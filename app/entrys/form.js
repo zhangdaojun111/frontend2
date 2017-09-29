@@ -405,10 +405,17 @@ let FormEntrys = {
         //创建请求
         let json = this.createPostJson();
         res = await FormService.getFormData(json);   //将表单名称发送给工作流
+
+        Mediator.emit('form: dataRes', res);
+
         if(res[1]['error'] == '您没有数据查看权限' || res[1]['error'] == '您没有查看该条数据的权限'  ) {
-            this.data.el.find('.form-print-position').append('<p style="font-size:20px;text-align: center;position: relative;top: 35px">您没有数据查看权限</p>')
-            return false;
+            //if(this.initFlag !== true){
+                this.data.el.find('.form-print-position').append('<p style="font-size:20px;text-align: center;position: relative;top: 35px">您没有数据查看权限</p>');
+               // this.initFlag = true
+                return false;
+           // }
         }
+
         Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
