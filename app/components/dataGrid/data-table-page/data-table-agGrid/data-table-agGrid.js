@@ -218,6 +218,10 @@ let config = {
     columnDefs: [],
     columnDefsEdit: [],
     actions: {
+        /**
+         * 生成表头
+         * 参数：edit是否为编辑模式的表头
+         */
         createHeaderColumnDefs: function (edit) {
             let columnDefs = [],
                 headerArr = [],
@@ -272,6 +276,9 @@ let config = {
             }
             return columnDefs;
         },
+        /**
+         * 递归生成表头用
+         */
         getArr: function (i, n, column, len, data, otherCol , edit) {
             if (i == n) {
                 this.actions.createHeader(column, i, len, data, otherCol,edit)
@@ -283,6 +290,9 @@ let config = {
                 }
             }
         },
+        /**
+         * 递归生成表头用
+         */
         createHeader: function (column, i, len, data, otherCol,edit) {
             let key = 0;
             for (let col of column) {
@@ -408,7 +418,7 @@ let config = {
                 }
             }
         },
-        //设置编辑模式表头
+        //设置编辑模式表头，通过表头数据来判断是否可以编辑
         setEditableCol: function ( col ) {
             let editCol = col;
             //拷贝columnDefs的值
@@ -450,6 +460,7 @@ let config = {
             }
             return editCol;
         },
+        //设置编辑模式选择类型字段的选项
         setOptionsForColumn: function(editCol,controlData,optionProp){
             editCol['editable']=true;
             editCol['cellEditor']='select';
@@ -475,6 +486,7 @@ let config = {
             controlData['options_objs']=groups;
             editCol['cellEditorParams']={values:radioParams};
         },
+        //调用aggrid的API，通过表头数据来生成每个cell内容
         bodyCellRender: function (params) {
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
                 let textAline = fieldTypeService.textAline( params.colDef["real_type"] )
@@ -746,7 +758,7 @@ let config = {
             }
             return sHtml;
         },
-        //重置偏好
+        //重置偏好以及重置筛选功能
         resetPreference: function () {
             let ediv = document.createElement('div');
             let eHeader = document.createElement('span');
@@ -804,7 +816,7 @@ let config = {
             ediv.appendChild( eImg )
             return ediv;
         },
-        //生成操作列
+        //生成操作列（查看，编辑，历史，触发操作，行级操作），以及计算操作列的宽度
         operateCellRenderer: function (params) {
             let rowStatus = 0;
             let operateWord = 2;
@@ -864,13 +876,13 @@ let config = {
             this.data.operateColWidth=20*operateWord+20;
             return str
         },
-        //设置搜索input值
+        //设置搜索input值，解决拖动列排序后重新渲染floatingFilter的input导致显示为空
         setFloatingFilterInput: function () {
             for( let k in this.data.searchValue ){
                 this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
             }
         },
-        //floatingFilter拼参数
+        //floatingFilter拼参数，接收floatingFilter改变的参数，拼装成搜索需要的参数
         floatingFilterPostData: function (col_field, keyWord, searchOperate) {
             this.data.queryList[col_field] = {
                 'keyWord': keyWord,
@@ -902,17 +914,19 @@ let config = {
             this.data.filterParam['is_filter'] = 1;
             this.actions.getGridData();
         },
+        //设置快速搜索参数，进行搜索
         fastSearchData: function (data) {
             this.data.filterParam.fastFilter = data;
             this.actions.getGridData();
         },
+        //设置高级查询参数，进行搜索
         postExpertSearch:function(data,id,name) {
             this.data.filterParam.expertFilter = data;
             this.data.filterParam.common_filter_id = id;
             this.data.filterParam.common_filter_name = name;
             this.actions.getGridData();
         },
-        //初始化按钮
+        //初始化按钮，根据viewMode参数，生成不同模式需要的按钮
         renderBtn: function () {
             let btnGroup = dgcService.gridBtn( this.data.viewMode );
             let btns = this.el.find( '.dataGrid-btn-group' )[0].querySelectorAll('a');
@@ -939,7 +953,10 @@ let config = {
                 this.el.find( '.dataGrid-btn-group' )[0].style.display = 'flex';
             },1000 )
         },
-        //请求表头数据
+        /**
+         * 请求表头数据，等数据全部返回后渲染数据
+         * （preferenceData：偏好，headerData：表头数据，sheetData：sheet分页数据，tableOperate：操作数据，prepareParmas：表单及工作流数据）
+         */
         getHeaderData: function () {
             let obj1 = {
                 actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
@@ -1134,7 +1151,10 @@ let config = {
             })
             HTTP.flush();
         },
-        //请求表格数据
+        /**
+         * 请求表格数据，等数据全部返回后渲染数据，也用于数据刷新
+         * （body：数据，remindData：提醒数据，footer：footer数据）
+         */
         getGridData: function (refresh) {
             //在途数据
             if( this.data.viewMode == 'in_process' || this.data.viewMode == 'reportTable2' ){
@@ -1241,7 +1261,7 @@ let config = {
             } )
             HTTP.flush();
         },
-        //获取设置选择数据
+        //获取设置选择数据（刷新时回显已经选择的数据）
         calcSelectData: function ( type ) {
             if( type == 'get' ){
                 let arr = [];
@@ -1379,7 +1399,10 @@ let config = {
                 }
             }
         },
-        //返回请求数据
+        /**
+         * 根据viewMode不同，生成不同请求数据的参数
+         * 拼装搜索的参数，排序参数
+         */
         createPostData: function () {
             let json = {
                 table_id: this.data.tableId,
@@ -1512,24 +1535,8 @@ let config = {
             }
             return json;
         },
-        //渲染agGrid
+        //渲染agGrid（根据存在的按钮，为按钮事件，渲染分组定制列，分页等组件）
         renderAgGrid: function () {
-            // let gridData = {
-            //     columnDefs: this.columnDefs,
-            //     rowData: this.data.rowData,
-            //     footerData: this.data.footerData,
-            //     floatingFilter: true,
-            //     fieldsData: this.data.fieldsData,
-            //     onColumnResized: this.actions.onColumnResized,
-            //     onSortChanged: this.actions.onSortChanged,
-            //     onDragStopped: this.actions.onDragStopped,
-            //     onCellClicked: this.actions.onCellClicked,
-            //     onRowDoubleClicked: this.actions.onRowDoubleClicked,
-            //     setRowStyle: this.actions.setRowStyle,
-            //     onRowSelected: this.actions.onRowSelected
-            // }
-            // this.agGrid = new agGrid(gridData);
-            // this.append(this.agGrid , this.el.find('#data-agGrid'));
             //渲染定制列
             if( this.el.find('.custom-column-btn')[0] ){
                 //如果有定制列修改偏好状态
@@ -2271,13 +2278,6 @@ let config = {
                     if(res.onlyclose == true) {
                         this.actions.getExpertSearchData()
                     }
-                    // if(res.saveCommonQuery || (res.saveCommonQuery && res.onlyclose == true)) {
-                    //     this.actions.getExpertSearchData(res.addNameAry);
-                    // }if(res.deleteCommonQuery || (res.deleteCommonQuery && res.onlyclose == true)) {
-                    //     this.actions.getExpertSearchData(res.addNameAry);
-                    // } if(!res.saveCommonQuery && res.onlyclose == true) {
-                    //     return false
-                    // }
                 })
             } )
             this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
