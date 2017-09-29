@@ -13,6 +13,7 @@ import {SingleDisplay} from './single-display/single-display'
 import {FileDisplay} from './file-display/file-display'
 import {GlobalService} from "../../../services/main/globalService"
 import dataPagination from "../../../components/dataGrid/data-table-toolbar/data-pagination/data-pagination";
+// import msgbox from "../../../lib/msgbox";
 
 let config = {
     template:template,
