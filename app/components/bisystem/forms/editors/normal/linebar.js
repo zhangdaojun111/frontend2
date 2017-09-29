@@ -240,11 +240,11 @@ let config = {
          */
         fillChart(data) {
             let chart = _.cloneDeep(data);
-            this.data.filter = chart.filter; // 用于保存高级查询数据
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
             this.formItems['xAxis'].setValue(chart['xAxis']);
@@ -307,9 +307,9 @@ let config = {
                         let data = {
                             tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
                             fieldsData: this.formItems['xAxis'].autoselect.data.list,
-                            commonQuery: this.data.filter ? [this.data.filter.filter_source] : '',
+                            commonQuery: this.formItems['filter'].data.value ? [this.formItems['filter'].data.value.filter_source] : null,
                         };
-                        this.formItems['filter'].actions.showAdvancedDialog(data)
+                        this.formItems['filter'].actions.showAdvancedDialog(data);
                     }
                 }
             },
@@ -595,7 +595,7 @@ let config = {
 
         if (this.data.id) {
             this.actions.fillChart(this.data.chart);
-        }
+        };
     }
 }
 
