@@ -3253,13 +3253,15 @@ let config = {
     },
     afterRender: function () {
         //发送表单tableId（订阅刷新数据用
-        TabService.onOpenTab( this.data.tableId ).done((result) => {
-            if(result.success === 1){
-                // console.log("post open record success");
-            }else{
-                console.log("post open record failed")
-            }
-        });
+        if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 ){
+            TabService.onOpenTab( this.data.tableId ).done((result) => {
+                if(result.success === 1){
+                    // console.log("post open record success");
+                }else{
+                    console.log("post open record failed")
+                }
+            });
+        }
         this.showLoading();
         try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {
