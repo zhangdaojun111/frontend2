@@ -304,6 +304,7 @@ let config = {
                 type: 'search',
                 events: {
                     onShowAdvancedSearchDialog() {
+                        console.log(this.formItems['filter'].data.value);
                         let data = {
                             tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
                             fieldsData: this.formItems['xAxis'].autoselect.data.list,

@@ -402,6 +402,8 @@ export const dgcService = {
         html += '</ul>'
         return html;
     },
+    //需要订阅刷新的情况
+    needRefreshMode: ['normal','child','count','deleteHanding'],
     //按钮组
     gridBtn: function (viewMode) {
         let obj = {
@@ -495,9 +497,9 @@ export const dgcService = {
                 data.colWidth = JSON.parse(res['colWidth'].colWidth);
             }
         }
-        if (res['pageSize'] && res['pageSize'].pageSize) {
-            data.rows = res['pageSize'].pageSize;
-        }
+        // if (res['pageSize'] && res['pageSize'].pageSize) {
+        //     data.rows = res['pageSize'].pageSize;
+        // }
         if (res['ignoreFields']&&res['ignoreFields']['ignoreFields']) {
             data.ignoreFields = JSON.parse(res['ignoreFields']['ignoreFields']);
         } else {
