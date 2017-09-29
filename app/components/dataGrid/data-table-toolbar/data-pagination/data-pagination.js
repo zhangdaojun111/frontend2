@@ -149,13 +149,13 @@ let config = {
                 this.actions.resetPagination( this.data.total );
                 this.actions.onPaginationChanged();
                 if( this.data.tableId ){
-                    console.log("pageSize数据保存：" + Number(this.data.rows));
-                    dataTableService.savePreference({
-                        'action': 'pageSize',
-                        table_id: this.data.tableId,
-                        pageSize: Number(this.data.rows)
-                    });
-                    HTTP.flush();
+                    // console.log("pageSize数据保存：" + Number(this.data.rows));
+                    // dataTableService.savePreference({
+                    //     'action': 'pageSize',
+                    //     table_id: this.data.tableId,
+                    //     pageSize: Number(this.data.rows)
+                    // });
+                    // HTTP.flush();
                 }
             },1000 ) ).on( 'input','.enterPageNum',_.debounce( ()=>{
                 let input = this.el.find( '.enterPageNum' )[0];
