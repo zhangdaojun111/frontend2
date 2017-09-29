@@ -185,7 +185,12 @@ const approveWorkflow = (para) => {
         comment=$('#comment').val();
     para.data={};
     if(agorfo){
-        para.data=JSON.stringify(formData);
+        if(formData.error){
+            msgBox.alert(`${formData.errorMessage}`);
+            return ;
+        }else {
+            para.data = JSON.stringify(formData);
+        }
     }
     para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);
@@ -197,14 +202,15 @@ const approveWorkflow = (para) => {
     })().then(res => {
         if(res.success===1){
             msgBox.alert(`操作成功`);
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key:key,
+                data:{refresh:true}
+            })
         }else{
             msgBox.alert(`失败：${res.error}`);
         }
-        PMAPI.sendToParent({
-            type: PMENUM.close_dialog,
-            key:key,
-            data:{}
-        })
+
     })
 };
 
@@ -278,7 +284,7 @@ Mediator.subscribe("approval:re-app", (msg) => {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:key,
-                data:{}
+                data:{refresh:true}
             })
         })
     }
