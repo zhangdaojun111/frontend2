@@ -134,7 +134,6 @@ let config = {
                 type: 'autocomplete'
             },
             theme,
-
             icon,
             {
                 label: '高级查询',
