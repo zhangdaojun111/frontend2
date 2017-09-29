@@ -402,6 +402,8 @@ export const dgcService = {
         html += '</ul>'
         return html;
     },
+    //需要订阅刷新的情况
+    needRefreshMode: ['normal','child','count','deleteHanding'],
     //按钮组
     gridBtn: function (viewMode) {
         let obj = {
