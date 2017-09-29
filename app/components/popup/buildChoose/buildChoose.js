@@ -21,6 +21,7 @@ let config = {
     afterRender() {
         let _this = this;
 
+
         PMAPI.getIframeParams(window.config.key).then(res => {
             _this.data = Object.assign({}, _this.data, res.data.data);
             let real_id;
@@ -60,12 +61,14 @@ let config = {
         });
         HTTP.flush();
         //改变表单
-        let errMsg = this.data.errMsg;
-        let el = _this.el.find('.ui-section');
-        if(errMsg == '您没有数据查看权限'){
-            debugger
-            el = ''
-        }
+        let el;
+        Mediator.on('form: dataRes', (res) =>{
+            if(res[1].error !== '您没有数据查看权限'){
+                 el = _this.el.find('.ui-section');
+            }
+
+        });
+
         _this.el.on('click', 'a.choose-aside-a', function () {
             if(_this.data.isCreatingForm){
                 return;
@@ -84,7 +87,6 @@ let config = {
                 el: el,
                 btnType: 'none'
             })
-            debugger
             if(!r2){
                 _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
             }
