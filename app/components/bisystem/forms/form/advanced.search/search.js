@@ -16,6 +16,8 @@ let config = {
          */
         showAdvancedDialog(data) {
             this.data.fields = data.fieldsData;
+            console.log('===========11111111111111==============');
+            console.log(data)
             let fieldsData = _.cloneDeep(data.fieldsData).map(item => {
                 item['field'] = item['dfield'];
                 item['real_type'] = item['type'];
@@ -27,7 +29,8 @@ let config = {
                 fieldsData: data.fieldsData ? dgcService.createNeedFields(fieldsData).search : [],
                 commonQuery: data.commonQuery ? data.commonQuery : [],
             };
-
+            console.log('============ddddddddddddd=============');
+            console.log(d)
             PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
                 width:950,
                 height:600,
