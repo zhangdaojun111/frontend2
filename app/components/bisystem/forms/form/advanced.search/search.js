@@ -43,6 +43,7 @@ let config = {
             })
         }
     },
+
     binds: [
         {
             event: 'click',
