@@ -20,6 +20,7 @@ let config = {
     },
     afterRender() {
         let _this = this;
+
         PMAPI.getIframeParams(window.config.key).then(res => {
             _this.data = Object.assign({}, _this.data, res.data.data);
             let real_id;
@@ -59,6 +60,12 @@ let config = {
         });
         HTTP.flush();
         //改变表单
+        let errMsg = this.data.errMsg;
+        let el = _this.el.find('.ui-section');
+        if(errMsg == '您没有数据查看权限'){
+            debugger
+            el = ''
+        }
         _this.el.on('click', 'a.choose-aside-a', function () {
             if(_this.data.isCreatingForm){
                 return;
@@ -74,9 +81,10 @@ let config = {
                 parent_real_id: '',
                 parent_temp_id: '',
                 real_id: $(this).data('value'),
-                el: _this.el.find('.ui-section'),
+                el: el,
                 btnType: 'none'
             })
+            debugger
             if(!r2){
                 _this.el.find('.ui-section').append('<p style="font-size:20px">您没有数据查看权限</p>')
             }
@@ -109,6 +117,7 @@ let config = {
 
 export default class BuildChoose extends Component {
     constructor(data) {
+        console.log(data);
         super(config, data);
     }
 }
