@@ -302,12 +302,11 @@ let AttachmentList = {
                 }
                 if(i < 0 ){ //前面没有可浏览文件
                     this.el.find('.previous').hide();
-                    this.firstPreviewableIndex = this.data.currentIndex;
+                    this.data.firstPreviewableIndex = this.data.currentIndex;
                     return;
                 } else {
                     this.data.currentIndex--;
                 }
-
                 this.actions._loadPreview(this.data.list[this.data.currentIndex].file_id);
                 this.actions._updateSwiftButtons(this.data.currentIndex);
             }
@@ -326,7 +325,7 @@ let AttachmentList = {
                 }
                 if(i >= length){ //后面没有可浏览文件
                     this.el.find('.next').hide();
-                    this.firstPreviewableIndex = this.data.currentIndex;
+                    this.data.lastPreviewableIndex = this.data.currentIndex;
                     return;
                 } else {
                     this.data.currentIndex++;
@@ -381,12 +380,12 @@ let AttachmentList = {
             return i;
         },
         _updateSwiftButtons(i){
-            if(i == 0){
+            if(i == this.data.firstPreviewableIndex){
                 this.el.find('.previous').hide();
             } else {
                 this.el.find('.previous').show();
             }
-            if(i == this.data.list.length - 1){
+            if(i == this.data.lastPreviewableIndex){
                 this.el.find('.next').hide();
             } else {
                 this.el.find('.next').show();
