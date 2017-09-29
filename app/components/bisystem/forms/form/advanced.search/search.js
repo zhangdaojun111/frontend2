@@ -62,7 +62,7 @@ let config = {
         filterDate(value) {
             let isDateColumn;
             for(let field of this.data.fields) {
-                if (value.cond.searchBy === field.dfield) {
+                if (value.cond.searchBy === field.dfield && (field.type == 3 || field.type == 5 || field.type == 12 || field.type == 30)) {
                     isDateColumn = true
                     break;
                 };

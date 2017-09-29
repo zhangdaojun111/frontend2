@@ -187,6 +187,22 @@ let config = {
             theme,
             icon,
             {
+                label: '高级查询',
+                name: 'filter',
+                defaultValue: '',
+                type: 'search',
+                events: {
+                    onShowAdvancedSearchDialog() {
+                        let data = {
+                            tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
+                            fieldsData: this.formItems['xAxis'].autoselect.data.list,
+                            commonQuery: this.formItems['filter'].data.value ? [this.formItems['filter'].data.value.filter_source] : null,
+                        };
+                        this.formItems['filter'].actions.showAdvancedDialog(data);
+                    }
+                }
+            },
+            {
                 label: '选择单条数据，多条数据',
                 name: 'pieType',
                 defaultValue: '1',
