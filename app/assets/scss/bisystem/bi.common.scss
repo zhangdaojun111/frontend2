@@ -3,6 +3,14 @@
  */
 @import "../core/base";
 
+@media print {
+    body * {
+        visibility: visible !important;
+        overflow: visible !important;
+        position: static !important;
+    }
+}
+
 @mixin icon {
     display: inline-block;
     width: 16px;

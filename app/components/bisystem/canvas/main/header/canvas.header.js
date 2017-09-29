@@ -166,6 +166,13 @@ let config = {
                 this.el.find('.child-menu').css('visibility','visible');
             }
         },
+        { //调用打印
+            event:'click',
+            selector:'.print-btn',
+            callback: function (context,event) {
+                window.print();
+            }
+        },
     ],
     afterRender() {
         //新窗口隐藏新窗口图标

@@ -13,9 +13,15 @@ let config = {
          * @param data{tableId: 数据源，fieldsData： x轴字段，commonQuery: 查询条件}
          */
         showAdvancedDialog(data) {
+            let fieldsData = _.cloneDeep(data.fieldsData).map(item => {
+                item['field'] = item['dfield'];
+                item['real_type'] = item['type'];
+                return item;
+            });
+
             let d = {
                 tableId: data.tableId ? data.tableId : '',
-                fieldsData: data.fieldsData ? data.fieldsData : [],
+                fieldsData: data.fieldsData ? dgcService.createNeedFields(fieldsData).search : [],
                 commonQuery: data.commonQuery ? data.commonQuery : [],
             };
             console.log(d);
