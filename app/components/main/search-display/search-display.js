@@ -13,7 +13,6 @@ import {SingleDisplay} from './single-display/single-display'
 import {FileDisplay} from './file-display/file-display'
 import {GlobalService} from "../../../services/main/globalService"
 import dataPagination from "../../../components/dataGrid/data-table-toolbar/data-pagination/data-pagination";
-import msgbox from "../../../lib/msgbox";
 
 let config = {
     template:template,
@@ -196,15 +195,6 @@ let config = {
          */
         sendSearch:function () {
             this.showLoading();
-
-            // msgbox.showLoadingSelf();
-            // setTimeout(function () {
-            //     msgbox.hideLoadingSelf();
-            //     msgbox.showLoadingRoot();
-            // },5000);
-            // setTimeout(function () {
-            //    msgbox.hideLoadingRoot();
-            // },8000);
 
             let searchData = {
                 keyword:this.data.searchText,            //搜索文字
