@@ -57,6 +57,7 @@ let config = {
         //         this.el.find('.canSaveView').hide();
         //     }
         // },
+
         /**
          * 初始化加载时隐藏的更多目录框
          */
