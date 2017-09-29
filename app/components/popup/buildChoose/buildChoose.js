@@ -66,7 +66,6 @@ let config = {
             if(res[1].error !== '您没有数据查看权限'){
                  el = _this.el.find('.ui-section');
             }
-
         });
 
         _this.el.on('click', 'a.choose-aside-a', function () {
