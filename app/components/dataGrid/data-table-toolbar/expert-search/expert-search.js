@@ -431,19 +431,28 @@ let config = {
         // },
         // 接受父组件传数据过来后
         afterGetMsg:function() {
-            if(this.data.autoSearch){
-                
-            }
-            if(this.data.commonQuery.length == 0){
-                this.el.find('.common-search-compile').css('display','none')
+
+            if (this.data.commonQuery.length == 0) {
+                this.el.find('.common-search-compile').css('display', 'none')
             } else {
-                this.data.commonQuery.forEach((item)=> {
+                this.data.commonQuery.forEach((item) => {
                     this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
                 })
             }
             this.actions.rendSearchItem();
+
             this.itemDeleteChecked = false;
             this.isEdit = false;
+            if (this.data.autoSearch) {
+                this.name = this.data.commonQuery[0].name;
+                this.id = this.data.commonQuery[0].id;
+                this.itemChecked = true;
+                this.data.searchInputList = JSON.parse(this.data.commonQuery[0]['queryParams']);
+                this.actions.showSearchData(JSON.parse(this.data.commonQuery[0]['queryParams']));
+                if (this.itemDeleteChecked) {
+                    this.isEdit = true;
+                }
+            }
             let _this = this;
             this.el.on('click','.condition-search-add',function() {
                 // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
