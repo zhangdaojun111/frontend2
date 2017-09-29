@@ -1038,13 +1038,11 @@ let config = {
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
             try{this.data.flowId = res["data"]["flow_data"][0]["flow_id"] || "";}catch(e){}
-            console.log(this.data.flowId, );
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
                     this.data.flowId = d.flow_id;
                 }
             }
-            console.log(this.data.flowId);
         },
         //请求新增表单统计数据
         getNewFormCountData: function () {
@@ -2096,9 +2094,10 @@ let config = {
             for( let k in this.data.colControlData ){
                 let field = this.data.colControlData[k];
                 //数字类型
-                if( fieldTypeService.numOrText( field.real_type ) ){
+                if( fieldTypeService.numOrText( field.real_type ) && data[field.dfield] != undefined ){
                     if( field.numArea && field.numArea !== "" ){
                         let num = Number( data[field.dfield] );
+                        data[field.dfield] = num;
                         //范围
                         if( num>field.numArea.max || num<field.numArea.min ){
                             err['type'] = true;
@@ -2687,7 +2686,6 @@ let config = {
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
-                console.log(data.value);
                 QuillAlert.data.value=data.value.replace(/(\n)/g, '');
                 PMAPI.openDialogByComponent(QuillAlert,{
                     width:800,
@@ -2926,10 +2924,6 @@ let config = {
                 if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                     btnType = 'none';
                 }
-                console.log("+++++++++++++++++++++++++")
-                console.log("+++++++++++++++++++++++++")
-                console.log("+++++++++++++++++++++++++")
-                console.log(data.data.flow_id);
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -2946,9 +2940,6 @@ let config = {
                     form_id:this.data.formId,
                     flow_id:data.data.flow_id || '',
                 };
-                console.log(data);
-                console.log("+++++++++++++++++++++++++++++++");
-                console.log(obj);
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSelfIframe( url,title );
@@ -3119,7 +3110,6 @@ let config = {
                 form_id:this.data.formId,
                 flow_id:data.data.flow_id || '',
             };
-            console.log(obj);
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                 obj.btnType = 'none';
             }
@@ -3253,13 +3243,15 @@ let config = {
     },
     afterRender: function () {
         //发送表单tableId（订阅刷新数据用
-        TabService.onOpenTab( this.data.tableId ).done((result) => {
-            if(result.success === 1){
-                // console.log("post open record success");
-            }else{
-                console.log("post open record failed")
-            }
-        });
+        if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 ){
+            TabService.onOpenTab( this.data.tableId ).done((result) => {
+                if(result.success === 1){
+                    // console.log("post open record success");
+                }else{
+                    console.log("post open record failed")
+                }
+            });
+        }
         this.showLoading();
         try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {
