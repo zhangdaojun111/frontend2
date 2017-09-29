@@ -82,6 +82,7 @@
             border: 1px solid #e4e4e4;
             border-top: none;
             .condition-search-select {
+                cursor: pointer;
                 font-size: 12px;
                 height: 30px;
                 background-color: #fafafa;
@@ -135,6 +136,7 @@
                 width: 185px;
                 top: -18px;
                 .condition-search-box-input {
+                    cursor: pointer;
                     background-position: right center;
                     //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
                     position: absolute;
