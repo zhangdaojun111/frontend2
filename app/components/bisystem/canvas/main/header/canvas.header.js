@@ -19,6 +19,7 @@ let config = {
         menus: {},
         isAdmin: window.config.is_admin,
         isSelf: window.config.bi_views.self,
+        headerMenus:[],
     },
     actions: {
         /**
@@ -64,13 +65,14 @@ let config = {
         hideMoreMenu(){
             let childWidth = 0;
             let navTabsWidth = this.el.find('.nav-tabs').width();
-            this.el.find('.nav-tabs-select').css('left',navTabsWidth);
-            this.el.find('.child-menu').css('left',navTabsWidth);
-            this.el.find('.nav-tabs div').each((index,val)=>{
+            this.el.find('.child-menu').css('left',navTabsWidth);//child-menu隐藏目录框显示的位置
+            this.el.find('.nav-tabs div').each((index,val)=>{//首次加载后的目录，将自身，自身的宽，显示属性添加到headerMenus数组中
+                this.data.headerMenus.push({'header':$(val),'width':$(val).width(),'show':true});
                 childWidth += $(val).outerWidth();
-                if(childWidth > navTabsWidth){
+                if(childWidth >= navTabsWidth){//当前目录宽的和大于nav-tabs的宽时 将其余的目录添加到child-menu隐藏目录框中 并将其属性show变为false
                     this.el.find('.nav-tabs-select').show();
                     $(val).appendTo(this.el.find('.child-menu'));
+                    this.data.headerMenus[index].show = false;
                 }
             });
         },
@@ -80,30 +82,39 @@ let config = {
         windowChange(){
             let childWidth = 0;
             let navTabsWidth = this.el.find('.nav-tabs').width();
-            this.el.find('.nav-tabs-select').css('left',navTabsWidth);
+            let navTabsLen = this.el.find('.nav-tabs div').length-1;
+            let staus = true;
             this.el.find('.child-menu').css('left',navTabsWidth);
-            this.el.find('.nav-tabs div').each((index,val)=>{
-                childWidth += $(val).width();
-                if(childWidth > navTabsWidth){
-                    if(this.el.find('.child-menu div').length){
-                        this.el.find('.child-menu div:first-child').before($(val));
+            this.data.headerMenus.forEach((val,index)=>{
+                if (val.show){
+                    childWidth += val.width;
+                    if(childWidth >= navTabsWidth){
+                        val.show = false;
+                        if(this.el.find('.child-menu div').length!==0 && index===navTabsLen && staus){
+                            this.el.find('.child-menu div:first-child').before(val.header);
+                        }else {
+                            val.header.appendTo(this.el.find('.child-menu'));
+                            staus = false;
+                        }
+                    }
+                }else{
+                    childWidth += val.width;
+                    if(childWidth < navTabsWidth){
+                        val.show = true;
+                        val.header.appendTo(this.el.find('.nav-tabs'));
                     }else {
-                        $(val).appendTo(this.el.find('.child-menu'));
+                        return;
                     }
                 }
+
             });
+            //下拉图标的显示与隐藏
             if(this.el.find('.child-menu div').length){
-                this.el.find('.nav-tabs-select').show();
-                this.el.find('.child-menu div').each((index,val)=>{
-                    childWidth +=$(val).width();
-                    if(childWidth < navTabsWidth){
-                        $(val).appendTo(this.el.find('.nav-tabs'));
-                    }
-                });
+                this.el.find('.nav-tabs-select').css('visibility','visible');
+            }else{
+                this.el.find('.nav-tabs-select').css('visibility','hidden');
             }
-            if(this.el.find('.child-menu div').length===0){
-                this.el.find('.nav-tabs-select').hide();
-            }
+
         },
         /**
          * 未选中的所有目录取消选中状态
@@ -176,6 +187,7 @@ let config = {
         },
     ],
     afterRender() {
+
         //新窗口隐藏新窗口图标
         if(window === window.parent){
             this.el.find('.new-window').hide();
@@ -195,6 +207,11 @@ let config = {
 
         //第一次渲染之后隐藏多的目录
         this.actions.hideMoreMenu();
+
+
+        // console.log(this.data.menus);
+
+
 
     },
     firstAfterRender(){
