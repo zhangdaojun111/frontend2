@@ -138,7 +138,7 @@ let config = {
             {
                 label: '高级查询',
                 name: 'filter',
-                defaultValue: '',
+                defaultValue: {},
                 type: 'search',
                 events: {
                     onShowAdvancedSearchDialog() {
