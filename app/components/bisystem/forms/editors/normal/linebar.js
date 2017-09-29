@@ -175,8 +175,9 @@ let config = {
                 }
             });
 
+            let advancedDataTemplates = this.formItems.advancedDataTemplates.getValue();
             let chart = {
-                advancedDataTemplates: [],
+                advancedDataTemplates: advancedDataTemplates,
                 assortment: 'normal',
                 chartAssignment: data.chartAssignment == 1 ? {name:'分组', val:1} : {name:'下穿', val:2},
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
@@ -239,7 +240,7 @@ let config = {
          */
         fillChart(data) {
             let chart = _.cloneDeep(data);
-
+            console.log(chart);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
@@ -247,6 +248,7 @@ let config = {
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
             this.formItems['xAxis'].setValue(chart['xAxis']);
+            this.formItems['advancedDataTemplates'].setValue(chart['advancedDataTemplates']);
             let yAxis1 = _.remove(chart['yAxis'],(item) => {
                 return item.yAxisIndex != 0
             })
@@ -416,6 +418,14 @@ let config = {
                 defaultValue: [],
                 type: 'deep',
                 events: {}
+            },
+            {
+                label: '高级数据',
+                name: 'advancedDataTemplates',
+                defaultValue: [],
+                type: 'advancedCompute',
+                events: {
+                }
             },
             {
                 label: '更多设置',

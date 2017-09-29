@@ -1,27 +1,28 @@
 @mixin th-td {
-    border-right: 1px solid #EEEEEE;
-    border-bottom: 1px solid #EEEEEE;
-    line-height: 35px;
-    border-collapse: collapse;
+    border-right: 1px solid #e4e4e4;
+    border-bottom: 1px solid #e4e4e4;
+    line-height: 30px;
+    font-size:12px;
     overflow: hidden;
 }
 
 .origin-data-wrap {
+    width:100%;
     height: calc(100%);
     overflow: hidden;
     position: absolute;
     top: 0;
     left: 0;
-    background: rgba(255, 255, 255, .9);
+    background: rgba(255, 255, 255, 1);
     .bi-icon-down {
-        display:inline-block;
-        border:solid 4px transparent;
-        border-top-color:#666666;
+        display: inline-block;
+        border: solid 4px transparent;
+        border-top-color: #666666;
     }
     .bi-icon-up {
-        display:inline-block;
-        border:solid 4px transparent;
-        border-bottom-color:#666666;
+        display: inline-block;
+        border: solid 4px transparent;
+        border-bottom-color: #666666;
     }
     .bi-origin-data-close {
         position: absolute;
@@ -34,11 +35,15 @@
         line-height: 30px;
         text-align: center;
         border-bottom: 2px solid #3b8cff;
-        .cur {
-            display: block;
+        span {
             width: 80px;
             float: left;
             font-size: 12px;
+            background: #ffffff;
+            color:#333333;
+            cursor:pointer;
+        }
+        .cur {
             background: #3b8cff;
             color: #fff;
         }
@@ -51,60 +56,96 @@
         overflow-y: scroll;
         border: 1px solid #EEEEEE;
         .content {
-            .custom-checkbox {
-               input{
-                   bottom: 4px;
-               }
-            }
+            width:100%;
             table {
                 width: 100%;
                 text-align: center;
                 border-collapse: collapse;
+                border-spacing: 0;
                 table-layout: fixed;
                 font-size: 12px;
-                th {
-                    font-weight: bold;
-                    text-align: center;
-                    background: #F5F5F5;
-                    @include th-td;
-                }
-                td {
-                    vertical-align: middle;
-                    @include th-td;
-                    a {
-                        text-decoration: none;
-                        color: #5B95E7;
-                        &:hover {
-                            text-decoration: underline;
+                thead {
+                    tr {
+                        th {
+                            font-weight: bold;
+                            @include th-td;
+                            color: #000;
+                            stroke: none;
+                            fill: #000;
+                            background: #f2f2f2;
+                            border-color:#e4e4e4;
+                            label {
+                                line-height:1;
+                                position:relative;
+                                top:3px;
+                            }
+                            span {
+                                cursor: pointer;
+                            }
                         }
                     }
                 }
-                tr:nth-child(2n) {
-                    background-color: #fefefe;
-                }
-                tr:nth-child(2n+3) {
-                    background-color: #FAFBFD;
+
+                tbody {
+                    > tr:nth-child(odd) {
+                        background-color: #FEFEFE;
+                    }
+                    > tr:nth-child(even) {
+                        background-color: #f2f2f2;
+                    }
+                    td {
+                        vertical-align: middle;
+                        @include th-td;
+                        label {
+                            line-height:1;
+                            position:relative;
+                            top:3px;
+                        }
+                        a {
+                            text-decoration: none;
+                            color: #5B95E7;
+                            &:hover {
+                                text-decoration: underline;
+                            }
+                        }
+                        table {
+                            td {
+                                border-right: 0;
+                                border-bottom: 1px solid #e4e4e4;
+                            }
+                            tr:last-child {
+                                td {
+                                    border: 0;
+                                }
+                            }
+                        }
+                    }
+                    &.origin-group-tbody {
+                        > tr:nth-child(even) {
+                            background:#fefefe;
+                        }
+                    }
                 }
                 .selectAllX {
                     width: 60px;
                 }
                 .selectY {
-                    b{
-                        cursor:pointer;
+                    b {
+                        cursor: pointer;
                     }
                     .bi-icon-down {
                         position: relative;
-                        top:5px;
-                        left:-11px;
-                        &.active{
+                        top: 5px;
+                        left: -11px;
+                        &.active {
                             border-top-color: #0088ff;
                         }
                     }
 
                     .bi-icon-up {
                         position: relative;
-                        top:-5px;
-                        &.active{
+                        top: -5px;
+                        &.active {
                             border-bottom-color: #0088ff;
                         }
 

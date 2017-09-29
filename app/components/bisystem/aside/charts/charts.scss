@@ -26,19 +26,9 @@ $font_size: 12px;
     li {
         position: relative;
     }
-    div:nth-child(even) {
-        li {
-            background-color: $li-even-bg;
-        }
-    }
-    div:nth-child(odd) {
-        li {
-            background-color: $li-odd-bg;
-        }
-    }
     div {
         li:hover {
-            background-color: $li-hover;
+            background-color: #444444;
         }
     }
     li {
@@ -54,7 +44,7 @@ $font_size: 12px;
                 float: left;
                 width: 160px;
                 margin-left: 3px;
-                color: #fff;
+                color: #999999;
                 line-height: 20px;
                 height: 20px;
                 word-break: break-all;
@@ -80,18 +70,17 @@ $font_size: 12px;
         display: none;
     }
     .btn_ripple:hover {
-        background-color: #353D53;
+        background-color: #373737;
     }
 }
 
 .hide_meun {
     position: absolute;
-    left: 132px;
-    top: 0px;
+    left: 254px;
+    top: 0;
     z-index: 99;
     width: 112px;
     display: none;
-    overflow: hidden;
     .btn_box {
         padding: 8px 0;
         background-color: #ffffff;
@@ -100,7 +89,6 @@ $font_size: 12px;
             text-decoration: none;
             color: #000000;
             display: block;
-            width: 100%;
             cursor: pointer;
             outline: none;
             border: none;
@@ -111,6 +99,9 @@ $font_size: 12px;
             text-align: start;
             transition: all .3s;
             background-color: #ffffff;
+        }
+        button {
+            width: 100%;
         }
         .menuitem:hover {
             background-color: rgba(240, 240, 240, 0.87);

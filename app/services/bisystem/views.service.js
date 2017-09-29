@@ -45,10 +45,10 @@ export const ViewsService = {
     },
 
     /**
-     * 修改文本框数据
+     * 保存富文本框数据
      * @param data 需要发送给服务器的参数
      */
-    async setEditData(data) {
+    async saveRichText(data) {
         const res = await HTTP.ajaxImmediately({
             url: '/bi/set_new_richtxt/',
             data: data,

@@ -93,6 +93,7 @@ let config = {
                         }
                     });
                     window.config.bi_views = views;
+
                 },
             });
             this.append(viewItemComponent,this.el.find('.view-list'));

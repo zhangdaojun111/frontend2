@@ -172,7 +172,11 @@ let config = {
          * 打开个人信息设置页面
          */
         showInfoSet:function () {
+            // msgbox.showLoadingSelf();        //测试使用
             PersonSetting.show();
+            // setTimeout(function () {
+            //     msgbox.hideLoadingSelf();
+            // },5000)
         },
         /**
          * 设置用户头像
