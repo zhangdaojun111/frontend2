@@ -6,7 +6,6 @@ import {CanvasHeaderComponent} from './header/canvas.header';
 import {canvasCellService} from '../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../lib/msgbox';
 import {PMAPI} from "../../../../lib/postmsg";
-import {biGetUrlParamService} from '../../../../services/bisystem/getUrlParams.service';
 
 
 let config = {
