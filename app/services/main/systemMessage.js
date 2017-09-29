@@ -61,6 +61,9 @@ const handlers = {
             //返回查看按钮
             return `<a href=javascript:void(0); class="ui-link view" data-type="view" title="查看">查看</a>`;
         }
+    },
+    exeStatusRender:function (data) {
+        return `<div class="grid-cell-info ${data.value === '待审批'?'waiting-for-approval':'approval-aleardy'}" title="${data.value}">${data.value}<div>`;
     }
 };
 
@@ -105,7 +108,8 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'handle_status_text',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
+                suppressSorting: true,
+                cellRenderer: handlers.exeStatusRender
             },
             {
                 headerName: '阅读状态',

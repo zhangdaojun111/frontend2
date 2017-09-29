@@ -20,7 +20,6 @@ let config = {
          * @param _param
          */
         loadData: function (_param) {
-            console.log("do loadData");
             _param = _param || {};
             let param = _.defaultsDeep(_param, {
                 rows: this.pagination.data.rows,
@@ -57,12 +56,12 @@ let config = {
          * @private
          */
         _postReadData: function (ids) {
-            // this.showLoading();
+            this.showLoading();
             HTTP.postImmediately('/remark_or_del_msg/', {
                 checkIds: ids
             })
                 .then((res) => {
-                // this.hideLoading();
+                this.hideLoading();
                 if (res.success === 1) {
                     this.actions.loadData();
                 }
@@ -160,8 +159,8 @@ let config = {
 
                 //查看通过前端自己刷新，审批通过loadData刷新
                 // if($event.event.srcElement.className.includes()){
-                    $event.node.data.is_read = 1;
-                    this.agGrid.actions.refreshView();
+                //     $event.node.data.is_read = 1;
+                //     this.agGrid.actions.refreshView();
                     this.actions._postReadData(JSON.stringify([data.id]));
                 // }
             }
