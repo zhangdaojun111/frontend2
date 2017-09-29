@@ -5,6 +5,9 @@
     left: 0;
     right: 0;
     overflow: hidden;
+    .ui-link{
+        cursor: pointer;
+    }
     .ag-cell-value {
         padding: 0px 8px!important;
         line-height: 30px;
