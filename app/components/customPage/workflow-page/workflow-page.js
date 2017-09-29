@@ -744,6 +744,8 @@ let config = {
                 // defaultMax: defaultMax,
                 customSize: defaultMax
             } ).then( (data)=>{
+                console.log( "工作流操作返回" )
+                console.log( data )
                 if( data == 'success' ){
                     this.actions.timeDelayRefresh();
                 }
