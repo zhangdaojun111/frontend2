@@ -82,18 +82,19 @@ let config = {
          * 加载头部
          */
         headLoad: function () {
-            if (!this.data.singleMode) {
-                let header = new CanvasHeaderComponent({}, {
-                    onAddCell: (cell) => {
-                        this.data.cells.actions.addCell(cell)
-                    },
-                    onSaveCanvas: () => {
-                        this.data.cells.actions.saveCanvas()
-                    },
-                });
-                this.append(header, this.el.find('.views-header'));
-                this.data.headerComponents = header;
-            }
+            // if (!this.data.singleMode) {
+            //
+            // }
+            let header = new CanvasHeaderComponent({}, {
+                onAddCell: (cell) => {
+                    this.data.cells.actions.addCell(cell)
+                },
+                onSaveCanvas: () => {
+                    this.data.cells.actions.saveCanvas()
+                },
+            });
+            this.append(header, this.el.find('.views-header'));
+            this.data.headerComponents = header;
         },
 
         /**

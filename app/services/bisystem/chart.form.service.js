@@ -4,12 +4,27 @@
  */
 import {HTTP} from "../../lib/http";
 
+
 export const ChartFormService = {
+    /**
+     * 从服务器url参数值
+     * @return 数据源promise
+     */
+    getQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  decodeURI(r[2]); return null;
+    },
+
     /**
      * 从服务器获取图表数据源
      * @return 数据源promise
      */
     async getChartSource() {
+            let params = {
+                parent_table_id: ChartFormService.getQueryString('parent_table_id')
+            };
+            console.log(params);
             let res = await HTTP.getImmediately('/bi/get_new_table_info');
             return Promise.resolve(res);
     },
