@@ -138,8 +138,9 @@ let config = {
         onCellClicked: function ($event) {
             if($event.colDef.headerName === '操作'){
                 let data = $event.data;
-                if (data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
-                    data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') {
+                // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
+                //     data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') || data.msg_type === '关注消息') {
+                if (data.msg_type === '审批消息' || data.msg_type === '关注消息') {
                     if(data.handle_status_text === '待审批'){
                         data.url += "&btnType=edit";
                     }else if(data.handle_status_text === '已取消'){
@@ -152,7 +153,6 @@ let config = {
                         title: data.msg_type_text,
                         customSize:true
                     }).then((result) => {
-                        console.log(result);
                         if (result.refresh === true) {
                             this.actions.loadData();
                         }
