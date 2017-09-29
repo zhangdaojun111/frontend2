@@ -1144,6 +1144,7 @@ let config = {
                 return;
             }
             if( this.data.viewMode == 'newFormCount' ){
+                HTTP.flush();
                 this.actions.getNewFormCountData(refresh);
                 return;
             }
