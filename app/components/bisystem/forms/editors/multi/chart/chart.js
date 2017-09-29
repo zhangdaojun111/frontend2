@@ -172,6 +172,7 @@ let config = {
                         type:'required',
                     }
                 ],
+
                 events: {
                     onChange:function(value) {
                         let list = _.cloneDeep(value);
