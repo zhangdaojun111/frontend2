@@ -1038,13 +1038,11 @@ let config = {
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
             try{this.data.flowId = res["data"]["flow_data"][0]["flow_id"] || "";}catch(e){}
-            console.log(this.data.flowId, );
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
                     this.data.flowId = d.flow_id;
                 }
             }
-            console.log(this.data.flowId);
         },
         //请求新增表单统计数据
         getNewFormCountData: function () {
@@ -2049,6 +2047,11 @@ let config = {
                             parent_temp_id:data['parent_temp_id']['value']
                         };
                         let targetRow = changedRows[real_id];
+                        let err = this.actions.judegEditVal( targetRow.data );
+                        if( err.type ){
+                            msgBox.alert( err.err );
+                            return;
+                        }
                         this.data.saveEditObjArr.push( this.actions.saveEdit(targetRow,obj) )
                         if( this.data.saveEditObjArr.length == this.data.editRowTotal ){
                             let saveArr = []
@@ -2082,6 +2085,49 @@ let config = {
                 } )
                 HTTP.flush();
             }
+        },
+        //编辑数据保存时判断是否符合字段
+        judegEditVal: function ( data ) {
+            let err = {
+                type: false,
+                err:''
+            }
+            for( let k in this.data.colControlData ){
+                let field = this.data.colControlData[k];
+                //数字类型
+                if( fieldTypeService.numOrText( field.real_type ) && data[field.dfield] != undefined ){
+                    if( field.numArea && field.numArea !== "" ){
+                        let num = Number( data[field.dfield] );
+                        data[field.dfield] = num;
+                        //范围
+                        if( num>field.numArea.max || num<field.numArea.min ){
+                            err['type'] = true;
+                            err['err'] = '字段“' + field.label + '”，当前值：' + num +'，数据错误，错误原因：' + field.numArea.error + '，请修改。';
+                            return err;
+                        }
+                        //必填
+                        if( field.required && data[field.dfield] == '' ){
+                            err['type'] = true;
+                            err['err'] = '字段“' + field.label + '”是必填的，请修改。';
+                            return err;
+                        }
+                        //整数小数
+                        let regReg = new RegExp(field.reg);
+                        if (data[field.dfield] != "" && field.reg !== "") {
+                            for (let r in field.reg) {
+                                let regReg = eval(r);
+                                let flag = regReg.test(num);
+                                if (!flag) {
+                                    err['type'] = true;
+                                    err['err'] = '字段“' + field.label + '”，当前值：' + num +'，数据错误，错误原因：' + field.reg[r];
+                                    return err;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return err;
         },
         onCellValueChanged: function (event) {
             if(!this.data.cellChangeValue[event['colDef']['colId']]) {
@@ -2641,7 +2687,6 @@ let config = {
             }
             //富文本字段
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
-                console.log(data.value);
                 QuillAlert.data.value=data.value.replace(/(\n)/g, '');
                 PMAPI.openDialogByComponent(QuillAlert,{
                     width:800,
@@ -2880,10 +2925,6 @@ let config = {
                 if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                     btnType = 'none';
                 }
-                console.log("+++++++++++++++++++++++++")
-                console.log("+++++++++++++++++++++++++")
-                console.log("+++++++++++++++++++++++++")
-                console.log(data.data.flow_id);
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -2900,9 +2941,6 @@ let config = {
                     form_id:this.data.formId,
                     flow_id:data.data.flow_id || '',
                 };
-                console.log(data);
-                console.log("+++++++++++++++++++++++++++++++");
-                console.log(obj);
                 let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
                 let title = '查看'
                 this.actions.openSelfIframe( url,title );
@@ -3026,9 +3064,24 @@ let config = {
             switch( fun ){
                 //行级操作-BI
                 case 'bi':{
-                    params = [customTableId,customRowId,row_op_id,this.data.rowData,this.data.fieldsData];
+                    let json = {
+                        parent_table_id: customTableId,
+                        rowId: customRowId,
+                        operation_id: row_op_id,
+                        allRowData: this.data.rowData,
+                        columnsList: this.data.fieldsData,
+                    }
                     console.log( '行级BI参数' )
-                    console.log( params )
+                    console.log( json )
+                    let url = '/iframe/rowOperation/?operationType=bi';
+                    let winTitle = '行级BI';
+                    PMAPI.openDialogByIframe( url,{
+                        width: 1400,
+                        height: 800,
+                        title: winTitle,
+                        modal:true
+                    },json ).then( (data)=>{
+                    } )
                     break;
                 }
             }
@@ -3058,7 +3111,6 @@ let config = {
                 form_id:this.data.formId,
                 flow_id:data.data.flow_id || '',
             };
-            console.log(obj);
             if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
                 obj.btnType = 'none';
             }
@@ -3192,13 +3244,15 @@ let config = {
     },
     afterRender: function () {
         //发送表单tableId（订阅刷新数据用
-        TabService.onOpenTab( this.data.tableId ).done((result) => {
-            if(result.success === 1){
-                // console.log("post open record success");
-            }else{
-                console.log("post open record failed")
-            }
-        });
+        if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 ){
+            TabService.onOpenTab( this.data.tableId ).done((result) => {
+                if(result.success === 1){
+                    // console.log("post open record success");
+                }else{
+                    console.log("post open record failed")
+                }
+            });
+        }
         this.showLoading();
         try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {

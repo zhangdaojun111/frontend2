@@ -229,14 +229,16 @@ let config = {
          * 修改后重置用户头像
          */
         resetAvatar:function(){
+            console.log("do reset")
             let $img = this.el.find("img.set-info");
             if($img.length === 0){
                 $img = $("<img>").addClass("set-info");
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
-                this.el.find("div.avatar").append($img);
+                this.el.find(".avatar").append($img);
             }else{
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
             }
+            console.log($img);
         },
         /**
          * 保存常用菜单

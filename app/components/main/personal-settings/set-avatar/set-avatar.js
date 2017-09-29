@@ -219,7 +219,6 @@ let config = {
             UserInfoService.saveAvatar(this.data.avatarSrc).done((result) => {
                 //根据结果处理后续工作
                 if(result.success === 1){
-                    console.log(result);
                     //向父窗口传递头像数据并设置
                     window.config.sysConfig.userInfo.avatar = this.data.avatarSrc;
                     Mediator.emit("personal:setAvatar");
@@ -303,7 +302,7 @@ let config = {
         this.actions.initUserAvatar();
     },
     beforeDestory:function () {
-
+        // Mediator.removeAll("personal:setAvatar");
     }
 };
 

@@ -149,13 +149,13 @@ let config = {
                 this.actions.resetPagination( this.data.total );
                 this.actions.onPaginationChanged();
                 if( this.data.tableId ){
-                    console.log("pageSize数据保存：" + Number(this.data.rows));
-                    dataTableService.savePreference({
-                        'action': 'pageSize',
-                        table_id: this.data.tableId,
-                        pageSize: Number(this.data.rows)
-                    });
-                    HTTP.flush();
+                    // console.log("pageSize数据保存：" + Number(this.data.rows));
+                    // dataTableService.savePreference({
+                    //     'action': 'pageSize',
+                    //     table_id: this.data.tableId,
+                    //     pageSize: Number(this.data.rows)
+                    // });
+                    // HTTP.flush();
                 }
             },1000 ) ).on( 'input','.enterPageNum',_.debounce( ()=>{
                 let input = this.el.find( '.enterPageNum' )[0];
@@ -304,9 +304,10 @@ let config = {
         //订阅数据失效
         if( this.data.type == 'workflow' ){
             PMAPI.subscribe(PMENUM.workflow_approve_msg, (info) => {
-                this.el.find( '.data-invalid' ).removeClass('freshtip');
-                this.el.find( '.data-invalid' )[0].innerHTML = '数据失效，请刷新。';
-                this.el.find( '.data-invalid' ).addClass('freshtip');
+                // this.el.find( '.data-invalid' ).removeClass('freshtip');
+                // this.el.find( '.data-invalid' )[0].innerHTML = '数据失效，请刷新。';
+                // this.el.find( '.data-invalid' ).addClass('freshtip');
+                this.actions.timeDelayRefresh();
             })
         }else {
             PMAPI.subscribe(PMENUM.data_invalid, (info) => {

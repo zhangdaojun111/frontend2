@@ -44,9 +44,8 @@ let config = {
             this.el.find(".J_ul-img").empty();
             let len = msg.file_ids.length;
             let html = " ";
-            let host = "http://"+window.location.host;
             for (let i=0;i<len;i++){
-                html += `<li class='li-img clearfix'><span class='J_delImg delImg' id=${msg.file_ids[i]}>X</span><img src='${host}/download_attachment/?file_id=${msg.file_ids[i]}&download=0' data-id=${msg.file_ids[i]} class='add-img'/></li>`;
+                html += `<li class='li-img clearfix'><span class='J_delImg delImg' id=${msg.file_ids[i]}>X</span><img src='/download_attachment/?file_id=${msg.file_ids[i]}&download=0' data-id=${msg.file_ids[i]} class='add-img'/></li>`;
             }
             this.el.find('.J_ul-img').html(html);
         },
