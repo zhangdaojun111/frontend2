@@ -43,8 +43,8 @@ let config = {
                 choosed = Array.from(choosed).map((item) => {
                     let $item = $(item);
                     return {
-                        id: $item.data('id'),
-                        name: $item.data('name')
+                        id: $item.data('id').replace(/\'/g, ''),
+                        name: $item.data('name').replace(/\'/g, ''),
                     }
                 });
                 this.data.choosed = choosed;
