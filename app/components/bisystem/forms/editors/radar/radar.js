@@ -105,7 +105,7 @@ let config = {
                 assortment: 'radar',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn:'',
-                filter: [],
+                filter: data.filter,
                 columns:data.columns,
                 product:data.product,
                 icon: data.icon,
@@ -133,11 +133,11 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
-
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['product'].setValue(chart['product']);
         }
@@ -166,6 +166,22 @@ let config = {
             },
             theme,
             icon,
+            {
+                label: '高级查询',
+                name: 'filter',
+                defaultValue: '',
+                type: 'search',
+                events: {
+                    onShowAdvancedSearchDialog() {
+                        let data = {
+                            tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
+                            fieldsData: this.formItems['xAxis'].autoselect.data.list,
+                            commonQuery: this.formItems['filter'].data.value ? [this.formItems['filter'].data.value.filter_source] : null,
+                        };
+                        this.formItems['filter'].actions.showAdvancedDialog(data);
+                    }
+                }
+            },
             {
                 label: '选中雷达图名称字段',
                 name: 'product',

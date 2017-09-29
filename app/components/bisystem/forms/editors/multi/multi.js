@@ -91,8 +91,6 @@ let config = {
                     };
                 }
             };
-
-
             //发送状态给子组件
             Mediator.emit('bi:multi:chart',1);
             //判断验证是否全部通过

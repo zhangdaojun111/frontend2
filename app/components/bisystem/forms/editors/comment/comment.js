@@ -106,7 +106,7 @@ let config = {
                 assortment: 'comment',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn:'',
-                filter: [],
+                filter: data.filter,
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -135,6 +135,7 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['columns'].setValue(JSON.stringify(chart['columns']));
         }
     },
@@ -161,6 +162,22 @@ let config = {
             },
             theme,
             icon,
+            {
+                label: '高级查询',
+                name: 'filter',
+                defaultValue: '',
+                type: 'search',
+                events: {
+                    onShowAdvancedSearchDialog() {
+                        let data = {
+                            tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
+                            fieldsData: this.formItems['xAxis'].autoselect.data.list,
+                            commonQuery: this.formItems['filter'].data.value ? [this.formItems['filter'].data.value.filter_source] : null,
+                        };
+                        this.formItems['filter'].actions.showAdvancedDialog(data);
+                    }
+                }
+            },
             {
                 label: '请选择列名',
                 name: 'columns',
