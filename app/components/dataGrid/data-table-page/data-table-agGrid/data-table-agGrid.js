@@ -2097,6 +2097,7 @@ let config = {
                 if( fieldTypeService.numOrText( field.real_type ) && data[field.dfield] != undefined ){
                     if( field.numArea && field.numArea !== "" ){
                         let num = Number( data[field.dfield] );
+                        data[field.dfield] = num;
                         //范围
                         if( num>field.numArea.max || num<field.numArea.min ){
                             err['type'] = true;
