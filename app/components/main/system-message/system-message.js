@@ -165,7 +165,7 @@ let config = {
                 // if($event.event.srcElement.className.includes()){
                 //     $event.node.data.is_read = 1;
                 //     this.agGrid.actions.refreshView();
-                    this.actions._postReadData(JSON.stringify([data.id]));
+                this.actions._postReadData(JSON.stringify([data.id]));
                 // }
             }
         }
