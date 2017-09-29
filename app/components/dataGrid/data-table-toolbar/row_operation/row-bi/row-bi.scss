@@ -4,7 +4,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 5px 5px 10px 5px;
+    padding: 5px 10px 10px 10px;
     overflow: hidden;
     .btn-con {
         height: 50px;
@@ -19,6 +19,36 @@
             border: none;
             padding: 1px;
             cursor: pointer;
+        }
+
+        .cantClick {
+            background-color: #afafaf;
+        }
+        .cantClick:hover {
+            cursor: not-allowed;
+        }
+
+
+        .fieldsMap {
+            padding: 0 23px 0 12px;
+            cursor: pointer;
+            border: 1px solid #d7d7d7;
+            border-radius: 4px;
+            text-indent: 0;
+            color: #666666;
+            width: 115px;
+            font-size: 12px;
+            height: 25px;
+            display: inline-block;
+            outline: none;
+            box-shadow: none;
+            appearance: none;
+            background-position: 90px;
+            background: url(../../../../../assets/images/dataGrid/icon_xiala2.png) 90px no-repeat;
+        }
+
+        span {
+            font-size: 12px;
         }
     }
     .bi-con {

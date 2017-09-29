@@ -3025,9 +3025,6 @@ let config = {
             switch( fun ){
                 //行级操作-BI
                 case 'bi':{
-                    params = [customTableId,customRowId,row_op_id,this.data.rowData,this.data.fieldsData];
-                    console.log( '行级BI参数' )
-                    console.log( params )
                     let json = {
                         parent_table_id: customTableId,
                         rowId: customRowId,
@@ -3035,6 +3032,8 @@ let config = {
                         allRowData: this.data.rowData,
                         columnsList: this.data.fieldsData,
                     }
+                    console.log( '行级BI参数' )
+                    console.log( json )
                     let url = '/iframe/rowOperation/?operationType=bi';
                     let winTitle = '行级BI';
                     PMAPI.openDialogByIframe( url,{
