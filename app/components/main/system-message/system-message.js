@@ -50,14 +50,17 @@ let config = {
             });
         },
         /**
-         * 向后台发送信息状态更新，并通过获取数据刷新页面
+         * 向后台发送信息阅读状态，审批通过获取数据刷新页面
          * @param ids
+         * @param type
          * @private
          */
         _postReadData: function (ids) {
+            this.showLoading();
             HTTP.postImmediately('/remark_or_del_msg/', {
                 checkIds: ids
             }).then((res) => {
+                this.hideLoading();
                 if (res.success === 1) {
                     this.actions.loadData();
                 }
@@ -133,25 +136,38 @@ let config = {
          * @param $event
          */
         onCellClicked: function ($event) {
-            let data = $event.data;
-            if (data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
-                data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') {
-                if(data.handle_status_text === '待审批'){
-                    data.url += "&btnType=edit";
-                }else if(data.handle_status_text === '已取消'){
-                    data.url += "&btnType=view";
+            if($event.colDef.headerName === '操作'){
+                let data = $event.data;
+                // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
+                //     data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') || data.msg_type === '关注消息') {
+                if (data.msg_type === '审批消息' || data.msg_type === '关注消息') {
+                    if(data.handle_status_text === '待审批'){
+                        data.url += "&btnType=edit";
+                    }else if(data.handle_status_text === '已取消'){
+                        data.url += "&btnType=view";
+                    }
+
+                    PMAPI.openDialogByIframe(data.url, {
+                        width: 1200,
+                        height: 500,
+                        title: data.msg_type_text,
+                        customSize:true
+                    }).then((result) => {
+                        if (result.refresh === true) {
+                            this.actions.loadData();
+                        }
+                    })
+                } else {
+                    systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
                 }
 
-                PMAPI.openDialogByIframe(data.url, {
-                    width: 1200,
-                    height: 500,
-                    title: data.msg_type_text,
-                    customSize:true
-                })
-            } else {
-                systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
+                //查看通过前端自己刷新，审批通过loadData刷新
+                // if($event.event.srcElement.className.includes()){
+                //     $event.node.data.is_read = 1;
+                //     this.agGrid.actions.refreshView();
+                this.actions._postReadData(JSON.stringify([data.id]));
+                // }
             }
-            this.actions._postReadData(JSON.stringify([data.id]));
         }
     },
     afterRender: function () {
