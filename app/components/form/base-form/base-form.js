@@ -1105,6 +1105,9 @@ let config = {
             } else {
                 json["real_id"] = this.data.realId;
             }
+            if (this.data.tempId){
+                json["temp_id"] = this.data.tempId;
+            }
             return json;
         },
 
