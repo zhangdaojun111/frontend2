@@ -185,7 +185,12 @@ const approveWorkflow = (para) => {
         comment=$('#comment').val();
     para.data={};
     if(agorfo){
-        para.data=JSON.stringify(formData);
+        if(formData.error){
+            msgBox.alert(`${formData.errorMessage}`);
+            return ;
+        }else {
+            para.data = JSON.stringify(formData);
+        }
     }
     para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);

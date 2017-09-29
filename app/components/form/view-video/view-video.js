@@ -81,7 +81,9 @@ let ViewVideo = {
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         this.actions.setBackground();
         for(let item of this.data.rows){
-             this.el.find('#'+item.file_id).find('.video-file-name').attr('title',item.file_name);
+            let ele = this.el.find('#'+item.file_id);
+             ele.find('.video-file-name').attr('title',item.file_name);
+             ele.find('.video-url').attr('href',`../download_attachment/?file_id=${item.file_id}&download=1&dinput_type=${this.data.dinput_type}`);
         }
         //没啥用的代码 写着玩的
         // let _this=this;
