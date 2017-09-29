@@ -27,6 +27,7 @@ let FormEntrys = {
         this.data.parentTempId = config.parent_temp_id || '';
         //数据id
         this.data.realId = config.real_id || '';
+        this.data.tempId = config.temp_id || '';
         //父表表名
         this.data.parentTableId = config.parent_table_id || '';
         this.data.parentRecordId = config.parent_record_id || '';
@@ -119,10 +120,6 @@ let FormEntrys = {
             json = this.pickJson();
         }
         if( this.data.inProcess == 1 ){
-            console.log( "__________________________" )
-            console.log( "__________________________" )
-            console.log( "__________________________" )
-            console.log( this.data.inProcess )
             json = {
                 form_id: this.data.formId,
                 record_id: this.data.recordId,
@@ -131,6 +128,11 @@ let FormEntrys = {
                 from_focus: 0,
                 table_id: this.data.tableId
             }
+        }
+        //如果有tempId优先传tempId
+        if( this.data.tempId ){
+            json['temp_id'] = this.data.tempId
+            json['real_id'] = ''
         }
         return json;
     },
@@ -171,9 +173,10 @@ let FormEntrys = {
             }
         }
         //如果是临时表(在途，批量工作流)，传temp_id，否则是real_id
-        if (this.data.inProcess == 1 || this.data.isBatch == 1) {
+        if (this.data.inProcess == 1 || this.data.isBatch == 1 ) {
             json["temp_id"] = this.data.realId;
-        } else {
+        }
+        else {
             json["real_id"] = this.data.realId;
         }
         return json;
@@ -212,6 +215,7 @@ let FormEntrys = {
         _.defaultsDeep(staticData, this.data)
         staticData.tableId = staticData['table_id'] || this.data.tableId;
         return staticData;
+
     },
     //处理字段数据,换了个变量名
     parseRes(res) {
@@ -291,7 +295,6 @@ let FormEntrys = {
         let sys_type = data["sys_type"];
         //审批中的提示信息
         let record_tip = data["record_tip"];
-
         let html = '';
         //加载表单
         if (companyCustomTableFormExists) {
@@ -402,7 +405,11 @@ let FormEntrys = {
         //创建请求
         let json = this.createPostJson();
         res = await FormService.getFormData(json);   //将表单名称发送给工作流
-		  Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
+        if(res[1]['error'] == '您没有数据查看权限' || res[1]['error'] == '您没有查看该条数据的权限'  ) {
+            this.data.el.find('.form-print-position').append('<p style="font-size:20px;text-align: center;position: relative;top: 35px">您没有数据查看权限</p>')
+            return false;
+        }
+        Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
         //处理static,dynamic数据
@@ -419,16 +426,15 @@ let FormEntrys = {
         this.childForm[this.data.tableId] = formBase;
         let $newWrap = this.data.el.find('.form-print-position');
         formBase.render($newWrap);
+
         //通知父框架表单刷新完毕
 
         Mediator.publish('form:formAlreadyCreate', 'success');
         Mediator.publish('form:formAlreadyCreate'+this.tableId, 'success');
         console.timeEnd('form创建时间');
-
         //给工作流传表单初始数据
         let valueChange = this.getFormValue(this.data.tableId, false)
         Mediator.publish('workFlow:formValueChange', valueChange);
-
     },
 
     //审批删除时重置表单可编辑性
@@ -453,7 +459,6 @@ let FormEntrys = {
             return;
         }
         return this.childForm[tableId].actions.getFormValue(isCheck);
-        debugger
     },
 }
 export default FormEntrys

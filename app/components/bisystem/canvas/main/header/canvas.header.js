@@ -56,11 +56,73 @@ let config = {
         //     }else{
         //         this.el.find('.canSaveView').hide();
         //     }
-        // }
+        // },
+        /**
+         * 初始化加载时隐藏的更多目录框
+         */
+        hideMoreMenu(){
+            let childWidth = 0;
+            let navTabsWidth = this.el.find('.nav-tabs').width();
+            this.el.find('.nav-tabs-select').css('left',navTabsWidth);
+            this.el.find('.child-menu').css('left',navTabsWidth);
+            this.el.find('.nav-tabs div').each((index,val)=>{
+                childWidth += $(val).outerWidth();
+                if(childWidth > navTabsWidth){
+                    this.el.find('.nav-tabs-select').show();
+                    $(val).appendTo(this.el.find('.child-menu'));
+                }
+            });
+        },
+        /**
+         *当窗口大小改变时 更多目录框的显示随之改变
+         */
+        windowChange(){
+            let childWidth = 0;
+            let navTabsWidth = this.el.find('.nav-tabs').width();
+            this.el.find('.nav-tabs-select').css('left',navTabsWidth);
+            this.el.find('.child-menu').css('left',navTabsWidth);
+            this.el.find('.nav-tabs div').each((index,val)=>{
+                childWidth += $(val).width();
+                if(childWidth > navTabsWidth){
+                    if(this.el.find('.child-menu div').length){
+                        this.el.find('.child-menu div:first-child').before($(val));
+                    }else {
+                        $(val).appendTo(this.el.find('.child-menu'));
+                    }
+                }
+            });
+            if(this.el.find('.child-menu div').length){
+                this.el.find('.nav-tabs-select').show();
+                this.el.find('.child-menu div').each((index,val)=>{
+                    childWidth +=$(val).width();
+                    if(childWidth < navTabsWidth){
+                        $(val).appendTo(this.el.find('.nav-tabs'));
+                    }
+                });
+            }
+            if(this.el.find('.child-menu div').length===0){
+                this.el.find('.nav-tabs-select').hide();
+            }
+        },
+        /**
+         * 未选中的所有目录取消选中状态
+         * @param menuId 选中的目录id
+         */
+        hideBrothers(menuId){
+            this.findAllChildren().forEach((item)=>{
+                if(item.data.id == menuId){
+                    item.el.find('a').addClass('active');
+                    item.el.find('i').addClass('tabs-menu-active-icon');
+                }else{
+                    item.el.find('a').removeClass('active');
+                    item.el.find('i').removeClass('tabs-menu-active-icon');
+                }
+            });
+        }
+
     },
     binds: [
-        //保存画布块
-        {
+        { //保存画布块
             event: 'click',
             selector: '.views-btn-group .view-save-btn',
             callback: function (context, event) {
@@ -86,29 +148,72 @@ let config = {
                 formData.append('file',$(context)[0].files[0]);
                 canvasCellService.importData(formData).then((res)=>{
                     if (res['success'] === 1) {
-                        // msgbox.alert('上传成功');
-                        location.reload();
+                        msgbox.alert('导入成功');
+                        window.setTimeout(function() {
+                            location.reload();
+                        },2000);
                     } else {
                         msgbox.alert(res['error']);
                     }
                 })
             }
         },
+        { //点击显示更多目录
+            event:'click',
+            selector:'.nav-tabs-select',
+            callback: function (context,event) {
+                event.stopPropagation();
+                this.el.find('.child-menu').css('visibility','visible');
+            }
+        },
+        { //调用打印
+            event:'click',
+            selector:'.print-btn',
+            callback: function (context,event) {
+                window.print();
+            }
+        },
     ],
     afterRender() {
-
         //新窗口隐藏新窗口图标
         if(window === window.parent){
             this.el.find('.new-window').hide();
-        };
-
+        }
         this.data.views = window.config.bi_views;
         // 渲染header视图列表
         this.data.views.forEach(viewData => {
-            let menu = new CanvasHeaderMenuComponent(viewData);
+            let menu = new CanvasHeaderMenuComponent(viewData,{
+                onClearActive:()=>{
+                    this.actions.hideBrothers(viewData.id);
+                }
+            });
             this.append(menu, this.el.find('.nav-tabs'));
             this.data.menus[viewData.id] = menu;
+        });
+
+
+        //第一次渲染之后隐藏多的目录
+        this.actions.hideMoreMenu();
+
+    },
+    firstAfterRender(){
+        //当窗口大小改变时 更多目录框的显示随之改变
+
+        $(window).resize(()=> {
+            this.actions.windowChange();
+        });
+        //点击更多目录框外 隐藏显示框
+        $(document.body).bind('click.menu',()=>{
+            this.el.find('.child-menu').css('visibility','hidden');
         })
+    },
+    beforeDestory(){
+
+        //当destory时销毁全局document.body click事件
+        $(document.body).off('click.menu');
+
+        //当destory时销毁全局window resize
+        $(window).off('resize');
     }
 };
 export class CanvasHeaderComponent extends Component {

@@ -1,6 +1,6 @@
 import {Base} from '../base';
 import template from './linebar.html';
-import {chartName,theme,icon,button} from '../form.chart.common';
+import {chartName,theme,icon,button,search} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -184,7 +184,7 @@ let config = {
                 countColumn: {},
                 double:data.double[0] ? 1 : 0,
                 echartX: data.echartX[0] ? {marginBottom: data.marginBottom, textNum:data.textNum}: {},
-                filter: [],
+                filter: data.filter,
                 icon: data.icon,
                 relations: [],
                 source: data.source,
@@ -240,11 +240,11 @@ let config = {
          */
         fillChart(data) {
             let chart = _.cloneDeep(data);
-            console.log(chart);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
             this.formItems['xAxis'].setValue(chart['xAxis']);
@@ -297,6 +297,22 @@ let config = {
             },
             theme,
             icon,
+            {
+                label: '高级查询',
+                name: 'filter',
+                defaultValue: '',
+                type: 'search',
+                events: {
+                    onShowAdvancedSearchDialog() {
+                        let data = {
+                            tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
+                            fieldsData: this.formItems['xAxis'].autoselect.data.list,
+                            commonQuery: this.formItems['filter'].data.value ? [this.formItems['filter'].data.value.filter_source] : null,
+                        };
+                        this.formItems['filter'].actions.showAdvancedDialog(data);
+                    }
+                }
+            },
             {
                 label: '默认排序',
                 name: 'sort',
@@ -579,7 +595,7 @@ let config = {
 
         if (this.data.id) {
             this.actions.fillChart(this.data.chart);
-        }
+        };
     }
 }
 

@@ -3,11 +3,54 @@
     height: 50px;
     white-space: nowrap;
     width: calc(100% - 300px);
-    overflow: auto;
     background: transparent;
     div {
         height: 100%;
         display: inline-block;
+        float: left;
+    }
+    .nav-tabs-select {
+        display: inline-block;
+        display: none;
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        top: 20px;
+        left: 0;
+        cursor: pointer;
+        z-index: 99;
+        i {
+            vertical-align: middle;
+        }
+    }
+}
+
+.child-menu {
+    visibility: hidden;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    z-index: 99;
+    a {
+        text-decoration: none;
+        padding: 0 25px;
+        display: block;
+        outline: none;
+        line-height: 50px;
+        height: 100%;
+        box-sizing: border-box;
+        color: #666666;
+        border-bottom: 2px solid transparent;
+        position: relative;
+        background: #FFFFFF;
+        &.active {
+            border-bottom-color: #0088FF;
+            color: #0088FF;
+        }
+        i {
+            vertical-align: middle;
+            margin-right: 2px;
+        }
     }
 }
 

@@ -15,6 +15,7 @@ import Mediator from '../../../../lib/mediator';
 import {router} from '../../bi.manage.router';
 import {AdvancedCompute} from '../form/advanced.compute/advanced.compute';
 import {Textarea} from '../form/textarea/textarea';
+import {Search} from '../form/advanced.search/search';
 
 let formItemTypes = {
     'text': Text,
@@ -28,7 +29,8 @@ let formItemTypes = {
     'deep': Deep,
     'yAxis': YaXis,
     'advancedCompute': AdvancedCompute,
-    'textarea': Textarea
+    'textarea': Textarea,
+    'search': Search
 }
 
 class Base extends Component {

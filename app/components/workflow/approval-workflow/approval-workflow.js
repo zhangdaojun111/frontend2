@@ -440,7 +440,6 @@ let config={
             }
         });
 
-        // zj
         Mediator.subscribe("workflow:focused", (res) => {
             this.actions.workflowFocused(res);
         });
