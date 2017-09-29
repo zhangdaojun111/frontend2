@@ -178,6 +178,7 @@ let config = {
                     }
                 }
             },
+
             {
                 label: '请选择列名',
                 name: 'columns',
