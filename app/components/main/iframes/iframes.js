@@ -121,14 +121,14 @@ export const IframeInstance = new Component({
          */
         sendOpenRequest:function (id) {
             if (id !== 'search-result'){
-                //向后台发送请求记录
-                // TabService.onOpenTab(id).done((result) => {
-                //     if(result.success === 1){
-                //         // console.log("post open record success");
-                //     }else{
-                //         console.log("post open record failed")
-                //     }
-                // });
+                // 向后台发送请求记录
+                TabService.onOpenTab(id).done((result) => {
+                    if(result.success === 1){
+                        // console.log("post open record success");
+                    }else{
+                        console.log("post open record failed")
+                    }
+                });
             }
         },
         /**
@@ -363,6 +363,7 @@ export const IframeInstance = new Component({
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
             TabService.getOpeningTabs().then((result) => {
+                console.log(result);
                 let tabs = {};
                 //将未关闭的标签id加入openingTabsList
                 if(result[0].succ === 1){
