@@ -167,7 +167,6 @@ let config = {
                 this.data.choosed.forEach((item) => {
                     if (!_.isUndefined(item.id)) {
                         let checkbox = this.listWrap.find(`input:checkbox[data-id="\'${item.id}\'"]`);
-                        console.log(checkbox);
                         if (checkbox.length) {
                             checkbox[0].checked = true;
                         }
@@ -197,11 +196,12 @@ let config = {
             this.el.on('keydown','.auto-select-component',function (event) {
                 //任意键盘操作，将鼠标移动状态置为false，防止鼠标被动触发mouseleave或mouseenter
                 that.data.mouseActive = false;
-                event.preventDefault();
                 let keyCode = event.keyCode;
                 if(keyCode === 13){
+                    event.preventDefault();
                     that.actions.setCheckBoxByKeyboard();
                 }else if(keyCode === 40){
+                    event.preventDefault();
                     let $next = that.data.focusItem.nextAll('.match-visible');
                     if($next.length > 0){
                         that.data.focusItem.removeClass('hovered');
@@ -212,6 +212,7 @@ let config = {
                         that.el.find('.auto-select-ul').scrollTop(scrollTop);
                     }
                 }else if(keyCode === 38){
+                    event.preventDefault();
                     let $prev = that.data.focusItem.prevAll('.match-visible');
                     if($prev.length > 0){
                         that.data.focusItem.removeClass('hovered');
@@ -282,7 +283,7 @@ let config = {
             selector: 'input.auto-select-text',
             callback: _.debounce(function (context) {
                 this.actions.onInput($(context));
-            }, 500)
+            }, 1000)
         },{
             event: 'click',
             selector: '.choosed .item',
