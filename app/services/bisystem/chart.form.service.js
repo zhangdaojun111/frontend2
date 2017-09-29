@@ -40,6 +40,7 @@ export const ChartFormService = {
         return Promise.resolve(res);
     },
 
+
     /**
      * 保存图表数据
      * @return promise
