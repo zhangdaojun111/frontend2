@@ -27,6 +27,7 @@ let config = {
                 fieldsData: data.fieldsData ? dgcService.createNeedFields(fieldsData).search : [],
                 commonQuery: data.commonQuery ? data.commonQuery : [],
             };
+
             PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
                 width:950,
                 height:600,
