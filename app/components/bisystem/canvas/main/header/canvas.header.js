@@ -148,7 +148,10 @@ let config = {
                 formData.append('file',$(context)[0].files[0]);
                 canvasCellService.importData(formData).then((res)=>{
                     if (res['success'] === 1) {
-                        location.reload();
+                        msgbox.alert('导入成功');
+                        window.setTimeout(function() {
+                            location.reload();
+                        },2000);
                     } else {
                         msgbox.alert(res['error']);
                     }

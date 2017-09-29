@@ -148,6 +148,7 @@ let config = {
         },
         //展示常用查询
         showSearchData: function(data) {
+            debugger
             let searchData = data;
             this.el.find('.condition-search-container').find('div').remove();
             this.actions.rendSearchItem();
