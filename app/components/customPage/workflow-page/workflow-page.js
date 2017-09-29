@@ -746,7 +746,7 @@ let config = {
             } ).then( (data)=>{
                 console.log( "工作流操作返回" )
                 console.log( data )
-                if( data.refresh == true ){
+                if( data.refresh ){
                     this.actions.timeDelayRefresh();
                 }
             } )
