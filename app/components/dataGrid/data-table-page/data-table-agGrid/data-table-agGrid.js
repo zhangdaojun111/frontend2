@@ -2048,6 +2048,11 @@ let config = {
                             parent_temp_id:data['parent_temp_id']['value']
                         };
                         let targetRow = changedRows[real_id];
+                        let err = this.actions.judegEditVal( targetRow.data );
+                        if( err.type ){
+                            msgBox.alert( err.err );
+                            return;
+                        }
                         this.data.saveEditObjArr.push( this.actions.saveEdit(targetRow,obj) )
                         if( this.data.saveEditObjArr.length == this.data.editRowTotal ){
                             let saveArr = []
@@ -2081,6 +2086,48 @@ let config = {
                 } )
                 HTTP.flush();
             }
+        },
+        //编辑数据保存时判断是否符合字段
+        judegEditVal: function ( data ) {
+            let err = {
+                type: false,
+                err:''
+            }
+            for( let k in this.data.colControlData ){
+                let field = this.data.colControlData[k];
+                //数字类型
+                if( fieldTypeService.numOrText( field.real_type ) ){
+                    if( field.numArea && field.numArea !== "" ){
+                        let num = Number( data[field.dfield] );
+                        //范围
+                        if( num>field.numArea.max || num<field.numArea.min ){
+                            err['type'] = true;
+                            err['err'] = '字段“' + field.label + '”，当前值：' + num +'，数据错误，错误原因：' + field.numArea.error + '，请修改。';
+                            return err;
+                        }
+                        //必填
+                        if( field.required && data[field.dfield] == '' ){
+                            err['type'] = true;
+                            err['err'] = '字段“' + field.label + '”是必填的，请修改。';
+                            return err;
+                        }
+                        //整数小数
+                        let regReg = new RegExp(field.reg);
+                        if (data[field.dfield] != "" && field.reg !== "") {
+                            for (let r in field.reg) {
+                                let regReg = eval(r);
+                                let flag = regReg.test(num);
+                                if (!flag) {
+                                    err['type'] = true;
+                                    err['err'] = '字段“' + field.label + '”，当前值：' + num +'，数据错误，错误原因：' + field.reg[r];
+                                    return err;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return err;
         },
         onCellValueChanged: function (event) {
             if(!this.data.cellChangeValue[event['colDef']['colId']]) {
@@ -3025,9 +3072,24 @@ let config = {
             switch( fun ){
                 //行级操作-BI
                 case 'bi':{
-                    params = [customTableId,customRowId,row_op_id,this.data.rowData,this.data.fieldsData];
+                    let json = {
+                        parent_table_id: customTableId,
+                        rowId: customRowId,
+                        operation_id: row_op_id,
+                        allRowData: this.data.rowData,
+                        columnsList: this.data.fieldsData,
+                    }
                     console.log( '行级BI参数' )
-                    console.log( params )
+                    console.log( json )
+                    let url = '/iframe/rowOperation/?operationType=bi';
+                    let winTitle = '行级BI';
+                    PMAPI.openDialogByIframe( url,{
+                        width: 1400,
+                        height: 800,
+                        title: winTitle,
+                        modal:true
+                    },json ).then( (data)=>{
+                    } )
                     break;
                 }
             }

@@ -495,9 +495,9 @@ export const dgcService = {
                 data.colWidth = JSON.parse(res['colWidth'].colWidth);
             }
         }
-        if (res['pageSize'] && res['pageSize'].pageSize) {
-            data.rows = res['pageSize'].pageSize;
-        }
+        // if (res['pageSize'] && res['pageSize'].pageSize) {
+        //     data.rows = res['pageSize'].pageSize;
+        // }
         if (res['ignoreFields']&&res['ignoreFields']['ignoreFields']) {
             data.ignoreFields = JSON.parse(res['ignoreFields']['ignoreFields']);
         } else {
