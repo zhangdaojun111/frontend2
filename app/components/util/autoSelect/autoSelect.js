@@ -51,8 +51,8 @@ let config = {
             } else {
                 if (item.find('input:checkbox')[0].checked) {
                     this.data.choosed = [{
-                        id: item.data('id'),
-                        name: item.data('name')
+                        id: item.data('id').replace(/\'/g, ''),
+                        name: item.data('name').replace(/\'/g, ''),
                     }];
                     this.actions.hideSelectBox();
                 } else {
@@ -91,8 +91,8 @@ let config = {
                 this.data.focusItem.addClass('hovered');
             } else {
                 this.listWrap.find('li').hide();
-                this.listWrap.find(`li[data-name*=${value}]`).addClass('match-visible').show();
-                this.listWrap.find(`li[data-py*=${value}]`).addClass('match-visible').show();
+                this.listWrap.find(`li[data-name*="${value}"]`).addClass('match-visible').show();
+                this.listWrap.find(`li[data-py*="${value}]"`).addClass('match-visible').show();
                 let $matchItems = this.el.find('li.match-visible');
                 if($matchItems.length > 0){
                     this.data.focusItem = $matchItems.eq(0).addClass('hovered');
@@ -166,7 +166,7 @@ let config = {
             if (this.data.choosed.length) {
                 this.data.choosed.forEach((item) => {
                     if (!_.isUndefined(item.id)) {
-                        let checkbox = this.listWrap.find(`input:checkbox[data-id=${item.id}]`);
+                        let checkbox = this.listWrap.find(`input:checkbox[data-id="${item.id}"]`);
                         if (checkbox.length) {
                             checkbox[0].checked = true;
                         }
