@@ -279,7 +279,7 @@ Mediator.subscribe("approval:re-app", (msg) => {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:key,
-                data:{}
+                data:{refresh:true}
             })
         })
     }
