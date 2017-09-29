@@ -6,6 +6,8 @@ import {CanvasHeaderComponent} from './header/canvas.header';
 import {canvasCellService} from '../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../lib/msgbox';
 import {PMAPI} from "../../../../lib/postmsg";
+import {biGetUrlParamService} from '../../../../services/bisystem/getUrlParams.service';
+
 
 let config = {
     template: template,
@@ -24,7 +26,7 @@ let config = {
             selector: '.to-edit-page',
             callback: function (context, event) {
                 //编辑模式Iframe
-                let iFrameUrl = '/bi/manager/' + window.location.hash;
+                let iFrameUrl = window.location.href.replace('index', 'manager');
                 PMAPI.openDialogByIframe(
                     iFrameUrl,
                     {
