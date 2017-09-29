@@ -313,14 +313,20 @@ let config = {
                     this.actions.calcCustomColumn();
                 } )
             }
-            //全屏
-            if( this.el.find( '.grid-new-window' )[0] ){
-                let obj = {
-                    tableId: this.data.tableId,
-                    tableName: this.data.tableId2Name[this.data.tableId]
+            //新窗口显示隐藏
+            if( this.data.isNewWindow ){
+                this.el.find( '.grid-new-window' )[0].style.display = 'none';
+            }else {
+                //全屏
+                if( this.el.find( '.grid-new-window' )[0] ){
+                    let obj = {
+                        tableId: this.data.tableId,
+                        tableName: this.data.tableId2Name[this.data.tableId],
+                        isNewWindow: true
+                    }
+                    let url = this.actions.returnIframeUrl( '/iframe/workflowPage/',obj )
+                    this.el.find('.grid-new-window').attr('href', url);
                 }
-                let url = this.actions.returnIframeUrl( '/iframe/workflowPage/',obj )
-                this.el.find('.grid-new-window').attr('href', url);
             }
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
