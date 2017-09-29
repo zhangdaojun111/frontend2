@@ -6,6 +6,7 @@ import {dgcService} from '../../../../../services/dataGrid/data-table-control.se
 let config = {
     template: template,
     data: {
+        fields: []
     },
     actions: {
         /**
@@ -13,7 +14,7 @@ let config = {
          * @param data{tableId: 数据源，fieldsData： x轴字段，commonQuery: 查询条件}
          */
         showAdvancedDialog(data) {
-            console.log(data);
+            this.data.fields = data.fieldsData;
             let fieldsData = _.cloneDeep(data.fieldsData).map(item => {
                 item['field'] = item['dfield'];
                 item['real_type'] = item['type'];
@@ -34,9 +35,14 @@ let config = {
                 if (res.onlyclose) {
                     this.data.value = {}
                 } else {
-                    console.log(res);
+                    let filterValues = _.cloneDeep(res).value.map(item => {
+                        if (item.cond.keyword.indexOf('1970-07-01') !== -1) {
+                            item.cond.keyword = this.actions.filterDate(item) ? '%date%' : item.cond.keyword;
+                        };
+                        return item;
+                    });
                     let params = {};
-                    params['filter'] = res.value;
+                    params['filter'] = filterValues;
                     let result = dgcService.returnQueryParams(params);
                     this.data.value = {
                         filter: result.filter,
@@ -46,10 +52,23 @@ let config = {
                             queryParams: JSON.stringify(res.value)
                         }
                     };
-                    console.log(this.data.value);
                 }
             })
-        }
+        },
+        /**
+         * 当时间字段设置为1970-07-01 00：00：00 替换格式为%date%
+         * @param data = 查询字段的名字
+         */
+        filterDate(value) {
+            let isDateColumn;
+            for(let field of this.data.fields) {
+                if (value.cond.searchBy === field.dfield) {
+                    isDateColumn = true
+                    break;
+                };
+            }
+            return isDateColumn;
+        },
     },
 
     binds: [
