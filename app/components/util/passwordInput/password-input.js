@@ -10,7 +10,6 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import template from './password-input.html';
 import './password-input.scss';
 
-
 let config = {
     template:template,
     data:{
@@ -26,8 +25,12 @@ let config = {
          * 初始化input前方的title和后方的输入规则
          */
         initPswInput:function () {
-            this.el.find('.password-title').html(this.data.title);
-            this.el.find('.password-rule').html(this.data.rule);
+            if(this.data.title !== undefined && this.data.title !== ''){
+                this.el.find('.password-title').html(this.data.title);
+            }
+            if(this.data.rule !== undefined && this.data.rule !== ''){
+                this.el.find('.password-rule').html(this.data.rule);
+            }
             if(this.data.fakerPsw === false){
                 this.el.find('.default-faker-password').hide();
             }
@@ -92,7 +95,7 @@ let config = {
             }
 
             if(this.actions.checkPwLength(this.data.password_value) === false){
-                this.el.find('.input-password-warning').html('密码长度必须为6-16位，请修改');
+                this.el.find('.input-password-warning').html('密码长度必须为6-20位，请修改');
                 this.data.isLegal = false;
                 return;
             }
@@ -113,7 +116,7 @@ let config = {
          */
         checkPwLength:function (pw) {
             let length = pw.length;
-            return (length >=6 && length <= 16 )
+            return (length >=6 && length <= 20 )
         },
         /**
          * input获取焦点时隐藏密码不合法的提醒

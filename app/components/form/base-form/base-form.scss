@@ -15,6 +15,9 @@
     input:disabled,textarea:disabled,.auto-select-component.disabled input.result{
         color: #666666!important;
     }
+    tr td:nth-child(odd) {
+        background: #FFFFFF;
+    }
     tr td:nth-child(even) {
         background: #fafafa;
     }

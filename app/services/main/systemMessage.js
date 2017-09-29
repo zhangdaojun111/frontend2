@@ -40,11 +40,11 @@ const handlers = {
         headerCell.on('click', () => {
             if (headerCell.data('selected') === '1') {
                 data.api.deselectAll();
-                headerCell.find("span[ref=eText]").html('全选')
+                headerCell.find("span[ref=eText]").html('全选');
                 headerCell.data('selected', '0')
             } else {
                 data.api.selectAll();
-                headerCell.find("span[ref=eText]").html('反选')
+                headerCell.find("span[ref=eText]").html('反选');
                 headerCell.data('selected', '1')
             }
         })
