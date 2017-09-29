@@ -202,14 +202,15 @@ const approveWorkflow = (para) => {
     })().then(res => {
         if(res.success===1){
             msgBox.alert(`操作成功`);
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key:key,
+                data:{refresh:true}
+            })
         }else{
             msgBox.alert(`失败：${res.error}`);
         }
-        PMAPI.sendToParent({
-            type: PMENUM.close_dialog,
-            key:key,
-            data:{}
-        })
+
     })
 };
 
@@ -283,7 +284,7 @@ Mediator.subscribe("approval:re-app", (msg) => {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:key,
-                data:{}
+                data:{refresh:true}
             })
         })
     }

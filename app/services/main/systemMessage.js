@@ -29,7 +29,6 @@ import {dgcService} from '../dataGrid/data-table-control.service';
 
 const handlers = {
     selectAll: function (data) {
-
         let html =
             `<div class="ag-cell-label-container" role="presentation">    
                 <div ref="eLabel" class="ag-header-cell-label" role="presentation">                    
@@ -51,7 +50,19 @@ const handlers = {
         return headerCell[0];
     },
     readRender: function (data) {
-        return `<div class="grid-cell-info ${data.value?'already-read-icon':'not-read-icon'}">${data.value?'已读':'未读'}<div>`;
+        return `<div class="grid-cell-info ${data.value?'already-read-icon':'not-read-icon'}" title="${data.value?'已读':'未读'}">${data.value?'已读':'未读'}<div>`;
+    },
+    operatorRender:function (data) {
+        if(data.value === '待审批'){
+            //返回审批按钮
+            return `<div><a href=javascript:void(0); class="ui-link approve" data-type="approve" title="审批">审批</a></div>`;
+        }else{
+            //返回查看按钮
+            return `<a href=javascript:void(0); class="ui-link view" data-type="view" title="查看">查看</a>`;
+        }
+    },
+    exeStatusRender:function (data) {
+        return `<div class="grid-cell-info ${data.value === '待审批'?'waiting-for-approval':'approval-aleardy'}" title="${data.value}">${data.value}<div>`;
     }
 };
 
@@ -73,6 +84,33 @@ export const systemMessageService = {
             //     cellStyle: {'text-align': 'center'},
             // },
             {
+                headerName: '操作',
+                field: 'handle_status_text',
+                width: 60,
+                suppressMenu: true,
+                cellStyle: {'text-align': 'center'},
+                cellRenderer: handlers.operatorRender
+            },
+            {
+                headerName: '消息类型',
+                field: 'msg_type',
+                width: 90,
+                suppressMenu: true,
+                tooltipField: 'msg_type',
+                cellStyle: {'text-align': 'center'},
+                suppressSorting: true
+            },
+            {
+                headerName: '执行状态',
+                field: 'handle_status_text',
+                width: 80,
+                suppressMenu: true,
+                tooltipField: 'handle_status_text',
+                cellStyle: {'text-align': 'center'},
+                suppressSorting: true,
+                cellRenderer: handlers.exeStatusRender
+            },
+            {
                 headerName: '阅读状态',
                 field: 'is_read',
                 width: 80,
@@ -91,20 +129,12 @@ export const systemMessageService = {
             }, {
                 headerName: '消息标题',
                 field: 'title',
-                width: 140,
+                width: 110,
                 suppressMenu: true,
                 tooltipField: 'title',
                 cellStyle: {'text-align': 'center'}
-            }, {
-                headerName: '消息类型',
-                field: 'msg_type',
-                width: 100,
-                suppressMenu: true,
-                tooltipField: 'msg_type_text',
-                cellStyle: {'text-align': 'center'},
-                suppressSorting: true
-            }, {
-                width:458,
+            },  {
+                width:438,
                 headerName: '消息内容',
                 field: 'msg_content',
                 suppressMenu: true,
@@ -117,14 +147,6 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'create_time',
                 cellStyle: {'text-align': 'center'}
-            }, {
-                headerName: '执行状态',
-                field: 'handle_status_text',
-                width: 80,
-                suppressMenu: true,
-                tooltipField: 'handle_status_text',
-                cellStyle: {'text-align': 'center'},
-                suppressSorting: true
             }
         ];
     },
