@@ -166,7 +166,8 @@ let config = {
             if (this.data.choosed.length) {
                 this.data.choosed.forEach((item) => {
                     if (!_.isUndefined(item.id)) {
-                        let checkbox = this.listWrap.find(`input:checkbox[data-id="${item.id}"]`);
+                        let checkbox = this.listWrap.find(`input:checkbox[data-id="\'${item.id}\'"]`);
+                        console.log(checkbox);
                         if (checkbox.length) {
                             checkbox[0].checked = true;
                         }
