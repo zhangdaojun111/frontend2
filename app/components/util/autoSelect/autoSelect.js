@@ -92,7 +92,7 @@ let config = {
             } else {
                 this.listWrap.find('li').hide();
                 this.listWrap.find(`li[data-name*="${value}"]`).addClass('match-visible').show();
-                this.listWrap.find(`li[data-py*="${value}]"`).addClass('match-visible').show();
+                this.listWrap.find(`li[data-py*="${value}"]`).addClass('match-visible').show();
                 let $matchItems = this.el.find('li.match-visible');
                 if($matchItems.length > 0){
                     this.data.focusItem = $matchItems.eq(0).addClass('hovered');
