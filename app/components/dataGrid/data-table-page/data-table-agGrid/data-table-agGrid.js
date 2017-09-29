@@ -3028,6 +3028,22 @@ let config = {
                     params = [customTableId,customRowId,row_op_id,this.data.rowData,this.data.fieldsData];
                     console.log( '行级BI参数' )
                     console.log( params )
+                    let json = {
+                        parent_table_id: customTableId,
+                        rowId: customRowId,
+                        operation_id: row_op_id,
+                        allRowData: this.data.rowData,
+                        columnsList: this.data.fieldsData,
+                    }
+                    let url = '/iframe/rowOperation/?operationType=bi';
+                    let winTitle = '行级BI';
+                    PMAPI.openDialogByIframe( url,{
+                        width: 1400,
+                        height: 800,
+                        title: winTitle,
+                        modal:true
+                    },json ).then( (data)=>{
+                    } )
                     break;
                 }
             }
