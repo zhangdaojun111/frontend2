@@ -106,7 +106,7 @@ let config = {
                 assortment: 'comment',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn:'',
-                filter: [],
+                filter: data.filter,
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -135,6 +135,7 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['columns'].setValue(JSON.stringify(chart['columns']));
         }
     },

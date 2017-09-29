@@ -76,7 +76,7 @@ let config = {
                 assortment: 'nineGrid',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn:'',
-                filter: [],
+                filter: data.filter,
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -108,6 +108,7 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['type'].setValue(chart['type']);
             for(let i = 1; i<=chart.type;i++) {
                 this.formItems['x'+i].setValue(chart['xAxis']['x'+i]);

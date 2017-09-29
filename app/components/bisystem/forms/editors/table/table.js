@@ -113,7 +113,7 @@ let config = {
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
-                filter: [],
+                filter: data.filter,
                 countNum: data.countNum,
                 single:data.single[0] ? data.single[0]: 0,
                 singleColumnWidthList:[],
@@ -146,6 +146,7 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
