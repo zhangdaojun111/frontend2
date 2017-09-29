@@ -105,6 +105,7 @@ let config = {
             this.el.find('.component-bi-canvas-main').append("<div class='cells-container client " + this.data.editMode + "'></div>")
         }
     },
+
     afterRender:function(){
         this.showLoading();
         //根据判断是否单行模式加载header
