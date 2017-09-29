@@ -6,7 +6,8 @@ import {dgcService} from '../../../../../services/dataGrid/data-table-control.se
 let config = {
     template: template,
     data: {
-        fields: []
+        fields: [],
+        value: {}
     },
     actions: {
         /**
