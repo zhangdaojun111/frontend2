@@ -1,25 +1,25 @@
 .system-message {
-    padding: 0 10px 0 10px;
-    .tool-bar{
-        padding-left: 1100px;
-        height: 30px;
-        line-height: 30px;
-        .float-search-btn{
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            position: relative;
-            outline: none;
-            .select{
-                vertical-align: baseline;
-                order: 1;
-            }
-            .icon-aggrid-filter{
-                margin-right: 4px;
-                order: 0;
-            }
-        }
-    }
+    padding: 10px 10px 0 10px;
+    //.tool-bar{
+    //    padding-left: 1100px;
+    //    height: 30px;
+    //    line-height: 30px;
+    //    .float-search-btn{
+    //        display: flex;
+    //        align-items: center;
+    //        text-decoration: none;
+    //        position: relative;
+    //        outline: none;
+    //        .select{
+    //            vertical-align: baseline;
+    //            order: 1;
+    //        }
+    //        .icon-aggrid-filter{
+    //            margin-right: 4px;
+    //            order: 0;
+    //        }
+    //    }
+    //}
     .grid {
         height: 485px;
         width: 1175px;

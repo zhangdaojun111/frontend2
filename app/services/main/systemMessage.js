@@ -29,7 +29,6 @@ import {dgcService} from '../dataGrid/data-table-control.service';
 
 const handlers = {
     selectAll: function (data) {
-
         let html =
             `<div class="ag-cell-label-container" role="presentation">    
                 <div ref="eLabel" class="ag-header-cell-label" role="presentation">                    

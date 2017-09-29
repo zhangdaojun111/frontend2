@@ -59,8 +59,7 @@ let config = {
             this.showLoading();
             HTTP.postImmediately('/remark_or_del_msg/', {
                 checkIds: ids
-            })
-                .then((res) => {
+            }).then((res) => {
                 this.hideLoading();
                 if (res.success === 1) {
                     this.actions.loadData();
@@ -152,6 +151,11 @@ let config = {
                         height: 500,
                         title: data.msg_type_text,
                         customSize:true
+                    }).then((result) => {
+                        console.log(result);
+                        if (result.refresh === true) {
+                            this.actions.loadData();
+                        }
                     })
                 } else {
                     systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
@@ -209,7 +213,7 @@ let systemMessageUtil = {
         systemMessage.render(this.el);
         this.el.erdsDialog({
             width: 1200,
-            height: 600,
+            height: 580,
             modal: true,
             title: '消息提醒',
             close: function () {
