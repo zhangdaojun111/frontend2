@@ -1,10 +1,10 @@
-<div class="clearfix">
+<div class="clearfix" style="display: flex">
     {{#if unvisible}}
         <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
     {{else if be_control_condition}}
         <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
     {{else}}
-        <a href="javascript:void(0);" class="view-attached-list">共{{value.length}}个文件</a>
+        <div style="display: inline-block;color:blue;position: relative;top: 3px;" class="view-attached-list">共{{value.length}}个文件</div>
         {{#unless is_view}}
             <!--上传文件，截图上传-->
             <input type="file" class="selecting-file" style="display: none;" multiple>
@@ -14,6 +14,12 @@
             <div class="ellipses" style="display: none; cursor: pointer;">......</div>
         {{/unless}}
         <div class="thumbnail-list-anchor"></div>
+    <div>
+        {{#if required}}
+        <span id="requiredLogo" class="{{requiredClass}}" style="position: relative; top: 3px;"></span>
+        {{/if}}
+    </div>
+
     {{/if}}
 </div>
 

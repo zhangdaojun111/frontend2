@@ -7,44 +7,20 @@ import msgBox from '../../../lib/msgbox';
 import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
 import {screenShotConfig} from "./screenshot-receiver/screenshot-receiver";
 import {PMAPI} from "../../../lib/postmsg";
-import {attachmentListConfig} from "./attachment-list/attachment-list";
 import {FormService} from '../../../services/formService/formService';
 import ThumbnailList from "./thumbnail-list/thumbnail-list";
 import {Storage} from "../../../lib/storage";
 import Mediator from "../../../lib/mediator";
 import browserMD5File from 'browser-md5-file';
+import AttachmentList from '../attachment-list/attachment-list';
+import ViewVideo from '../view-video/view-video';
+
+let preview_file = ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"];
 
 let config = {
     template: template,
     binds: [
         {
-            event: 'click',
-            selector: '.view-attached-list',
-            callback: function () {
-                attachmentListConfig.data =_.defaultsDeep({
-                    isView:this.data.is_view,
-                    id:this.data.id,
-                    fileIds: this.data.value,
-                    dinput_type: this.data.real_type
-                },attachmentListConfig.data);
-                Storage.init((new URL(document.URL)).searchParams.get('key'));
-                PMAPI.openDialogToSelfByComponent(attachmentListConfig, {
-                    width: 700,
-                    height: 500,
-                    title: "浏览上传文件"
-                }).then(res=>{
-                    let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
-                    if(!deletedFiles){
-                        return;
-                    }
-                    for(let file of deletedFiles){
-                        this.data.value.splice(this.data.value.indexOf(file),1);
-                    }
-                    this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
-                    this.trigger('changeValue',this.data);
-                });
-            }
-        }, {
             event: 'click',
             selector: '.upload-file',
             callback: function () {
@@ -128,6 +104,70 @@ let config = {
                     this.data.queueItemEles[i].css('display','block');
                 }
             }
+        }, {
+            event:'click',
+            selector: '.view-attached-list',
+            callback: function () {
+                if(this.data.value.length == 0){
+                    return;
+                }
+                FormService.getAttachment({
+                    file_ids:JSON.stringify(this.data.value),
+                    dinput_type:this.data.dinput_type
+                }).then(res=>{
+                    if(res.success){
+                        this.data.rows = res.rows;
+                        for( let data of this.data.rows ){
+                            //附件名称编码转换
+                            data.file_name = data.file_name;
+                            let str = data.file_name.split('.').pop();
+                            if( preview_file.indexOf( str.toLowerCase() ) != -1 ){
+                                data["isPreview"] = true;
+                                if( preview_file.indexOf(str.toLowerCase()) <4){
+                                    data["isImg"] = true;
+                                }else{
+                                    data["isImg"] = false;
+                                }
+                            }else{
+                                data["isPreview"] = false;
+                            }
+                        }
+                        if(this.data.real_type == 9 || this.data.real_type == 23){
+                            let obj={
+                                list:this.data.rows,
+                                dinput_type:this.data.real_type,
+                                is_view:this.data.is_view,
+                                control_id:this.data.id
+                            };
+                            PMAPI.openDialogToSelfByComponent(_.defaultsDeep({},{data:obj},AttachmentList), {
+                                width: 700,
+                                height: 500,
+                                title: "浏览上传文件"
+                            }).then(res=>{
+                                this.actions._updateDeleted(res);
+                            });
+                        }else if(this.data.real_type == 33){
+                            let fileId = this.data.value[0];
+                            let obj={
+                                rows:this.data.rows,
+                                dinput_type:this.data.real_type,
+                                currentVideoId:fileId,
+                                videoSrc:`/download_attachment/?file_id=${fileId}&download=0&dinput_type=${this.data.real_type}`,
+                                control_id:this.data.id,
+                                is_view:this.data.is_view
+                            }
+                            PMAPI.openDialogToSelfByComponent(_.defaultsDeep({},{data:obj},ViewVideo), {
+                                width: 780,
+                                height: 500,
+                                title: '视频播放器'
+                            }).then(res=>{
+                                this.actions._updateDeleted(res);
+                            })
+                        }
+
+                    }
+                })
+            }
         }
     ],
     data: {
@@ -171,6 +211,9 @@ let config = {
                                 }
                                 this.events.changeValue(this.data);
                                 this.actions._playQueueItems();
+                                if(this.data.value.length == 0){
+                                    this.el.find('.view-attached-list').css('cursor','auto');
+                                }
                             }
                         }
                         if (event.event == 'finished') {
@@ -193,12 +236,16 @@ let config = {
                                 this.data['thumbnailListComponent'] = comp;
                             }
                         }
+                            if(this.data.value.length > 0){
+                                this.el.find('.view-attached-list').css('cursor','pointer');
+                            }
                     }
                 });
             this.el.find('.upload-process-queue').prepend(ele);
             item.render(ele);
             this.data.queueItemEles.unshift(ele);
             this.actions._playQueueItems();
+            this.data.attachmentQueueItemComps[i]=item;
         },
         //调整上传文件条目，仅显示3条
         _playQueueItems:function () {
@@ -216,6 +263,17 @@ let config = {
                 }
                 this.data.queueItemEles[i].css('display','block');
             }
+        },
+        _updateDeleted:function(res){
+            Storage.init((new URL(document.URL)).searchParams.get('key'));
+            let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+            if(!deletedFiles){
+                return;
+            }
+            for(let file of deletedFiles){
+                this.data.value.splice(this.data.value.indexOf(file),1);
+            }
+            this.trigger('changeValue',this.data);
         }
     },
     afterRender: function () {
@@ -247,14 +305,9 @@ let config = {
             let id = data.id;
             this.data.attachmentQueueItemComps[id].actions.cancelUploading();
         });
-        FormService.getAttachment({
-            file_ids:JSON.stringify(this.data.value),
-            dinput_type:this.data.dinput_type
-        }).then(res=>{
-            if(res.success){
-                this.data.rows = res.rows;
-            }
-        })
+        if(this.data.value.length > 0){
+            this.el.find('.view-attached-list').css('cursor','pointer');
+        }
     },
     beforeDestroy:function () {
         Mediator.remove('getDataFromOtherFrame:'+this.data.id);
