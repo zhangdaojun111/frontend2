@@ -2094,7 +2094,7 @@ let config = {
             for( let k in this.data.colControlData ){
                 let field = this.data.colControlData[k];
                 //数字类型
-                if( fieldTypeService.numOrText( field.real_type ) ){
+                if( fieldTypeService.numOrText( field.real_type ) && data[field.dfield] != undefined ){
                     if( field.numArea && field.numArea !== "" ){
                         let num = Number( data[field.dfield] );
                         //范围
