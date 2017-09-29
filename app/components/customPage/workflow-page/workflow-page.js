@@ -719,6 +719,17 @@ let config = {
                 this.actions.openSourceDataGrid( url,winTitle );
             }
         },
+        //设置失效
+        setInvalid: function () {
+            if( this.pagination ){
+                this.pagination.data.myInvalid = true;
+            }
+        },
+        //延时刷新
+        timeDelayRefresh: function(){
+            this.actions.setInvalid();
+            this.pagination.actions.timeDelayRefresh();
+        },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title ) {
             let defaultMax = false;
@@ -733,6 +744,9 @@ let config = {
                 // defaultMax: defaultMax,
                 customSize: defaultMax
             } ).then( (data)=>{
+                if( data == 'success' ){
+                    this.actions.timeDelayRefresh();
+                }
             } )
         },
         //操作工作流
@@ -746,10 +760,11 @@ let config = {
                     workflowService.approve( json )
                         .then(res => {
                             if( res.success ){
-                                msgBox.showTips( '取消成功' );
+                                msgBox.showTips( '操作成功' );
                                 this.actions.getData();
+                                this.actions.timeDelayRefresh();
                             }else {
-                                msgBox.alert( '取消失败：' + res.error );
+                                msgBox.alert( '操作失败：' + res.error );
                             }
                         })
                 }

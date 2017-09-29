@@ -304,9 +304,10 @@ let config = {
         //订阅数据失效
         if( this.data.type == 'workflow' ){
             PMAPI.subscribe(PMENUM.workflow_approve_msg, (info) => {
-                this.el.find( '.data-invalid' ).removeClass('freshtip');
-                this.el.find( '.data-invalid' )[0].innerHTML = '数据失效，请刷新。';
-                this.el.find( '.data-invalid' ).addClass('freshtip');
+                // this.el.find( '.data-invalid' ).removeClass('freshtip');
+                // this.el.find( '.data-invalid' )[0].innerHTML = '数据失效，请刷新。';
+                // this.el.find( '.data-invalid' ).addClass('freshtip');
+                this.actions.timeDelayRefresh();
             })
         }else {
             PMAPI.subscribe(PMENUM.data_invalid, (info) => {
