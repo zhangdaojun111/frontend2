@@ -203,7 +203,7 @@ const approveWorkflow = (para) => {
         PMAPI.sendToParent({
             type: PMENUM.close_dialog,
             key:key,
-            data:{}
+            data:{refresh:true}
         })
     })
 };
