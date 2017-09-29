@@ -189,7 +189,7 @@ let config = {
                         let data = {
                             tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
                             fieldsData: this.formItems['xAxis'].autoselect.data.list,
-                            commonQuery: this.formItems['filter'].data.value['filter'] ? [this.formItems['filter'].data.value.filter_source] : null,
+                            commonQuery: this.formItems['filter'].data.value.hasOwnProperty('filter') ? [this.formItems['filter'].data.value.filter_source] : null,
                         };
                         this.formItems['filter'].actions.showAdvancedDialog(data);
                     }
