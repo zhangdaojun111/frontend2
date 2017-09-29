@@ -24,12 +24,6 @@ let config = {
     actions: {
         //找当前行的数据
         findCurrentData: function ( type ) {
-            if( type == 'prev' && this.el.find( '.prev' )[0].className.indexOf( 'cantClick' )!=-1 ){
-                return
-            }
-            if( type == 'next' && this.el.find( '.next' )[0].className.indexOf( 'cantClick' )!=-1 ){
-                return
-            }
             let currentRowData;
             let allData = this.data.params.allRowData;
             this.data.params.allRowData.forEach((item,idx) => {
@@ -118,6 +112,9 @@ let config = {
             event: 'click',
             selector: '.prev',
             callback: function () {
+                if( this.el.find( '.prev' )[0].className.indexOf( 'cantClick' )!=-1 ){
+                    return
+                }
                 this.actions.findCurrentData( 'prev' );
                 this.actions.changeFields();
                 this.actions.openBIIframe( true )
@@ -127,6 +124,9 @@ let config = {
             event: 'click',
             selector: '.next',
             callback: function () {
+                if( this.el.find( '.next' )[0].className.indexOf( 'cantClick' )!=-1 ){
+                    return
+                }
                 this.actions.findCurrentData( 'next' );
                 this.actions.changeFields();
                 this.actions.openBIIframe( true )
