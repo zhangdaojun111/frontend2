@@ -7,7 +7,6 @@ import {canvasCellService} from '../../../../services/bisystem/canvas.cell.servi
 import msgbox from '../../../../lib/msgbox';
 import {PMAPI} from "../../../../lib/postmsg";
 
-
 let config = {
     template: template,
     data: {
