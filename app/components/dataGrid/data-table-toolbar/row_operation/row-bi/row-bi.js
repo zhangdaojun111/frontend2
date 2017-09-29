@@ -46,9 +46,6 @@ let config = {
             this.data.currentData = currentRowData;
             this.data.params.rowId = currentRowData['_id'];
             this.actions.calcClick();
-            console.log("________________")
-            console.log("________________")
-            console.log(this.data.currentData)
         },
         //拼装字段信息
         pickFiled() {
@@ -144,8 +141,6 @@ let config = {
                 action: 'get'
             }
             dataTableService.getBIField( json ).then( data=>{
-                console.log( '返回的BI数据' )
-                console.log( data )
                 this.actions.findCurrentData();
                 //拼装字段信息
                 this.actions.pickFiled();
