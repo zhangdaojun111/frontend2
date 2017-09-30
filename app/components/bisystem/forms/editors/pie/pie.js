@@ -47,8 +47,10 @@ let config = {
                     this.formItems['yAxis'].setList([]);
                     this.formItems['deepX'].setList([]);
                 };
-                // 清除所有下穿字段数据
-                this.formItems['deeps'].actions.clear();
+                if (this.formItems['deeps']) {
+                    // 清除所有下穿字段数据
+                    this.formItems['deeps'].actions.clear();
+                };
             }
         },
 

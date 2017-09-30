@@ -74,7 +74,6 @@ let config = {
          * @param columns 表格列表字段（x轴）
          */
         async loadColumns(data) {
-            this.formItems['deeps'].actions.clear(); // 清除下穿数据
             if (this.formItems['xAxis']) {
                 if (data) {
                     this.formItems['xAxis'].setList(data['x_field']);
@@ -88,8 +87,11 @@ let config = {
                     this.formItems['yAxis1'].actions.updateY([]);
                     this.formItems['chartGroup'].setList([]);
                     this.formItems['sortColumns'].setList([]);
-                }
-            }
+                };
+            };
+            if (this.formItems['deeps']) {
+                this.formItems['deeps'].actions.clear(); // 清除下穿数据
+            };
         },
 
         /**
@@ -178,8 +180,9 @@ let config = {
             });
 
             let advancedDataTemplates = this.formItems.advancedDataTemplates.getValue();
+            console.log(advancedDataTemplates);
             let chart = {
-                advancedDataTemplates: advancedDataTemplates,
+                advancedDataTemplates: advancedDataTemplates.length > 0 && advancedDataTemplates[0].code  && advancedDataTemplates[0].result ? advancedDataTemplates : [],
                 assortment: 'normal',
                 chartAssignment: data.chartAssignment == 1 ? {name:'分组', val:1} : {name:'下穿', val:2},
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
