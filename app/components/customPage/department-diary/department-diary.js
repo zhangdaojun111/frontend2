@@ -54,7 +54,8 @@ let config = {
         departmentData: [],
         choosedDepart: [],
         //第一次加载数据不触发
-        firstGetData: true
+        firstGetData: true,
+        tabOpen: true
     },
     actions: {
         /**
@@ -164,16 +165,27 @@ let config = {
             obj[That.data.searchField] = {'$in':filter}
             That.dataGrid.data.departmentFilter = obj;
             That.dataGrid.actions.getGridData( true );
-        },1000 )
+        },1000 ),
+        //开关右侧tab
+        calcUserCon: function () {
+            this.data.tabOpen = !this.data.tabOpen;
+            setTimeout( ()=>{
+                this.el.find( '.diary-user' ).eq(0).animate( { 'left':this.data.tabOpen ? '0px' : '-470px' } );
+                this.el.find( '.calc-user' )[0].innerHTML = this.data.tabOpen ? '《 ':' 》';
+            },this.data.tabOpen ? 0 : 200 )
+            setTimeout( ()=>{
+                this.el.find( '.diary-grid' )[0].style.width = this.data.tabOpen ? 'calc(100% - 500px)':' calc(100% - 30px)';
+            },this.data.tabOpen ? 200 : 0 )
+        }
     },
     binds: [
-        // {
-        //     event: 'click',
-        //     selector: '.original-data-btn',
-        //     callback: function () {
-        //         this.trigger('onShowOriginal');
-        //     }
-        // }
+        {
+            event: 'click',
+            selector: '.calc-user',
+            callback: function () {
+                this.actions.calcUserCon();
+            }
+        }
     ],
     afterRender: function (){
         this.showLoading();
