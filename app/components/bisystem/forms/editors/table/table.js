@@ -99,7 +99,6 @@ let config = {
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
-
         /**
          * 保存图表数据
          */
