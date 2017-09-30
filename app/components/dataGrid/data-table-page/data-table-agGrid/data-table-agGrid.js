@@ -195,6 +195,14 @@ let config = {
         //显示tabs
         showTabs:function (opacity) {
         },
+        //是否为部门日报
+        departmentDiary: false,
+        //部门日报搜索参数
+        departmentFilter: {},
+        //获取部门日报填写人字段
+        getDiarySearchField: function (d) {
+
+        },
         //是否为新窗口打开
         isNewWindow: false,
         //左侧提示
@@ -345,6 +353,12 @@ let config = {
                         datetime: 160,
                         time: 90,
                         date: 110
+                    }
+                    //部门日报搜索字段
+                    if( this.data.departmentDiary ){
+                        if( data.header[i] == '填写人' ){
+                            this.data.getDiarySearchField( data.data["field"] );
+                        }
                     }
                     let obj = {
                         headerName: data.header[i],
@@ -1534,6 +1548,20 @@ let config = {
                     this.data.filterText = json.filter;
                 }
             }
+
+            //部门日报的搜索
+            if( this.data.departmentDiary && this.data.departmentFilter ){
+                if( json.filter ){
+                    let obj = {$and:[]}
+                    let f = JSON.parse( json.filter )
+                    obj['$and'].push( f )
+                    obj['$and'].push( this.data.departmentFilter )
+                    json.filter = obj;
+                }else {
+                    json['filter'] = this.data.departmentFilter;
+                }
+                json.filter = JSON.stringify( json.filter )
+            }
             return json;
         },
         //渲染agGrid（根据存在的按钮，为按钮事件，渲染分组定制列，分页等组件）
@@ -1898,6 +1926,9 @@ let config = {
                     isNewWindow: true
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
+                if( this.data.departmentDiary ){
+                    url = "/datagrid/custom_index/?table_id=9585_a8yQZorU7CpywTkJhX8vBn&amp&folder_id=130&custom_id=department-daily&isNewWindow=true";
+                }
                 this.el.find('.grid-new-window')[0].href = url;
             }
             //新增数据
@@ -3245,7 +3276,7 @@ let config = {
     },
     afterRender: function () {
         //发送表单tableId（订阅刷新数据用
-        if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 ){
+        if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 && !this.data.departmentDiary ){
             TabService.onOpenTab( this.data.tableId ).done((result) => {
                 if(result.success === 1){
                     // console.log("post open record success");

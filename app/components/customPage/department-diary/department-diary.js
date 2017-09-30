@@ -53,6 +53,8 @@ let config = {
         userData: [],
         departmentData: [],
         choosedDepart: [],
+        //第一次加载数据不触发
+        firstGetData: true
     },
     actions: {
         /**
@@ -85,6 +87,7 @@ let config = {
          * 初始化人员选择组件
          */
         initChoosedUsers: function () {
+            let That = this;
             this.autoSelect = new AutoSelect({
                 displayType: 'static',           // popup或者static popup为弹出的形式 static 为静态显示
                 selectBoxHeight: '100%',           // select 框的高度
@@ -92,7 +95,7 @@ let config = {
                 displayChoosed: false,
             }, {
                 onSelect: function (param) {
-                    console.log(param);
+                    That.actions.setDiaryFilter( That,param );
                 }
             });
             this.autoSelect.render(this.el.find('.users'));
@@ -141,6 +144,43 @@ let config = {
             this.autoSelect.data.choosed = users;
             this.autoSelect.reload();
         }, 500),
+        //获取部门提报搜索field
+        getDiarySearchField: function (d) {
+            console.log( '填写人字段：' + d )
+            this.data.searchField = d;
+        },
+        //设置搜索参数
+        setDiaryFilter: _.debounce( (That,users)=>{
+            if( That.data.firstGetData ){
+                That.data.firstGetData = false;
+                return;
+            }
+            let filter = [];
+            // for( let u of users ){
+            //     filter.push({
+            //         "relation": "$or",
+            //         "cond": {
+            //             "leftBracket": 0,
+            //             "searchBy": That.data.searchField,
+            //             "operate": "exact",
+            //             "keyword": u.name,
+            //             "rightBracket": 0
+            //         }
+            //     })
+            // }
+            // if( filter[1] ){
+            //     filter[1]['relation'] = '$and';
+            // }
+
+            for( let u of users ){
+                filter.push(u.name)
+            }
+            let obj = {}
+            obj[That.data.searchField] = {'$in':filter}
+            // let obj_1 = {$and:[obj]};
+            That.dataGrid.data.departmentFilter = obj;
+            That.dataGrid.actions.getGridData( true );
+        },1000 )
     },
     binds: [
         // {
@@ -152,6 +192,7 @@ let config = {
         // }
     ],
     afterRender: function (){
+        this.showLoading();
         dataTableService.getCustomTableId( {table_key: 'department-daily'} ).then( res=>{
             if( res.success ){
                 this.data.tableId = res.table_id;
@@ -159,7 +200,8 @@ let config = {
                     tableId: this.data.tableId,
                     tableName: this.data.tableName,
                     viewMode: 'normal',
-                    departmentDiary: true
+                    departmentDiary: true,
+                    getDiarySearchField: this.actions.getDiarySearchField
                 }
                 this.dataGrid = new dataTableAgGrid(json)
                 this.append(this.dataGrid, this.el.find('.diary-grid'));
@@ -167,6 +209,9 @@ let config = {
             }else {
                 msgBox.alert( '请联系管理员配置定指表tableId。' )
             }
+            setTimeout( ()=>{
+                this.hideLoading();
+            },700 )
         } )
     }
 }

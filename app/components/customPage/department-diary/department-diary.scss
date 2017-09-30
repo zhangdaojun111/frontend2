@@ -5,6 +5,22 @@
     bottom: 0;
     right: 0;
     overflow: hidden;
+    .tips {
+        position: absolute;
+        display: flex;
+        i {
+            background: url("../../../assets/images/dataGrid/tab-title.png") no-repeat;
+            width: 16px;
+            height: 16px;
+            display: block;
+            margin-right: 20px;
+            margin-top: 21px;
+            margin-left: 15px;
+        }
+        span {
+            line-height: 60px;
+        }
+    }
     .diary-user {
         width: 500px;
         height: calc(100% - 60px);

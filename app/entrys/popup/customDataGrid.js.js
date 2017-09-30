@@ -52,7 +52,8 @@ $(document).ready(function(){
     if( ts_name == 'department-daily' ){
         tableName = '部门日报';
         json = {
-            tableName: '部门日报'
+            tableName: '部门日报',
+            isNewWindow: isNewWindow
         }
         com = new departmentDiary(json);
     }
