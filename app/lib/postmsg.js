@@ -141,7 +141,8 @@ window.addEventListener('message', function (event) {
 
                 break;
             case PMENUM.close_dialog:
-                if (dialogHash[data.key].comp) {
+                console.log(dialogHash[data.key])
+                if (dialogHash[data.key].hasOwnProperty('comp')) {
                     // 弹出框是组件
                     dialogHash[data.key].element.erdsDialog('destroy').remove();
                     dialogHash[data.key].comp.destroySelf();
