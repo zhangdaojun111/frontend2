@@ -8,7 +8,15 @@ export const ViewsService = {
      * @returns {Promise}
      */
     async update(data) {
-        const res = await HTTP.getImmediately('/bi/set_new_view_data',data);
+        let params = {
+            parent_table_id: window.config.parent_table_id,
+            row_id: window.config.row_id,
+            query_mark: window.config.query_mark,
+            operation_id:window.config.operation_id,
+            folder_id: window.config.folder_id,
+            query_mark: window.config.query_mark === 'single' ? 'single' : 'normal',
+        }
+        const res = await HTTP.getImmediately('/bi/set_new_view_data',Object.assign(data,params));
         return new Promise((resolve, reject) => {
                 resolve(res);
         })

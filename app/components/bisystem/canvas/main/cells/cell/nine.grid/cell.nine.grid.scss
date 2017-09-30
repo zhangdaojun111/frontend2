@@ -54,13 +54,14 @@ $border-color: #eee;
             flex-direction: row;
             border-bottom: 1px solid $border-color;
             font-weight: bold;
+            height: 100px;
             div {
                 flex-grow: 1;
                 overflow: hidden;
                 @include dis-flex;
                 flex-direction: row;
                 width: 100px;
-                height: 100px;
+                height: 100%;
                 border-right: 1px solid $border-color;
             }
         }
@@ -115,5 +116,10 @@ $border-color: #eee;
         li {
             width: 25%;
         }
+    }
+}
+@media print {
+    .bi-nine-grid {
+        overflow: hidden!important;
     }
 }

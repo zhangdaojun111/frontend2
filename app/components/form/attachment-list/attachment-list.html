@@ -8,7 +8,7 @@
         </thead>
         <tbody>
         {{#each list}}
-        <tr>
+        <tr id="{{this.file_id}}">
             <td>{{ this.file_name }}</td>
             <td id="{{this.file_id}}">
                 <a class="download-url" style="color: blue;">下载</a>
@@ -19,13 +19,9 @@
                 <a  class="preview-url" style="color:blue;" class="ui-href" target="_blank">预览</a>
                 {{/if}}
                 {{else}}
-                <a style="color: grey;" href="javascript:void(0);">预览</a>&nbsp;&nbsp;
+                    <a style="color: grey;" class="ui-href pre">预览</a>
                 {{/if}}
-                {{#if is_view}}
-                {{#unless isFormAbout}}
                 <a style="color: blue;" class="del" data-id="{{this.file_id}}" href="javascript:void(0);">删除</a>
-                {{/unless}}
-                {{/if}}
             </td>
         </tr>
         {{/each}}
