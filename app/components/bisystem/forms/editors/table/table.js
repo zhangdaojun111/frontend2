@@ -37,9 +37,11 @@ let config = {
         async loadColumns(columns) {
             if (this.formItems['columns']) {
                 if (columns) {
+                    this.data.xAxis = columns;
                     this.formItems['columns'].setList(columns);
                     this.formItems['sortColumns'].setList(columns);
                 } else { // 清空字段
+                    this.data.xAxis = [];
                     this.formItems['columns'].actions.clear();
                     this.formItems['choosed'].actions.clear();
                     this.formItems['table_single'].actions.clear();
@@ -157,6 +159,7 @@ let config = {
         }
     },
     data: {
+        xAxis:[],
         options: [
             chartName,
             {
@@ -188,7 +191,7 @@ let config = {
                     onShowAdvancedSearchDialog() {
                         let data = {
                             tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
-                            fieldsData: this.formItems['columns'].data.list,
+                            fieldsData: this.data.xAxis,
                             commonQuery: this.formItems['filter'].data.value && this.formItems['filter'].data.value.hasOwnProperty('filter') ? [this.formItems['filter'].data.value.filter_source] : null,
                         };
                         this.formItems['filter'].actions.showAdvancedDialog(data);

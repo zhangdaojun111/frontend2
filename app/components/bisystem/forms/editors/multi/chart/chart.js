@@ -261,10 +261,11 @@ class ChartEditor extends Base {
      * @param data
      */
     setValue(data) {
+        console.log(data);
         this.formItems['source'].setValue(data['sources']);
         this.formItems['chartType'].setValue(data['chartType']['type']);
         this.formItems['xAxis'].setValue(data['xAxis']);
-        this.formItems['filter'].setValue({filter: data['filter'], filter_source:data['filter_source']});
+        this.formItems['filter'].setValue({filter: data['filter'] ? data['filter']: '', filter_source:data['filter_source'] ?data['filter_source'] : []});
         this.actions.selectY(data['yAxis']);
         this.data.firstDo = true;
     }
