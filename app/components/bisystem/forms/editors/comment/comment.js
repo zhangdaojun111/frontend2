@@ -106,8 +106,6 @@ let config = {
                 assortment: 'comment',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn:'',
-                filter: data.filter.filter,
-                filter_source: data.filter.filter_source,
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -136,7 +134,6 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
             this.formItems['columns'].setValue(JSON.stringify(chart['columns']));
         }
     },
@@ -163,23 +160,6 @@ let config = {
             },
             theme,
             icon,
-            {
-                label: '高级查询',
-                name: 'filter',
-                defaultValue: {},
-                type: 'search',
-                events: {
-                    onShowAdvancedSearchDialog() {
-                        let data = {
-                            tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
-                            fieldsData: [],
-                            commonQuery: this.formItems['filter'].data.value && this.formItems['filter'].data.value.hasOwnProperty('filter') ? [this.formItems['filter'].data.value.filter_source] : null,
-                        };
-                        this.formItems['filter'].actions.showAdvancedDialog(data);
-                    }
-                }
-            },
-
             {
                 label: '请选择列名',
                 name: 'columns',
