@@ -148,7 +148,7 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
+            this.formItems['filter'].setValue({filter: chart['filter']?chart['filter']: '', filter_source:chart['filter_source']?chart['filter_source']:[]});
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);

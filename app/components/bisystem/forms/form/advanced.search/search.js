@@ -95,7 +95,8 @@ class Search extends Base {
      * @param value = 高级查询条件值
      */
     setValue(value) {
-        this.data.value = value && value['filter'] ? value : {};
+        console.log(value);
+        this.data.value = value && typeof value['filter'] === 'string' ? value : {};
     }
 }
 
