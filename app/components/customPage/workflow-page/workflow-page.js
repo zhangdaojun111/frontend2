@@ -746,6 +746,7 @@ let config = {
             } ).then( (data)=>{
                 console.log( "工作流操作返回" )
                 console.log( data )
+
                 if( data.refresh ){
                     this.actions.timeDelayRefresh();
                 }
@@ -763,7 +764,6 @@ let config = {
                         .then(res => {
                             if( res.success ){
                                 msgBox.showTips( '操作成功' );
-                                this.actions.getData();
                                 this.actions.timeDelayRefresh();
                             }else {
                                 msgBox.alert( '操作失败：' + res.error );

@@ -81,7 +81,7 @@ let config = {
         //打开BI
         openBIIframe: function (quick_page) {
             let obj = this.data.params;
-            let url = `/bi/index/?parent_table_id=${obj.parent_table_id}&row_id=${obj.rowId}&operation_id=${obj.operation_id}&folder_id=&query_mark=`;
+            let url = `/bi/index/?parent_table_id=${obj.parent_table_id}&row_id=${obj.rowId}&operation_id=${obj.operation_id}&folder_id=&query_mark=single`;
             if(quick_page) {
                 url += '&quick_page=1';
             }
