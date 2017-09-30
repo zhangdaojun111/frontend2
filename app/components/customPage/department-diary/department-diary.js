@@ -156,28 +156,12 @@ let config = {
                 return;
             }
             let filter = [];
-            // for( let u of users ){
-            //     filter.push({
-            //         "relation": "$or",
-            //         "cond": {
-            //             "leftBracket": 0,
-            //             "searchBy": That.data.searchField,
-            //             "operate": "exact",
-            //             "keyword": u.name,
-            //             "rightBracket": 0
-            //         }
-            //     })
-            // }
-            // if( filter[1] ){
-            //     filter[1]['relation'] = '$and';
-            // }
 
             for( let u of users ){
                 filter.push(u.name)
             }
             let obj = {}
             obj[That.data.searchField] = {'$in':filter}
-            // let obj_1 = {$and:[obj]};
             That.dataGrid.data.departmentFilter = obj;
             That.dataGrid.actions.getGridData( true );
         },1000 )

@@ -1550,7 +1550,7 @@ let config = {
             }
 
             //部门日报的搜索
-            if( this.data.departmentDiary && this.data.departmentFilter ){
+            if( this.data.departmentDiary && JSON.stringify( this.data.departmentFilter ) != '{}' ){
                 if( json.filter ){
                     let obj = {$and:[]}
                     let f = JSON.parse( json.filter )
