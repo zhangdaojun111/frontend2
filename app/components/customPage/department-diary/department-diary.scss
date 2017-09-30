@@ -1,0 +1,69 @@
+.diary-con {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: hidden;
+    .diary-user {
+        width: 500px;
+        height: calc(100% - 60px);
+        float: left;
+        background-color: #FAFAFA;
+        margin-top: 60px;
+        border-top: 1px solid #E4E4E4;
+        .inputs {
+            width: 100%;
+            height: 100%;
+            .tree {
+                border: 1px solid #DDDDDD;
+                padding: 0px;
+                margin: 5px;
+                width: 230px;
+                height: calc(100% - 20px);
+                float: left;
+                overflow: hidden;
+                .treeview {
+                    height: calc(100% - 20px);
+                    .list-group {
+                        overflow: scroll;
+                        height: 100%;
+                    }
+                }
+            }
+            .users {
+                border: 1px solid #DDDDDD;
+                padding: 0px;
+                margin: 5px;
+                width: 230px;
+                height: calc(100% - 20px);
+                float: left;
+                overflow: hidden;
+                .auto-select-component {
+                    width: 230px;
+                    height: calc(100% + 30px);
+                    overflow: hidden;
+                    .result {
+                        display: none;
+                    }
+                    .triangle {
+                        display: none;
+                    }
+                    .list {
+                        height: calc(100% - 30px)!important;
+                        .auto-select-ul {
+                            height: calc(100% - 60px)!important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .diary-grid {
+        width: calc(100% - 500px);
+        height: 100%;
+        float: left;
+        position: relative;
+    }
+}
