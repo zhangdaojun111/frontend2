@@ -50,7 +50,7 @@ export const canvasCellService = {
      */
     async getCellChart(charts) {
         const res = await HTTP.ajaxImmediately({
-            url: '/bi/get_bi_data/?&canvasType=pc',
+            url: '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id,
             data: charts,
             method:'post',
             traditional: true

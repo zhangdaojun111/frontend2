@@ -7,6 +7,9 @@
         height: 50px;
         font-size: 12px;
         background-color: #374157;
+        >div{
+            height: 100%;
+        }
         &.clearfix {
             & {
                 background-color: #FFFFFF;
@@ -24,18 +27,16 @@
                 text-align: right;
                 font-size: 12px;
                 height: 50px;
-                line-height: 50px;
+                //line-height: 50px;
                 right: 0;
                 a {
                     display: inline-block;
-                    width: 80px;
-                    line-height: 50px;
                     text-align: left;
-                    margin-left: -3px;
                     text-decoration: none;
                     color: #999999;
                     cursor: pointer;
                     outline: none;
+                    margin: 17px 18px;
                     i {
                         vertical-align: middle;
                         padding-left: 4px;
@@ -45,7 +46,7 @@
         }
         &.manager {
             .nav-tabs {
-                width: calc(100% - 300px);
+                width: calc(100% - 320px);
             }
         }
     }
@@ -90,4 +91,12 @@
     }
 }
 
+@media print {
+    .component-bi-canvas-main{
+        header{
+            display: none !important;
+        }
+    }
+
+}
 

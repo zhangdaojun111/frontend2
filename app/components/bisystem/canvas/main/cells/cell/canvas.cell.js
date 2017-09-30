@@ -18,6 +18,7 @@ import {CellCommentComponent} from './comment/cell.comment';
 import {CanvasCellTitleComponent} from './title/canvas.title';
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
+import msgbox from '../../../../../../lib/msgbox';
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
 const cellTypes = {
@@ -56,6 +57,7 @@ let config = {
          */
         loadCellChart(chart) {
             if (!chart || chart['success'] !== 1) {
+                msgbox.showTips(chart['error']);
                 return false;
             };
 

@@ -87,6 +87,7 @@ let css = `
         right:20px;
         top:20px;
         cursor: pointer;
+        z-index: 10;
     }
     .mask-div{
         position: absolute;
@@ -141,10 +142,6 @@ let css = `
         top: 50%;
         cursor: pointer;
     }
-    .closeImg {
-        z-index: 10;
-        cursor: pointer;
-    }
     `;
 let AttachmentList = {
     template: template.replace(/\"/g, '\''),
@@ -160,7 +157,6 @@ let AttachmentList = {
         dinput_type: '',
         fileIds: '',
         is_view: '',
-        isFormAbout: '',
         fileGroup: [],
         preview_file: ["gif", "jpg", "jpeg", "png", "txt", "pdf", "lua", "sql", "rm", "rmvb", "wmv", "mp4", "3gp", "mkv", "avi"],
     },
@@ -180,29 +176,43 @@ let AttachmentList = {
             event: 'click',
             selector: '.del',
             callback: function (event) {
-                let _this = this;
-                let fielIds = $(event.target).attr('id');
-                HTTP.post('delete_attachment', {
-                    file_ids: JSON.stringify([fielIds]),
-                    dinput_type: this.data.dinput_type
-                }).then(res => {
-                    _this.data.list = res["rows"];
-                    for (let i = 0, len = _this.data.list.length; i < len; i++) {
-                        if (_this.data.list[i]["file_id"] == fielIds) {
-                            _this.data.list.splice(i, 1);
-                            break;
-                        }
+                let fielIds = $(event).attr('data-id');
+                //如果直接用delete_attachment删除此文件，而并没有提交表单，那么下次访问将看到file_id但是没有任何文件名和文件的脏数据
+                // let _this = this;
+                // HTTP.post('delete_attachment', {
+                //     file_ids: JSON.stringify([fielIds]),
+                //     dinput_type: this.data.dinput_type
+                // }).then(res => {
+                //     _this.data.list = res["rows"];
+                //     for (let i = 0, len = _this.data.list.length; i < len; i++) {
+                //         if (_this.data.list[i]["file_id"] == fielIds) {
+                //             _this.data.list.splice(i, 1);
+                //             break;
+                //         }
+                //     }
+                //     _this.reload();
+                // });
+                // HTTP.flush();
+                for (let i = 0, len = this.data.list.length; i < len; i++) {
+                    if (this.data.list[i]["file_id"] == fielIds) {
+                        this.data.list.splice(i, 1);
+                        break;
                     }
-                    // this.wfService.sendDelFile(fileId);
-                    // this.wfService.sendDelQQimg(fileId);
-                    // this.emitDelAttachmentIds.emit(fileId);
-                    _this.reload();
-                });
-                HTTP.flush();
+                }
+
+                this.el.find('#'+fielIds).remove();
+                let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+                if(deletedFiles == undefined){
+                    deletedFiles = [];
+                }
+                deletedFiles.push(fielIds);
+                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                Storage.setItem(deletedFiles,'deletedItem-'+this.data.control_id,Storage.SECTION.FORM);
+
             }
         }, {
             event: 'click',
-            selector: '.mask-div,.closeImg',
+            selector: '.closeImg',
             callback: function () {
                 this.el.find('.my-mask').hide();
                 this.data.dragStart = false;
@@ -398,10 +408,15 @@ let AttachmentList = {
         //给各个href赋值，解决dinput_type在引号中无法获得的问题
         for(let item of this.data.list){
             let ele =this.el.find('#'+item.file_id);
-            ele.find('.download-url').attr('href',`../download_attachment/?file_id=${item.file_id}&download=1&dinput_type=${this.data.dinput_type}`);
+            ele.find('.download-url').attr('href','/download_attachment/?file_id='+item.file_id+'&download=1&dinput_type='+this.data.dinput_type);
             let previewUrl = ele.find('.preview-url');
             if(previewUrl.length > 0){
-                previewUrl.attr('href',`../download_attachment/?file_id=${item.file_id}&download=0&dinput_type=${this.data.dinput_type}`);
+                previewUrl.attr('href','/download_attachment/?file_id='+item.file_id+'&download=0&dinput_type='+this.data.dinput_type);
+            }
+            if(this.data.is_view){
+                ele.find('.del').hide();
+            } else {
+                ele.find('.del').show();
             }
         }
         this.data.lastPreviewableIndex = this.data.list.length - 1;
