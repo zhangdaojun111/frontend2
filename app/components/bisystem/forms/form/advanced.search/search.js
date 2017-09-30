@@ -10,7 +10,6 @@ let config = {
         value: {}
     },
     actions: {
-
         /**
          * 显示高级查询dialog
          * @param data{tableId: 数据源，fieldsData： x轴字段，commonQuery: 查询条件}
