@@ -189,7 +189,8 @@ let config = {
                 countColumn: {},
                 double:data.double[0] ? 1 : 0,
                 echartX: data.echartX[0] ? {marginBottom: data.marginBottom, textNum:data.textNum}: {},
-                filter: data.filter,
+                filter: data.filter.filter,
+                filter_source: data.filter.filter_source,
                 icon: data.icon,
                 relations: [],
                 source: data.source,
@@ -249,7 +250,7 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue(chart['filter']);
+            this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
             this.formItems['xAxis'].setValue(chart['xAxis']);
