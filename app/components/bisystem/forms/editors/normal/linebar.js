@@ -65,7 +65,8 @@ let config = {
                 }
             } else {
                 this.actions.loadColumns(table);
-            }
+            };
+
         },
 
         /**
@@ -73,6 +74,7 @@ let config = {
          * @param columns 表格列表字段（x轴）
          */
         async loadColumns(data) {
+            this.formItems['deeps'].actions.clear(); // 清除下穿数据
             if (this.formItems['xAxis']) {
                 if (data) {
                     this.formItems['xAxis'].setList(data['x_field']);
@@ -304,8 +306,6 @@ let config = {
                 type: 'search',
                 events: {
                     onShowAdvancedSearchDialog() {
-                        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                        console.log(this.formItems['filter'].data.value);
                         let data = {
                             tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
                             fieldsData: this.formItems['xAxis'].autoselect.data.list,
@@ -410,7 +410,6 @@ let config = {
                         } else {
                             this.formItems['deeps'].el.show();
                         };
-                        this.formItems['deeps'].actions.clear();
                         this.formItems['chartGroup'].autoselect.actions.clearValue();
                     }
                 }
