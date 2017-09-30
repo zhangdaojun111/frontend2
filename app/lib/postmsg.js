@@ -141,6 +141,8 @@ window.addEventListener('message', function (event) {
 
                 break;
             case PMENUM.close_dialog:
+                console.log(dialogHash)
+                console.log(data.key)
                 console.log(dialogHash[data.key])
                 if (dialogHash[data.key].hasOwnProperty('comp')) {
                     // 弹出框是组件
