@@ -171,12 +171,14 @@ let config = {
 
             let ySelectedGroup = [];
             data.ySelectedGroup.forEach(item => {
-                for (let y of yAxis){
-                    if (item.id === y.field.id) {
-                        ySelectedGroup.push(y);
-                        break;
-                    }
-                }
+               if (item) {
+                   for (let y of yAxis){
+                       if (item.id === y.field.id) {
+                           ySelectedGroup.push(y);
+                           break;
+                       }
+                   }
+               }
             });
 
             let advancedDataTemplates = this.formItems.advancedDataTemplates.getValue();
