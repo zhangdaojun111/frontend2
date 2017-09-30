@@ -219,8 +219,6 @@ let config = {
         project: '',
         //二维表改变的值
         cellChangeValue: {},
-
-        addNewFlowId: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -1942,7 +1940,7 @@ let config = {
                         parent_record_id: this.data.parentRecordId,
                         btnType: 'new',
                         form_id:this.data.formId,
-                        flow_id:this.data.addNewFlowId,
+                        flow_id:this.data.flowId,
                     };
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
