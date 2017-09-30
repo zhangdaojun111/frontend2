@@ -106,7 +106,7 @@ let config = {
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn:'',
                 filter: data.filter.filter,
-                filter_source: data.filter.filter_source
+                filter_source: data.filter.filter_source,
                 columns:data.columns,
                 product:data.product,
                 icon: data.icon,

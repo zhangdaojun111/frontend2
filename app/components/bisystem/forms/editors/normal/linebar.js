@@ -180,7 +180,6 @@ let config = {
             });
 
             let advancedDataTemplates = this.formItems.advancedDataTemplates.getValue();
-            console.log(advancedDataTemplates);
             let chart = {
                 advancedDataTemplates: advancedDataTemplates.length > 0 && advancedDataTemplates[0].code  && advancedDataTemplates[0].result ? advancedDataTemplates : [],
                 assortment: 'normal',
