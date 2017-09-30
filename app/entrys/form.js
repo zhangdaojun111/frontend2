@@ -111,7 +111,7 @@ let FormEntrys = {
                 record_id: this.data.recordId,
                 is_view: this.data.isView,
                 from_approve: this.data.fromApprove,
-                from_focus: this.data.fromFocus,
+                from_focus: this.data.fromFocus || 0,
                 table_id: this.data.tableId
             }
             this.data.isloadWorkflow = true;
