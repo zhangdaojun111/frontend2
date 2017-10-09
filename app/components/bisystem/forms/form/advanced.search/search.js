@@ -21,13 +21,12 @@ let config = {
                 item['real_type'] = item['type'];
                 return item;
             });
-
             let d = {
                 tableId: data.tableId ? data.tableId : '',
                 fieldsData: data.fieldsData ? dgcService.createNeedFields(fieldsData).search : [],
                 commonQuery: data.commonQuery ? data.commonQuery : [],
+                bi:true,
             };
-            console.log(d);
             PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
                 width:950,
                 height:600,
