@@ -403,7 +403,7 @@ export const dgcService = {
         return html;
     },
     //需要订阅刷新的情况
-    needRefreshMode: ['normal','child','count','deleteHanding'],
+    needRefreshMode: ['child','count','deleteHanding'],
     //按钮组
     gridBtn: function (viewMode) {
         let obj = {

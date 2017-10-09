@@ -2,13 +2,16 @@
     position: relative;
     height: 50px;
     white-space: nowrap;
-    width: calc(100% - 320px);
+    width: calc(100% - 300px);
     background: transparent;
     display: inline-block;
+    overflow:hidden;
     div {
         height: 100%;
         display: inline-block;
-        float: left;
+    }
+    &:hover{
+        overflow-x:auto;
     }
 
 }
