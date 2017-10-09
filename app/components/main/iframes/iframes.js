@@ -92,10 +92,8 @@ export const IframeInstance = new Component({
                 //根据id查询该iframe是否已经预加载，如果已经预加载直接取用iframe
                 let dom = IframesManager.getIframe(id),iframe;
                 if(dom !== undefined && dom.length > 0){
-                    console.log('do fast load');
                     iframe = $('<div class="item">').append(dom[0]).appendTo(this.data.iframes);
                 }else{
-                    console.log('do normal load');
                     iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
                 }
 
@@ -108,6 +106,7 @@ export const IframeInstance = new Component({
                 // }, 500);
 
                 originIframe.on('load', function () {
+                    console.log('load');
                     PMAPI.sendToIframe(originIframe[0], {
                         type: PMENUM.open_iframe_data,
                         data: {
