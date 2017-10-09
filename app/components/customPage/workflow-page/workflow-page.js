@@ -118,8 +118,8 @@ let config = {
                     floatingFilterComponent: this.floatingFilterCom.actions.createFilter(s.type , s.field, this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true},
                     enableRowGroup: true,
-                    suppressSorting: s.type == 'none'?true : false,
-                    sortField: s.type == 'none'?'' : s.field,
+                    suppressSorting: false,
+                    sortField: col["field"],
                     suppressResize: false,
                     suppressMovable: false
                 }
