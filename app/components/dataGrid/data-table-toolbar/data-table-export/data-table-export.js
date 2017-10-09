@@ -178,6 +178,7 @@ let css = `
     font-family: '微软雅黑';
     text-align: center;
     font-weight: 400;
+    cursor:pointer;
     font-style: normal;
     font-size: 12px;
     color: #FFFFFF !important;
@@ -256,7 +257,7 @@ let exportSetting = {
         } ).on( 'click','#attachment',()=>{
             this.el.find('#attachment').toggleClass('export-input-check');
             this.actions.changeState( 'attachment' );
-        } ).on( 'click','.export-btn',()=>{
+        } ).on( 'click','.button-box',()=>{
             PMAPI.sendToParent( {
                 key: this.key,
                 type: PMENUM.close_dialog,
