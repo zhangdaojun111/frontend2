@@ -39,6 +39,7 @@ if(obj.in_process == 1 || obj.is_batch == 1){
 }
 //批量工作流隐藏多余div
 if(obj.is_batch == 1){
+    $("#add-wf").find('#print').addClass('addPrint');
     $("#add-wf").find('.J_hide').addClass('hide');
 }
 
@@ -176,7 +177,7 @@ Mediator.subscribe('workflow:changeToEdit',(res)=>{
     //$("#add-wf").find('.J_hide').removeClass('hide');
     if(obj.is_batch !== '1') {
         $("#add-wf").find('.J_hide').removeClass('hide');
+        $("#add-wf").find('#print').removeClass('addPrint');
     }
-    $("#add-wf").find('#print').removeClass('addPrint');
     FormEntrys.changeToEdit(res);
 })

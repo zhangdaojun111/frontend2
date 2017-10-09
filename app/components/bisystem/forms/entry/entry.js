@@ -9,15 +9,17 @@ import {componentsJson} from './loadFormChart.json';
 
 // 将对象转化为数组
 let components = [];
-Object.keys(componentsJson).map(key => {components.push(componentsJson[key])})
+Object.keys(componentsJson).map(key => {components.push(componentsJson[key])});
 
 let config = {
     template: template,
     data: {
-        components:components
+        components:components,
     },
     actions: {},
-    afterRender() {},
+    afterRender() {
+        console.log(components)
+    },
     firstRender() {}
 };
 

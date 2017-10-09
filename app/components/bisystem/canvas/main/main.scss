@@ -1,3 +1,6 @@
+$print-width:1050px;
+$print-height: 1465px;
+
 .component-bi-canvas-main {
     width: 100%;
     height: 100%;
@@ -15,7 +18,6 @@
                 background-color: #FFFFFF;
             }
             .nav-tabs {
-                width: calc(100% - 240px);
                 a {
                     color: #666666;
                     background: #FFFFFF;
@@ -74,7 +76,7 @@
                 min-width: 3000px;
                 background-color: #DDDDDD;
                 background-image: linear-gradient(rgba(255, 255, 255, 0.5) 50%, transparent 50%, transparent), linear-gradient(90deg, rgba(255, 255, 255, 0.5) 50%, transparent);
-                background-size: 1050px 2970px;
+                background-size: $print-width $print-height * 2;
             }
         }
     }

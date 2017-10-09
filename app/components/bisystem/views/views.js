@@ -13,7 +13,7 @@ import Mediator from '../../../lib/mediator';
 let config = {
     template:template,
     data:{
-        views:window.config.bi_views,
+        views:[],
         chart_id:"",
 
     },
@@ -75,6 +75,8 @@ let config = {
 
     ],
     afterRender(){
+        this.data.views = window.config.bi_views;
+
         //渲染列表数据
         this.data.views.forEach((val,index) => {
             let viewItemComponent = new ViewItemComponent(val,{

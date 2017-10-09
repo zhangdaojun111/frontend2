@@ -76,7 +76,6 @@ let config = {
                 assortment: 'nineGrid',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn:'',
-                filter: data.filter,
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -108,7 +107,6 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['type'].setValue(chart['type']);
             for(let i = 1; i<=chart.type;i++) {
                 this.formItems['x'+i].setValue(chart['xAxis']['x'+i]);
@@ -135,22 +133,6 @@ let config = {
             },
             theme,
             icon,
-            {
-                label: '高级查询',
-                name: 'filter',
-                defaultValue: {},
-                type: 'search',
-                events: {
-                    onShowAdvancedSearchDialog() {
-                        let data = {
-                            tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
-                            fieldsData: [],
-                            commonQuery: this.formItems['filter'].data.value && this.formItems['filter'].data.value.hasOwnProperty('filter') ? [this.formItems['filter'].data.value.filter_source] : null,
-                        };
-                        this.formItems['filter'].actions.showAdvancedDialog(data);
-                    }
-                }
-            },
             {
                 label: '选择格子数',
                 name: 'type',
