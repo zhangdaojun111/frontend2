@@ -39,6 +39,7 @@ if(obj.in_process == 1 || obj.is_batch == 1){
 }
 //批量工作流隐藏多余div
 if(obj.is_batch == 1){
+    $("#add-wf").find('#print').addClass('addPrint');
     $("#add-wf").find('.J_hide').addClass('hide');
 }
 
@@ -138,6 +139,7 @@ Mediator.subscribe('workflow:focus-users', (res) => {
 })
 Mediator.subscribe('workflow:submit', (res) => {
     let formData = FormEntrys.getFormValue(obj.table_id,true);
+    console.log(obj);
     if (formData.error) {
         msgBox.alert(`${formData.errorMessage}`);
     } else {
@@ -158,7 +160,7 @@ Mediator.subscribe('workflow:submit', (res) => {
         })().then(res => {
             if (res.success === 1) {
                 msgBox.alert(`${res.error}`);
-                PMAPI.sendToParent({
+                PMAPI.sendToRealParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
                     data: {
@@ -176,8 +178,9 @@ Mediator.subscribe('workflow:changeToEdit',(res)=>{
     //$("#add-wf").find('.J_hide').removeClass('hide');
     if(obj.is_batch !== '1') {
         $("#add-wf").find('.J_hide').removeClass('hide');
+        $("#add-wf").find('#print').removeClass('addPrint');
     }
-    $("#add-wf").find('#print').removeClass('addPrint');
+    // $("#add-wf").find('#print').removeClass('addPrint');
     is_view = 0;
     FormEntrys.changeToEdit(res);
 })

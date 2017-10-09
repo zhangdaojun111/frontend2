@@ -87,6 +87,7 @@ let config = {
             event.dataTransfer.setData("Text",JSON.stringify(this.data));
             return true;
         });
+
     },
     firstAfterRender() {
         //点击编辑删除隐藏

@@ -68,7 +68,7 @@ let config = {
             this.el.find('.child-menu').css('left',navTabsWidth);//child-menu隐藏目录框显示的位置
             this.el.find('.nav-tabs div').each((index,val)=>{//首次加载后的目录，将自身，自身的宽，显示属性添加到headerMenus数组中
                 this.data.headerMenus.push({'header':$(val),'width':$(val).width(),'show':true});
-                childWidth += $(val).outerWidth();
+                childWidth += $(val).width();
                 if(childWidth >= navTabsWidth){//当前目录宽的和大于nav-tabs的宽时 将其余的目录添加到child-menu隐藏目录框中 并将其属性show变为false
                     this.el.find('.nav-tabs-select').show();
                     $(val).appendTo(this.el.find('.child-menu'));
@@ -207,11 +207,6 @@ let config = {
 
         //第一次渲染之后隐藏多的目录
         this.actions.hideMoreMenu();
-
-
-        // console.log(this.data.menus);
-
-
 
     },
     firstAfterRender(){
