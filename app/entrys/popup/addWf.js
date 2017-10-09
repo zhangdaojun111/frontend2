@@ -139,6 +139,7 @@ Mediator.subscribe('workflow:focus-users', (res) => {
 })
 Mediator.subscribe('workflow:submit', (res) => {
     let formData = FormEntrys.getFormValue(obj.table_id,true);
+    console.log(obj);
     if (formData.error) {
         msgBox.alert(`${formData.errorMessage}`);
     } else {
@@ -159,7 +160,7 @@ Mediator.subscribe('workflow:submit', (res) => {
         })().then(res => {
             if (res.success === 1) {
                 msgBox.alert(`${res.error}`);
-                PMAPI.sendToParent({
+                PMAPI.sendToRealParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
                     data: {
