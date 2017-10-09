@@ -178,6 +178,7 @@ let config = {
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
             footerData:[]
+
         });
         this.agGrid.render(gridDom);
         this.pagination = new dataPagination({
