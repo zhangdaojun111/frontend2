@@ -146,6 +146,7 @@ let config = {
             this.data.menus[viewData.id] = menu;
         });
     },
+
     firstAfterRender(){},
     beforeDestory(){}
 };
