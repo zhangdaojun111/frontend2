@@ -122,7 +122,7 @@ let config = {
             Promise.all([preferenceData, headerData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
                 let oprate = {headerName: '操作',field: 'myOperate', width: 160,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                    return '<div style="text-align:center;"><a class="ui-link" id="view" style="color:#337ab7;">查看</a> | <a class="ui-link" id="edit" style="color:#337ab7;">编辑</a> | <a class="ui-link" id="jurisdiction" style="color:#337ab7;">权限</a><div>';
+                    return '<div style="text-align:center;"><a class="ui-link" id="view" style="color:#0088ff;">查看</a> | <a class="ui-link" id="edit" style="color:#0088ff;">编辑</a> | <a class="ui-link" id="jurisdiction" style="color:#0088ff;">权限</a><div>';
                 }}
                 //添加序号列
                 let number = dgcService.numberCol;
