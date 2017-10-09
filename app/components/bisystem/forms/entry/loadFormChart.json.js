@@ -15,26 +15,31 @@ export let componentsJson = {
     'normal': {
         'entry': 'normal',
         'name': '折线柱状图',
+        'icon':'chart-barline-icon',
         'component': FormNormalComponent
     },
     'table': {
         'entry': 'table',
         'name': '表格图',
+        'icon':'chart-table-icon',
         'component': FormTableComponent
     },
     'radar': {
         'entry': 'radar',
         'name': '雷达图',
+        'icon':'chart-radar-icon',
         'component': FormRadarComponent
     },
     'multilist': {
         'entry': 'multilist',
         'name': '多表图',
+        'icon':'chart-multip-icon',
         'component': FormMultiComponent
     },
     'nineGrid': {
         'entry': 'nineGrid',
         'name': '九宫图',
+        'icon':'chart-ninegrid-icon',
         'component': FormNineGridComponent
     },
     // 'funnel': {
@@ -45,11 +50,13 @@ export let componentsJson = {
     'comment': {
         'entry': 'comment',
         'name': '注释图',
+        'icon':'chart-comment-icon',
         'component': FormCommentComponent
     },
     'pie': {
         'entry': 'pie',
         'name': '饼图',
+        'icon':'chart-pie-icon',
         'component': FormPieComponent
     }
 }

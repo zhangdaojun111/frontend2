@@ -1,11 +1,12 @@
-
-
 .cell {
     position: absolute !important;
     box-shadow: 0 1px 5px rgba(211,211,211, .2);
     background: #ffffff;
     font-size: 14px;
     box-sizing: border-box;
+    @media print {
+        box-shadow: none;
+    };
     .bread-crumb-nav {
         position: relative;
         top: 0;

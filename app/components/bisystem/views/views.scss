@@ -1,37 +1,26 @@
-$a-bg: #3b8cff;
-$a-bg2: #f8645c;
-$font-color: #ffffff;
-.bi-container {
-    background-color: #EAEAEA;
-}
-
 .views-container {
-    margin: 20px;
+    //margin: 20px;
     height: calc(100% - 40px);
-    .btn-shadow {
-        box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
-        display: inline-block;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 36px;
-        padding: 0 16px;
-        border-radius: 2px;
-    }
     h3 {
         color: #000000;
-        font-size: 16px;
-        border-bottom: solid 3px #ececec;
-        padding: 15px;
-        background-color: $font-color;
+        font-size: 12px;
+        padding: 16px;
+        background-color: #FFFFFF;
         overflow: hidden;
         text-align: right;
         span {
             float: left;
-            padding-top: 10px;
+            color: #444444;
+            i {
+                vertical-align: middle;
+                margin-right: 16px;
+            }
         }
         a {
-            background-color: $a-bg;
-            color: $font-color;
+            margin: 0 16px;
+            i {
+                vertical-align: middle;
+            }
             span {
                 clear: both;
                 padding: 0;
@@ -40,16 +29,11 @@ $font-color: #ffffff;
     }
     .view-list {
         max-height: calc(100% - 92px);
-        background-color: $font-color;
+        background: #f5f4f4;
         padding: 20px;
         overflow: auto;
         a {
             text-decoration: none;
-        }
-        div:nth-child(odd) {
-            .view {
-                background-color: #eeeeee;
-            }
         }
     }
 }

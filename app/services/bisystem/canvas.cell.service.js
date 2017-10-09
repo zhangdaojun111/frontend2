@@ -44,6 +44,7 @@ export const canvasCellService = {
         })
     },
 
+
     /**
      * 获取画布块图表数据
      * @param charts = [chart_id1, chart_id2, chart_id3]
