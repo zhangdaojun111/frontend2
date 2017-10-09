@@ -1019,7 +1019,7 @@ let config = {
             }
             let res = await FormService.saveAddpageData(json);
             if (res.succ == 1) {
-                MSG.showTips('保存成功');
+                MSG.showTips('保1存成功');
                 Mediator.publish('updateForm:success:' + this.data.tableId, true);
                 if (this.data.isAddBuild && !this.flowId) {
                     PMAPI.sendToRealParent({
