@@ -36,6 +36,7 @@ module.exports = {
         operationDetails: path.resolve(APP_PATH, 'entrys/popup/operationDetails.js'),
         jurisdiction: path.resolve(APP_PATH, 'entrys/popup/jurisdiction.js'),
         workflowPage: path.resolve(APP_PATH, 'entrys/popup/workflowPage.js'),
+        rowOperation: path.resolve(APP_PATH, 'entrys/popup/rowOperation.js'),
         sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
         login:path.resolve(APP_PATH, 'entrys/login.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
@@ -189,6 +190,10 @@ module.exports = {
                 quality: '60'
             }
         }),
-        new OptimizeCssAssetsPlugin()
+        new OptimizeCssAssetsPlugin({
+            cssProcessorOptions: {
+                safe: true
+            }
+        })
     ]
 }

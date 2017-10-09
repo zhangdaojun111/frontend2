@@ -109,6 +109,10 @@ export const dataTableService = {
     rowOperationBackend: function (data,address) {
         return HTTP.postImmediately(address,data);
     },
+    //获取保存的BI的字段
+    getBIField: function ( json ) {
+        return HTTP.postImmediately('/folder_preference/',json);
+    },
     setImgDataAndNum(res,imgData,imgSelect){
         imgData = res;
         let imgTotal = res.rows.length;

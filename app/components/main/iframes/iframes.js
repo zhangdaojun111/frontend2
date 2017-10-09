@@ -58,10 +58,10 @@ let maxIframeCount = 15;
 export const IframeInstance = new Component({
     template: template,
     data: {
-        hash: {},
-        count: 0,
-        sort: [],
-        focus: null,
+        hash: {},                //实时保存当前打开的iframes的相关信息
+        count: 0,                //iframes的数量
+        sort: [],                //经排序后的iframs的id
+        focus: null,             //当前焦点iframe
         hideFlag:false,
         openingTabsList:[],      //记录未关闭的tabs的id
         timeList:{},             //记录tabs的时间戳
@@ -75,7 +75,12 @@ export const IframeInstance = new Component({
         saveViewOpen:false       //保存视图界面标记
     },
     actions: {
-        //根据id，url，name打开iframe
+        /**
+         * 根据id、url、name打开iframe
+         * @param id
+         * @param url
+         * @param name
+         */
         openIframe: function (id, url, name) {
             this.actions.sendOpenRequest(id);
             id = id.toString();
@@ -110,10 +115,13 @@ export const IframeInstance = new Component({
             }
             this.actions.adaptTabWidth();
         },
-        //打开iframe时向后台发送请求，后台记录未关闭的iframe
+        /**
+         * 打开iframe时向后台发送请求，后台记录未关闭的iframe
+         * @param id
+         */
         sendOpenRequest:function (id) {
             if (id !== 'search-result'){
-                //向后台发送请求记录
+                // 向后台发送请求记录
                 TabService.onOpenTab(id).done((result) => {
                     if(result.success === 1){
                         // console.log("post open record success");
@@ -123,7 +131,10 @@ export const IframeInstance = new Component({
                 });
             }
         },
-        //关闭iframe时向后台发送请求，后台记录未关闭的iframe
+        /**
+         * 关闭iframe时向后台发送请求，后台记录未关闭的iframe
+         * @param id
+         */
         sendCloseRequest:function (id) {
             TabService.onCloseTab(id,this.data.focus.id).done((result) => {
                 if(result.success === 1){
@@ -133,16 +144,21 @@ export const IframeInstance = new Component({
                 }
             });
         },
+        /**
+         * 关闭第一个iframe
+         */
         closeFirstIframe: function () {
             let firstId = this.data.sort.shift();
             this.actions.closeIframe(firstId);
         },
-        //根据id关闭iframe
+        /**
+         * 根据id关闭iframe
+         * @param id
+         */
         closeIframe: function (id) {
             if ( id === undefined) {
                 return;
             }
-
             this.actions.sendCloseRequest(id);
             let item = this.data.hash[id];
             //关闭的item放入关闭历史数组，数组大于5则清除最后一项
@@ -163,7 +179,10 @@ export const IframeInstance = new Component({
             }
             this.actions.adaptTabWidth();
         },
-        //记录最近关闭的5个iframe历史记录
+        /**
+         * 记录最近关闭的5个iframe历史记录
+         * @param item
+         */
         setCloseHistory:function (item) {
             if(item.name !== 'BI' && item.name !== '日历'&& item.name !== '搜索结果'){    //不保存搜索/BI/日历
                 _.remove(this.data.closeHistory,function (n) {      //去重和重新插入，确保最后关闭的在记录最前面
@@ -175,7 +194,10 @@ export const IframeInstance = new Component({
                 }
             }
         },
-        //根据id将iframe设为焦点
+        /**
+         * 根据id将iframe设为焦点
+         * @param id
+         */
         focusIframe: function (id) {
             if (this.data.focus) {
                 this.data.focus.tab.removeClass('focus');
@@ -199,14 +221,18 @@ export const IframeInstance = new Component({
         setSizeToMini: function () {
             this.el.addClass('mini');
         },
-        //关闭所有iframes
+        /**
+         * 关闭所有iframes
+         */
         closeAllIframes:function () {
             let temp_arr = _.defaultsDeep([],this.data.sort);
             for(let k of temp_arr){
                 this.actions.closeIframe(k);
             }
         },
-        //关闭除焦点iframe以外的其它iframe
+        /**
+         * 关闭除焦点iframe以外的其它iframe
+         */
         closeOtherIframes:function () {
             let temp_arr = _.defaultsDeep([],this.data.sort);
             for (let k of temp_arr){
@@ -215,7 +241,9 @@ export const IframeInstance = new Component({
                 }
             }
         },
-        //打开标签管理界面（与视图保存界面互斥）
+        /**
+         * 打开标签管理界面（与视图保存界面互斥）
+         */
         showTabsPopup:function () {
             if(this.data.tabsControlOpen === false){
                 this.actions.initTabList(this.data.closeHistory);
@@ -231,10 +259,15 @@ export const IframeInstance = new Component({
                 this.data.tabsControlOpen = false;
             }
         },
+        /**
+         * 取消面板延迟隐藏
+         */
         removeTimeOut:function () {
             window.clearTimeout(this.data.timer);
         },
-        //延时隐藏标签管理界面
+        /**
+         * 延时隐藏标签管理界面
+         */
         hideTabsPopup(){
             this.data.timer = window.setTimeout(() => {
                 this.el.find('.tab-list').hide();
@@ -242,13 +275,18 @@ export const IframeInstance = new Component({
                 this.data.tabsControlOpen = false;
             }, 500);
         },
-        //直接隐藏标签管理界面
+        /**
+         * 直接隐藏标签管理界面
+         */
         hideTabsPopupImmediately(){
             this.el.find('.tab-list').hide();
             this.el.find('.popup-icon').removeClass('mouse-enter-icon');
             this.data.tabsControlOpen = false;
         },
-        //更新标签管理界面
+        /**
+         * 更新标签管理界面
+         * @param data
+         */
         initTabList:function (data) {
             let $parent = this.el.find('.tabs-ul');
             $parent.empty();
@@ -262,13 +300,18 @@ export const IframeInstance = new Component({
                 $parent.prepend($prompt);
             }
         },
-        //关闭当前tabs
+        /**
+         * 关闭当前tabs
+         */
         closeFocusTab:function () {
             if(this.data.focus){
                 this.actions.closeIframe(this.data.focus.id);
             }
         },
-        //冒泡方式监听标签控制界面的点击
+        /**
+         * 冒泡方式监听标签控制界面的点击
+         * @param event
+         */
         controlTabs:function (event) {
             let name = event.target.textContent;
             if(name === '关闭标签'){
@@ -312,12 +355,15 @@ export const IframeInstance = new Component({
         //     }
         //     return name;
         // },
-        //获取最后一次退出系统时未关闭的标签数据以及快捷设置中bi/日历的设置记录
+        /**
+         * 获取最后一次退出系统时未关闭的标签数据以及快捷设置中bi/日历的设置记录
+         */
         readyOpenTabs:function () {
             //自动打开的标签由系统设置的bi/日历 和 最后一次系统关闭时未关闭的标签两部分组成
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
             TabService.getOpeningTabs().then((result) => {
+                console.log(result);
                 let tabs = {};
                 //将未关闭的标签id加入openingTabsList
                 if(result[0].succ === 1){
@@ -375,7 +421,9 @@ export const IframeInstance = new Component({
                 that.actions.autoOpenTabs();
             });
         },
-        //根据设置准备的数据结果打开iframes
+        /**
+         * 根据设置准备的数据结果打开iframes
+         */
         autoOpenTabs:function () {
             let menu = window.config.menu;
             this.actions.findTabInfo(menu,this.data.openingTabsList);
@@ -386,7 +434,11 @@ export const IframeInstance = new Component({
                 this.actions.openIframe(k.id,k.url,k.name);
             }
         },
-        //使用id取time值，再根据time排序
+        /**
+         * 使用id取time值，再根据time排序
+         * @param tabsList
+         * @param timeList
+         */
         sortTabs:function (tabsList,timeList) {
             for(let k of tabsList){
                 k.time = timeList[k.id];
@@ -395,7 +447,11 @@ export const IframeInstance = new Component({
                 return a.time - b.time;
             })
         },
-        //根据id在config中的menu数据中获取iframes的相关数据（url，key）
+        /**
+         * 根据id在config中的menu数据中获取iframes的相关数据（url，key）
+         * @param nodes
+         * @param targetList
+         */
         findTabInfo:function (nodes,targetList) {
             for( let i=0; i < nodes.length; i++){
                 if(targetList.includes(nodes[i].ts_name ) || targetList.includes(nodes[i].table_id )){
@@ -421,13 +477,18 @@ export const IframeInstance = new Component({
                 }
             }
         },
+        /**
+         * 根据标签条总宽度tabsTotalWidth计算标签数量
+         */
         setTabsCount:function () {
             this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 85;   //标签可用总宽度
             maxIframeCount = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);  //自适应最大tabs数量
             // let count = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);
             // maxIframeCount =  count>15 ? 15:count;      //最多不超过15个
         },
-        //自适应宽度
+        /**
+         * 自适应宽度
+         */
         adaptTabWidth:function () {
             let singleWidth = this.data.tabsTotalWidth/this.data.count ;
             if(singleWidth  > this.data.tabWidth){              //空间有剩余
@@ -436,14 +497,10 @@ export const IframeInstance = new Component({
                 this.el.find('.tabs div.item').css("width",singleWidth);
             }
         },
-        //向子iframes发送信息
-        sendMsgToIframes: function (info) {
-            PMAPI.sendToAllChildren({
-                type: PMENUM[info.typeName],
-                data: info
-            });
-        },
-        //打开全局搜索界面或通过变更url更新全局搜索界面的内容
+        /**
+         * 打开全局搜索界面或通过变更url更新全局搜索界面的内容
+         * @param data
+         */
         displaySearchResult:function (data) {
             let content = data.content;
             let formerContent = data.formerContent;
@@ -472,7 +529,9 @@ export const IframeInstance = new Component({
                 this.actions.openIframe(id,url,name);
             }
         },
-        //打开视图保存界面（与标签控制界面互斥打开）
+        /**
+         * 打开视图保存界面（与标签控制界面互斥打开）
+         */
         showViewSave:function () {
             if(this.data.saveViewOpen === false){
                 this.el.find('.view-save-component').show();
@@ -487,12 +546,16 @@ export const IframeInstance = new Component({
                 this.saveView.actions.resetComponent();
             }
         },
-        //直接关闭保存视图页面
+        /**
+         * 直接关闭保存视图页面
+         */
         closeSaveViewPage:function () {
             this.el.find('.view-save-component').hide();
             this.data.saveViewOpen = false;
         },
-        //延迟关闭保存视图页面
+        /**
+         * 延迟关闭保存视图页面
+         */
         hideSaveViewPage:function () {
             this.data.timer = window.setTimeout(() => {
                 this.el.find('.view-save-component').hide();
@@ -539,7 +602,6 @@ export const IframeInstance = new Component({
             event:'click',
             selector:'.popup-icon',
             callback:function () {
-                console.log("open tabs");
                 this.actions.showTabsPopup();       //打开标签控制页面
             }
         },
@@ -576,7 +638,6 @@ export const IframeInstance = new Component({
             event:'click',
             selector:'.view-save',
             callback:function (target,event) {
-                console.log("open save view");
                 this.actions.showViewSave();            //打开保存视图页面
             }
         },
@@ -639,10 +700,10 @@ export const IframeInstance = new Component({
             }
         });
 
-        Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:one_the_way_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:workflow_approve_msg', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:one_the_way_invalid', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:workflow_approve_msg', this.actions.sendMsgToIframes);
 
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签

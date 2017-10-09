@@ -104,7 +104,6 @@ class Uploader {
         } else {
             delete this.fileList[name][code];
         }
-        console.dir(this.fileList);
     }
 
     /**
@@ -161,6 +160,21 @@ class Uploader {
         }
     }
 
+    getProgressParams(name){
+        let array = [];
+        for(let code of Object.keys(this.fileList[name])){
+            array.push({
+                id:this.getFileId(name,code),
+                name:this.fileList[name][code].filename
+            });
+        }
+        return {files:array,originalField:name};
+    }
+
+    getFileId(name,code){
+        return name+"-"+code;
+    }
+
     /**
      * 上传所有文件
      * @param url 上传地址
@@ -179,15 +193,13 @@ class Uploader {
             cache: false,
             processData: false,
             contentType: false,
-            timeout: 60000,
-            success:onCompleted,
-            error: onError?onError:(function (error) {
-                console.dir(error);
-            })
+            timeout: 60000
         };
 
         this.settings['options'] = _.defaultsDeep(options,defaultOptions);
         this.settings['onProgress'] = onprogress;
+        this.settings['onCompleted'] = onCompleted;
+        this.settings['onError'] = onError;
         let keys = Object.keys(this.fileList);
         //如果内存CPU开销大的话要改为一个一个文件上传的串行模式
         for(let name of keys){
@@ -214,6 +226,15 @@ class Uploader {
     }
 
     _transmitData(name,code){
+        let that =this;
+        let onComplete = this.settings['onCompleted'];
+        this.settings['options']['success'] = function (res) {
+            onComplete(res,{fileId:that.getFileId(name,code)});
+        };
+        let onError = this.settings['onError'];
+        this.settings['options']['error'] = function (msg) {
+            onError({fileId:that.getFileId(name,code),msg:msg})
+        };
         let fileItem = this.fileList[name][code];
         if(fileItem['state']!='on'){
             if(fileItem['state']=='pre-delete'){
@@ -242,12 +263,16 @@ class Uploader {
                 var myXhr = $.ajaxSettings.xhr();
                 if(myXhr.upload){
                     myXhr.upload.addEventListener('progress',(event)=>{
-                        onprogress(_.defaultsDeep({
+                        let total = startIndex+event['total'];
+                        let loaded = startIndex+(event['loaded']||event['position']);
+                        onprogress({
+                            fileId:that.getFileId(name,code),
                             code:code,
                             name:name,
-                            total:startIndex+event['total'],
-                            loaded:startIndex+(event['loaded']||event['position'])
-                        },event));
+                            total:total,
+                            loaded:loaded,
+                            progress: Math.ceil(loaded*100/total)
+                        });
                     },false);
                     return myXhr;
                 }
@@ -257,7 +282,12 @@ class Uploader {
                 var myXhr = $.ajaxSettings.xhr();
                 if(myXhr.upload){
                     myXhr.upload.addEventListener('progress',(event)=>{
-                        onprogress(_.defaultsDeep({code:code,name:name},event));
+                        onprogress({
+                            fileId:that.getFileId(name,code),
+                            code:code,
+                            name:name,
+                            progress:Math.ceil((event['loaded']||event['position'])*100/event['total'])
+                        });
                     },false);
                     return myXhr;
                 }
@@ -278,6 +308,10 @@ class Uploader {
                 }
             } else {
                 fileItem['state']='on';
+                this.settings['options']['error'](res.error);
+                if(!res.warning_msg){
+                    delete this.fileList[name][code];
+                }
             }
         });
 

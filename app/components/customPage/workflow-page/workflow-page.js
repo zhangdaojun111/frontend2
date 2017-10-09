@@ -313,14 +313,20 @@ let config = {
                     this.actions.calcCustomColumn();
                 } )
             }
-            //全屏
-            if( this.el.find( '.grid-new-window' )[0] ){
-                let obj = {
-                    tableId: this.data.tableId,
-                    tableName: this.data.tableId2Name[this.data.tableId]
+            //新窗口显示隐藏
+            if( this.data.isNewWindow ){
+                this.el.find( '.grid-new-window' )[0].style.display = 'none';
+            }else {
+                //全屏
+                if( this.el.find( '.grid-new-window' )[0] ){
+                    let obj = {
+                        tableId: this.data.tableId,
+                        tableName: this.data.tableId2Name[this.data.tableId],
+                        isNewWindow: true
+                    }
+                    let url = this.actions.returnIframeUrl( '/iframe/workflowPage/',obj )
+                    this.el.find('.grid-new-window').attr('href', url);
                 }
-                let url = this.actions.returnIframeUrl( '/iframe/workflowPage/',obj )
-                this.el.find('.grid-new-window').attr('href', url);
             }
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
@@ -426,6 +432,7 @@ let config = {
             _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
+                    _this.el.find('.query-tips').css('display','none');
                 } else if($(this).val() == '临时高级查询') {
                     _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
                 } else {
@@ -515,15 +522,23 @@ let config = {
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
-                for( let a of this.data.filterParam.expertFilter ){
-                    json['filter'].push( a );
+                //这个顺序要保证是先高级查询，再搜索的
+                let len = this.data.filterParam.expertFilter.length - 1;
+                for(let i = len; i>=0; i--){
+                    json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
+                // for( let a of this.data.filterParam.expertFilter ){
+                //     json['filter'].push( a );
+                // }
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 ){
-                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
-                    this.el.find('.btn-nav').append(dom);
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
+                    this.el.find('.btn-nav-con').append(dom);
+                    setTimeout(()=>{
+                        this.el.find('.query-tips').css('display','none');
+                    },5000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -704,6 +719,17 @@ let config = {
                 this.actions.openSourceDataGrid( url,winTitle );
             }
         },
+        //设置失效
+        setInvalid: function () {
+            if( this.pagination ){
+                this.pagination.data.myInvalid = true;
+            }
+        },
+        //延时刷新
+        timeDelayRefresh: function(){
+            this.actions.setInvalid();
+            this.pagination.actions.timeDelayRefresh();
+        },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title ) {
             let defaultMax = false;
@@ -718,6 +744,12 @@ let config = {
                 // defaultMax: defaultMax,
                 customSize: defaultMax
             } ).then( (data)=>{
+                console.log( "工作流操作返回" )
+                console.log( data )
+
+                if( data.refresh ){
+                    this.actions.timeDelayRefresh();
+                }
             } )
         },
         //操作工作流
@@ -731,10 +763,10 @@ let config = {
                     workflowService.approve( json )
                         .then(res => {
                             if( res.success ){
-                                msgBox.showTips( '取消成功' );
-                                this.actions.getData();
+                                msgBox.showTips( '操作成功' );
+                                this.actions.timeDelayRefresh();
                             }else {
-                                msgBox.alert( '取消失败：' + res.error );
+                                msgBox.alert( '操作失败：' + res.error );
                             }
                         })
                 }

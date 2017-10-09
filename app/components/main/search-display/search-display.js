@@ -13,6 +13,7 @@ import {SingleDisplay} from './single-display/single-display'
 import {FileDisplay} from './file-display/file-display'
 import {GlobalService} from "../../../services/main/globalService"
 import dataPagination from "../../../components/dataGrid/data-table-toolbar/data-pagination/data-pagination";
+import msgbox from "../../../lib/msgbox";
 
 let config = {
     template:template,
@@ -24,8 +25,11 @@ let config = {
         attachmentCount:"",
     },
     actions:{
+        /**
+         * 根据每个data创建数据展示组件，一页最多展示20个数据
+         * @param data
+         */
         displayDataResult:function (data) {
-            //根据每个data创建组件，一页最多20个子组件
             let $fatherContainer = this.el.find("div.data-result-content");
             $fatherContainer.empty();
             let tempData = data.result;
@@ -33,8 +37,11 @@ let config = {
                 SingleDisplay.create(d,$fatherContainer);
             }
         },
+        /**
+         * 根据每个data创建附件展示组件，一页最多展示15个附件
+         * @param data
+         */
         displayAttachmentResult:function (data) {
-            //根据每个data创建组件，一页最多15个子组件
             let $fatherContainer = this.el.find("div.attachment-result-content");
             $fatherContainer.empty();
             let tempData = data.result;
@@ -42,6 +49,9 @@ let config = {
                 FileDisplay.create(d,$fatherContainer);
             }
         },
+        /**
+         * 切换到数据展示界面
+         */
         showDataPage:function () {
             if(this.data.dataCount.toString() !== "0"){             //data搜索结果不为0条，显示data页面
                 this.el.find('div.data-result-display').show();
@@ -56,6 +66,9 @@ let config = {
             this.el.find('.data-btn').addClass('btn-active');
             this.el.find('.attachment-btn').removeClass('btn-active');
         },
+        /**
+         * 切换到附件展示界面
+         */
         showAttachmentPage:function () {
             if(this.data.attachmentCount.toString() !== "0"){           //附件搜索结果不为0条，显示data页面
                 this.el.find('div.data-result-display').hide();
@@ -70,6 +83,9 @@ let config = {
             this.el.find('.data-btn').removeClass('btn-active');
             this.el.find('.attachment-btn').addClass('btn-active');
         },
+        /**
+         * 根据url的参数设置搜索内容
+         */
         setSearchContent:function () {
             let url = location.search;
             let mark = url.indexOf('=');
@@ -77,6 +93,9 @@ let config = {
             this.data.searchText =  decodeURI(url.substr(mark));
             this.actions.sendSearch();
         },
+        /**
+         * 创建两个分页组件分别管理data和附件的分页
+         */
         initPageController:function () {
             //初始化data页面分页控制
             this.dataPageController = new dataPagination({
@@ -102,6 +121,10 @@ let config = {
             this.el.find('.attachment-name').html(str2);
             this.attachmentPageController.actions.paginationChanged = this.actions.attachmentPageChanged;
         },
+        /**
+         * 数据页面的页码改变，按页码进行搜索并更新显示内容
+         * @param data
+         */
         dataPageChanged:function (data) {
             this.showLoading();
             //data页面改变分页，根据页面请求新数据，并刷新页面内容
@@ -133,6 +156,10 @@ let config = {
                 that.hideLoading();
             });
         },
+        /**
+         * 附件页面的页码改变，按页码进行搜索并更新显示内容
+         * @param data
+         */
         attachmentPageChanged:function (data) {
             this.showLoading();
             let searchData = {
@@ -142,7 +169,10 @@ let config = {
                 in_attachment:1,
             };
 
-            //发起搜索请求，仅搜索附件
+            /**
+             * 发起搜索请求，仅搜索附件
+             * @type {config}
+             */
             let that = this;
             GlobalService.sendSearch(searchData).done((result) => {
                 if (result.success === 1) {
@@ -161,8 +191,21 @@ let config = {
                 }
             })
         },
+        /**
+         * 向后台请求第一轮搜索，数据和附件均搜索
+         */
         sendSearch:function () {
             this.showLoading();
+
+            // msgbox.showLoadingSelf();
+            // setTimeout(function () {
+            //     msgbox.hideLoadingSelf();
+            //     msgbox.showLoadingRoot();
+            // },5000);
+            // setTimeout(function () {
+            //    msgbox.hideLoadingRoot();
+            // },8000);
+
             let searchData = {
                 keyword:this.data.searchText,            //搜索文字
                 rows:20 ,                               //每页显示的个数

@@ -27,6 +27,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
         //background-repeat: no-repeat;
 
         .login-content {
+            display: none;
             width: 300px;
             margin-left: 200px;
             margin-top: 150px;
@@ -61,11 +62,60 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                 }
 
                 form {
-                    .form-group {
+                    .form-group{
                         position: relative;
                         height: 40px;
                         margin-left: 30px;
+                        .form-user-logo {
+                            width: 16px;
+                            height: 16px;
+                            display: block;
+                            position: absolute;
+                            left: 15px;
+                            top: 9px;
+                        }
+                        .form-user-logo {
+                            background: url("../images/login/icon_user.png");
+                            background-repeat: no-repeat;
+                        }
+                    }
 
+                    .ps-group {
+                        height: 40px;
+                        width: 100%;
+                        box-sizing: border-box;
+                        margin-top: 5px;
+                        height: 30px;
+                        position: relative;
+                        .form-pw-logo{
+                            left: 45px;
+                            top:13px;
+                            width: 16px;
+                            height: 16px;
+                            position: absolute;
+                            background: url("../images/login/icon_password.png");
+                            background-repeat: no-repeat;
+                        }
+                        .password-component{
+                            .password-component-group{
+                                height: 40px;
+                                .input-box{
+                                    margin-left: 30px;
+                                    .default-faker-password{
+                                        top:12px;
+                                        left: 215px;
+                                        &.display-password{
+                                            top:11px;
+                                        }
+                                    }
+                                }
+                                .input-password-warning{
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                    .form-group,.ps-group {
                         input {
                             width: 240px;
                             height: 30px;
@@ -82,29 +132,6 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                             border-color: #27adf4;
                             outline: none;
                         }
-
-                        i {
-                            width: 16px;
-                            height: 16px;
-                            display: block;
-                            position: absolute;
-                            left: 15px;
-                            top: 9px;
-                        }
-
-                        .form-user-logo {
-                            background: url("../images/login/icon_user.png");
-                            background-repeat: no-repeat;
-                        }
-
-                        .form-pw-logo {
-                            background: url("../images/login/icon_password.png");
-                            background-repeat: no-repeat;
-                        }
-                    }
-
-                    .ps-group {
-                        margin-top: 5px;
                     }
 
                     .remember-pw-group {

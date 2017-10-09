@@ -5,7 +5,7 @@ import {CanvasCellsComponent} from './cells/canvas.cells';
 import {CanvasHeaderComponent} from './header/canvas.header';
 import {canvasCellService} from '../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../lib/msgbox';
-import {PMAPI, PMENUM} from "../../../../lib/postmsg";
+import {PMAPI} from "../../../../lib/postmsg";
 
 let config = {
     template: template,
@@ -15,7 +15,7 @@ let config = {
         headerComponents: {},
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
-        editModeDialog: true,
+        isViewEmpty: false,
     },
     binds: [
         // 编辑模式
@@ -24,7 +24,7 @@ let config = {
             selector: '.to-edit-page',
             callback: function (context, event) {
                 //编辑模式Iframe
-                let iFrameUrl = '/bi/manager/' + window.location.hash;
+                let iFrameUrl = window.location.href.replace('index', 'manager');
                 PMAPI.openDialogByIframe(
                     iFrameUrl,
                     {
@@ -65,30 +65,36 @@ let config = {
          * @param viewId
          */
         switchViewId: function (viewId) {
-            this.currentViewId = viewId ? viewId.toString() : window.config.bi_views[0].id;
-            if (!this.data.singleMode) {
-                this.data.headerComponents.data.menus[this.currentViewId].actions.focus();
-            }
-            this.data.cells = new CanvasCellsComponent(this.currentViewId);
-            this.data.cells.render(this.el.find('.cells-container'));
-        },
+            // 如果router没有传viewId 则默认用bi_views第一个
+            this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
+            if (this.data.currentViewId) {
+                if (!this.data.singleMode) {
+                    this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
+                }
+                this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
+                this.data.cells.render(this.el.find('.cells-container'));
 
+               // this.data.headerComponents.actions.canSaveViews(this.data.currentViewId);
+            };
+
+        },
         /**
          * 加载头部
          */
         headLoad: function () {
-            if (!this.data.singleMode) {
-                let header = new CanvasHeaderComponent({}, {
-                    onAddCell: (cell) => {
-                        this.data.cells.actions.addCell(cell)
-                    },
-                    onSaveCanvas: () => {
-                        this.data.cells.actions.saveCanvas()
-                    },
-                });
-                this.append(header, this.el.find('.views-header'));
-                this.data.headerComponents = header;
-            }
+            // if (!this.data.singleMode) {
+            //
+            // }
+            let header = new CanvasHeaderComponent({}, {
+                onAddCell: (cell) => {
+                    this.data.cells.actions.addCell(cell)
+                },
+                onSaveCanvas: () => {
+                    this.data.cells.actions.saveCanvas()
+                },
+            });
+            this.append(header, this.el.find('.views-header'));
+            this.data.headerComponents = header;
         },
 
         /**
@@ -99,22 +105,19 @@ let config = {
             this.el.find('.component-bi-canvas-main').append("<div class='cells-container client " + this.data.editMode + "'></div>")
         }
     },
+
     afterRender:function(){
         this.showLoading();
         //根据判断是否单行模式加载header
         this.actions.headLoad();
         this.hideLoading();
     },
-    beforeDestory:function () {
-
-    }
+    beforeDestory:function () {}
 };
 
 export class CanvasMain extends Component {
     constructor(data, events) {
-        if (window.location.href.indexOf('key') !== -1) {
-            config.data.editModeDialog = false;
-        }
+        config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
         super(config, data, events);
     }
 }

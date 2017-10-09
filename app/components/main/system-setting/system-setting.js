@@ -15,7 +15,9 @@ import {UserInfoService} from "../../../services/main/userInfoService"
 
 let config = {
     template:template,
-    //以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
+    /**
+     * 以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
+     */
     data:{
         biSort:1,           //记录bi的顺序
         calendarSort:2,     //记录日历顺序
@@ -23,21 +25,27 @@ let config = {
         calendarStatus:0,   //记录快捷bi状态（0为不快捷打开日历）
     },
     actions:{
-        //打开样式设置页面
+        /**
+         * 打开样式设置页面
+         */
         showStyleSetting:function () {
             this.el.find('.style-setting').show();
             this.el.find('.rapid-setting').hide();
             this.el.find('.style-btn').addClass('active');
             this.el.find('.rapid-btn').removeClass('active');
         },
-        //打开快捷设置页面
+        /**
+         * 打开快捷设置页面
+         */
         showRapidSetting:function () {
             this.el.find('.style-setting').hide();
             this.el.find('.rapid-setting').show();
             this.el.find('.style-btn').removeClass('active');
             this.el.find('.rapid-btn').addClass('active');
         },
-        //清理缓存
+        /**
+         * 清理缓存
+         */
         clearStorage:function () {
             msgbox.confirm('确定要清除缓存，并退出到登录页面吗？').then((result) => {
                 if(result === true){
@@ -46,7 +54,9 @@ let config = {
                 }
             })
         },
-        //获取用户快捷设置参数并解析
+        /**
+         * 获取用户快捷设置参数并解析
+         */
         getItemData:function () {
             let biStatus = window.config.sysConfig.logic_config.login_show_bi || "10";
             this.data.biSort = biStatus.split('')[0];
@@ -58,7 +68,9 @@ let config = {
 
             this.actions.addCheckbox();
         },
-        //根据用户设置的参数在bi前或后添加日历拖动框
+        /**
+         * 根据用户设置的参数在bi前或后添加日历拖动框
+         */
         addCheckbox:function () {
             let $parent = this.el.find('.sortable-box');
             let $ul = $("<li class='isShow-calendar sort-item' title='拖动调整顺序'><input class='calendar-Show' title='点击设置此功能' type='checkbox'><span>登录时自动开启日历</span>" +
@@ -70,7 +82,9 @@ let config = {
             }
             this.actions.setCheckboxStatus();
         },
-        //保存用户快捷设置状态
+        /**
+         * 保存用户快捷设置状态
+         */
         saveSetting:function () {
             this.showLoading();
             let biflag = 10;
@@ -113,7 +127,9 @@ let config = {
                 }
             });
         },
-        //改变字体大小（目前仅有示例效果，实际效果未完成）
+        /**
+         * 改变字体大小（目前仅有示例效果，实际效果未完成）
+         */
         changeFontSize:function () {
             let fontsize = this.el.find('input.font-range').val();
             this.el.find("span.font-size").html(fontsize);
@@ -121,7 +137,9 @@ let config = {
             this.el.find("span.font-example").css("font-size",fontsize);
             //添加对aggrid的影响
         },
-        //设置bi/日历li可拖动以及checkbox初始状态
+        /**
+         * 设置bi/日历li可拖动以及checkbox初始状态
+         */
         setCheckboxStatus:function () {
             let that = this;
             this.el.find('.sortable-box').sortable({
@@ -142,7 +160,11 @@ let config = {
                 this.el.find('input.calendar-Show').attr("checked",true);
             }
         },
-        //仅当dom位置发生变化（即bi/日历顺序有变化）才会触发，原地拖动不会触发
+        /**
+         * 仅当dom位置发生变化（即bi/日历顺序有变化）才会触发，原地拖动不会触发
+         * @param event
+         * @param ui
+         */
         saveSortResult(event,ui){
             let temp = this.data.biSort;
             this.data.biSort = this.data.calendarSort;

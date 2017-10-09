@@ -12,6 +12,11 @@
             margin-bottom: 30px;
         }
     }
+    .hide{
+        visibility: hidden;
+        height: 0;
+        overflow: hidden;
+    }
 }
 #app-workflow {
     .workflow-foot .workflow-box{
@@ -52,6 +57,10 @@
             float: left;
             margin-right: 5px;
         }
+    }
+    .addPrint{
+        margin-top: 1px;
+        margin-right: 28px;
     }
     .down{
         position: absolute;

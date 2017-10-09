@@ -1,6 +1,6 @@
 //时间日期
 #ui-datepicker-div {
-    width: 237.22px;
+    width: 233.22px;
     border: 1px solid #CCCCCC;
     font-family: '微软雅黑 ';
     .ui-datepicker-calendar thead {
@@ -64,6 +64,7 @@
     }
     .ui-datepicker-month, .ui-datepicker-year {
         font-style: normal;
+        height: 20px;
         position: relative;
         float: left;
         left: 10%;
@@ -71,6 +72,9 @@
         font-family: 'Arial Normal', 'Arial';
         font-size: 13px;
         color: #333333;
+    }
+    .ui-datepicker-year{
+        padding-top: 2px;
     }
     th span {
         font-weight: normal !important;

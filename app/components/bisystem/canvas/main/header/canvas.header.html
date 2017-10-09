@@ -1,9 +1,32 @@
 {{#unless singleModel}}
-<div class="nav-tabs nav-tabs-{{editMode}}"></div>
+<div class="nav-tabs nav-tabs-{{editMode}}"></div><span class="nav-tabs-select" title="显示更多"><i class="select-icon"></i></span>
+<div class="child-menu"></div>
 {{#if editMode}}
 <div class="views-btn-group">
-    <a href="javascript:;" class="add-cell-btn">添加画布块</a>
-    <a href="javascript:;" class="view-save-btn">保存</a>
+    <div class="views-btn-right">
+        <a href="javascript:;" draggable="false" class="print-line" title="开关打印线"><i class="print-line-icon"></i></a>
+        {{#if isAdmin}}
+        <a href="javascript:;" draggable="false">
+            <label for="form-data" title="导入数据">
+                <input type="file" id="form-data" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel">
+                <i class="import-icon"></i>
+            </label>
+        </a>
+        <a href="/bi/export_bi_setting" draggable="false"  class="export-data" title="导出数据"><i class="export-icon"></i></a>
+        {{/if}}
+        <span class="canSaveView">
+            <a href="javascript:;" draggable="false" class="add-cell-btn" title="添加画布块"><i class="add-cell-icon"></i></a>
+            <a href="javascript:;" draggable="false" class="view-save-btn" title="保存"><i class="save-icon"></i></a>
+        </span>
+    </div>
 </div>
+{{else}}
+    <span class="views-header-right">
+        {{#unless editMode}}
+        <a href="javascript:;"draggable="false"  class="to-edit-page" title="编辑"><i class="manager-edit-icon"></i>编辑</a>
+        {{/unless}}
+        <a href="javascript:;" draggable="false" class="print-btn" title="打印"><i class="print-icon"></i>打印</a>
+        <a href="/bi/index/" draggable="false" target="_blank" class="new-window" title="在新窗口打开"><i class="new-window-icon"></i>新窗口</a>
+    </span>
 {{/if}}
 {{/unless}}

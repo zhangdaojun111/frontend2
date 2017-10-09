@@ -66,6 +66,7 @@ $sub_color: #0088ff;
                 float: left;
                 cursor: pointer;
                 border-radius: 50%;
+                border: solid 2px #E4E4E4;
                 overflow: hidden;
                 &.default_avatar{
                     background-image: url("../../../assets/images/framework/default_avatar_64.png");
@@ -129,7 +130,7 @@ $sub_color: #0088ff;
             }
         }
         .personal-info{
-            margin-top: 40px;
+            margin-top: 20px;
             .department-group,.position-group{
                 height: 50px;
                 margin-left: 130px;
@@ -169,42 +170,30 @@ $sub_color: #0088ff;
 
         .modify-password{
             display: none;
-            div{
-                height: 50px;
-                line-height: 50px;
-                margin-left: 30px;
-
-                input{
-                    height: 30px;
-                    width: 250px;
-                    background-color: #fafafa;
-                    border: solid 1px #e4e4e4;
-                    outline: none;
-                    text-indent: 10px;
-                    &:focus{
-                      border: solid 1px #0088ff;
-                    }
-                }
-            }
+            margin-top: 20px;
 
             .old-pw-group{
-                margin-top: 30px;
-                margin-left: 102px;
+                //margin-top: 15px;
+                margin-left: 100px;
             }
             .new-pw-group{
-                margin-left: 102px;
+                margin-left: 100px;
                 margin-top: 15px;
             }
             .confirm-new-pw-group{
-                margin-left: 78px;
+                margin-left: 76px;
                 margin-top: 15px;
             }
-            .ps-warn{
-                color: red;
+            .password-rule-prompt{
                 display: block;
-                margin-top: 40px;
-                margin-left: 310px;
+                margin: 30px 0 0 260px;
             }
+            //.save-password-warning{
+            //    color: red;
+            //    display: block;
+            //    margin-top: 40px;
+            //    margin-left: 310px;
+            //}
             button{
                 width: 100px;
                 height: 35px;

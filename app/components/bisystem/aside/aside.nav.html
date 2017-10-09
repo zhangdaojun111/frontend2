@@ -1,27 +1,18 @@
 <aside class="aside" >
+    <div class="aside-title">
+        <b>BI</b><span>数据分析系统</span>
+    </div>
     <div class="user">
-        <a href="#forms/home" class="add-chart-btn">新建图表</a>
-        <a href="#views/edit" class="edit-view-btn">编辑视图</a>
+        <a href="#forms/home" draggable="false" class="add-chart-btn" title="新建图表"><i class="new-chart-icon"></i>新建图表</a>
+        <a href="#views/edit" draggable="false" class="edit-view-btn" title="编辑视图"><i class="edit-view-icon"></i>编辑视图</a>
     </div>
     <div class="charts-container">
         <p class="filter">
-            <input type="text" class="filter-match" placeholder="搜索">
-            <i class="font fa fa-search"></i>
+            <i class="search-icon"></i>
+            <input type="text" class="filter-match" placeholder="搜索目录">
         </p>
-<div class="charts">
-    <ul class="charts-items">
-        <!--{{#each charts}}-->
-        <!--<li data-index="{{@index}}" class="charts-item"><p><span>{{name}}</span><i class="btn_ripple fa fa-ellipsis-v"></i></p></li>-->
-        <!--{{/each}}-->
-    </ul>
-    <!--<div class="hide_meun">-->
-        <!--<div class="btn_box">-->
-            <!--<button class="menuitem btn_del"><span>删除</span></button>-->
-            <!--<button class="menuitem btn_change"><span>编辑</span></button>-->
-        <!--</div>-->
-    <!--</div>-->
+    <div class="charts">
+        <ul class="charts-items"></ul>
+    </div>
 </div>
-</div>
-<!--<div class="switch-button singlepage"><a class="mat-fab btn-single" title="单页" href="javascript:;">单页</a></div>-->
-<!--<div class="switch-button multiplepage"><a class="mat-fab" title="多页" href="/bi/index/">多页</a></div>-->
 </aside>

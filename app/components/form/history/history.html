@@ -2,8 +2,8 @@
     <table class="history form table table-striped table-bordered table-hover " >
         <tr class="history-title" >
             <td>序号</td>
-            <td>修改后值</td>
             <td>修改前值</td>
+            <td>修改后值</td>
             <td>修改人</td>
             <td>修改时间</td>
             <td>ip</td>
@@ -11,8 +11,8 @@
         {{#each history_data}}
         <tr>
             <td>{{this.index}}</td>
-            <td>{{this.new_value}}</td>
             <td>{{this.old_value}}</td>
+            <td>{{this.new_value}}</td>
             <td>{{this.update_user}}</td>
             <td>{{this.update_time}}</td>
             <td>{{this.update_ip}}</td>

@@ -51,7 +51,9 @@ export const PMENUM = {
     show_tips: '12',
     send_data_to_dialog_component: '13', //向子componentDialog发消息，需和openDialogByComponentWithKey结合使用，便于获得dialog的key
     send_data_to_iframe:'14',
-    get_data:'15'
+    get_data:'15',
+    show_loading:'16',          //打开loading
+    hide_loading:'17',          //隐藏loading
 }
 
 /**
@@ -179,17 +181,14 @@ window.addEventListener('message', function (event) {
                 break;
 
             case PMENUM.send_data_to_iframe:
-                PMAPI.sendToChild(dialogHash[data.key].element[0], {
-                    type: PMENUM.get_data,
-                    key: data.key,
-                    data: data.data
-                });
-                break;
-
-            case PMENUM.get_data:
                 Mediator.publish('getDataFromOtherFrame:'+data.data.originalField,data.data);
                 break;
-
+            case PMENUM.show_loading:
+                msgbox._showLoading(data.data);
+                break;
+            case PMENUM.hide_loading:
+                msgbox._hideLoading(data.data);
+                break;
             default:
                 console.log('postmsg listener: unsupported message');
         }
@@ -285,11 +284,11 @@ export const PMAPI = {
     },
 
     /**
-     * 将消息发送给调用的父组件
+     * 将消息发送给调用的父组件,新框架如果是在非主框架上打开的话，关闭应该采用此方法
      * @param data
      */
     sendToRealParent: function (data) {
-        this.parent.postMessage(data, location.origin);
+        window.parent.postMessage(data, location.origin);
         return this;
     },
 
@@ -429,7 +428,7 @@ export const PMAPI = {
     openDialogByComponentWithKey: function (componentConfig, key, frame) {
         return new Promise(function (resolve) {
             dialogWaitHash[key] = resolve;
-            PMAPI.sendToParent({
+            PMAPI.sendToSelf({
                 type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),
@@ -522,7 +521,7 @@ export const PMAPI = {
                 let args = obj[key]['Arguments'] || "";
                 let source = obj[key]['Source'];
                 let fstr = "function " + obj[key]['Function'] + "(" + args + "){" + source + "}";
-                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Storage','Quill', "return " + fstr)($, _, PMAPI, PMENUM, HTTP, Storage, Quill);
+                let f = new Function('$', '_', 'PMAPI', 'PMENUM', 'HTTP', 'Storage','Quill', "Mediator","return " + fstr)($, _, PMAPI, PMENUM, HTTP, Storage, Quill,Mediator);
                 obj[key] = f;
             } else if (obj[key] instanceof Object) {
                 PMAPI._createFuncs(obj[key]);

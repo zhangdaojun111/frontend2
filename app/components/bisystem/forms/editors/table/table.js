@@ -113,7 +113,7 @@ let config = {
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
-                filter: [],
+                filter: data.filter,
                 countNum: data.countNum,
                 single:data.single[0] ? data.single[0]: 0,
                 singleColumnWidthList:[],
@@ -122,8 +122,6 @@ let config = {
                 alignment:data.alignment,
                 columnNum:data.columnNum
             };
-
-
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
@@ -133,7 +131,6 @@ let config = {
                     };
                 }
             };
-
 
             if(pass) {
                 this.save(chart);
@@ -149,6 +146,7 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
@@ -181,6 +179,22 @@ let config = {
             },
             theme,
             icon,
+            {
+                label: '高级查询',
+                name: 'filter',
+                defaultValue: {},
+                type: 'search',
+                events: {
+                    onShowAdvancedSearchDialog() {
+                        let data = {
+                            tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
+                            fieldsData: this.formItems['columns'].data.list,
+                            commonQuery: this.formItems['filter'].data.value && this.formItems['filter'].data.value.hasOwnProperty('filter') ? [this.formItems['filter'].data.value.filter_source] : null,
+                        };
+                        this.formItems['filter'].actions.showAdvancedDialog(data);
+                    }
+                }
+            },
             {
                 label: '请选择列名',
                 name: 'columns',
@@ -276,13 +290,18 @@ let config = {
                 defaultValue: '1',
                 placeholder: '请输入默认显示单行为多少列',
                 type: 'text',
+                rules: [
+                    {
+                        errorMsg: '显示多少列数必须是大于0的整数',
+                        type: 'positiveInteger'
+                    }
+                ],
                 category: 'number',
                 events: {
                     onChange: _.debounce(function(value) {
                         let columnNum = parseInt(value);
                         if (columnNum !== NaN) {
-                            let num = this.formItems['table_single'].actions.setColumns(this.formItems['choosed'].data.list, columnNum);
-                            this.formItems['columnNum'].setValue(num);
+                            this.formItems['table_single'].actions.setColumns(this.formItems['choosed'].data.list, columnNum);
                         }
                     },100)
                 }
@@ -308,6 +327,7 @@ let config = {
             button,
         ]
     },
+
     async afterRender() {
         if(this.data.chart_id) {
             const res = await this.actions.getChartData(this.data.chart_id);
@@ -321,8 +341,6 @@ let config = {
         // 渲染图表表单字段
         this.drawForm();
         this.actions.init();
-        console.log(this.el.find('.form-group'));
-        console.log(this.el.find('.form-chart-save'));
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
         }

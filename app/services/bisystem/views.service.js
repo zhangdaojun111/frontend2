@@ -8,7 +8,15 @@ export const ViewsService = {
      * @returns {Promise}
      */
     async update(data) {
-        const res = await HTTP.getImmediately('/bi/set_new_view_data',data);
+        let params = {
+            parent_table_id: window.config.parent_table_id,
+            row_id: window.config.row_id,
+            query_mark: window.config.query_mark,
+            operation_id:window.config.operation_id,
+            folder_id: window.config.folder_id,
+            query_mark: window.config.query_mark === 'single' ? 'single' : 'normal',
+        }
+        const res = await HTTP.getImmediately('/bi/set_new_view_data',Object.assign(data,params));
         return new Promise((resolve, reject) => {
                 resolve(res);
         })
@@ -45,10 +53,10 @@ export const ViewsService = {
     },
 
     /**
-     * 修改文本框数据
+     * 保存富文本框数据
      * @param data 需要发送给服务器的参数
      */
-    async setEditData(data) {
+    async saveRichText(data) {
         const res = await HTTP.ajaxImmediately({
             url: '/bi/set_new_richtxt/',
             data: data,

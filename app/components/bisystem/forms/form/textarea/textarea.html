@@ -1,0 +1,12 @@
+<div class="form-chart-text {{class}}">
+    {{#if label}}
+    <h4 class="form-label">
+        <span>{{label}}</span>
+        {{#if required}}<i class="start-icon"></i>{{/if}}
+        <b class="error-msg"></b>
+    </h4>
+    {{/if}}
+    <div class="form-chart-wrapper">
+        <textarea placeholder="{{placeholder}}" value={{value}}></textarea>
+    </div>
+</div>

@@ -3,6 +3,7 @@ import confirmConfig from '../components/util/confirm/confirm';
 import {Tips} from '../components/util/tips/tips';
 import {PMAPI, PMENUM} from './postmsg';
 import {progressConfig} from "../components/util/progresses/progresses";
+import {Loading} from "../components/util/loading/loading"
 
 
 export default {
@@ -50,20 +51,50 @@ export default {
         });
         // return this.alert(msg);
     },
+    showLoadingSelf:function () {
+        PMAPI.sendToSelf({
+            type: PMENUM.show_loading
+        });
+    },
+    showLoadingRoot:function () {
+        PMAPI.sendToParent({
+            type: PMENUM.show_loading
+        });
+    },
+    hideLoadingSelf:function () {
+        PMAPI.sendToSelf({
+            type: PMENUM.hide_loading
+        });
+    },
+    hideLoadingRoot:function () {
+        PMAPI.sendToParent({
+            type: PMENUM.hide_loading
+        });
+    },
 
     _showTips: function (msg) {
         Tips.showMessage(msg)
     },
-
+    _showLoading:function () {
+        Loading.showLoading();
+    },
+    _hideLoading:function () {
+        Loading.hideLoading();
+    },
     /**
      * 显示进度条
      */
     showProgress: function (data) {
         let key = PMAPI._getKey();
-        progressConfig.data = data;
-        PMAPI.openDialogByComponentWithKey(progressConfig,key,{
-            width:400,
-            height:200,
+        // let height = data.files.length*24+30;
+        let height = 170;
+        let width = 400; //410
+        if(data.files.length == 0){
+            return;
+        }
+        PMAPI.openDialogByComponentWithKey(_.defaultsDeep({},{data:data},progressConfig),key,{
+            width:width,
+            height:height,
             title:'查看上传进度'
         });
 
@@ -72,14 +103,14 @@ export default {
              * @param item 上传进度百分比数组[20,30,20]
              **/
             update:function (items) {
-                PMAPI.sendToParent({
+                PMAPI.sendToSelf({
                     type:PMENUM.send_data_to_dialog_component,
                     key:key,
                     data:{type:'update',msg:items}
                 })
             },
-            finish:function ({fileOrder:index}) {
-                PMAPI.sendToParent({
+            finish:function ({fileId:index}) {
+                PMAPI.sendToSelf({
                     type:PMENUM.send_data_to_dialog_component,
                     key:key,
                     data:{type:'finish',msg:index}
@@ -90,7 +121,7 @@ export default {
              * @param msgData {fileId:filename_time,msg:'....'}
              */
             showError:function (msgData) {
-                PMAPI.sendToParent({
+                PMAPI.sendToSelf({
                     type:PMENUM.send_data_to_dialog_component,
                     key:key,
                     data:{type:'error',msg:msgData}

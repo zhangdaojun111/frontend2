@@ -1,6 +1,15 @@
 /**
-* 容器的大小
-*/
+ 引用公共样式
+ */
+@import "../core/base";
+
+@media print {
+    body * {
+        visibility: visible !important;
+        overflow: visible !important;
+        position: static !important;
+    }
+}
 
 @mixin icon {
     display: inline-block;
@@ -51,6 +60,70 @@ html.bi, body.bi {
     .original-data-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/original_data.png') no-repeat;
+    }
+    .save-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/save.png') no-repeat;
+    }
+    .new-window-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/new-window.png') no-repeat;
+    }
+    .rich-text-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/richtext.png') no-repeat;
+    }
+    .right-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/right.png') no-repeat;
+    }
+    .wrong-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/wrong.png') no-repeat;
+    }
+    .print-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/print.png') no-repeat;
+    }
+    .manager-edit-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/manager_edit.png') no-repeat;
+    }
+    .add-cell-icon {
+         @include icon;
+         background: url('../../../assets/images/bisystem/add_cell.png') no-repeat;
+    }
+    .export-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/export.png') no-repeat;
+    }
+    .import-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/import.png') no-repeat;
+    }
+    .print-line-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/print_line.png') no-repeat;
+    }
+    .edit-view-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/edit_view.png') no-repeat;
+    }
+    .file-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/file.png') no-repeat;
+    }
+    .new-chart-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/new-chart.png') no-repeat;
+    }
+    .search-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/search.png') no-repeat;
+    }
+    .select-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/select.png') no-repeat;
     }
 }
 
@@ -183,7 +256,6 @@ html.bi, body.bi {
         @include form-btn;
     }
 }
-
 
 
 

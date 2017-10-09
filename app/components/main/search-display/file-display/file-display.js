@@ -20,11 +20,17 @@ let config = {
         fileId:'',
     },
     actions:{
+        /**
+         * 设置附件标题
+         */
         initInfo:function () {
             this.el.find('div.table-name').html(this.data.searchData.label);
             this.el.find('div.attachment-content').html(this.data.searchData.file_name + " 附件").attr('title',this.data.searchData.file_name + " 附件");
             this.actions.setHref();
         },
+        /**
+         * 设置附件预览和下载链接
+         */
         setHref:function () {
             if(this.data.searchData.file_name.indexOf('docx') !== -1
                 || this.data.searchData.file_name.indexOf('xlsx') !== -1

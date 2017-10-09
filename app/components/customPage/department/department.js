@@ -279,6 +279,10 @@ let config = {
                 this.data.isShowCustomPanel = false;
                 this.actions.changeAgGridWidth(true);
             } )
+            //新窗口显示隐藏
+            if( this.data.isNewWindow ){
+                this.el.find( '.grid-new-window' )[0].style.display = 'none';
+            }
         },
         //定制列事件
         calcCustomColumn: function () {
@@ -410,7 +414,7 @@ let config = {
                         }else {
                             msgBox.alert( res.error )
                         }
-                    } )
+                    });
                     HTTP.flush();
                 }
             } )
@@ -422,7 +426,7 @@ let config = {
         this.actions.createHeader();
         //订阅数据失效
         PMAPI.subscribe(PMENUM.data_invalid, (info) => {
-            console.log( "部门信息订阅数据失效" )
+            console.log( "部门信息订阅数据失效" );
             let tableId = info.data.table_id;
             if( this.data.tableId == tableId ){
                 if( !this.data.onRefresh ){

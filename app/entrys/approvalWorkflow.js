@@ -3,13 +3,9 @@ import '../assets/scss/main.scss';
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
 
-import {
-    HTTP
-} from '../lib/http';
+import {HTTP} from '../lib/http';
 import Mediator from '../lib/mediator';
-import {
-    workflowService
-} from '../services/workflow/workflow.service';
+import {workflowService} from '../services/workflow/workflow.service';
 import WorkFlowCreate from '../components/workflow/workflow-create/workflow-create';
 import WorkflowRecord from '../components/workflow/approval-record/approval-record';
 import WorkFlowForm from '../components/workflow/workflow-form/workflow-form';
@@ -23,6 +19,14 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
 
+let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
+serchStr.split('&').forEach(res => {
+    let arr = res.split('=');
+    obj[arr[0]] = arr[1];
+});
+is_view=obj.btnType==='view'?1:0;
+
+console.log(obj);
 
 ApprovalWorkflow.showDom().then(function (component) {
     WorkFlowGrid.showGrid();
@@ -39,12 +43,7 @@ ApprovalWorkflow.showDom().then(function (component) {
     });
     setTimeout(()=> component.hideLoading(),1000)
 });
-let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
-serchStr.split('&').forEach(res => {
-    let arr = res.split('=');
-    obj[arr[0]] = arr[1];
-});
-is_view=obj.btnType==='view'?1:0;
+
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
     ApprovalHeader.showheader(res.record_info);
@@ -59,12 +58,34 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     };
     if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
-        $('#approval-workflow').find('#re-app').show();
+        if(!is_view){
+            $('#approval-workflow').find('#re-app').show();
+        }
     };
     if(res.record_info.status==="已撤回"&&res.record_info.start_handler===window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
-        $('#approval-workflow').find('#re-app').show();
+        if(!is_view){
+            $('#approval-workflow').find('#re-app').show();
+        }
     };
+    if(is_view){
+        $('#add-home').find('#addFollower').hide();
+    }
+
+    // zj
+    // (async function () {
+    //     return workflowService.getWorkflowInfo({url: '/get_all_users/'});
+    // })().then(users => {
+    //     for(let i in focus){
+    //         nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
+    //     }
+    //     $('#add-home #addFollowerList').html(nameArr);
+    //     if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
+    //         $('#approval-workflow').find('.for-hide').hide();
+    //         $('#approval-workflow').find('#re-app').hide();
+    //     };
+    // })
+
     //审批工作流
     (async function () {
         return workflowService.getWorkflowInfo({
@@ -108,7 +129,11 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     return workflowService.getRecordInfo(
         {
             flow_id: obj.flow_id,
+            form_id: obj.form_id,
             record_id: obj.record_id,
+            is_view: is_view,
+            from_approve: 1,
+            from_focus: 0,
             // is_view:0,
             table_id: obj.table_id,
         }
@@ -164,7 +189,12 @@ const approveWorkflow = (para) => {
         comment=$('#comment').val();
     para.data={};
     if(agorfo){
-        para.data=JSON.stringify(formData);
+        if(formData.error){
+            msgBox.alert(`${formData.errorMessage}`);
+            return ;
+        }else {
+            para.data = JSON.stringify(formData);
+        }
     }
     para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);
@@ -176,14 +206,15 @@ const approveWorkflow = (para) => {
     })().then(res => {
         if(res.success===1){
             msgBox.alert(`操作成功`);
+            PMAPI.sendToParent({
+                type: PMENUM.close_dialog,
+                key:key,
+                data:{refresh:true}
+            })
         }else{
             msgBox.alert(`失败：${res.error}`);
         }
-        PMAPI.sendToParent({
-            type: PMENUM.close_dialog,
-            key:key,
-            data:{}
-        })
+
     })
 };
 
@@ -257,7 +288,7 @@ Mediator.subscribe("approval:re-app", (msg) => {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:key,
-                data:{}
+                data:{refresh:true}
             })
         })
     }

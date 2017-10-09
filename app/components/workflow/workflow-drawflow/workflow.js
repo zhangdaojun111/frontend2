@@ -100,6 +100,7 @@ let config = {
                             text = value['handler_relation'] == 0 ? '临时(会签)' : '临时(并行)';
                         }
                         if (value['multi_handlers']) {
+                            condition = value['multi_handlers'];
                             myTitle = value['multi_handlers'];
                         }
                     }

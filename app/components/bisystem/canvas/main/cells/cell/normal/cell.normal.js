@@ -43,10 +43,10 @@ let config = {
             yAxis.forEach((item) => {
                 let itemData = [];
                 item.data.forEach((val,index,arrays) => {
-                    let isRemove = yAxisRemoveDataIndex.toString().indexOf(index) ;
+                    let isRemove = yAxisRemoveDataIndex.indexOf(index);
                     if (isRemove === -1) {
                         itemData.push(val)
-                    }
+                    };
                 });
                 item.data = itemData;
             });
@@ -59,8 +59,8 @@ let config = {
         echartsInit() {
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
-                // 当attribute or select　等于空时　代表全选
 
+                // 当attribute or select　等于空时　代表全选
                 if (this.data.cellChart.chart.chartGroup.id && this.data.cellChart.cell.select.length > 0) {
                     chartData = _.cloneDeep(this.data);
                     let ename = [];
@@ -82,18 +82,16 @@ let config = {
                         chartData.cellChart = cellChart;
                     };
                 }
-
             };
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
+            this.trigger('onUpdateChartDeepTitle',this.data);
         },
-
         updateChart(data) {
             //重新渲染echarts
             const option = this.normalChart.lineBarOption(data);
             this.normalChart.myChart.setOption(option,true);
         },
-
         /**
          * 初始化pie图表数据
          */
@@ -166,6 +164,7 @@ let config = {
                         this.data.cellChart['cell']['attribute'] = [];
                         this.data.cellChart['cell']['select'] = [];
                         this.actions.updateChart(this.data.cellChart);
+                        this.trigger('onUpdateChartDeepTitle',this.data);
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
@@ -246,5 +245,48 @@ export class CellNormalComponent extends CellBaseComponent {
     async updateOriginalDeep(name) {
        let res = await this.actions.CanvasDeep(name);
        return Promise.resolve(this.data);
+    }
+
+    /**
+     * 当原始数据下穿排序
+     * @param sort = {type: 'asc', filed:y轴字段对象}
+     */
+    async deepSort(sort) {
+        let deep_info = {};
+        if (this.data.floor == 0) {
+            deep_info = {}
+        } else {
+            deep_info[this.data.floor] = this.data['xAxis'];
+        };
+
+        const layouts = {
+            chart_id: this.data.cellChart.cell.chart_id,
+            floor: this.data.floor,
+            view_id: this.data.viewId,
+            layout_id:  this.data.cellChart.cell.layout_id,
+            xOld: this.data.xOld,
+            row_id:0,
+            deep_info: deep_info,
+            sort: JSON.stringify(sort)
+        };
+        const data = {
+            'layouts': [JSON.stringify(layouts)],
+            'query_type': 'deep',
+            'is_deep': window.config.bi_user === 'manager' ? 1 : 0
+        };
+        const res = await this.normalChart.getDeepData(data);
+        if (res[0]['success'] === 1) {
+            if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
+                this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
+                this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
+                this.data.cellChart['cell']['attribute'] = [];
+                this.data.cellChart['cell']['select'] = [];
+                this.actions.updateChart(this.data.cellChart);
+                this.trigger('onUpdateChartDeepTitle',this.data);
+            }
+        } else {
+            msgbox.alert(res[0]['error']);
+        };
+        return Promise.resolve(this.data);
     }
 }

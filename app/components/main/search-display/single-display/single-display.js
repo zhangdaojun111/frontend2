@@ -17,10 +17,16 @@ let config = {
         searchData:{},
     },
     actions:{
+        /**
+         * 设置数据组件的名称和数量
+         */
         initInfo:function () {
             this.el.find('span.data-content').html(this.data.searchData.label);
             this.el.find('span.data-count').html(this.data.searchData.row_num);
         },
+        /**
+         * 点击数据标题穿透到aggrid
+         */
         penetrateToGrid:function () {
             //穿透到ag-grid
             let tableId = this.data.searchData.table_id;

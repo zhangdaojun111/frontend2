@@ -1,20 +1,27 @@
 <h3 class="title">
-    {{#if icon}}
-    <img src="{{imgUrl}}?file_id={{icon}}">
-    {{else}}
-    <i class="title-left"></i>
-    {{/if}}
-    {{title}}
+    <span class="title-tips">
+        {{#if icon}}
+        <img src="{{imgUrl}}?file_id={{icon}}">
+        {{else}}
+        <i class="title-left"></i>
+        {{/if}}
+        {{title}} <b class="deep-title"></b>
+    </span>
+
     <span class="icon-group">
         {{#if isDeep}}
             <a href="javascript:;" class="back-floor-btn" title="上一层"><i class="view-back-icon"></i></a>
         {{/if}}
-
         {{#if editMode}}
-            {{#if newCell}}
-                <a href="#/forms/{{chart.data.assortment}}/{{chart.data.chartName.id}}?&viewId={{viewId}}" title="编辑"><i class="edit-icon"></i></a>
+            {{#if richText}}
+                <a href="javascript:;" class="rich-text-btn" title="富文本编辑"><i class="rich-text-icon"></i></a>
             {{/if}}
-        <a href="javascript:;" class="del-cell-btn" title="删除"><i class="remove-icon"></i></a>
+            {{#if userSelf}}
+                {{#if newCell}}
+                <a href="#/forms/{{chart.data.assortment}}/{{chart.data.chartName.id}}?&viewId={{viewId}}" title="编辑"><i class="edit-icon"></i></a>
+                {{/if}}
+            {{/if}}
+            <a href="javascript:;" class="del-cell-btn" title="删除"><i class="remove-icon"></i></a>
         {{else}}
             {{#if isDeep}}
             <a href="javascript:;" class="original-data-btn" title="原始数据"><i class="original-data-icon"></i></a>
