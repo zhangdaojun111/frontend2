@@ -1,19 +1,76 @@
 .nav-tabs {
-    position: absolute;
+    position: relative;
     height: 50px;
     white-space: nowrap;
-    width: calc(100% - 300px);
-    overflow: auto;
+    width: calc(100% - 320px);
     background: transparent;
+    display: inline-block;
     div {
         height: 100%;
         display: inline-block;
+        float: left;
+    }
+
+}
+
+.nav-tabs-select {
+    display: inline-block;
+    visibility: hidden;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    bottom: 20px;
+    left: 0;
+    cursor: pointer;
+    z-index: 99;
+    i {
+        vertical-align: middle;
+    }
+}
+
+.child-menu {
+    visibility: hidden;
+    position: absolute;
+    top: 50px;
+    left: 0;
+    z-index: 99;
+    a {
+        text-decoration: none;
+        padding: 10px 10px 0 10px;
+        display: block;
+        outline: none;
+        line-height: 50px;
+        height: 100%;
+        box-sizing: border-box;
+        color: #666666;
+        border-bottom: 2px solid transparent;
+        position: relative;
+        background: #FFFFFF;
+        max-width: 120px;
+        overflow: hidden;
+        &.active {
+            border-bottom-color: #0088FF;
+            color: #0088FF;
+        }
+        i {
+            margin-right: 4px;
+            margin-top: 4px;
+            float: left;
+        }
+        span {
+            display: inline-block;
+            float: right;
+            width: calc(100% - 20px);
+            line-height: 24px;
+        }
     }
 }
 
 .views-btn-group {
-    position: absolute;
+    position: relative;
+    display: inline-block;
     right: 0;
+    top: 0;
     width: 300px;
     text-align: right;
     white-space: nowrap;
@@ -24,12 +81,11 @@
         text-decoration: none;
         display: inline-block;
         outline: none;
-        line-height: 50px;
         box-sizing: border-box;
-        width: 60px;
         text-align: center;
         height: 100%;
         float: left;
+        margin: 17px 22px;
         i {
             vertical-align: middle;
         }

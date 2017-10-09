@@ -129,7 +129,11 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     return workflowService.getRecordInfo(
         {
             flow_id: obj.flow_id,
+            form_id: obj.form_id,
             record_id: obj.record_id,
+            is_view: is_view,
+            from_approve: 1,
+            from_focus: 0,
             // is_view:0,
             table_id: obj.table_id,
         }
