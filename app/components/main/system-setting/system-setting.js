@@ -58,11 +58,11 @@ let config = {
          * 获取用户快捷设置参数并解析
          */
         getItemData:function () {
-            let biStatus = window.config.sysConfig.logic_config.login_show_bi || "10";
+            let biStatus = window.config.sysConfig.logic_config.client_login_show_bi || "10";
             this.data.biSort = biStatus.split('')[0];
             this.data.biStatus = biStatus.split('')[1];
 
-            let calendarStatus = window.config.sysConfig.logic_config.login_show_calendar || "20";
+            let calendarStatus = window.config.sysConfig.logic_config.client_login_show_calendar || "20";
             this.data.calendarSort = calendarStatus.split('')[0];
             this.data.calendarStatus = calendarStatus.split('')[1];
 
@@ -118,8 +118,8 @@ let config = {
             UserInfoService.saveUserConfig(json,json2).then((result) => {
                 that.hideLoading();
                 if(result[0].succ === 1 && result[1].succ === 1){
-                    window.config.sysConfig.logic_config.login_show_bi = result[0].data.toString();
-                    window.config.sysConfig.logic_config.login_show_calendar = result[1].data.toString();
+                    window.config.sysConfig.logic_config.client_login_show_bi = result[0].data.toString();
+                    window.config.sysConfig.logic_config.client_login_show_calendar = result[1].data.toString();
                     msgbox.alert("设置保存成功");
                     SysSetting.hide();
                 }else{
