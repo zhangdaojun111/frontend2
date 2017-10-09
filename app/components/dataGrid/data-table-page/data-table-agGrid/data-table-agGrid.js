@@ -2210,7 +2210,6 @@ let config = {
                     if(res.type == 'temporaryQuery') {
                         if(res.addNameAry.length == 0){
                             // this.actions.getExpertSearchData(res.addNameAry);
-                            debugger
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);

@@ -431,7 +431,11 @@ let config = {
         // },
         // 接受父组件传数据过来后
         afterGetMsg:function() {
-
+            if (this.data.bi) {
+                this.el.find('.common-search').css('display', 'none');
+                this.el.find('.save-button').css('display', 'none');
+                this.el.find('.save-img').css('display', 'none');
+            }
             if (this.data.commonQuery.length == 0) {
                 this.el.find('.common-search-compile').css('display', 'none')
             } else {
@@ -440,10 +444,9 @@ let config = {
                 })
             }
             this.actions.rendSearchItem();
-
             this.itemDeleteChecked = false;
             this.isEdit = false;
-            if (this.data.autoSearch) {
+            if (this.data.autoSearch && this.data.commonQuery.length != 0) {
                 this.name = this.data.commonQuery[0].name;
                 this.id = this.data.commonQuery[0].id;
                 this.itemChecked = true;
