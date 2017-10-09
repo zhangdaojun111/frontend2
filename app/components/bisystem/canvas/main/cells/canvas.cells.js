@@ -107,6 +107,7 @@ let config = {
                     deep_info: deep_info,
                     sort: val.sort
                 }));
+
             });
 
             // 获取画布块最大zindex
