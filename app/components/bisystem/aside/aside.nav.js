@@ -58,7 +58,6 @@ let config = {
             });
             this.append(chartsComponent,this.el.find('.charts-items'));
         });
-
     },
     firstAfterRender() {
         Mediator.subscribe('bi:aside:update',(res) => {

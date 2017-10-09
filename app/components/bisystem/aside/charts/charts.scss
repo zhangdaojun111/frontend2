@@ -1,25 +1,11 @@
-$aside-bg: #374157;
-$section-bg: #60a998;
-$aside-a: #f8645c;
-$aside-a-last: #3b8cff;
-$charts-container-p: #4c576f;
-$active: #6b758a;
-$filter-match-bg: #eef0f5;
-$li-bg: #424e67;
-$li-even-bg: #353D53;
-$li-odd-bg: #374157;
-$li-hover: #424e67;
-$btn_width: 16px;
-$font_size: 12px;
-
 .charts-items {
     width: 100%;
     font-size: 12px;
     cursor: move;
-    img {
+    img,i {
         float: left;
         margin-right: 4px;
-        border-radius: 50%;
+        margin-top: 2px;
     }
     li {
         position: relative;
@@ -36,7 +22,7 @@ $font_size: 12px;
     li {
         display: inline-block;
         width: 100%;
-        color: $li-bg;
+        color: #424e67;
         transition: all .3s;
         p {
             padding: 10px 15px;
@@ -59,9 +45,9 @@ $font_size: 12px;
         overflow: hidden;
         text-align: center;
         display: inline-block;
-        width: $btn_width;
-        height: $btn_width;
-        line-height: $btn_width;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
         padding: 2px;
         color: #ffffff;
         border-radius: 50%;
