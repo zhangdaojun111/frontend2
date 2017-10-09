@@ -116,10 +116,10 @@ let config = {
          * @param type
          */
         getCalendarData: function (data,type){
-            //this.showLoading();
+            this.showLoading();
             CalendarService.getCalendarData(data).then( res=>{
                 if(res) {
-                    //this.hideLoading();
+                    this.hideLoading();
                 }
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
