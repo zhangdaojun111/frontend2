@@ -20,6 +20,8 @@ let config = {
     },
     afterRender() {
         let _this = this;
+
+
         PMAPI.getIframeParams(window.config.key).then(res => {
             _this.data = Object.assign({}, _this.data, res.data.data);
             let real_id;
@@ -59,6 +61,13 @@ let config = {
         });
         HTTP.flush();
         //改变表单
+        let el;
+        Mediator.on('form: dataRes', (res) =>{
+            if(res[1].error !== '您没有数据查看权限'){
+                 el = _this.el.find('.ui-section');
+            }
+        });
+
         _this.el.on('click', 'a.choose-aside-a', function () {
             if(_this.data.isCreatingForm){
                 return;
@@ -74,7 +83,7 @@ let config = {
                 parent_real_id: '',
                 parent_temp_id: '',
                 real_id: $(this).data('value'),
-                el: _this.el.find('.ui-section'),
+                el: el,
                 btnType: 'none'
             })
             if(!r2){
@@ -109,6 +118,7 @@ let config = {
 
 export default class BuildChoose extends Component {
     constructor(data) {
+        console.log(data);
         super(config, data);
     }
 }

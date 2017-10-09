@@ -931,7 +931,7 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value === '') {
+            if (_this.data.value === '' || _this.data.value.length === 0) {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
@@ -1104,6 +1104,9 @@ let config = {
                 json["temp_id"] = this.data.realId;
             } else {
                 json["real_id"] = this.data.realId;
+            }
+            if (this.data.tempId){
+                json["temp_id"] = this.data.tempId;
             }
             return json;
         },

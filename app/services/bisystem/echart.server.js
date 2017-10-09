@@ -312,7 +312,6 @@ export class EchartsService {
         pieOption['series'][0].data = series;
         pieOption['series'][0].name = title;
         pieOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
-
         return pieOption;
     }
 

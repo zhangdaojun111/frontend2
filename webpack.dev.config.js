@@ -45,6 +45,7 @@ module.exports = {
         operationDetails: path.resolve(APP_PATH, 'entrys/popup/operationDetails'),
         jurisdiction: path.resolve(APP_PATH, 'entrys/popup/jurisdiction'),
         workflowPage: path.resolve(APP_PATH, 'entrys/popup/workflowPage.js'),
+        rowOperation: path.resolve(APP_PATH, 'entrys/popup/rowOperation.js'),
         customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
         bi:path.resolve(APP_PATH, 'entrys/bi.js'),
         bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),

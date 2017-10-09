@@ -8,27 +8,20 @@
         </thead>
         <tbody>
         {{#each list}}
-        <tr>
+        <tr id="{{this.file_id}}">
             <td>{{ this.file_name }}</td>
-            <td>
-                <a style="color: blue;"
-                   href="/download_attachment/?file_id={{file_id}}&download=1&dinput_type={{dinput_type}}">下载</a>
+            <td id="{{this.file_id}}">
+                <a class="download-url" style="color: blue;">下载</a>
                 {{#if this.isPreview}}
                 {{#if this.isImg}}
                 <a style="color:blue;" class="ui-href pre" data-id="{{this.file_id}}" href="javascript:;">预览</a>
                 {{else}}
-                <a style="color:blue;" class="ui-href"
-                   href="/download_attachment/?file_id={{this.file_id}}&download=0&dinput_type={{dinput_type}}"
-                   target="_blank">预览</a>
+                <a  class="preview-url" style="color:blue;" class="ui-href" target="_blank">预览</a>
                 {{/if}}
                 {{else}}
-                <a style="color: grey;" href="javascript:void(0);">预览</a>&nbsp;&nbsp;
+                    <a style="color: grey;" class="ui-href pre">预览</a>
                 {{/if}}
-                {{#if is_view}}
-                {{#unless isFormAbout}}
                 <a style="color: blue;" class="del" data-id="{{this.file_id}}" href="javascript:void(0);">删除</a>
-                {{/unless}}
-                {{/if}}
             </td>
         </tr>
         {{/each}}

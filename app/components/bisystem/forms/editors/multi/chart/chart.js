@@ -172,10 +172,28 @@ let config = {
                         type:'required',
                     }
                 ],
+
                 events: {
                     onChange:function(value) {
                         let list = _.cloneDeep(value);
                         this.actions.selectY(list);
+                    }
+                }
+            },
+
+            {
+                label: '高级查询',
+                name: 'filter',
+                defaultValue: {},
+                type: 'search',
+                events: {
+                    onShowAdvancedSearchDialog() {
+                        let data = {
+                            tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
+                            fieldsData: this.formItems['xAxis'].autoselect.data.list,
+                            commonQuery: this.formItems['filter'].data.value && this.formItems['filter'].data.value.hasOwnProperty('filter') ? [this.formItems['filter'].data.value.filter_source] : null,
+                        };
+                        this.formItems['filter'].actions.showAdvancedDialog(data);
                     }
                 }
             },
@@ -225,11 +243,10 @@ class ChartEditor extends Base {
      */
     getChartData() {
         let data = this.getData();
-        console.log(data);
         let chart = {
             chartType: data.chartType == 'line' ? {'name': '折线图', 'type': 'line'} : {'name': '柱状图', 'type': 'bar'},
             countColumn: '',
-            filter: [],
+            filter: data.filter,
             filter_rule: {},
             sources: data.source,
             xAxis: data.xAxis,
@@ -246,6 +263,7 @@ class ChartEditor extends Base {
         this.formItems['source'].setValue(data['sources']);
         this.formItems['chartType'].setValue(data['chartType']['type']);
         this.formItems['xAxis'].setValue(data['xAxis']);
+        this.formItems['filter'].setValue(data['filter']);
         this.actions.selectY(data['yAxis']);
         this.data.firstDo = true;
     }

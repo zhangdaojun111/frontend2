@@ -42,6 +42,7 @@ $font-color: #e4e4e4;
                 }
             }
         }
+
     }
     .single-list {
         margin-bottom: 20px;
@@ -69,5 +70,11 @@ $font-color: #e4e4e4;
             background-color: #FAFAFA;
         }
 
+    }
+}
+
+@media print {
+    .bi-table {
+        overflow: hidden!important;
     }
 }
