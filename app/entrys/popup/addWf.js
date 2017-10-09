@@ -159,7 +159,7 @@ Mediator.subscribe('workflow:submit', (res) => {
             return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
-                msgBox.alert(`${res.error}`);
+                msgBox.showTips(`${res.error}`);
                 PMAPI.sendToRealParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
