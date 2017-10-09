@@ -89,7 +89,7 @@ let config = {
         initChoosedUsers: function () {
             this.autoSelect = new AutoSelect({
                 displayType: 'static',           // popup或者static popup为弹出的形式 static 为静态显示
-                selectBoxHeight: 180,           // select 框的高度
+                selectBoxHeight: 210,           // select 框的高度
                 width: 300,                     // 为0表示显示默认宽度240
                 displayChoosed: false,
             }, {
@@ -193,7 +193,7 @@ let config = {
                     HTTP.postImmediately('/set_notice/', formData).then((res) => {
                         if (res.success === 1) {
                             postMessageUtil.hide();
-                            msgbox.showTips('发送成功');
+                            msgbox.alert('发送成功');
                         } else {
                             msgbox.alert(res.error);
                         }
