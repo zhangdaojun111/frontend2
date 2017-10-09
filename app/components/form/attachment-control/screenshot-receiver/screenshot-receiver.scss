@@ -1,5 +1,4 @@
 .screenshot {
-    // max-width: 500px;
     min-height: 250px;
     background: white;
     border: 1px solid #ccc;
@@ -18,11 +17,9 @@
     padding: 110px 0;
 }
 .screenshot-image {
-    //height: 100%;
-    //width: 100%;
     height: auto;
     width: auto;
-    min-width: 490px;
+    min-width: 500px;
 }
 .btn-save-rechoose {
     position: absolute;

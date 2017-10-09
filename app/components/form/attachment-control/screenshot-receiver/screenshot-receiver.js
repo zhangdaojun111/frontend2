@@ -7,31 +7,31 @@ import Component from "../../../../lib/component";
 import './screenshot-receiver.scss';
 
 let css = `
-.screenshot {
-  max-width: 500px;
-  min-height: 250px;
-  background: white;
-  border: 1px solid #ccc;
-}
-
-.paste-tip {
-  height: 40px;
-  line-height: 40px;
-  font-size: 30px;
-  color: gray;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  text-align: center;
-  padding: 110px 0;
-}
-
-.screenshot-image {
-  height: 100%;
-  width: 100%;
-}
+// .screenshot {
+//   max-width: 500px;
+//   min-height: 250px;
+//   background: white;
+//   border: 1px solid #ccc;
+// }
+//
+// .paste-tip {
+//   height: 40px;
+//   line-height: 40px;
+//   font-size: 30px;
+//   color: gray;
+//   left: 0;
+//   top: 0;
+//   right: 0;
+//   bottom: 0;
+//   margin: auto;
+//   text-align: center;
+//   padding: 110px 0;
+// }
+//
+// .screenshot-image {
+//   height: 100%;
+//   width: 100%;
+// }
 `;
 
 export const screenShotConfig={
