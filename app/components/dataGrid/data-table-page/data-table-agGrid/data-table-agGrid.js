@@ -1930,7 +1930,7 @@ let config = {
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
                 if( this.data.departmentDiary ){
-                    url = "/datagrid/custom_index/?table_id=9585_a8yQZorU7CpywTkJhX8vBn&amp&folder_id=130&custom_id=department-daily&isNewWindow=true";
+                    url = '/datagrid/custom_index/' + location.search + '&isNewWindow=true';
                 }
                 this.el.find('.grid-new-window')[0].href = url;
             }
