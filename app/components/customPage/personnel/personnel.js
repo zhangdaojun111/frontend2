@@ -567,7 +567,14 @@ let config = {
                 height: 360,
                 title: '导出数据'
             }).then((data) => {
-
+                let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
+                this.el.find('.btn-nav').append(dom);
+                setTimeout(()=>{
+                    this.el.find('.exports-tips').css('display','none');
+                },3000)
+                this.el.find('.exports-tips-delete').on('click', ()=> {
+                    this.el.find('.exports-tips').css('display','none');
+                })
             });
         },
         //渲染高级查询
