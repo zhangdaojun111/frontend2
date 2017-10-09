@@ -37,9 +37,11 @@ let config = {
         async loadColumns(columns) {
             if (this.formItems['columns']) {
                 if (columns) {
+                    this.data.xAxis = columns;
                     this.formItems['columns'].setList(columns);
                     this.formItems['sortColumns'].setList(columns);
                 } else { // 清空字段
+                    this.data.xAxis = [];
                     this.formItems['columns'].actions.clear();
                     this.formItems['choosed'].actions.clear();
                     this.formItems['table_single'].actions.clear();
@@ -99,7 +101,6 @@ let config = {
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
-
         /**
          * 保存图表数据
          */
@@ -113,7 +114,8 @@ let config = {
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
-                filter: data.filter,
+                filter: data.filter.filter,
+                filter_source: data.filter.filter_source,
                 countNum: data.countNum,
                 single:data.single[0] ? data.single[0]: 0,
                 singleColumnWidthList:[],
@@ -146,7 +148,7 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue(chart['filter']);
+            this.formItems['filter'].setValue({filter: chart['filter']?chart['filter']: '', filter_source:chart['filter_source']?chart['filter_source']:[]});
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
@@ -157,6 +159,7 @@ let config = {
         }
     },
     data: {
+        xAxis:[],
         options: [
             chartName,
             {
@@ -188,7 +191,7 @@ let config = {
                     onShowAdvancedSearchDialog() {
                         let data = {
                             tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
-                            fieldsData: this.formItems['columns'].data.list,
+                            fieldsData: this.data.xAxis,
                             commonQuery: this.formItems['filter'].data.value && this.formItems['filter'].data.value.hasOwnProperty('filter') ? [this.formItems['filter'].data.value.filter_source] : null,
                         };
                         this.formItems['filter'].actions.showAdvancedDialog(data);

@@ -85,7 +85,6 @@ let config = {
         cellDragandResize() {
             let dragCell = this.el.find('.cell');
             const dragOption = {
-                cursor: "crosshair",
                 containment: '.cells-container',
                 grid: [10, 10],
                 stop: (event, ui) => {
