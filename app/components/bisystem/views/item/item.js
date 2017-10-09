@@ -29,7 +29,7 @@ let config = {
                     if(res['success']===1){
                         this.trigger('onDelete',this.data);
                         msgbox.showTips('删除成功');
-                        this.destroySelf();
+                        window.location.reload();
                     }else{
                         msgbox.alert(res['error']);
                     }

@@ -246,7 +246,8 @@ class ChartEditor extends Base {
         let chart = {
             chartType: data.chartType == 'line' ? {'name': '折线图', 'type': 'line'} : {'name': '柱状图', 'type': 'bar'},
             countColumn: '',
-            filter: data.filter,
+            filter: data.filter.filter ? data.filter.filter : {},
+            filter_source: data.filter.filter_source ? data.filter.filter_source : {},
             filter_rule: {},
             sources: data.source,
             xAxis: data.xAxis,
@@ -263,7 +264,7 @@ class ChartEditor extends Base {
         this.formItems['source'].setValue(data['sources']);
         this.formItems['chartType'].setValue(data['chartType']['type']);
         this.formItems['xAxis'].setValue(data['xAxis']);
-        this.formItems['filter'].setValue(data['filter']);
+        this.formItems['filter'].setValue({filter: data['filter'] ? data['filter']: '', filter_source:data['filter_source'] ?data['filter_source'] : {}});
         this.actions.selectY(data['yAxis']);
         this.data.firstDo = true;
     }

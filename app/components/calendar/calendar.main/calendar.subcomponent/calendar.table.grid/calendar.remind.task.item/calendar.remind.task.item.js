@@ -57,6 +57,16 @@ let config = {
          * 打开日历提醒
          */
         openRemind: function () {
+            let tempData = this.data.remindTaskItemData.data2show[0];
+            if(tempData.length > 0) {
+                tempData.forEach(item => {
+                    if(typeof item['fieldValue'] === "string"){
+                        item['fieldValue'] = item['fieldValue'].replace(/(\n)/g, '');
+                    }
+
+                })
+            }
+            console.log(tempData);
             CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
             CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
             CalendarRemind.data.remindDetail = this.data.remindTaskItemData.data2show;
@@ -69,8 +79,7 @@ let config = {
                 width: '1200',
                 height: '640',
                 title: '查看',
-                modal: true,
-                //customSize: true,
+                //modal: true,
             }).then(data => {
                 console.log(data);
             });

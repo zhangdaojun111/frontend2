@@ -107,6 +107,7 @@ let config = {
                     deep_info: deep_info,
                     sort: val.sort
                 }));
+
             });
 
             // 获取画布块最大zindex
@@ -148,9 +149,16 @@ let config = {
             canvasCellService.saveCellLayout(data).then(res => {
                 if (res['success'] === 1) {
                     msgbox.showTips('保存视图信息成功');
+                    for (let index of window.config.bi_views.keys()) {
+                        if ( window.config.bi_views[index].name === res['data'].name) {
+                            window.config.bi_views[index] = res['data'];
+                            break;
+                        };
+                    }
+                    console.log(window.config.bi_views);
                 } else {
                     msgbox.showTips(res['error']);
-                }
+                };
             });
         }
     },

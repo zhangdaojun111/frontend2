@@ -65,7 +65,8 @@ let config = {
                 }
             } else {
                 this.actions.loadColumns(table);
-            }
+            };
+
         },
 
         /**
@@ -86,8 +87,11 @@ let config = {
                     this.formItems['yAxis1'].actions.updateY([]);
                     this.formItems['chartGroup'].setList([]);
                     this.formItems['sortColumns'].setList([]);
-                }
-            }
+                };
+            };
+            if (this.formItems['deeps']) {
+                this.formItems['deeps'].actions.clear(); // 清除下穿数据
+            };
         },
 
         /**
@@ -167,24 +171,27 @@ let config = {
 
             let ySelectedGroup = [];
             data.ySelectedGroup.forEach(item => {
-                for (let y of yAxis){
-                    if (item.id === y.field.id) {
-                        ySelectedGroup.push(y);
-                        break;
-                    }
-                }
+               if (item) {
+                   for (let y of yAxis){
+                       if (item.id === y.field.id) {
+                           ySelectedGroup.push(y);
+                           break;
+                       }
+                   }
+               }
             });
 
             let advancedDataTemplates = this.formItems.advancedDataTemplates.getValue();
             let chart = {
-                advancedDataTemplates: advancedDataTemplates,
+                advancedDataTemplates: advancedDataTemplates.length > 0 && advancedDataTemplates[0].code  && advancedDataTemplates[0].result ? advancedDataTemplates : [],
                 assortment: 'normal',
                 chartAssignment: data.chartAssignment == 1 ? {name:'分组', val:1} : {name:'下穿', val:2},
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn: {},
                 double:data.double[0] ? 1 : 0,
                 echartX: data.echartX[0] ? {marginBottom: data.marginBottom, textNum:data.textNum}: {},
-                filter: data.filter,
+                filter: data.filter.filter,
+                filter_source: data.filter.filter_source,
                 icon: data.icon,
                 relations: [],
                 source: data.source,
@@ -202,7 +209,7 @@ let config = {
             } else {
                 chart['deeps'] = data.deeps
             };
-            console.log(chart);
+
             let pass = true; // 判断表单是否验证通过
 
             for (let key of Object.keys(this.formItems)) {
@@ -244,7 +251,7 @@ let config = {
             this.formItems['source'].setValue(chart['source']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue(chart['filter']);
+            this.formItems['filter'].setValue({filter: chart['filter'] ? chart['filter'] : '', filter_source:chart['filter_source']? chart['filter_source']:[]});
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
             this.formItems['xAxis'].setValue(chart['xAxis']);
@@ -304,8 +311,6 @@ let config = {
                 type: 'search',
                 events: {
                     onShowAdvancedSearchDialog() {
-                        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                        console.log(this.formItems['filter'].data.value);
                         let data = {
                             tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
                             fieldsData: this.formItems['xAxis'].autoselect.data.list,
@@ -410,7 +415,6 @@ let config = {
                         } else {
                             this.formItems['deeps'].el.show();
                         };
-                        this.formItems['deeps'].actions.clear();
                         this.formItems['chartGroup'].autoselect.actions.clearValue();
                     }
                 }
@@ -598,6 +602,7 @@ let config = {
         if (this.data.id) {
             this.actions.fillChart(this.data.chart);
         };
+
     }
 }
 
