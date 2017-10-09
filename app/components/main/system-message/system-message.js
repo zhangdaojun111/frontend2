@@ -131,6 +131,9 @@ let config = {
         onPaginationChanged: function (data) {
             this.actions.loadData(data);
         },
+        onSortChanged:function () {
+            this.agGrid.actions.refreshView();
+        },
         /**
          * 选择信息查看详细内容，信息类型不同，采用不同方式展示
          * @param $event
