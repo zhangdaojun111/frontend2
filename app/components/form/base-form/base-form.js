@@ -1016,7 +1016,7 @@ let config = {
             }
             let res = await FormService.saveAddpageData(json);
             if (res.succ == 1) {
-                MSG.alert('保存成功')
+                MSG.showTips('保存成功');
                 Mediator.publish('updateForm:success:' + this.data.tableId, true);
                 if (this.data.isAddBuild && !this.flowId) {
                     PMAPI.sendToRealParent({
@@ -1521,8 +1521,8 @@ let config = {
             }
             let _this = this;
             PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${window.config.table_id}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
-                width: 1550,
-                height: 600,
+                width: 1400,
+                height: 800,
                 title: `对应关系`,
                 modal: true
             }).then(res => {
