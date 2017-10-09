@@ -102,8 +102,10 @@ export const screenShotConfig={
 
         //弹窗button位置不随横向滚动条滚动
         t.el.find(".screenshot").parents().scroll(function () {
+            let scrollTop =  t.el.find(".screenshot").parents().scrollTop();
             let scrollLeft =  t.el.find(".screenshot").parents().scrollLeft();
-            t.el.find(".btn-save-rechoose").css('margin-right',-scrollLeft + 'px')
+            t.el.find(".btn-save-rechoose").css('right',-scrollLeft + 'px')
+            t.el.find(".btn-save-rechoose").css('bottom',-scrollTop + 'px')
         });
     },
     beforeDestory:function () {

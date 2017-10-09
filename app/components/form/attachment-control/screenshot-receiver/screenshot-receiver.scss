@@ -25,10 +25,12 @@
     min-width: 490px;
 }
 .btn-save-rechoose {
-    float: right;
+    position: absolute;
+    right: 0;
+    bottom: 0;
     margin: 5px 0;
     .comfirm-n-save, .cancel-to-rechoose{
-        width: 91px;
+        width: 90px;
         height: 30px;
         background: inherit;
         background-color: #08f;
@@ -41,8 +43,5 @@
         font-size: 12px;
         color: #fff;
         cursor: pointer;
-    }
-    .cancel-to-rechoose{
-        width: 96px;
     }
 }
