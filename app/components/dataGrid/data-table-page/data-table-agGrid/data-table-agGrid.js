@@ -836,7 +836,7 @@ let config = {
                 return '';
             }
             if( this.data.viewMode == 'in_process' ){
-                return '<div style="text-align: center;"><a class="gridView" style="color:#337ab7;">查看</a></div>';
+                return '<div style="text-align: center;"><a class="gridView" style="color:#337ab7; cursor: pointer">查看</a></div>';
             }
             if (params.data.group || Object.is(params.data.group, '') || Object.is(params.data.group, 0)) {
                 return '';
@@ -851,19 +851,19 @@ let config = {
             } catch (e) {
                 rowStatus = 0;
             }
-            let str = '<div style="text-align:center;"><a class="gridView" style="color:#337ab7;">查看</a>';
+            let str = '<div style="text-align:center;"><a class="gridView" style="color:#0088ff;cursor: pointer">查看</a>';
             if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2 || this.data.permission.cell_edit == 0) {
-                    str += ' | <span style="color: darkgrey;">编辑</span>';
-                    str += ' | <a style="color: darkgrey;">历史</a>';
+                    str += ' | <span style="color: darkgrey;cursor: pointer">编辑</span>';
+                    str += ' | <a style="color: darkgrey;cursor: pointer">历史</a>';
                 } else {
-                    str += ' | <a  class="gridEdit" style="color:#337ab7;">编辑</a>';
-                    str += ' | <a  class="gridHistory" style="color:#337ab7;">历史</a>';
+                    str += ' | <a  class="gridEdit" style="color:#0088ff;cursor: pointer">编辑</a>';
+                    str += ' | <a  class="gridHistory" style="color:#0088ff;cursor: pointer">历史</a>';
                 }
                 operateWord = operateWord + 4;
             }
             if (this.data.viewMode == 'approveBatch') {
-                str += ' | <a  class="gridEdit" style="color:#337ab7;">编辑</a>';
+                str += ' | <a  class="gridEdit" style="color:#0088ff;">编辑</a>';
                 operateWord = operateWord + 2;
             }
             if (this.data.customOperateList) {
@@ -2298,7 +2298,6 @@ let config = {
                     if(res.type == 'temporaryQuery') {
                         if(res.addNameAry.length == 0){
                             // this.actions.getExpertSearchData(res.addNameAry);
-                            debugger
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);

@@ -82,6 +82,7 @@
             border: 1px solid #e4e4e4;
             border-top: none;
             .condition-search-select {
+                cursor: pointer;
                 font-size: 12px;
                 height: 30px;
                 background-color: #fafafa;
@@ -122,7 +123,7 @@
                 cursor: pointer;
                 color: #d7d7d7;
                 &.left-choice{
-                    margin-right: 20px;
+                    margin-right: 10px;
                 }
                 &.active {
                     background-color: #0e7aef;
@@ -135,6 +136,7 @@
                 width: 185px;
                 top: -18px;
                 .condition-search-box-input {
+                    cursor: pointer;
                     background-position: right center;
                     //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
                     position: absolute;
@@ -168,7 +170,7 @@
                     .condition-search-li {
                         padding: 0 8px;
                         &:hover {
-                           background: #f2f2f2;
+                            background: #f2f2f2;
                         }
                     }
                 }
@@ -189,7 +191,13 @@
             }
             .condition-search-value {
                 display: inline-block;
-                width: 240px;
+                width: 230px;
+                .component-date-control {
+                    width: 280px;
+                }
+                .component-time-control {
+                    width: 280px;
+                }
                 .dynamic-form-input {
                     height: 26px;
                     color: rgb(85, 85, 85);
