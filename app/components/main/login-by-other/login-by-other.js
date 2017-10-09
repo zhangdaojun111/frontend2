@@ -34,7 +34,7 @@ let config = {
                             if( row.f7_p ){
                                 row.py = row.f7_p.join(',');
                             }else {
-                                row.py = '';
+                                row.py = ''
                             }
                             tempData.push(row);
                         }
