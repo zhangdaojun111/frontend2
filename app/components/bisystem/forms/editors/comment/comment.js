@@ -14,7 +14,6 @@ let config = {
          * 加载x 和y轴数据
          * @param data 选中的数据源
          */
-
         async getFields(data) {
             let table = data ? data : null;
             if (table) {
