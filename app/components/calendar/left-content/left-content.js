@@ -107,6 +107,7 @@ let config = {
             ).then(data => {
                 console.log(data);
                 Mediator.emit('Calendar: tool', {toolMethod: 'refresh', type: 'closeSetting'})
+                Mediator.emit('Calendar: closeSetting', 'closeSetting');
             });
         },
 

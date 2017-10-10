@@ -64,6 +64,15 @@ let config = {
             },800);
         });
 
+        Mediator.on('Calendar: closeSetting', (data) => {
+            CalendarService.getCalendarTreeData().then(res => {
+                this.data.cancelFields = res['cancel_fields'];
+                this.el.find('.left-content').empty();
+                this.append(new LeftContent(res), this.el.find('.left-content'));
+                this.hideLoading();
+            });
+        });
+
         this.el.on('click', '#monthView', () => {
             // 切换月视图
             Mediator.emit('Calendar: changeMainView', {calendarContent: 'month',});
@@ -134,6 +143,7 @@ let config = {
     },
     beforeDestory: function () {
         Mediator.removeAll('CalendarMain: remindCount');
+        Mediator.removeAll('Calendar: closeSetting');
     }
 };
 
