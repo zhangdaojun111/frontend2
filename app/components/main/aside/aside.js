@@ -172,11 +172,8 @@ let config = {
          * 打开个人信息设置页面
          */
         showInfoSet:function () {
-            // msgbox.showLoadingSelf();        //测试使用
-            PersonSetting.show();
-            // setTimeout(function () {
-            //     msgbox.hideLoadingSelf();
-            // },5000)
+            // PersonSetting.show();
+            PersonSetting.showUserInfo({'name':'赵俨'})
         },
         /**
          * 设置用户头像

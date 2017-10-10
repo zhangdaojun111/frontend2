@@ -63,10 +63,16 @@ let css = `
     border-bottom: solid 1px #0088ff;
 }
 .uid-personal-info {
-    margin-top: 30px;
+    margin-top: 10px;
+}
+.uid-personal-info span{
+    display: inline-block;
+    height: 25px;
+    line-height: 25px;
+    margin-top: 1px;
+    vertical-align: middle;
 }
 .uid-department-group,.uid-position-group {
-    width: 210px;
     height: 50px;
     float: left;
     margin-left: 70px;
@@ -74,22 +80,21 @@ let css = `
     position: relative;
 }
 input.uid-department-info,input.uid-position-info,input.uid-email-info,input.uid-phone-info{
+    width:180px;
+    height: 25px;
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow: ellipsis;
     background-color: transparent;
     border: none;
     !important;
 }
 .uid-email-group,.uid-phone-group {
-    width: 260px;
     height: 50px;
     float: left;
     margin-left: 70px;
     line-height: 50px;
     position: relative;
-}
-.uid-email-info,.uid-phone-info {
-    height: 25px;
-    background-color: transparent;
-    border: none;
 }
 `;
 
@@ -105,10 +110,10 @@ let userInfoDisplay = {
          * 展示用户基本信息
          */
         displayTargetInfo:function () {
-            this.el.find('.uid-department-info').val(this.data.userInfo.user_department);
-            this.el.find('.uid-email-info').val(this.data.userInfo.user_email);
-            this.el.find('.uid-position-info').val(this.data.userInfo.user_job);
-            this.el.find('.uid-phone-info').val(this.data.userInfo.user_tel);
+            this.el.find('.uid-department-info').val(this.data.userInfo.user_department).attr('title',this.data.userInfo.user_department);
+            this.el.find('.uid-email-info').val(this.data.userInfo.user_email).attr('title',this.data.userInfo.user_email);
+            this.el.find('.uid-position-info').val(this.data.userInfo.user_job).attr('title',this.data.userInfo.user_job);
+            this.el.find('.uid-phone-info').val(this.data.userInfo.user_tel).attr('title',this.data.userInfo.user_tel);
             this.el.find('.uid-name').html(this.data.userName);
             if(this.data.userInfo.avatar === ""){
                 this.data.avatar = "";
