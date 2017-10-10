@@ -2,7 +2,8 @@ import {HTTP} from '../../lib/http';
 import msgbox from '../../lib/msgbox';
 
 export const FormService = {
-
+    isCannotSub:false,
+    isRefreshSongrid:false,
     selectObj: {'select': 'options', 'radio': 'group', 'multi-select': 'options'},
     continue_key: ["parent_real_id", "parent_table_id", "parent_temp_id", "real_id", "table_id", "temp_id"],
     need_key: ["id", "dfield", "effect", "expression", "dinput_type", "real_type"],
@@ -36,21 +37,21 @@ export const FormService = {
                     //要填充的value
                     val = formDataFromParent[key];
                     //判断父表类型
-                    if (type == 'select' || type == 'buildin') {
+                    if (type == 'Select' || type == 'Buildin') {
                         for (var k in newDataFromParent[key]["options"]) {
                             if (newDataFromParent[key]["options"][k]["value"] == val) {
                                 val = newDataFromParent[key]["options"][k]["label"];
                                 break;
                             }
                         }
-                    } else if (type == 'radio') {
+                    } else if (type == 'Radio') {
                         for (var k in newDataFromParent[key]["group"]) {
                             if (newDataFromParent[key]["group"][k]["value"] == val) {
                                 val = newDataFromParent[key]["group"][k]["label"];
                                 break;
                             }
                         }
-                    } else if (type == 'multi-select') {
+                    } else if (type == 'MultiSelect') {
                         let resultVal = '';
                         for (let v of val) {
                             for (var k in newDataFromParent[key]["options"]) {
