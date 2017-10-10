@@ -69,7 +69,7 @@
     }
 }
 
-.views-btn-group {
+.views-btn-group,.views-header-right {
     position: relative;
     display: inline-block;
     right: 0;
@@ -77,10 +77,31 @@
     width: 300px;
     text-align: right;
     white-space: nowrap;
-    .views-btn-right {
-        float: right;
-    }
+    float: right;
+        a {
+            float:right;
+            text-align: left;
+            text-decoration: none;
+            color: #999999;
+            cursor: pointer;
+            outline: none;
+            margin: 17px 30px 17px 0;
+            i {
+                vertical-align: middle;
+            }
+            &:first-child {
+                margin-right:15px;
+                margin-left:-2px;
+            }
+        }
     input[type='file'] {
         display: none;
+    }
+    &.views-header-right{
+        a{
+            i{
+                margin-right:4px;
+            }
+        }
     }
 }
