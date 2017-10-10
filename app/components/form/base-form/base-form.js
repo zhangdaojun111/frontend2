@@ -1,4 +1,4 @@
-/**
+﻿/**
  *@author yudeping
  *表单主要逻辑
  */
@@ -972,6 +972,22 @@ let config = {
             }
             this.data.childComponent[dfield].reload();
         },
+
+	 //移除其它字段隐藏的字段信息
+        checkOhterField(data,obj_new,obj_old){
+            let delKey=[];
+            for(let index in this.data.data){
+                if(this.data.data[index]['is_other_field']){
+                    delKey.push(this.data.data[index]['dfield']);
+                }
+            }
+            for(let obj of delKey){
+                delete data[obj];
+                delete obj_new[obj];
+                delete obj_old[obj];
+            }
+        },
+
         //密码框回显
         addEnrypt(data) {
             let value = this.actions.md5(data.newItems);
@@ -995,6 +1011,9 @@ let config = {
             let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
             let obj_old = this.actions.createCacheData(formDataOld, data, false, this);
             this.actions.changeValueForChildTable(data);
+	    if(this.data.hasOtherFields == 0){
+                this.actions.checkOhterField(data,obj_new,obj_old);
+            }
             let json = {
                 data: JSON.stringify(data),
                 cache_new: JSON.stringify(obj_new),
