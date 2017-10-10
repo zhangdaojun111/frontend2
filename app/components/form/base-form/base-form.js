@@ -1019,7 +1019,7 @@ let config = {
             }
             let res = await FormService.saveAddpageData(json);
             if (res.succ == 1) {
-                MSG.showTips('保1存成功');
+                MSG.showTips('保存成功');
                 Mediator.publish('updateForm:success:' + this.data.tableId, true);
                 if (this.data.isAddBuild && !this.flowId) {
                     PMAPI.sendToRealParent({
@@ -1768,6 +1768,13 @@ let config = {
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
+
+        //tabs
+        this.el.find('#tabs ul li:first').addClass('tabs-active');
+        this.el.find('#tabs ul li').on('click',function () {
+            $(this).addClass('tabs-active');
+            $(this).siblings().removeClass('tabs-active');
+        });
 
     },
     beforeDestory() {
