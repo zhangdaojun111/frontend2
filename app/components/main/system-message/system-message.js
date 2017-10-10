@@ -14,6 +14,11 @@ import {HTTP} from '../../../lib/http';
 
 let config = {
     template: template,
+    data:{
+        frontendSort:true,      //排序方式（前端/后端）
+        total:0,
+        row:200,
+    },
     actions: {
         /**
          * 根据参数（页码）向后台发送请求，获取渲染该页所需数据
@@ -28,6 +33,7 @@ let config = {
             });
             this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
+                console.log(data);
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
                 });
@@ -168,6 +174,12 @@ let config = {
                 this.actions._postReadData(JSON.stringify([data.id]));
                 // }
             }
+        },
+        /**
+         * 根据数据量判断排序方式
+         */
+        getSortModel:function () {
+            // if()
         }
     },
     afterRender: function () {
