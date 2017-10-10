@@ -282,27 +282,28 @@
 
     //tabs
     #form-paging-tabs-control{
+        width: 1200px;
+        margin: 0 auto;
         ul {
-            display: block;
-            padding-top: 10px;
-            margin-left: 15px;
-
+            padding: 0;
+            margin: 0;
+            background: none;
+            border: none;
             li {
                 display: block;
                 float: left;
                 font-size: 12px;
                 background-color: #ffffff;
                 line-height: 30px;
-                cursor: pointer;
                 position: relative;
-                width: 100px;
+                top:1px;
+                width: 55px;
                 text-align: center;
-                border: 1px solid #E4E4E4;
-                border-bottom: 0 none;
                 border-radius: 4px 4px 0 0;
-                position: relative;
-                margin: 0;
+                margin: 0px auto;
                 outline-style:none;
+                border: 1px solid #d6d6d6;
+                border-bottom: 0!important;
                 a {
                     outline-style:none;
                     color: #000000;
@@ -310,8 +311,12 @@
                 }
             }
         }
-        table {
-            width: 100%;
+
+        .ui-tabview-panels {
+            border: 1px solid #ccc;
+            overflow: auto;
+            padding-top: 50px;
+            min-height: 430px;
         }
          .ui-tabs-anchor {
             float: none;
@@ -320,16 +325,14 @@
             margin: 0;
             padding: 0;
         }
-        .ui-widget-header {
-            border: none;
-            background: none;
-        }
         .ui-button.ui-state-active:hover, .ui-button:active, .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active {
             border: none;
             background: #F2F2F2;
         }
        .ui-tabs-panel {
-            padding: 0;
+           padding: 0;
+           display: table;
+           margin: 0 auto;
         }
     }
 }
