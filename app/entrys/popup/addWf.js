@@ -82,7 +82,7 @@ Mediator.publish('workflow:getKey', obj.key);
     }
 });
 Mediator.subscribe('workflow:getflows', (res) => {
-    if (obj.btnType === 'view') {
+    if (obj.btnType === 'view' && is_view != 0) {
         $('#toEdit').show();
         $('#addFollower').hide();
     }else if(obj.btnType==='none'){
@@ -180,5 +180,7 @@ Mediator.subscribe('workflow:changeToEdit',(res)=>{
         $("#add-wf").find('.J_hide').removeClass('hide');
         $("#add-wf").find('#print').removeClass('addPrint');
     }
+    // $("#add-wf").find('#print').removeClass('addPrint');
+    is_view = 0;
     FormEntrys.changeToEdit(res);
 })
