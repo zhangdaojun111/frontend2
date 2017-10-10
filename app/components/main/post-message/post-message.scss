@@ -98,7 +98,9 @@
             border-radius: 5px;
             color: #fff;
             margin: 20px 0 0;
-            width: 100px;
+            width: 90px;
+            box-sizing: border-box;
+            padding: 1px 6px;
             cursor: pointer;
         }
     }

@@ -3,6 +3,7 @@ import myWorkflow from '../../components/customPage/my-workflow/my-workflow.js'
 import myOperation from '../../components/customPage/my-operation/my-operation.js'
 import department from '../../components/customPage/department/department'
 import personnel from '../../components/customPage/personnel/personnel'
+import departmentDiary from '../../components/customPage/department-diary/department-diary'
 $(document).ready(function(){
     let isNewWindow = window.location.href.indexOf( 'isNewWindow=true' ) == -1 ? false:true;
     let tableName = window.config.tableName || 'ERDS';
@@ -48,6 +49,13 @@ $(document).ready(function(){
         }
         com = new personnel(json);
     }
-    $( 'title' ).html( tableName );
+    if( ts_name == 'department-daily' ){
+        tableName = '部门日报';
+        json = {
+            tableName: '部门日报',
+            isNewWindow: isNewWindow
+        }
+        com = new departmentDiary(json);
+    }
     com.render($('#customDataGrid'));
 })

@@ -32,19 +32,6 @@ $print-height: 1465px;
                 height: 50px;
                 //line-height: 50px;
                 right: 0;
-                a {
-                    display: inline-block;
-                    text-align: left;
-                    text-decoration: none;
-                    color: #999999;
-                    cursor: pointer;
-                    outline: none;
-                    margin: 17px 15px;
-                    i {
-                        vertical-align: middle;
-                        padding-left: 4px;
-                    }
-                }
             }
         }
         &.manager {

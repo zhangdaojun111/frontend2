@@ -14,6 +14,7 @@ let config = {
          * 加载x 和y轴数据
          * @param data 选中的数据源
          */
+
         async getFields(data) {
             let table = data ? data : null;
             if (table) {
@@ -25,6 +26,7 @@ let config = {
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
                 } else {
+                    this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
                 };
                 let res = await ChartFormService.getChartField(table.id);
