@@ -109,6 +109,8 @@
         margin-top: 18px;
         .save-proxy {
             display: block;
+            box-sizing: border-box;
+            padding: 1px 6px;
             width: 90px;
             height: 30px;
             background-color: #0088ff;

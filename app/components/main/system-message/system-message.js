@@ -130,6 +130,10 @@ let config = {
          */
         onPaginationChanged: function (data) {
             this.actions.loadData(data);
+
+        },
+        onSortChanged:function ($event) {
+            this.agGrid.actions.refreshView();
         },
         /**
          * 选择信息查看详细内容，信息类型不同，采用不同方式展示
@@ -177,6 +181,7 @@ let config = {
         this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
+            onSortChanged: this.actions.onSortChanged,
             footerData:[]
         });
         this.agGrid.render(gridDom);
