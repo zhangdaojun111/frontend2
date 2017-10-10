@@ -195,6 +195,14 @@ let config = {
         //显示tabs
         showTabs:function (opacity) {
         },
+        //是否为部门日报
+        departmentDiary: false,
+        //部门日报搜索参数
+        departmentFilter: {},
+        //获取部门日报填写人字段
+        getDiarySearchField: function (d) {
+
+        },
         //是否为新窗口打开
         isNewWindow: false,
         //左侧提示
@@ -211,8 +219,6 @@ let config = {
         project: '',
         //二维表改变的值
         cellChangeValue: {},
-
-        addNewFlowId: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -345,6 +351,12 @@ let config = {
                         datetime: 160,
                         time: 90,
                         date: 110
+                    }
+                    //部门日报搜索字段
+                    if( this.data.departmentDiary ){
+                        if( data.header[i] == '填写人' ){
+                            this.data.getDiarySearchField( data.data["field"] );
+                        }
                     }
                     let obj = {
                         headerName: data.header[i],
@@ -975,11 +987,12 @@ let config = {
             let tableOperate = dataTableService.getTableOperation( obj2 );
             let prepareParmas = dataTableService.getPrepareParmas( obj2 );
             Promise.all([preferenceData, headerData, sheetData,tableOperate,prepareParmas]).then((res)=> {
-                this.actions.setHeaderData( res )
-                //this.actions.getGridData();
+                this.actions.setHeaderData( res );
+                this.actions.getGridData();
             })
             //请求表单数据
-            this.actions.getGridData();
+            // this.actions.getGridData();
+            HTTP.flush();
         },
         //设置表头数据
         setHeaderData: function ( res ) {
@@ -1189,6 +1202,9 @@ let config = {
                     if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                         this.actions.checkCorrespondence( true );
                     }
+                    if(this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild'){
+                        Mediator.publish('form:songGridRefresh:'+this.data.tableId,this.data.tableId);
+                    }
                 },time )
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
@@ -1243,6 +1259,10 @@ let config = {
                 });
             }
             this.actions.calcSelectData( 'set' );
+            try {
+                this.data.showTabs(1);
+                this.hideLoading();
+            }catch(e){}
         },
         //请求footer数据
         getFooterData: function () {
@@ -1255,8 +1275,8 @@ let config = {
                 //赋值
                 try {
                     this.agGrid.actions.setGridData(d);
-                    this.data.showTabs(1);
-                    this.hideLoading();
+                    // this.data.showTabs(1);
+                    // this.hideLoading();
                 }catch(e){}
 
             } )
@@ -1534,6 +1554,20 @@ let config = {
                     this.data.filterText = json.filter;
                 }
             }
+
+            //部门日报的搜索
+            if( this.data.departmentDiary && JSON.stringify( this.data.departmentFilter ) != '{}' ){
+                if( json.filter ){
+                    let obj = {$and:[]}
+                    let f = JSON.parse( json.filter )
+                    obj['$and'].push( f )
+                    obj['$and'].push( this.data.departmentFilter )
+                    json.filter = obj;
+                }else {
+                    json['filter'] = this.data.departmentFilter;
+                }
+                json.filter = JSON.stringify( json.filter )
+            }
             return json;
         },
         //渲染agGrid（根据存在的按钮，为按钮事件，渲染分组定制列，分页等组件）
@@ -1654,7 +1688,14 @@ let config = {
                 height: 360,
                 title: '导出数据'
             }).then((data) => {
-
+                let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
+                this.el.find('.btn-nav-con').append(dom);
+                setTimeout(()=>{
+                    this.el.find('.exports-tips').css('display','none');
+                },3000)
+                this.el.find('.exports-tips-delete').on('click', ()=> {
+                    this.el.find('.exports-tips').css('display','none');
+                })
             });
         },
         //分组触发
@@ -1898,6 +1939,9 @@ let config = {
                     isNewWindow: true
                 }
                 let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', url_obj);
+                if( this.data.departmentDiary ){
+                    url = '/datagrid/custom_index/' + location.search + '&isNewWindow=true';
+                }
                 this.el.find('.grid-new-window')[0].href = url;
             }
             //新增数据
@@ -1911,7 +1955,7 @@ let config = {
                         parent_record_id: this.data.parentRecordId,
                         btnType: 'new',
                         form_id:this.data.formId,
-                        flow_id:this.data.addNewFlowId,
+                        flow_id:this.data.flowId,
                     };
                     let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
 
@@ -3244,7 +3288,7 @@ let config = {
     },
     afterRender: function () {
         //发送表单tableId（订阅刷新数据用
-        if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 ){
+        if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 && !this.data.departmentDiary ){
             TabService.onOpenTab( this.data.tableId ).done((result) => {
                 if(result.success === 1){
                     // console.log("post open record success");

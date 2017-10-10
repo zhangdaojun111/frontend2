@@ -26,7 +26,7 @@
         height: 60px;
         width: 100%;
 
-        .query-tips {
+        .query-tips,.exports-tips{
             position: absolute;
             width: 200px;
             height: 70px;
@@ -34,12 +34,12 @@
             text-align: center;
             line-height: 70px;
             right: calc(50% - 100px);
-            top: 65px;
+            top: calc(50% - 100px);
             box-shadow: 0 0 5px #ccc;
             z-index: 100;
             font-size:14px;
             background: rgba(255, 255, 255, 0.7);
-            .query-tips-delete {
+            .query-tips-delete,.exports-tips-delete {
                 position: absolute;
                 display: block;
                 color: #999;

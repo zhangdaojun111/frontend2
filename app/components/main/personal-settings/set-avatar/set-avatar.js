@@ -320,9 +320,9 @@ export const AvatarSet = {
         component.render(this.el);
         this.el.erdsDialog({
             title: '设置头像',
-            width: 500,
+            width: 540,
             modal:true,
-            height: 620,
+            height: 600,
             close: function() {
                 $(this).erdsDialog('destroy');
                 component.destroySelf();

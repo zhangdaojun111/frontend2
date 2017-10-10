@@ -341,7 +341,7 @@ let config = {
                 }
                 if( this.data.filterParam.filter.length == 0 ){
                     let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
-                    this.el.find('.btn-nav-con').append(dom);
+                    this.el.find('.btn-nav').append(dom);
                     setTimeout(()=>{
                         this.el.find('.query-tips').css('display','none');
                     },5000)
@@ -567,7 +567,14 @@ let config = {
                 height: 360,
                 title: '导出数据'
             }).then((data) => {
-
+                let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
+                this.el.find('.btn-nav').append(dom);
+                setTimeout(()=>{
+                    this.el.find('.exports-tips').css('display','none');
+                },3000)
+                this.el.find('.exports-tips-delete').on('click', ()=> {
+                    this.el.find('.exports-tips').css('display','none');
+                })
             });
         },
         //渲染高级查询
