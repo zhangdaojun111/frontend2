@@ -27,12 +27,14 @@ let FormEntrys = {
         this.data.parentTempId = config.parent_temp_id || '';
         //数据id
         this.data.realId = config.real_id || '';
+        this.data.tempId = config.temp_id || '';
         //父表表名
         this.data.parentTableId = config.parent_table_id || '';
         this.data.parentRecordId = config.parent_record_id || '';
         //可编辑（0）or不可编辑（1）
         this.data.isView = config.is_view || 0;
         this.data.isBatch = config.is_batch || 0;//是否是批量工作流
+        this.data.inProcess = config.in_process || 0;//是否是在途
         this.data.recordId = config.record_id || '';
         this.data.el = config.el || '';//form的外层dom
         this.data.reloadDraftData = config.reload_draft_data || 0;//工作流接口用到
@@ -109,13 +111,28 @@ let FormEntrys = {
                 record_id: this.data.recordId,
                 is_view: this.data.isView,
                 from_approve: this.data.fromApprove,
-                from_focus: this.data.fromFocus,
+                from_focus: this.data.fromFocus || 0,
                 table_id: this.data.tableId
             }
             this.data.isloadWorkflow = true;
         }
         else {
             json = this.pickJson();
+        }
+        if( this.data.inProcess == 1 ){
+            json = {
+                form_id: this.data.formId,
+                record_id: this.data.recordId,
+                is_view: this.data.isView,
+                from_approve: 1,
+                from_focus: 0,
+                table_id: this.data.tableId
+            }
+        }
+        //如果有tempId优先传tempId
+        if( this.data.tempId ){
+            json['temp_id'] = this.data.tempId
+            json['real_id'] = ''
         }
         return json;
     },
@@ -156,9 +173,10 @@ let FormEntrys = {
             }
         }
         //如果是临时表(在途，批量工作流)，传temp_id，否则是real_id
-        if (this.data.inProcess == 1 || this.data.isBatch == 1) {
+        if (this.data.inProcess == 1 || this.data.isBatch == 1 ) {
             json["temp_id"] = this.data.realId;
-        } else {
+        }
+        else {
             json["real_id"] = this.data.realId;
         }
         return json;
@@ -197,6 +215,7 @@ let FormEntrys = {
         _.defaultsDeep(staticData, this.data)
         staticData.tableId = staticData['table_id'] || this.data.tableId;
         return staticData;
+
     },
     //处理字段数据,换了个变量名
     parseRes(res) {
@@ -276,7 +295,6 @@ let FormEntrys = {
         let sys_type = data["sys_type"];
         //审批中的提示信息
         let record_tip = data["record_tip"];
-
         let html = '';
         //加载表单
         if (companyCustomTableFormExists) {
@@ -310,7 +328,12 @@ let FormEntrys = {
                 try {
                     //加载个人制作的表单
                     console.log('加载个人制作表单');
-                    html = res[2]['data']['content'];
+                    if(res[2]['data']['content']){
+                        html = res[2]['data']['content'];
+                    }else{
+                        html = CreateForm.formDefaultVersion(res[0].data);
+                    }
+
                 } catch (e) {
                     console.error(`加载${ company }的个人制作的表单，form_id为：${ this.data.formId }的表单失败`);
                     console.error(e);
@@ -382,7 +405,18 @@ let FormEntrys = {
         //创建请求
         let json = this.createPostJson();
         res = await FormService.getFormData(json);   //将表单名称发送给工作流
-		  Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
+
+        Mediator.emit('form: dataRes', res);
+
+        if(res[1]['error'] == '您没有数据查看权限' || res[1]['error'] == '您没有查看该条数据的权限'  ) {
+            //if(this.initFlag !== true){
+                this.data.el.find('.form-print-position').append('<p style="font-size:20px;text-align: center;position: relative;top: 35px">您没有数据查看权限</p>');
+               // this.initFlag = true
+                return false;
+           // }
+        }
+
+        Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
         console.timeEnd('获取表单数据的时间');
         console.time('form创建时间');
         //处理static,dynamic数据
@@ -399,16 +433,15 @@ let FormEntrys = {
         this.childForm[this.data.tableId] = formBase;
         let $newWrap = this.data.el.find('.form-print-position');
         formBase.render($newWrap);
+
         //通知父框架表单刷新完毕
 
         Mediator.publish('form:formAlreadyCreate', 'success');
         Mediator.publish('form:formAlreadyCreate'+this.tableId, 'success');
         console.timeEnd('form创建时间');
-
         //给工作流传表单初始数据
         let valueChange = this.getFormValue(this.data.tableId, false)
         Mediator.publish('workFlow:formValueChange', valueChange);
-
     },
 
     //审批删除时重置表单可编辑性
@@ -433,7 +466,6 @@ let FormEntrys = {
             return;
         }
         return this.childForm[tableId].actions.getFormValue(isCheck);
-        debugger
     },
 }
 export default FormEntrys

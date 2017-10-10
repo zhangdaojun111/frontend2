@@ -12,8 +12,14 @@
         bi_views: {{ bi_views|safe }},
         bi_user: '{{bi_user|safe}}',
         img_url: '{{ config.img_url | safe }}',
+        parent_table_id: '{{parent_table_id|safe}}',
+        row_id: '{{row_id|safe}}',
+        query_mark: '{{query_mark|safe}}',
+        operation_id: '{{operation_id|safe}}',
+        folder_id: '{{folder_id|safe}}'
     }
 </script>
+
 <div id="route-outlet" class="bi-container"></div>
 </body>
 {% ifequal config.window_type 'develop'%}

@@ -25,6 +25,20 @@ let formChartValidateService = {
     },
 
     /**
+     * 判断是否正整数
+     * @param data = 传递过来的值
+     */
+    positiveInteger(value) {
+        let result;
+        if (parseInt(value) > 0) {
+            result = true;
+        } else {
+            result = false;
+        }
+        return result;
+    },
+
+    /**
      * 折线柱状图多y轴验证
      * @param data = y轴字段
      */
@@ -38,8 +52,6 @@ let formChartValidateService = {
         }
         return result;
     }
-
-
 
 };
 export {formChartValidateService}

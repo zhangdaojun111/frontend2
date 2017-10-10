@@ -57,7 +57,13 @@ let config = {
         async getCellLayout() {
             const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
             if (res['success'] === 1) {
-                this.actions.loadCellChart(res['data']['data']);
+                try {
+                    this.actions.loadCellChart(res['data']['data']);
+                } catch (e){
+
+                } finally {
+
+                };
             } else {
                 msgbox.alert(res['error'])
             }
@@ -98,8 +104,10 @@ let config = {
                     layout_id: val.layout_id,
                     xOld: val.is_deep == 0 ? {} : userMode === 'client' ? val.deep['xOld'] : {},
                     row_id: 0,
-                    deep_info: deep_info
+                    deep_info: deep_info,
+                    sort: val.sort
                 }));
+
             });
 
             // 获取画布块最大zindex
@@ -107,20 +115,21 @@ let config = {
 
             // 获取画布块的chart数据
             const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
+            if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
 
-            //结束加载动画
+                //结束加载动画
+                this.hideLoading();
 
-            this.hideLoading();
+                if (res['success'] == 0) {
+                    msgbox.alert(res['error']);
+                    return false;
+                };
 
-            if (res['success'] == 0) {
-                msgbox.alert(res['error']);
-                return false;
-            };
-
-            // 当返回成功时，通知各个cell渲染chart数据
-            Object.keys(this.data.cells).map((key,index) => {
-                this.data.cells[key].setChartData(res[index]);
-            })
+                // 当返回成功时，通知各个cell渲染chart数据
+                Object.keys(this.data.cells).map((key,index) => {
+                    this.data.cells[key].setChartData(res[index]);
+                })
+            }
         },
 
         /**
@@ -139,20 +148,25 @@ let config = {
             };
             canvasCellService.saveCellLayout(data).then(res => {
                 if (res['success'] === 1) {
-                    msgbox.alert('保存成功');
+                    msgbox.showTips('保存视图信息成功');
+                    for (let index of window.config.bi_views.keys()) {
+                        if ( window.config.bi_views[index].name === res['data'].name) {
+                            window.config.bi_views[index] = res['data'];
+                            break;
+                        };
+                    }
+                    console.log(window.config.bi_views);
                 } else {
-                    msgbox.alert(res['error']);
-                }
+                    msgbox.showTips(res['error']);
+                };
             });
         }
-
     },
     binds: [],
 
     afterRender() {
         // 加载loading动画;
         this.showLoading();
-
         this.actions.getCellLayout();
     },
     beforeDestory() {}

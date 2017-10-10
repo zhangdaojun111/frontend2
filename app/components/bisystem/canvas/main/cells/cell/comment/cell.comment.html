@@ -1,5 +1,14 @@
 <div class="comment">
+    <div class="quill ql-container ql-snow comment-ql-content">
+        <div class="content ql-editor">
+            {{{comment.rows.[0].[0]}}}
+        </div>
+    </div>
     <div class="editor">
-        {{{comment.rows.[0].[0]}}}
+        <div class="quill" id="comment{{componentId}}"></div>
+        <p class="save-rich">
+            <button class="save-rich-btn" >确定</button>
+            <button class="cancel-rich-btn">取消</button>
+        </p>
     </div>
 </div>

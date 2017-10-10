@@ -51,7 +51,9 @@ export const PMENUM = {
     show_tips: '12',
     send_data_to_dialog_component: '13', //向子componentDialog发消息，需和openDialogByComponentWithKey结合使用，便于获得dialog的key
     send_data_to_iframe:'14',
-    get_data:'15'
+    get_data:'15',
+    show_loading:'16',          //打开loading
+    hide_loading:'17',          //隐藏loading
 }
 
 /**
@@ -181,7 +183,12 @@ window.addEventListener('message', function (event) {
             case PMENUM.send_data_to_iframe:
                 Mediator.publish('getDataFromOtherFrame:'+data.data.originalField,data.data);
                 break;
-
+            case PMENUM.show_loading:
+                msgbox._showLoading(data.data);
+                break;
+            case PMENUM.hide_loading:
+                msgbox._hideLoading(data.data);
+                break;
             default:
                 console.log('postmsg listener: unsupported message');
         }

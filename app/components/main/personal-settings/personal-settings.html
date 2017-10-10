@@ -35,23 +35,23 @@
     <div class="personal-info">
         <div class="department-group">
             <span>部门：</span>
-            <input type="text" class="department-info" disabled="disabled" value="{{department}}" >
+            <input type="text" class="department-info" disabled="disabled" value="{{department}}" title="{{department}}">
         </div>
 
         <div class="position-group">
             <span>职位：</span>
-            <input type="text" class="position-info" disabled="disabled" value="{{position}}">
+            <input type="text" class="position-info" disabled="disabled" value="{{position}}" title="{{position}}">
         </div>
 
         <div class="email-group">
             <span>邮箱：</span>
-            <input type="email" class="email-info" disabled="disabled" value="{{user_email}}">
+            <input type="email" class="email-info" disabled="disabled" value="{{user_email}}" title="{{user_email}}">
             <i class="edit-email icon-framework-edit"></i>
         </div>
 
         <div class="phone-group ">
             <span>电话：</span>
-            <input type="tel" class="phone-info" disabled="disabled" value="{{user_phone}}">
+            <input type="tel" class="phone-info" disabled="disabled" value="{{user_phone}}" title="{{user_phone}}">
             <i class="edit-tel icon-framework-edit"></i>
         </div>
     </div>
@@ -77,7 +77,7 @@
             <!--<input class="confirm-new-pw"  type="password" maxlength="16">-->
             <!--<p class="confirm-password-tips"></p>-->
         </div>
-        <span class="password-rule-prompt">（密码需要由6-16位数字或字母组成）</span>
+        <span class="password-rule-prompt">（密码需要由6-20位数字或字母组成）</span>
         <button class="confirm-btn">保存</button>
     </div>
 </div>

@@ -5,11 +5,11 @@
         <div class="auto-select-text-wrap">
             <input class="auto-select-text" type="text" placeholder="选择或者输入查找" />
         </div>
-        <ul>
+        <ul class="auto-select-ul">
             {{#each list}}
-            <li data-id="{{id}}" data-name="{{name}}" data-py="{{py}}">
+            <li class="match-visible" data-id="'{{id}}'" data-name="'{{name}}'" data-py="'{{py}}'">
                 <label class="custom-checkbox">
-                    <input type="checkbox" class="checkbox" name="" data-id="{{id}}" value="{{id}}" data-name="{{name}}"/>
+                    <input type="checkbox" class="checkbox" name="" data-id="'{{id}}'" value="'{{id}}'" data-name="'{{name}}'"/>
                     <span>{{name}}</span>
                 </label>
             </li>

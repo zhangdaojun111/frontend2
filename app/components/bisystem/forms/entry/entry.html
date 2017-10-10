@@ -1,8 +1,11 @@
 <div class="form-entry">
-    <h3>请选择需要创建的图表</h3>
+    <span><i class="new-charts-icon"></i>新建图表</span>
     <div class="clearfix">
         {{#each components}}
-        <a href="#/forms/{{entry}}"><span>{{name}}</span></a>
+        <a href="#/forms/{{entry}}">
+            <i class="{{icon}}"></i>
+            <span>{{name}}</span>
+        </a>
         {{/each}}
     </div>
 </div>

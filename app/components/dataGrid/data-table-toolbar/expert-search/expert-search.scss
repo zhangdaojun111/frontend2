@@ -76,168 +76,175 @@
         border: 1px solid #f2f2f2;
         overflow-y: auto;
         //height: 408px;
-        .condition-search-choice {
-            .condition-search-item {
-                padding:5px;
+        .condition-search-item {
+            padding:5px;
+            background-color: #fafafa;
+            border: 1px solid #e4e4e4;
+            border-top: none;
+            .condition-search-select {
+                cursor: pointer;
+                font-size: 12px;
+                height: 30px;
                 background-color: #fafafa;
-                border: 1px solid #e4e4e4;
-                border-top: none;
-                .condition-search-select {
-                    font-size: 12px;
-                    height: 30px;
-                    background-color: #fafafa;
+                background-position: right center;
+                //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
+                border: none;
+                appearance: none;
+                -moz-appearance: none;
+                -webkit-appearance: none;
+                outline: none;
+                padding-right: 14px;
+                width: 60px;
+                height: 30px;
+                color: rgb(85, 85, 85);
+                line-height: 30px;
+                margin-right: 10px;
+                &.radio {
+                    width: 65px;
+                }
+                &.left-select {
+                    width: 50px;
+                }
+                &.right-select {
+                    width: 50px;
+                }
+                option:hover{
+                    background-color: #f2f2f2;
+                }
+            }
+            .condition-search-choice {
+                display: inline-block;
+                width: 20px;
+                height: 12px;
+                padding: 4px 0px;
+                text-align: center;
+                vertical-align: center;
+                background-color: #f2f2f2;
+                cursor: pointer;
+                color: #d7d7d7;
+                &.left-choice{
+                    margin-right: 10px;
+                }
+                &.active {
+                    background-color: #0e7aef;
+                    color: #ffffff;
+                }
+            }
+            .condition-search-box {
+                display: inline-block;
+                position: relative;
+                width: 185px;
+                top: -18px;
+                .condition-search-box-input {
+                    cursor: pointer;
                     background-position: right center;
                     //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
-                    border: none;
+                    position: absolute;
+                    top:-1px;
+                    font-size: 12px;
+                    border: 1px solid rgb(201, 201, 201);
                     appearance: none;
                     -moz-appearance: none;
                     -webkit-appearance: none;
-                    outline: none;
                     padding-right: 14px;
-                    width: 60px;
-                    height: 30px;
+                    width: 151px;
+                    height: 26px;
                     color: rgb(85, 85, 85);
                     line-height: 30px;
                     margin-right: 10px;
-                    &.radio {
-                        width: 65px;
-                    }
-                    &.left-select {
-                        width: 50px;
-                    }
-                    &.right-select {
-                        width: 50px;
-                    }
-                    option:hover{
-                        background-color: #f2f2f2;
-                    }
+                    padding-left: 5px;
                 }
-                .condition-search-choice {
-                    display: inline-block;
-                    width: 20px;
-                    height: 12px;
-                    padding: 4px 0px;
-                    text-align: center;
-                    vertical-align: center;
-                    background-color: #f2f2f2;
-                    cursor: pointer;
-                    &.left-choice{
-                        margin-right: 10px;
-                    }
-                    &.active {
-                        background-color: #0e7aef;
-                        color: #ffffff;
-                    }
-                }
-                .condition-search-box {
-                    display: inline-block;
-                    position: relative;
-                    width: 185px;
-                    top: -18px;
-                    .condition-search-box-input {
-                        background-position: right center;
-                        //background: url(../../../../assets/images/dataGrid/icon_xiala2.png) no-repeat scroll right center transparent;
-                        position: absolute;
-                        top:-1px;
-                        font-size: 12px;
-                        border: 1px solid rgb(201, 201, 201);
-                        appearance: none;
-                        -moz-appearance: none;
-                        -webkit-appearance: none;
-                        padding-right: 14px;
-                        width: 151px;
-                        height: 26px;
-                        color: rgb(85, 85, 85);
-                        line-height: 30px;
-                        margin-right: 10px;
-                        padding-left: 5px;
-                    }
-                    .condition-search-ul {
-                        display: none;
-                        z-index: 999;
-                        padding: 0px;
-                        margin: 0px;
-                        position: absolute;
-                        top: 28px;
-                        max-height: 210px;
-                        width: 170px;
-                        overflow: auto;
-                        line-height: 30px;
-                        border: 1px solid rgb(201, 201, 201);
-                        background: rgb(255, 255, 255);
-                        .condition-search-li {
-                            padding: 0 8px;
-                            &:hover {
-                               background: #f2f2f2;
-                            }
+                .condition-search-ul {
+                    display: none;
+                    z-index: 999;
+                    padding: 0px;
+                    margin: 0px;
+                    position: absolute;
+                    top: 28px;
+                    max-height: 210px;
+                    width: 170px;
+                    overflow: auto;
+                    line-height: 30px;
+                    border: 1px solid rgb(201, 201, 201);
+                    background: rgb(255, 255, 255);
+                    .condition-search-li {
+                        padding: 0 8px;
+                        &:hover {
+                            background: #f2f2f2;
                         }
                     }
-                    .condition-search-ul::-webkit-scrollbar {
-                        width: 4px;
-                        height: 6px;
-                    }
-                    .condition-search-ul::-webkit-scrollbar-thumb {
-                        border-radius: 5px;
-                        -webkit-box-shadow: inset 0 0 5px rgba(242,242,242,0.290196);
-                        background: rgba(242,242,242,0.2);
-                    }
-                    .condition-search-ul::-webkit-scrollbar-track {
-                        -webkit-box-shadow: inset 0 0 5px rgba(242,242,242,0.290196);
-                        border-radius: 0;
-                        background: rgba(242,242,242,0.2);
-                    }
                 }
-                .condition-search-value {
-                    display: inline-block;
-                    .dynamic-form-input {
-                        height: 26px;
-                        color: rgb(85, 85, 85);
-                        border: 1px solid rgb(201, 201, 201);
-                        line-height: 28px;
-                        //margin-right: 10px;
-                        padding-left: 5px;
-                        width: 214px;
-
-                    }
-                    .ui-datepicker-trigger {
-                        top:4px;
-                    }
-                    .condition-search-input {
-                        position: relative;
-                        font-size: 12px;
-                        border: 1px solid rgb(201, 201, 201);
-                        appearance: none;
-                        -moz-appearance: none;
-                        -webkit-appearance: none;
-                        padding-right: 14px;
-                        width: 200px;
-                        height: 26px;
-                        color: rgb(85, 85, 85);
-                        line-height: 30px;
-                        margin-right: 16px;
-                        padding-left: 5px;
-                    }
+                .condition-search-ul::-webkit-scrollbar {
+                    width: 4px;
+                    height: 6px;
                 }
-                .condition-search-add {
-                    float: right;
-                    margin-right: 10px;
-                    display: inline-block;
-                    cursor: pointer;
-                    width: 14px;
-                    height: 30px;
-                    background-position: right center;
-                    //background: url(../../../../assets/images/dataGrid/icon_add_1.png) no-repeat scroll right center transparent;
+                .condition-search-ul::-webkit-scrollbar-thumb {
+                    border-radius: 5px;
+                    -webkit-box-shadow: inset 0 0 5px rgba(242,242,242,0.290196);
+                    background: rgba(242,242,242,0.2);
                 }
-                .condition-search-delete {
-                    float: right;
-                    margin-right: 10px;
-                    display: inline-block;
-                    cursor: pointer;
-                    width: 14px;
-                    height: 30px;
-                    background-position: right center;
-                    //background: url(../../../../assets/images/dataGrid/icon_delete_1.png) no-repeat scroll right center transparent;
+                .condition-search-ul::-webkit-scrollbar-track {
+                    -webkit-box-shadow: inset 0 0 5px rgba(242,242,242,0.290196);
+                    border-radius: 0;
+                    background: rgba(242,242,242,0.2);
                 }
+            }
+            .condition-search-value {
+                display: inline-block;
+                width: 230px;
+                .component-date-control {
+                    width: 280px;
+                }
+                .component-time-control {
+                    width: 280px;
+                }
+                .dynamic-form-input {
+                    height: 26px;
+                    color: rgb(85, 85, 85);
+                    border: 1px solid rgb(201, 201, 201);
+                    line-height: 28px;
+                    //margin-right: 10px;
+                    padding-left: 5px;
+                    width: 214px;
+                }
+                .ui-datepicker-trigger {
+                    top:4px;
+                }
+                .condition-search-input {
+                    position: relative;
+                    font-size: 12px;
+                    border: 1px solid rgb(201, 201, 201);
+                    appearance: none;
+                    -moz-appearance: none;
+                    -webkit-appearance: none;
+                    padding-right: 14px;
+                    width: 200px;
+                    height: 26px;
+                    color: rgb(85, 85, 85);
+                    line-height: 30px;
+                    margin-right: 16px;
+                    padding-left: 5px;
+                }
+            }
+            .condition-search-add {
+                float: right;
+                margin-right: 10px;
+                display: inline-block;
+                cursor: pointer;
+                width: 14px;
+                height: 30px;
+                background-position: right center;
+                //background: url(../../../../assets/images/dataGrid/icon_add_1.png) no-repeat scroll right center transparent;
+            }
+            .condition-search-delete {
+                float: right;
+                margin-right: 10px;
+                display: inline-block;
+                cursor: pointer;
+                width: 14px;
+                height: 30px;
+                background-position: right center;
+                //background: url(../../../../assets/images/dataGrid/icon_delete_1.png) no-repeat scroll right center transparent;
             }
         }
     }

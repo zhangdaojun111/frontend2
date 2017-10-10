@@ -10,6 +10,8 @@ import handlebars from 'handlebars';
 import {canvasCellService} from '../../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../../lib/msgbox';
 import {CanvasOriginalAdvancedComponent} from './advanced/original.advanced';
+import {CanvasOriginalAdvancedItemComponent} from './advanced/item/original.advanced.item';
+
 
 // 自定义original_each_yAxis helper
 handlebars.registerHelper('original_each_yAxis', function(data,index, options) {
@@ -22,10 +24,15 @@ handlebars.registerHelper('original_data_title', function(index, options) {
     // return data['field'] ? data['field']['name'] : data['name'];
 });
 
-// 自定义分组original_data_title helper
+// 自定义分组original_group_data helper
 handlebars.registerHelper('original_group_data', function(data, options) {
     return data ? data : '暂无数据';
     // return data['field'] ? data['field']['name'] : data['name'];
+});
+
+// 自定义分组original_deep_equal helper
+handlebars.registerHelper('original_deep_equal', function(val1, val2, val3,val4, options) {
+    return val1 === val2 ? 'active' : '';
 });
 
 let config = {
@@ -69,13 +76,18 @@ let config = {
                 };
             }
         },
-
         /**
          * 当下穿数据时更新数据
          */
         updateOriginal(data) {
+            if (this.data.sort) {
+                data.cellChart.cell.sort = JSON.stringify(this.data.sort)
+            };
             let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
-            this.data = originalData;
+            Object.assign(this.data, originalData);
+            if (this.data.attribute) {
+                this.data.cellChart.cell.attribute = this.data.attribute;
+            };
             this.reload();
         },
 
@@ -83,19 +95,92 @@ let config = {
          * 新增高级字段
          */
         addAdvancedList(){
-            let that = this;
-            this.el.find('.add-advanced-list').click( function () {
-                $(this).closest('.list').hide();
-                let originForm = new CanvasOriginalAdvancedComponent();
-                that.append(originForm,$(this).closest('.origin-data'));
-            })
+            let originForm = new CanvasOriginalAdvancedComponent(this.data.chart, {
+                // 返回高级计算列表tab
+                onBackAdvancedList: ()=> {
+                    this.actions.backAdvancedList(1);
+                },
+
+                // 保存高级计算数据
+                onSaveAdvancedData: (data) => {
+                    canvasCellService.saveAdvancedData(data).then(res => {
+                        if (res['success'] === 1) {
+                            this.actions.backAdvancedList(1);
+                            this.actions.makeAdvancedItem(res['data'], data.id ? true : false);
+                        }
+                    })
+                }
+            });
+            this.append(originForm,this.el.find('.origin-data'));
+            this.data.originalAdvancedSetting = originForm;
+        },
+
+        /**
+         * 返回高级字段列表tab
+         * @param num 1 = 高级字段列表tab ,2 = 高级字段form tab
+         */
+        backAdvancedList(num,isEditMode = false) {
+            if (num === 1) {
+                this.el.find('.origin-data .form').hide();
+                this.el.find('.origin-data .advanced-list').show();
+            } else {
+                if (!isEditMode) {
+                    this.data.originalAdvancedSetting.actions.reset();
+                };
+                this.el.find('.origin-data .form').show();
+                this.el.find('.origin-data .advanced-list').hide();
+            };
+        },
+        /**
+         *高级计算item 实例化
+         */
+        makeAdvancedItem(itemData, editMode = false) {
+            itemData['itemId'] = itemData.id;
+            if (editMode) {
+                this.data.originalAdvancedItems[itemData['itemId']].actions.update(itemData);
+            } else {
+                let comp = new CanvasOriginalAdvancedItemComponent(Object.assign(itemData,this.data), {
+                    onEditItem: (data) => {
+                        let item = {
+                            itemId: data.itemId,
+                            name: data.name,
+                            compute_model:data.compute_model,
+                            content:data.content
+                        };
+                        this.data.originalAdvancedSetting.actions.setValue(item);
+                        this.actions.backAdvancedList(2, true);
+                    }
+                });
+                this.append(comp, this.el.find('.advanced-list table tbody'), 'tr');
+                this.data.originalAdvancedItems[itemData['itemId']] = comp;
+            };
+        },
+        /**
+         * 获取高级计算保存的item
+         */
+        getAdvancedList() {
+            if (Object.keys(this.data.originalAdvancedItems).length === 0) {
+                canvasCellService.getAdvancedListData({'chart_id': this.data.chart.chartName.id}).then(res => {
+                    if (res['success'] === 1) {
+                        res['data'].forEach(item => {
+                            this.actions.makeAdvancedItem(item);
+                        })
+                    } else {
+                        msgbox.alert(res['error'])
+                    };
+                });
+            }
         }
+
     },
     data: {
         selectAllX: true,
         floor:0,
         xAxis: [],
         hideGroup: [], //需要隐藏的分组列表
+        showSortArrow: true, // 是否显示排序箭头
+        canSortDeep: 'sort-deep', // 判断点击原始数据是否可以排序
+        originalAdvancedItems: {} //用来保存高级计算items list
     },
     binds:[
         { // 点击关闭原始数据
@@ -199,23 +284,64 @@ let config = {
                 }
             }
         },
-        // { // 点击下穿排序
-        //     event:'click',
-        //     selector:'.selectY',
-        //     callback:function (context) {
-        //         let index = $(context).attr('data-y-index');
-        //         alert(index);
-        //         $(context).find('i').addClass('active').siblings('th').removeClass('active');
-        //         return false;
-        //     }
-        // },
+        { // 点击下穿排序
+            event:'click',
+            selector:'.sort-deep span',
+            callback:function (context) {
+                let index = $(context).closest('th').attr('data-y-index');
+                this.data.cellChart.cell.attribute.forEach((item, itemIndex) => {
+                    if (index != itemIndex) {
+                        item.sort = '';
+                    };
+                });
+                let sortType = this.data.cellChart.cell.attribute[index].sort;
+                if (sortType === 'desc') {
+                    sortType = 'asc';
+                } else if (sortType === 'asc') {
+                    sortType = '';
+                } else {
+                    sortType = 'desc';
+                };
+                this.data.cellChart.cell.attribute[index].sort = sortType;
+                let field = this.data.cellChart.chart.assortment === 'pie'? this.data.cellChart.chart.yAxis : this.data.cellChart.chart.yAxis[index].field;
+                let sort = {
+                    field:field,
+                    type:sortType
+                };
+                this.data.sort = sort;
+                this.data.attribute = this.data.cellChart.cell.attribute; // 这个主要用于当更新数据reload时，保存现在的状态
+                this.trigger('onDeepSort', sort);
+                return false;
+            }
+        },
+        { // 分组和高级计算tab切换
+            event:'click',
+            selector:'.bi-tabs span',
+            callback:function (context) {
+                this.actions.getAdvancedList();
+                $(context).addClass('cur').siblings('span').removeClass('cur');
+                let index = $(context).index();
+                let curTab = this.el.find('.origin-data .content').eq(index);
+                curTab.show().siblings('.content').hide();
+                this.el.find('.origin-data .form').hide();
+            }
+        },
+        { // 显示高级计算form
+            event:'click',
+            selector:'.add-advanced-btn',
+            callback:function (context) {
+                this.actions.backAdvancedList(2);
+            }
+        },
     ],
     afterRender() {
-        //新增高级字段
-        this.actions.addAdvancedList();
-
+        if (this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id']) {
+            // 新增高级字段
+            this.actions.addAdvancedList();
+        }
     },
-    firstAfterRender() {},
+    firstAfterRender() {
+    },
     beforeDestory() {}
 };
 
@@ -235,10 +361,21 @@ export class CanvasOriginalDataComponent extends Component {
             CanvasOriginalDataComponent.handleLineBarOriginalData(data)
         } else {
             CanvasOriginalDataComponent.handlePieOriginalData(data)
-        }
+        };
+
+        // 判断排序情况
+        if (typeof data.cell.sort === 'string') {
+            let sort = JSON.parse(data.cell.sort);
+            data.cellChart.cell.attribute.forEach(item => {
+                if (item.name === sort.field.name) {
+                    item.sort = sort.type;
+                } else {
+                    item.sort = '';
+                };
+            });
+        };
         return data;
     }
-
     /**
      * 处理折线柱状图的原始数据
      */
@@ -324,7 +461,6 @@ export class CanvasOriginalDataComponent extends Component {
             });
         } else {
             data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
-                console.log(item);
                 let value = JSON.parse(item);
                 if (!value.select) {
                     data.selectAllX = false;
@@ -335,7 +471,8 @@ export class CanvasOriginalDataComponent extends Component {
         //如果attribute有数据就用attribute的数据 attribute = yAxis
         data.cellChart.cell.attribute = [{'selected': true, 'name': data.cellChart.chart.pieType.value === 1 ? data.cellChart.chart.xAxis.name : data.cellChart.chart.yAxis.name}];
         if (data.cellChart.chart.pieType.value === 1) {
-            data.cellChart.pieSingle = true;
-        }
+            data.showSortArrow = false;
+            data.canSortDeep = '';// 判断点击原始数据是否可以排序
+        };
     }
 }

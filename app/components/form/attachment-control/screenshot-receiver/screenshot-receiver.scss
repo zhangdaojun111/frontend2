@@ -1,5 +1,4 @@
 .screenshot {
-    // max-width: 500px;
     min-height: 250px;
     background: white;
     border: 1px solid #ccc;
@@ -18,17 +17,17 @@
     padding: 110px 0;
 }
 .screenshot-image {
-    //height: 100%;
-    //width: 100%;
     height: auto;
     width: auto;
-    min-width: 490px;
+    min-width: 500px;
 }
 .btn-save-rechoose {
-    float: right;
+    position: absolute;
+    right: 0;
+    bottom: 0;
     margin: 5px 0;
     .comfirm-n-save, .cancel-to-rechoose{
-        width: 91px;
+        width: 90px;
         height: 30px;
         background: inherit;
         background-color: #08f;
@@ -41,8 +40,5 @@
         font-size: 12px;
         color: #fff;
         cursor: pointer;
-    }
-    .cancel-to-rechoose{
-        width: 96px;
     }
 }

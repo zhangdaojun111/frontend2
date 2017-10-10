@@ -10,7 +10,6 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import template from './password-input.html';
 import './password-input.scss';
 
-
 let config = {
     template:template,
     data:{
@@ -26,8 +25,12 @@ let config = {
          * 初始化input前方的title和后方的输入规则
          */
         initPswInput:function () {
-            this.el.find('.password-title').html(this.data.title);
-            this.el.find('.password-rule').html(this.data.rule);
+            if(this.data.title !== undefined && this.data.title !== ''){
+                this.el.find('.password-title').html(this.data.title);
+            }
+            if(this.data.rule !== undefined && this.data.rule !== ''){
+                this.el.find('.password-rule').html(this.data.rule);
+            }
             if(this.data.fakerPsw === false){
                 this.el.find('.default-faker-password').hide();
             }
@@ -92,7 +95,7 @@ let config = {
             }
 
             if(this.actions.checkPwLength(this.data.password_value) === false){
-                this.el.find('.input-password-warning').html('密码长度必须为6-16位，请修改');
+                this.el.find('.input-password-warning').html('密码长度必须为6-20位，请修改');
                 this.data.isLegal = false;
                 return;
             }
@@ -113,7 +116,7 @@ let config = {
          */
         checkPwLength:function (pw) {
             let length = pw.length;
-            return (length >=6 && length <= 16 )
+            return (length >=6 && length <= 20 )
         },
         /**
          * input获取焦点时隐藏密码不合法的提醒
@@ -147,6 +150,19 @@ let config = {
             }
             this.el.find('.set-password-input').focus();    //点击眼睛后强制input获取焦点并取消延迟执行的blur事件
         },
+        /**
+         * 父组件设置密码组件的值
+         * @param psw
+         */
+        setPswByParent:function (psw) {
+            this.data.password_value = psw;
+            this.el.find('.set-password-input').val(psw);
+        },
+        sendPawToParent:function () {
+            console.log('do send');
+            let password = this.el.find('.set-password-input').val();
+            this.setValue(password);
+        }
     },
     binds:[
         {
@@ -186,12 +202,12 @@ let config = {
             }
         },
         {
-            event:'blur',
-            selector:'.default-faker-password',
-            callback:function (target,event) {          //input框失去焦点时，设置密码值以及检测密码是否合法
-                this.actions.delayHideTips();
+            event:'input',
+            selector:'.set-password-input',
+            callback:function(){
+                this.actions.sendPawToParent();
             }
-        },
+        }
     ],
     afterRender:function () {
         this.actions.initPswInput();
@@ -208,12 +224,14 @@ let config = {
  *      rule:密码框后方文字（填写说明）
  *      checkChar:是否检测非法字符（默认检测）
  *      fakerPsw:是否显示密码框中的眼睛（默认显示）
+ *
  * }
  */
 
 class PasswordInput extends Component {
-    constructor(data){
+    constructor(data,callback){
         super(config,data);
+        this.setValue = callback;
     }
 }
 

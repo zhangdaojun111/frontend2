@@ -66,6 +66,7 @@ $sub_color: #0088ff;
                 float: left;
                 cursor: pointer;
                 border-radius: 50%;
+                border: solid 2px #E4E4E4;
                 overflow: hidden;
                 &.default_avatar{
                     background-image: url("../../../assets/images/framework/default_avatar_64.png");
@@ -194,8 +195,8 @@ $sub_color: #0088ff;
             //    margin-left: 310px;
             //}
             button{
-                width: 100px;
-                height: 35px;
+                width: 90px;
+                height: 30px;
                 color: white;
                 background-color: #0088ff;
                 position: absolute;

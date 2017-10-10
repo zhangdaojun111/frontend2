@@ -7,40 +7,20 @@ import msgBox from '../../../lib/msgbox';
 import AttachmentQueueItem from "./attachment-queue-item/attachment-queue-item";
 import {screenShotConfig} from "./screenshot-receiver/screenshot-receiver";
 import {PMAPI} from "../../../lib/postmsg";
-import {attachmentListConfig} from "./attachment-list/attachment-list";
 import {FormService} from '../../../services/formService/formService';
 import ThumbnailList from "./thumbnail-list/thumbnail-list";
 import {Storage} from "../../../lib/storage";
 import Mediator from "../../../lib/mediator";
 import browserMD5File from 'browser-md5-file';
+import AttachmentList from '../attachment-list/attachment-list';
+import ViewVideo from '../view-video/view-video';
+
+let preview_file = ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"];
 
 let config = {
     template: template,
     binds: [
         {
-            event: 'click',
-            selector: '.view-attached-list',
-            callback: function () {
-                attachmentListConfig.data =_.defaultsDeep({
-                    isView:this.data.is_view,
-                    id:this.data.id,
-                    fileIds: this.data.value,
-                    dinput_type: this.data.real_type
-                },attachmentListConfig.data);
-                PMAPI.openDialogByComponent(attachmentListConfig, {
-                    width: 700,
-                    height: 500,
-                    title: "浏览上传文件"
-                }).then(res=>{
-                    Storage.init((new URL(document.URL)).searchParams.get('key'));
-                    let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
-                    for(let file of deletedFiles){
-                        this.data.value.splice(this.data.value.indexOf(file),1);
-                    }
-                    this.trigger('changeValue',this.data);
-                });
-            }
-        }, {
             event: 'click',
             selector: '.upload-file',
             callback: function () {
@@ -57,8 +37,8 @@ let config = {
             selector: '.shot-screen',
             callback: function () {
                 PMAPI.openDialogByComponent(screenShotConfig, {
-                    width: 500,
-                    height: 300,
+                    width: 900,
+                    height: 600,
                     title: "选择截图"
                 }).then(res => {
                     if (!res.file) {
@@ -115,11 +95,85 @@ let config = {
                 //清空文件选择器，不影响下一次选择
                 this.el.find('.selecting-file').val(null);
             }
+        }, {
+            event: 'click',
+            selector:'.ellipses',
+            callback: function () {
+                this.el.find('.ellipses').css('display','none');
+                for(let i=3,length = this.data.queueItemEles.length; i <length;i++){
+                    this.data.queueItemEles[i].css('display','block');
+                }
+            }
+        }, {
+            event:'click',
+            selector: '.view-attached-list',
+            callback: function () {
+                if(this.data.value.length == 0){
+                    return;
+                }
+                FormService.getAttachment({
+                    file_ids:JSON.stringify(this.data.value),
+                    dinput_type:this.data.dinput_type
+                }).then(res=>{
+                    if(res.success){
+                        this.data.rows = res.rows;
+                        for( let data of this.data.rows ){
+                            //附件名称编码转换
+                            data.file_name = data.file_name;
+                            let str = data.file_name.split('.').pop();
+                            if( preview_file.indexOf( str.toLowerCase() ) != -1 ){
+                                data["isPreview"] = true;
+                                if( preview_file.indexOf(str.toLowerCase()) <4){
+                                    data["isImg"] = true;
+                                }else{
+                                    data["isImg"] = false;
+                                }
+                            }else{
+                                data["isPreview"] = false;
+                            }
+                        }
+                        if(this.data.real_type == 9 || this.data.real_type == 23){
+                            let obj={
+                                list:this.data.rows,
+                                dinput_type:this.data.real_type,
+                                is_view:this.data.is_view,
+                                control_id:this.data.id
+                            };
+                            PMAPI.openDialogToSelfByComponent(_.defaultsDeep({},{data:obj},AttachmentList), {
+                                width: 700,
+                                height: 500,
+                                title: "浏览上传文件"
+                            }).then(res=>{
+                                this.actions._updateDeleted(res);
+                            });
+                        }else if(this.data.real_type == 33){
+                            let fileId = this.data.value[0];
+                            let obj={
+                                rows:this.data.rows,
+                                dinput_type:this.data.real_type,
+                                currentVideoId:fileId,
+                                videoSrc:`/download_attachment/?file_id=${fileId}&download=0&dinput_type=${this.data.real_type}`,
+                                control_id:this.data.id,
+                                is_view:this.data.is_view
+                            }
+                            PMAPI.openDialogToSelfByComponent(_.defaultsDeep({},{data:obj},ViewVideo), {
+                                width: 780,
+                                height: 500,
+                                title: '视频播放器'
+                            }).then(res=>{
+                                this.actions._updateDeleted(res);
+                            })
+                        }
+
+                    }
+                })
+            }
         }
     ],
     data: {
         attachmentQueueItemComps:{},
-        queue:[]
+        queue:[],
+        queueItemEles:[]
     },
     actions: {
         controlUploadingForFile: function (file,i,toolbox) {
@@ -144,6 +198,7 @@ let config = {
                     changeFile: event => {
                         if (event.event == 'delete') {
                             ele.remove();
+                            this.data.queueItemEles.splice(this.data.queueItemEles.indexOf(ele),1);
                             if (event.data != undefined) {
                                 this.data.queue.splice(this.data.queue.indexOf(event.data),1);
                                 this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
@@ -155,9 +210,14 @@ let config = {
                                     }
                                 }
                                 this.events.changeValue(this.data);
+                                this.actions._playQueueItems();
+                                if(this.data.value.length == 0){
+                                    this.el.find('.view-attached-list').css('cursor','auto');
+                                }
                             }
                         }
                         if (event.event == 'finished') {
+                            this.data.queue.push(event.data);
                             this.data.value = this.data.value == '' ? [] : this.data.value;
                             this.data.value.push(event.data.fileId);
                             this.data.queue.push(event.data);
@@ -165,19 +225,55 @@ let config = {
                             this.trigger('changeValue', this.data);
                             let obj = {};
                             obj[event.data.fileId] = event.data.thumbnail;
+                            if(!event.data.thumbnail || event.data.thumbnail ==''){
+                                return;
+                            }
                             if (this.data['thumbnailListComponent']) {
                                 this.data['thumbnailListComponent'].actions.addItem(obj);
-                            } else if(this.data.dinput_type == 23 || this.data.dinput_type == 33) {
+                            } else if(this.data.dinput_type == 23) {
                                 let comp = new ThumbnailList([obj]);
                                 comp.render(this.el.find('.thumbnail-list-anchor'));
                                 this.data['thumbnailListComponent'] = comp;
                             }
                         }
+                            if(this.data.value.length > 0){
+                                this.el.find('.view-attached-list').css('cursor','pointer');
+                            }
                     }
                 });
-            this.el.find('.upload-process-queue').append(ele);
+            this.el.find('.upload-process-queue').prepend(ele);
             item.render(ele);
+            this.data.queueItemEles.unshift(ele);
+            this.actions._playQueueItems();
             this.data.attachmentQueueItemComps[i]=item;
+        },
+        //调整上传文件条目，仅显示3条
+        _playQueueItems:function () {
+            if(this.data.queueItemEles.length > 3){
+                this.el.find('.ellipses').css('display','block');
+                for(let i=3,length = this.data.queueItemEles.length; i <length;i++){
+                    this.data.queueItemEles[i].css('display','none');
+                }
+            } else {
+                this.el.find('.ellipses').css('display','none');
+            }
+            for(let i=0;i<3;i++){
+                if(!this.data.queueItemEles[i]){
+                    break;
+                }
+                this.data.queueItemEles[i].css('display','block');
+            }
+        },
+        _updateDeleted:function(res){
+            Storage.init((new URL(document.URL)).searchParams.get('key'));
+            let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+            if(!deletedFiles){
+                return;
+            }
+            for(let file of deletedFiles){
+                this.data.value.splice(this.data.value.indexOf(file),1);
+            }
+            this.trigger('changeValue',this.data);
         }
     },
     afterRender: function () {
@@ -186,20 +282,21 @@ let config = {
             this.el.find('.upload-file').val('上传视频');
         } else if (this.data.dinput_type == 23) {
             this.el.find('.upload-file').val('上传图片');
-        }
-        if ((this.data.dinput_type == 33 || this.data.dinput_type == 2) && this.data.value.length != 0) {
-            FormService.getThumbnails({
-                file_ids: JSON.stringify(this.data.value)
-            }).then(res => {
-                if (!res.success) {
-                    console.log(res.error)
-                }
-                if (res.rows.length != 0) {
-                    let comp = new ThumbnailList(res.rows);
-                    comp.render(this.el.find('.thumbnail-list-anchor'));
-                    this.data['thumbnailListComponent'] = comp;
-                }
-            })
+            if(this.data.value.length != 0){
+                FormService.getThumbnails({
+                    file_ids: JSON.stringify(this.data.value)
+                }).then(res => {
+                    if (!res.success) {
+                        console.log(res.error);
+                        return;
+                    }
+                    if (res.rows.length != 0) {
+                        let comp = new ThumbnailList(res.rows);
+                        comp.render(this.el.find('.thumbnail-list-anchor'));
+                        this.data['thumbnailListComponent'] = comp;
+                    }
+                })
+            }
         }
         Mediator.subscribe('getDataFromOtherFrame:'+this.data.id,(data)=>{
             if(data.type != 'cancel_uploading'){
@@ -208,14 +305,9 @@ let config = {
             let id = data.id;
             this.data.attachmentQueueItemComps[id].actions.cancelUploading();
         });
-        FormService.getAttachment({
-            file_ids:JSON.stringify(this.data.value),
-            dinput_type:this.data.dinput_type
-        }).then(res=>{
-            if(res.success){
-                this.data.rows = res.rows;
-            }
-        })
+        if(this.data.value.length > 0){
+            this.el.find('.view-attached-list').css('cursor','pointer');
+        }
     },
     beforeDestroy:function () {
         Mediator.remove('getDataFromOtherFrame:'+this.data.id);

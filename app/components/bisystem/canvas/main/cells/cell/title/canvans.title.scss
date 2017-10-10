@@ -2,12 +2,42 @@
     line-height: 15px;
     height: 15px;
     padding: 4px;
-    img {
-        vertical-align: middle;
+
+    .title-tips{
+        float: left;
+        width: calc(100% - 93px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 14px;
+        font-weight: normal;
+        color:#333333;
+        .deep-title{
+            color:#999999;
+            font-size:14px;
+        }
+        img {
+            vertical-align: middle;
+        }
+        .title-left {
+            border-left: #5b95e8 4px solid;
+            padding-right: 4px;
+        }
     }
-    .title-left {
-        border-left: #5b95e8 4px solid;
-        padding-right: 4px;
+    .icon-group {
+        position: absolute;
+        right: 10px;
+        @media print {
+            display:none;
+        }
+        a {
+            display: inline-block;
+            text-decoration: none;
+            margin-left: 5px;
+            font-size: 14px;
+            outline: none;
+            color: #dddddd;
+        }
     }
     .back-floor-btn-data {
         cursor: pointer;

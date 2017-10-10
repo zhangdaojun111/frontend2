@@ -44,9 +44,8 @@ let config = {
             this.el.find(".J_ul-img").empty();
             let len = msg.file_ids.length;
             let html = " ";
-            let host = "http://"+window.location.host;
             for (let i=0;i<len;i++){
-                html += `<li class='li-img clearfix'><span class='J_delImg delImg' id=${msg.file_ids[i]}>X</span><img src='${host}/download_attachment/?file_id=${msg.file_ids[i]}&download=0' data-id=${msg.file_ids[i]} class='add-img'/></li>`;
+                html += `<li class='li-img clearfix'><span class='J_delImg delImg' id=${msg.file_ids[i]}>X</span><img src='/download_attachment/?file_id=${msg.file_ids[i]}&download=0' data-id=${msg.file_ids[i]} class='add-img'/></li>`;
             }
             this.el.find('.J_ul-img').html(html);
         },
@@ -71,12 +70,12 @@ let config = {
             let viewTop = top;
             let top1 = top+"%";
             let left1 = left+"%";
-            let host = "http://"+window.location.host;
+
             let html = `<div class='imgseal noprint'  data-width=${width} data-viewLeft=${viewLeft} data-viewTop=${viewTop} data-imgid=${id} style='top:${top1};left:${left1}'>
-                            <img  width=${width} style="max-height:150px" src='${host}/download_attachment/?file_id=${id}&download=0'/>
+                            <img  width=${width} style="max-height:150px" src='/download_attachment/?file_id=${id}&download=0'/>
                                 <i class='J_del'>X</i>
                          </div>`;
-            html += `<img class="printS printimg" style="top:${top1};left:${left1};max-height: 150px" width=${width} src='${host}/download_attachment/?file_id=${id}&download=0'/>`;
+            html += `<img class="printS printimg" style="top:${top1};left:${left1};max-height: 150px" width=${width} src='/download_attachment/?file_id=${id}&download=0'/>`;
             $('#place-form').find(".form-print-position").append(html);
         },
         /**
@@ -181,12 +180,11 @@ class WorkflowSeal extends Component{
 }
 export default {
     showheader(data){
-        let host = window.location.host;
         let len = data.file_ids.length;
         let obj = new Array();
         for(let i=0;i<len;i++){
             let url = {};
-            url['url']= `http://${host}/download_attachment/?file_id=${data.file_ids[i]}&download=0`,
+            url['url']= `/download_attachment/?file_id=${data.file_ids[i]}&download=0`,
                 url["id"]=data.file_ids[i];
             obj.push(url);
         }

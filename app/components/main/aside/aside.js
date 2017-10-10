@@ -172,7 +172,11 @@ let config = {
          * 打开个人信息设置页面
          */
         showInfoSet:function () {
+            // msgbox.showLoadingSelf();        //测试使用
             PersonSetting.show();
+            // setTimeout(function () {
+            //     msgbox.hideLoadingSelf();
+            // },5000)
         },
         /**
          * 设置用户头像
@@ -225,14 +229,16 @@ let config = {
          * 修改后重置用户头像
          */
         resetAvatar:function(){
+            console.log("do reset")
             let $img = this.el.find("img.set-info");
             if($img.length === 0){
                 $img = $("<img>").addClass("set-info");
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
-                this.el.find("div.avatar").append($img);
+                this.el.find(".avatar").append($img);
             }else{
                 $img.attr("src",window.config.sysConfig.userInfo.avatar);
             }
+            console.log($img);
         },
         /**
          * 保存常用菜单
@@ -273,6 +279,15 @@ let config = {
                             })
                         }
                     })
+            }
+        },
+        /**
+         * 检测系统名称长度，调整ERDS logo位置
+         */
+        checkSysName:function () {
+            let lenght = this.data.systemName.length;
+            if(lenght > 8){
+                this.el.find('.erds-logo').css('padding-top','10px');
             }
         }
     },
@@ -341,6 +356,8 @@ let config = {
         }
         //此处检查用户是否开启代理，并做提醒
         this.actions.checkAgent();
+        //检测系统名称名字长度，长于8则修改ERDS logo的padding
+        this.actions.checkSysName();
     },
     firstAfterRender: function() {
         Mediator.on('aside:size', (order) => {

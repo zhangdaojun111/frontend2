@@ -60,7 +60,7 @@ let config = {
                 this.data.columnDefs = [
                     number,dgcService.selectCol,
                     {headerName: '操作',field: 'myOperate', width: 120,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                        return '<div style="text-align:center;"><a class="ui-link" id="departView" style="color:#337ab7;">查看</a> | <a class="ui-link" id="departModify" style="color:#337ab7;">编辑</a><div>';
+                        return '<div style="text-align:center;"><a class="ui-link" id="departView" style="color:#0088ff;">查看</a> | <a class="ui-link" id="departModify" style="color:#0088ff;">编辑</a><div>';
                     }},
                     { headerName: '部门', field: 'f5',cellRenderer: 'group',suppressMenu: true, tooltipField:'f5' }
                 ]
@@ -227,7 +227,14 @@ let config = {
                         height: 360,
                         title: '导出数据'
                     }).then((data) => {
-
+                        let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
+                        this.el.find('.btn-nav').append(dom);
+                        setTimeout(()=>{
+                            this.el.find('.exports-tips').css('display','none');
+                        },3000)
+                        this.el.find('.exports-tips-delete').on('click', ()=> {
+                            this.el.find('.exports-tips').css('display','none');
+                        })
                     });
                 } )
             }
@@ -279,6 +286,10 @@ let config = {
                 this.data.isShowCustomPanel = false;
                 this.actions.changeAgGridWidth(true);
             } )
+            //新窗口显示隐藏
+            if( this.data.isNewWindow ){
+                this.el.find( '.grid-new-window' )[0].style.display = 'none';
+            }
         },
         //定制列事件
         calcCustomColumn: function () {
@@ -410,7 +421,7 @@ let config = {
                         }else {
                             msgBox.alert( res.error )
                         }
-                    } )
+                    });
                     HTTP.flush();
                 }
             } )
@@ -422,7 +433,7 @@ let config = {
         this.actions.createHeader();
         //订阅数据失效
         PMAPI.subscribe(PMENUM.data_invalid, (info) => {
-            console.log( "部门信息订阅数据失效" )
+            console.log( "部门信息订阅数据失效" );
             let tableId = info.data.table_id;
             if( this.data.tableId == tableId ){
                 if( !this.data.onRefresh ){

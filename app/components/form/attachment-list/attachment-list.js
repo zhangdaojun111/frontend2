@@ -82,6 +82,13 @@ let css = `
         left: 0;
         top: 0;
     }
+    .closeImg{
+        position: absolute;
+        right:20px;
+        top:20px;
+        cursor: pointer;
+        z-index: 10;
+    }
     .mask-div{
         position: absolute;
         z-index: 2;
@@ -99,12 +106,12 @@ let css = `
         z-index: 10;
         max-height:80%;
     }
-    .rotate-button{
+    .operator-buttons{
         position: absolute;
         transform: translate(50%,-50%);
         right: 50%;
         bottom: 0;
-        width: 300px;
+        width: 350px;
         height: 50px;
         z-index: 10;
         padding:0 20px;
@@ -114,8 +121,26 @@ let css = `
         align-items:center;
         justify-content: center;
     }
-    .closeImg:hover{
-        background-color:darkred;
+    .operator-buttons li{
+        padding:5px 15px;
+    }
+    .scale {
+        font-size:20px;
+        color:white;
+    }
+    .previous {
+        z-index: 10;
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        cursor: pointer;
+    }
+    .next {
+        z-index: 10;
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        cursor: pointer;
     }
     `;
 let AttachmentList = {
@@ -125,117 +150,276 @@ let AttachmentList = {
         dragStart: false,
         rotateNo: 0,
         imgScale: 1,
+        currentIndex:0,
+        firstPreviewableIndex:0,
+        lastPreviewableIndex:0,
         list: [],
         dinput_type: '',
         fileIds: '',
         is_view: '',
-        isFormAbout: '',
         fileGroup: [],
         preview_file: ["gif", "jpg", "jpeg", "png", "txt", "pdf", "lua", "sql", "rm", "rmvb", "wmv", "mp4", "3gp", "mkv", "avi"],
     },
+    binds: [
+        {
+            //图片弹窗预览
+            event:'click',
+            selector:'.pre',
+            callback:function (event) {
+                let id = event.dataset.id;
+                this.actions._loadPreview(id);
+                this.data.currentIndex = this.actions._getCurrentIndex(id);
+                this.actions._updateSwiftButtons(this.data.currentIndex);
+            }
+        }, {
+            //删除
+            event: 'click',
+            selector: '.del',
+            callback: function (event) {
+                let fielIds = $(event).attr('data-id');
+                //如果直接用delete_attachment删除此文件，而并没有提交表单，那么下次访问将看到file_id但是没有任何文件名和文件的脏数据
+                // let _this = this;
+                // HTTP.post('delete_attachment', {
+                //     file_ids: JSON.stringify([fielIds]),
+                //     dinput_type: this.data.dinput_type
+                // }).then(res => {
+                //     _this.data.list = res["rows"];
+                //     for (let i = 0, len = _this.data.list.length; i < len; i++) {
+                //         if (_this.data.list[i]["file_id"] == fielIds) {
+                //             _this.data.list.splice(i, 1);
+                //             break;
+                //         }
+                //     }
+                //     _this.reload();
+                // });
+                // HTTP.flush();
+                for (let i = 0, len = this.data.list.length; i < len; i++) {
+                    if (this.data.list[i]["file_id"] == fielIds) {
+                        this.data.list.splice(i, 1);
+                        break;
+                    }
+                }
+
+                this.el.find('#'+fielIds).remove();
+                let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+                if(deletedFiles == undefined){
+                    deletedFiles = [];
+                }
+                deletedFiles.push(fielIds);
+                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                Storage.setItem(deletedFiles,'deletedItem-'+this.data.control_id,Storage.SECTION.FORM);
+
+            }
+        }, {
+            event: 'click',
+            selector: '.closeImg',
+            callback: function () {
+                this.el.find('.my-mask').hide();
+                this.data.dragStart = false;
+                $(document).off("mousewheel DOMMouseScroll");
+            }
+        }, {
+            event: 'mouseup',
+            selector: '.img-pre',
+            callback: function () {
+                this.data.dragStart = false;
+            }
+        }, {
+            event: 'mousemove',
+            selector: '.img-pre',
+            callback: function ($event) {
+                //是否拖拽
+                if (!this.data.dragStart) {
+                    return;
+                }
+
+                //初始值调用 计算位移偏差值
+                let disX = $event.clientX - this.data.dragStartX;
+                let disY = $event.clientY - this.data.dragStartY;
+
+                //计算图片相对位置
+                let goX = this.data.imgStartX + disX + $(".img-pre").width() / 2;
+                let goY = this.data.imgStartY + disY + $(".img-pre").height() / 2;
+
+                $($event.target).css({'top': goY + 'px', 'left': goX + 'px'});
+            }
+        }, {
+            event: 'mousedown',
+            selector: '.img-pre',
+            callback: function ($event) {
+                $event.preventDefault && $event.preventDefault();//这个很重要
+                //dragStart==可拖拽标识
+                this.data.dragStart = true;
+
+                //初始值记录
+                this.data.dragStartX = $event.clientX;
+                this.data.dragStartY = $event.clientY;
+                this.data.imgStartX = this.el.find('.img-pre').position().left;
+                this.data.imgStartY = this.el.find('.img-pre').position().top;
+            }
+        }, {
+            event:'click',
+            selector: '.save',
+            callback:function (event) {
+                this.el.find('.download-url').attr('href','/download_attachment/?file_id='+event.id+'&download=1&dinput_type={{'+this.data.dinput_type+'}}');
+            }
+        }, {
+            event: 'click',
+            selector: '.zoom-out',
+            callback: function () {
+                this.data.imgScale -= 0.1;
+                this.actions._updatePreview();
+            }
+        }, {
+            event: 'click',
+            selector: '.zoom-in',
+            callback: function () {
+                this.data.imgScale += 0.1;
+                this.actions._updatePreview();
+            }
+        }, {
+            event: 'click',
+            selector: '.rotate',
+            callback: function (event) {
+                this.data.rotateNo -= 90;
+                this.data.imgScale = 1;
+                this.el.find(".img-pre").css({
+                    "transform": "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg)",
+                    "top": "50%",
+                    "left": "50%"
+                });
+                this.actions._uploadScale();
+            }
+        }, {
+            event:'click',
+            selector: '.resize',
+            callback:function () {
+                this.data.imgScale = 1;
+                this.data.rotateNo = 0;
+                this.actions._updatePreview();
+            }
+        }, {
+            event: 'click',
+            selector:'.previous',
+            callback:function () {
+                //找到前一个可浏览的文件的索引
+                let i = this.data.currentIndex - 1;
+                for(;i >=0; i--){
+                    let type = this.data.list[i].file_name.split('.').pop();
+                    if(this.data.preview_file.includes(type)){
+                        break;
+                    }
+                }
+                if(i < 0 ){ //前面没有可浏览文件
+                    this.el.find('.previous').hide();
+                    this.data.firstPreviewableIndex = this.data.currentIndex;
+                    return;
+                } else {
+                    this.data.currentIndex--;
+                }
+                this.actions._loadPreview(this.data.list[this.data.currentIndex].file_id);
+                this.actions._updateSwiftButtons(this.data.currentIndex);
+            }
+        }, {
+            event: 'click',
+            selector:'.next',
+            callback:function () {
+                //找到前一个可浏览的文件的索引
+                let i = this.data.currentIndex + 1;
+                let length = this.data.list.length;
+                for(;i < length; i++){
+                    let type = this.data.list[i].file_name.split('.').pop();
+                    if(this.data.preview_file.includes(type)){
+                        break;
+                    }
+                }
+                if(i >= length){ //后面没有可浏览文件
+                    this.el.find('.next').hide();
+                    this.data.lastPreviewableIndex = this.data.currentIndex;
+                    return;
+                } else {
+                    this.data.currentIndex++;
+                }
+
+                this.actions._loadPreview(this.data.list[i].file_id);
+                this.actions._updateSwiftButtons(i);
+            }
+        }
+    ],
     actions: {
         //获取文件名后缀
         getFileExtension(filename) {
             return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
-        }
-    },
-    afterRender() {
-        //许多操作已暂时弃用 代码留着 有备无患
-        this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
-        let _this = this;
-        //图片弹窗预览
-        this.el.on('click', '.pre', function (event) {
-            _this.el.find('.my-mask').show();
-            _this.data.rotateNo = 0;
-            _this.data.imgScale = 1;
-            _this.el.find('.img-pre').css("height", $(window).height() * 0.7 + 'px');
-            _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + "," + _this.data.imgScale + ")");
-            let myLocated = location.href.split('#');
-            // _this.el.find('.img-pre').get(0).src=myLocated[0]+"download_attachment/?file_id="+$(event.target).data("id")+"&download=0&dinput_type="+_this.data.dinput_type;
-            _this.el.find('.img-pre').get(0).src = "/download_attachment/?file_id=" + $(event.target).data("id") + "&download=0&dinput_type=" + _this.data.dinput_type;
+        },
+        _uploadScale() {
+            this.el.find('.scale').text(Math.floor(this.data.imgScale*100)+"%");
+        },
+        _updatePreview() {
+            this.el.find(".img-pre").css('transform','translate(-50%,-50%) rotate(' + this.data.rotateNo + 'deg) scale(' + this.data.imgScale + ')');
+            this.actions._uploadScale();
+        },
+        _loadPreview(id){
+            this.el.find('.my-mask').show();
+            this.data.rotateNo = 0;
+            this.data.imgScale = 1;
+            this.el.find('.img-pre').css("height", $(window).height() * 0.7 + 'px');
+            this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + "," + this.data.imgScale + ")");
+            this.el.find('.img-pre').get(0).src = "/download_attachment/?file_id=" + id + "&download=0&dinput_type=" + this.data.dinput_type;
             $(document).on("mousewheel DOMMouseScroll", (e) => {
                 let delta = (e.originalEvent['wheelDelta'] && (e.originalEvent['wheelDelta'] > 0 ? 1 : -1)) ||
                     (e.originalEvent['detail'] && (e.originalEvent['detail'] > 0 ? -1 : 1));
-                if (delta > 0) {
-                    _this.data.imgScale += 0.1;
-                    _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
-                } else if (delta < 0) {
-                    this.imgScale -= 0.1;
-                    _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
-                }
-            });
-        });
-        //删除
-        this.el.on('click', '.del', function (event) {
-            let _this = this;
-            let fielIds = $(event.target).attr('id');
-            HTTP.post('delete_attachment', {
-                file_ids: JSON.stringify([fielIds]),
-                dinput_type: this.data.dinput_type
-            }).then(res => {
-                _this.data.list = res["rows"];
-                for (let i = 0, len = _this.data.list.length; i < len; i++) {
-                    if (_this.data.list[i]["file_id"] == fielIds) {
-                        _this.data.list.splice(i, 1);
-                        break;
-                    }
-                }
-                // this.wfService.sendDelFile(fileId);
-                // this.wfService.sendDelQQimg(fileId);
-                // this.emitDelAttachmentIds.emit(fileId);
-                _this.reload();
-            })
-            HTTP.flush();
-        });
-
-        this.el.on('click', '.mask-div,.closeImg', function () {
-            _this.el.find('.my-mask').hide();
-            _this.data.dragStart = false;
-            $(document).off("mousewheel DOMMouseScroll");
-        })
-        this.el.on('mouseup', '.img-pre', function () {
-            _this.data.dragStart = false;
-        }).on('mousemove', '.img-pre', function ($event) {
-            //是否拖拽
-            if (!_this.data.dragStart) {
-                return;
+            if (delta > 0) {
+                this.data.imgScale += 0.1;
+                this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
+            } else if (delta < 0) {
+                this.imgScale -= 0.1;
+                this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
             }
-
-            //初始值调用 计算位移偏差值
-            let disX = $event.clientX - _this.data.dragStartX;
-            let disY = $event.clientY - _this.data.dragStartY;
-
-            //计算图片相对位置
-            let goX = _this.data.imgStartX + disX + $(".img-pre").width() / 2;
-            let goY = _this.data.imgStartY + disY + $(".img-pre").height() / 2;
-
-            $($event.target).css({'top': goY + 'px', 'left': goX + 'px'});
-        }).on('mousedown', '.img-pre', function ($event) {
-            $event.preventDefault && $event.preventDefault();//这个很重要
-            //dragStart==可拖拽标识
-            _this.data.dragStart = true;
-
-            //初始值记录
-            _this.data.dragStartX = $event.clientX;
-            _this.data.dragStartY = $event.clientY;
-            _this.data.imgStartX = _this.el.find('.img-pre').position().left;
-            _this.data.imgStartY = _this.el.find('.img-pre').position().top;
-        })
-        this.el.on('click', '.narrow', function () {
-            _this.data.imgScale -= 0.1;
-            _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
-        }).on('click', '.enlarge', function () {
-            _this.data.imgScale += 0.1;
-            _this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")");
-        }).on('click', '.counterclockwise', function (event) {
-            _this.data.rotateNo -= 90;
-            _this.data.imgScale = 1;
-            $(event.target).parent().parent().find(".img-pre").css({
-                "transform": "translate(-50%,-50%) rotate(" + _this.data.rotateNo + "deg) scale(" + _this.data.imgScale + ")",
-                "top": "50%",
-                "left": "50%"
-            });
-        })
+        });
+            this.el.find(".save").attr('id',id);
+        },
+        _getCurrentIndex(id){
+            let i = 0;
+            for(let length = this.data.list.length; i < length; i++){
+                if(id == this.data.list[i]['file_id'])
+                {
+                    console.log(i);
+                    break;
+                }
+            }
+            return i;
+        },
+        _updateSwiftButtons(i){
+            if(i == this.data.firstPreviewableIndex){
+                this.el.find('.previous').hide();
+            } else {
+                this.el.find('.previous').show();
+            }
+            if(i == this.data.lastPreviewableIndex){
+                this.el.find('.next').hide();
+            } else {
+                this.el.find('.next').show();
+            }
+        }
+    },
+    afterRender() {
+        this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
+        this.actions._uploadScale();
+        //给各个href赋值，解决dinput_type在引号中无法获得的问题
+        for(let item of this.data.list){
+            let ele =this.el.find('#'+item.file_id);
+            ele.find('.download-url').attr('href','/download_attachment/?file_id='+item.file_id+'&download=1&dinput_type='+this.data.dinput_type);
+            let previewUrl = ele.find('.preview-url');
+            if(previewUrl.length > 0){
+                previewUrl.attr('href','/download_attachment/?file_id='+item.file_id+'&download=0&dinput_type='+this.data.dinput_type);
+            }
+            if(this.data.is_view){
+                ele.find('.del').hide();
+            } else {
+                ele.find('.del').show();
+            }
+        }
+        this.data.lastPreviewableIndex = this.data.list.length - 1;
     },
     beforeDestory() {
         this.data.style.remove();

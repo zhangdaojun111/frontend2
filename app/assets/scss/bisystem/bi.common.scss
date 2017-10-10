@@ -1,6 +1,15 @@
 /**
-* 容器的大小
-*/
+ 引用公共样式
+ */
+@import "../core/base";
+
+@media print {
+    body * {
+        visibility: visible !important;
+        overflow: visible !important;
+        position: static !important;
+    }
+}
 
 @mixin icon {
     display: inline-block;
@@ -13,6 +22,7 @@ html.bi, body.bi {
     height: 100%;
     .bi-container {
         height: 100%;
+        background: #f5f4f4;
     }
     .remove-icon {
         @include icon;
@@ -51,6 +61,130 @@ html.bi, body.bi {
     .original-data-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/original_data.png') no-repeat;
+    }
+    .save-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/save.png') no-repeat;
+    }
+    .new-window-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/new-window.png') no-repeat;
+    }
+    .rich-text-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/richtext.png') no-repeat;
+    }
+    .right-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/right.png') no-repeat;
+    }
+    .wrong-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/wrong.png') no-repeat;
+    }
+    .print-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/print.png') no-repeat;
+    }
+    .manager-edit-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/manager_edit.png') no-repeat;
+    }
+    .add-cell-icon {
+         @include icon;
+         background: url('../../../assets/images/bisystem/add_cell.png') no-repeat;
+    }
+    .export-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/export.png') no-repeat;
+    }
+    .import-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/import.png') no-repeat;
+    }
+    .print-line-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/print_line.png') no-repeat;
+    }
+    .edit-view-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/edit_view.png') no-repeat;
+    }
+    .file-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/file.png') no-repeat;
+    }
+    .new-chart-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/new-chart.png') no-repeat;
+    }
+    .new-charts-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/new_charts.png') no-repeat;
+    }
+    .search-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/search.png') no-repeat;
+    }
+    .select-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/select.png') no-repeat;
+    }
+    .chart-barline-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_barline.png') no-repeat;
+    }
+    .chart-table-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_table.png') no-repeat;
+    }
+    .chart-radar-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_radar.png') no-repeat;
+    }
+    .chart-multip-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_multip.png') no-repeat;
+    }
+    .chart-ninegrid-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_ninegrid.png') no-repeat;
+    }
+    .chart-comment-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_comment.png') no-repeat;
+    }
+    .chart-pie-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_pie.png') no-repeat;
+    }
+    .aside-normal-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_barline.png') no-repeat;
+    }
+    .aside-comment-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_comment.png') no-repeat;
+    }
+    .aside-multilist-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_multip.png') no-repeat;
+    }
+    .aside-nineGrid-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_ninegrid.png') no-repeat;
+    }
+    .aside-pie-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_pie.png') no-repeat;
+    }
+    .aside-radar-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_radar.png') no-repeat;
+    }
+    .aside-table-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_table.png') no-repeat;
     }
 }
 
@@ -183,7 +317,6 @@ html.bi, body.bi {
         @include form-btn;
     }
 }
-
 
 
 

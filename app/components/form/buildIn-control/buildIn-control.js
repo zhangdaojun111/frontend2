@@ -38,13 +38,13 @@ let config={
         let _this=this;
         this.data.isInit=true;
         if(!this.data.is_view && this.data.can_add_item){
-            this.el.find('.add-item').css('visibility','visible')
+            this.el.find('.add-item').css('visibility','visible').addClass('icon-fl');
         }
         if(!this.data.is_view){
-            this.el.find('.ui-selector').css('visibility','visible');
+            this.el.find('.ui-selector').css('visibility','visible').addClass('icon-fl');
         }
         if(this.data.history){
-            this.el.find('.ui-history').css('visibility','visible');
+            this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }
         if(!this.data.be_control_condition) {
             let el=this.el.find('.dropdown');

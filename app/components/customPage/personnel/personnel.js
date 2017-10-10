@@ -103,6 +103,8 @@ let config = {
         specialFilter:{},
         //第一次设置数据
         firstSetData: true,
+        //是否为新窗口
+        isNewWindow: false
     },
     actions: {
         //获取表头数据
@@ -120,7 +122,7 @@ let config = {
             Promise.all([preferenceData, headerData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
                 let oprate = {headerName: '操作',field: 'myOperate', width: 160,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                    return '<div style="text-align:center;"><a class="ui-link" id="view" style="color:#337ab7;">查看</a> | <a class="ui-link" id="edit" style="color:#337ab7;">编辑</a> | <a class="ui-link" id="jurisdiction" style="color:#337ab7;">权限</a><div>';
+                    return '<div style="text-align:center;"><a class="ui-link" id="view" style="color:#0088ff;">查看</a> | <a class="ui-link" id="edit" style="color:#0088ff;">编辑</a> | <a class="ui-link" id="jurisdiction" style="color:#0088ff;">权限</a><div>';
                 }}
                 //添加序号列
                 let number = dgcService.numberCol;
@@ -326,15 +328,23 @@ let config = {
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
-                for( let a of this.data.filterParam.expertFilter ){
-                    json['filter'].push( a );
+                //这个顺序要保证是先高级查询，再搜索的
+                let len = this.data.filterParam.expertFilter.length - 1;
+                for(let i = len; i>=0; i--){
+                    json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
+                // for( let a of this.data.filterParam.expertFilter ){
+                //     json['filter'].push( a );
+                // }
                 if( this.data.filterParam['common_filter_id'] != '临时高级查询' ){
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
                 if( this.data.filterParam.filter.length == 0 ){
-                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span>加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;</div>`;
+                    let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
                     this.el.find('.btn-nav').append(dom);
+                    setTimeout(()=>{
+                        this.el.find('.query-tips').css('display','none');
+                    },5000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -529,6 +539,10 @@ let config = {
                 this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
                 this.data.isAutoWidth = !this.data.isAutoWidth;
             } )
+            //新窗口显示隐藏
+            if( this.data.isNewWindow ){
+                this.el.find( '.grid-new-window' )[0].style.display = 'none';
+            }
         },
         //触发导出
         onExport: function () {
@@ -553,7 +567,14 @@ let config = {
                 height: 360,
                 title: '导出数据'
             }).then((data) => {
-
+                let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
+                this.el.find('.btn-nav').append(dom);
+                setTimeout(()=>{
+                    this.el.find('.exports-tips').css('display','none');
+                },3000)
+                this.el.find('.exports-tips-delete').on('click', ()=> {
+                    this.el.find('.exports-tips').css('display','none');
+                })
             });
         },
         //渲染高级查询
@@ -606,6 +627,7 @@ let config = {
             _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
+                    _this.el.find('.query-tips').css('display','none');
                 } else if($(this).val() == '临时高级查询') {
                     _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
                 } else {

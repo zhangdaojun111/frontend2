@@ -1,51 +1,29 @@
-$aside-bg: #374157;
-$section-bg: #60a998;
-$aside-a: #f8645c;
-$aside-a-last: #3b8cff;
-$charts-container-p: #4c576f;
-$active: #6b758a;
-$filter-match-bg: #eef0f5;
-$li-bg: #424e67;
-$li-even-bg: #353D53;
-$li-odd-bg: #374157;
-$li-hover: #424e67;
-$btn_width: 16px;
-$font_size: 12px;
-
 .charts-items {
     width: 100%;
-    //height: 100%;
-    //overflow: auto;//显示滚动条
     font-size: 12px;
     cursor: move;
-    img {
+    img,i {
         float: left;
         margin-right: 4px;
-        border-radius: 50%;
+        margin-top: 2px;
     }
     li {
         position: relative;
     }
-    div:nth-child(even) {
-        li {
-            background-color: $li-even-bg;
-        }
-    }
-    div:nth-child(odd) {
-        li {
-            background-color: $li-odd-bg;
-        }
-    }
     div {
         li:hover {
-            background-color: $li-hover;
+            background-color: #444444;
+            span {
+                color: #fefefe;
+                transition: all .3s;
+            }
         }
     }
     li {
         display: inline-block;
         width: 100%;
-        color: $li-bg;
-        transition: all .3s; //hover时 过渡
+        color: #424e67;
+        transition: all .3s;
         p {
             padding: 10px 15px;
             overflow: hidden;
@@ -54,7 +32,7 @@ $font_size: 12px;
                 float: left;
                 width: 160px;
                 margin-left: 3px;
-                color: #fff;
+                color: #999999;
                 line-height: 20px;
                 height: 20px;
                 word-break: break-all;
@@ -67,9 +45,9 @@ $font_size: 12px;
         overflow: hidden;
         text-align: center;
         display: inline-block;
-        width: $btn_width;
-        height: $btn_width;
-        line-height: $btn_width;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
         padding: 2px;
         color: #ffffff;
         border-radius: 50%;
@@ -80,18 +58,17 @@ $font_size: 12px;
         display: none;
     }
     .btn_ripple:hover {
-        background-color: #353D53;
+        background-color: #373737;
     }
 }
 
 .hide_meun {
     position: absolute;
-    left: 132px;
-    top: 0px;
+    left: 254px;
+    top: 0;
     z-index: 99;
     width: 112px;
     display: none;
-    overflow: hidden;
     .btn_box {
         padding: 8px 0;
         background-color: #ffffff;
@@ -100,7 +77,6 @@ $font_size: 12px;
             text-decoration: none;
             color: #000000;
             display: block;
-            width: 100%;
             cursor: pointer;
             outline: none;
             border: none;
@@ -111,6 +87,9 @@ $font_size: 12px;
             text-align: start;
             transition: all .3s;
             background-color: #ffffff;
+        }
+        button {
+            width: 100%;
         }
         .menuitem:hover {
             background-color: rgba(240, 240, 240, 0.87);

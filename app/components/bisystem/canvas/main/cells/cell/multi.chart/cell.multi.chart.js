@@ -1,7 +1,7 @@
 /**
  * Created by birdyy on 2017/7/31.
  */
-import {BiBaseComponent} from '../../../../../bi.base.component';
+import {CellBaseComponent} from '../base';
 import template from './cell.multi.chart.html';
 import {EchartsService} from '../../../../../../../services/bisystem/echart.server';
 import Mediator from '../../../../../../../lib/mediator';
@@ -31,10 +31,18 @@ let config = {
     }
 }
 
-export class CellMultiChartComponent extends BiBaseComponent {
-    constructor(cellChart) {
-        config.data.cellChart = cellChart ? cellChart : null;
-        super(config);
+export class CellMultiChartComponent extends CellBaseComponent {
+    // constructor(cellChart) {
+    //     config.data.cellChart = cellChart ? cellChart : null;
+    //     super(config);
+    //     this.data.id += this.componentId;
+    // }
+    constructor(data,event) {
+        data.cellChart = {
+            cell: data.cell,
+            chart: data.chart
+        };
+        super(config,data,event);
         this.data.id += this.componentId;
     }
 }

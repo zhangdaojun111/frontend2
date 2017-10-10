@@ -121,7 +121,7 @@ export const IframeInstance = new Component({
          */
         sendOpenRequest:function (id) {
             if (id !== 'search-result'){
-                //向后台发送请求记录
+                // 向后台发送请求记录
                 TabService.onOpenTab(id).done((result) => {
                     if(result.success === 1){
                         // console.log("post open record success");
@@ -362,6 +362,8 @@ export const IframeInstance = new Component({
             //自动打开的标签由系统设置的bi/日历 和 最后一次系统关闭时未关闭的标签两部分组成
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
+            let calendarConfig,biConfig;
+
             TabService.getOpeningTabs().then((result) => {
                 let tabs = {};
                 //将未关闭的标签id加入openingTabsList
@@ -379,7 +381,7 @@ export const IframeInstance = new Component({
                 }
 
                 if(result[1].succ === 1){
-                    let biConfig = result[1];
+                    biConfig = result[1];
                     //检测数据biConfig.data是否为两位数，如果不是（ng系统为1位数），给用户设置默认值10
                     if(biConfig.data !== "10" && biConfig.data !== "11" && biConfig.data !== "20" && biConfig.data !== "21"){
                         biConfig.data = "10";
@@ -391,18 +393,18 @@ export const IframeInstance = new Component({
                             url: window.config.sysConfig.bi_index
                         });
                     }
-                    window.config.sysConfig.logic_config.login_show_bi = biConfig.data.toString();
+                    window.config.sysConfig.logic_config.client_login_show_bi = biConfig.data.toString();
                 }else{
                     console.log("get tabs failed",result[1].err);
                 }
 
                 if(result[2].succ === 1){
-                    let calendarConfig = result[2];
+                    calendarConfig = result[2];
                     //检测数据calendarConfig.data是否为两位数，如果不是，给用户设置默认值20
                     if(calendarConfig.data !== "10" && calendarConfig.data !== "11" && calendarConfig.data !== "20" && calendarConfig.data !== "21"){
                         calendarConfig.data = "20";
                     }
-                    window.config.sysConfig.logic_config.login_show_calendar = calendarConfig.data.toString();
+                    window.config.sysConfig.logic_config.client_login_show_calendar = calendarConfig.data.toString();
                     if((calendarConfig.data && calendarConfig.data.toString() === "11")){
                         that.data.biCalendarList.unshift({
                             id: 'calendar',
@@ -415,6 +417,35 @@ export const IframeInstance = new Component({
                             name: '日历',
                             url: window.config.sysConfig.calendar_index
                         });
+                    }
+                }
+                //如果bi、calendar均未勾选，则参考后台bi、calendar自动开启设置
+                console.log(biConfig,calendarConfig);
+                if((biConfig.data === "10" || biConfig.data === "20") && (calendarConfig.data === "10" || calendarConfig.data === "20")){
+                    console.log('in');
+                    if(window.config.sysConfig.logic_config.login_show_bi === "1"){
+                        console.log('check bi')
+                        that.data.biCalendarList.push({
+                            id: 'bi',
+                            name: 'BI',
+                            url: window.config.sysConfig.bi_index
+                        });
+                    }
+                    if(window.config.sysConfig.logic_config.login_show_calendar === "1"){
+                        console.log('check calendar');
+                        if((calendarConfig.data && calendarConfig.data.toString() === "10")){
+                            that.data.biCalendarList.unshift({
+                                id: 'calendar',
+                                name: '日历',
+                                url: window.config.sysConfig.calendar_index
+                            });
+                        }else if((calendarConfig.data && calendarConfig.data.toString() === "20")){
+                            that.data.biCalendarList.push({
+                                id: 'calendar',
+                                name: '日历',
+                                url: window.config.sysConfig.calendar_index
+                            });
+                        }
                     }
                 }
                 that.actions.autoOpenTabs();
@@ -495,16 +526,6 @@ export const IframeInstance = new Component({
             }else{
                 this.el.find('.tabs div.item').css("width",singleWidth);
             }
-        },
-        /**
-         * 向子iframes发送信息
-         * @param info
-         */
-        sendMsgToIframes: function (info) {
-            PMAPI.sendToAllChildren({
-                type: PMENUM[info.typeName],
-                data: info
-            });
         },
         /**
          * 打开全局搜索界面或通过变更url更新全局搜索界面的内容
@@ -661,7 +682,7 @@ export const IframeInstance = new Component({
             event:'mouseleave',
             selector:'.view-save-group',
             callback:function () {
-                // this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
+                this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
             }
         },
     ],
@@ -709,10 +730,10 @@ export const IframeInstance = new Component({
             }
         });
 
-        Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:one_the_way_invalid', this.actions.sendMsgToIframes);
-        Mediator.on('socket:workflow_approve_msg', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:one_the_way_invalid', this.actions.sendMsgToIframes);
+        // Mediator.on('socket:workflow_approve_msg', this.actions.sendMsgToIframes);
 
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签

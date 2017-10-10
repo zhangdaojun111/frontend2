@@ -106,7 +106,6 @@ let config = {
                 assortment: 'comment',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn:'',
-                filter: [],
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,

@@ -12,6 +12,11 @@
             margin-bottom: 30px;
         }
     }
+    .hide{
+        visibility: hidden;
+        height: 0;
+        overflow: hidden;
+    }
 }
 #app-workflow {
     .workflow-foot .workflow-box{
@@ -23,7 +28,9 @@
         bottom: 0px;
         width: 100%;
         justify-content: flex-end;
-        background: #fff;
+        background: #f2f2f2;
+        z-index: 1;
+        padding-top: 12px;
         div{
             background: #0088ff;
             width: 91px;
@@ -32,7 +39,7 @@
             border-radius: 4px;
             box-shadow: none;
             color: #fff;
-            margin-right: 9px;
+            margin-right: 35px;
             line-height: 30px;
             cursor: pointer;
         }
@@ -52,6 +59,10 @@
             float: left;
             margin-right: 5px;
         }
+    }
+    .addPrint{
+        margin-top: 1px;
+        margin-right: 28px;
     }
     .down{
         position: absolute;
