@@ -281,7 +281,7 @@
     }
 
     //tabs
-    #form-paging-tabs-control{
+    #form-paging-tabs-control,#tabs{
         ul {
             display: block;
             padding-top: 10px;
@@ -304,7 +304,9 @@
                 margin: 0;
 
                 a {
+                    outline-style:none;
                     color: #000000;
+                    cursor: pointer;
                 }
             }
         }

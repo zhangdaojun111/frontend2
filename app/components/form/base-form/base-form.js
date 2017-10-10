@@ -1770,8 +1770,8 @@ let config = {
         }
 
         //tabs
-        this.el.find('#form-paging-tabs-control ul li:first').addClass('tabs-active');
-        this.el.find('#form-paging-tabs-control ul li').on('click',function () {
+        this.el.find('#tabs ul li:first').addClass('tabs-active');
+        this.el.find('#tabs ul li').on('click',function () {
             $(this).addClass('tabs-active');
             $(this).siblings().removeClass('tabs-active');
         });
