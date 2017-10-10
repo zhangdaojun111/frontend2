@@ -22,6 +22,7 @@ let config = {
                     fields = table.count_fields.map(item => {
                         return {value: JSON.stringify(item), name: item.name}
                     });
+                    this.formItems['countColumn'].data.name = this.componentId;
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
                 } else {
