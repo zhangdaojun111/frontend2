@@ -101,6 +101,10 @@ export const progressConfig = {
         },
         update:function({fileId:i,progress:n}) {
             this.el.find('#'+i).find('.progress-liquid').css('width',n+'%').text(n+'%');
+            if(n == 100){
+                this.el.find('#'+i).find('.cancel-upload').css('display','none');
+                this.el.find('#'+i).find('.post-upload-process').css('display','inline-block');
+            }
         },
         finish:function (i) {
             this.el.find('#'+i).find('.cancel-upload').remove();

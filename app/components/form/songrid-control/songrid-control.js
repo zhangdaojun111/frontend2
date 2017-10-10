@@ -8,6 +8,7 @@ import Component from '../../../lib/component'
 import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import './songridControl.scss'
 import template from './songrid-control.html';
+import Mediator from '../../../lib/mediator';
 
 let config={
     template:template,
@@ -45,6 +46,11 @@ let config={
         }
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.songGrid'));
+        Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
+            if(res == this.data["value"]){
+                this.events.emitDataIfInline(this.data);
+            }
+        })
     },
     beforeDestory(){
         this.el.off();

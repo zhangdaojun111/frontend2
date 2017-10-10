@@ -1,4 +1,4 @@
-/**
+﻿/**
  *@author yudeping
  *表单主要逻辑
  */
@@ -106,10 +106,12 @@ let config = {
                         let dinput_type = newDataFromSongrid[songridDfield]["dinput_type"] || "";
                         let options = [{value: val, label: val}];
                         if (FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
-                            console.log(1111);
                             let options = [{value: val, label: val}];
                             this.data.childComponent[songridDfield].data["options"] = this.data.data[songridDfield]["options"] = options;
                         }
+                        console.log('子表填充附表');
+                        console.log(songridDfield);
+                        console.log(val);
                         this.actions.setFormValue(songridDfield, val);
                         this.actions.triggerSingleControl(songridDfield);
                     }
@@ -125,12 +127,12 @@ let config = {
         //主动触发指定字段的所有事件
         triggerSingleControl(key) {
             let val = this.data.data[key]["value"];
-            if(val != "" || !$.isEmptyObject(val)) {
-                if($.isArray(val)){
-                    if(val.length != 0){
+            if (val != "" || !$.isEmptyObject(val)) {
+                if ($.isArray(val)) {
+                    if (val.length != 0) {
                         this.actions.checkValue(this.data.data[key]);
                     }
-                }else{
+                } else {
                     this.actions.checkValue(this.data.data[key]);
                 }
             }
@@ -140,9 +142,10 @@ let config = {
         async setCountData() {
             let res = await FormService.getCountData({
                 //传给后台当前表单所有控件的值
-                data: this.actions.createFormValue(this.data.data),
+                data: JSON.stringify(this.actions.createFormValue(this.data.data)),
                 //传子表id
-                child_table_id: this.data.sonTableId
+                child_table_id: this.data.sonTableId,
+                table_id: this.data.tableId
             });
             //给统计赋值
             for (let d in res["data"]) {
@@ -181,7 +184,7 @@ let config = {
 
         //创建cache数据
         //@param formData原始表单数据,val当前表单数据,isNew 是否是cacheNew
-        createCacheData(formData, val, isNew, com) {
+        createCacheData(formData, val, isNew) {
             let obj = {};
             for (let key in formData) {
                 //自增编号old_cache置为空
@@ -367,6 +370,7 @@ let config = {
                     }
                 }
             }
+            //子表必填
             for (let d in allData) {
                 if (allData[d].type == 'songrid' && allData[d].required && allData[d].total == 0) {
                     error = true;
@@ -533,6 +537,7 @@ let config = {
             return data;
         },
 
+        //为控件赋值前检验
         set_value_for_form(result, f) {
             let data = this.data.data[f];
             if (typeof result === 'string') {
@@ -879,6 +884,11 @@ let config = {
             }
         },
 
+        //多字段统计提前修改myUseFields
+        myUseFieldsofcountFunc(){
+            this.data.myUseFields = JSON.parse(JSON.stringify(this.data['use_fields']))
+        },
+
         //统计功能
         async countFunc(dfield) {
             for (let key in this.data['use_fields']) {
@@ -893,7 +903,45 @@ let config = {
                     if (this.data['use_fields'][key].sort().toString() == data.sort().toString()) {
                         let formValue = this.actions.createFormValue(this.data.data);
                         let res = await FormService.getCountData({data: JSON.stringify(formValue)})
-                        //给统计赋值
+
+                        // if(res.hasOwnProperty('verify')){
+                        //     if(res.verify == 1){
+                        //         FormService.isCannotSub = false;
+                        //         for(let d in res["data"]){
+                        //             this.data.data[dfield]['regErrorMsg'] = '';
+                        //             this.actions.setFormValue(d,res["data"][d]);
+                        //         }
+                        //     }
+                        //     else{
+                        //         this.data.data[dfield]['regErrorMsg'] = '您还没有输入正确的证件号码';
+                        //         FormService.isCannotSub = true;
+                        //         for(let d in res["data"]){
+                        //             this.actions.setFormValue(d,'');
+                        //         }
+                        //     }
+                        // }
+                        // else{
+                        //     for(let d in res["data"]){
+                        //         if(FormService.isRefreshSongrid == true){
+                        //             this.actions.setFormValue(d,res["data"][d]);
+                        //         }
+                        //         else{
+                        //             for(let i in this.data.data){
+                        //                 if(this.data.data[i].dfield == d){
+                        //                     for(let j in this.data.data){
+                        //                         if(this.data.data[i].field_content.count_table && this.data.data[j].value == this.data.data[i].field_content.count_table && this.data.data[j].type != "hidden"){
+                        //                             FormService.isRefreshSongrid = true;
+                        //                             return;
+                        //                         }
+                        //                     }
+                        //                 }
+                        //             }
+                        //             this.actions.setFormValue(d,res["data"][d]);
+                        //         }
+                        //     }
+                        // }
+
+                        // 给统计赋值
                         for (let d in res["data"]) {
                             this.actions.setFormValue(d, res["data"][d]);
                         }
@@ -940,7 +988,7 @@ let config = {
         //赋值
         setFormValue(dfield, value) {
             let data = this.data.data[dfield];
-            if (data  && this.data.childComponent[dfield]) {
+            if (data && this.data.childComponent[dfield]) {
                 let childComponet = this.data.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
                 childComponet.reload();
@@ -950,8 +998,8 @@ let config = {
         async setAboutData(id, value) {
             let res = await FormService.getAboutData({buildin_field_id: id, buildin_mongo_id: value});
             for (let k in res["data"]) {
-                //如果是周期规则
                 let data = this.data.data;
+                //如果是周期规则
                 if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
                     if (res["data"][k]["-1"]) {
                         this.actions.setFormValue.bind(this)(k, res["data"][k]["-1"]);
@@ -972,6 +1020,22 @@ let config = {
             }
             this.data.childComponent[dfield].reload();
         },
+
+        //移除其它字段隐藏的字段信息
+        checkOhterField(data, obj_new, obj_old){
+            let delKey = [];
+            for (let index in this.data.data) {
+                if (this.data.data[index]['is_other_field']) {
+                    delKey.push(this.data.data[index]['dfield']);
+                }
+            }
+            for (let obj of delKey) {
+                delete data[obj];
+                delete obj_new[obj];
+                delete obj_old[obj];
+            }
+        },
+
         //密码框回显
         addEnrypt(data) {
             let value = this.actions.md5(data.newItems);
@@ -995,6 +1059,9 @@ let config = {
             let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
             let obj_old = this.actions.createCacheData(formDataOld, data, false, this);
             this.actions.changeValueForChildTable(data);
+            if (this.data.hasOtherFields == 0) {
+                this.actions.checkOhterField(data, obj_new, obj_old);
+            }
             let json = {
                 data: JSON.stringify(data),
                 cache_new: JSON.stringify(obj_new),
@@ -1105,7 +1172,7 @@ let config = {
             } else {
                 json["real_id"] = this.data.realId;
             }
-            if (this.data.tempId){
+            if (this.data.tempId) {
                 json["temp_id"] = this.data.tempId;
             }
             return json;
@@ -1225,6 +1292,7 @@ let config = {
                 this.actions.validDefault(data, data['value']);
             }
             //统计功能
+            this.actions.myUseFieldsofcountFunc();
             this.actions.countFunc(data.dfield);
             //改变选择框的选项
             if (data['linkage'] != {}) {
@@ -1268,8 +1336,8 @@ let config = {
             if (data.required) {
                 this.actions.requiredChange(this.data.childComponent[data.dfield]);
             }
-            if(this.data["frontend_cal_parent_2_child"]){
-                window.top.frontendParentFormValue[this.data.tableId]=this.actions.createFormValue(this.data.data);
+            if (this.data["frontend_cal_parent_2_child"]) {
+                window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
             }
         },
         //添加按钮组
@@ -1346,9 +1414,33 @@ let config = {
                 },
                 emitOpenCount: (data) => {
                     this.actions.openCount(data);
+                },
+                emitDataIfInline: (data) => {
+                    this.actions.emitDataIfInline(data);
                 }
             }
             return actions;
+        },
+        //内联子表刷新事件
+        emitDataIfInline(data){
+            this.data.can_not_open_form = data.can_not_open_form;
+            let type = data["type"];
+            let isView = data["is_view"];
+            if (type == 'popup') {
+                this.data.sonTableId = data["value"];
+                if (isView == '0') {
+                    this.data.viewMode = 'normal';
+                } else {
+                    this.data.viewMode = 'viewFromSongrid';
+                }
+            } else {
+                this.data.sonTableId = data["value"];
+                if (isView == '0') {
+                    this.actions.setCountData();
+                }
+            }
+            //保存父表数据
+            window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
         },
         //打开统计穿透
         openCount(data) {
@@ -1408,8 +1500,8 @@ let config = {
                 height: 600,
                 title: `选择器`,
                 modal: true
-            },{
-                data:data
+            }, {
+                data: data
             }).then((res) => {
                 if (res.value) {
                     _this.actions.setFormValue(data.dfield, res.value, res.label);
@@ -1581,7 +1673,7 @@ let config = {
                     data[key]['width'] = single.data('width') + 'px';
                 } else {
 
-                      data[key]['width'] = '240px';
+                    data[key]['width'] = '240px';
                 }
                 //数据填充后，根据修改条件对不同框进行只读操作
                 setTimeout(() => {
@@ -1748,7 +1840,7 @@ let config = {
     },
     afterRender() {
         this.actions.createFormControl();
-        if(this.data.is_view == 1){
+        if (this.data.is_view == 1) {
             this.actions.checkCustomTable();
         }
         this.actions.triggerControl();
@@ -1773,26 +1865,28 @@ class BaseForm extends Component {
     constructor(formData) {
         config.template = formData.template;
         //存父子表关系
-        if(!window.top.frontendRelation){
-            window.top.frontendRelation={};
+        if (!window.top.frontendRelation) {
+            window.top.frontendRelation = {};
         }
-        if(!window.top.frontendParentNewData){
-            window.top.frontendParentNewData={};
+        if (!window.top.frontendParentNewData) {
+            window.top.frontendParentNewData = {};
         }
-        if(!window.top.isSonGridDataNeedParentTepmId){
-            window.top.isSonGridDataNeedParentTepmId='';
+        if (!window.top.isSonGridDataNeedParentTepmId) {
+            window.top.isSonGridDataNeedParentTepmId = '';
         }
-        if(!window.top.idsInChildTableToParent){
-            window.top.idsInChildTableToParent={};
+        if (!window.top.idsInChildTableToParent) {
+            window.top.idsInChildTableToParent = {};
         }
-        if(!window.top.frontendParentFormValue){
-            window.top.frontendParentFormValue={};
+        if (!window.top.frontendParentFormValue) {
+            window.top.frontendParentFormValue = {};
         }
         window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
         //存父表的newData
         window.top.frontendParentNewData[formData.data.tableId] = formData.data.data;
-        window.top.isSonGridDataNeedParentTepmId=formData.data.data['temp_id']['value'] || '';
+        window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value'] || '';
         super(config, formData.data);
+        console.log('表单数据');
+        console.log(this.data);
     }
 
 }

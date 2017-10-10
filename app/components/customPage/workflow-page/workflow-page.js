@@ -118,8 +118,8 @@ let config = {
                     floatingFilterComponent: this.floatingFilterCom.actions.createFilter(s.type , s.field, this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true},
                     enableRowGroup: true,
-                    suppressSorting: s.type == 'none'?true : false,
-                    sortField: s.type == 'none'?'' : s.field,
+                    suppressSorting: false,
+                    sortField: col["field"],
                     suppressResize: false,
                     suppressMovable: false
                 }
@@ -535,7 +535,7 @@ let config = {
                 }
                 if( this.data.filterParam.filter.length == 0 ){
                     let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
-                    this.el.find('.btn-nav-con').append(dom);
+                    this.el.find('.btn-nav').append(dom);
                     setTimeout(()=>{
                         this.el.find('.query-tips').css('display','none');
                     },5000)
