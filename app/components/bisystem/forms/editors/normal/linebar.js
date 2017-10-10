@@ -65,6 +65,7 @@ let config = {
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
                 } else {
+                    this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
                 };
 
