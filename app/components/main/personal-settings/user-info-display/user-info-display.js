@@ -80,7 +80,7 @@ let css = `
     position: relative;
 }
 input.uid-department-info,input.uid-position-info,input.uid-email-info,input.uid-phone-info{
-    width:180px;
+    width:200px;
     height: 25px;
     overflow: hidden;
     white-space:nowrap;
