@@ -105,6 +105,8 @@ let config = {
                     customSize: true,
                 },
             ).then(data => {
+                console.log(data);
+                Mediator.emit('Calendar: tool', {toolMethod: 'refresh', type: 'closeSetting'})
             });
         },
 

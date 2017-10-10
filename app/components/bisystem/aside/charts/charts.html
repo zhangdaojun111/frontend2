@@ -2,6 +2,8 @@
     <p>
         {{#if isIcon}}
         <img width="16" height="16" src="{{imgUrl}}?file_id={{icon}}">
+        {{else}}
+        <i class="aside-{{assortment}}-icon"></i>
         {{/if}}
         <span class="item">{{name}}</span>
         {{#if userSelf}}

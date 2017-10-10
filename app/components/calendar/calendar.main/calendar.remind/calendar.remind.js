@@ -31,6 +31,8 @@ let css = `
     width: 96%;
     padding: 0px 5px;
     height: 30px;
+    overflow:hidden;
+    text-overflow:ellipsis
 }
 .start, .end {
     width: 46.7%;

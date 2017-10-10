@@ -172,11 +172,8 @@ let config = {
          * 打开个人信息设置页面
          */
         showInfoSet:function () {
-            // msgbox.showLoadingSelf();        //测试使用
             PersonSetting.show();
-            // setTimeout(function () {
-            //     msgbox.hideLoadingSelf();
-            // },5000)
+            // PersonSetting.showUserInfo({'name':'赵俨'})
         },
         /**
          * 设置用户头像
@@ -229,7 +226,6 @@ let config = {
          * 修改后重置用户头像
          */
         resetAvatar:function(){
-            console.log("do reset")
             let $img = this.el.find("img.set-info");
             if($img.length === 0){
                 $img = $("<img>").addClass("set-info");
