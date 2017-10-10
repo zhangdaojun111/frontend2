@@ -73,8 +73,14 @@ let config = {
          */
         addCheckbox:function () {
             let $parent = this.el.find('.sortable-box');
-            let $ul = $("<li class='isShow-calendar sort-item' title='拖动调整顺序'><label class='custom-checkbox' style='display: inline'><input class='calendar-Show' title='点击设置此功能' type='checkbox'></label><span>登录时自动开启日历</span>" +
-                "<i class='drag-icon icon-framework-drag'></i></li>");
+            let $ul = $(`
+                <li class='isShow-calendar sort-item' title='拖动调整顺序'>
+                    <label class='custom-checkbox' style='display: inline'>
+                        <input class='calendar-Show' title='点击设置此功能' type='checkbox'>
+                    </label>
+                    <span>登录时自动开启日历</span>
+                    <i class='drag-icon icon-framework-drag'></i>
+                </li>`);
             if(this.data.calendarSort === "1"){
                 $parent.append($ul);
             }else{

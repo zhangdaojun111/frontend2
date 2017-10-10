@@ -226,7 +226,6 @@ let config = {
          * 修改后重置用户头像
          */
         resetAvatar:function(){
-            console.log("do reset")
             let $img = this.el.find("img.set-info");
             if($img.length === 0){
                 $img = $("<img>").addClass("set-info");
