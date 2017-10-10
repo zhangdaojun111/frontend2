@@ -884,6 +884,11 @@ let config = {
             }
         },
 
+        //多字段统计提前修改myUseFields
+        myUseFieldsofcountFunc(){
+            this.data.myUseFields = JSON.parse(JSON.stringify(this.data['use_fields']))
+        },
+
         //统计功能
         async countFunc(dfield) {
             for (let key in this.data['use_fields']) {
@@ -1287,6 +1292,7 @@ let config = {
                 this.actions.validDefault(data, data['value']);
             }
             //统计功能
+            this.actions.myUseFieldsofcountFunc();
             this.actions.countFunc(data.dfield);
             //改变选择框的选项
             if (data['linkage'] != {}) {
