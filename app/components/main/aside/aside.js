@@ -172,8 +172,8 @@ let config = {
          * 打开个人信息设置页面
          */
         showInfoSet:function () {
-            // PersonSetting.show();
-            PersonSetting.showUserInfo({'name':'赵俨'})
+            PersonSetting.show();
+            // PersonSetting.showUserInfo({'name':'赵俨'})
         },
         /**
          * 设置用户头像
