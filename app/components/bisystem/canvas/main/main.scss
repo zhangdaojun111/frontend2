@@ -32,7 +32,7 @@ $print-height: 1465px;
                 //line-height: 50px;
                 right: 0;
                 a {
-                    display: inline-block;
+                    float:right;
                     text-align: left;
                     text-decoration: none;
                     color: #999999;
@@ -41,7 +41,7 @@ $print-height: 1465px;
                     margin: 17px 15px;
                     i {
                         vertical-align: middle;
-                        padding-left: 4px;
+                        margin-right: 4px;
                     }
                 }
             }
