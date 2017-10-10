@@ -1,4 +1,3 @@
-
 .detail-form {
     //display: flex !important;
     //justify-content: center;
@@ -279,5 +278,61 @@
         -webkit-box-shadow: none;
         box-shadow: none;
         cursor: pointer;
+    }
+
+    //tabs
+    #form-paging-tabs-control{
+        width: 1200px;
+        margin: 0 auto;
+        ul {
+            padding: 0;
+            margin: 0;
+            background: none;
+            border: none;
+            li {
+                display: block;
+                float: left;
+                font-size: 12px;
+                background-color: #ffffff;
+                line-height: 30px;
+                position: relative;
+                top:2px;
+                width: 55px;
+                text-align: center;
+                border-radius: 4px 4px 0 0;
+                margin: 0px auto;
+                outline-style:none;
+                border: 1px solid #d6d6d6;
+                border-bottom: 0!important;
+                a {
+                    outline-style:none;
+                    color: #000000;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .ui-tabview-panels {
+            border: 1px solid #ccc;
+            overflow: auto;
+            padding-top: 50px;
+            min-height: 430px;
+        }
+         .ui-tabs-anchor {
+            float: none;
+        }
+        .ui-tabs .ui-tabs-nav {
+            margin: 0;
+            padding: 0;
+        }
+       .ui-state-active {
+           // border: none;
+            background: #F2F2F2;
+        }
+       .ui-tabs-panel {
+           padding: 0;
+           display: table;
+           margin: 0 auto;
+        }
     }
 }

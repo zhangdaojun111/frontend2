@@ -1202,6 +1202,9 @@ let config = {
                     if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                         this.actions.checkCorrespondence( true );
                     }
+                    if(this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild'){
+                        Mediator.publish('form:songGridRefresh:'+this.data.tableId,this.data.tableId);
+                    }
                 },time )
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )

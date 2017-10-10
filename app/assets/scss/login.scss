@@ -137,7 +137,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                     .remember-pw-group {
                         width: 80px;
                         height: 20px;
-                        margin-top: 5px;
+                        margin-top: 12px;
                         margin-left: 27px;
                         color: rgba(72, 72, 72, 0.73);
 
@@ -155,12 +155,12 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                         width: 100%;
                         height: 20px;
                         line-height: 20px;
-                        margin-top: 5px;
+                        margin-top: 3px;
                         color: red;
                         text-align: center;
                     }
                     .panel-bottom {
-                        height: 50px;
+                        height: 54px;
                         border-top: solid 1px rgba(212, 212, 212, 0.24);
                         .find-pw-group {
                             margin-left: 30px;
@@ -190,12 +190,14 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                             cursor: pointer;
                             width: 90px;
                             height: 30px;
+                            box-sizing: border-box;
+                            padding: 1px 6px;
                             color: white;
                             background-color: #686868;
                             border-radius: 5px;
                             border: 0;
-                            margin-left: 80px;
-                            margin-top: 10px;
+                            margin-left: 86px;
+                            margin-top: 12px;
                         }
                     }
                 }
