@@ -1,24 +1,46 @@
 .form-entry {
-    margin: 20px;
-    padding: 20px;
+    padding-top: 20px;
     background: #ffffff;
-    h3 {
-        font-size: 16px;
-        color: #676a6c;
-        padding: 15px 15px 10px 0;
-        margin-bottom: 15px;
-        border-bottom: solid 1px #e7eaec;
+    > span {
+        display: block;
+        height: 16px;
+        line-height: 16px;
+        padding: 0 0 16px 16px;
+        color: #444444;
+        i {
+            vertical-align: bottom;
+            margin-right: 16px;
+        }
     }
-    a {
-        float: left;
-        width: 150px;
-        height: 100px;
-        padding-top: 50px;
-        text-align: center;
-        color: #676a6c;
-        font-size: 18px;
-        margin: 10px;
-        text-decoration: none;
-        border: solid 1px #e7eaec;
+    .clearfix {
+        background: #f5f4f4;
+        padding-top: 10px;
+        a {
+            display: inline-block;
+            width: 224px;
+            height: 224px;
+            background: #FFFFFF;
+            line-height: 200px;
+            color: #676a6c;
+            text-align: center;
+            text-decoration: none;
+            margin: 10px 0 0 10px;
+            transition: all .2s;
+            &:hover {
+                background: #f9f8f8;
+                transition: all .2s;
+            }
+            i {
+                width: 96px;
+                height: 96px;
+                vertical-align: middle;
+            }
+            span {
+                display: block;
+                font-size: 16px;
+                line-height: 0;
+                font-weight: 400;
+            }
+        }
     }
 }

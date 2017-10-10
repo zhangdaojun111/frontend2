@@ -1,7 +1,7 @@
 import {Base} from '../base';
 import template from './nine.grid.html';
 
-import {chartName,theme,icon,button} from '../form.chart.common';
+import {chartName,theme,icon,button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -14,6 +14,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
+           this.formItems['countColumn'].el.hide();
            this.formItems['type'].trigger('onChange',this.data.value);
 
            // 获取数据来源
@@ -75,7 +76,7 @@ let config = {
             let chart = {
                 assortment: 'nineGrid',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn:'',
+                countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -105,6 +106,7 @@ let config = {
         fillChart(chart) {
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
+            this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
             this.formItems['type'].setValue(chart['type']);
@@ -129,8 +131,26 @@ let config = {
                         type: 'required'
                     }
                 ],
-                type: 'autocomplete'
+                type: 'autocomplete',
+                events: {
+                    onSelect(data) {
+                        let table = data ? data : null;
+                        if (table) {
+                            if (table.count_fields.length > 0) {
+                                let fields =[];
+                                fields = table.count_fields.map(item => {
+                                    return {value: JSON.stringify(item), name: item.name}
+                                });
+                                this.formItems['countColumn'].setList(fields);
+                                this.formItems['countColumn'].el.show();
+                            } else {
+                                this.formItems['countColumn'].el.hide();
+                            };
+                        };
+                    }
+                }
             },
+            countColumn,
             theme,
             icon,
             {
