@@ -73,7 +73,7 @@ let config = {
                     let file = files[i];
                     let fileItem = fileArray[i];
                     browserMD5File(file, (err,md5)=>{
-                        if(this.data.queue){
+                        if(this.data.queue ){
                             for(let item of this.data.queue){
                                 if(file.name == item.file.name && md5 == item.md5){
                                     msgBox.showTips('文件已上传');
@@ -199,8 +199,18 @@ let config = {
                         if (event.event == 'delete') {
                             ele.remove();
                             this.data.queueItemEles.splice(this.data.queueItemEles.indexOf(ele),1);
-                            if (event.data != undefined) {
-                                this.data.queue.splice(this.data.queue.indexOf(event.data),1);
+                            if (event.data != undefined){
+                                let i = 0;
+                                let l = this.data.queue.length;
+                                for(; i < l; i++){
+                                    let item = this.data.queue[i];
+                                    if(item.file.name == event.data.file.name && item.md5 == event.data.md5){
+                                        break;
+                                    }
+                                }
+                                if(i < l){
+                                    this.data.queue.splice(i,1);
+                                }
                                 this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
                                 this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                                 if (this.data['thumbnailListComponent']) {
@@ -217,7 +227,6 @@ let config = {
                             }
                         }
                         if (event.event == 'finished') {
-                            this.data.queue.push(event.data);
                             this.data.value = this.data.value == '' ? [] : this.data.value;
                             this.data.value.push(event.data.fileId);
                             this.data.queue.push(event.data);
