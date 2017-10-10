@@ -17,7 +17,7 @@ let config = {
     data:{
         frontendSort:true,      //排序方式（前端/后端）
         total:0,
-        row:200,
+        row:100,
     },
     actions: {
         /**
@@ -33,13 +33,27 @@ let config = {
             });
             this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
-                console.log(data);
+                this.data.total = data.total;
+                this.actions.setSortModel();
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
                 });
                 this.pagination.actions.setPagination(data.total, param.currentPage);
                 this.hideLoading();
             });
+        },
+        setSortModel:function () {
+            if(this.data.total > this.data.row){
+                this.data.frontendSort = false;
+                console.log('启用后端排序');
+            }else{
+                this.data.frontendSort = true;
+                console.log('启用前端排序');
+            }
+            this.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
+            this.gridOptions["enableSorting"] = this.data.frontendSort;
+            this.gridOptions["enableFilter"] = this.data.frontendSort;
+            this.gridOptions["EnableServerSideFilter"] = !this.data.frontendSort;
         },
         /**
          * 将选中信息标记为已读状态
