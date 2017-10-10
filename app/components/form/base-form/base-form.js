@@ -1769,13 +1769,6 @@ let config = {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
 
-        //tabs
-        this.el.find('#tabs ul li:first').addClass('tabs-active');
-        this.el.find('#tabs ul li').on('click',function () {
-            $(this).addClass('tabs-active');
-            $(this).siblings().removeClass('tabs-active');
-        });
-
     },
     beforeDestory() {
         this.el.off();

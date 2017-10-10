@@ -281,7 +281,7 @@
     }
 
     //tabs
-    #form-paging-tabs-control,#tabs{
+    #form-paging-tabs-control{
         ul {
             display: block;
             padding-top: 10px;
@@ -302,7 +302,7 @@
                 border-radius: 4px 4px 0 0;
                 position: relative;
                 margin: 0;
-
+                outline-style:none;
                 a {
                     outline-style:none;
                     color: #000000;
@@ -316,9 +316,8 @@
         .tabs-active {
             background-color: #F2F2F2;
         }
-        .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
-            float: none !important;
-            padding: 0 !important;
+         .ui-tabs-anchor {
+            float: none;
         }
         .ui-tabs .ui-tabs-nav {
             margin: 0;
@@ -329,8 +328,11 @@
             background: none;
         }
         .ui-button.ui-state-active:hover, .ui-button:active, .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active {
-            border: none !important;
+            border: none;
             background: #F2F2F2;
+        }
+       .ui-tabs-panel {
+            padding: 0;
         }
 
 
