@@ -46,7 +46,7 @@ class Uploader {
                     that.fileList[name][that.code++] = {
                         filename: file.name,
                         file: file,
-                        state: 'on'
+                        state: 'ready'
                     };
                 }
             // }
@@ -236,6 +236,9 @@ class Uploader {
             onError({fileId:that.getFileId(name,code),msg:msg})
         };
         let fileItem = this.fileList[name][code];
+        if(fileItem['state']=='ready'){
+            fileItem['state']='on';
+        }
         if(fileItem['state']!='on'){
             if(fileItem['state']=='pre-delete'){
                 delete this.fileList[name][code];
