@@ -296,7 +296,7 @@
                 background-color: #ffffff;
                 line-height: 30px;
                 position: relative;
-                top:1px;
+                top:2px;
                 width: 55px;
                 text-align: center;
                 border-radius: 4px 4px 0 0;
@@ -325,8 +325,8 @@
             margin: 0;
             padding: 0;
         }
-        .ui-button.ui-state-active:hover, .ui-button:active, .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active {
-            border: none;
+       .ui-state-active {
+           // border: none;
             background: #F2F2F2;
         }
        .ui-tabs-panel {
