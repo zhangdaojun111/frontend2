@@ -140,9 +140,10 @@ let config = {
         async setCountData() {
             let res = await FormService.getCountData({
                 //传给后台当前表单所有控件的值
-                data: this.actions.createFormValue(this.data.data),
+                data: JSON.stringify(this.actions.createFormValue(this.data.data)),
                 //传子表id
-                child_table_id: this.data.sonTableId
+                child_table_id: this.data.sonTableId,
+                table_id:this.data.tableId
             });
             //给统计赋值
             for (let d in res["data"]) {
@@ -1365,9 +1366,33 @@ let config = {
                 },
                 emitOpenCount: (data) => {
                     this.actions.openCount(data);
+                },
+                emitDataIfInline:(data)=>{
+                    this.actions.emitDataIfInline(data);
                 }
             }
             return actions;
+        },
+        //内联子表刷新事件
+        emitDataIfInline(data){
+            this.data.can_not_open_form=data.can_not_open_form;
+            let type = data["type"];
+            let isView = data["is_view"];
+            if(type == 'popup'){
+                this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    this.data.viewMode = 'normal';
+                }else{
+                    this.data.viewMode = 'viewFromSongrid';
+                }
+            }else{
+                this.data.sonTableId = data["value"];
+                if(isView == '0'){
+                    this.actions.setCountData();
+                }
+            }
+            //保存父表数据
+            window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
         },
         //打开统计穿透
         openCount(data) {
