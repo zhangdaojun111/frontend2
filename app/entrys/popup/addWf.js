@@ -82,7 +82,7 @@ Mediator.publish('workflow:getKey', obj.key);
     }
 });
 Mediator.subscribe('workflow:getflows', (res) => {
-    if (obj.btnType === 'view') {
+    if (obj.btnType === 'view' && is_view != 0) {
         $('#toEdit').show();
         $('#addFollower').hide();
     }else if(obj.btnType==='none'){
@@ -139,6 +139,7 @@ Mediator.subscribe('workflow:focus-users', (res) => {
 })
 Mediator.subscribe('workflow:submit', (res) => {
     let formData = FormEntrys.getFormValue(obj.table_id,true);
+    console.log(obj);
     if (formData.error) {
         msgBox.alert(`${formData.errorMessage}`);
     } else {
@@ -158,8 +159,8 @@ Mediator.subscribe('workflow:submit', (res) => {
             return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
-                msgBox.alert(`${res.error}`);
-                PMAPI.sendToParent({
+                msgBox.showTips(`保存成功`);
+                PMAPI.sendToRealParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
                     data: {
@@ -179,5 +180,7 @@ Mediator.subscribe('workflow:changeToEdit',(res)=>{
         $("#add-wf").find('.J_hide').removeClass('hide');
         $("#add-wf").find('#print').removeClass('addPrint');
     }
+    // $("#add-wf").find('#print').removeClass('addPrint');
+    is_view = 0;
     FormEntrys.changeToEdit(res);
 })
