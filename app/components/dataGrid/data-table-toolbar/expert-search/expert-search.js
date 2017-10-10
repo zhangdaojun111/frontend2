@@ -278,7 +278,7 @@ let config = {
                                 searchName = item.name;
                                 appendChecked = false;
                             }
-                        })
+                        });
                         PMAPI.closeIframeDialog(window.config.key, {
                             type:'temporaryQuery',
                             appendChecked:appendChecked,

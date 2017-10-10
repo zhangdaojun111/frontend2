@@ -2312,7 +2312,6 @@ let config = {
             }
             this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
             this.el.find('.dataGrid-commonQuery-select').val('临时高级查询');
-
         },
         //删除数据
         delTableData: function (type) {
@@ -2510,6 +2509,9 @@ let config = {
                 res.rows.forEach((row) => {
                     this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
+            }
+            if(this.data.filterParam['common_filter_name'] == '临时高级查询'){
+                this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
             }
             if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
                 this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
