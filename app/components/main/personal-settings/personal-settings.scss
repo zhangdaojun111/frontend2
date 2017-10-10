@@ -137,6 +137,7 @@ $sub_color: #0088ff;
                 margin-top: 10px;
                 line-height:50px;
                 input{
+                    height: 25px;
                     width: 230px;
                     background-color: transparent;
                     border: none;
@@ -150,7 +151,7 @@ $sub_color: #0088ff;
                 position: relative;
                 input{
                     height: 25px;
-                    width: 180px;
+                    width: 200px;
                     background-color: transparent;
                     border: none;
                     &:focus{
@@ -204,6 +205,8 @@ $sub_color: #0088ff;
                 right: 30px;
                 border: 0;
                 border-radius: 5px;
+                box-sizing: border-box;
+                padding: 1px 6px;
                 cursor: pointer;
             }
         }

@@ -130,8 +130,9 @@ let config = {
          */
         onPaginationChanged: function (data) {
             this.actions.loadData(data);
+
         },
-        onSortChanged:function () {
+        onSortChanged:function ($event) {
             this.agGrid.actions.refreshView();
         },
         /**
@@ -180,6 +181,7 @@ let config = {
         this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
+            onSortChanged: this.actions.onSortChanged,
             footerData:[]
         });
         this.agGrid.render(gridDom);
