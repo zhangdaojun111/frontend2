@@ -70,8 +70,36 @@
         .data-invalid {
 
         }
-
         @keyframes freshTip {
+            0% {
+                color: #0088ff;
+            }
+            16% {
+                color: #fff;
+            }
+            33% {
+                color: #0088ff;
+            }
+            49% {
+                color: #fff;
+            }
+            66% {
+                color: #0088ff;
+            }
+            82% {
+                color: #fff;
+            }
+            100% {
+                color: #0088ff;
+            }
+        }
+        .freshtip {
+            font-weight: normal;
+            margin-left: 10px;
+            animation: freshTip 4s;
+            animation-fill-mode: forwards;
+        }
+        @keyframes unfreshTip {
             0% {
                 color: #ff5400;
             }
@@ -94,7 +122,7 @@
                 color: #ff5400;
             }
         }
-        .freshtip {
+        .unfreshtip {
             font-weight: normal;
             margin-left: 10px;
             animation: freshTip 4s;
