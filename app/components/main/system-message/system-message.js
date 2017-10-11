@@ -36,6 +36,7 @@ let config = {
             });
             this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
+                console.log(data);
                 this.data.total = data.total;
                 this.actions.setSortModel();
                 this.agGrid.actions.setGridData({
@@ -48,10 +49,10 @@ let config = {
         setSortModel:function () {
             if(this.data.total > this.data.rows){
                 this.data.frontendSort = false;
-                console.log('启用后端排序');
+                // console.log('启用后端排序');
             }else{
                 this.data.frontendSort = true;
-                console.log('启用前端排序');
+                // console.log('启用前端排序');
             }
             this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
             this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
@@ -248,6 +249,7 @@ let config = {
         };
 
         dataTableService.getPreferences(tempData).then((result) => {
+            console.log(result);
             if(result.success === 1){
                 that.data.rows = result.pageSize.pageSize;
             }
