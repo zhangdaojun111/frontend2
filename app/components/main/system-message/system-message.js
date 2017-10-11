@@ -11,13 +11,16 @@ import {systemMessageService} from '../../../services/main/systemMessage';
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import msgbox from '../../../lib/msgbox';
 import {HTTP} from '../../../lib/http';
+import {dataTableService} from "../../../services/dataGrid/data-table.service"
 
 let config = {
     template: template,
     data:{
         frontendSort:true,      //排序方式（前端/后端）
         total:0,
-        row:100,
+        rows:100,
+        getDataList:{"sortOrder":-1,sortField:""},     //后端排序参数
+        tableId:'user-message'
     },
     actions: {
         /**
@@ -43,17 +46,15 @@ let config = {
             });
         },
         setSortModel:function () {
-            if(this.data.total > this.data.row){
+            if(this.data.total > this.data.rows){
                 this.data.frontendSort = false;
                 console.log('启用后端排序');
             }else{
                 this.data.frontendSort = true;
                 console.log('启用前端排序');
             }
-            this.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
-            this.gridOptions["enableSorting"] = this.data.frontendSort;
-            this.gridOptions["enableFilter"] = this.data.frontendSort;
-            this.gridOptions["EnableServerSideFilter"] = !this.data.frontendSort;
+            this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
+            this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
         },
         /**
          * 将选中信息标记为已读状态
@@ -149,11 +150,35 @@ let config = {
          * @param data
          */
         onPaginationChanged: function (data) {
+            data = _.defaultsDeep(data,this.data.getDataList);
             this.actions.loadData(data);
-
         },
         onSortChanged:function ($event) {
-            this.agGrid.actions.refreshView();
+            //分情况进行前端排序或后端排序
+            if(!this.data.frontendSort){
+                //后端排序
+                let data = this.agGrid.gridOptions.api.getSortModel()[0];
+                let sortPostData = {};
+                if( data && data.sort === "asc" ){
+                    this.data.getDataList.sortOrder = 1;
+                    this.data.getDataList.sortField = data.colId;
+                    sortPostData = {
+                        sortField: data.colId,
+                        sortOrder: this.data.getDataList.sortOrder
+                    }
+                }else if(data && data.sort === "desc"){
+                    this.data.getDataList.sortOrder = -1;
+                    this.data.getDataList.sortField = data.colId;
+                    sortPostData = {
+                        sortField: data.colId,
+                        sortOrder: this.data.getDataList.sortOrder
+                    }
+                }
+                this.actions.loadData(sortPostData);
+            }else{
+                //前端排序
+                this.agGrid.actions.refreshView();
+            }
         },
         /**
          * 选择信息查看详细内容，信息类型不同，采用不同方式展示
@@ -193,12 +218,6 @@ let config = {
                 // }
             }
         },
-        /**
-         * 根据数据量判断排序方式
-         */
-        getSortModel:function () {
-            // if()
-        }
     },
     afterRender: function () {
         let gridDom = this.el.find('.grid');
@@ -209,12 +228,22 @@ let config = {
             onCellClicked: that.actions.onCellClicked,
             onSortChanged: this.actions.onSortChanged,
             footerData:[]
-
         });
         this.agGrid.render(gridDom);
+        //请求页显示数量偏好
+        let tempData = {
+            actions:JSON.stringify(['pageSize']),
+            table_id:this.data.tableId
+        };
+
+        dataTableService.getPreferences(tempData).then((result) => {
+            console.log("sssssssssssssssssssssssssssssssssssssssssss",result);
+        });
+
         this.pagination = new dataPagination({
             page: 1,
-            rows: 100
+            rows: 100,
+            tableId:this.data.tableId
         });
         this.pagination.render(this.el.find('.pagination'));
         this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
