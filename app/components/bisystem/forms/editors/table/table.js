@@ -360,8 +360,7 @@ let config = {
         this.actions.init();
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
-        }
-
+        };
     }
 }
 

@@ -171,6 +171,13 @@ export class EchartsService {
         let secondMaxText = Math.max.apply(null, secondMaxTextYnum);
         let maxXTextNum = Math.max.apply(null, maxXnum);
 
+        //如果数据里面有柱状图，则y轴起始点从0开始
+        for(let y of yAxis){
+            if(y.type.type == 'bar'&& !cellOption['yHorizontal']&& firstMinYnum[0] >= 0){
+                linebarOption['yAxis'][0]['min'] = 0;
+                break;
+            }
+        };
 
         linebarOption['yAxis'][0]['min'] = firstMin;
         linebarOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
