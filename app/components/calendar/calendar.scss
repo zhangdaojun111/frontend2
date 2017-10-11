@@ -87,11 +87,13 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         .right-tool {
             height: 60px;
             float: right;
+            margin-right: 10px;
             .right-tool-btn {
                 display: flex;
                 cursor: pointer;
                 line-height: 16px;
-                margin-right: 20px;
+                margin-left: 30px;
+                color: rgb(102, 102, 102);
                 .right-tool-icon {
                     margin-right: 4px;
                 }

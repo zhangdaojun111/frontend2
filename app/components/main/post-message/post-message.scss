@@ -46,11 +46,11 @@
                 margin-right: 10px;
             }
             .users {
-                border-top: 1px solid #ddd;
                 height: 212px;
                 overflow: auto;
+                border-top: 1px solid #ddd;
                 .result,.triangle{
-                    display: none;
+                    display:none
                 }
             }
             .custom-radio {
@@ -99,6 +99,9 @@
             color: #fff;
             margin: 20px 0 0;
             width: 90px;
+            box-sizing: border-box;
+            padding: 1px 6px;
+            cursor: pointer;
         }
     }
 }

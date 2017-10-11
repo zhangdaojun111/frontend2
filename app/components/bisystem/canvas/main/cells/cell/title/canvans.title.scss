@@ -27,6 +27,9 @@
     .icon-group {
         position: absolute;
         right: 10px;
+        @media print {
+            display:none;
+        }
         a {
             display: inline-block;
             text-decoration: none;

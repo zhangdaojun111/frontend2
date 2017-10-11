@@ -1,3 +1,6 @@
+$print-width:1050px;
+$print-height: 1465px;
+
 .component-bi-canvas-main {
     width: 100%;
     height: 100%;
@@ -10,12 +13,12 @@
         >div{
             height: 100%;
         }
+
         &.clearfix {
             & {
                 background-color: #FFFFFF;
             }
             .nav-tabs {
-                width: calc(100% - 240px);
                 a {
                     color: #666666;
                     background: #FFFFFF;
@@ -29,19 +32,6 @@
                 height: 50px;
                 //line-height: 50px;
                 right: 0;
-                a {
-                    display: inline-block;
-                    text-align: left;
-                    text-decoration: none;
-                    color: #999999;
-                    cursor: pointer;
-                    outline: none;
-                    margin: 17px 18px;
-                    i {
-                        vertical-align: middle;
-                        padding-left: 4px;
-                    }
-                }
             }
         }
         &.manager {
@@ -74,7 +64,7 @@
                 min-width: 3000px;
                 background-color: #DDDDDD;
                 background-image: linear-gradient(rgba(255, 255, 255, 0.5) 50%, transparent 50%, transparent), linear-gradient(90deg, rgba(255, 255, 255, 0.5) 50%, transparent);
-                background-size: 1050px 2970px;
+                background-size: $print-width $print-height * 2;
             }
         }
     }
