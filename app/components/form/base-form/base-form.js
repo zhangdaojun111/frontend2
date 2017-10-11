@@ -36,6 +36,7 @@ import SettingPrint from '../setting-print/setting-print'
 import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
 import ContractControl from "../contract-control/contract-control";
+import '../../../../node_modules/jquery-ui/ui/widgets/tabs';
 let config = {
     template: '',
     data: {
@@ -140,6 +141,7 @@ let config = {
 
         //给子表统计赋值
         async setCountData() {
+            debugger
             let res = await FormService.getCountData({
                 //传给后台当前表单所有控件的值
                 data: JSON.stringify(this.actions.createFormValue(this.data.data)),
@@ -147,6 +149,7 @@ let config = {
                 child_table_id: this.data.sonTableId,
                 table_id: this.data.tableId
             });
+            console.log(res)
             //给统计赋值
             for (let d in res["data"]) {
                 this.actions.setFormValue(d, res["data"][d]);
@@ -973,6 +976,9 @@ let config = {
                         fData = fData.replace("T", " ");
                     }
                 }
+            }
+            if(formData.temp_id){
+                formData.real_id = '';
             }
             return formData;
         },
@@ -1809,6 +1815,9 @@ let config = {
                         break;
                 }
             }
+            $( function() {
+                $( "#form-paging-tabs-control" ).tabs();
+            } );
         },
 
         //改变人员信息表主岗选项
