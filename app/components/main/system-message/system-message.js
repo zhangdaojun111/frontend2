@@ -250,7 +250,7 @@ let config = {
 
         dataTableService.getPreferences(tempData).then((result) => {
             console.log(result);
-            if(result.success === 1){
+            if(result.success === 1 && result.pageSize !== null){
                 that.data.rows = result.pageSize.pageSize;
             }
             that.actions.initPagination();
