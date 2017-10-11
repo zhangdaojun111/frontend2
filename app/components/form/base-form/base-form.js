@@ -790,6 +790,9 @@ let config = {
                             }
                         }
                         this.data.data[f]["required"] = this.data.childComponent[f].data['required'] = (i == andData[f].length) ? 1 : 0;
+                        if (this.data.childComponent[f].data['required']) {
+                            this.data.childComponent[f].data['requiredClass'] = this.data.childComponent[f].data.value == '' ? 'required' : 'required2';
+                        }
                         this.data.childComponent[f].reload();
                     }
                 } else {
@@ -798,6 +801,9 @@ let config = {
                             continue;
                         }
                         this.data.data[dfield]["required"] = this.data.childComponent[dfield].data['required'] = (key == value) ? 1 : 0;
+                        if (this.data.childComponent[dfield].data['required']) {
+                            this.data.childComponent[dfield].data['requiredClass'] = this.data.childComponent[dfield].data.value == '' ? 'required' : 'required2';
+                        }
                         this.data.childComponent[dfield].reload();
                         if (key == value) {
                             arr.push(dfield);
@@ -823,9 +829,11 @@ let config = {
                         errorMessage: errorMsg
                     }
                 } else {
+                    this.actions.checkOhterField(formValue);
                     return formValue;
                 }
             } else {
+                this.actions.checkOhterField(formValue);
                 return formValue;
             }
         },
@@ -977,9 +985,6 @@ let config = {
                     }
                 }
             }
-            if(formData.temp_id){
-                formData.real_id = '';
-            }
             return formData;
         },
 
@@ -1036,9 +1041,15 @@ let config = {
                 }
             }
             for (let obj of delKey) {
-                delete data[obj];
-                delete obj_new[obj];
-                delete obj_old[obj];
+                if(data){
+                    delete data[obj];
+                }
+                if(obj_new){
+                    delete obj_new[obj];
+                }
+                if(obj_old){
+                    delete obj_old[obj];
+                }
             }
         },
 
@@ -1104,12 +1115,12 @@ let config = {
                         data: 'success',
                     });
                 }
+                //清空子表内置父表的ids
+                delete window.top.idsInChildTableToParent[this.data.tableId];
             } else {
                 MSG.alert(res.error);
             }
             this.data.isBtnClick = false;
-            //清空子表内置父表的ids
-            delete window.top.idsInChildTableToParent[this.data.tableId];
         },
 
         createPostJson() {
@@ -1183,7 +1194,6 @@ let config = {
             }
             return json;
         },
-
 
         checkCustomTable(){
             console.log(this.data.custom_table_form_exists);
@@ -1515,7 +1525,6 @@ let config = {
                 }
             });
         },
-
         //打开密码框弹窗
         addPassword(data) {
             let _this = this;
@@ -1556,7 +1565,6 @@ let config = {
                 _this.actions.addNewItem(data);
             });
         },
-
         //打开打印页眉设置弹窗 现由工作流负责此功能，以防万一先放着
         async printSetting() {
             let res = await FormService.getPrintSetting()
