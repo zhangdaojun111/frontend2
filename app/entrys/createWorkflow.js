@@ -161,7 +161,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })().then(res=>{
                 if(res.success===1){
                     msgBox.alert(`${res.error}`);
-                    $("#startNew").show().on('click',()=>{
+                    $("#startNew").show().one('click',()=>{
                         Mediator.publish('workflow:choose',wfObj);
                         $("#startNew").hide();
                         $("#submitWorkflow").show();
