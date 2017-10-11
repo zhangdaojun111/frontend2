@@ -218,6 +218,16 @@ let config = {
                 // }
             }
         },
+        initPagination:function () {
+            this.pagination = new dataPagination({
+                page: 1,
+                rows: this.data.rows,
+                tableId:this.data.tableId
+            });
+            this.pagination.render(this.el.find('.pagination'));
+            this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
+            this.actions.loadData();
+        }
     },
     afterRender: function () {
         let gridDom = this.el.find('.grid');
@@ -230,6 +240,7 @@ let config = {
             footerData:[]
         });
         this.agGrid.render(gridDom);
+        this.showLoading();
         //请求页显示数量偏好
         let tempData = {
             actions:JSON.stringify(['pageSize']),
@@ -237,17 +248,12 @@ let config = {
         };
 
         dataTableService.getPreferences(tempData).then((result) => {
-            console.log("sssssssssssssssssssssssssssssssssssssssssss",result);
+            if(result.success === 1){
+                that.data.rows = result.pageSize.pageSize;
+            }
+            that.actions.initPagination();
         });
-
-        this.pagination = new dataPagination({
-            page: 1,
-            rows: 100,
-            tableId:this.data.tableId
-        });
-        this.pagination.render(this.el.find('.pagination'));
-        this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
-        this.actions.loadData();
+        HTTP.flush();
     },
     firstAfterRender: function () {
         this.el.on('click', '.markRead', () => {

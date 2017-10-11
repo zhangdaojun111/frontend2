@@ -101,6 +101,7 @@ export const systemMessageService = {
             },
             {
                 headerName: '执行状态',
+                suppressSorting:true,
                 field: 'handle_status_text',
                 width: 80,
                 suppressMenu: true,
