@@ -823,9 +823,11 @@ let config = {
                         errorMessage: errorMsg
                     }
                 } else {
+                    this.actions.checkOhterField(formValue);
                     return formValue;
                 }
             } else {
+                this.actions.checkOhterField(formValue);
                 return formValue;
             }
         },
@@ -1036,9 +1038,15 @@ let config = {
                 }
             }
             for (let obj of delKey) {
-                delete data[obj];
-                delete obj_new[obj];
-                delete obj_old[obj];
+                if(data){
+                    delete data[obj];
+                }
+                if(obj_new){
+                    delete obj_new[obj];
+                }
+                if(obj_old){
+                    delete obj_old[obj];
+                }
             }
         },
 
