@@ -30,6 +30,7 @@ let timer;
 let formSave = false;
 let formValue;
 Mediator.subscribe('workflow:choose', (msg)=> {
+    // temp_ids=[];
     $("#singleFlow").click();
     $("#submitWorkflow").show();
     $("#startNew").hide();
@@ -174,29 +175,35 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })
         }
     }else{
-        $("#submitWorkflow").hide();
+        console.log(temp_ids);
         let postData={
             type:1,
             temp_ids:JSON.stringify(temp_ids),
             flow_id:wfObj.id,
             unique_check:0
         };
-        (async function () {
-            return await workflowService.createWorkflowRecord(postData);
-        })().then(res=>{
-            if(res.success===1){
-                msgBox.alert(`${res.error}`);
-                $("#startNew").show().on('click',()=>{
-                    Mediator.publish('workflow:choose',wfObj);
-                    $("#startNew").hide();
+        if(temp_ids.length){
+            $("#submitWorkflow").hide();
+            (async function (){
+                return await workflowService.createWorkflowRecord(postData);
+            })().then(res=>{
+                if(res.success===1){
+                    msgBox.alert(`${res.error}`);
+                    $("#startNew").show().on('click',()=>{
+                        Mediator.publish('workflow:choose',wfObj);
+                        $("#startNew").hide();
+                        $("#submitWorkflow").show();
+                    });
+                    WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
+                }else{
+                    msgBox.alert(`${res.error}`);
                     $("#submitWorkflow").show();
-                });
-                WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
-            }else{
-                msgBox.alert(`${res.error}`);
-                $("#submitWorkflow").show();
-            }
-        })
+                }
+            })
+            temp_ids=[];
+        }else{
+            msgBox.alert(`请上传数据`);
+        }
     }
     
 });
