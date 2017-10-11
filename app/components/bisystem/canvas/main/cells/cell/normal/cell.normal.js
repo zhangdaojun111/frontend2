@@ -206,7 +206,7 @@ let config = {
     },
     firstAfterRender() {
         this.actions.echartsInit();
-        this.actions.showNormalDataRange();
+        // this.actions.showNormalDataRange();
     },
     beforeDestory() {
 
