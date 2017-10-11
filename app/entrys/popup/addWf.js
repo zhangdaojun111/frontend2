@@ -165,7 +165,8 @@ Mediator.subscribe('workflow:submit', (res) => {
                     key: obj.key,
                     data: {
                         table_id: obj.table_id,
-                        type: 'closeAddition'
+                        type: 'closeAddition',
+                        refresh: true
                     }
                 });
             } else {
