@@ -281,7 +281,7 @@ let config = {
          * 检测系统名称长度，调整ERDS logo位置
          */
         checkSysName:function () {
-            if( this.data.systemName ){
+            if(this.data.hasOwnProperty('systemName')){
                 let lenght = this.data.systemName.length;
                 if(lenght > 8){
                     this.el.find('.erds-logo').css('padding-top','10px');
