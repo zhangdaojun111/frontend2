@@ -9,6 +9,8 @@ import template from "./views.html";
 import msgbox from "../../../lib/msgbox";
 import  './views.scss';
 import Mediator from '../../../lib/mediator';
+import 'jquery-ui/ui/widgets/sortable.js';
+
 
 let config = {
     template:template,
@@ -22,8 +24,8 @@ let config = {
          * 保存视图排序
          */
         saveView() {
-            let views = this.data.views;
-            ViewsService.saveData({data:views}).then((res)=>{
+            let views = window.config.bi_views.map(item => JSON.stringify(item));
+            ViewsService.saveData({data: views}).then((res)=>{
                 if(res['success']===1){
                     msgbox.alert('保存成功');
                 }else{
@@ -76,6 +78,25 @@ let config = {
     ],
     afterRender(){
         this.data.views = window.config.bi_views;
+
+        // 视图排序
+        let sortable_list = this.el.find('.view-list')
+        sortable_list.sortable({
+            'update': function(event,ui) {
+                let view_sort_list = sortable_list.sortable( "toArray");
+                let views = [];
+                view_sort_list.forEach((sortView,index) => {
+                    for (let view of window.config.bi_views) {
+                        if (view.name == sortView) {
+                            view.index = index;
+                            views.push(view);
+                            break;
+                        }
+                    }
+                });
+               window.config.bi_views = views;
+            }
+        });
 
         //渲染列表数据
         this.data.views.forEach((val,index) => {
