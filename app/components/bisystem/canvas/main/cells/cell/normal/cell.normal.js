@@ -7,6 +7,7 @@ import './cell.normal.scss';
 
 import {EchartsService} from '../../../../../../../services/bisystem/echart.server';
 import Mediator from '../../../../../../../lib/mediator';
+import {NormalRangeComponent} from './range/range';
 
 let config = {
     template: template,
@@ -19,6 +20,13 @@ let config = {
         xOld: [], //保存历史数据x轴字段
     },
     actions: {
+        /**
+         * 显示字段数据范围
+         */
+        showNormalDataRange(){
+            this.normalRange = new NormalRangeComponent();
+            this.append(this.normalRange,this.el.find('.chart-normal-data-range'));
+        },
         /**
          * 当有原始数据保存的时候，优先处理原始数据
          */
@@ -198,6 +206,7 @@ let config = {
     },
     firstAfterRender() {
         this.actions.echartsInit();
+        this.actions.showNormalDataRange();
     },
     beforeDestory() {
 
