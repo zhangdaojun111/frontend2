@@ -78,6 +78,8 @@ let config = {
         customOperateList: [],
         //自定义行级操作
         rowOperation: [],
+        //自定义外部操作
+        externalOperation: [],
         //是否固化
         isFixed: false,
         //模式
@@ -212,7 +214,9 @@ let config = {
         //二维表改变的值
         cellChangeValue: {},
 
-        addNewFlowId: ''
+        addNewFlowId: '',
+        //是否是启用
+        fofIsStart :'1'
     },
     //生成的表头数据
     columnDefs: [],
@@ -872,6 +876,36 @@ let config = {
                     }
                 }
             }
+            if (this.data.externalOperation) {
+                for(let ro of this.data.externalOperation){
+                    if(!$.isEmptyObject(ro["condition"])){
+                        let conField=ro["condition"]["dfield"];
+                        let conValue=params.data[conField];
+                        if(conValue!=ro["condition"]["value"]){
+                            continue;
+                        }
+                        operateWord=operateWord+(ro["name"]?ro["name"].length : 0);
+                    }
+                    let par=ro["param_dict"];
+                    let parStr='';
+                    if(!$.isEmptyObject(par)){
+                        parStr='?'
+                        let valueIndex=0;
+                        for(let key in par){
+                            let field=par[key];
+                            let value=params.data[field];
+                            if(valueIndex==0){
+                                parStr+=key+"="+value;
+                            }else{
+                                parStr+="&"+key+"="+value;
+                            }
+                            valueIndex++;
+                        }
+                    }
+                    str += ` <a class="externalOperation" id="${ ro["id"] }" style="width:100%;height:100%;color:#fff;background:#1897FF;padding:2px 5px;" href="${ ro["route"]+parStr }">${ ro["name"] }</a>`;
+                    operateWord=operateWord+(ro["name"]?ro["name"].length : 0);
+                }
+            }
             str += '</div>';
             this.data.operateColWidth=20*operateWord+20;
             return str
@@ -1054,6 +1088,7 @@ let config = {
             this.data.prepareParmas = res.data;
             this.data.customOperateList = this.data.prepareParmas["operation_data"] || [];
             this.data.rowOperation = this.data.prepareParmas['row_operation'] || [];
+            this.data.externalOperation = this.data.prepareParmas['external_operation'] || [];
             try{this.data.flowId = res["data"]["flow_data"][0]["flow_id"] || "";}catch(e){}
             for( let d of this.data.prepareParmas["flow_data"] ){
                 if( d.selected == 1 ){
@@ -3008,6 +3043,23 @@ let config = {
                     }
                 }
             }
+            //外部操作
+            if( data.event.srcElement.className == 'externalOperation' ){
+                let id = data["event"]["target"]["id"];
+                for(let ro of this.data.externalOperation){
+                    if(ro['row_op_id'] == id){
+                        // let selectedRow = [];
+                        // let roBackendAddress = ro['route'];
+                        // //因为与表级操作可以复用代码所以即使只选择了一个row也组成一个数组，用来适应后台接口
+                        // selectedRow.push(THIS.realId);
+                        // let roPostData = {
+                        //     table_id:THIS.pageId,
+                        //     selectedRows:JSON.stringify(selectedRow)
+                        // };
+                        // THIS.rowOperationBackend(roPostData,roBackendAddress);
+                    }
+                }
+            }
         },
         //半触发操作
         customOperate: function (d) {
@@ -3091,7 +3143,61 @@ let config = {
                     } )
                     break;
                 }
+                //fof-行级操作-启用
+                case 'fofstart':{
+                    this.data.fofIsStart='1';
+                    let jjzh=''
+                    for(let row of this.data.rowData){
+                        if(row['_id'] == customRowId){
+                            if(JSON.parse(params)[2]){
+                                jjzh=row[JSON.parse(params)[2]];
+                            }
+                        }
+                    }
+                    msgBox.confirm( '是否确认启用'+jjzh ).then( r=>{
+                        if( r ){
+                            this.actions.accountOperate(customRowId)
+                        }
+                    } )
+                    break;
+                }
+                //fof-行级操作-停用
+                case 'fofstop':{
+                    this.data.fofIsStart='0';
+                    let jjzh=''
+                    for(let row of this.data.rowData){
+                        if(row['_id'] == customRowId){
+                            if(JSON.parse(params)[2]){
+                                jjzh=row[JSON.parse(params)[2]];
+                            }
+                        }
+                    }
+                    msgBox.confirm( '是否确认停用'+jjzh ).then( r=>{
+                        if( r ){
+                            this.actions.accountOperate(customRowId)
+                        }
+                    } )
+                    break;
+                }
             }
+        },
+        //fof-停用启用操作
+        accountOperate:function (customRowId){
+            let data = {
+                account_row_id:customRowId,
+                table_id:this.data.tableId,
+                status:this.data.fofIsStart
+            }
+            let address = '/data/update_account_status/';
+            dataTableService.rowOperationBackend( data,address ).then( res=>{
+                if(res.success == 1){
+                    msgBox.showTips('操作成功并刷新数据');
+                    //刷新数据
+                    this.actions.getGridData();
+                }else if(res.success == 0){
+                    msgBox.alert( '发送请求失败！错误是' + res['error'] );
+                }
+            } )
         },
         //行双击
         onRowDoubleClicked: function (data) {
