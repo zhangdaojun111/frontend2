@@ -36,7 +36,6 @@ let config = {
             });
             this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
-                console.log(data);
                 this.data.total = data.total;
                 this.actions.setSortModel();
                 this.agGrid.actions.setGridData({
@@ -152,12 +151,14 @@ let config = {
          */
         onPaginationChanged: function (data) {
             data = _.defaultsDeep(data,this.data.getDataList);
+            this.data.rows = data.rows;
             this.actions.loadData(data);
         },
         onSortChanged:function ($event) {
             //分情况进行前端排序或后端排序
             if(!this.data.frontendSort){
                 //后端排序
+                console.log('启用后端排序');
                 let data = this.agGrid.gridOptions.api.getSortModel()[0];
                 let sortPostData = {};
                 if( data && data.sort === "asc" ){
@@ -178,6 +179,7 @@ let config = {
                 this.actions.loadData(sortPostData);
             }else{
                 //前端排序
+                console.log('启用前端排序');
                 this.agGrid.actions.refreshView();
             }
         },
@@ -249,7 +251,6 @@ let config = {
         };
 
         dataTableService.getPreferences(tempData).then((result) => {
-            console.log(result);
             if(result.success === 1 && result.pageSize !== null){
                 that.data.rows = result.pageSize.pageSize;
             }
