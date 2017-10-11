@@ -17,8 +17,8 @@ let config = {
     data:{
         views:[],
         chart_id:"",
-
     },
+
     actions:{
         /**
          * 保存视图排序
