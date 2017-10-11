@@ -277,7 +277,9 @@ let config = {
                         // this.data.saveTemporaryCommonQuery(this.data.searchInputList);
                         let searchId = '临时高级查询',searchName = '临时高级查询',appendChecked = true;
                         this.data.commonQuery.forEach((item) => {
-                            if(item.id == this.id && JSON.parse(item.queryParams)[0]['cond']['keyword'] == this.data.searchInputList[0]['cond']['keyword']) {
+                            if(item.id == this.id &&
+                                JSON.parse(item.queryParams)[0]['cond']['keyword'] == this.data.searchInputList[0]['cond']['keyword'] &&
+                                JSON.parse(item.queryParams).length == this.data.searchInputList.length) {
                                 searchId = item.id;
                                 searchName = item.name;
                                 appendChecked = false;
