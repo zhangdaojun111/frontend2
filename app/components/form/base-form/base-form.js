@@ -96,6 +96,7 @@ let config = {
                 let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parentTableId);
                 //子表的this.newData
                 let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
+                console.log('子表填充附表');
                 //循环给子表赋值
                 for (let key in kvDict) {
                     let val = parentData[key];
@@ -110,10 +111,9 @@ let config = {
                             let options = [{value: val, label: val}];
                             this.data.childComponent[songridDfield].data["options"] = this.data.data[songridDfield]["options"] = options;
                         }
-                        console.log('子表填充附表');
-                        console.log(songridDfield);
-                        console.log(val);
-                        this.actions.setFormValue(songridDfield, val);
+                        if(val || val =='') {
+                            this.actions.setFormValue(songridDfield, val);
+                        }
                         this.actions.triggerSingleControl(songridDfield);
                     }
                 }
@@ -141,7 +141,6 @@ let config = {
 
         //给子表统计赋值
         async setCountData() {
-            debugger
             let res = await FormService.getCountData({
                 //传给后台当前表单所有控件的值
                 data: JSON.stringify(this.actions.createFormValue(this.data.data)),
@@ -149,7 +148,6 @@ let config = {
                 child_table_id: this.data.sonTableId,
                 table_id: this.data.tableId
             });
-            console.log(res)
             //给统计赋值
             for (let d in res["data"]) {
                 this.actions.setFormValue(d, res["data"][d]);
@@ -1300,7 +1298,9 @@ let config = {
                         break;
                     }
                 }
-                this.actions.setAboutData(id, value);
+                if(value && value != ''){
+                    this.actions.setAboutData(id, value);
+                }
             }
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
