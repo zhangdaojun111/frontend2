@@ -137,6 +137,7 @@ export const systemMessageService = {
                 field: 'msg_content',
                 suppressMenu: true,
                 tooltipField: 'msg_content',
+                suppressSorting:true,
                 cellStyle: {'text-align': 'center'}
             }, {
                 width:160,
