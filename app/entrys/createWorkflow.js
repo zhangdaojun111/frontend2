@@ -175,7 +175,6 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })
         }
     }else{
-        $("#submitWorkflow").hide();
         console.log(temp_ids);
         let postData={
             type:1,
@@ -184,6 +183,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
             unique_check:0
         };
         if(temp_ids.length){
+            $("#submitWorkflow").hide();
             (async function (){
                 return await workflowService.createWorkflowRecord(postData);
             })().then(res=>{
