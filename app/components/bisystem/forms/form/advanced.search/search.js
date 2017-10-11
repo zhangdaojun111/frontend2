@@ -21,11 +21,11 @@ let config = {
                 item['real_type'] = item['type'];
                 return item;
             });
-
             let d = {
                 tableId: data.tableId ? data.tableId : '',
                 fieldsData: data.fieldsData ? dgcService.createNeedFields(fieldsData).search : [],
                 commonQuery: data.commonQuery ? data.commonQuery : [],
+                bi:true
             };
             PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
                 width:950,
@@ -37,7 +37,7 @@ let config = {
                     this.data.value = {}
                 } else {
                     let filterValues = _.cloneDeep(res).value.map(item => {
-                        if (item.cond.keyword.indexOf('1970-07-01') !== -1) {
+                        if (item.cond.keyword.toString().indexOf('1970-07-01') !== -1) {
                             item.cond.keyword = this.actions.filterDate(item) ? '%date%' : item.cond.keyword;
                         };
                         return item;
@@ -95,7 +95,7 @@ class Search extends Base {
      * @param value = 高级查询条件值
      */
     setValue(value) {
-        this.data.value = value['filter'] ? value : null;
+        this.data.value = value && typeof value['filter'] === 'string' ? value : {};
     }
 }
 

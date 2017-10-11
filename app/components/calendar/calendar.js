@@ -59,7 +59,9 @@ let config = {
             this.cancelFields = res['cancel_fields'];
             this.append(new LeftContent(res), this.el.find('.left-content'));
             this.append(new CalendarMain(res['cancel_fields']), this.el.find('.main-content'));
-            this.hideLoading();
+            setTimeout(() => {
+                this.hideLoading();
+            },800);
         });
 
         this.el.on('click', '#monthView', () => {

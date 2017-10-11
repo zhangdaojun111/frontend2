@@ -106,16 +106,18 @@
     }
 
     .agent-footer {
-        margin-top: 13px;
+        margin-top: 18px;
         .save-proxy {
             display: block;
-            width: 100px;
-            height: 35px;
+            box-sizing: border-box;
+            padding: 1px 6px;
+            width: 90px;
+            height: 30px;
             background-color: #0088ff;
-            line-height: 35px;
+            line-height: 30px;
             color: white;
             float: right;
-            margin-right: 15px;
+            margin-right: 12px;
             border: none;
             border-radius: 5px;
             text-align: center;

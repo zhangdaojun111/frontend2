@@ -1,6 +1,6 @@
 import {Base} from '../base';
 import template from './linebar.html';
-import {chartName,theme,icon,button,search} from '../form.chart.common';
+import {chartName,theme,icon,button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -57,6 +57,18 @@ let config = {
         async getFields(data) {
             let table = data ? data : null;
             if (table) {
+                if (table.count_fields.length > 0) {
+                    let fields =[];
+                    fields = table.count_fields.map(item => {
+                        return {value: JSON.stringify(item), name: item.name}
+                    });
+                    this.formItems['countColumn'].setList(fields);
+                    this.formItems['countColumn'].el.show();
+                } else {
+                    this.formItems['countColumn'].actions.clear();
+                    this.formItems['countColumn'].el.hide();
+                };
+
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']);
@@ -65,7 +77,8 @@ let config = {
                 }
             } else {
                 this.actions.loadColumns(table);
-            }
+            };
+
         },
 
         /**
@@ -86,14 +99,18 @@ let config = {
                     this.formItems['yAxis1'].actions.updateY([]);
                     this.formItems['chartGroup'].setList([]);
                     this.formItems['sortColumns'].setList([]);
-                }
-            }
+                };
+            };
+            if (this.formItems['deeps']) {
+                this.formItems['deeps'].actions.clear(); // 清除下穿数据
+            };
         },
 
         /**
          * 初始化图表操作
          */
         async init() {
+            this.formItems['countColumn'].el.hide();
             this.formItems['double'].trigger('onChange');
             this.formItems['yHorizontalColumns'].trigger('onChange');
             this.formItems['chartAssignment'].trigger('onChange');
@@ -167,24 +184,27 @@ let config = {
 
             let ySelectedGroup = [];
             data.ySelectedGroup.forEach(item => {
-                for (let y of yAxis){
-                    if (item.id === y.field.id) {
-                        ySelectedGroup.push(y);
-                        break;
-                    }
-                }
+               if (item) {
+                   for (let y of yAxis){
+                       if (item.id === y.field.id) {
+                           ySelectedGroup.push(y);
+                           break;
+                       }
+                   }
+               }
             });
 
             let advancedDataTemplates = this.formItems.advancedDataTemplates.getValue();
             let chart = {
-                advancedDataTemplates: advancedDataTemplates,
+                advancedDataTemplates: advancedDataTemplates.length > 0 && advancedDataTemplates[0].code  && advancedDataTemplates[0].result ? advancedDataTemplates : [],
                 assortment: 'normal',
                 chartAssignment: data.chartAssignment == 1 ? {name:'分组', val:1} : {name:'下穿', val:2},
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn: {},
+                countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 double:data.double[0] ? 1 : 0,
                 echartX: data.echartX[0] ? {marginBottom: data.marginBottom, textNum:data.textNum}: {},
-                filter: data.filter,
+                filter: data.filter.filter,
+                filter_source: data.filter.filter_source,
                 icon: data.icon,
                 relations: [],
                 source: data.source,
@@ -202,7 +222,7 @@ let config = {
             } else {
                 chart['deeps'] = data.deeps
             };
-            console.log(chart);
+
             let pass = true; // 判断表单是否验证通过
 
             for (let key of Object.keys(this.formItems)) {
@@ -213,7 +233,6 @@ let config = {
                    };
                 }
             };
-
 
             // y轴单独验证
             let yAxispass = formValidate.validateYAxis(yAxis);
@@ -242,16 +261,17 @@ let config = {
             let chart = _.cloneDeep(data);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
+            this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue(chart['filter']);
+            this.formItems['filter'].setValue({filter: chart['filter'] ? chart['filter'] : '', filter_source:chart['filter_source']? chart['filter_source']:[]});
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
             this.formItems['xAxis'].setValue(chart['xAxis']);
             this.formItems['advancedDataTemplates'].setValue(chart['advancedDataTemplates']);
             let yAxis1 = _.remove(chart['yAxis'],(item) => {
                 return item.yAxisIndex != 0
-            })
+            });
             this.formItems['yAxis0'].setValue(chart['yAxis']);
             this.formItems['double'].setValue(chart['double']);
             if (chart['double'] == 1) {
@@ -295,6 +315,7 @@ let config = {
                     }
                 }
             },
+            countColumn,
             theme,
             icon,
             {
@@ -304,8 +325,6 @@ let config = {
                 type: 'search',
                 events: {
                     onShowAdvancedSearchDialog() {
-                        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-                        console.log(this.formItems['filter'].data.value);
                         let data = {
                             tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
                             fieldsData: this.formItems['xAxis'].autoselect.data.list,
@@ -410,7 +429,6 @@ let config = {
                         } else {
                             this.formItems['deeps'].el.show();
                         };
-                        this.formItems['deeps'].actions.clear();
                         this.formItems['chartGroup'].autoselect.actions.clearValue();
                     }
                 }
@@ -598,6 +616,7 @@ let config = {
         if (this.data.id) {
             this.actions.fillChart(this.data.chart);
         };
+
     }
 }
 

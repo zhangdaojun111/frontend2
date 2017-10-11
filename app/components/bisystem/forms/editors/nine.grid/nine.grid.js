@@ -1,7 +1,7 @@
 import {Base} from '../base';
 import template from './nine.grid.html';
 
-import {chartName,theme,icon,button} from '../form.chart.common';
+import {chartName,theme,icon,button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -14,6 +14,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
+           this.formItems['countColumn'].el.hide();
            this.formItems['type'].trigger('onChange',this.data.value);
 
            // 获取数据来源
@@ -75,8 +76,7 @@ let config = {
             let chart = {
                 assortment: 'nineGrid',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn:'',
-                filter: data.filter,
+                countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -106,9 +106,9 @@ let config = {
         fillChart(chart) {
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
+            this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue(chart['filter']);
             this.formItems['type'].setValue(chart['type']);
             for(let i = 1; i<=chart.type;i++) {
                 this.formItems['x'+i].setValue(chart['xAxis']['x'+i]);
@@ -131,26 +131,29 @@ let config = {
                         type: 'required'
                     }
                 ],
-                type: 'autocomplete'
-            },
-            theme,
-            icon,
-            {
-                label: '高级查询',
-                name: 'filter',
-                defaultValue: {},
-                type: 'search',
+                type: 'autocomplete',
                 events: {
-                    onShowAdvancedSearchDialog() {
-                        let data = {
-                            tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
-                            fieldsData: [],
-                            commonQuery: this.formItems['filter'].data.value && this.formItems['filter'].data.value.hasOwnProperty('filter') ? [this.formItems['filter'].data.value.filter_source] : null,
+                    onSelect(data) {
+                        let table = data ? data : null;
+                        if (table) {
+                            if (table.count_fields.length > 0) {
+                                let fields =[];
+                                fields = table.count_fields.map(item => {
+                                    return {value: JSON.stringify(item), name: item.name}
+                                });
+                                this.formItems['countColumn'].setList(fields);
+                                this.formItems['countColumn'].el.show();
+                            } else {
+                                this.formItems['countColumn'].actions.clear();
+                                this.formItems['countColumn'].el.hide();
+                            };
                         };
-                        this.formItems['filter'].actions.showAdvancedDialog(data);
                     }
                 }
             },
+            countColumn,
+            theme,
+            icon,
             {
                 label: '选择格子数',
                 name: 'type',

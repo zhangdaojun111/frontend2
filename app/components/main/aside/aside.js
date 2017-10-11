@@ -173,6 +173,7 @@ let config = {
          */
         showInfoSet:function () {
             PersonSetting.show();
+            // PersonSetting.showUserInfo({'name':'赵俨'})
         },
         /**
          * 设置用户头像
@@ -225,7 +226,6 @@ let config = {
          * 修改后重置用户头像
          */
         resetAvatar:function(){
-            console.log("do reset")
             let $img = this.el.find("img.set-info");
             if($img.length === 0){
                 $img = $("<img>").addClass("set-info");
@@ -281,9 +281,11 @@ let config = {
          * 检测系统名称长度，调整ERDS logo位置
          */
         checkSysName:function () {
-            let lenght = this.data.systemName.length;
-            if(lenght > 8){
-                this.el.find('.erds-logo').css('padding-top','10px');
+            if(this.data.hasOwnProperty('systemName')){
+                let lenght = this.data.systemName.length;
+                if(lenght > 8){
+                    this.el.find('.erds-logo').css('padding-top','10px');
+                }
             }
         }
     },
