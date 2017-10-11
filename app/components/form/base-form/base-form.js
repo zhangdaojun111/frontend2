@@ -979,9 +979,6 @@ let config = {
                     }
                 }
             }
-            if(formData.temp_id){
-                formData.real_id = '';
-            }
             return formData;
         },
 
