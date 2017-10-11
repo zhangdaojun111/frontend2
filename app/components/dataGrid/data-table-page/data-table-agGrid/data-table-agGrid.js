@@ -214,7 +214,9 @@ let config = {
         //二维表改变的值
         cellChangeValue: {},
 
-        addNewFlowId: ''
+        addNewFlowId: '',
+        //是否是启用
+        fofIsStart :'1'
     },
     //生成的表头数据
     columnDefs: [],
@@ -3141,7 +3143,61 @@ let config = {
                     } )
                     break;
                 }
+                //fof-行级操作-启用
+                case 'fofstart':{
+                    this.data.fofIsStart='1';
+                    let jjzh=''
+                    for(let row of this.data.rowData){
+                        if(row['_id'] == customRowId){
+                            if(JSON.parse(params)[2]){
+                                jjzh=row[JSON.parse(params)[2]];
+                            }
+                        }
+                    }
+                    msgBox.confirm( '是否确认启用'+jjzh ).then( r=>{
+                        if( r ){
+                            this.actions.accountOperate(customRowId)
+                        }
+                    } )
+                    break;
+                }
+                //fof-行级操作-停用
+                case 'fofstop':{
+                    this.data.fofIsStart='0';
+                    let jjzh=''
+                    for(let row of this.data.rowData){
+                        if(row['_id'] == customRowId){
+                            if(JSON.parse(params)[2]){
+                                jjzh=row[JSON.parse(params)[2]];
+                            }
+                        }
+                    }
+                    msgBox.confirm( '是否确认停用'+jjzh ).then( r=>{
+                        if( r ){
+                            this.actions.accountOperate(customRowId)
+                        }
+                    } )
+                    break;
+                }
             }
+        },
+        //fof-停用启用操作
+        accountOperate:function (customRowId){
+            let data = {
+                account_row_id:customRowId,
+                table_id:this.data.tableId,
+                status:this.data.fofIsStart
+            }
+            let address = '/data/update_account_status/';
+            dataTableService.rowOperationBackend( data,address ).then( res=>{
+                if(res.success == 1){
+                    msgBox.showTips('操作成功并刷新数据');
+                    //刷新数据
+                    this.actions.getGridData();
+                }else if(res.success == 0){
+                    msgBox.alert( '发送请求失败！错误是' + res['error'] );
+                }
+            } )
         },
         //行双击
         onRowDoubleClicked: function (data) {
