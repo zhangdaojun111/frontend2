@@ -3030,7 +3030,7 @@ let config = {
                 let id = data["event"]["target"]["id"];
                 for (let d of this.data.customOperateList) {
                     if (d["id"] == id) {
-                        this.actions.customOperate(d);
+                        this.actions.customOperate(d,data);
                     }
                 }
             }
@@ -3047,20 +3047,18 @@ let config = {
             }
         },
         //半触发操作
-        customOperate: function (d) {
-            console.log( "_____" )
+        customOperate: function (d,data) {
+            console.log( "半触发操作" )
             console.log( d )
+            console.log( data )
             let obj = {
-                // parent_table_id: this.data.parentTableId,
-                // parent_real_id: this.data.parentRealId,
-                // parent_temp_id: this.data.parentTempId,
-                // parent_record_id: this.data.parentRecordId,
-                // real_id: d["id"],
                 flow_id : d["flow_id"],
                 form_id : d["form_id"],
                 id : d["id"],
                 table_id : d['table_id'],
-                btnType: 'new'
+                btnType: 'new',
+                data_from_row_id: data.data['_id'],
+                operation_id: d.id
             };
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = d.name;
