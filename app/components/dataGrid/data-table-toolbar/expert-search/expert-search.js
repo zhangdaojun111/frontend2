@@ -207,16 +207,19 @@ let config = {
                 if(item.name == type) {
                     switch (item.searchType) {
                         case "datetime":
+                            this.el.find('.condition-search-box-input').eq(index).attr('title','datetime');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateTimeControl = new DateTimeControl({value: value},{changeValue:function(data){}});
                             dateTimeControl.render(this.el.find('.condition-search-value').eq(index));
                             break;
                         case "date":
+                            this.el.find('.condition-search-box-input').eq(index).attr('title','date');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateControl = new DateControl({value: value},{changeValue:function(data){}});
                             dateControl.render(this.el.find('.condition-search-value').eq(index));
                             break;
                         case "time":
+                            this.el.find('.condition-search-box-input').eq(index).attr('title','time');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let timeControl = new TimeControl({value: value},{changeValue:function(data){}});
                             timeControl.render(this.el.find('.condition-search-value').eq(index));
@@ -226,6 +229,7 @@ let config = {
                             this.el.find('.condition-search-value').eq(index).find('.condition-search-input').val(value);
                             break;
                         case "number":
+                            this.el.find('.condition-search-box-input').eq(index).attr('title','number');
                             this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="number">`);
                             this.el.find('.condition-search-input').eq(index).val(value);
                             break;
