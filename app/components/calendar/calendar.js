@@ -66,10 +66,11 @@ let config = {
 
         Mediator.on('Calendar: closeSetting', (data) => {
             CalendarService.getCalendarTreeData().then(res => {
+                console.log(res);
                 this.data.cancelFields = res['cancel_fields'];
                 this.el.find('.left-content').empty();
                 this.append(new LeftContent(res), this.el.find('.left-content'));
-                this.hideLoading();
+                // this.hideLoading();
             });
         });
 
