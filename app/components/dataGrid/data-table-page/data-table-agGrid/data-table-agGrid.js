@@ -3221,6 +3221,9 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
+                console.log( "_----------------" )
+                console.log( "_----------------" )
+                console.log( data )
                 if( data == 'success' || data.refresh ){
                     this.actions.timeDelayRefresh();
                 }
