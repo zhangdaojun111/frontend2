@@ -654,6 +654,10 @@ let config = {
             }
             let new_data = {};
             let old_data = this.actions.createFormValue(this.data.data);
+            console.log('old_data');
+            console.log('old_data');
+            console.log('old_data');
+            console.log(this.data.data);
             for (let d in old_data) {
                 if (continue_key.indexOf(d) != -1) {
                     continue
@@ -834,7 +838,6 @@ let config = {
                     return formValue;
                 }
             } else {
-                this.actions.checkOhterField(formValue);
                 return formValue;
             }
         },
@@ -1080,10 +1083,6 @@ let config = {
             if (this.data.hasOtherFields == 0) {
                 this.actions.checkOhterField(data, obj_new, obj_old);
             }
-            console.log('data')
-            console.log('data')
-            console.log('data')
-            console.log(data);
             let json = {
                 data: JSON.stringify(data),
                 cache_new: JSON.stringify(obj_new),
