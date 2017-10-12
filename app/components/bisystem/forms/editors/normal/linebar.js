@@ -272,7 +272,6 @@ let config = {
             let yAxis1 = _.remove(chart['yAxis'],(item) => {
                 return item.yAxisIndex != 0
             });
-
             this.formItems['yAxis0'].setValue(chart['yAxis']);
             this.formItems['double'].setValue(chart['double']);
             if (chart['double'] == 1) {
