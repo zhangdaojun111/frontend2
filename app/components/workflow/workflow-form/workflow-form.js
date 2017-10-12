@@ -26,6 +26,11 @@ let config = {
             let em = el.next();
             em.remove();
             el.remove();
+            if(el.hasClass('deloldimg')){
+                console.log();
+                let id = el.attr('data-imgid');
+                this.data.delsign.push(parseInt(id));
+            }
         },
 
         /**
@@ -51,6 +56,7 @@ let config = {
                 };
                 arr.push(obj);
             }
+            console.log(arr);
             return arr;
         },
         /**
@@ -62,10 +68,19 @@ let config = {
             let len =imgInfo.length;
             let html = " ";
             for (let i=0;i<len;i++){
-                let left = imgInfo[i].viewLeft+"%";
-                let top = imgInfo[i].viewTop+"%";
-                html += `<img class="oldImg noprint" src="/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
-                html += `<img class="printimg printS" src="/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
+                let left = imgInfo[i].viewLeft + "%";
+                let top = imgInfo[i].viewTop + "%";
+                // console.log(window.config);
+                if(imgInfo[i].user == window.config.ID&&this.data.view){
+                    html += `<div class='deloldimg noprint'  data-imgid=${imgInfo[i].id} style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px ">
+                            <img style="max-height:150px;width:100%" src='/download_attachment/?file_id=${imgInfo[i].file_id}&download=0'/>
+                                <i class='J_del'>X</i>
+                         </div>`;
+                    html += `<img class="printS printimg" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px "  src='/download_attachment/?file_id=${imgInfo[i].file_id}&download=0'/>`;
+                }else {
+                    html += `<img class="oldImg noprint" src="/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
+                    html += `<img class="printimg printS" src="/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
+                }
             }
             this.el.find(".form-print-position").append(html);
         },
@@ -109,8 +124,15 @@ let config = {
     ],
     afterRender: function() {
         // this.showLoading();
+        let serchStr = location.search.slice(1),obj={};
+        serchStr.split('&').forEach(res => {
+            let arr = res.split('=');
+            obj[arr[0]] = arr[1];
+        });
+        this.data.view = obj.btnType == 'edit'? 1 : 0;
         let __this=this;
         this.formTrans = false;
+        this.data.delsign=[];
         this.el.on("mouseenter",".imgseal",function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","block");
@@ -118,7 +140,14 @@ let config = {
         this.el.on("mouseleave",'.imgseal',function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","none");
-
+        })
+        this.el.on("mouseenter",".deloldimg",function(e){
+            let ev = $(this).find('.J_del');
+            ev.css("display","block");
+        }),
+        this.el.on("mouseleave",'.deloldimg',function(e){
+            let ev = $(this).find('.J_del');
+            ev.css("display","none");
         })
         this.el.on("click",'.J_del',(e)=>{
             this.actions.delimg(e);
@@ -140,7 +169,12 @@ let config = {
             this.actions.showImg();
         });
         Mediator.subscribe("workflow:appPass",(e)=>{
-            Mediator.publish('workflow:sendImgInfo',this.actions.collectImg());
+
+            console.log(this.data.view);
+            let arr = [];
+            arr.push(JSON.stringify(this.actions.collectImg()));
+            arr.push(JSON.stringify(this.data.delsign));
+            Mediator.publish('workflow:sendImgInfo',arr);
         });
         //获取表名，通过form传给我们表名
         Mediator.subscribe("workflow:getWorkflowTitle",res=>{

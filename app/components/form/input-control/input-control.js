@@ -45,7 +45,12 @@ let config = {
                 let regReg = new RegExp(reg);
                 if (val != "" && reg !== "") {
                     for (let r in reg) {
-                        let regReg = eval(r);
+                        let regReg
+                        if (r.startsWith('/') && r.endsWith('/')) {
+                            regReg = eval(r);
+                        }else {
+                            regReg = new RegExp(r);
+                        }
                         let flag = regReg.test(val);
                         if (!flag) {
                             this.el.find("#error_tip").css("display", "inline-block");

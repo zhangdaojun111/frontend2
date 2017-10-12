@@ -202,7 +202,7 @@ let config = {
                     HTTP.postImmediately('/set_notice/', formData).then((res) => {
                         if (res.success === 1) {
                             postMessageUtil.hide();
-                            msgbox.showTips('发送成功');
+                            msgbox.alert('发送成功');
                         } else {
                             msgbox.alert(res.error);
                         }
