@@ -11,6 +11,7 @@ import SelectStaff from '../select-staff/select-staff';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import AddSigner from '../add-signer/add-signer';
 import msgBox from '../../../../lib/msgbox';
+import approvalOpinion from '../../approval-opinion/approval-opinion'
 
 let config={
     template: template,
@@ -131,11 +132,33 @@ let config={
             o.sigh_type=__this.el.find('[name="addHandlerType"]:checked').val();
             o.sigh_user_id=__this.data.sigh_user_id;
             if(o.sigh_user_id){
-                PMAPI.sendToParent({
-                    type: PMENUM.close_dialog,
-                    key:__this.data.key,
-                    data:o
+                PMAPI.openDialogByComponent(approvalOpinion,{
+                    width: 450,
+                    height: 300,
+                    title: '提示'
+                }).then(res=>{
+                    console.log(res);
+                    console.log('.................')
+                    if(res.determine){
+                        console.log(res);
+                        console.log(777777888888888);
+                        // Mediator.publish('workflow:comment',res.comment);
+                        o.comment = res.comment;
+                        PMAPI.sendToParent({
+                            type: PMENUM.close_dialog,
+                            key:__this.data.key,
+                            data:o
+                        })
+                    }
                 })
+
+                // PMAPI.sendToParent({
+                //     type: PMENUM.close_dialog,
+                //     key:__this.data.key,
+                //     data:o
+                // })
+                console.log(o);
+                console.log('99999999999999999999')
             }else{
                 msgBox.alert("请选择一名加签人员");
             }

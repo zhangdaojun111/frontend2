@@ -1,4 +1,5 @@
 import template from './approval-opinion.html'
+// import Mediator from "../../../lib/mediator";
 
 let css=`
     .workflow-alertbox{
@@ -64,23 +65,46 @@ let approvalOpinion = {
     },
     binds:[
         {
-            //图片弹窗预览
+            event: 'click',
+            selector: '.J_sure',
+            callback: function (event) {
+                this.actions.determine();
+                window.parent.postMessage({
+                    type: '1',
+                    key: this.key,
+                    data: {
+                        determine:true,
+                        key: this.key,
+                        comment: this.data.comment,
+                    }
+                }, location.origin);
+            }
+        },
+        {
             event:'click',
-            selector:'.J_sure',
+            selector:'.J_cancel',
             callback:function (event) {
-
+                window.parent.postMessage({
+                    type:'1',
+                    key:this.key,
+                    data: {
+                        determine:false,
+                    }
+                }, location.origin);
             }
         },
     ],
     actions:{
-        Determine(){
-
+        determine(){
+            this.data.comment = this.el.find('#comment').val();
         }
     },
     afterRender(){
+
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
     },
     beforeDestory(){
+        Mediator.publish("workflow:hufei","sjaodiadioa");
         this.data.style.remove();
     },
 }

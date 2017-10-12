@@ -51,16 +51,24 @@ let config = {
         }
     },
     afterRender: function() {
+        this.data.comment='';
+        Mediator.subscribe('workflow:comment',(res)=>{
+            this.data.comment = res;
+        })
         Mediator.subscribe('approval:rejToAny', (id) => {
             if(id.length === 21){
                 id=id.slice(5);
             }else if(id.length === 19){
                 id=id.slice(3);
             }
+            console.log("aaaaaaaaaaaaaaaaaaaaaaa");
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:this.data.key,
-                data:id
+                data:{
+                    id:id,
+                    comment:this.data.comment
+                }
             })
         });
 
