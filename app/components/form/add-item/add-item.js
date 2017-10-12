@@ -32,6 +32,8 @@ let css = `
         width:56px;
         border-radius:5px;
         background:#fff;
+        cursor: pointer;
+        outline-style: none;
     }
     .add-wrap .add-table .add-new .content{
         display:flex;
@@ -55,6 +57,7 @@ let css = `
     }
     .add-wrap .save{
         height:40px;
+        cursor: pointer;
     }
     .add-wrap .flex-wrap{
         display: flex;
@@ -97,6 +100,7 @@ let css = `
     .ui-del{
         float: right;
         color: red;
+        cursor: pointer;
     }
 
 `;
@@ -167,7 +171,7 @@ let AddItem = {
         }
     },{
         event:'click',
-        selectory:'.save',
+        selector:'.save',
         callback:function(){
             this.actions.saveItems();
         }
