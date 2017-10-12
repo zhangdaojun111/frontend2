@@ -18,7 +18,10 @@ import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
-    setTimeout(()=>component.hideLoading(),1000)
+    Mediator.subscribe("form:formAlreadyCreate",()=>{
+        component.hideLoading();
+    });
+    // setTimeout(()=>component.hideLoading(),1000)
 });
 let serchStr = location.search.slice(1);
 let obj = {}, is_view = 0,cache_old;
@@ -119,6 +122,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         parent_real_id: obj.parent_real_id,
         parent_temp_id: obj.parent_temp_id,
         parent_record_id: obj.parent_record_id,
+        data_from_row_id: obj.data_from_row_id || '',
+        operation_id: obj.operation_id || '',
         real_id: obj.real_id,
         temp_id: obj.temp_id,
         in_process: obj.in_process,
@@ -165,7 +170,8 @@ Mediator.subscribe('workflow:submit', (res) => {
                     key: obj.key,
                     data: {
                         table_id: obj.table_id,
-                        type: 'closeAddition'
+                        type: 'closeAddition',
+                        refresh: true
                     }
                 });
             } else {

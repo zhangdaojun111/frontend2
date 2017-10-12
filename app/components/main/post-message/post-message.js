@@ -179,7 +179,7 @@ let config = {
             let choosedUsers = this.autoSelect.actions.getValue();
             choosedUsers = choosedUsers.map((item) => {
                 return item.id;
-            })
+            });
             if (form.checkValidity()) {
                 let formData = Form.getValue(form);
                 if (choosedUsers.length === 0) {
@@ -193,7 +193,7 @@ let config = {
                     HTTP.postImmediately('/set_notice/', formData).then((res) => {
                         if (res.success === 1) {
                             postMessageUtil.hide();
-                            msgbox.showTips('发送成功');
+                            msgbox.alert('发送成功');
                         } else {
                             msgbox.alert(res.error);
                         }

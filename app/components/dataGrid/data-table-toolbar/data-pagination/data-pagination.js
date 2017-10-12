@@ -148,6 +148,7 @@ let config = {
                 this.data.currentPage = 1;
                 this.actions.resetPagination( this.data.total );
                 this.actions.onPaginationChanged();
+
                 if( this.data.tableId ){
                     console.log("pageSize数据保存：" + Number(this.data.rows));
                     dataTableService.savePreference({
@@ -277,10 +278,15 @@ let config = {
         invalidTips: function () {
             this.el.find( '.data-invalid' ).removeClass('freshtip');
             this.el.find( '.data-invalid' )[0].innerHTML = this.data.myInvalid ? '数据失效，已刷新。' : '数据失效，请刷新。';
+            if(this.data.myInvalid) {
+                this.el.find( '.data-invalid' ).addClass('freshtip');
+            } else {
+                this.el.find( '.data-invalid' ).addClass('unfreshtip');
+            }
             if( this.data.myInvalid ){
                 this.actions.onPaginationChanged( true );
             }
-            this.el.find( '.data-invalid' ).addClass('freshtip');
+            // this.el.find( '.data-invalid' ).addClass('freshtip');
             this.data.myInvalid = false;
         },
         //延时刷新

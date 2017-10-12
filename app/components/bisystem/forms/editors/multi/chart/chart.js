@@ -10,6 +10,7 @@ import './chart.scss';
 let config = {
     template: template,
     actions: {
+
         /**
          * 加载x 和y轴数据
          * @param data 选中的数据源

@@ -96,6 +96,7 @@ let config = {
                 let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parentTableId);
                 //子表的this.newData
                 let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
+                console.log('子表填充附表');
                 //循环给子表赋值
                 for (let key in kvDict) {
                     let val = parentData[key];
@@ -110,10 +111,9 @@ let config = {
                             let options = [{value: val, label: val}];
                             this.data.childComponent[songridDfield].data["options"] = this.data.data[songridDfield]["options"] = options;
                         }
-                        console.log('子表填充附表');
-                        console.log(songridDfield);
-                        console.log(val);
-                        this.actions.setFormValue(songridDfield, val);
+                        if(val || val =='') {
+                            this.actions.setFormValue(songridDfield, val);
+                        }
                         this.actions.triggerSingleControl(songridDfield);
                     }
                 }
@@ -141,7 +141,6 @@ let config = {
 
         //给子表统计赋值
         async setCountData() {
-            debugger
             let res = await FormService.getCountData({
                 //传给后台当前表单所有控件的值
                 data: JSON.stringify(this.actions.createFormValue(this.data.data)),
@@ -149,7 +148,6 @@ let config = {
                 child_table_id: this.data.sonTableId,
                 table_id: this.data.tableId
             });
-            console.log(res)
             //给统计赋值
             for (let d in res["data"]) {
                 this.actions.setFormValue(d, res["data"][d]);
@@ -301,12 +299,15 @@ let config = {
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
+                        let reg;
                         //有待优化
                         if (r.startsWith('/') && r.endsWith('/')) {
-                            r = r.substring(1)
-                            r = r.substring(0, r.length - 1);
+                            // r = r.substring(1)
+                            // r = r.substring(0, r.length - 1);
+                            reg = eval(r);
+                        }else {
+                            reg = new RegExp(r);
                         }
-                        let reg = new RegExp(r);
                         let flag = reg.test(val);
                         if (!flag) {
                             error = true;
@@ -790,6 +791,9 @@ let config = {
                             }
                         }
                         this.data.data[f]["required"] = this.data.childComponent[f].data['required'] = (i == andData[f].length) ? 1 : 0;
+                        if (this.data.childComponent[f].data['required']) {
+                            this.data.childComponent[f].data['requiredClass'] = this.data.childComponent[f].data.value == '' ? 'required' : 'required2';
+                        }
                         this.data.childComponent[f].reload();
                     }
                 } else {
@@ -798,6 +802,9 @@ let config = {
                             continue;
                         }
                         this.data.data[dfield]["required"] = this.data.childComponent[dfield].data['required'] = (key == value) ? 1 : 0;
+                        if (this.data.childComponent[dfield].data['required']) {
+                            this.data.childComponent[dfield].data['requiredClass'] = this.data.childComponent[dfield].data.value == '' ? 'required' : 'required2';
+                        }
                         this.data.childComponent[dfield].reload();
                         if (key == value) {
                             arr.push(dfield);
@@ -823,9 +830,11 @@ let config = {
                         errorMessage: errorMsg
                     }
                 } else {
+                    this.actions.checkOhterField(formValue);
                     return formValue;
                 }
             } else {
+                this.actions.checkOhterField(formValue);
                 return formValue;
             }
         },
@@ -977,9 +986,6 @@ let config = {
                     }
                 }
             }
-            if(formData.temp_id){
-                formData.real_id = '';
-            }
             return formData;
         },
 
@@ -1036,9 +1042,15 @@ let config = {
                 }
             }
             for (let obj of delKey) {
-                delete data[obj];
-                delete obj_new[obj];
-                delete obj_old[obj];
+                if(data){
+                    delete data[obj];
+                }
+                if(obj_new){
+                    delete obj_new[obj];
+                }
+                if(obj_old){
+                    delete obj_old[obj];
+                }
             }
         },
 
@@ -1068,6 +1080,10 @@ let config = {
             if (this.data.hasOtherFields == 0) {
                 this.actions.checkOhterField(data, obj_new, obj_old);
             }
+            console.log('data')
+            console.log('data')
+            console.log('data')
+            console.log(data);
             let json = {
                 data: JSON.stringify(data),
                 cache_new: JSON.stringify(obj_new),
@@ -1104,12 +1120,12 @@ let config = {
                         data: 'success',
                     });
                 }
+                //清空子表内置父表的ids
+                delete window.top.idsInChildTableToParent[this.data.tableId];
             } else {
                 MSG.alert(res.error);
             }
             this.data.isBtnClick = false;
-            //清空子表内置父表的ids
-            delete window.top.idsInChildTableToParent[this.data.tableId];
         },
 
         createPostJson() {
@@ -1184,7 +1200,6 @@ let config = {
             return json;
         },
 
-
         checkCustomTable(){
             console.log(this.data.custom_table_form_exists);
             if (this.data.custom_table_form_exists) {
@@ -1223,6 +1238,7 @@ let config = {
             this.actions.addBtn();
             this.actions.checkCustomTable();
             this.actions.triggerControl();
+            this.actions.setDataFromParent();
             this.data.isBtnClick = false;
         },
         //修改可修改性
@@ -1290,7 +1306,9 @@ let config = {
                         break;
                     }
                 }
-                this.actions.setAboutData(id, value);
+                if(value && value != ''){
+                    this.actions.setAboutData(id, value);
+                }
             }
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
@@ -1515,7 +1533,6 @@ let config = {
                 }
             });
         },
-
         //打开密码框弹窗
         addPassword(data) {
             let _this = this;
@@ -1556,7 +1573,6 @@ let config = {
                 _this.actions.addNewItem(data);
             });
         },
-
         //打开打印页眉设置弹窗 现由工作流负责此功能，以防万一先放着
         async printSetting() {
             let res = await FormService.getPrintSetting()

@@ -30,6 +30,7 @@ let timer;
 let formSave = false;
 let formValue;
 Mediator.subscribe('workflow:choose', (msg)=> {
+    // temp_ids=[];
     $("#singleFlow").click();
     $("#submitWorkflow").show();
     $("#startNew").hide();
@@ -161,6 +162,38 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })().then(res=>{
                 if(res.success===1){
                     msgBox.alert(`${res.error}`);
+                    let isdraft = true;
+                    $("#startNew").show().on('click',()=>{
+                        // console.log("46666666666666");
+                        if(isdraft){
+                            Mediator.publish('workflow:choose',wfObj);
+                            $("#startNew").hide();
+                            $("#submitWorkflow").show();
+                            isdraft = false;
+                        }
+                    });
+                    WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
+                }else{
+                    msgBox.alert(`${res.error}`);
+                    $("#submitWorkflow").show();
+                }
+            })
+        }
+    }else{
+        console.log(temp_ids);
+        let postData={
+            type:1,
+            temp_ids:JSON.stringify(temp_ids),
+            flow_id:wfObj.id,
+            unique_check:0
+        };
+        if(temp_ids.length){
+            $("#submitWorkflow").hide();
+            (async function (){
+                return await workflowService.createWorkflowRecord(postData);
+            })().then(res=>{
+                if(res.success===1){
+                    msgBox.alert(`${res.error}`);
                     $("#startNew").show().on('click',()=>{
                         Mediator.publish('workflow:choose',wfObj);
                         $("#startNew").hide();
@@ -172,31 +205,10 @@ Mediator.subscribe('workflow:submit', (res)=> {
                     $("#submitWorkflow").show();
                 }
             })
+            temp_ids=[];
+        }else{
+            msgBox.alert(`请上传数据`);
         }
-    }else{
-        $("#submitWorkflow").hide();
-        let postData={
-            type:1,
-            temp_ids:JSON.stringify(temp_ids),
-            flow_id:wfObj.id,
-            unique_check:0
-        };
-        (async function () {
-            return await workflowService.createWorkflowRecord(postData);
-        })().then(res=>{
-            if(res.success===1){
-                msgBox.alert(`${res.error}`);
-                $("#startNew").show().on('click',()=>{
-                    Mediator.publish('workflow:choose',wfObj);
-                    $("#startNew").hide();
-                    $("#submitWorkflow").show();
-                });
-                WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
-            }else{
-                msgBox.alert(`${res.error}`);
-                $("#submitWorkflow").show();
-            }
-        })
     }
     
 });
