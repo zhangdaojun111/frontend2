@@ -106,7 +106,6 @@ let config = {
                         let dinput_type = newDataFromSongrid[songridDfield]["dinput_type"] || "";
                         let options = [{value: val, label: val}];
                         if (FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
-                            console.log(1111);
                             let options = [{value: val, label: val}];
                             this.data.childComponent[songridDfield].data["options"] = this.data.data[songridDfield]["options"] = options;
                         }
