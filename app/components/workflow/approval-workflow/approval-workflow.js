@@ -13,7 +13,7 @@ import WorkflowSeal from '../workflow-seal/workflow-seal';
 import {workflowService} from '../../../services/workflow/workflow.service';
 import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
-
+import approvalOpinion from '../approval-opinion/approval-opinion'
 import WorkFlowForm from '../workflow-form/workflow-form';
 import WorkFlowGrid from '../workflow-grid/workflow-grid';
 
@@ -201,10 +201,16 @@ let config={
         },
         appPass() {
             Mediator.publish('workflow:appPass');
-            msgBox.confirm("确定审核通过").then((res)=>{
-                if(res===true){
-                    Mediator.publish("approval:recordPass",this.data.imgInfo);
-                }
+            PMAPI.openDialogByComponent(approvalOpinion,{
+                width: 450,
+                height: 300,
+                title: '提示'
+            }).then((res)=>{
+                console.log(res);
+                console.log("11111112222222222222")
+                // if(res===true){
+                //     Mediator.publish("approval:recordPass",this.data.imgInfo);
+                // }
             })
         },
         appRejStart(){
