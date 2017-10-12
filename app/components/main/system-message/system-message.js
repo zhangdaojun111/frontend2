@@ -28,6 +28,9 @@ let config = {
             });
             this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
+                // console.log(data);
+                // data.rows[0].msg_type = '推送消息';
+                // data.rows[0].msg_content = '        我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊啊我就是测试一下啊啊我就是测试一下啊啊我就是测试一下啊啊我就是测试一下啊\n    第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段';
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
                 });
@@ -241,7 +244,7 @@ let systemMessageUtil = {
         let html = `
             <div class="component-msg-detail">
                 <h3>${msgTitle}</h3>
-                <div class="text">${msgContent}</div>
+                <pre class="text">${msgContent}</pre>
             </div>
         `;
         if (speak) {

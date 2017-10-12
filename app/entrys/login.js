@@ -357,9 +357,9 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 }
 
 let controller = getLoginController();
+controller.formInit();  //初始化表单控件
 let isNeedDownload = controller.browser_check();
 if( isNeedDownload === false){      //正常显示登录表单
-    controller.formInit();  //初始化表单控件
     controller.infoInit();  //初始化最近访问用户和密码
     LoginService.getVersionInfo().done((result) => {
         if(result.success === 1){

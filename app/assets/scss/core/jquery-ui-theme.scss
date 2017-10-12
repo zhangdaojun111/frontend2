@@ -43,9 +43,15 @@
             height: 20px;
             .icon-maximize{
                 background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAPUlEQVQ4y2P8//8/AyWAiYFCwMLAwMAwa9YsspyRlpbGSB0XwEwjRSPM1RS7YNSAYWEAC3rCIBUwDnhuBABQlBDsTRq+rwAAAABJRU5ErkJggg==);
+                &:hover{
+                    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAPElEQVQ4y2P8//8/AyWAiYFCwMLAwMDA2MlAljP+lzMwUscFMNNI0QhzNcUuGDVgWBjAgp4wSAWMA54bAQvoDagC/S79AAAAAElFTkSuQmCC);
+                }
             }
             .icon-newwin{
                 background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAUElEQVQ4y2P8//8/AyWAiYFCwIJNcNasWUQ5Ky0tjZE2LoCZjk8jzJUUu4A6XkAONEJOxxkG6BqJjQkWcgKQrDDA5aJBEgukBBo6YBzw3AgAtskc8tM+AlgAAAAASUVORK5CYII=);
+                &:hover{
+                    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAT0lEQVQ4y2P8//8/AyWAiYFCwIJNkLGTgShn/S9nYKSNC2Cm49MIcyXFLqCOF5ADjZDTcYYBukZiY4KFnAAkKwxwuWiQxAIpgYbhtQHPjQAPdhau2j+DzgAAAABJRU5ErkJggg==);
+                }
             }
         }
         .ui-dialog-titlebar-close{
@@ -56,6 +62,9 @@
                 top: 10px;
                 left: 10px;
                 background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAg0lEQVQ4y8WTwQ3FMAhDyV/J08JMeCb31Oi3TWiqHorEBfATMUqTZG/iZy+jAyJiaZXzXAcAuIVEhAAci5J6ZqbcXf+1Pd1dmXnpXQZHkJl4CDhDKrEka7MzkhRJA2AA2uMz7mKS9VnuDKuMHXowenMFsVW3Z5AlcQU5NCvxbK59/hs38iKj9wg6P+sAAAAASUVORK5CYII=);
+                &:hover{
+                    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAdklEQVQ4y8WTwQ0AIQgE4TqzM55eaVa199IQlZXEx5HwAXYwS1QAchOPXMYA6Cupp8xzA2DlDNFXYGUqAhhpDZAK+FpPqYC1tbcM7iCReAuYIUwcAjyEiSmgiyNPKMBvPkFSbtPrZN2OICkxPbFvMnE0p7//xg8l5+lxwVt82AAAAABJRU5ErkJggg==);
+                }
             }
         }
     }

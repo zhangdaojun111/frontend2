@@ -85,7 +85,10 @@
         padding: 20px;
     }
     .text {
+        text-align: left;
         line-height: 22px;
-        padding: 0 30px;
+        padding: 0 50px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 }
