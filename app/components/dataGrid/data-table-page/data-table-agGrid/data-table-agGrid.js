@@ -2735,6 +2735,7 @@ let config = {
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
                 QuillAlert.data.value=data.value.replace(/(\n)/g, '');
                 PMAPI.openDialogByComponent(QuillAlert,{
+                    title:'文本编辑器',
                     width:800,
                     height:500,
                     modal:true,
