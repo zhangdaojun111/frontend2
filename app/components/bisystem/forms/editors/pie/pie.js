@@ -1,7 +1,7 @@
 import {Base} from '../base';
 import template from './pie.html';
 
-import {chartName,theme,icon,button} from '../form.chart.common';
+import {chartName,theme,icon,button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -17,6 +17,17 @@ let config = {
         async getFields(data) {
             let table = data ? data : null;
             if (table) {
+                if (table.count_fields.length > 0) {
+                    let fields =[];
+                    fields = table.count_fields.map(item => {
+                        return {value: JSON.stringify(item), name: item.name}
+                    });
+                    this.formItems['countColumn'].setList(fields);
+                    this.formItems['countColumn'].el.show();
+                } else {
+                    this.formItems['countColumn'].actions.clear();
+                    this.formItems['countColumn'].el.hide();
+                };
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']);
@@ -58,6 +69,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
+            this.formItems['countColumn'].el.hide();
             this.formItems['pieType'].trigger('onChange', this.formItems['pieType'].data.value);
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
@@ -113,7 +125,7 @@ let config = {
             let chart = {
                 assortment: 'pie',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn:'',
+                countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 filter: data.filter.filter,
                 filter_source: data.filter.filter_source,
                 chartType: {
@@ -152,6 +164,7 @@ let config = {
 
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
+            this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
             this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
@@ -188,6 +201,7 @@ let config = {
                     }
                 }
             },
+            countColumn,
             theme,
             icon,
             {

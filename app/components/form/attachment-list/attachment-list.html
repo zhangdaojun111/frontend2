@@ -11,7 +11,6 @@
         <tr id="{{this.file_id}}">
             <td>{{ this.file_name }}</td>
             <td id="{{this.file_id}}">
-                <a class="download-url" style="color: blue;">下载</a>
                 {{#if this.isPreview}}
                 {{#if this.isImg}}
                 <a style="color:blue;" class="ui-href pre" data-id="{{this.file_id}}" href="javascript:;">预览</a>
@@ -21,6 +20,7 @@
                 {{else}}
                     <a style="color: grey;" class="ui-href pre">预览</a>
                 {{/if}}
+                <a class="download-url" style="color: blue;">下载</a>
                 <a style="color: blue;" class="del" data-id="{{this.file_id}}" href="javascript:void(0);">删除</a>
             </td>
         </tr>
@@ -43,7 +43,7 @@
             <li class="resize" style="cursor: pointer"><img src="../../../assets/images/form/icon_resize.png"></li>
             <li class="rotate" style="cursor: pointer"><img src="../../../assets/images/form/icon_rotate.png"></li>
         </ul>
-        <div class="closeImg"><img src="../../../assets/images/form/icon_off.png"></div>
+        <div class="closeImg"><img src="../../../assets/images/form/icon_close.png"></div>
         <div class="previous"><img src="../../../assets/images/form/icon_arrow_left.png"></div>
         <div class="next"><img src="../../../assets/images/form/icon_arrow_right.png"></div>
     </div>
