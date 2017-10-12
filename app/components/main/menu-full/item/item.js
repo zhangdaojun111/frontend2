@@ -66,17 +66,28 @@ let config = {
         /**
          * 迷你菜单模式下
          */
-        showChildrenAtMini: function () {
+        showChildrenAtMini: function (event) {
             // window.clearTimeout(this.data.timer);
             if (this.childlist.length) {
                 this.childlist.show();
-                let height = this.childlist.height();
-                let position = this.childlist.offset();
+                let position = $(event).position();
                 let screenHeight = $('body').height();
-                if ((position.top + height) > screenHeight) {
+                let parentPos = $(event).parent().css('position') == 'fixed'?($(event).parent().position()):{top:0,left:0};
+                let top = position.top + parentPos.top;
+                let left = position.left + parentPos.left + Math.ceil($(event).outerWidth());
+                if ((position.top + this.childlist.height()) > screenHeight) {
                     this.childlist.removeClass('top').addClass('bottom');
+                    this.childlist.css({
+                        bottom:0,
+                        left:left
+                    })
                 } else {
                     this.childlist.removeClass('bottom').addClass('top');
+                    this.childlist.css({
+                        top:top,
+                        left:left
+                    })
+
                 }
             }
         },
@@ -194,8 +205,8 @@ let config = {
         }, {
             event: 'mouseenter',
             selector: null,
-            callback: function () {
-                this.actions.showChildrenAtMini();
+            callback: function (event) {
+                this.actions.showChildrenAtMini(event);
             }
         }, {
             event: 'mouseleave',
