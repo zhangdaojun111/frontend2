@@ -196,6 +196,18 @@ let config = {
         sendSearch:function () {
             // this.showLoading();
             msgbox.showLoadingSelf();
+            setTimeout(function () {
+                msgbox.hideLoadingSelf()
+            },5000);
+
+            setTimeout(function () {
+                msgbox.showLoadingRoot()
+            },7000);
+
+            setTimeout(function () {
+                msgbox.hideLoadingRoot()
+            },12000);
+
 
             let searchData = {
                 keyword:this.data.searchText,            //搜索文字
