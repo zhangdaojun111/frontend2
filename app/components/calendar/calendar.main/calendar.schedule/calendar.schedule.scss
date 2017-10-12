@@ -13,7 +13,9 @@
             padding-left: 1px;
             .component-date-control{
                 position: relative;
-                width: 242px;
+                width: 240px;
+                height:30px;
+                box-sizing: border-box;
                 border: 1px solid #999;
                 overflow: hidden;
                 input{
@@ -38,10 +40,13 @@
             background: $btn-bg-color;
             color: #fff;
             line-height: 28px;
-            padding: 0px 10px;
+            //padding: 0px 10px;
             font-size: 14px;
             display: inline-block;
             cursor: pointer;
+            width:90px;
+            text-align: center;
+            box-sizing: border-box;
         }
     }
     .schedule-content {
