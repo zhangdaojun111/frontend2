@@ -1,21 +1,24 @@
-.normal-data-range {
+.normal-date-range {
     width: 100%;
     height: 24px;
     line-height: 24px;
     overflow: hidden;
-    .normal-data-options {
+    .normal-date-options {
         float: left;
-        color: #dddddd;
-        span {
+        label {
+            cursor: pointer;
+        }
+        >span {
             font-weight: bold;
-            color: #333333;
         }
         .option-active {
-            font-weight: 500;
-            color: #333333;
+            font-weight: bold;
+        }
+        .option-disabled {
+            color: #DDDDDD;
         }
     }
-    .normal-data-time {
+    .normal-date-time {
         float: right;
         span {
             font-weight: bold;

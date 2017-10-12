@@ -21,11 +21,19 @@ let config = {
     },
     actions: {
         /**
-         * 显示字段数据范围
+         * 判断是否显示时间字段
          */
-        showNormalDataRange(){
-            this.normalRange = new NormalRangeComponent();
-            this.append(this.normalRange,this.el.find('.chart-normal-data-range'));
+        judgeDateZoom(cellChart) {
+            let type = cellChart.chart.xAxis.type;
+            if(type==3||type==5||type==12||type==30){
+                this.el.find('.echarts-cell').addClass('.date-filed');
+                this.normalRange = new NormalRangeComponent({id:this.data.id});
+                this.append(this.normalRange,this.el.find('.chart-normal-date-zoom'));
+                this.normalRange.actions.rangeChoose(type);
+                this.normalRange.actions.setDateValue(cellChart.chart.data.xAxis);
+            }else {
+                this.el.find('.echarts-cell').removeClass('.date-filed');
+            }
         },
         /**
          * 当有原始数据保存的时候，优先处理原始数据
@@ -63,7 +71,6 @@ let config = {
             return cellChart;
         },
 
-
         echartsInit() {
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
@@ -95,6 +102,7 @@ let config = {
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle',this.data);
         },
+
         updateChart(data) {
             //重新渲染echarts
             const option = this.normalChart.lineBarOption(data);
@@ -206,7 +214,9 @@ let config = {
     },
     firstAfterRender() {
         this.actions.echartsInit();
-        this.actions.showNormalDataRange();
+        //是否显示时间字段
+        this.actions.judgeDateZoom(this.data.cellChart);
+        console.log(this.data.cellChart)
     },
     beforeDestory() {
 
