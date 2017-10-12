@@ -15,7 +15,9 @@
 
             .component-date-control{
                 position: relative;
-                width: 245px;
+                width: 240px;
+                height:30px;
+                box-sizing: border-box;
                 border: 1px solid #999;
                 overflow: hidden;
                 input{
@@ -42,8 +44,8 @@
     }
     .export-btn {
         display: block;
-        line-height: 30px;
-        padding: 0px 12px;
+        line-height: 28px;
+        //padding: 0px 12px;
         font-weight: bold;
         float: right;
         background: #0088FF;
@@ -53,6 +55,8 @@
         cursor: pointer;
         margin-top: 230px;
         margin-right: 34px;
+        width: 90px;
+        text-align: center;
     }
     .disabled {
         pointer-events: none;
