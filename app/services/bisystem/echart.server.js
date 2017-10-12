@@ -202,7 +202,9 @@ export class EchartsService {
             };
 
             const splitNumber = 5;
-            linebarOption['yAxis'][0]['max'] = firstMax;
+            if(!isStack) {
+                linebarOption['yAxis'][0]['max'] = firstMax;
+            };
             linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
