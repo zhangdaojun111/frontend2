@@ -194,19 +194,19 @@ let config = {
          * 向后台请求第一轮搜索，数据和附件均搜索
          */
         sendSearch:function () {
-            // this.showLoading();
-            msgbox.showLoadingSelf();
-            setTimeout(function () {
-                msgbox.hideLoadingSelf()
-            },5000);
-
-            setTimeout(function () {
-                msgbox.showLoadingRoot()
-            },7000);
-
-            setTimeout(function () {
-                msgbox.hideLoadingRoot()
-            },12000);
+            this.showLoading();
+            // msgbox.showLoadingSelf();
+            // setTimeout(function () {
+            //     msgbox.hideLoadingSelf()
+            // },5000);
+            //
+            // setTimeout(function () {
+            //     msgbox.showLoadingRoot()
+            // },7000);
+            //
+            // setTimeout(function () {
+            //     msgbox.hideLoadingRoot()
+            // },12000);
 
 
             let searchData = {
@@ -255,14 +255,14 @@ let config = {
                     that.el.find('.attachment-name').html(str2);
                     that.actions.displayAttachmentResult(tempData);
                     that.attachmentPageController.actions.setPagination(tempData.total,1);
-                    // that.hideLoading();
+                    that.hideLoading();
                 }else{
                     console.log("查询失败",result);
-                    // that.hideLoading();
+                    that.hideLoading();
                 }
             }).fail((err) => {
                 console.log("查询失败",err);
-                // that.hideLoading();
+                that.hideLoading();
             });
         }
     },

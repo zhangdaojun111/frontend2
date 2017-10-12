@@ -182,15 +182,6 @@ let config = {
             });
             if (form.checkValidity()) {
                 let formData = Form.getValue(form);
-                // //对文本进行分段处理(如果使用pre则不需要)
-                // try{
-                //     formData.content = formData.content.replace(/\r\n/g,"</p><p>");
-                //     formData.content = formData.content.replace(/\n/g,"</p><p>");
-                // }catch(e) {
-                //     alert(e.message);
-                // }
-                // formData.content = '<p>' + formData.content + '</p>';
-
                 if (choosedUsers.length === 0) {
                     this.autoSelect.el.find('input:text')[0].setCustomValidity("发送人员不能为空");
                 } else {
