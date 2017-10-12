@@ -178,7 +178,7 @@ export class EchartsService {
                 break;
             }
         };
-        linebarOption['yAxis'][0]['min'] = isZero ? 0 : Math.floor(firstMin);
+        linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
         linebarOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
             if (10 * firstMaxText > 30) {
