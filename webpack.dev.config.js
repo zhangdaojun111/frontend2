@@ -3,6 +3,7 @@
  */
 
 const path = require('path');
+var argv = require('yargs').argv;
 var express = require('express');
 var webpack = require('webpack');
 var WebpackDevMiddleware = require('webpack-dev-middleware');
@@ -15,50 +16,22 @@ require("babel-polyfill");
 var ROOT_PATH = path.resolve(__dirname);
 var APP_PATH = path.resolve(ROOT_PATH, 'app');
 
+var customType = argv.env && argv.env.path;
+var customEntrys = {};
+
+try {
+    console.info("loading custom entrys config");
+    customEntrys = require(`./custom/${customType}/entrys.config.js`);
+} catch (e) {
+    console.info("ERROR: loading default entrys config");
+    customEntrys = require('./entrys.config.js');
+}
+
 module.exports = {
 
     devtool: 'cheap-module-eval-source-map',
 
-    entry: [
-        // 'webpack/hot/dev-server',
-        // 'webpack-hot-middleware/client',
-        APP_PATH
-    ],
-
-    entry: {
-        form: path.resolve(APP_PATH, 'entrys/form.js'),
-        openForm: path.resolve(APP_PATH, 'entrys/popup/openForm.js'),
-        choose: path.resolve(APP_PATH, 'entrys/popup/choose.js'),
-        createWorkflow: path.resolve(APP_PATH, 'entrys/createWorkflow.js'),
-        approvalWorkflow: path.resolve(APP_PATH, 'entrys/approvalWorkflow.js'),
-        addSigner: path.resolve(APP_PATH, 'entrys/popup/addSigner.js'),
-        addfocus: path.resolve(APP_PATH, 'entrys/popup/addfocus.js'),
-        addWf: path.resolve(APP_PATH, 'entrys/popup/addWf.js'),
-        approvalDialog:path.resolve(APP_PATH, 'entrys/popup/approvalDialog.js'),
-        multiapp: path.resolve(APP_PATH, 'entrys/popup/multiapp.js'),
-        login:path.resolve(APP_PATH, 'entrys/login.js'),
-        dataGrid: path.resolve(APP_PATH, 'entrys/dataGrid.js'),
-        sourceDataGrid: path.resolve(APP_PATH, 'entrys/popup/sourceDataGrid.js'),
-        dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
-        expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
-        historyApprove: path.resolve(APP_PATH, 'entrys/popup/historyApprove.js'),
-        operationDetails: path.resolve(APP_PATH, 'entrys/popup/operationDetails'),
-        jurisdiction: path.resolve(APP_PATH, 'entrys/popup/jurisdiction'),
-        workflowPage: path.resolve(APP_PATH, 'entrys/popup/workflowPage.js'),
-        rowOperation: path.resolve(APP_PATH, 'entrys/popup/rowOperation.js'),
-        customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
-        bi:path.resolve(APP_PATH, 'entrys/bi.js'),
-        bimanager:path.resolve(APP_PATH, 'entrys/bimanager.js'),
-        calendar: path.resolve(APP_PATH, 'entrys/calendar.js'),
-        calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
-        calendarSetRemind: path.resolve(APP_PATH, 'entrys/popup/calendarSetRemind.js'),
-        calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
-        calendarOpenSetting: path.resolve(APP_PATH, 'entrys/popup/calendarOpenSetting.js'),
-        calendarExport: path.resolve(APP_PATH, 'entrys/popup/calendarExport.js'),
-        main: path.resolve(APP_PATH, 'entrys/main.js'),
-        register:path.resolve(APP_PATH, 'entrys/register.js'),
-        resultDisplay:path.resolve(APP_PATH,'entrys/resultDisplay.js'),
-        findPassword:path.resolve(APP_PATH,'entrys/findPassword.js'),
+    entry: Object.assign(customEntrys, {
         vendors: [
             'jquery',
             'jquery-ui',
@@ -69,7 +42,7 @@ module.exports = {
             'lodash',
             'babel-polyfill'
         ]
-    },
+    }),
 
     output: {
         path: '/',
