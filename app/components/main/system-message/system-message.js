@@ -116,8 +116,8 @@ let config = {
             let data = JSON.stringify(checkIds);
             let that = this;
             PMAPI.openDialogByIframe(url,{
-                width: 540,
-                height: 600,
+                width: 450,
+                height: 310,
                 title: '批量审批',
                 // customSize:true
             },data).then(res => {
