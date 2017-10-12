@@ -461,7 +461,8 @@ export const FormService = {
     },
     //获取表单动态数据
     getDynamicData(json) {
-        return HTTP.post('get_form_dynamic_data', json)
+        let res = HTTP.postImmediately({url:'/get_form_dynamic_data/', data:json});
+        return res;
     },
     //立即获得表单静态数据
     getStaticDataImmediately(json) {

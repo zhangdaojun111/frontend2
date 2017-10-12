@@ -335,4 +335,8 @@
            margin: 0 auto;
         }
     }
+
+    .otherhidden *{
+        visibility: hidden !important;
+    }
 }

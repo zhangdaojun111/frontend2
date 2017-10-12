@@ -109,7 +109,7 @@ let config={
             if(this.data.sMuiltOption && this.data.sMuiltOption.length >0 &&[0]['label'] == '-'){
                 this.data.sMuiltOption[0]['value']='-';
             }
-            if(this.data.options[0]['label'] == '-'){
+            if(this.data.options[0] && this.data.options[0]['label'] && this.data.options[0]['label'] == '-'){
                 this.data.options[0]['value']='-';
             }
             let data1=_.defaultsDeep({},this.data);
@@ -227,7 +227,7 @@ let config={
 
                 this.setData('childSelect', {});
                 let el=this.el.find('#multi-select');
-                if(this.data.options[0]['label'] == '-'){
+                if(this.data.options[0] && this.data.options[0]['label'] && this.data.options[0]['label'] == '-'){
                     this.data.options[0]['value']='-';
                 }
                 if(this.data.isViewOptions && this.data.isViewOptions.length>0 && this.data.isViewOptions[0]['label'] == '-'){
@@ -256,6 +256,7 @@ let config={
                 this.data.childSelect=autoSelect;
                 this.append(autoSelect,el);
             }else {
+                console.log('这里?');
                 this.data.originalList = {};
                 for( let o of this.data['options'] ){
                     let str = o.label;
