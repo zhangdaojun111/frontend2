@@ -20,6 +20,7 @@
         }
 
         .style-setting{
+            display: none;
             width: 460px;
             float: left;
             .prompt{
@@ -57,7 +58,7 @@
         .rapid-setting{
             width: 460px;
             float: left;
-            display: none;
+            //display: none;
             //.sort-prompt{
             //    height: 30px;
             //    display: block;
@@ -75,21 +76,16 @@
                     .isShow-BI,.isShow-calendar{
                         height: 30px;
                         line-height: 30px;
-                        //margin: 10px 30px 0 30px;
                         margin: 5px;
                         background-color: #f2f2f2;
                         cursor:n-resize;
-                        .bi-Show{
-                            vertical-align: middle;
-                            margin-left: 10px;
-                            margin-right: 10px;
-                            cursor: pointer;
-                        }
-                        .calendar-Show{
-                            cursor: pointer;
-                            vertical-align: middle;
-                            margin-left: 10px;
-                            margin-right: 14px;
+                        .custom-checkbox{
+                            margin: 7px 5px 0 10px;
+                            float:left;
+                            .bi-Show,.calendar-Show{
+                                vertical-align: top;
+                                cursor: pointer;
+                            }
                         }
                         span{
                             vertical-align: middle;
@@ -109,6 +105,8 @@
             .rapid-save-btn{
                 width: 90px;
                 height: 30px;
+                box-sizing: border-box;
+                padding: 1px 6px;
                 border-radius: 5px;
                 background-color: #0088ff;
                 color: #ffffff;

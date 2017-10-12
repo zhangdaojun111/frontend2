@@ -44,7 +44,7 @@ export const GlobalService = {
             {
                 headerName: '是否在职',
                 field: 'is_active',
-                width: 110,
+                width: 90,
                 suppressMenu: true,
                 tooltipField: 'is_active',
                 cellStyle: {'text-align': 'center'},
@@ -90,7 +90,7 @@ export const GlobalService = {
             {
                 headerName: '设备',
                 field: 'device',
-                width: 80,
+                width: 150,
                 suppressMenu: true,
                 tooltipField: 'device',
                 cellStyle: {'text-align': 'center'},
@@ -99,7 +99,7 @@ export const GlobalService = {
             {
                 headerName: 'app版本',
                 field: 'version',
-                width: 190,
+                width: 140,
                 suppressMenu: true,
                 tooltipField: 'version',
                 cellStyle: {'text-align': 'center'},

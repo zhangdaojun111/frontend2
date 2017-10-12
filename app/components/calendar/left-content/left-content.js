@@ -13,7 +13,7 @@ import {PMAPI} from '../../../lib/postmsg';
 import LeftContentCalendarSet from './leftContent.calendarSet/leftContent.calendarSet';
 import leftContentFinished from './leftContent.finished/leftContent.finished';
 import RightContentWorkFlow from '../right-content/right.content.workflowcontent/right.content.workflowcontent';
-import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
+import {CalendarService} from "../../../services/calendar/calendar.service"
 import {CalendarWorkflowData} from '../calendar.main/calendar.workflow/calendar.workflow';
 
 let config = {
@@ -105,6 +105,14 @@ let config = {
                     customSize: true,
                 },
             ).then(data => {
+                console.log(data);
+                Mediator.emit('Calendar: tool', {toolMethod: 'refresh', type: 'closeSetting'});
+                CalendarService.getCalendarTreeData().then(res => {
+                    console.log(res);
+                    this.data.cancelFields = res['cancel_fields'];
+                    this.el.find('.left-calendar-set').empty();
+                    this.append(new LeftContentCalendarSet(res), this.el.find('.left-calendar-set'));
+                });
             });
         },
 
