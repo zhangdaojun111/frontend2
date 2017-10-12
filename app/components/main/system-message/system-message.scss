@@ -34,7 +34,7 @@
                 &.already-read-icon{
                     color: #31fc38;
                 }
-                &.not-read-icon, &.waiting-for-approval{
+                &.not-read-icon, &.waiting-for-approval,&.approval-msg{
                     color:red;
                 }
             }

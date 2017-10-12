@@ -52,6 +52,9 @@ const handlers = {
     readRender: function (data) {
         return `<div class="grid-cell-info ${data.value?'already-read-icon':'not-read-icon'}" title="${data.value?'已读':'未读'}">${data.value?'已读':'未读'}<div>`;
     },
+    msgTypeRender:function (data) {
+        return `<div class="grid-cell-info ${data.value === '审批消息'?'approval-msg':'non-approval-msg'}" title="${data.value}">${data.value}<div>`;
+    },
     operatorRender:function (data) {
         if(data.value === '待审批'){
             //返回审批按钮
@@ -98,6 +101,7 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'msg_type',
                 cellStyle: {'text-align': 'center'},
+                cellRenderer: handlers.msgTypeRender
             },
             {
                 headerName: '执行状态',

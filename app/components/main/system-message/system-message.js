@@ -187,42 +187,46 @@ let config = {
             }
         },
         /**
+         * 双击打开消息细节弹窗
+         * @param $event
+         */
+        onRowDoubleClicked:function ($event) {
+            this.actions.openDialog($event);
+        },
+        /**
          * 选择信息查看详细内容，信息类型不同，采用不同方式展示
          * @param $event
          */
         onCellClicked: function ($event) {
             if($event.colDef.headerName === '操作'){
-                let data = $event.data;
-                // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
-                //     data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') || data.msg_type === '关注消息') {
-                if (data.msg_type === '审批消息' || data.msg_type === '关注消息') {
-                    if(data.handle_status_text === '待审批'){
-                        data.url += "&btnType=edit";
-                    }else if(data.handle_status_text === '已取消'){
-                        data.url += "&btnType=view";
-                    }
-
-                    PMAPI.openDialogByIframe(data.url, {
-                        width: 1200,
-                        height: 500,
-                        title: data.msg_type_text,
-                        customSize:true
-                    }).then((result) => {
-                        if (result.refresh === true) {
-                            this.actions.loadData();
-                        }
-                    })
-                } else {
-                    systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
+                this.actions.openDialog($event);
+            }
+        },
+        openDialog:function ($event) {
+            let data = $event.data;
+            // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
+            //     data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') || data.msg_type === '关注消息') {
+            if (data.msg_type === '审批消息' || data.msg_type === '关注消息') {
+                if(data.handle_status_text === '待审批'){
+                    data.url += "&btnType=edit";
+                }else if(data.handle_status_text === '已取消'){
+                    data.url += "&btnType=view";
                 }
 
-                //查看通过前端自己刷新，审批通过loadData刷新
-                // if($event.event.srcElement.className.includes()){
-                //     $event.node.data.is_read = 1;
-                //     this.agGrid.actions.refreshView();
-                this.actions._postReadData(JSON.stringify([data.id]));
-                // }
+                PMAPI.openDialogByIframe(data.url, {
+                    width: 1200,
+                    height: 500,
+                    title: data.msg_type_text,
+                    customSize:true
+                }).then((result) => {
+                    if (result.refresh === true) {
+                        this.actions.loadData();
+                    }
+                })
+            } else {
+                systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
             }
+            this.actions._postReadData(JSON.stringify([data.id]));
         },
         initPagination:function () {
             this.pagination = new dataPagination({
@@ -242,6 +246,7 @@ let config = {
         this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
+            onRowDoubleClicked:that.actions.onRowDoubleClicked,
             onSortChanged: this.actions.onSortChanged,
             footerData:[]
         });
