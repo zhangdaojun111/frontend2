@@ -100,7 +100,7 @@ export const screenShotConfig={
             }
         });
 
-        //弹窗button位置不随横向滚动条滚动
+        //弹窗button位置不随滚动条滚动
         t.el.find(".screenshot").parents().scroll(function () {
             let scrollTop =  t.el.find(".screenshot").parents().scrollTop();
             let scrollLeft =  t.el.find(".screenshot").parents().scrollLeft();

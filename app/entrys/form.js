@@ -49,6 +49,8 @@ let FormEntrys = {
         this.data.btnType = config.btnType || 'new';//按钮
         this.data.viewMode = config.viewMode || '0';//aggrid权限
         this.data.inProcess = config.in_process || '0';//是否查询临时数据
+        this.data.data_from_row_id = config.data_from_row_id || '';//半触发操作
+        this.data.operation_id = config.operation_id || '';//半触发操作
         console.log(config);
     }
     ,
@@ -133,6 +135,10 @@ let FormEntrys = {
         if( this.data.tempId ){
             json['temp_id'] = this.data.tempId
             json['real_id'] = ''
+        }
+        if( this.data.data_from_row_id ){
+            json['data_from_row_id'] = this.data.data_from_row_id;
+            json['operation_id'] = this.data.operation_id;
         }
         return json;
     },

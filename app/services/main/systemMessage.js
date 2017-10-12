@@ -98,7 +98,6 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'msg_type',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
             },
             {
                 headerName: '执行状态',
@@ -107,7 +106,6 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'handle_status_text',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true,
                 cellRenderer: handlers.exeStatusRender
             },
             {
@@ -125,7 +123,6 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'publisher',
                 cellStyle: {'text-align': 'center'},
-                suppressSorting: true
             }, {
                 headerName: '消息标题',
                 field: 'title',

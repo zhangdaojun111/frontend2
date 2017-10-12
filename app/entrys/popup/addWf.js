@@ -18,7 +18,10 @@ import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
-    setTimeout(()=>component.hideLoading(),1000)
+    Mediator.subscribe("form:formAlreadyCreate",()=>{
+        component.hideLoading();
+    });
+    // setTimeout(()=>component.hideLoading(),1000)
 });
 let serchStr = location.search.slice(1);
 let obj = {}, is_view = 0,cache_old;
@@ -82,7 +85,7 @@ Mediator.publish('workflow:getKey', obj.key);
     }
 });
 Mediator.subscribe('workflow:getflows', (res) => {
-    if (obj.btnType === 'view') {
+    if (obj.btnType === 'view' && is_view != 0) {
         $('#toEdit').show();
         $('#addFollower').hide();
     }else if(obj.btnType==='none'){
@@ -119,6 +122,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         parent_real_id: obj.parent_real_id,
         parent_temp_id: obj.parent_temp_id,
         parent_record_id: obj.parent_record_id,
+        data_from_row_id: obj.data_from_row_id || '',
+        operation_id: obj.operation_id || '',
         real_id: obj.real_id,
         temp_id: obj.temp_id,
         in_process: obj.in_process,
@@ -139,6 +144,7 @@ Mediator.subscribe('workflow:focus-users', (res) => {
 })
 Mediator.subscribe('workflow:submit', (res) => {
     let formData = FormEntrys.getFormValue(obj.table_id,true);
+    console.log(obj);
     if (formData.error) {
         msgBox.alert(`${formData.errorMessage}`);
     } else {
@@ -158,13 +164,14 @@ Mediator.subscribe('workflow:submit', (res) => {
             return workflowService.addUpdateTableData(postData);
         })().then(res => {
             if (res.success === 1) {
-                msgBox.alert(`${res.error}`);
-                PMAPI.sendToParent({
+                msgBox.showTips(`保存成功`);
+                PMAPI.sendToRealParent({
                     type: PMENUM.close_dialog,
                     key: obj.key,
                     data: {
                         table_id: obj.table_id,
-                        type: 'closeAddition'
+                        type: 'closeAddition',
+                        refresh: true
                     }
                 });
             } else {
@@ -179,5 +186,7 @@ Mediator.subscribe('workflow:changeToEdit',(res)=>{
         $("#add-wf").find('.J_hide').removeClass('hide');
         $("#add-wf").find('#print').removeClass('addPrint');
     }
+    // $("#add-wf").find('#print').removeClass('addPrint');
+    is_view = 0;
     FormEntrys.changeToEdit(res);
 })

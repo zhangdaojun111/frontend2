@@ -1,6 +1,6 @@
 import {Base} from '../base';
 import template from './linebar.html';
-import {chartName,theme,icon,button,search} from '../form.chart.common';
+import {chartName,theme,icon,button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -57,6 +57,18 @@ let config = {
         async getFields(data) {
             let table = data ? data : null;
             if (table) {
+                if (table.count_fields.length > 0) {
+                    let fields =[];
+                    fields = table.count_fields.map(item => {
+                        return {value: JSON.stringify(item), name: item.name}
+                    });
+                    this.formItems['countColumn'].setList(fields);
+                    this.formItems['countColumn'].el.show();
+                } else {
+                    this.formItems['countColumn'].actions.clear();
+                    this.formItems['countColumn'].el.hide();
+                };
+
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']);
@@ -98,6 +110,7 @@ let config = {
          * 初始化图表操作
          */
         async init() {
+            this.formItems['countColumn'].el.hide();
             this.formItems['double'].trigger('onChange');
             this.formItems['yHorizontalColumns'].trigger('onChange');
             this.formItems['chartAssignment'].trigger('onChange');
@@ -187,7 +200,7 @@ let config = {
                 assortment: 'normal',
                 chartAssignment: data.chartAssignment == 1 ? {name:'分组', val:1} : {name:'下穿', val:2},
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn: {},
+                countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 double:data.double[0] ? 1 : 0,
                 echartX: data.echartX[0] ? {marginBottom: data.marginBottom, textNum:data.textNum}: {},
                 filter: data.filter.filter,
@@ -221,7 +234,6 @@ let config = {
                 }
             };
 
-
             // y轴单独验证
             let yAxispass = formValidate.validateYAxis(yAxis);
             if (!yAxispass) {
@@ -249,6 +261,7 @@ let config = {
             let chart = _.cloneDeep(data);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
+            this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
             this.formItems['filter'].setValue({filter: chart['filter'] ? chart['filter'] : '', filter_source:chart['filter_source']? chart['filter_source']:[]});
@@ -258,7 +271,7 @@ let config = {
             this.formItems['advancedDataTemplates'].setValue(chart['advancedDataTemplates']);
             let yAxis1 = _.remove(chart['yAxis'],(item) => {
                 return item.yAxisIndex != 0
-            })
+            });
             this.formItems['yAxis0'].setValue(chart['yAxis']);
             this.formItems['double'].setValue(chart['double']);
             if (chart['double'] == 1) {
@@ -302,6 +315,7 @@ let config = {
                     }
                 }
             },
+            countColumn,
             theme,
             icon,
             {

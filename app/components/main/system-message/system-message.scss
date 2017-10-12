@@ -78,6 +78,7 @@
 
 .component-msg-detail {
     text-align: center;
+    padding: 0 20px;
     h3 {
         padding-bottom: 20px;
         font-size: 16px;
@@ -86,5 +87,7 @@
     }
     .text {
         line-height: 22px;
+        padding: 0 30px;
+        overflow: auto;
     }
 }
