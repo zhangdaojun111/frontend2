@@ -148,6 +148,7 @@ let config = {
                 this.data.currentPage = 1;
                 this.actions.resetPagination( this.data.total );
                 this.actions.onPaginationChanged();
+
                 if( this.data.tableId ){
                     console.log("pageSize数据保存：" + Number(this.data.rows));
                     dataTableService.savePreference({

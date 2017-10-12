@@ -2735,6 +2735,7 @@ let config = {
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
                 QuillAlert.data.value=data.value.replace(/(\n)/g, '');
                 PMAPI.openDialogByComponent(QuillAlert,{
+                    title:'文本编辑器',
                     width:800,
                     height:500,
                     modal:true,
@@ -3032,7 +3033,7 @@ let config = {
                 let id = data["event"]["target"]["id"];
                 for (let d of this.data.customOperateList) {
                     if (d["id"] == id) {
-                        this.actions.customOperate(d);
+                        this.actions.customOperate(d,data);
                     }
                 }
             }
@@ -3049,25 +3050,22 @@ let config = {
             }
         },
         //半触发操作
-        customOperate: function (d) {
-            // console.log( "_____" )
-            // console.log( d )
-            // let obj = {
-            //     table_id: this.data.tableId,
-            //     parent_table_id: this.data.parentTableId,
-            //     parent_real_id: this.data.parentRealId,
-            //     parent_temp_id: this.data.parentTempId,
-            //     parent_record_id: this.data.parentRecordId,
-            //     real_id: d["id"],
-            //     flow_id : d["flow_id"],
-            //     form_id : d["form_id"],
-            //     id : d["id"],
-            //     table_id : d['table_id'],
-            //     btnType: 'oprate'
-            // };
-            // let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
-            // let title = d.name;
-            // this.actions.openSourceDataGrid( url,title );
+        customOperate: function (d,data) {
+            console.log( "半触发操作" )
+            console.log( d )
+            console.log( data )
+            let obj = {
+                flow_id : d["flow_id"],
+                form_id : d["form_id"],
+                id : d["id"],
+                table_id : d['table_id'],
+                btnType: 'new',
+                data_from_row_id: data.data['_id'],
+                operation_id: d.id
+            };
+            let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
+            let title = d.name;
+            this.actions.openSelfIframe( url,title );
         },
         //行级操作
         doRowOperation: function (r,$event) {
@@ -3223,7 +3221,7 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-                if( data == 'success' ){
+                if( data == 'success' || data.refresh ){
                     this.actions.timeDelayRefresh();
                 }
             } )
