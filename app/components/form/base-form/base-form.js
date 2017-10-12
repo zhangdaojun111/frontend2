@@ -1077,6 +1077,10 @@ let config = {
             if (this.data.hasOtherFields == 0) {
                 this.actions.checkOhterField(data, obj_new, obj_old);
             }
+            console.log('data')
+            console.log('data')
+            console.log('data')
+            console.log(data);
             let json = {
                 data: JSON.stringify(data),
                 cache_new: JSON.stringify(obj_new),
@@ -1231,6 +1235,7 @@ let config = {
             this.actions.addBtn();
             this.actions.checkCustomTable();
             this.actions.triggerControl();
+            this.actions.setDataFromParent();
             this.data.isBtnClick = false;
         },
         //修改可修改性
