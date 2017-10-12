@@ -255,14 +255,14 @@ let config = {
                     that.el.find('.attachment-name').html(str2);
                     that.actions.displayAttachmentResult(tempData);
                     that.attachmentPageController.actions.setPagination(tempData.total,1);
-                    that.hideLoading();
+                    // that.hideLoading();
                 }else{
                     console.log("查询失败",result);
-                    that.hideLoading();
+                    // that.hideLoading();
                 }
             }).fail((err) => {
                 console.log("查询失败",err);
-                that.hideLoading();
+                // that.hideLoading();
             });
         }
     },

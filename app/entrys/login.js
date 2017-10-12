@@ -384,5 +384,6 @@ if( isNeedDownload === false){      //正常显示登录表单
     });
 }else{
     //显示浏览器下载提示,隐藏其余部分
+    $('.login-content').hide();
     $(".need-download").show();
 }
