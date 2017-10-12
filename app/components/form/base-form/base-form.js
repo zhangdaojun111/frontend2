@@ -285,7 +285,7 @@ let config = {
                     continue;
                 }
                 let type = data["type"];
-                if (type == 'songrid') {
+                if (type == 'Songrid') {
                     continue;
                 }
                 let val = formValue[key];
@@ -377,7 +377,8 @@ let config = {
             }
             //子表必填
             for (let d in allData) {
-                if (allData[d].type == 'songrid' && allData[d].required && allData[d].total == 0) {
+                if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
+                    debugger
                     error = true;
                     errorMsg = '子表字段:' + allData[d].label + '是必填！';
                     break;
@@ -997,6 +998,14 @@ let config = {
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
+
+            //子表必填性改变
+            if (_this.data.type == 'Songrid' && _this.data.total == 0) {
+                _this.el.find('#requiredLogo').removeClass().addClass('required');
+            }else {
+                _this.el.find('#requiredLogo').removeClass().addClass('required2');
+            }
+
         },
         //赋值
         setFormValue(dfield, value) {
