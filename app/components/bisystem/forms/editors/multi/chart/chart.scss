@@ -57,11 +57,16 @@
     }
     .form-chart-radio {
         @include msg-show;
+        .form-label {
+            span {
+                top: -28px;
+            }
+        }
         label {
-            border: none!important;
-            background: none!important;
-            margin: 0!important;
-            padding: 0!important;
+            border: none !important;
+            background: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
 
     }

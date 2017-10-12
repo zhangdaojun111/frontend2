@@ -163,16 +163,22 @@ export class EchartsService {
                 };
             }
         };
-        let firstMax = ToolPlugin.fixMaxNumber(Math.max.apply(null, firstMaxYnum));
-        let firstMin = ToolPlugin.fixMinNumber(Math.min.apply(null, firstMinYnum));
-        let secondMax = ToolPlugin.fixMaxNumber(Math.max.apply(null, secondMaxYnum));
-        let secondMin = ToolPlugin.fixMinNumber(Math.min.apply(null, secondMinYnum));
+        let firstMax = Math.max.apply(null, firstMaxYnum);
+        let firstMin = Math.min.apply(null, firstMinYnum);
+        let secondMax = Math.max.apply(null, secondMaxYnum);
+        let secondMin = Math.min.apply(null, secondMinYnum);
         let firstMaxText = Math.max.apply(null, firstMaxTextYnum);
         let secondMaxText = Math.max.apply(null, secondMaxTextYnum);
         let maxXTextNum = Math.max.apply(null, maxXnum);
-
-
-        linebarOption['yAxis'][0]['min'] = firstMin;
+        //如果数据里面有柱状图，则y轴起始点从0开始
+        let isZero = false;
+        for(let y of yAxis){
+            if(y.type.type == 'bar'&& !cellOption['yHorizontal']&& firstMin >= 0){
+                let isZero = true;
+                break;
+            }
+        };
+        linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
         linebarOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
             if (10 * firstMaxText > 30) {
