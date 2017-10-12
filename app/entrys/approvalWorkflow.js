@@ -225,7 +225,8 @@ Mediator.subscribe('approval:recordPass', (data) => {
         node_id: null, //驳回节点id
         sigh_type: 0, //加签类型  0：前 1：后
         sigh_user_id: '',
-        sign: JSON.stringify(data),
+        sign: data[0],
+        delSign:data[1],
     });
 });
 Mediator.subscribe('approval:appRejUp', (ispass) => {

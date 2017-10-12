@@ -136,7 +136,18 @@ $sub_color: #0088ff;
                 margin-left: 130px;
                 margin-top: 10px;
                 line-height:50px;
+                span{
+                    display: inline-block;
+                    height: 25px;
+                    line-height: 25px;
+                    margin-top: 1px;
+                    vertical-align: middle;
+                }
                 input{
+                    overflow: hidden;
+                    white-space:nowrap;
+                    text-overflow: ellipsis;
+                    height: 25px;
                     width: 230px;
                     background-color: transparent;
                     border: none;
@@ -148,11 +159,21 @@ $sub_color: #0088ff;
                 margin-left: 130px;
                 margin-top: 10px;
                 position: relative;
+                span{
+                    display: inline-block;
+                    height: 25px;
+                    line-height: 25px;
+                    margin-top: 1px;
+                    vertical-align: middle;
+                }
                 input{
                     height: 25px;
-                    width: 180px;
+                    width: 200px;
                     background-color: transparent;
                     border: none;
+                    overflow: hidden;
+                    white-space:nowrap;
+                    text-overflow: ellipsis;
                     &:focus{
                         border: solid 1px #0088ff;
                     }
@@ -204,6 +225,8 @@ $sub_color: #0088ff;
                 right: 30px;
                 border: 0;
                 border-radius: 5px;
+                box-sizing: border-box;
+                padding: 1px 6px;
                 cursor: pointer;
             }
         }

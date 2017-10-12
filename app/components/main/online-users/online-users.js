@@ -11,6 +11,8 @@ import template from './online-users.html';
 import agGrid from '../../dataGrid/agGrid/agGrid';
 import dataPagination from '../../dataGrid/data-table-toolbar/data-pagination/data-pagination';
 import {GlobalService} from "../../../services/main/globalService"
+import {dataTableService} from "../../../services/dataGrid/data-table.service"
+import {HTTP} from '../../../lib/http';
 
 let component;
 let config = {
@@ -18,7 +20,9 @@ let config = {
     data:{
         columnDefs:{},
         currentData:{},
-        // test_data:{"total": 15, "rows": [{"employee_id": -1, "name": "\u5c39\u624d\u534e", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 86378, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e343", "login_time": "2017-09-04 12:53:26"}, {"employee_id": -1, "name": "\u718a\u5c0f\u6d9b", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80606, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e34b", "login_time": "2017-09-04 09:55:15"}, {"employee_id": -1, "name": "\u5f90\u8273", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 85533, "login_ip": "192.168.2.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e34f", "login_time": "2017-09-04 11:54:42"}, {"employee_id": -1, "name": "\u6768\u6653\u5ddd", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 82247, "login_ip": "192.168.2.21", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e370", "login_time": "2017-09-04 10:19:37"}, {"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"},{"employee_id": -1, "name": "\u4e8e\u5fb7\u840d", "mobile": "", "is_active": "\u5728\u804c", "is_superuser": "\u662f", "expire": 80096, "login_ip": "127.0.0.1", "version": "", "device": "pc", "ID": "5979e48a41f77c586658e371", "login_time": "2017-09-04 10:06:39"}], "success": 1, "error": ""}
+        total:0,
+        rows:100,
+        tableId:'online-user'
     },
     actions:{
         /**
@@ -56,22 +60,44 @@ let config = {
         onPaginationChanged:function (data) {
             this.actions.loadData(data);
         },
+        onSortChanged:function ($event) {
+            this.agGrid.actions.refreshView();
+        },
+        initPagination:function () {
+            this.pagination = new dataPagination({
+                currentPage: 1,
+                rows: this.data.rows,
+                tableId:this.data.tableId
+            });
+            this.pagination.render(this.el.find('.user-pagination'));
+            this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
+            this.actions.loadData();
+        }
     },
     afterRender:function () {
+        let that = this;
         let gridRoot = this.el.find('.user-grid');
         //设置表头
         this.agGrid = new agGrid({
             columnDefs: GlobalService.getOnlineColumnDefs(),
-            footerData:[]
+            footerData:[],
+            onSortChanged: this.actions.onSortChanged,
         });
         this.agGrid.render(gridRoot);
-        this.pagination = new dataPagination({
-            currentPage: 1,
-            rows: 100,
+        this.showLoading();
+        //请求页显示数量偏好
+        let tempData = {
+            actions:JSON.stringify(['pageSize']),
+            table_id:this.data.tableId
+        };
+
+        dataTableService.getPreferences(tempData).then((result) => {
+            if(result.success === 1 && result.pageSize !== null){
+                that.data.rows = result.pageSize.pageSize;
+            }
+            that.actions.initPagination();
         });
-        this.pagination.render(this.el.find('.user-pagination'));
-        this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
-        this.actions.loadData();
+        HTTP.flush();
     },
     beforeDestory:function () {
         

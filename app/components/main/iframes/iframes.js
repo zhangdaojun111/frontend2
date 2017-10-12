@@ -304,7 +304,7 @@ export const IframeInstance = new Component({
          * 关闭当前tabs
          */
         closeFocusTab:function () {
-            if(this.data.focus){
+            if(this.data.focus && this.data.count > 0){
                 this.actions.closeIframe(this.data.focus.id);
             }
         },

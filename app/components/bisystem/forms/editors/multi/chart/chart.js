@@ -1,7 +1,7 @@
 import {Base} from '../../base';
 import template from './chart.html';
 
-import {chartName,theme,icon} from '../../form.chart.common';
+import {chartName,theme,icon,countColumn} from '../../form.chart.common';
 import {ChartFormService} from '../../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../../lib/msgbox";
 import Mediator from '../../../../../../lib/mediator';
@@ -10,6 +10,7 @@ import './chart.scss';
 let config = {
     template: template,
     actions: {
+
         /**
          * 加载x 和y轴数据
          * @param data 选中的数据源
@@ -17,6 +18,18 @@ let config = {
         async getFields(data) {
             let table = data ? data : null;
             if (table) {
+                if (table.count_fields.length > 0) {
+                    let fields =[];
+                    fields = table.count_fields.map(item => {
+                        return {value: JSON.stringify(item), name: item.name}
+                    });
+                    this.formItems['countColumn'].data.name = this.componentId;
+                    this.formItems['countColumn'].setList(fields);
+                    this.formItems['countColumn'].el.show();
+                } else {
+                    this.formItems['countColumn'].actions.clear();
+                    this.formItems['countColumn'].el.hide();
+                };
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']);
@@ -55,6 +68,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
+           this.formItems['countColumn'].el.hide();
            this.formItems['source'].setList(this.data.source);
         },
         /**
@@ -110,6 +124,7 @@ let config = {
                     }
                 }
             },
+            countColumn,
             {
                 label: '选择图形',
                 name: 'chartType',
@@ -245,7 +260,7 @@ class ChartEditor extends Base {
         let data = this.getData();
         let chart = {
             chartType: data.chartType == 'line' ? {'name': '折线图', 'type': 'line'} : {'name': '柱状图', 'type': 'bar'},
-            countColumn: '',
+            countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
             filter: data.filter.filter ? data.filter.filter : {},
             filter_source: data.filter.filter_source ? data.filter.filter_source : {},
             filter_rule: {},
@@ -262,6 +277,7 @@ class ChartEditor extends Base {
      */
     setValue(data) {
         this.formItems['source'].setValue(data['sources']);
+        this.formItems['countColumn'].setValue(JSON.stringify(data['countColumn']));
         this.formItems['chartType'].setValue(data['chartType']['type']);
         this.formItems['xAxis'].setValue(data['xAxis']);
         this.formItems['filter'].setValue({filter: data['filter'] ? data['filter']: '', filter_source:data['filter_source'] ?data['filter_source'] : {}});
