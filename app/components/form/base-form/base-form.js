@@ -94,9 +94,11 @@ let config = {
                 let formDataFromParent = window.top.frontendParentFormValue[this.data.parentTableId];
                 //组装子表所需列表或表单中内置或相关的父表中数据
                 let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parentTableId);
+                console.log('父表的value');
+                console.log(formDataFromParent);
+                console.log(parentData);
                 //子表的this.newData
                 let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
-                console.log('子表填充附表');
                 //循环给子表赋值
                 for (let key in kvDict) {
                     let val = parentData[key];
@@ -654,10 +656,6 @@ let config = {
             }
             let new_data = {};
             let old_data = this.actions.createFormValue(this.data.data);
-            console.log('old_data');
-            console.log('old_data');
-            console.log('old_data');
-            console.log(this.data.data);
             for (let d in old_data) {
                 if (continue_key.indexOf(d) != -1) {
                     continue
@@ -823,6 +821,14 @@ let config = {
         createFormValue(data, isCheck) {
             let formValue = {};
             for (let key in data) {
+                if(key == 'f26'){
+                    console.log('##')
+                    console.log('##')
+                    console.log('##')
+                    console.log('##')
+                    console.log(data[key]);
+                    console.log(data[key].value);
+                }
                 formValue[key] = data[key].value;
             }
             if (isCheck) {
@@ -1003,10 +1009,11 @@ let config = {
         //赋值
         setFormValue(dfield, value) {
             let data = this.data.data[dfield];
-            if (data && this.data.childComponent[dfield]) {
+            if (data) {
                 let childComponet = this.data.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
                 childComponet.reload();
+                this.actions.triggerSingleControl(dfield);
             }
         },
         //给相关赋值
