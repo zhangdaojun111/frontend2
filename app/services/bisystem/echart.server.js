@@ -75,7 +75,11 @@ export class EchartsService {
         let secondMaxTextYnum = [];
         let maxXnum = [];
         let maxYTextNum; // y轴数字toSting().length最大字数
+        let isStack = false; // 判断是否堆叠
+
         yAxis.forEach((y,i) => {
+           isStack = cellOption.yAxis[i] && cellOption.yAxis[i]['group'];
+
             legend.push(y[nameType]);
             if (nameType === 'new_name') {
                 if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
@@ -178,7 +182,10 @@ export class EchartsService {
                 break;
             }
         };
-        linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
+        if (!isStack) {
+            linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
+        };
+
         linebarOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
             if (10 * firstMaxText > 30) {
@@ -195,7 +202,10 @@ export class EchartsService {
             };
 
             const splitNumber = 5;
-            linebarOption['yAxis'][0]['max'] = firstMax;
+            if(!isStack) {
+                linebarOption['yAxis'][0]['max'] = firstMax;
+            };
+
             linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
