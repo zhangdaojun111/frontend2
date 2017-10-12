@@ -60,6 +60,9 @@ let config = {
         onPaginationChanged:function (data) {
             this.actions.loadData(data);
         },
+        onSortChanged:function ($event) {
+            this.agGrid.actions.refreshView();
+        },
         initPagination:function () {
             this.pagination = new dataPagination({
                 currentPage: 1,
@@ -77,7 +80,8 @@ let config = {
         //设置表头
         this.agGrid = new agGrid({
             columnDefs: GlobalService.getOnlineColumnDefs(),
-            footerData:[]
+            footerData:[],
+            onSortChanged: this.actions.onSortChanged,
         });
         this.agGrid.render(gridRoot);
         this.showLoading();
