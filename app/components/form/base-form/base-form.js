@@ -291,7 +291,7 @@ let config = {
                 let val = formValue[key];
                 //必填检查
                 if (data["required"]) {
-                    if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]") {
+                    if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]" || JSON.stringify(val) == "{}") {
                         error = true;
                         errorMsg = `${ data["label"] }是必填项!`;
                         break;
@@ -992,7 +992,7 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value === '' || _this.data.value.length === 0) {
+            if (_this.data.value === '' || _this.data.value.length === 0 || JSON.stringify(_this.data.value) === "{}") {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
