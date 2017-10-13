@@ -217,6 +217,7 @@ let config = {
                 yHorizontalColumns: data.yHorizontalColumns[0] ? {marginBottom:data.marginBottomx} : {},
                 ySelectedGroup: data.defaultY[0] ? ySelectedGroup : [],
             };
+
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
             } else {
