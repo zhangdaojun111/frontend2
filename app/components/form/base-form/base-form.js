@@ -989,7 +989,7 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value === '' || _this.data.value.length === 0 || JSON.stringify(_this.data.value) === "{}") {
+            if (_this.data.value === '' || _this.data.value.length === 0 || JSON.stringify(_this.data.value) === "{}" || _this.data.value.replace(/<.*?>/ig,"").replace(/\s/g, "") === '' ) {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
@@ -1068,8 +1068,10 @@ let config = {
             if (error) {
                 MSG.alert(errorMsg);
                 this.data.isBtnClick = false;
+                debugger
                 return;
             }
+            debugger
             let data = this.actions.handleFormData(formValue);
             let formDataOld = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
