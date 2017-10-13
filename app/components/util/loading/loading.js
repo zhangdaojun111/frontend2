@@ -17,7 +17,6 @@ let config = {
 let Loading = {
     showLoading(){
         if(this.loadingComponent && this.loadingComponent.$root !== null){
-            console.log('do return');
             return;
         }
         this.$wrap = $("<div class='loading-component-box'>").appendTo(document.body);
