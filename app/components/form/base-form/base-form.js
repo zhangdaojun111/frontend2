@@ -1013,7 +1013,7 @@ let config = {
                 let childComponet = this.data.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
                 childComponet.reload();
-                this.actions.triggerSingleControl(dfield);
+                // this.actions.triggerSingleControl(dfield);
             }
         },
         //给相关赋值
@@ -1195,6 +1195,8 @@ let config = {
                 }
             }
             //如果是临时表，传temp_id，否则是real_id
+            console.log('this.data.inProcess');
+            console.log(this.data.inProcess);
             if (this.data.inProcess == 1 || this.data.isBatch == 1) {
                 json["temp_id"] = this.data.realId;
             } else {
@@ -1202,6 +1204,9 @@ let config = {
             }
             if (this.data.tempId) {
                 json["temp_id"] = this.data.tempId;
+                if(json["real_id"]){
+                    delete json["real_id"];
+                }
             }
             return json;
         },
