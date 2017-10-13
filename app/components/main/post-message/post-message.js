@@ -179,7 +179,7 @@ let config = {
             let choosedUsers = this.autoSelect.actions.getValue();
             choosedUsers = choosedUsers.map((item) => {
                 return item.id;
-            })
+            });
             if (form.checkValidity()) {
                 let formData = Form.getValue(form);
                 if (choosedUsers.length === 0) {

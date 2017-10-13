@@ -162,10 +162,15 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })().then(res=>{
                 if(res.success===1){
                     msgBox.alert(`${res.error}`);
+                    let isdraft = true;
                     $("#startNew").show().on('click',()=>{
-                        Mediator.publish('workflow:choose',wfObj);
-                        $("#startNew").hide();
-                        $("#submitWorkflow").show();
+                        // console.log("46666666666666");
+                        if(isdraft){
+                            Mediator.publish('workflow:choose',wfObj);
+                            $("#startNew").hide();
+                            $("#submitWorkflow").show();
+                            isdraft = false;
+                        }
                     });
                     WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
                 }else{
