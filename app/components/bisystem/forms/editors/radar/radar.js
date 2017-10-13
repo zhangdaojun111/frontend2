@@ -6,6 +6,7 @@ import {ChartFormService} from '../../../../../services/bisystem/chart.form.serv
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
+import 'jquery-ui/ui/widgets/sortable.js';
 
 let config = {
     template: template,
@@ -227,6 +228,24 @@ let config = {
                     onChange:function(value) {
                         this.formItems['columns'].clearErrorMsg();
                         this.formItems['choosed'].actions.update(value);
+                        let me = this;
+                        // 以选择列名排序
+                        let sort_items = this.formItems['choosed'].el.find('.form-chart-clo');
+                        sort_items.sortable({
+                            'update': function(event, ui) {
+                                let sort_columns_list = sort_items.sortable( "toArray");
+                                let columns = [];
+                                sort_columns_list.forEach(item => {
+                                    for (let column of me.formItems['columns'].data.value) {
+                                        if (column.id === item) {
+                                            columns.push(column);
+                                            break;
+                                        };
+                                    }
+                                })
+                                me.formItems['columns'].data.value = columns;
+                            }
+                        })
                     }
                 }
             },
@@ -267,9 +286,9 @@ let config = {
 
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
-        }
+        };
 
-    }
+    },
 }
 
 class RadarEditor extends Base {

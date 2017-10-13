@@ -230,6 +230,26 @@ let config = {
                         this.formItems['columns'].clearErrorMsg();
                         this.formItems['choosed'].actions.update(value);
                         this.formItems['table_single'].actions.setColumns(value, this.formItems['columnNum'].getValue());
+
+                        let me = this;
+                        // 以选择列名排序
+                        let sort_items = this.formItems['choosed'].el.find('.form-chart-clo');
+                        sort_items.sortable({
+                            'update': function(event, ui) {
+                                let sort_columns_list = sort_items.sortable( "toArray");
+                                let columns = [];
+                                sort_columns_list.forEach(item => {
+                                    for (let column of me.formItems['columns'].data.value) {
+                                        if (column.id === item) {
+                                            columns.push(column);
+                                            break;
+                                        };
+                                    }
+                                })
+                                me.formItems['columns'].data.value = columns;
+                                me.formItems['table_single'].actions.setColumns(columns, me.formItems['columnNum'].getValue());
+                            }
+                        })
                     }
                 }
             },
@@ -360,8 +380,7 @@ let config = {
         this.actions.init();
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
-        }
-
+        };
     }
 }
 

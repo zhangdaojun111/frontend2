@@ -158,7 +158,12 @@ let config = {
             this.el.find('.condition-search-container').find('div').remove();
             this.actions.rendSearchItem();
             for(let i = 0; i<searchData.length-1; i++) {
-                this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
+                let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
+                let dom = document.createElement('div');
+                dom.className = 'condition-search-choice';
+                this.append(epCondition, $(dom));
+                $(dom).appendTo(this.el.find('.condition-search-container'));
+                // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
             }
             for(let j = 0;j<searchData.length;j++) {
                 let html = this.actions.checkedRelationType(searchData[j]['cond']['searchByName']);

@@ -39,35 +39,35 @@
       flex-grow: 1.5;
       width: 200px;
     }
-    &:nth-child(3){
+    &:nth-child(4){
       flex-grow: 3;
       width: 300px;
     }
-    &:nth-child(4){
+    &:nth-child(3){
       flex-grow: 1;
       width: 200px;
-      justify-content: flex-end;
-      .printBtn{
-        &>i{
-          display: inline-block;
-          float: left;
-          margin-right: 5px;
-        }
-        width: 52px;
-        line-height: 16px;
-        margin-left: 5px;
-        cursor: pointer;
-      }
-      .gz{
-        margin-right: 15px;
-        text-align: center;
-        line-height:16px;
-        cursor: pointer;
-        .gz-icon{
-          display: inline-block;
-          margin-right: 5px;
-          float: left;
-        }
+      //justify-content: flex-end;
+    }
+    .printBtn{
+       &>i{
+         display: inline-block;
+         float: left;
+         margin-right: 5px;
+       }
+       width: 52px;
+       line-height: 16px;
+       margin-left: 5px;
+       cursor: pointer;
+     }
+    .gz{
+      margin-right: 15px;
+      text-align: center;
+      line-height:16px;
+      cursor: pointer;
+      .gz-icon{
+        display: inline-block;
+        margin-right: 5px;
+        float: left;
       }
     }
     .approval-control{

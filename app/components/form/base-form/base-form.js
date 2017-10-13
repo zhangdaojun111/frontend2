@@ -110,10 +110,9 @@ let config = {
                             let options = [{value: val, label: val}];
                             this.data.childComponent[songridDfield].data["options"] = this.data.data[songridDfield]["options"] = options;
                         }
-                        console.log('子表填充附表');
-                        console.log(songridDfield);
-                        console.log(val);
-                        this.actions.setFormValue(songridDfield, val);
+                        if(val || val =='') {
+                            this.actions.setFormValue(songridDfield, val);
+                        }
                         this.actions.triggerSingleControl(songridDfield);
                     }
                 }
@@ -148,7 +147,6 @@ let config = {
                 child_table_id: this.data.sonTableId,
                 table_id: this.data.tableId
             });
-            console.log(res)
             //给统计赋值
             for (let d in res["data"]) {
                 this.actions.setFormValue(d, res["data"][d]);
@@ -835,7 +833,6 @@ let config = {
                     return formValue;
                 }
             } else {
-                this.actions.checkOhterField(formValue);
                 return formValue;
             }
         },
@@ -1002,10 +999,11 @@ let config = {
         //赋值
         setFormValue(dfield, value) {
             let data = this.data.data[dfield];
-            if (data && this.data.childComponent[dfield]) {
+            if (data) {
                 let childComponet = this.data.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
                 childComponet.reload();
+                // this.actions.triggerSingleControl(dfield);
             }
         },
         //给相关赋值
@@ -1194,17 +1192,17 @@ let config = {
             }
             if (this.data.tempId) {
                 json["temp_id"] = this.data.tempId;
+                if(json["real_id"]){
+                    delete json["real_id"];
+                }
             }
             return json;
         },
 
         checkCustomTable(){
-            console.log(this.data.custom_table_form_exists);
             if (this.data.custom_table_form_exists) {
-                console.log(this.data.table_name);
                 if (this.data.table_name == '人员信息') {
                     for (let key in this.data.data) {
-                        console.log(this.data.data[key].label);
                         if (this.data.data[key].label == '用户名') {
                             this.data.data[key].is_view = 1;
                             this.data.childComponent[key].data.is_view = 1;
@@ -1236,6 +1234,7 @@ let config = {
             this.actions.addBtn();
             this.actions.checkCustomTable();
             this.actions.triggerControl();
+            this.actions.setDataFromParent();
             this.data.isBtnClick = false;
         },
         //修改可修改性
@@ -1303,7 +1302,9 @@ let config = {
                         break;
                     }
                 }
-                this.actions.setAboutData(id, value);
+                if(value && value != ''){
+                    this.actions.setAboutData(id, value);
+                }
             }
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {

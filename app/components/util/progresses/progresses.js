@@ -137,6 +137,9 @@ export const progressConfig = {
         for(let i=0,length=this.data.files.length;i < length;i++){
             $(this.el.find('.process-item')[i]).attr('id',this.data.files[i].id);
             $(this.el.find('.cancel-upload')[i]).attr('itemid',this.data.files[i].id);
+            if(this.data.unCancellable){
+                $(this.el.find('.cancel-upload')[i]).css('display','none');
+            }
         }
     },
     beforeDestroy:function () {

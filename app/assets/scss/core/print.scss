@@ -73,14 +73,38 @@
         display: none;
     }
     .data-table-agGrid-con {
+        overflow-y: hidden!important;
         .custom-columns-panel {
             display: none;
         }
         .group-panel {
             display: none;
         }
+        .ag-header {
+            overflow: hidden !important;
+            width: 100%;
+            height: 32px!important;
+        }
         .ag-header-viewport {
-            height: 31px;
+            overflow: hidden !important;
+            width: 100%;
+            line-height: 28px;
+            height: 30px !important;
+        }
+        .dataGrid-commonQuery{
+            display: none!important;
+        }
+        .dataGrid-btn-group {
+            font-size: 12px!important;
+            img{
+                display: none!important;
+            }
+        }
+        .ag-floating-bottom-viewport {
+            display: none!important;
+        }
+        .floatingFilter-box {
+            display: none!important;
         }
     }
 }

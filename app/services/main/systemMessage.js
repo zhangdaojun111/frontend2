@@ -52,18 +52,21 @@ const handlers = {
     readRender: function (data) {
         return `<div class="grid-cell-info ${data.value?'already-read-icon':'not-read-icon'}" title="${data.value?'已读':'未读'}">${data.value?'已读':'未读'}<div>`;
     },
+    // msgTypeRender:function (data) {
+    //     return `<div class="grid-cell-info ${(data.value === '审批消息' && data.data.handle_status_text === '待审批')?'approval-msg':'non-approval-msg'}" title="${data.value}">${data.value}<div>`;
+    // },
     operatorRender:function (data) {
         if(data.value === '待审批'){
             //返回审批按钮
-            return `<div><a href=javascript:void(0); class="ui-link approve" data-type="approve" title="审批">审批</a></div>`;
+            return `<div class="grid-cell-info"><a href=javascript:void(0); class="ui-link approve" data-type="approve" title="审批">审批</a></div>`;
         }else{
             //返回查看按钮
-            return `<a href=javascript:void(0); class="ui-link view" data-type="view" title="查看">查看</a>`;
+            return `<div class="grid-cell-info"><a href=javascript:void(0); class="ui-link view" data-type="view" title="查看">查看</a></div>`;
         }
     },
-    exeStatusRender:function (data) {
-        return `<div class="grid-cell-info ${data.value === '待审批'?'waiting-for-approval':'approval-aleardy'}" title="${data.value}">${data.value}<div>`;
-    }
+    // exeStatusRender:function (data) {
+    //     return `<div class="grid-cell-info ${data.value === '待审批'?'waiting-for-approval':'approval-aleardy'}" title="${data.value}">${data.value}<div>`;
+    // }
 };
 
 export const systemMessageService = {
@@ -98,15 +101,17 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'msg_type',
                 cellStyle: {'text-align': 'center'},
+                // cellRenderer: handlers.msgTypeRender
             },
             {
                 headerName: '执行状态',
+                suppressSorting:true,
                 field: 'handle_status_text',
                 width: 80,
                 suppressMenu: true,
                 tooltipField: 'handle_status_text',
                 cellStyle: {'text-align': 'center'},
-                cellRenderer: handlers.exeStatusRender
+                // cellRenderer: handlers.exeStatusRender
             },
             {
                 headerName: '阅读状态',
@@ -136,6 +141,7 @@ export const systemMessageService = {
                 field: 'msg_content',
                 suppressMenu: true,
                 tooltipField: 'msg_content',
+                suppressSorting:true,
                 cellStyle: {'text-align': 'center'}
             }, {
                 width:160,
