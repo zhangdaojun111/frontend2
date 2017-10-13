@@ -1203,7 +1203,7 @@ let config = {
                         this.actions.checkCorrespondence( true );
                     }
                     if(this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild'){
-                        Mediator.publish('form:songGridRefresh:'+this.data.tableId,this.data.tableId);
+                        Mediator.publish('form:songGridRefresh:'+this.data.tableId,this.data);
                     }
                 },time )
                 if(refresh){

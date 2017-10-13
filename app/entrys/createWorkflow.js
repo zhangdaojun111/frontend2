@@ -146,12 +146,13 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
     focusArr=res;
 })
 Mediator.subscribe('workflow:submit', (res)=> {
-    msgBox.showLoadingSelf();
+
     if($("#workflow-form:visible").length>0){
         let formData=FormEntrys.getFormValue(wfObj.tableid,true);
         if(formData.error){
             msgBox.alert(`${formData.errorMessage}`);
         }else{
+            msgBox.showLoadingSelf();
             $("#submitWorkflow").hide();
             let postData={
                 flow_id:wfObj.id,
@@ -190,10 +191,12 @@ Mediator.subscribe('workflow:submit', (res)=> {
             unique_check:0
         };
         if(temp_ids.length){
+            msgBox.showLoadingSelf();
             $("#submitWorkflow").hide();
             (async function (){
                 return await workflowService.createWorkflowRecord(postData);
             })().then(res=>{
+                msgBox.hideLoadingSelf();
                 if(res.success===1){
                     msgBox.alert(`${res.error}`);
                     $("#startNew").show().on('click',()=>{
