@@ -199,16 +199,20 @@ let config = {
             // msgbox.showLoadingSelf();
             // setTimeout(function () {
             //     msgbox.hideLoadingSelf();
-            //     msgbox.showLoadingSelf();
-            //     msgbox.showLoadingSelf();
-            //     msgbox.showLoadingSelf();
             // },5000);
             //
             // setTimeout(function () {
-            //     msgbox.showLoadingSelf()
+            //     msgbox.showLoadingSelf();
+            //     msgbox.showLoadingSelf();
+            //     msgbox.showLoadingSelf();
             // },7000);
             //
             // setTimeout(function () {
+            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf()
             //     msgbox.hideLoadingSelf()
             // },12000);
 
