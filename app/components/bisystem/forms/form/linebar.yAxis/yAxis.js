@@ -78,7 +78,7 @@ let config = {
          */
         updateY(data) {
             this.data.ySource = data;
-            Object.keys(this.data.yAxis).forEach(key => {
+            Object.keys(this.data.yAxis).forEach((key,index) => {
                 this.data.yAxis[key].field.setList(data);
             });
             this.trigger('onUpdate')

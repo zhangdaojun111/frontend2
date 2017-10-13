@@ -283,13 +283,13 @@ let config = {
                     continue;
                 }
                 let type = data["type"];
-                if (type == 'songrid') {
+                if (type == 'Songrid') {
                     continue;
                 }
                 let val = formValue[key];
                 //必填检查
                 if (data["required"]) {
-                    if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]") {
+                    if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]" || JSON.stringify(val) == "{}") {
                         error = true;
                         errorMsg = `${ data["label"] }是必填项!`;
                         break;
@@ -374,13 +374,13 @@ let config = {
                 }
             }
             //子表必填
-            for (let d in allData) {
-                if (allData[d].type == 'songrid' && allData[d].required && allData[d].total == 0) {
-                    error = true;
-                    errorMsg = '子表字段:' + allData[d].label + '是必填！';
-                    break;
-                }
-            }
+            // for (let d in allData) {
+            //     if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
+            //         error = true;
+            //         errorMsg = '子表字段:' + allData[d].label + '是必填！';
+            //         break;
+            //     }
+            // }
             return {
                 error,
                 errorMsg
@@ -989,11 +989,19 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value === '' || _this.data.value.length === 0) {
+            if (_this.data.value === '' || _this.data.value.length === 0 || JSON.stringify(_this.data.value) === "{}") {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
+
+            //子表必填性改变
+            if (_this.data.type == 'Songrid' && _this.data.total == 0) {
+                _this.el.find('#requiredLogo').removeClass().addClass('required');
+            }else {
+                _this.el.find('#requiredLogo').removeClass().addClass('required2');
+            }
+
         },
         //赋值
         setFormValue(dfield, value) {
@@ -1459,7 +1467,7 @@ let config = {
                 }
             }
             //保存父表数据
-            window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
+            window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(data);
         },
         //打开统计穿透
         openCount(data) {
