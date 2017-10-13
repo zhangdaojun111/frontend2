@@ -104,7 +104,6 @@ let approvalOpinion = {
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
     },
     beforeDestory(){
-        Mediator.publish("workflow:hufei","sjaodiadioa");
         this.data.style.remove();
     },
 }
