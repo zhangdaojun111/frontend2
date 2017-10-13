@@ -195,19 +195,26 @@ let config = {
          */
         sendSearch:function () {
             this.showLoading();
+
             // msgbox.showLoadingSelf();
             // setTimeout(function () {
-            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf();
             // },5000);
             //
             // setTimeout(function () {
-            //     msgbox.showLoadingRoot()
+            //     msgbox.showLoadingSelf();
+            //     msgbox.showLoadingSelf();
+            //     msgbox.showLoadingSelf();
             // },7000);
             //
             // setTimeout(function () {
-            //     msgbox.hideLoadingRoot()
+            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf()
+            //     msgbox.hideLoadingSelf()
             // },12000);
-
 
             let searchData = {
                 keyword:this.data.searchText,            //搜索文字

@@ -146,6 +146,7 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
     focusArr=res;
 })
 Mediator.subscribe('workflow:submit', (res)=> {
+    msgBox.showLoadingSelf();
     if($("#workflow-form:visible").length>0){
         let formData=FormEntrys.getFormValue(wfObj.tableid,true);
         if(formData.error){
@@ -160,8 +161,9 @@ Mediator.subscribe('workflow:submit', (res)=> {
             (async function () {
                 return await workflowService.createWorkflowRecord(postData);
             })().then(res=>{
+                msgBox.hideLoadingSelf();
                 if(res.success===1){
-                    msgBox.alert(`${res.error}`);
+                    msgBox.showTips(`执行成功`);
                     let isdraft = true;
                     $("#startNew").show().on('click',()=>{
                         // console.log("46666666666666");
