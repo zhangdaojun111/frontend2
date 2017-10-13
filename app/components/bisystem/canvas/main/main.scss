@@ -1,5 +1,5 @@
 $print-width:1050px;
-$print-height: 1465px;
+$print-height: 1485px;
 
 .component-bi-canvas-main {
     width: 100%;
@@ -82,11 +82,13 @@ $print-height: 1465px;
 }
 
 @media print {
+    .bi-container,.cells-container.client{
+        background:transparent !important;
+    }
     .component-bi-canvas-main{
         header{
             display: none !important;
         }
     }
-
 }
 
