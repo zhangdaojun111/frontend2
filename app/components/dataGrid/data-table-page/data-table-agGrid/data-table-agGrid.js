@@ -1471,6 +1471,7 @@ let config = {
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
+                delete json['rowId']
             }
             if( this.data.viewMode == 'count' ){
                 json["tableType"]='count';
