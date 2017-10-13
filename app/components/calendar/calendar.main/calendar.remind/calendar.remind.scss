@@ -1,46 +1,53 @@
 @import "../../calendar";
 .remind-wrap {
     width: calc(100% - 60px);
-    padding: 30px;
+    margin: 30px;
     overflow: auto;
+    font-size: 12px;
+    border: 1px solid rgba(228, 228, 228, 1);
+    border-top: 0;
     .remind-row {
-        border: 1px solid $boder-color;
+        border-top: 1px solid rgba(228, 228, 228, 1);
         background-color: rgba(250, 250, 250, 1);
-        .remind-span {
-            background-color: #ffffff;
-            border: 1px solid $boder-color;
-            vertical-align: middle;
-            line-height: 30px;
+        .calendar-form-content {
+            width: 700px;
             display: inline-block;
-            margin: 5px 0px;
-            width: 96%;
-            padding: 0px 5px;
-            height: 30px;
         }
     }
     .title {
         padding-left: 5px;
         width: 35%;
-        height: 40px;
+        line-height: 40px;
         vertical-align: middle;
+        display: inline-block;
     }
-    span {
+    .remind-span, .res-form, .date-attr, .start, .end {
+        box-sizing: border-box;
         background-color: #ffffff;
-        border: 1px solid $boder-color;
+        border: 1px solid rgba(228, 228, 228, 1);
         vertical-align: middle;
         line-height: 30px;
         display: inline-block;
-        margin: 5px 0px;
-        width: 96%;
+        width: 100%;
         padding: 0px 5px;
         height: 30px;
+        overflow:hidden;
+        text-overflow:ellipsis
     }
     .start, .end {
-        width: 46.7%;
+        width: 348px;
         height: 30px;
     }
     .detail {
-        width: 598px;
-        margin: 5px 5px 5px 0px;
+        display: inline-block;
+        width: 699px;
+        box-sizing: border-box;
+        margin: 5px 0px 5px 0px;
+        border: 1px solid rgba(228, 228, 228, 1);
+        border-top: 0;
+        .detail-calendar-form-content {
+            display: inline-block;
+            width: 420px;
+        }
     }
 }

@@ -66,22 +66,41 @@ let config = {
 
                 })
             }
-            console.log(tempData);
-            CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
-            CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
-            CalendarRemind.data.remindDetail = this.data.remindTaskItemData.data2show;
-            CalendarRemind.data.remindDateTime = this.data.remindTaskItemData.time;
-            CalendarRemind.data.remindTableId = this.data.remindTaskItemData.tableId;
-            CalendarRemind.data.remindDate = this.data.remindTaskItemData.time.substr(0,10);
-            CalendarRemind.data.remindTime = this.data.remindTaskItemData.time.substr(11,5);
-            CalendarRemind.data.remindRealId = this.data.remindTaskItemData.real_id.substr(2,24);
-            PMAPI.openDialogByComponent(CalendarRemind, {
-                width: '1200',
-                height: '640',
-                title: '查看',
-                //modal: true,
-            }).then(data => {
-                console.log(data);
+            // console.log(tempData);
+            // CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
+            // CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
+            // CalendarRemind.data.remindDetail = this.data.remindTaskItemData.data2show;
+            // CalendarRemind.data.remindDateTime = this.data.remindTaskItemData.time;
+            // CalendarRemind.data.remindTableId = this.data.remindTaskItemData.tableId;
+            // CalendarRemind.data.remindDate = this.data.remindTaskItemData.time.substr(0,10);
+            // CalendarRemind.data.remindTime = this.data.remindTaskItemData.time.substr(11,5);
+            // CalendarRemind.data.remindRealId = this.data.remindTaskItemData.real_id.substr(2,24);
+            // PMAPI.openDialogByComponent(CalendarRemind, {
+            //     width: '1200',
+            //     height: '640',
+            //     title: '查看',
+            //     //modal: true,
+            // }).then(data => {
+            //     console.log(data);
+            // });
+            PMAPI.openDialogByIframe(
+                '/iframe/calendarOpenRemind/',
+                {
+                    width: '1200',
+                    height: '640',
+                    title: '查看',
+                    modal: true,
+                },{
+                    remindTable: this.data.remindTaskItemData.tableName,
+                    remindDateProp: this.data.remindTaskItemData.fieldName,
+                    remindDetail: this.data.remindTaskItemData.data2show,
+                    remindDateTime: this.data.remindTaskItemData.time,
+                    remindTableId: this.data.remindTaskItemData.tableId,
+                    remindDate: this.data.remindTaskItemData.time.substr(0,10),
+                    remindTime: this.data.remindTaskItemData.time.substr(11,5),
+                    remindRealId: this.data.remindTaskItemData.real_id.substr(2,24),
+                }).then(data => {
+                    console.log(data);
             });
         },
 
