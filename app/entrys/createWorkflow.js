@@ -146,12 +146,13 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
     focusArr=res;
 })
 Mediator.subscribe('workflow:submit', (res)=> {
-    msgBox.showLoadingSelf();
+
     if($("#workflow-form:visible").length>0){
         let formData=FormEntrys.getFormValue(wfObj.tableid,true);
         if(formData.error){
             msgBox.alert(`${formData.errorMessage}`);
         }else{
+            msgBox.showLoadingSelf();
             $("#submitWorkflow").hide();
             let postData={
                 flow_id:wfObj.id,
