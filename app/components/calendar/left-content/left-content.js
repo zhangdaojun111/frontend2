@@ -106,9 +106,9 @@ let config = {
                 },
             ).then(data => {
                 console.log(data);
-                Mediator.emit('Calendar: tool', {toolMethod: 'refresh', type: 'closeSetting'});
                 CalendarService.getCalendarTreeData().then(res => {
                     console.log(res);
+                    Mediator.emit('Calendar: tool', {toolMethod: 'refresh', type: 'closeSetting', data:res['cancel_fields']});
                     this.data.cancelFields = res['cancel_fields'];
                     this.el.find('.left-calendar-set').empty();
                     this.append(new LeftContentCalendarSet(res), this.el.find('.left-calendar-set'));
