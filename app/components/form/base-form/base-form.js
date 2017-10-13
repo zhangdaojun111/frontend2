@@ -1068,10 +1068,8 @@ let config = {
             if (error) {
                 MSG.alert(errorMsg);
                 this.data.isBtnClick = false;
-                debugger
                 return;
             }
-            debugger
             let data = this.actions.handleFormData(formValue);
             let formDataOld = this.data.oldData;
             //如果有其他字段的数据，这里是拼approvedFormData
