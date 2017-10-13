@@ -174,8 +174,14 @@ let config = {
             }
         }
         if(this.data.remindTaskItemData['type'] === 1) {
+            // console.log(this.data.remindTaskItemData);
             if(this.data.remindTaskItemData['data3show'][0] && this.data.remindTaskItemData['data3show'][0][0]) {
-                this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
+                for(let i of this.data.remindTaskItemData['data3show'][0]) {
+                    if(i['fieldId'] === this.data.remindTaskItemData['selectedRepresents']) {
+                        this.el.find('.task-show-text').html(i['fieldName'] + ':' + i['fieldValue']);
+                    }
+                }
+                // this.el.find('.task-show-text').html(this.data.remindTaskItemData['data3show'][0][0]['fieldName'] + ':' + this.data.remindTaskItemData['data3show'][0][0]['fieldValue']);
             }
             this.el.on('click', '.task-show-text', () => {
                 this.actions.openRemind();
