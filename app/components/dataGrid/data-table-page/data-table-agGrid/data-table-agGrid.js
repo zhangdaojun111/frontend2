@@ -1209,6 +1209,9 @@ let config = {
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
+                if(this.data.groupCheck) {
+                    msgBox.hideLoadingRoot();
+                }
             })
             HTTP.flush();
         },
@@ -1688,20 +1691,23 @@ let config = {
                 height: 360,
                 title: '导出数据'
             }).then((data) => {
-                let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
-                this.el.find('.btn-nav-con').append(dom);
-                setTimeout(()=>{
-                    this.el.find('.exports-tips').css('display','none');
-                },3000)
-                this.el.find('.exports-tips-delete').on('click', ()=> {
-                    this.el.find('.exports-tips').css('display','none');
-                })
+                if(data.type == 'export') {
+                    let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
+                    this.el.find('.btn-nav-con').append(dom);
+                    setTimeout(()=>{
+                        this.el.find('.exports-tips').css('display','none');
+                    },3000)
+                    this.el.find('.exports-tips-delete').on('click', ()=> {
+                        this.el.find('.exports-tips').css('display','none');
+                    })
+                }
             });
         },
         //分组触发
         onGroupChange: function (group) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
             this.data.myGroup = group;
+            msgBox.showLoadingRoot();
             this.actions.getGridData();
         },
         //列宽改变
@@ -2145,12 +2151,6 @@ let config = {
             }
             for( let k in this.data.colControlData ){
                 let field = this.data.colControlData[k];
-                //必填
-                if( field.required && data[field.dfield] == '' ){
-                    err['type'] = true;
-                    err['err'] = '字段“' + field.label + '”是必填的，请修改。';
-                    return err;
-                }
                 //数字类型
                 if( fieldTypeService.numOrText( field.real_type ) && data[field.dfield] != undefined ){
                     if( field.numArea && field.numArea !== "" ){
@@ -2160,6 +2160,12 @@ let config = {
                         if( num>field.numArea.max || num<field.numArea.min ){
                             err['type'] = true;
                             err['err'] = '字段“' + field.label + '”，当前值：' + num +'，数据错误，错误原因：' + field.numArea.error + '，请修改。';
+                            return err;
+                        }
+                        //必填
+                        if( field.required && data[field.dfield] == '' ){
+                            err['type'] = true;
+                            err['err'] = '字段“' + field.label + '”是必填的，请修改。';
                             return err;
                         }
                         //整数小数
@@ -3061,7 +3067,6 @@ let config = {
                 table_id : d['table_id'],
                 btnType: 'new',
                 data_from_row_id: data.data['_id'],
-                operation_table_id: this.data.tableId,
                 operation_id: d.id
             };
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
