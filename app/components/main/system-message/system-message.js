@@ -73,8 +73,8 @@ let config = {
                         return item.id;
                     });
                     //保持window.config中unread数量正确
-                    console.log(unread_count);
                     window.config.sysConfig.unread_msg_count = window.config.sysConfig.unread_msg_count - unread_count;
+                    Mediator.emit("sysmsg:refresh_unread");
                     this.actions._postReadData(JSON.stringify(checkIds));
                 }
             });
