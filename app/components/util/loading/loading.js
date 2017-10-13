@@ -9,14 +9,14 @@ let config = {
             this.$root.show();
         }
     },
-    firstAfterRender:function () {
+    afterRender:function () {
         this.$root = this.el.find('.loading-component-box');
     },
 };
 
 let Loading = {
     showLoading(){
-        if(this.loadingComponent){
+        if(this.loadingComponent && this.loadingComponent.$root !== null){
             return;
         }
         this.$wrap = $("<div class='loading-component-box'>").appendTo(document.body);
