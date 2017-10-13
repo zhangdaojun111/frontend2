@@ -163,7 +163,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })().then(res=>{
                 msgBox.hideLoadingSelf();
                 if(res.success===1){
-                    msgBox.alert(`${res.error}`);
+                    msgBox.showTips(`执行成功`);
                     let isdraft = true;
                     $("#startNew").show().on('click',()=>{
                         // console.log("46666666666666");
