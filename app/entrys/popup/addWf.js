@@ -168,11 +168,13 @@ Mediator.subscribe('workflow:submit', (res) => {
         }
         (async function () {
             //半触发操作用
-            if( obj.data_from_row_id ){
-                return workflowService.createWorkflowRecord(postData);
-            }else {
+            console.log("------------------")
+            console.log(obj.data_from_row_id)
+            // if( obj.data_from_row_id ){
+            //     return workflowService.createWorkflowRecord(postData);
+            // }else {
                 return workflowService.addUpdateTableData(postData);
-            }
+            // }
         })().then(res => {
             if (res.success === 1) {
                 msgBox.showTips(`保存成功`);
