@@ -989,11 +989,20 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value === '' || _this.data.value.length === 0 || JSON.stringify(_this.data.value) === "{}" || _this.data.value.replace(/<.*?>/ig,"").replace(/\s/g, "") === '' ) {
+            if (_this.data.value === '' || _this.data.value.length === 0 || JSON.stringify(_this.data.value) === "{}" ) {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
+            //富文本必填性改变
+            if(_this.data.type == 'Editor'){
+                if ( _this.data.value.replace(/<.*?>/ig,"").replace(/\s/g, "") === '' ) {
+                    _this.el.find('#requiredLogo').removeClass().addClass('required');
+                } else {
+                    _this.el.find('#requiredLogo').removeClass().addClass('required2');
+                }
+            }
+
 
         },
         //赋值
