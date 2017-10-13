@@ -222,7 +222,6 @@ const approveWorkflow = (para) => {
     })
 };
 Mediator.subscribe('workflow:comment',(res)=>{
-    console.log("00000000000000")
     comment = res;
 })
 
@@ -262,8 +261,6 @@ Mediator.subscribe('approval:signUser', (signObj) => {
     });
 });
 Mediator.subscribe('approval:rejToAny', (id) => {
-    console.log(id);
-    console.log('mmmmmmmmmmmmmmmmmmmmmmmmmmmmm');
     if(id.length==21){
         id=id.slice(5);
     }else if(id.length==19){

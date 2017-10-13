@@ -137,11 +137,7 @@ let config={
                     height: 300,
                     title: '提示'
                 }).then(res=>{
-                    console.log(res);
-                    console.log('.................')
                     if(res.determine){
-                        console.log(res);
-                        console.log(777777888888888);
                         // Mediator.publish('workflow:comment',res.comment);
                         o.comment = res.comment;
                         PMAPI.sendToParent({
@@ -157,8 +153,6 @@ let config={
                 //     key:__this.data.key,
                 //     data:o
                 // })
-                console.log(o);
-                console.log('99999999999999999999')
             }else{
                 msgBox.alert("请选择一名加签人员");
             }

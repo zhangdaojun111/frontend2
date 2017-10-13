@@ -299,9 +299,7 @@ let config = {
                         title: '提示'
                     }).then(res=>{
                         if(res.determine){
-                            console.log(res.comment);
                             this.comment = res.comment;
-                            console.log('***********************')
                             Mediator.publish('workflow:comment',res.comment);
                             Mediator.publish('approval:rejToAny',this.rejectId);
                         }

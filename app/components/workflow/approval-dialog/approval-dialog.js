@@ -61,7 +61,6 @@ let config = {
             }else if(id.length === 19){
                 id=id.slice(3);
             }
-            console.log("aaaaaaaaaaaaaaaaaaaaaaa");
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:this.data.key,
