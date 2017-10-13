@@ -998,13 +998,6 @@ let config = {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
 
-            //子表必填性改变
-            if (_this.data.type == 'Songrid' && _this.data.total == 0) {
-                _this.el.find('#requiredLogo').removeClass().addClass('required');
-            }else {
-                _this.el.find('#requiredLogo').removeClass().addClass('required2');
-            }
-
         },
         //赋值
         setFormValue(dfield, value) {
