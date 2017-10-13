@@ -47,10 +47,13 @@ let config={
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.songGrid'));
         Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
-            if(res == this.data["value"]){
+            if(res.tableId == this.data["value"]){
+               this.data["total"] = res.total;
                 this.events.emitDataIfInline(this.data);
             }
         })
+
+
     },
     beforeDestory(){
         this.el.off();

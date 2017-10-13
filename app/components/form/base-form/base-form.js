@@ -378,7 +378,6 @@ let config = {
             //子表必填
             for (let d in allData) {
                 if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
-                    debugger
                     error = true;
                     errorMsg = '子表字段:' + allData[d].label + '是必填！';
                     break;
@@ -839,6 +838,8 @@ let config = {
                 this.actions.checkOhterField(formValue);
                 return formValue;
             }
+
+            debugger
         },
 
         //判断一下日期的类型，并且进行限制
@@ -1075,6 +1076,8 @@ let config = {
         async onSubmit() {
             let formValue = this.actions.createFormValue(this.data.data);
             let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
+
+            debugger
             if (error) {
                 MSG.alert(errorMsg);
                 this.data.isBtnClick = false;
@@ -1468,6 +1471,7 @@ let config = {
             }
             //保存父表数据
             window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
+            debugger
         },
         //打开统计穿透
         openCount(data) {
