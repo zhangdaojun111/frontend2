@@ -94,9 +94,6 @@ let config = {
                 let formDataFromParent = window.top.frontendParentFormValue[this.data.parentTableId];
                 //组装子表所需列表或表单中内置或相关的父表中数据
                 let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parentTableId);
-                console.log('父表的value');
-                console.log(formDataFromParent);
-                console.log(parentData);
                 //子表的this.newData
                 let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
                 //循环给子表赋值
@@ -821,14 +818,6 @@ let config = {
         createFormValue(data, isCheck) {
             let formValue = {};
             for (let key in data) {
-                if(key == 'f26'){
-                    console.log('##')
-                    console.log('##')
-                    console.log('##')
-                    console.log('##')
-                    console.log(data[key]);
-                    console.log(data[key].value);
-                }
                 formValue[key] = data[key].value;
             }
             if (isCheck) {
@@ -1195,8 +1184,6 @@ let config = {
                 }
             }
             //如果是临时表，传temp_id，否则是real_id
-            console.log('this.data.inProcess');
-            console.log(this.data.inProcess);
             if (this.data.inProcess == 1 || this.data.isBatch == 1) {
                 json["temp_id"] = this.data.realId;
             } else {
@@ -1212,12 +1199,9 @@ let config = {
         },
 
         checkCustomTable(){
-            console.log(this.data.custom_table_form_exists);
             if (this.data.custom_table_form_exists) {
-                console.log(this.data.table_name);
                 if (this.data.table_name == '人员信息') {
                     for (let key in this.data.data) {
-                        console.log(this.data.data[key].label);
                         if (this.data.data[key].label == '用户名') {
                             this.data.data[key].is_view = 1;
                             this.data.childComponent[key].data.is_view = 1;
