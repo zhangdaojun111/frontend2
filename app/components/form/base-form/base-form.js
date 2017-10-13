@@ -96,7 +96,6 @@ let config = {
                 let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parentTableId);
                 //子表的this.newData
                 let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
-                console.log('子表填充附表');
                 //循环给子表赋值
                 for (let key in kvDict) {
                     let val = parentData[key];
@@ -834,7 +833,6 @@ let config = {
                     return formValue;
                 }
             } else {
-                this.actions.checkOhterField(formValue);
                 return formValue;
             }
         },
@@ -1000,10 +998,11 @@ let config = {
         //赋值
         setFormValue(dfield, value) {
             let data = this.data.data[dfield];
-            if (data && this.data.childComponent[dfield]) {
+            if (data) {
                 let childComponet = this.data.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
                 childComponet.reload();
+                // this.actions.triggerSingleControl(dfield);
             }
         },
         //给相关赋值
@@ -1080,10 +1079,6 @@ let config = {
             if (this.data.hasOtherFields == 0) {
                 this.actions.checkOhterField(data, obj_new, obj_old);
             }
-            console.log('data')
-            console.log('data')
-            console.log('data')
-            console.log(data);
             let json = {
                 data: JSON.stringify(data),
                 cache_new: JSON.stringify(obj_new),
@@ -1196,17 +1191,17 @@ let config = {
             }
             if (this.data.tempId) {
                 json["temp_id"] = this.data.tempId;
+                if(json["real_id"]){
+                    delete json["real_id"];
+                }
             }
             return json;
         },
 
         checkCustomTable(){
-            console.log(this.data.custom_table_form_exists);
             if (this.data.custom_table_form_exists) {
-                console.log(this.data.table_name);
                 if (this.data.table_name == '人员信息') {
                     for (let key in this.data.data) {
-                        console.log(this.data.data[key].label);
                         if (this.data.data[key].label == '用户名') {
                             this.data.data[key].is_view = 1;
                             this.data.childComponent[key].data.is_view = 1;
