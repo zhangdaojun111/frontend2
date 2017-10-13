@@ -191,10 +191,12 @@ Mediator.subscribe('workflow:submit', (res)=> {
             unique_check:0
         };
         if(temp_ids.length){
+            msgBox.showLoadingSelf();
             $("#submitWorkflow").hide();
             (async function (){
                 return await workflowService.createWorkflowRecord(postData);
             })().then(res=>{
+                msgBox.hideLoadingSelf();
                 if(res.success===1){
                     msgBox.alert(`${res.error}`);
                     $("#startNew").show().on('click',()=>{
