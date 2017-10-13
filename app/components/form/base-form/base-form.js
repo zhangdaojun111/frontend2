@@ -376,13 +376,13 @@ let config = {
                 }
             }
             //子表必填
-            // for (let d in allData) {
-            //     if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
-            //         error = true;
-            //         errorMsg = '子表字段:' + allData[d].label + '是必填！';
-            //         break;
-            //     }
-            // }
+            for (let d in allData) {
+                if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
+                    error = true;
+                    errorMsg = '子表字段:' + allData[d].label + '是必填！';
+                    break;
+                }
+            }
             return {
                 error,
                 errorMsg
@@ -1465,8 +1465,10 @@ let config = {
                     this.actions.setCountData();
                 }
             }
+
             //保存父表数据
-            window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(data);
+            this.data.data[data['dfield']].total =  data['total'];
+            window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
         },
         //打开统计穿透
         openCount(data) {
@@ -1692,6 +1694,10 @@ let config = {
                 let type = single.data('type');
                 if (data[key].required) {
                     data[key]['requiredClass'] = data[key].value == '' ? 'required' : 'required2';
+
+                    if(type == 'Songrid') {
+                        data[key]['requiredClass'] = data[key].total== 0 ? 'required' : 'required2';
+                    }
                 }
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';

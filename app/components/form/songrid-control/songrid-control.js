@@ -48,7 +48,7 @@ let config={
         this.append(dataGrid,this.el.find('.songGrid'));
         Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
             if(res.tableId == this.data["value"]){
-               this.data["total"] = res.total;
+                this.data["total"] = res.total;
                 this.events.emitDataIfInline(this.data);
             }
         })
