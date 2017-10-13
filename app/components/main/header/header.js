@@ -207,6 +207,11 @@ let config = {
         Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
         Mediator.on('socket:personal_message', this.actions.displayMessageUnread);
         Mediator.on('socket:notice', this.actions.onSocketNotice);
+        Mediator.on('sysmsg:refresh_unread',(data) => {
+            that.actions.displayMessageUnread({
+                badge: window.config.sysConfig.unread_msg_count
+            })
+        });
         //加载全局搜索窗口
         this.actions.initGlobalSearch();
     },
