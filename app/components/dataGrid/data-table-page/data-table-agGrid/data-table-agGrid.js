@@ -868,7 +868,7 @@ let config = {
             }
             if (this.data.customOperateList) {
                 for (let d of this.data.customOperateList) {
-                    str += ` | <a class="customOperate" id="${ d["id"] }" style="color:#337ab7;">${ d["name"] }</a>`;
+                    str += ` | <a class="customOperate" id="${ d["id"] }" style="color:#0088ff;cursor: pointer">${ d["name"] }</a>`;
                     operateWord = operateWord + (d["name"] ? d["name"].length : 0);
                 }
             }
