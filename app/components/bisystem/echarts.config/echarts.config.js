@@ -172,7 +172,8 @@ const radar = {
         bottom: 0,
         orient: 'vertical',
         data: [],
-        selected: {}
+        selected: {},
+        type: 'scroll'
     },
     radar: [
         {
