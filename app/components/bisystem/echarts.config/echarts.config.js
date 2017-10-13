@@ -239,7 +239,8 @@ const linebar = {
     legend: {
         top: 0,
         data: [],
-        selected: {}
+        selected: {},
+        type: 'scroll'
     },
     grid: {
         left: 30,
