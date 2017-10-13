@@ -27,7 +27,14 @@ export const ViewsService = {
      * @returns {Promise}
      */
     async saveData(data) {
-        const res = await HTTP.getImmediately('/bi/set_new_view_sort',data);
+        // const res = await HTTP.postImmediately('/bi/set_new_view_sort',data);
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/set_new_view_sort/',
+            data: data,
+            // contentType: "application/json; charset=utf-8",
+            method:'post',
+            traditional: true
+        });
         return new Promise((resolve, reject) => {
             if (res['success']===1) {
                 resolve(res);

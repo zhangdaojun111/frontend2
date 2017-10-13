@@ -79,7 +79,7 @@ let config = {
         }
     ],
     afterRender(){
-
+        this.el.prop('id', this.data.name)
     },
     firstAfterRender(){}
 };
