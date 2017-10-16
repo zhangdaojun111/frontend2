@@ -19,7 +19,7 @@ let config = {
         menus: {},
         isAdmin: window.config.is_admin,
         isSelf: window.config.bi_views.self,
-        headerMenus:[],
+        // headerMenus:[],
     },
     actions: {
         /**
@@ -187,7 +187,7 @@ let config = {
         },
     ],
     afterRender() {
-
+        console.log(window.location);
         //新窗口隐藏新窗口图标
         if(window === window.parent){
             this.el.find('.new-window').hide();

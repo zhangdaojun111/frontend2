@@ -216,7 +216,6 @@ let config = {
         this.actions.echartsInit();
         //是否显示时间字段
         this.actions.judgeDateZoom(this.data.cellChart);
-        console.log(this.data.cellChart)
     },
     beforeDestory() {
 
