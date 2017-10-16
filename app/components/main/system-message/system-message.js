@@ -317,13 +317,15 @@ class SystemMessage extends Component {
 let systemMessageUtil = {
     el: null,
     show: function () {
-        this.el = $("<div>").appendTo('body');
+        this.el = $("<div class='user-system-message'>").appendTo('body');
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
         this.el.erdsDialog({
             width: 1200,
             height: 580,
             modal: true,
+            maxable: true,
+            defaultMax: false,
             title: '消息提醒',
             close: function () {
                 $(this).erdsDialog('destroy');

@@ -1,30 +1,9 @@
 .system-message {
     padding: 10px 10px 0 10px;
-    //.tool-bar{
-    //    padding-left: 1100px;
-    //    height: 30px;
-    //    line-height: 30px;
-    //    .float-search-btn{
-    //        display: flex;
-    //        align-items: center;
-    //        text-decoration: none;
-    //        position: relative;
-    //        outline: none;
-    //        .select{
-    //            vertical-align: baseline;
-    //            order: 1;
-    //        }
-    //        .icon-aggrid-filter{
-    //            margin-right: 4px;
-    //            order: 0;
-    //        }
-    //    }
-    //}
     .grid {
         height: 485px;
         width: 1175px;
         position: relative;
-        //margin: 10px 0 10px 0;
         border: double #e4e4e4;
         .ag-body-viewport{
             .grid-cell-info{
@@ -34,9 +13,6 @@
                         color: red !important;
                     }
                 }
-                //&.already-read-icon{
-                //    color: #31fc38;
-                //}
                 &.not-read-icon{
                     color:red;
                 }
@@ -47,9 +23,6 @@
         height: 40px;
         clear: none;
         margin-top: 5px;
-        //.p-left select,.p-left > span:nth-child(1),.p-left > span:nth-child(3){
-        //   display: none;
-        //}
         div.p-page-con{
             float: left;
             height: 40px;
