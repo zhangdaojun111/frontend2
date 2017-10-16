@@ -625,6 +625,17 @@ let config = {
                 }
             }
         },
+        /**
+         * 从编辑转到查看模式
+         */
+        async changeToView(){
+            for (let key in this.data.data) {
+                if (this.data.childComponent[key]) {
+                    this.data.childComponent[key].data.is_view = this.data.data[key].is_view =1;
+                    this.data.childComponent[key].reload();
+                }
+            }
+        },
 
         /**
          *  表达式主要方法

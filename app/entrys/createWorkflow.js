@@ -162,6 +162,9 @@ Mediator.subscribe('workflow:submit', (res)=> {
             (async function () {
                 return await workflowService.createWorkflowRecord(postData);
             })().then(res=>{
+                console.log(wfObj.tableid);
+                console.log("1215456465464")
+                FormEntrys.changeToView(wfObj.tableid);
                 msgBox.hideLoadingSelf();
                 if(res.success===1){
                     msgBox.showTips(`执行成功`);
