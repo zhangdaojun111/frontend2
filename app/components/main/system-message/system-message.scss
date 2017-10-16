@@ -50,6 +50,61 @@
             cursor: pointer;
         }
     }
+
+    //最大化模式下的样式
+    &.maximize-model{
+        //padding: 10px 10px 0 10px;
+        .grid {
+            height: 855px;
+            width: 1895px;
+            //position: relative;
+            //border: double #e4e4e4;
+            //.ag-body-viewport{
+            //    .grid-cell-info{
+            //        .ui-link{
+            //            outline: none;
+            //            &.approve{
+            //                color: red !important;
+            //            }
+            //        }
+            //        &.not-read-icon{
+            //            color:red;
+            //        }
+            //    }
+            //}
+        }
+        //.pagination {
+        //    height: 40px;
+        //    clear: none;
+        //    margin-top: 5px;
+        //    div.p-page-con{
+        //        float: left;
+        //        height: 40px;
+        //    }
+        //    div.selectPage-con{
+        //        margin-left: 30px;
+        //        float: left;
+        //    }
+        //}
+        //.bar {
+        //    height: 30px;
+        //    float: right;
+        //    margin-right: 20px;
+        //    margin-top: 10px;
+        //    .markRead,.batchApprove,.batchDelete{
+        //        width: 60px;
+        //        height: 24px;
+        //        border-radius: 3px;
+        //        background-color: #0088ff;
+        //        color: white;
+        //        margin: 3px 0 0 10px;
+        //        outline: none;
+        //        border: none;
+        //        padding: 1px;
+        //        cursor: pointer;
+        //    }
+        //}
+    }
 }
 
 .component-msg-detail {

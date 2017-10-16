@@ -14,6 +14,7 @@ import {HTTP} from '../../../lib/http';
 import {dataTableService} from "../../../services/dataGrid/data-table.service"
 import Mediator from '../../../lib/mediator';
 
+let gridPref;
 let config = {
     template: template,
     data:{
@@ -44,6 +45,8 @@ let config = {
                 });
                 this.pagination.actions.setPagination(data.total, param.currentPage);
                 // this.hideLoading();
+                this.agGrid.gridOptions.api.sizeColumnsToFit();
+                console.log(this.agGrid);
             });
         },
         setSortModel:function () {
@@ -268,19 +271,27 @@ let config = {
             this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
             this.actions.loadData();
             this.hideLoading();
+        },
+        setMaximize:function () {
+            console.log('调到max函数啦');
+        },
+        setMinimize:function () {
+            console.log('调到min' +
+                '函数啦');
         }
     },
     afterRender: function () {
         let gridDom = this.el.find('.grid');
         let that = this;
         //设置表格表头信息
-        this.agGrid = new agGrid({
+         this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
             onRowDoubleClicked:that.actions.onRowDoubleClicked,
             onSortChanged: this.actions.onSortChanged,
             footerData:[]
         });
+        gridPref = this.agGrid;
         this.agGrid.render(gridDom);
         this.showLoading();
         //请求页显示数量偏好
@@ -304,7 +315,7 @@ let config = {
             this.actions.batchApprove();
         }).on('click', '.batchDelete', () => {
             this.actions.batchDelete();
-        })
+        });
     }
 };
 
@@ -317,6 +328,7 @@ class SystemMessage extends Component {
 let systemMessageUtil = {
     el: null,
     show: function () {
+        let that = this;
         this.el = $("<div class='user-system-message'>").appendTo('body');
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
@@ -327,6 +339,18 @@ let systemMessageUtil = {
             maxable: true,
             defaultMax: false,
             title: '消息提醒',
+            resizeMax:function () {
+                that.el.find('.system-message').addClass('maximize-model');
+                setTimeout(function () {
+                    gridPref.gridOptions.api.sizeColumnsToFit();
+                },450);
+            },
+            resizeMin:function () {
+                that.el.find('.system-message').removeClass('maximize-model');
+                setTimeout(function () {
+                    gridPref.gridOptions.api.sizeColumnsToFit();
+                },450);
+            },
             close: function () {
                 $(this).erdsDialog('destroy');
                 systemMessage.destroySelf();
