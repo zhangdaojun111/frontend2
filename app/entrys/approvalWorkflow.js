@@ -25,7 +25,7 @@ serchStr.split('&').forEach(res => {
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
-
+let comment='';
 console.log(obj);
 
 ApprovalWorkflow.showDom().then(function (component) {
@@ -185,8 +185,8 @@ function GetQueryString(name)
 //审批操作
 const approveWorkflow = (para) => {
     let key=GetQueryString('key');
-    let formData=FormEntrys.getFormValue(obj.table_id,true),
-        comment=$('#comment').val();
+    let formData=FormEntrys.getFormValue(obj.table_id,true);
+        // comment=$('#comment').val();
     para.data={};
     if(agorfo){
         if(formData.error){
@@ -198,6 +198,10 @@ const approveWorkflow = (para) => {
     }
     para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);
+    console.log(para);
+    console.log(comment);
+    // console.log(9999999999888888888888)
+    // console.log('88888888888888888888888')
     (async function () {
         return workflowService.approveWorkflowRecord({
             url: '/approve_workflow_record/',
@@ -217,6 +221,9 @@ const approveWorkflow = (para) => {
 
     })
 };
+Mediator.subscribe('workflow:comment',(res)=>{
+    comment = res;
+})
 
 Mediator.subscribe('approval:recordPass', (data) => {
     approveWorkflow({

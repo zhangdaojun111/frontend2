@@ -30,11 +30,14 @@
             .grid-cell-info{
                 .ui-link{
                     outline: none;
+                    &.approve{
+                        color: red !important;
+                    }
                 }
-                &.already-read-icon{
-                    color: #31fc38;
-                }
-                &.not-read-icon, &.waiting-for-approval,&.approval-msg{
+                //&.already-read-icon{
+                //    color: #31fc38;
+                //}
+                &.not-read-icon{
                     color:red;
                 }
             }

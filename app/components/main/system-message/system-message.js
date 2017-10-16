@@ -12,6 +12,7 @@ import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import msgbox from '../../../lib/msgbox';
 import {HTTP} from '../../../lib/http';
 import {dataTableService} from "../../../services/dataGrid/data-table.service"
+import Mediator from '../../../lib/mediator';
 
 let config = {
     template: template,
@@ -36,9 +37,6 @@ let config = {
             });
             this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
-                // console.log(data);
-                // data.rows[0].msg_type = '推送消息';
-                // data.rows[0].msg_content = '        我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊我就是测试一下啊啊我就是测试一下啊啊我就是测试一下啊啊我就是测试一下啊啊我就是测试一下啊\n    第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段第二段';
                 this.data.total = data.total;
                 this.actions.setSortModel();
                 this.agGrid.actions.setGridData({
@@ -63,12 +61,20 @@ let config = {
          * 将选中信息标记为已读状态
          */
         markRead: function () {
+            let unread_count = 0;
             msgbox.confirm('是否将选中的消息标为已读？').then((res) => {
                 if (res) {
                     let rows = this.agGrid.gridOptions.api.getSelectedRows();
                     let checkIds = rows.map((item) => {
+                        console.log(item);
+                        if(item.is_read === 0){
+                            unread_count++;
+                        }
                         return item.id;
                     });
+                    //保持window.config中unread数量正确
+                    window.config.sysConfig.unread_msg_count = window.config.sysConfig.unread_msg_count - unread_count;
+                    Mediator.emit("sysmsg:refresh_unread");
                     this.actions._postReadData(JSON.stringify(checkIds));
                 }
             });
@@ -89,6 +95,16 @@ let config = {
                     this.actions.loadData();
                 }
             });
+        },
+        /**
+         * 向后台发送信息阅读状态,前端自己刷新页面
+         * @param ids
+         * @private
+         */
+        _justPostReadData:function (ids) {
+            HTTP.postImmediately('/remark_or_del_msg/', {
+                checkIds: ids
+            })
         },
         /**
          * 批量审批，符合勾选规则后跳至工作流页面，审批完成后，刷新数据
@@ -226,7 +242,21 @@ let config = {
             } else {
                 systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
             }
-            this.actions._postReadData(JSON.stringify([data.id]));
+            // 查看操作通过前端自己刷新未读，审批通过loadData刷新
+            if($event.event.srcElement.className.includes('view')){
+                if($event.node.data.is_read === 0){
+                    $event.node.data.is_read = 1;
+                    this.agGrid.actions.refreshView();
+                    window.config.sysConfig.unread_msg_count--;
+                    Mediator.emit("sysmsg:refresh_unread");
+                    this.actions._justPostReadData(JSON.stringify([data.id]));
+                }
+            }else{
+                if($event.node.data.is_read === 0){
+                    window.config.sysConfig.unread_msg_count--;
+                }
+                this.actions._postReadData(JSON.stringify([data.id]));
+            }
         },
         initPagination:function () {
             this.pagination = new dataPagination({

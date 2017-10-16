@@ -612,6 +612,10 @@ export const dgcService = {
     checkObejctNotEqual(obj1,obj2){
         let o1=Object.assign({},obj1);
         let o2=Object.assign({},obj2);
+        //o1为空时候时候判断
+        if( obj1 == '' && obj1 != obj2 ){
+            return true;
+        }
         if(Object.prototype.toString.call(o1)!='[object Object]'){
             if(o1 != o2){
                 return true;

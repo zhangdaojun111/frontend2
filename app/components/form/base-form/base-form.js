@@ -96,7 +96,6 @@ let config = {
                 let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parentTableId);
                 //子表的this.newData
                 let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
-                console.log('子表填充附表');
                 //循环给子表赋值
                 for (let key in kvDict) {
                     let val = parentData[key];
@@ -284,13 +283,13 @@ let config = {
                     continue;
                 }
                 let type = data["type"];
-                if (type == 'songrid') {
+                if (type == 'Songrid') {
                     continue;
                 }
                 let val = formValue[key];
                 //必填检查
                 if (data["required"]) {
-                    if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]") {
+                    if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]" || JSON.stringify(val) == "{}") {
                         error = true;
                         errorMsg = `${ data["label"] }是必填项!`;
                         break;
@@ -376,7 +375,7 @@ let config = {
             }
             //子表必填
             for (let d in allData) {
-                if (allData[d].type == 'songrid' && allData[d].required && allData[d].total == 0) {
+                if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
                     error = true;
                     errorMsg = '子表字段:' + allData[d].label + '是必填！';
                     break;
@@ -834,7 +833,6 @@ let config = {
                     return formValue;
                 }
             } else {
-                this.actions.checkOhterField(formValue);
                 return formValue;
             }
         },
@@ -991,19 +989,24 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value === '' || _this.data.value.length === 0) {
+            if (_this.data.value === '' || _this.data.value.length === 0 || JSON.stringify(_this.data.value) === "{}" ) {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
+            }
+            //富文本必填性改变
+            if(_this.data.type == 'Editor' && ( _this.data.value.replace(/<.*?>/ig,"").replace(/\s/g, "") === '' )){
+                _this.el.find('#requiredLogo').removeClass().addClass('required');
             }
         },
         //赋值
         setFormValue(dfield, value) {
             let data = this.data.data[dfield];
-            if (data && this.data.childComponent[dfield]) {
+            if (data) {
                 let childComponet = this.data.childComponent[dfield];
                 childComponet.data["value"] = data["value"] = value;
                 childComponet.reload();
+                // this.actions.triggerSingleControl(dfield);
             }
         },
         //给相关赋值
@@ -1080,10 +1083,6 @@ let config = {
             if (this.data.hasOtherFields == 0) {
                 this.actions.checkOhterField(data, obj_new, obj_old);
             }
-            console.log('data')
-            console.log('data')
-            console.log('data')
-            console.log(data);
             let json = {
                 data: JSON.stringify(data),
                 cache_new: JSON.stringify(obj_new),
@@ -1196,17 +1195,17 @@ let config = {
             }
             if (this.data.tempId) {
                 json["temp_id"] = this.data.tempId;
+                if(json["real_id"]){
+                    delete json["real_id"];
+                }
             }
             return json;
         },
 
         checkCustomTable(){
-            console.log(this.data.custom_table_form_exists);
             if (this.data.custom_table_form_exists) {
-                console.log(this.data.table_name);
                 if (this.data.table_name == '人员信息') {
                     for (let key in this.data.data) {
-                        console.log(this.data.data[key].label);
                         if (this.data.data[key].label == '用户名') {
                             this.data.data[key].is_view = 1;
                             this.data.childComponent[key].data.is_view = 1;
@@ -1463,7 +1462,9 @@ let config = {
                     this.actions.setCountData();
                 }
             }
+
             //保存父表数据
+            this.data.data[data['dfield']].total =  data['total'];
             window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
         },
         //打开统计穿透
@@ -1690,6 +1691,10 @@ let config = {
                 let type = single.data('type');
                 if (data[key].required) {
                     data[key]['requiredClass'] = data[key].value == '' ? 'required' : 'required2';
+
+                    if(type == 'Songrid') {
+                        data[key]['requiredClass'] = data[key].total== 0 ? 'required' : 'required2';
+                    }
                 }
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';

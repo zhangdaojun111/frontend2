@@ -202,7 +202,7 @@
         width: 100%;
     }
     .ui-btn-box .btn {
-        margin-right: 35px;
+        margin-right: 20px;
         float: right;
     }
     .ui-btn-box .btn-normal {
@@ -297,7 +297,8 @@
                 line-height: 30px;
                 position: relative;
                 top:2px;
-                width: 55px;
+                width: auto;
+                min-width: 55px;
                 text-align: center;
                 border-radius: 4px 4px 0 0;
                 margin: 0px auto;
