@@ -2,14 +2,15 @@
     padding: 4px 74px 0 74px;
     span {
         background: #f5f5f5;
-        display: inline-block;
+        float: left;
         padding: 5px 20px;
         margin: 0 5px 5px 0;
+        cursor: pointer;
         b {
             display: inline-block;
             width: 16px;
             height: 16px;
-            background: rgb(114, 190, 255)
+            background: rgb(114, 190, 255);
         }
     }
 }
