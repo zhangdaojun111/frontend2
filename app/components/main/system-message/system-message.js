@@ -35,7 +35,7 @@ let config = {
                 first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
                 currentPage: this.pagination.data.currentPage
             });
-            this.showLoading();
+            // this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
                 this.data.total = data.total;
                 this.actions.setSortModel();
@@ -43,7 +43,7 @@ let config = {
                     rowData: data.rows
                 });
                 this.pagination.actions.setPagination(data.total, param.currentPage);
-                this.hideLoading();
+                // this.hideLoading();
             });
         },
         setSortModel:function () {
@@ -267,6 +267,7 @@ let config = {
             this.pagination.render(this.el.find('.pagination'));
             this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
             this.actions.loadData();
+            this.hideLoading();
         }
     },
     afterRender: function () {
