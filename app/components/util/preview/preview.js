@@ -178,7 +178,8 @@ let config = {
             this.data.imgScale = 1;
             this.actions._uploadScale();
             this.actions._updateSwiftButtons(this.data.currentIndex);
-            this.el.find('.img-pre').css("height", $(window).height() * 0.7 + 'px');
+            this.el.find('.img-pre').css("max-height", $(window).height() * 0.7 + 'px');
+            this.el.find('.img-pre').css('max-width',$(window).width() * 0.8 + 'px');
             this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + "," + this.data.imgScale + ")");
             this.el.find('.img-pre').get(0).src = "/download_attachment/?file_id=" + id + "&download=0&dinput_type=" + this.data.dinput_type;
             // $(document).on("mousewheel DOMMouseScroll", (e) => {
