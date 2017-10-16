@@ -332,6 +332,7 @@ let systemMessageUtil = {
         this.el = $("<div class='user-system-message'>").appendTo('body');
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
+        let sysDom = this.el.find('.system-message');
         this.el.erdsDialog({
             width: 1200,
             height: 580,
@@ -340,16 +341,16 @@ let systemMessageUtil = {
             defaultMax: false,
             title: '消息提醒',
             resizeMax:function () {
-                that.el.find('.system-message').addClass('maximize-model');
+                sysDom.addClass('maximize-model');
                 setTimeout(function () {
                     gridPref.gridOptions.api.sizeColumnsToFit();
-                },450);
+                },400);
             },
             resizeMin:function () {
-                that.el.find('.system-message').removeClass('maximize-model');
+                sysDom.removeClass('maximize-model');
                 setTimeout(function () {
                     gridPref.gridOptions.api.sizeColumnsToFit();
-                },450);
+                },400);
             },
             close: function () {
                 $(this).erdsDialog('destroy');
