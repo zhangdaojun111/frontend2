@@ -1713,7 +1713,7 @@ let config = {
                         this.data.childComponent[data[key].dfield] = correspondence;
                         break;
                     case 'Songrid':
-                        let popupType = single.data('popupType') || 0;
+                        let popupType = single.data('popuptype') || 0;
                         data[key]['temp_id'] = data['temp_id']['value'];
                         let songrid = new Songrid(Object.assign(data[key], {popupType: popupType}), actions);
                         songrid.render(single);
