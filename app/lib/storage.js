@@ -76,6 +76,9 @@ export const Storage = {
      * @param section 所属部分
      */
     deleteItem:function (itemTag,section) {
+        if(!window.localStorage[Storage['iframe_key']]){
+            return;
+        }
         let obj = JSON.parse(window.localStorage[Storage['iframe_key']]);
         for(let key of Object.keys(obj[section])){
             if(key.indexOf(itemTag)>=0){
@@ -102,7 +105,7 @@ export const Storage = {
             if(key.indexOf('password_info')!=-1){
                 continue;
             }
-            if(key.indexOf('iframedialog')!=-1){
+            if(key.indexOf('iframedialog')!=-1 || key == 'null' || key == 'undefined'){
                 delete window.localStorage[key];
             } else {
                 for(let section of Object.values(Storage.SECTION)){
