@@ -73,12 +73,18 @@ let config = {
                         name: res[columenListIndex]['name'],
                         id: res[columenListIndex]['id']
                     });
-                    this.data.dropdownForRes.push({
-                        name: res[columenListIndex]['name'],
-                        id: res[columenListIndex]['id']
-                    })
+
+                    // 代表字段过滤周期规则类型选项
+                    if(res[columenListIndex]['name'].indexOf('周期规则') === -1) {
+                        this.data.dropdownForRes.push({
+                            name: res[columenListIndex]['name'],
+                            id: res[columenListIndex]['id']
+                        })
+                    }
+
                 }
             }
+            console.log(this.data.dropdownForRes);
             this.actions.getSetting(this.data.tableId);
         },
 
