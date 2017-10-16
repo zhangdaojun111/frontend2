@@ -6,7 +6,6 @@ import template from './range.html';
 import Component from '../../../../../../../../lib/component';
 import './range.scss';
 import {canvasCellService} from '../../../../../../../../services/bisystem/canvas.cell.service';
-
 let config = {
     template: template,
     data: {},
