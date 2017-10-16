@@ -995,10 +995,8 @@ let config = {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
             //富文本必填性改变
-            if(_this.data.type == 'Editor'){
-                if ( _this.data.value.replace(/<.*?>/ig,"").replace(/\s/g, "") === '' ) {
-                    _this.el.find('#requiredLogo').removeClass().addClass('required');
-                }
+            if(_this.data.type == 'Editor' && ( _this.data.value.replace(/<.*?>/ig,"").replace(/\s/g, "") === '' )){
+                _this.el.find('#requiredLogo').removeClass().addClass('required');
             }
         },
         //赋值
