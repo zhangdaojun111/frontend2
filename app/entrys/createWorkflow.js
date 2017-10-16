@@ -61,18 +61,18 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             btnType:'none',
             is_view:0
         });
-        const intervalSave= async function (data) {
-            let postData={
-                flow_id:msg.id,
-                is_draft:1,
-                data:{}
-            };
-            postData.data=JSON.stringify(data);
-            let res = await workflowService.createWorkflowRecord(postData);
-            if(res.success===1){
-                msgBox.showTips('自动保存成功！');
-            }
-        };
+        // const intervalSave= async function (data) {
+        //     let postData={
+        //         flow_id:msg.id,
+        //         is_draft:1,
+        //         data:{}
+        //     };
+        //     postData.data=JSON.stringify(data);
+        //     let res = await workflowService.createWorkflowRecord(postData);
+        //     if(res.success===1){
+        //         msgBox.showTips('自动保存成功！');
+        //     }
+        // };
         // let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
