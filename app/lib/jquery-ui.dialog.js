@@ -40,7 +40,6 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
     },
 
     _maximizeWindow: function () {
-        this.options.resizeMax && this.options.resizeMax();
         let width = Math.max(400, document.documentElement.clientWidth);
         let height = Math.max(400, document.documentElement.clientHeight);
         this.options.originHeight = this.options.height;
@@ -49,6 +48,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         this.option('height', height);
         this.option('position', {my: "center top", at: "center top", of: window});
         this.fullScreen = true;
+        this.options.resizeMax && this.options.resizeMax();
 
         if (this.uiDialogTitlebarFull) {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
@@ -58,18 +58,18 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         }
     },
     _minimizeWindow: function () {
-        this.options.resizeMin && this.options.resizeMin();
         this._removeClass($(this.uiDialog[0]), "ui-dialog-maximize");
         this.option('width', this.options.originWidth);
         this.option('height', this.options.originHeight);
         this.option('position', {my: "center", at: "center", of: window});
         this.fullScreen = false;
+        this.options.resizeMin && this.options.resizeMin();
+
         if (this.uiDialogTitlebarFull) {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-newwin");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
             $(this.uiDialogTitlebarFull[0].firstChild).attr('title','全屏');
         }
-
     },
     _createTitlebar: function () {
         this._super();

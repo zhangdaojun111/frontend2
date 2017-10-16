@@ -46,16 +46,13 @@ let config = {
                 this.pagination.actions.setPagination(data.total, param.currentPage);
                 // this.hideLoading();
                 this.agGrid.gridOptions.api.sizeColumnsToFit();
-                console.log(this.agGrid);
             });
         },
         setSortModel:function () {
             if(this.data.total > this.data.rows){
                 this.data.frontendSort = false;
-                // console.log('启用后端排序');
             }else{
                 this.data.frontendSort = true;
-                // console.log('启用前端排序');
             }
             this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
             this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
@@ -69,7 +66,6 @@ let config = {
                 if (res) {
                     let rows = this.agGrid.gridOptions.api.getSelectedRows();
                     let checkIds = rows.map((item) => {
-                        console.log(item);
                         if(item.is_read === 0){
                             unread_count++;
                         }
@@ -277,14 +273,13 @@ let config = {
         let gridDom = this.el.find('.grid');
         let that = this;
         //设置表格表头信息
-         this.agGrid = new agGrid({
+        gridPref = this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
             onRowDoubleClicked:that.actions.onRowDoubleClicked,
             onSortChanged: this.actions.onSortChanged,
             footerData:[]
         });
-        gridPref = this.agGrid;
         this.agGrid.render(gridDom);
         this.showLoading();
         //请求页显示数量偏好
@@ -334,15 +329,15 @@ let systemMessageUtil = {
             title: '消息提醒',
             resizeMax:function () {
                 sysDom.addClass('maximize-model');
-                setTimeout(function () {
-                    gridPref.gridOptions.api.sizeColumnsToFit();
-                },450);
+                // setTimeout(function () {
+                //     gridPref.gridOptions.api.sizeColumnsToFit();
+                // },450);
             },
             resizeMin:function () {
                 sysDom.removeClass('maximize-model');
-                setTimeout(function () {
-                    gridPref.gridOptions.api.sizeColumnsToFit();
-                },450);
+                // setTimeout(function () {
+                //     gridPref.gridOptions.api.sizeColumnsToFit();
+                // },450);
             },
             close: function () {
                 $(this).erdsDialog('destroy');
