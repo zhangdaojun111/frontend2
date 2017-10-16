@@ -998,12 +998,8 @@ let config = {
             if(_this.data.type == 'Editor'){
                 if ( _this.data.value.replace(/<.*?>/ig,"").replace(/\s/g, "") === '' ) {
                     _this.el.find('#requiredLogo').removeClass().addClass('required');
-                } else {
-                    _this.el.find('#requiredLogo').removeClass().addClass('required2');
                 }
             }
-
-
         },
         //赋值
         setFormValue(dfield, value) {
