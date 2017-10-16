@@ -47,8 +47,8 @@ let config = {
     },
     binds:[
         {   //选中状态
-            event:'click',
-            selector:'input',
+            event:'change',
+            selector:'.normal-date-options input',
             callback:function (context,event) {
                 if(!$(context).parent().next().is('.option-disabled')){
                     $(context).parents('label').addClass('option-active');
@@ -59,7 +59,10 @@ let config = {
         }
     ],
     afterRender() {},
-    firstAfterRender() {},
+    firstAfterRender() {
+        // // 默认选中全部
+        // this.el.find('.normal-date-options .all-year input').trigger('focus');
+    },
     beforeDestory() {}
 };
 
