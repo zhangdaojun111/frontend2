@@ -36,7 +36,6 @@ let config={
         }
     ],
     afterRender(){
-        debugger;
         let config={
             tableId:this.data.value,
             parentTableId:this.data.parent_table_id,
