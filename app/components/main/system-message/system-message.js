@@ -272,13 +272,6 @@ let config = {
             this.actions.loadData();
             this.hideLoading();
         },
-        setMaximize:function () {
-            console.log('调到max函数啦');
-        },
-        setMinimize:function () {
-            console.log('调到min' +
-                '函数啦');
-        }
     },
     afterRender: function () {
         let gridDom = this.el.find('.grid');
