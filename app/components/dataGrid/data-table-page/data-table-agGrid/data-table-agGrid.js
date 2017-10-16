@@ -2434,9 +2434,10 @@ let config = {
         //定制列
         customColumnClick: function () {
             if( this.el.find('.custom-column-btn')[0] ){
-                this.el.find( '.custom-column-btn' ).on( 'click',()=>{
-                    this.actions.calcCustomColumn();
-                } )
+                let That = this;
+                this.el.find( '.custom-column-btn' ).on( 'click',_.debounce( ()=>{
+                    That.actions.calcCustomColumn();
+                },500 ) )
             }
         },
         //定制列事件
@@ -2457,9 +2458,10 @@ let config = {
             if( !this.el.find('.group-btn')[0] ){
                 return;
             }
-            this.el.on('click','.group-btn',()=> {
-                this.actions.calcGroup();
-            })
+            let Taht = this;
+            this.el.on('click','.group-btn',_.debounce( ()=>{
+                Taht.actions.calcGroup();
+            },500 ))
         },
         //分组打开关闭
         calcGroup: function () {
