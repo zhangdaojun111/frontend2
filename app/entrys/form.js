@@ -185,6 +185,12 @@ let FormEntrys = {
 		else {
 			json["real_id"] = this.data.realId;
 		}
+		if (this.data.tempId) {
+			json["temp_id"] = this.data.tempId;
+			if(json["real_id"]){
+				delete json["real_id"];
+			}
+		}
 		return json;
 	},
 	//merge static和dynamic数据,将dynamic中的动态数据 替换掉static中的静态数据，保证数据正确
