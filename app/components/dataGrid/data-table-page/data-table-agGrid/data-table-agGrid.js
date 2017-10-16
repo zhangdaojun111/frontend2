@@ -1049,7 +1049,7 @@ let config = {
             }
             this.data.tableOperationData = temp;
             //渲染其他组件
-            this.actions.renderAgGrid();
+            // this.actions.renderAgGrid();
         },
         //隐藏系统字段
         hideSysCols: function ( res ) {
@@ -1099,6 +1099,8 @@ let config = {
                     }
                     this.data.rowData = resRows;
                     if( this.data.firstRender ){
+                        //渲染其他组件
+                        this.actions.renderAgGrid();
                         let d = {
                             rowData: this.data.rowData
                         }
@@ -1130,6 +1132,8 @@ let config = {
                 this.data.remindColor = res[1];
                 this.data.common_filter_id = res[0].common_filter_id || '';
                 if( this.data.firstRender ){
+                    //渲染其他组件
+                    this.actions.renderAgGrid();
                     let d = {
                         rowData: this.data.rowData
                     }
@@ -1230,6 +1234,8 @@ let config = {
                 this.data.footerData = dgcService.createFooterData( res[2] );
             }
             if( this.data.firstRender ){
+                //渲染其他组件
+                this.actions.renderAgGrid();
                 let d = {
                     rowData: this.data.rowData
                 }
@@ -1474,6 +1480,7 @@ let config = {
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
+                delete json['rowId']
             }
             if( this.data.viewMode == 'count' ){
                 json["tableType"]='count';
@@ -2433,9 +2440,10 @@ let config = {
         //定制列
         customColumnClick: function () {
             if( this.el.find('.custom-column-btn')[0] ){
-                this.el.find( '.custom-column-btn' ).on( 'click',()=>{
-                    this.actions.calcCustomColumn();
-                } )
+                let That = this;
+                this.el.find( '.custom-column-btn' ).on( 'click',_.debounce( ()=>{
+                    That.actions.calcCustomColumn();
+                },500 ) )
             }
         },
         //定制列事件
@@ -2456,9 +2464,10 @@ let config = {
             if( !this.el.find('.group-btn')[0] ){
                 return;
             }
-            this.el.on('click','.group-btn',()=> {
-                this.actions.calcGroup();
-            })
+            let Taht = this;
+            this.el.on('click','.group-btn',_.debounce( ()=>{
+                Taht.actions.calcGroup();
+            },500 ))
         },
         //分组打开关闭
         calcGroup: function () {
@@ -3167,6 +3176,12 @@ let config = {
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
             this.actions.openSelfIframe( url,title );
+            //行选择容错
+            let ele= data.event.target;
+            let node = data.node;
+            node.setSelected(false, false);
+            $(ele).removeClass('my-ag-cell-focus1');
+            $(ele).removeClass('my-ag-cell-focus2');
         },
         //设置失效
         setInvalid: function () {

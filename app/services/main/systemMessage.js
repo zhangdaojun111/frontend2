@@ -92,7 +92,8 @@ export const systemMessageService = {
                 width: 60,
                 suppressMenu: true,
                 cellStyle: {'text-align': 'center'},
-                cellRenderer: handlers.operatorRender
+                cellRenderer: handlers.operatorRender,
+                sortingOrder: ['desc', null],
             },
             {
                 headerName: '消息类型',
