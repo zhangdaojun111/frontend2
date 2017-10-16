@@ -329,15 +329,15 @@ let systemMessageUtil = {
             title: '消息提醒',
             resizeMax:function () {
                 sysDom.addClass('maximize-model');
-                // setTimeout(function () {
-                //     gridPref.gridOptions.api.sizeColumnsToFit();
-                // },450);
+                setTimeout(function () {
+                    gridPref.gridOptions.api.sizeColumnsToFit();
+                },450);
             },
             resizeMin:function () {
                 sysDom.removeClass('maximize-model');
-                // setTimeout(function () {
-                //     gridPref.gridOptions.api.sizeColumnsToFit();
-                // },450);
+                setTimeout(function () {
+                    gridPref.gridOptions.api.sizeColumnsToFit();
+                },450);
             },
             close: function () {
                 $(this).erdsDialog('destroy');
