@@ -1,5 +1,6 @@
 import Component from '../../../lib/component';
 import template from './aside.html';
+import './aside.scss';
 import '../../../../custom/fof/app/components/main/aside/aside.scss';
 import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
