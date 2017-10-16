@@ -6,6 +6,8 @@ import template from './preview.html';
 import Component from "../../../lib/component";
 import './preview.css';
 
+let preview_file = ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"];
+
 let config = {
     template:template,
     data:{
@@ -20,7 +22,7 @@ let config = {
                 this.el.find('.my-mask').hide();
                 this.data.dragStart = false;
                 this.el.remove();
-                $(document).off("mousewheel DOMMouseScroll");
+                // $(document).off("mousewheel DOMMouseScroll");
             }
         }, {
             event: 'mouseup',
@@ -106,12 +108,13 @@ let config = {
             event: 'click',
             selector:'.previous',
             callback:function () {
-                if(this.data.items[0].file_name){//兼容附件浏览的情况
+                let fileId;
+                if(this.data.list[0].file_name){//兼容附件浏览的情况
                     //找到前一个可浏览的文件的索引
                     let i = this.data.currentIndex - 1;
                     for(;i >=0; i--){
-                        let type = this.data.items[i].file_name.split('.').pop();
-                        if(this.data.preview_file.includes(type)){
+                        let type = this.data.list[i].file_name.split('.').pop();
+                        if(preview_file.includes(type)){
                             break;
                         }
                     }
@@ -122,24 +125,25 @@ let config = {
                     } else {
                         this.data.currentIndex--;
                     }
-
+                    fileId = this.data.list[this.data.currentIndex].file_id;
                 }else {//普通图片浏览
                     this.data.currentIndex = this.data.currentIndex == 0? this.data.currentIndex:this.data.currentIndex - 1;
+                    fileId = Object.keys(this.data.list[this.data.currentIndex])[0];
                 }
-                this.actions._loadPreview(Object.keys(this.data.items[this.data.currentIndex])[0]);
-                this.actions._updateSwiftButtons(this.data.currentIndex);
+                this.actions._loadPreview(fileId);
             }
         }, {
             event: 'click',
             selector:'.next',
             callback:function () {
-                if(this.data.items[0].file_name) {//兼容附件浏览的情况
+                let fileId;
+                if(this.data.list[0].file_name) {//兼容附件浏览的情况
                     //找到前一个可浏览的文件的索引
                     let i = this.data.currentIndex + 1;
-                    let length = this.data.items.length;
+                    let length = this.data.list.length;
                     for (; i < length; i++) {
-                        let type = this.data.items[i].file_name.split('.').pop();
-                        if (this.data.preview_file.includes(type)) {
+                        let type = this.data.list[i].file_name.split('.').pop();
+                        if (preview_file.includes(type)) {
                             break;
                         }
                     }
@@ -150,12 +154,13 @@ let config = {
                     } else {
                         this.data.currentIndex++;
                     }
+                    fileId = this.data.list[this.data.currentIndex].file_id;
                 } else {//普通图片浏览
-                    this.data.currentIndex = this.data.currentIndex < this.data.items.length - 1? this.data.currentIndex + 1:this.data.currentIndex;
+                    this.data.currentIndex = this.data.currentIndex < this.data.list.length - 1? this.data.currentIndex + 1:this.data.currentIndex;
+                    fileId = Object.keys(this.data.list[this.data.currentIndex])[0];
                 }
 
-                this.actions._loadPreview(Object.keys(this.data.items[this.data.currentIndex])[0]);
-                this.actions._updateSwiftButtons(this.data.currentIndex);
+                this.actions._loadPreview(fileId);
             }
         }
     ],
@@ -171,26 +176,28 @@ let config = {
             this.el.find('.my-mask').show();
             this.data.rotateNo = 0;
             this.data.imgScale = 1;
+            this.actions._uploadScale();
+            this.actions._updateSwiftButtons(this.data.currentIndex);
             this.el.find('.img-pre').css("height", $(window).height() * 0.7 + 'px');
             this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + "," + this.data.imgScale + ")");
             this.el.find('.img-pre').get(0).src = "/download_attachment/?file_id=" + id + "&download=0&dinput_type=" + this.data.dinput_type;
-            $(document).on("mousewheel DOMMouseScroll", (e) => {
-                let delta = (e.originalEvent['wheelDelta'] && (e.originalEvent['wheelDelta'] > 0 ? 1 : -1)) ||
-                    (e.originalEvent['detail'] && (e.originalEvent['detail'] > 0 ? -1 : 1));
-                if (delta > 0) {
-                    this.data.imgScale += 0.1;
-                    this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
-                } else if (delta < 0) {
-                    this.imgScale -= 0.1;
-                    this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
-                }
-            });
+            // $(document).on("mousewheel DOMMouseScroll", (e) => {
+            //     let delta = (e.originalEvent['wheelDelta'] && (e.originalEvent['wheelDelta'] > 0 ? 1 : -1)) ||
+            //         (e.originalEvent['detail'] && (e.originalEvent['detail'] > 0 ? -1 : 1));
+            //     if (delta > 0) {
+            //         this.data.imgScale += 0.1;
+            //         this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
+            //     } else if (delta < 0) {
+            //         this.imgScale -= 0.1;
+            //         this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
+            //     }
+            // });
             this.el.find(".save").attr('id',id);
         },
         _getCurrentIndex(id){
             let i = 0;
-            for(let length = this.data.items.length; i < length; i++){
-                if(id == this.data.items[i]['file_id']) {
+            for(let length = this.data.list.length; i < length; i++){
+                if(id == this.data.list[i]['file_id']) {
                     break;
                 }
             }
@@ -210,30 +217,17 @@ let config = {
         }
     },
     afterRender:function () {
-        this.data.rotateNo = 0;
-        this.data.imgScale = 1;
-        this.data.lastPreviewableIndex = this.data.items.length - 1;
-        this.actions._uploadScale();
-        if(!this.data.currentIndex){
-            this.actions._getCurrentIndex(this.data.id);
+        this.data.lastPreviewableIndex = this.data.list.length - 1;
+        console.dir(this.data);
+        if(this.data.currentIndex == undefined){
+            console.log('here1');
+            this.data.currentIndex = this.actions._getCurrentIndex(this.data.id);
+        } else {
+            console.log('here2');
+            this.data.id = Object.keys(this.data.list[this.data.currentIndex])[0];
         }
-        this.data.id = Object.keys(this.data.items[this.data.currentIndex])[0];
-        this.actions._updateSwiftButtons(this.data.currentIndex);
-        this.el.find('.img-pre').css("height", $(window).height() * 0.7 + 'px');
-        this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + "," + this.data.imgScale + ")");
-        this.el.find('.img-pre').get(0).src = "/download_attachment/?file_id=" + this.data.id + "&download=0&dinput_type=" + this.data.dinput_type;
-        // $(document).on("mousewheel DOMMouseScroll", (e) => {
-        //     let delta = (e.originalEvent['wheelDelta'] && (e.originalEvent['wheelDelta'] > 0 ? 1 : -1)) ||
-        //         (e.originalEvent['detail'] && (e.originalEvent['detail'] > 0 ? -1 : 1));
-        //     if (delta > 0) {
-        //         this.data.imgScale += 0.1;
-        //         this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
-        //     } else if (delta < 0) {
-        //         this.imgScale -= 0.1;
-        //         this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
-        //     }
-        // });
-        this.el.find(".save").attr('id',this.data.id);
+        console.log('id:'+this.data.id);
+        this.actions._loadPreview(this.data.id);
     }
 }
 

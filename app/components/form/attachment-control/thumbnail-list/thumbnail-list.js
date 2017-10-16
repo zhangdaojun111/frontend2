@@ -5,7 +5,8 @@
 import template from './thumbnail-list.html';
 import './thumbnail-list.scss';
 import Component from "../../../../lib/component";
-import Preview from '../../../util/preview/preview';
+// import Preview from '../../../util/preview/preview';
+import {PMAPI, PMENUM} from "../../../../lib/postmsg";
 
 let config = {
     template:template,
@@ -144,15 +145,12 @@ let config = {
             let imgEle = $('<img class="thumbnail-'+i+'" style="width: 50px;height: 50px;padding: 5px">');
             this.el.find('.thumbnail-anchor').append(imgEle);
             imgEle.on('click',(event)=>{
-                let preview = new Preview(_.defaultsDeep({},this.data,{currentIndex:i}));
-                let ele = $('<div class="preview"></div>');
-                ele.appendTo(document.body);
-                preview.render(ele);
+                PMAPI.openPreview({list:this.data.items,currentIndex:i});
                 if(!this.data.items[this.data.currentIndex+i]){
                     return;
                 }
                 let src = '/download_attachment/?file_id='+Object.keys(this.data.items[this.data.currentIndex+i])[0]+'&download=0';
-                event.stopPropagation();
+                event.stopPropagation({list:this.data.items,currentIndex:i});
             })
         }
         this.actions.setMoveController();

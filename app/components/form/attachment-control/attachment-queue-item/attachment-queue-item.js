@@ -7,6 +7,7 @@ import Component from "../../../../lib/component";
 import browserMD5File from 'browser-md5-file';
 import {FormService} from "../../../../services/formService/formService";
 import msgbox from '../../../../lib/msgbox';
+import {PMAPI} from "../../../../lib/postmsg";
 
 let config = {
     template: template,
@@ -74,11 +75,11 @@ let config = {
                         return;
                     }
                     let fileId = this.data._controlItem['fileId'];
+                    console.dir(this.data._controlItem);
                     let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
                     if(this.data.file.type.indexOf('image') != -1) {
-                        this.el.find('.preview-contain').show();
-                        let ele = $('<img src="'+src+'">');
-                        this.el.find('.preview-anchor').empty().append(ele);
+                        this.el.find('.preview-anchor').empty();
+                        PMAPI.openPreview({list:[{file_id:fileId}],id:fileId});
                     } else if (this.data.file.type == 'video/mp4') {
                         this.el.find('.preview-contain').show();
                         let ele = $('<video width="400" controls><source src="'+src+'" type="video/mp4">您的浏览器不支持HTML5</video>');
@@ -125,9 +126,12 @@ let config = {
                 this.el.find('.pause-attaching').css('display','none');
                 this.el.find('.cancel-attaching').css('display','none');
                 this.el.find('.delete-file').css('display','inline');
-                this.el.find('.preview').css('display','inline');
-                if(this.data.file.type.indexOf('image') == -1 && this.data.file.type != 'video/mp4'){
-                    this.el.find('.preview').css({'color':'grey','cursor':'auto'});
+
+                if(this.data.real_type == 9){
+                    this.el.find('.preview').css('display','inline');
+                    if(this.data.file.type.indexOf('image') == -1 && this.data.file.type != 'video/mp4'){
+                        this.el.find('.preview').css({'color':'grey','cursor':'auto'});
+                    }
                 }
             }
         },
