@@ -1608,7 +1608,7 @@ let config = {
                     _this.data.viewMode = 'ViewChild';
                 }
                 PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`, {
-                    width: 800,
+                    width: 1100,
                     height: 600,
                     title: `子表`,
                     modal: true
@@ -1715,6 +1715,7 @@ let config = {
                     case 'Songrid':
                         let popupType = single.data('popuptype') || 0;
                         data[key]['temp_id'] = data['temp_id']['value'];
+                        data[key]['popup'] = popupType;
                         let songrid = new Songrid(Object.assign(data[key], {popupType: popupType}), actions);
                         songrid.render(single);
                         this.data.childComponent[data[key].dfield] = songrid;
