@@ -111,6 +111,9 @@ let config = {
                 if(this.data.value.length == 0){
                     return;
                 }
+                //初始化清空一下缓存
+                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                Storage.deleteItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
                 FormService.getAttachment({
                     file_ids:JSON.stringify(this.data.value),
                     dinput_type:this.data.dinput_type
@@ -274,7 +277,6 @@ let config = {
             }
         },
         _updateDeleted:function(res){
-            Storage.init((new URL(document.URL)).searchParams.get('key'));
             let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
             if(!deletedFiles){
                 return;
@@ -282,6 +284,7 @@ let config = {
             for(let file of deletedFiles){
                 this.data.value.splice(this.data.value.indexOf(file),1);
             }
+            this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
             this.trigger('changeValue',this.data);
         }
     },

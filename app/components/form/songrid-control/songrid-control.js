@@ -54,7 +54,12 @@ let config={
         this.append(dataGrid,this.el.find('.songGrid'));
         Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
             if(res.tableId == this.data["value"]){
-               this.data["total"] = res.total;
+                this.data["total"] = res.total;
+                if (this.data.total == 0) {
+                    this.el.find('#requiredLogo').removeClass().addClass('required');
+                }else {
+                    this.el.find('#requiredLogo').removeClass().addClass('required2');
+                }
                 this.events.emitDataIfInline(this.data);
             }
         })
