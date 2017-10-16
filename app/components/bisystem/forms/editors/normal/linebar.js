@@ -38,7 +38,7 @@ let config = {
                 this.formItems['double'].clearErrorMsg();
                 // 当是编辑模式下,需要先渲染完y轴在执行默认展示y轴数据
                 if(this.data.id) {
-                    if (data) {
+                    if (data.length > 0) {
                         if (this.data.chart['yAxis'].length == data.length) {
                             delete this.data.id;
                             return false;
@@ -614,6 +614,7 @@ let config = {
         this.drawForm();
         this.actions.init();
 
+        // console.log(this.data);
         if (this.data.id) {
             this.actions.fillChart(this.data.chart);
         };
