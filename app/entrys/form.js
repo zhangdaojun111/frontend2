@@ -286,8 +286,12 @@ let FormEntrys = {
 	},
 	//销毁单个form实例
 	destoryForm(tableID) {
+		console.log('调用了么?');
+		console.log(tableID);
+		console.log(this.childForm);
 		if (this.childForm[tableID]) {
 			this.childForm[tableID].destroySelf();
+			console.log('删除了么？');
 			delete this.childForm[tableID];
 		}
 	},
@@ -381,7 +385,8 @@ let FormEntrys = {
 	//代码容错 el必须为一个jq对象
 	checkConfig(config) {
 		if (!(config.el instanceof jQuery)) {
-			console.err('el不是一个Jquery对象');
+			console.error('el不是一个Jquery对象');
+			console.error(config.el);
 			return {
 				error: true,
 				errorMsg: 'el不是一个Jquery对象'
@@ -424,7 +429,7 @@ let FormEntrys = {
 			//if(this.initFlag !== true){
 			this.data.el.find('.form-print-position').append('<p style="font-size:20px;text-align: center;position: relative;top: 35px">您没有数据查看权限</p>');
 			// this.initFlag = true
-			Mediator.publish('form:formAlreadyCreate', 'success');
+			Mediator.publish('form:formAlreadyCreate' + this.tableId, 'success');
 			return false;
 			// }
 		}
