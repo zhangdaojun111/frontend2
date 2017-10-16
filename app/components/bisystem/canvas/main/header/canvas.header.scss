@@ -1,24 +1,27 @@
 .nav-tabs {
     position: relative;
-    height: 50px;
+    height: 60px;
     white-space: nowrap;
     width: calc(100% - 300px);
     background: transparent;
     display: inline-block;
-    overflow:hidden;
-    >.new-charts-icon{
-        vertical-align: middle;
-        margin-left: 16px;
+    overflow: hidden;
+    .icon-chart {
+        .new-charts-icon {
+            vertical-align: middle;
+            margin-left: 17px;
+        }
     }
     div {
         height: 100%;
         display: inline-block;
     }
-    &:hover{
-        overflow-x:auto;
+    &:hover {
+        overflow-x: auto;
     }
 }
-.views-btn-group,.views-header-right {
+
+.views-btn-group, .views-header-right {
     position: relative;
     display: inline-block;
     right: 0;

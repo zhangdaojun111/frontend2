@@ -5,6 +5,7 @@
 import template from './range.html';
 import Component from '../../../../../../../../lib/component';
 import './range.scss';
+import {canvasCellService} from '../../../../../../../../services/bisystem/canvas.cell.service';
 
 let config = {
     template: template,
@@ -55,14 +56,13 @@ let config = {
                     $(context).parents('label').addClass('option-active');
                     $(context).parents('label').siblings().removeClass('option-active');
                 }
-
             }
         }
     ],
     afterRender() {},
     firstAfterRender() {
-        // // 默认选中全部
-        // this.el.find('.normal-date-options .all-year input').trigger('focus');
+        //默认选中全部
+        this.el.find('.normal-date-options .all-year input').prop('checked', true);
     },
     beforeDestory() {}
 };

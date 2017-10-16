@@ -27,7 +27,8 @@
         }
         input {
             border: 1px solid #d4d4d4;;
-            width: 110px;
+            width: 120px;
+            padding:3px;
             &::-webkit-inner-spin-button {
                 visibility: hidden;
             }
