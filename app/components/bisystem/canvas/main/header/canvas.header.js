@@ -19,6 +19,7 @@ let config = {
         menus: {},
         isAdmin: window.config.is_admin,
         isSelf: window.config.bi_views.self,
+        markSingle:'',
         // headerMenus:[],
     },
     actions: {
@@ -208,6 +209,10 @@ let config = {
 
     },
     firstAfterRender(){
+        //修改单页模式下的url地址
+         if(window.config.query_mark === "single"){
+            this.el.find('.new-window').prop('href',`/bi/index/${window.location.search}`);
+        }
     },
     beforeDestory(){
     }

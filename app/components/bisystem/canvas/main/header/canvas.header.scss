@@ -6,6 +6,10 @@
     background: transparent;
     display: inline-block;
     overflow:hidden;
+    >.new-charts-icon{
+        vertical-align: middle;
+        margin-left: 16px;
+    }
     div {
         height: 100%;
         display: inline-block;

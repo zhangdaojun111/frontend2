@@ -1,5 +1,7 @@
 {{#unless singleModel}}
-<div class="nav-tabs nav-tabs-{{editMode}}"></div>
+<div class="nav-tabs nav-tabs-{{editMode}}">
+    <i class="new-charts-icon"></i>
+</div>
 {{#if editMode}}
 <div class="views-btn-group">
     <div class="views-btn-right">
@@ -21,7 +23,7 @@
 </div>
 {{else}}
     <span class="views-header-right">
-        <a href="/bi/index/" draggable="false" target="_blank" class="new-window" title="在新窗口打开"><i class="new-window-icon"></i>新窗口</a>
+        <a href="/bi/index" draggable="false" target="_blank" class="new-window" title="在新窗口打开"><i class="new-window-icon"></i>新窗口</a>
         <a href="javascript:;" draggable="false" class="print-btn" title="打印"><i class="print-icon"></i>打印</a>
         {{#unless editMode}}
         <a href="javascript:;"draggable="false"  class="to-edit-page" title="编辑"><i class="manager-edit-icon"></i>编辑</a>
