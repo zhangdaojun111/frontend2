@@ -36,10 +36,6 @@ let config={
         }
     ],
     afterRender(){
-        console.log( "---------------------" )
-        console.log( "---------------------" )
-        console.log( window.config )
-        console.log( this.data )
         debugger;
         let config={
             tableId:this.data.value,
