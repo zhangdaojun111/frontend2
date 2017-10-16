@@ -34,6 +34,7 @@ let config = {
                     this.el.find('.week input').prop('disabled',true);
                     break;
             }
+
         },
         /**
          *设置时间范围
