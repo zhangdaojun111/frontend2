@@ -3171,6 +3171,12 @@ let config = {
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
             this.actions.openSelfIframe( url,title );
+            //行选择容错
+            let ele= data.event.target;
+            let node = data.node;
+            node.setSelected(false, false);
+            $(ele).removeClass('my-ag-cell-focus1');
+            $(ele).removeClass('my-ag-cell-focus2');
         },
         //设置失效
         setInvalid: function () {
