@@ -39,6 +39,7 @@ function getLoginController() {
         $submitFindPw:$('.submit-find-account'),    //查找密码提交按钮
         $mobileDownload:$('.mobile-download-btn'),  //移动下载按钮
         $selfServiceUpdate:$('.self-service-update'),   //自助更新按钮
+        nextUrl:'/index',
 
         /**
          * 检测浏览器是否可用
@@ -310,7 +311,7 @@ function getLoginController() {
          * 用户登录
          */
         userLogin:function (username,password) {
-            // console.log(username,password);
+            debugger;
             if(password === ''){
                 $(".warn-info").html('密码不能为空');
                 return;
@@ -334,7 +335,9 @@ function getLoginController() {
                     }
                     info = JSON.stringify(info);
                     window.localStorage.setItem('password_info',info);
-                    $(window).attr('location','/index');
+                    console.log(that.nextUrl);
+                    debugger;
+                    $(window).attr('location',that.nextUrl);
                 }else if(result.success === 0){
                     $(".warn-info").html(result['error']).show();
                 }
@@ -344,6 +347,17 @@ function getLoginController() {
         },
         setPasswordValue:function (value) {
             loginController.password_value = value;
+        },
+        /**
+         * 获取url并解析，判断是否直接跳转页面
+         */
+        getNextUrl:function () {
+            let url = window.location.search;
+            let position = url.indexOf('=');
+            url = url.substr(position + 1);
+            if(url && url !== '/'){
+                this.nextUrl = url;
+            }
         }
     };
     return loginController;
@@ -357,21 +371,8 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 }
 
 let controller = getLoginController();
-
-/**
- * 获取url并解析，判断是否直接跳转页面
- */
-function getNextUrl() {
-    let url = window.location.search;
-    url = url.split('=')[1];
-    if(url && url !== '/'){
-        $(window).attr('location',url);
-    }
-}
-
-getNextUrl();       //根据url判断是否跳转页面
-
 controller.formInit();  //初始化表单控件
+controller.getNextUrl();       //根据url判断是否跳转页面
 // let isNeedDownload = controller.browser_check();     //暂时屏蔽
 let isNeedDownload = false;
 if( isNeedDownload === false){      //正常显示登录表单
