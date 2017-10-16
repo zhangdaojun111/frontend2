@@ -1049,7 +1049,7 @@ let config = {
             }
             this.data.tableOperationData = temp;
             //渲染其他组件
-            this.actions.renderAgGrid();
+            // this.actions.renderAgGrid();
         },
         //隐藏系统字段
         hideSysCols: function ( res ) {
@@ -1099,6 +1099,8 @@ let config = {
                     }
                     this.data.rowData = resRows;
                     if( this.data.firstRender ){
+                        //渲染其他组件
+                        this.actions.renderAgGrid();
                         let d = {
                             rowData: this.data.rowData
                         }
@@ -1130,6 +1132,8 @@ let config = {
                 this.data.remindColor = res[1];
                 this.data.common_filter_id = res[0].common_filter_id || '';
                 if( this.data.firstRender ){
+                    //渲染其他组件
+                    this.actions.renderAgGrid();
                     let d = {
                         rowData: this.data.rowData
                     }
@@ -1227,6 +1231,8 @@ let config = {
                 this.data.footerData = dgcService.createFooterData( res[2] );
             }
             if( this.data.firstRender ){
+                //渲染其他组件
+                this.actions.renderAgGrid();
                 let d = {
                     rowData: this.data.rowData
                 }
