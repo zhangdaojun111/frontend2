@@ -328,7 +328,6 @@ class SystemMessage extends Component {
 let systemMessageUtil = {
     el: null,
     show: function () {
-        let that = this;
         this.el = $("<div class='user-system-message'>").appendTo('body');
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
@@ -344,13 +343,13 @@ let systemMessageUtil = {
                 sysDom.addClass('maximize-model');
                 setTimeout(function () {
                     gridPref.gridOptions.api.sizeColumnsToFit();
-                },400);
+                },450);
             },
             resizeMin:function () {
                 sysDom.removeClass('maximize-model');
                 setTimeout(function () {
                     gridPref.gridOptions.api.sizeColumnsToFit();
-                },400);
+                },450);
             },
             close: function () {
                 $(this).erdsDialog('destroy');
