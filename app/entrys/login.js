@@ -357,6 +357,20 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 }
 
 let controller = getLoginController();
+
+/**
+ * 获取url并解析，判断是否直接跳转页面
+ */
+function getNextUrl() {
+    let url = window.location.search;
+    url = url.split('=')[1];
+    if(url && url !== '/'){
+        $(window).attr('location',url);
+    }
+}
+
+getNextUrl();       //根据url判断是否跳转页面
+
 controller.formInit();  //初始化表单控件
 // let isNeedDownload = controller.browser_check();     //暂时屏蔽
 let isNeedDownload = false;
