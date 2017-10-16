@@ -158,7 +158,12 @@ let config = {
             this.el.find('.condition-search-container').find('div').remove();
             this.actions.rendSearchItem();
             for(let i = 0; i<searchData.length-1; i++) {
-                this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
+                let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
+                let dom = document.createElement('div');
+                dom.className = 'condition-search-choice';
+                this.append(epCondition, $(dom));
+                $(dom).appendTo(this.el.find('.condition-search-container'));
+                // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
             }
             for(let j = 0;j<searchData.length;j++) {
                 let html = this.actions.checkedRelationType(searchData[j]['cond']['searchByName']);
@@ -207,16 +212,19 @@ let config = {
                 if(item.name == type) {
                     switch (item.searchType) {
                         case "datetime":
+                            this.el.find('.condition-search-box-input').eq(index).attr('title','datetime');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateTimeControl = new DateTimeControl({value: value},{changeValue:function(data){}});
                             dateTimeControl.render(this.el.find('.condition-search-value').eq(index));
                             break;
                         case "date":
+                            this.el.find('.condition-search-box-input').eq(index).attr('title','date');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateControl = new DateControl({value: value},{changeValue:function(data){}});
                             dateControl.render(this.el.find('.condition-search-value').eq(index));
                             break;
                         case "time":
+                            this.el.find('.condition-search-box-input').eq(index).attr('title','time');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let timeControl = new TimeControl({value: value},{changeValue:function(data){}});
                             timeControl.render(this.el.find('.condition-search-value').eq(index));
@@ -226,6 +234,7 @@ let config = {
                             this.el.find('.condition-search-value').eq(index).find('.condition-search-input').val(value);
                             break;
                         case "number":
+                            this.el.find('.condition-search-box-input').eq(index).attr('title','number');
                             this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="number">`);
                             this.el.find('.condition-search-input').eq(index).val(value);
                             break;
@@ -273,12 +282,14 @@ let config = {
                         // this.data.saveTemporaryCommonQuery(this.data.searchInputList);
                         let searchId = '临时高级查询',searchName = '临时高级查询',appendChecked = true;
                         this.data.commonQuery.forEach((item) => {
-                            if(item.id == this.id) {
+                            if(item.id == this.id &&
+                                JSON.parse(item.queryParams)[0]['cond']['keyword'] == this.data.searchInputList[0]['cond']['keyword'] &&
+                                JSON.parse(item.queryParams).length == this.data.searchInputList.length) {
                                 searchId = item.id;
                                 searchName = item.name;
                                 appendChecked = false;
                             }
-                        })
+                        });
                         PMAPI.closeIframeDialog(window.config.key, {
                             type:'temporaryQuery',
                             appendChecked:appendChecked,

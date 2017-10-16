@@ -411,6 +411,7 @@ let config = {
             day['data'] = [];
             for( let set of calendarDate ){
                 let setDetail = this.data.calendarSettings[set.id];
+                // console.log(setDetail);
                 for( let select of setDetail['selectedOpts_data'] ){
 
                     if( select[setDetail['field_id']].indexOf(day.dataTime) === -1 ){
@@ -433,6 +434,7 @@ let config = {
                         arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
                         arrData['type'] = 1;
                         arrData['isShow'] = this.data.searchText === '' ? true : false;
+                        arrData['selectedRepresents'] = setDetail['selectedRepresents'][0] || '';
                         let selectFieldId = '';
                         if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
                             selectFieldId = setDetail['selectedEnums'][0];
@@ -457,7 +459,7 @@ let config = {
                                 fieldId: key,
                                 _id: select['_id'],
                                 fieldName: this.data.fieldInfos[key]['dname'] || '',
-                                fieldValue: select[key] || ''
+                                fieldValue: select[key] || '',
                             } )
                         }
                         for( let d of everyData ){
@@ -474,6 +476,7 @@ let config = {
                         let data3show = [];
                         let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
                         let everyData_3 = [];
+                        // console.log(select_3);
                         for( let key in select_3 ){
                             if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
                                 continue;
@@ -499,6 +502,7 @@ let config = {
                                 }
                             }
                         }
+                        // console.log(everyData_3)
                         for( let d of everyData_3 ){
                             if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
                                 arrData['isShow'] = true;

@@ -11,9 +11,18 @@ import {systemMessageService} from '../../../services/main/systemMessage';
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import msgbox from '../../../lib/msgbox';
 import {HTTP} from '../../../lib/http';
+import {dataTableService} from "../../../services/dataGrid/data-table.service"
+import Mediator from '../../../lib/mediator';
 
 let config = {
     template: template,
+    data:{
+        frontendSort:true,      //排序方式（前端/后端）
+        total:0,
+        rows:100,
+        getDataList:{"sortOrder":-1,sortField:""},     //后端排序参数
+        tableId:'user-message'
+    },
     actions: {
         /**
          * 根据参数（页码）向后台发送请求，获取渲染该页所需数据
@@ -28,6 +37,8 @@ let config = {
             });
             this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
+                this.data.total = data.total;
+                this.actions.setSortModel();
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
                 });
@@ -35,16 +46,35 @@ let config = {
                 this.hideLoading();
             });
         },
+        setSortModel:function () {
+            if(this.data.total > this.data.rows){
+                this.data.frontendSort = false;
+                // console.log('启用后端排序');
+            }else{
+                this.data.frontendSort = true;
+                // console.log('启用前端排序');
+            }
+            this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
+            this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
+        },
         /**
          * 将选中信息标记为已读状态
          */
         markRead: function () {
+            let unread_count = 0;
             msgbox.confirm('是否将选中的消息标为已读？').then((res) => {
                 if (res) {
                     let rows = this.agGrid.gridOptions.api.getSelectedRows();
                     let checkIds = rows.map((item) => {
+                        console.log(item);
+                        if(item.is_read === 0){
+                            unread_count++;
+                        }
                         return item.id;
                     });
+                    //保持window.config中unread数量正确
+                    window.config.sysConfig.unread_msg_count = window.config.sysConfig.unread_msg_count - unread_count;
+                    Mediator.emit("sysmsg:refresh_unread");
                     this.actions._postReadData(JSON.stringify(checkIds));
                 }
             });
@@ -65,6 +95,16 @@ let config = {
                     this.actions.loadData();
                 }
             });
+        },
+        /**
+         * 向后台发送信息阅读状态,前端自己刷新页面
+         * @param ids
+         * @private
+         */
+        _justPostReadData:function (ids) {
+            HTTP.postImmediately('/remark_or_del_msg/', {
+                checkIds: ids
+            })
         },
         /**
          * 批量审批，符合勾选规则后跳至工作流页面，审批完成后，刷新数据
@@ -92,8 +132,8 @@ let config = {
             let data = JSON.stringify(checkIds);
             let that = this;
             PMAPI.openDialogByIframe(url,{
-                width: 1000,
-                height: 400,
+                width: 450,
+                height: 310,
                 title: '批量审批',
                 // customSize:true
             },data).then(res => {
@@ -129,11 +169,45 @@ let config = {
          * @param data
          */
         onPaginationChanged: function (data) {
+            data = _.defaultsDeep(data,this.data.getDataList);
+            this.data.rows = data.rows;
             this.actions.loadData(data);
-
         },
         onSortChanged:function ($event) {
-            this.agGrid.actions.refreshView();
+            //分情况进行前端排序或后端排序
+            if(!this.data.frontendSort){
+                //后端排序
+                console.log('启用后端排序');
+                let data = this.agGrid.gridOptions.api.getSortModel()[0];
+                let sortPostData = {};
+                if( data && data.sort === "asc" ){
+                    this.data.getDataList.sortOrder = 1;
+                    this.data.getDataList.sortField = data.colId;
+                    sortPostData = {
+                        sortField: data.colId,
+                        sortOrder: this.data.getDataList.sortOrder
+                    }
+                }else if(data && data.sort === "desc"){
+                    this.data.getDataList.sortOrder = -1;
+                    this.data.getDataList.sortField = data.colId;
+                    sortPostData = {
+                        sortField: data.colId,
+                        sortOrder: this.data.getDataList.sortOrder
+                    }
+                }
+                this.actions.loadData(sortPostData);
+            }else{
+                //前端排序
+                console.log('启用前端排序');
+                this.agGrid.actions.refreshView();
+            }
+        },
+        /**
+         * 双击打开消息细节弹窗
+         * @param $event
+         */
+        onRowDoubleClicked:function ($event) {
+            this.actions.openDialog($event);
         },
         /**
          * 选择信息查看详细内容，信息类型不同，采用不同方式展示
@@ -141,37 +215,58 @@ let config = {
          */
         onCellClicked: function ($event) {
             if($event.colDef.headerName === '操作'){
-                let data = $event.data;
-                // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
-                //     data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') || data.msg_type === '关注消息') {
-                if (data.msg_type === '审批消息' || data.msg_type === '关注消息') {
-                    if(data.handle_status_text === '待审批'){
-                        data.url += "&btnType=edit";
-                    }else if(data.handle_status_text === '已取消'){
-                        data.url += "&btnType=view";
-                    }
-
-                    PMAPI.openDialogByIframe(data.url, {
-                        width: 1200,
-                        height: 500,
-                        title: data.msg_type_text,
-                        customSize:true
-                    }).then((result) => {
-                        if (result.refresh === true) {
-                            this.actions.loadData();
-                        }
-                    })
-                } else {
-                    systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
+                this.actions.openDialog($event);
+            }
+        },
+        openDialog:function ($event) {
+            let data = $event.data;
+            // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
+            //     data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') || data.msg_type === '关注消息') {
+            if (data.msg_type === '审批消息' || data.msg_type === '关注消息') {
+                if(data.handle_status_text === '待审批'){
+                    data.url += "&btnType=edit";
+                }else if(data.handle_status_text === '已取消'){
+                    data.url += "&btnType=view";
                 }
 
-                //查看通过前端自己刷新，审批通过loadData刷新
-                // if($event.event.srcElement.className.includes()){
-                //     $event.node.data.is_read = 1;
-                //     this.agGrid.actions.refreshView();
-                this.actions._postReadData(JSON.stringify([data.id]));
-                // }
+                PMAPI.openDialogByIframe(data.url, {
+                    width: 1200,
+                    height: 500,
+                    title: data.msg_type_text,
+                    customSize:true
+                }).then((result) => {
+                    if (result.refresh === true) {
+                        this.actions.loadData();
+                    }
+                })
+            } else {
+                systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
             }
+            // 查看操作通过前端自己刷新未读，审批通过loadData刷新
+            if($event.event.srcElement.className.includes('view')){
+                if($event.node.data.is_read === 0){
+                    $event.node.data.is_read = 1;
+                    this.agGrid.actions.refreshView();
+                    window.config.sysConfig.unread_msg_count--;
+                    Mediator.emit("sysmsg:refresh_unread");
+                    this.actions._justPostReadData(JSON.stringify([data.id]));
+                }
+            }else{
+                if($event.node.data.is_read === 0){
+                    window.config.sysConfig.unread_msg_count--;
+                }
+                this.actions._postReadData(JSON.stringify([data.id]));
+            }
+        },
+        initPagination:function () {
+            this.pagination = new dataPagination({
+                page: 1,
+                rows: this.data.rows,
+                tableId:this.data.tableId
+            });
+            this.pagination.render(this.el.find('.pagination'));
+            this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
+            this.actions.loadData();
         }
     },
     afterRender: function () {
@@ -181,17 +276,25 @@ let config = {
         this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
+            onRowDoubleClicked:that.actions.onRowDoubleClicked,
             onSortChanged: this.actions.onSortChanged,
             footerData:[]
         });
         this.agGrid.render(gridDom);
-        this.pagination = new dataPagination({
-            page: 1,
-            rows: 100
+        this.showLoading();
+        //请求页显示数量偏好
+        let tempData = {
+            actions:JSON.stringify(['pageSize']),
+            table_id:this.data.tableId
+        };
+
+        dataTableService.getPreferences(tempData).then((result) => {
+            if(result.success === 1 && result.pageSize !== null){
+                that.data.rows = result.pageSize.pageSize;
+            }
+            that.actions.initPagination();
         });
-        this.pagination.render(this.el.find('.pagination'));
-        this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
-        this.actions.loadData();
+        HTTP.flush();
     },
     firstAfterRender: function () {
         this.el.on('click', '.markRead', () => {
@@ -241,7 +344,7 @@ let systemMessageUtil = {
         let html = `
             <div class="component-msg-detail">
                 <h3>${msgTitle}</h3>
-                <div class="text">${msgContent}</div>
+                <pre class="text">${msgContent}</pre>
             </div>
         `;
         if (speak) {

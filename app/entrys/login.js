@@ -357,9 +357,10 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 }
 
 let controller = getLoginController();
-let isNeedDownload = controller.browser_check();
+controller.formInit();  //初始化表单控件
+// let isNeedDownload = controller.browser_check();     //暂时屏蔽
+let isNeedDownload = false;
 if( isNeedDownload === false){      //正常显示登录表单
-    controller.formInit();  //初始化表单控件
     controller.infoInit();  //初始化最近访问用户和密码
     LoginService.getVersionInfo().done((result) => {
         if(result.success === 1){
@@ -384,5 +385,6 @@ if( isNeedDownload === false){      //正常显示登录表单
     });
 }else{
     //显示浏览器下载提示,隐藏其余部分
+    $('.login-content').hide();
     $(".need-download").show();
 }

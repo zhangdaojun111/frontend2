@@ -868,7 +868,7 @@ let config = {
             }
             if (this.data.customOperateList) {
                 for (let d of this.data.customOperateList) {
-                    str += ` | <a class="customOperate" id="${ d["id"] }" style="color:#337ab7;">${ d["name"] }</a>`;
+                    str += ` | <a class="customOperate" id="${ d["id"] }" style="color:#0088ff;cursor: pointer">${ d["name"] }</a>`;
                     operateWord = operateWord + (d["name"] ? d["name"].length : 0);
                 }
             }
@@ -1203,7 +1203,7 @@ let config = {
                         this.actions.checkCorrespondence( true );
                     }
                     if(this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild'){
-                        Mediator.publish('form:songGridRefresh:'+this.data.tableId,this.data.tableId);
+                        Mediator.publish('form:songGridRefresh:'+this.data.tableId,this.data);
                     }
                 },time )
                 if(refresh){
@@ -2145,6 +2145,12 @@ let config = {
             }
             for( let k in this.data.colControlData ){
                 let field = this.data.colControlData[k];
+                //必填
+                if( field.required && data[field.dfield] == '' ){
+                    err['type'] = true;
+                    err['err'] = '字段“' + field.label + '”是必填的，请修改。';
+                    return err;
+                }
                 //数字类型
                 if( fieldTypeService.numOrText( field.real_type ) && data[field.dfield] != undefined ){
                     if( field.numArea && field.numArea !== "" ){
@@ -2154,12 +2160,6 @@ let config = {
                         if( num>field.numArea.max || num<field.numArea.min ){
                             err['type'] = true;
                             err['err'] = '字段“' + field.label + '”，当前值：' + num +'，数据错误，错误原因：' + field.numArea.error + '，请修改。';
-                            return err;
-                        }
-                        //必填
-                        if( field.required && data[field.dfield] == '' ){
-                            err['type'] = true;
-                            err['err'] = '字段“' + field.label + '”是必填的，请修改。';
                             return err;
                         }
                         //整数小数
@@ -2349,7 +2349,6 @@ let config = {
             }
             this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
             this.el.find('.dataGrid-commonQuery-select').val('临时高级查询');
-
         },
         //删除数据
         delTableData: function (type) {
@@ -2548,6 +2547,9 @@ let config = {
                     this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
                 });
             }
+            if(this.data.filterParam['common_filter_name'] == '临时高级查询'){
+                this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
+            }
             if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
                 this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
             }
@@ -2733,6 +2735,7 @@ let config = {
             if( data.colDef.real_type == fieldTypeService.UEDITOR ){
                 QuillAlert.data.value=data.value.replace(/(\n)/g, '');
                 PMAPI.openDialogByComponent(QuillAlert,{
+                    title:'文本编辑器',
                     width:800,
                     height:500,
                     modal:true,
@@ -3030,7 +3033,7 @@ let config = {
                 let id = data["event"]["target"]["id"];
                 for (let d of this.data.customOperateList) {
                     if (d["id"] == id) {
-                        this.actions.customOperate(d);
+                        this.actions.customOperate(d,data);
                     }
                 }
             }
@@ -3047,25 +3050,23 @@ let config = {
             }
         },
         //半触发操作
-        customOperate: function (d) {
-            // console.log( "_____" )
-            // console.log( d )
-            // let obj = {
-            //     table_id: this.data.tableId,
-            //     parent_table_id: this.data.parentTableId,
-            //     parent_real_id: this.data.parentRealId,
-            //     parent_temp_id: this.data.parentTempId,
-            //     parent_record_id: this.data.parentRecordId,
-            //     real_id: d["id"],
-            //     flow_id : d["flow_id"],
-            //     form_id : d["form_id"],
-            //     id : d["id"],
-            //     table_id : d['table_id'],
-            //     btnType: 'oprate'
-            // };
-            // let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
-            // let title = d.name;
-            // this.actions.openSourceDataGrid( url,title );
+        customOperate: function (d,data) {
+            console.log( "半触发操作" )
+            console.log( d )
+            console.log( data )
+            let obj = {
+                flow_id : d["flow_id"],
+                form_id : d["form_id"],
+                id : d["id"],
+                table_id : d['table_id'],
+                btnType: 'new',
+                data_from_row_id: data.data['_id'],
+                operation_table_id: this.data.tableId,
+                operation_id: d.id
+            };
+            let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
+            let title = d.name;
+            this.actions.openSelfIframe( url,title );
         },
         //行级操作
         doRowOperation: function (r,$event) {
@@ -3221,7 +3222,7 @@ let config = {
                     defaultMax: true,
                     // customSize: true
             } ).then( (data)=>{
-                if( data == 'success' ){
+                if( data == 'success' || data.refresh ){
                     this.actions.timeDelayRefresh();
                 }
             } )

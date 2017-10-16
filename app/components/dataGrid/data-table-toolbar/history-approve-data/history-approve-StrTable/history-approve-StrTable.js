@@ -10,13 +10,14 @@ import strikeItem from "./history-approve-StrItem/history-approve-StrItem"
 let config = {
     template: template,
     data: {
+        trigger_work_records:[]
     },
     actions: {
 
     },
     afterRender: function() {
-        if(this.data.history_data){
-            this.data.trigger_work_records[0].data.forEach((item)=>{
+        if(this.data.trigger_work_records){
+            this.data.trigger_work_records.forEach((item)=>{
                 this.append(new strikeItem(item), this.el.find('.history-table-body.strike'));
             })
         }
@@ -24,7 +25,9 @@ let config = {
 }
 class strikeTable extends Component {
     constructor(data) {
-        config.data = data
+        for (let d in data) {
+            config.data[d] = data[d]
+        }
         super(config)
     }
 }

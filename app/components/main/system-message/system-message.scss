@@ -30,11 +30,14 @@
             .grid-cell-info{
                 .ui-link{
                     outline: none;
+                    &.approve{
+                        color: red !important;
+                    }
                 }
-                &.already-read-icon{
-                    color: #31fc38;
-                }
-                &.not-read-icon, &.waiting-for-approval{
+                //&.already-read-icon{
+                //    color: #31fc38;
+                //}
+                &.not-read-icon{
                     color:red;
                 }
             }
@@ -79,13 +82,15 @@
 .component-msg-detail {
     text-align: center;
     h3 {
-        padding-bottom: 20px;
         font-size: 16px;
         color: #333;
-        padding: 20px;
+        padding: 40px;
     }
     .text {
+        text-align: left;
         line-height: 22px;
-        padding: 0 30px;
+        padding: 0 50px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 }

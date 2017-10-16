@@ -10,7 +10,8 @@ import msgBox from '../../../lib/msgbox';
 import Mediator from '../../../lib/mediator';
 import {workflowService} from '../../../services/workflow/workflow.service';
 import jsplumb from 'jsplumb';
-
+import approvalOpinion from '../approval-opinion/approval-opinion'
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
 let config = {
     template: template,
     data: {
@@ -292,8 +293,14 @@ let config = {
                 let text = e.getAttribute("title");
                 this.rejectId = e.getAttribute("id");
                 if (can_reject == 1) {
-                    msgBox.confirm(`您确定要驳回到【${text}】么？`).then(res=>{
-                        if(res){
+                    PMAPI.openDialogByComponent(approvalOpinion,{
+                        width: 450,
+                        height: 300,
+                        title: '提示'
+                    }).then(res=>{
+                        if(res.determine){
+                            this.comment = res.comment;
+                            Mediator.publish('workflow:comment',res.comment);
                             Mediator.publish('approval:rejToAny',this.rejectId);
                         }
                     })

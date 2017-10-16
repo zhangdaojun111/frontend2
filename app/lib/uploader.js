@@ -168,6 +168,9 @@ class Uploader {
                 name:this.fileList[name][code].filename
             });
         }
+        if(this.settings['per_size'] == undefined){
+            return {files:array,originalField:name,unCancellable:true};
+        }
         return {files:array,originalField:name};
     }
 

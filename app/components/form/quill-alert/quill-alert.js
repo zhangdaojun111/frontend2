@@ -1356,7 +1356,7 @@ let css = `
 let QuillAlert = {
     template: template.replace(/(\")/g, '\''),
     data: {
-        css: css.replace(/(\n)/g, ''),
+        //css: css.replace(/(\n)/g, ''),
         value: '',
         toolbarOption: [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -1382,7 +1382,7 @@ let QuillAlert = {
         ]
     },
     afterRender() {
-        this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
+       // this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         let editorDom = this.el.find('.content .editor');
         this.data.quill = new Quill(editorDom[0], {
             modules: {

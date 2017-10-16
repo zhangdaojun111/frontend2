@@ -10,6 +10,7 @@ import './chart.scss';
 let config = {
     template: template,
     actions: {
+
         /**
          * 加载x 和y轴数据
          * @param data 选中的数据源
@@ -22,6 +23,7 @@ let config = {
                     fields = table.count_fields.map(item => {
                         return {value: JSON.stringify(item), name: item.name}
                     });
+                    this.formItems['countColumn'].data.name = this.componentId;
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
                 } else {

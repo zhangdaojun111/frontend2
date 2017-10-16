@@ -18,7 +18,10 @@ import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
-    setTimeout(()=>component.hideLoading(),1000)
+    Mediator.subscribe("form:formAlreadyCreate",()=>{
+        component.hideLoading();
+    });
+    // setTimeout(()=>component.hideLoading(),1000)
 });
 let serchStr = location.search.slice(1);
 let obj = {}, is_view = 0,cache_old;
@@ -47,8 +50,6 @@ if(obj.is_view == 1 && obj.in_process == 0){
     $("#add-wf").find('.J_hide').addClass('hide');
     $("#add-wf").find('#print').addClass('addPrint');
 }
-console.log(obj);
-console.log(1111111111111111111111);
 Mediator.publish('workflow:getKey', obj.key);
 (async function () {
     return workflowService.getPrepareParams({table_id: obj.table_id});
@@ -119,6 +120,8 @@ Mediator.subscribe('workflow:getflows', (res) => {
         parent_real_id: obj.parent_real_id,
         parent_temp_id: obj.parent_temp_id,
         parent_record_id: obj.parent_record_id,
+        data_from_row_id: obj.data_from_row_id || '',
+        operation_id: obj.operation_id || '',
         real_id: obj.real_id,
         temp_id: obj.temp_id,
         in_process: obj.in_process,
@@ -139,7 +142,6 @@ Mediator.subscribe('workflow:focus-users', (res) => {
 })
 Mediator.subscribe('workflow:submit', (res) => {
     let formData = FormEntrys.getFormValue(obj.table_id,true);
-    console.log(obj);
     if (formData.error) {
         msgBox.alert(`${formData.errorMessage}`);
     } else {
@@ -155,8 +157,22 @@ Mediator.subscribe('workflow:submit', (res) => {
             parent_temp_id:obj.parent_temp_id,
             parent_record_id:obj.parent_record_id
         };
+        //半触发操作用
+        if( obj.data_from_row_id ){
+            postData = {
+                data: JSON.stringify(formData),
+                flow_id: obj.flow_id,
+                operation_table_id: obj.operation_table_id,
+                operation_real_id: obj.data_from_row_id
+            }
+        }
         (async function () {
-            return workflowService.addUpdateTableData(postData);
+            //半触发操作用
+            if( obj.data_from_row_id ){
+                return workflowService.createWorkflowRecord(postData);
+            }else {
+                return workflowService.addUpdateTableData(postData);
+            }
         })().then(res => {
             if (res.success === 1) {
                 msgBox.showTips(`保存成功`);
@@ -165,7 +181,8 @@ Mediator.subscribe('workflow:submit', (res) => {
                     key: obj.key,
                     data: {
                         table_id: obj.table_id,
-                        type: 'closeAddition'
+                        type: 'closeAddition',
+                        refresh: true
                     }
                 });
             } else {

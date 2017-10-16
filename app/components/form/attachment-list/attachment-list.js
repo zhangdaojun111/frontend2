@@ -176,16 +176,16 @@ let AttachmentList = {
             event: 'click',
             selector: '.del',
             callback: function (event) {
-                let fielIds = $(event).attr('data-id');
+                let fileIds = $(event).attr('data-id');
                 //如果直接用delete_attachment删除此文件，而并没有提交表单，那么下次访问将看到file_id但是没有任何文件名和文件的脏数据
                 // let _this = this;
                 // HTTP.post('delete_attachment', {
-                //     file_ids: JSON.stringify([fielIds]),
+                //     file_ids: JSON.stringify([fileIds]),
                 //     dinput_type: this.data.dinput_type
                 // }).then(res => {
                 //     _this.data.list = res["rows"];
                 //     for (let i = 0, len = _this.data.list.length; i < len; i++) {
-                //         if (_this.data.list[i]["file_id"] == fielIds) {
+                //         if (_this.data.list[i]["file_id"] == fileIds) {
                 //             _this.data.list.splice(i, 1);
                 //             break;
                 //         }
@@ -194,18 +194,17 @@ let AttachmentList = {
                 // });
                 // HTTP.flush();
                 for (let i = 0, len = this.data.list.length; i < len; i++) {
-                    if (this.data.list[i]["file_id"] == fielIds) {
+                    if (this.data.list[i]["file_id"] == fileIds) {
                         this.data.list.splice(i, 1);
                         break;
                     }
                 }
-
-                this.el.find('#'+fielIds).remove();
-                let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+                this.el.find('#'+fileIds).remove();
+                let deletedFiles = Storage.getItem('deletedItem-'+this.data.control_id,Storage.SECTION.FORM);
                 if(deletedFiles == undefined){
                     deletedFiles = [];
                 }
-                deletedFiles.push(fielIds);
+                deletedFiles.push(fileIds);
                 Storage.init((new URL(document.URL)).searchParams.get('key'));
                 Storage.setItem(deletedFiles,'deletedItem-'+this.data.control_id,Storage.SECTION.FORM);
 
