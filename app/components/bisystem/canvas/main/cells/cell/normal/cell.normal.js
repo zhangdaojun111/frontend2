@@ -21,13 +21,47 @@ let config = {
     },
     actions: {
         /**
+         * 获取（一周 一月 半年 一年 全部）获取数据
+         * @param value {startValue:x轴第一个数据,endValue:x轴第2个数据,type:'week'}
+         */
+       async getChangeDateData(value) {
+           let deep_info = {};
+           deep_info[this.data.floor] = this.data['xAxis'];
+           const layouts = {
+                chart_id: this.data.cellChart.cell.chart_id,
+                floor: this.data.floor,
+                view_id: this.data.viewId,
+                layout_id:  this.data.cellChart.cell.layout_id,
+                xOld: this.data.xOld,
+                row_id:window.config.row_id,
+                deep_info: deep_info,
+                startValue:value['startValue'],
+                endValue:value['endValue'],
+                type:value['type']
+            };
+            const data = {
+                'layouts': [JSON.stringify(layouts)],
+                'query_type': 'deep',
+                'is_deep': 1
+            };
+            const res = await this.normalChart.getDeepData(data);
+            console.log(res);
+        },
+
+
+        /**
          * 判断是否显示时间字段
          */
         judgeDateZoom(cellChart) {
             let type = cellChart.chart.xAxis.type;
             if(type==3||type==5||type==12||type==30){
                 this.el.find('.echarts-cell').addClass('.date-filed');
-                this.normalRange = new NormalRangeComponent({id:this.data.id});
+                this.normalRange = new NormalRangeComponent({id:this.data.id}, {
+                    // 通过（一周 一月 半年 一年 全部）获取数据
+                    onChangeDateData: (value) => {
+                        this.actions.getChangeDateData(value);
+                    }
+                });
                 this.append(this.normalRange,this.el.find('.chart-normal-date-zoom'));
                 this.normalRange.actions.rangeChoose(type);
                 this.normalRange.actions.setDateValue(cellChart.chart.data.xAxis);
@@ -163,9 +197,8 @@ let config = {
                     view_id: this.data.viewId,
                     layout_id:  this.data.cellChart.cell.layout_id,
                     xOld: this.data.xOld,
-                    row_id:0,
+                    row_id:window.config.row_id,
                     deep_info: deep_info,
-
                 };
                 const data = {
                     'layouts': [JSON.stringify(layouts)],

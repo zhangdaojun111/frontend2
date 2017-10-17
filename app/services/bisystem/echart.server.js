@@ -186,7 +186,7 @@ export class EchartsService {
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
         };
 
-        linebarOption['color'] = Array.isArray(cellOption['theme']) ? cellOption['theme'] : EchartsOption['blue'];
+        linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
             if (10 * firstMaxText > 30) {
                 linebarOption['grid']['left'] = 10 * firstMaxText;
@@ -327,7 +327,7 @@ export class EchartsService {
         pieOption['legend'].data = legend;
         pieOption['series'][0].data = series;
         pieOption['series'][0].name = title;
-        pieOption['color'] = Array.isArray(cellOption['theme']) ? cellOption['theme'] : EchartsOption['blue'];
+        pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         return pieOption;
     }
 
@@ -348,7 +348,7 @@ export class EchartsService {
         let multillist = cellOption['data']['multillist'];
         // tableHeight 为多表图表中每一个图表的高度
         let tableHeight = (cellHeight - Math.max(offset * (multillist.length - 1), 0) - Math.max(12 * (multillist.length - 1), 0) - gridFirstTop) / multillist.length;
-        let colors = Array.isArray(cellOption['theme']) ? cellOption['theme'] : EchartsOption['blue'];
+        let colors = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         multillist.forEach((option, index, list) => {
             // mutiListOption['dataZoom'][0]['xAxisIndex'].push(index);
             // mutiListOption['dataZoom'][1]['xAxisIndex'].push(index);
@@ -460,7 +460,7 @@ export class EchartsService {
                 max: Math.max.apply(null, maxNumList)
             });
         });
-        radarOption['color'] = Array.isArray(cellOption['theme']) ? cellOption['theme'] : EchartsOption['blue'];
+        radarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         return radarOption;
     }
 

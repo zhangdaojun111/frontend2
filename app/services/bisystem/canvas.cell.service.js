@@ -67,10 +67,10 @@ export const canvasCellService = {
      */
     async getDeepData(data) {
         const res = await HTTP.ajaxImmediately({
-            url: '/bi/get_bi_data/',
+            url: '/bi/get_bi_data/?&canvasType=pc&row_id='+ window.config.row_id,
             data: data,
             // contentType: "application/json; charset=utf-8",
-            method:'get',
+            method:'post',
             traditional: true
         });
         return new Promise((resolve, reject) => {

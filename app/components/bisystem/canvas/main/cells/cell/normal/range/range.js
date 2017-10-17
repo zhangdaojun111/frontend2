@@ -42,12 +42,14 @@ let config = {
         setDateValue(names){
             const dateStart = _.first(names);
             const dateEnd = _.last(names);
+            this.data.startValue = dateStart;
+            this.data.endValue = dateEnd;
             this.el.find('.date-start').val(dateStart);
             this.el.find('.date-end').val(dateEnd);
         }
     },
     binds:[
-        {   //选中状态
+        {   //选中状态(1周 1月 半年 1年 全部)
             event:'change',
             selector:'.normal-date-options input',
             callback:function (context,event) {
@@ -55,11 +57,20 @@ let config = {
                     $(context).parents('label').addClass('option-active');
                     $(context).parents('label').siblings().removeClass('option-active');
                 }
+                this.trigger('onChangeDateData', {'startValue': this.data.startValue,'endValue':this.data.endValue,type:$(context).val()})
+            }
+        },
+        {   //选中状态(1周 1月 半年 1年 全部)
+            event:'click',
+            selector:'.search-custom-btn',
+            callback:function (context,event) {
+                this.trigger('onChangeDateData', {'startValue': this.el.find('.date-start').val(),'endValue':this.el.find('.date-end').val(),type:'custom'})
             }
         }
     ],
     afterRender() {},
     firstAfterRender() {
+
         //默认选中全部
         this.el.find('.normal-date-options .all-year input').prop('checked', true);
     },
