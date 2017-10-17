@@ -2442,9 +2442,9 @@ let config = {
         //定制列
         customColumnClick: function () {
             if( this.el.find('.custom-column-btn')[0] ){
-                let That = this;
+                let that = this;
                 this.el.find( '.custom-column-btn' ).on( 'click',_.debounce( ()=>{
-                    That.actions.calcCustomColumn();
+                    that.actions.calcCustomColumn();
                 },500 ) )
             }
         },
@@ -2469,7 +2469,7 @@ let config = {
             let that = this;
             this.el.on('click','.group-btn',_.debounce( ()=>{
                 that.actions.calcGroup();
-            },500 ))
+            },500 ));
         },
         //分组打开关闭
         calcGroup: function () {
