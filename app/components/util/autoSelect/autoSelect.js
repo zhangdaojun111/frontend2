@@ -122,8 +122,7 @@ let config = {
         hideSelectBox: function () {
             if (this.listWrap) {
                 this.actions.resetAutoSelect();
-                //this.listWrap.hide();
-                this.listWrap.delay(1000).hide(0);
+                this.listWrap.hide();
                 this.data.isSelectBoxDisplayed = false;
                 this.actions.stopListenKeyboard();
             }
