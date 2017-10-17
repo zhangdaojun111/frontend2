@@ -382,7 +382,6 @@ let FormEntrys = {
 		this.childForm[tableId].actions.changeToEdit();
 	},
 
-<<<<<<< HEAD
     //转到查看模式
 
     changeToView(tableId) {
@@ -390,48 +389,6 @@ let FormEntrys = {
         this.childForm[tableId].actions.changeToView();
     },
 
-
-
-    //代码容错 el必须为一个jq对象
-    checkConfig(config) {
-        if (!(config.el instanceof jQuery)) {
-            console.err('el不是一个Jquery对象');
-            return {
-                error: true,
-                errorMsg: 'el不是一个Jquery对象'
-            }
-        } else {
-            return {error: false}
-        }
-    },
-    //创建表单入口
-    async createForm(config = {}) {
-        console.time('获取表单数据的时间');
-        let result = this.checkConfig(config);
-        if (result.error) {
-            return result;
-        }
-        //初始化数据
-        this.init(config);
-        // let $wrap = $(`<div data-id="form-${this.tableId}" style="" class="table-wrap wrap detail-form"></div>`).prependTo(this.el);
-        // let html = $(`<div class="center-wrap"></div>`).appendTo($wrap);
-        let html = $(`<div data-id="form-${this.data.tableId}" style="" class="table-wrap wrap detail-form"><div class="form-print-position"></div></div>`).prependTo(this.data.el);
-        let res;
-        //如果不处于工作流中
-        // if (!this.fromWorkFlow) {
-        //     //获取表单的form_id
-        //     res = await  FormService.getPrepareParmas({table_id: this.tableId});
-        //     this.findFormIdAndFlowId(res);
-        // }
-        if (!this.data.formId) {
-            //获取表单的form_id
-            res = await  FormService.getPrepareParmas({table_id: this.data.tableId});
-            this.findFormIdAndFlowId(res);
-        }
-        //创建请求
-        let json = this.createPostJson();
-        res = await FormService.getFormData(json);   //将表单名称发送给工作流
-=======
 	//代码容错 el必须为一个jq对象
 	checkConfig(config) {
 		if (!(config.el instanceof jQuery)) {
@@ -472,7 +429,7 @@ let FormEntrys = {
 		//创建请求
 		let json = this.createPostJson();
 		res = await FormService.getFormData(json);   //将表单名称发送给工作流
->>>>>>> 931f09727d6e6bbf3deace296eb7ee5df85cae43
+
 
 		Mediator.emit('form: dataRes', res);
 
