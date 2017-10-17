@@ -131,6 +131,7 @@ let config = {
                 this.listWrap.hide();
                 this.data.isSelectBoxDisplayed = false;
                 this.actions.stopListenKeyboard();
+                this.el.find('.result').blur();
             }
         },
         /**
