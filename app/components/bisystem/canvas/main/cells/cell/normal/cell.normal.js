@@ -48,12 +48,12 @@ let config = {
             const res = await this.normalChart.getDeepData(data);
             if (res[0] && res[0].success === 1) {
                 if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
-                    this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
-                    this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
-                    this.data.cellChart['cell']['attribute'] = [];
-                    this.data.cellChart['cell']['select'] = [];
-                    this.actions.updateChart(this.data.cellChart);
-                    this.trigger('onUpdateChartDeepTitle',this.data);
+                    let cellChart = _.cloneDeep(this.data.cellChart);
+                    cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
+                    cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
+                    cellChart['cell']['attribute'] = [];
+                    cellChart['cell']['select'] = [];
+                    this.actions.updateChart(cellChart);
                 };
             }
         },
@@ -261,7 +261,9 @@ let config = {
     firstAfterRender() {
         this.actions.echartsInit();
         //是否显示时间字段
-        this.actions.judgeDateZoom(this.data.cellChart);
+        if (window.config.bi_user !== 'manager') {
+            this.actions.judgeDateZoom(this.data.cellChart);
+        };
     },
     beforeDestory() {
 
