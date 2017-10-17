@@ -27,12 +27,13 @@ let config={
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible');
         }
-        for(let k in this.data.options) {
-            if(this.data.value == this.data.options[k].value) {
-                this.el.find('.dropdown').attr('title',this.data.options[k].label)
+        if (this.data.is_view) {
+            for(let k in this.data.options) {
+                if(this.data.value == this.data.options[k].value) {
+                    this.el.find('.dropdown').attr('title',this.data.options[k].label)
+                }
             }
         }
-
         if(!this.data.be_control_condition) {
             let el=this.el.find('.dropdown');
             let data=FormService.createSelectJson(this.data);

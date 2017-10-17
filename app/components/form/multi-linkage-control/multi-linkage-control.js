@@ -166,7 +166,7 @@ let config={
                 let autoSelect = new AutoSelect(d);
                 this.data.childDrop[i] = autoSelect;
                 this.append(autoSelect, this.el.find('.multi-drop'));
-                if (this.data.is_view) {
+                if (this.data.is_view && this.data.value) {
                     $(this.el.find('.auto-select-component').get(i)).attr('title', d['choosed'][0].name);
                 }
             }
