@@ -41,7 +41,8 @@ let config={
             parentTableId:this.data.parent_table_id,
             parentTempId:this.data.temp_id,
             rowId:this.data.parent_temp_id || '',
-            tableType:'child',
+            recordId:this.data.parent_record_id || '',
+            // tableType:'child',
             viewMode:this.data.is_view==0?'EditChild':'ViewChild',
         }
         let dataGrid=new DataTableAgGrid(config);

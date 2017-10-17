@@ -75,6 +75,7 @@ let config = {
             _this.data.isCreatingForm=true;
             _this.data.selected = {value: $(this).data('value'), label: $(this).html()};
             FormEntry.destoryForm(_this.data.source_table_id);
+	        _this.el.find('.ui-section').empty();
             let r2 =  FormEntry.createForm({
                 table_id: _this.data.source_table_id,
                 form_id: '',
@@ -83,7 +84,7 @@ let config = {
                 parent_real_id: '',
                 parent_temp_id: '',
                 real_id: $(this).data('value'),
-                el: el,
+                el:  _this.el.find('.ui-section'),
                 btnType: 'none'
             })
             if(!r2){
@@ -110,7 +111,9 @@ let config = {
         });
         Mediator.subscribe('form:formAlreadyCreate'+this.data.source_table_id,res=>{
             if(res=='success'){
+            	console.log('接受到了么');
                 _this.data.isCreatingForm=false;
+                console.log(_this.data);
             }
         })
     }
