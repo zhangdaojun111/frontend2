@@ -44,6 +44,7 @@ let config = {
                 'query_type': 'deep',
                 'is_deep': 1
             };
+
             const res = await this.normalChart.getDeepData(data);
             if (res[0] && res[0].success === 1) {
                 if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
