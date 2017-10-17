@@ -45,7 +45,16 @@ let config = {
                 'is_deep': 1
             };
             const res = await this.normalChart.getDeepData(data);
-            console.log(res);
+            if (res[0] && res[0].success === 1) {
+                if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
+                    this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
+                    this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
+                    this.data.cellChart['cell']['attribute'] = [];
+                    this.data.cellChart['cell']['select'] = [];
+                    this.actions.updateChart(this.data.cellChart);
+                    this.trigger('onUpdateChartDeepTitle',this.data);
+                };
+            }
         },
 
 
@@ -66,6 +75,9 @@ let config = {
                 this.normalRange.actions.rangeChoose(type);
                 this.normalRange.actions.setDateValue(cellChart.chart.data.xAxis);
             }else {
+                if (this.normalRange) {
+                    this.normalRange.destroySelf();
+                };
                 this.el.find('.echarts-cell').removeClass('.date-filed');
             }
         },

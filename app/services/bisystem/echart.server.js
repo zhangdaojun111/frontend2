@@ -302,6 +302,28 @@ export class EchartsService {
                 }
             }
         };
+
+        //x轴为3日期,5日期时间,12年份,30年月类型字段时开启数据缩放
+        let dateType = ['3','5','12','30'];
+        if(cellOption['xAxis'] && cellOption['xAxis']['type'] && dateType.indexOf(cellOption['xAxis']['type']) != -1){
+            linebarOption['grid']['bottom'] += 30;
+            linebarOption['dataZoom']=[{
+                type: 'slider',
+                xAxisIndex: 0,
+                bottom:'0',
+                height:20,
+                startValue: linebarOption['xAxis'][0]['data'][0],
+                endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
+                rangeMode: ['value', 'value']
+            },
+                {
+                    type: 'inside',
+                    xAxisIndex: 0,
+                    startValue: linebarOption['xAxis'][0]['data'][0],
+                    endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
+                    rangeMode: ['value', 'value']
+                }]
+        }
         return linebarOption;
     }
 
