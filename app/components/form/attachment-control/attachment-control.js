@@ -159,7 +159,7 @@ let config = {
                                 control_id:this.data.id,
                                 is_view:this.data.is_view
                             }
-                            PMAPI.openDialogByComponent(_.defaultsDeep({},{data:obj},ViewVideo), {
+                            PMAPI.openDialogToSelfByComponent(_.defaultsDeep({},{data:obj},ViewVideo), {
                                 width: 780,
                                 height: 500,
                                 title: '视频播放器'
