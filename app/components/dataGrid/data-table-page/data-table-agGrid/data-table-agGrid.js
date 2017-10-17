@@ -1049,7 +1049,7 @@ let config = {
             }
             this.data.tableOperationData = temp;
             //渲染其他组件
-            this.actions.renderAgGrid();
+            // this.actions.renderAgGrid();
         },
         //隐藏系统字段
         hideSysCols: function ( res ) {
@@ -1099,6 +1099,8 @@ let config = {
                     }
                     this.data.rowData = resRows;
                     if( this.data.firstRender ){
+                        //渲染其他组件
+                        this.actions.renderAgGrid();
                         let d = {
                             rowData: this.data.rowData
                         }
@@ -1130,6 +1132,8 @@ let config = {
                 this.data.remindColor = res[1];
                 this.data.common_filter_id = res[0].common_filter_id || '';
                 if( this.data.firstRender ){
+                    //渲染其他组件
+                    this.actions.renderAgGrid();
                     let d = {
                         rowData: this.data.rowData
                     }
@@ -1209,6 +1213,9 @@ let config = {
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
+                if(this.data.groupCheck) {
+                    msgBox.hideLoadingRoot();
+                }
             })
             HTTP.flush();
         },
@@ -1227,6 +1234,8 @@ let config = {
                 this.data.footerData = dgcService.createFooterData( res[2] );
             }
             if( this.data.firstRender ){
+                //渲染其他组件
+                this.actions.renderAgGrid();
                 let d = {
                     rowData: this.data.rowData
                 }
@@ -1471,6 +1480,7 @@ let config = {
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
+                delete json['rowId']
             }
             if( this.data.viewMode == 'count' ){
                 json["tableType"]='count';
@@ -1688,20 +1698,23 @@ let config = {
                 height: 360,
                 title: '导出数据'
             }).then((data) => {
-                let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
-                this.el.find('.btn-nav-con').append(dom);
-                setTimeout(()=>{
-                    this.el.find('.exports-tips').css('display','none');
-                },3000)
-                this.el.find('.exports-tips-delete').on('click', ()=> {
-                    this.el.find('.exports-tips').css('display','none');
-                })
+                if(data.type == 'export') {
+                    let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
+                    this.el.find('.btn-nav-con').append(dom);
+                    setTimeout(()=>{
+                        this.el.find('.exports-tips').css('display','none');
+                    },3000)
+                    this.el.find('.exports-tips-delete').on('click', ()=> {
+                        this.el.find('.exports-tips').css('display','none');
+                    })
+                }
             });
         },
         //分组触发
         onGroupChange: function (group) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
             this.data.myGroup = group;
+            msgBox.showLoadingRoot();
             this.actions.getGridData();
         },
         //列宽改变
@@ -2145,12 +2158,6 @@ let config = {
             }
             for( let k in this.data.colControlData ){
                 let field = this.data.colControlData[k];
-                //必填
-                if( field.required && data[field.dfield] == '' ){
-                    err['type'] = true;
-                    err['err'] = '字段“' + field.label + '”是必填的，请修改。';
-                    return err;
-                }
                 //数字类型
                 if( fieldTypeService.numOrText( field.real_type ) && data[field.dfield] != undefined ){
                     if( field.numArea && field.numArea !== "" ){
@@ -2160,6 +2167,12 @@ let config = {
                         if( num>field.numArea.max || num<field.numArea.min ){
                             err['type'] = true;
                             err['err'] = '字段“' + field.label + '”，当前值：' + num +'，数据错误，错误原因：' + field.numArea.error + '，请修改。';
+                            return err;
+                        }
+                        //必填
+                        if( field.required && data[field.dfield] == '' ){
+                            err['type'] = true;
+                            err['err'] = '字段“' + field.label + '”是必填的，请修改。';
                             return err;
                         }
                         //整数小数
@@ -2427,9 +2440,10 @@ let config = {
         //定制列
         customColumnClick: function () {
             if( this.el.find('.custom-column-btn')[0] ){
-                this.el.find( '.custom-column-btn' ).on( 'click',()=>{
-                    this.actions.calcCustomColumn();
-                } )
+                let That = this;
+                this.el.find( '.custom-column-btn' ).on( 'click',_.debounce( ()=>{
+                    That.actions.calcCustomColumn();
+                },500 ) )
             }
         },
         //定制列事件
@@ -2450,9 +2464,10 @@ let config = {
             if( !this.el.find('.group-btn')[0] ){
                 return;
             }
-            this.el.on('click','.group-btn',()=> {
-                this.actions.calcGroup();
-            })
+            let Taht = this;
+            this.el.on('click','.group-btn',_.debounce( ()=>{
+                Taht.actions.calcGroup();
+            },500 ))
         },
         //分组打开关闭
         calcGroup: function () {
@@ -3061,7 +3076,6 @@ let config = {
                 table_id : d['table_id'],
                 btnType: 'new',
                 data_from_row_id: data.data['_id'],
-                operation_table_id: this.data.tableId,
                 operation_id: d.id
             };
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
@@ -3162,6 +3176,12 @@ let config = {
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
             let title = '查看'
             this.actions.openSelfIframe( url,title );
+            //行选择容错
+            let ele= data.event.target;
+            let node = data.node;
+            node.setSelected(false, false);
+            $(ele).removeClass('my-ag-cell-focus1');
+            $(ele).removeClass('my-ag-cell-focus2');
         },
         //设置失效
         setInvalid: function () {
