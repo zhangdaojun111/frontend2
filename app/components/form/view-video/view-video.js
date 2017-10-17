@@ -78,7 +78,7 @@ let ViewVideo = {
             callback:function (event) {
                 let fileId = $(event).attr('file-id');
                 this.el.find('#'+fileId).remove();
-                let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+                let deletedFiles = Storage.getItem('deletedItem-'+this.data.control_id,Storage.SECTION.FORM);
                 if(deletedFiles == undefined){
                     deletedFiles = [];
                 }
