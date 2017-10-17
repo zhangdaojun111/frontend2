@@ -979,7 +979,10 @@ let config = {
             }
             if( this.data.viewMode == 'reportTable2' ){
                 obj2['is_report'] = 1;
-                obj2['project'] = this.data.project;
+                obj2['parent_table_id'] = this.data.parentTableId;
+                obj2['parent_real_id'] = this.data.parentRealId;
+                obj2['field_id'] = this.data.fieldId;
+                obj2['parent_temp_id'] = this.data.parentTempId;
             }
             let preferenceData = dataTableService.getPreferences(obj1);
             let headerData = dataTableService.getColumnList(obj2);
@@ -2004,6 +2007,7 @@ let config = {
                         let j = {table_id: this.data.tableId}
                         if( this.data.viewMode == 'reportTable2' ){
                             j['is_report'] = 1;
+                            j['field_id'] = this.data.fieldId;
                         }
                         FormService.getStaticData(j).then( res=>{
                             for( let d of res.data ){
@@ -2244,6 +2248,8 @@ let config = {
                         this.actions.getGridData();
                         msgBox.showTips( '保存成功' );
                         this.actions.toogleEdit();
+                    }else {
+                        msgBox.alert( res.error );
                     }
                 });
             },500 )
@@ -2908,14 +2914,33 @@ let config = {
                 if(data.value == 0){
                     return
                 }
+                let ks = [];
+                if(data.colDef.field_content.update_exp){
+                    let reg = /\@f(\d+)\@/g;
+                    let items = data.colDef.field_content.update_exp.match(reg);
+                    for(let item of items) {
+                        item = item.replace("@", "").replace("@", "");
+                        ks.push(item);
+                    }
+                };
                 let current_colId = data.colDef.colId;
                 let val = data.value;
                 let real_colId = '';
                 let project = '';
-                for(let k in data.data){
-                    if(val == data.data[k] && current_colId != k){
-                        real_colId = k;
-                        break;
+                if(JSON.stringify(ks) == '[]') {
+                    for (let k in data.data) {
+                        if (val == data.data[k] && current_colId != k) {
+                            real_colId = k;
+                            break;
+                        }
+                    }
+                }else{
+                    for (let k of ks) {
+                        if (val == data.data[k] && current_colId != k) {
+                            real_colId = k;
+                            break;
+
+                        }
                     }
                 }
                 //查询信息
