@@ -241,8 +241,9 @@ let config = {
             } else {
                 systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
             }
+
             // 查看操作通过前端自己刷新未读，审批通过loadData刷新
-            if($event.event.srcElement.className.includes('view')){
+            if($event.data.handle_status_text !== '待审批'){
                 if($event.node.data.is_read === 0){
                     $event.node.data.is_read = 1;
                     this.agGrid.actions.refreshView();
@@ -329,15 +330,19 @@ let systemMessageUtil = {
             title: '消息提醒',
             resizeMax:function () {
                 sysDom.addClass('maximize-model');
+                systemMessage.showLoading();
                 setTimeout(function () {
                     gridPref.gridOptions.api.sizeColumnsToFit();
-                },450);
+                    systemMessage.hideLoading();
+                },500);
             },
             resizeMin:function () {
                 sysDom.removeClass('maximize-model');
+                systemMessage.showLoading();
                 setTimeout(function () {
                     gridPref.gridOptions.api.sizeColumnsToFit();
-                },450);
+                    systemMessage.hideLoading();
+                },500);
             },
             close: function () {
                 $(this).erdsDialog('destroy');
