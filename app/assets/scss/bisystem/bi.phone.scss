@@ -3,8 +3,12 @@
         .views-header {
             .nav-tabs {
                 width: 100%;
+                overflow-x: auto !important;
                 .icon-chart {
                     display: none;
+                }
+                &::-webkit-scrollbar {
+                    height: 0;
                 }
             }
             .views-header-right {
@@ -12,6 +16,8 @@
             }
         }
         .cells-container {
+            padding: 0 .5em;
+            box-sizing: border-box;
             .cells {
                 > .cell {
                     display: none;
