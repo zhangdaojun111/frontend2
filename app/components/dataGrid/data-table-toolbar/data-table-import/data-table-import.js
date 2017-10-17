@@ -160,7 +160,6 @@ let config = {
                     }
                 }else {
                     this.data.warning_msg = '';
-                    this.uploader.deleteFileByCode( currentCode,'/upload_data/' );
                     if( res.warning_msg ){
                         let warning_msg = res.warning_msg || {};
                         let warning_list = res.warning_list || [];
@@ -174,6 +173,8 @@ let config = {
                                 }
                                 this.data.warning_msg = warning_msg;
                                 this.actions.import();
+                            } else {
+                                this.uploader.deleteFileByCode( currentCode,'/upload_data/' );
                             }
                         } )
                     }else {

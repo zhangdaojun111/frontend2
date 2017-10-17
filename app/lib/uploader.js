@@ -163,6 +163,9 @@ class Uploader {
     getProgressParams(name){
         let array = [];
         for(let code of Object.keys(this.fileList[name])){
+            if(this.fileList[name][code]['state']=='pre-delete'){
+                continue;
+            }
             array.push({
                 id:this.getFileId(name,code),
                 name:this.fileList[name][code].filename
@@ -313,7 +316,7 @@ class Uploader {
                     }
                 }
             } else {
-                fileItem['state']='error';
+                fileItem['state']='on';
                 this.settings['options']['error'](res.error);
                 if(!res.warning_msg){
                     delete this.fileList[name][code];
