@@ -1,5 +1,6 @@
 @media screen and (max-width: 960px) {
     body {
+
         .views-header {
             height: 44px !important;
             > div {
@@ -27,6 +28,8 @@
             height: calc(100% - 45px) !important;
             padding: 0 .5em;
             box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+            overflow:scroll;
             .cells {
                 > .cell {
                     display: none;
