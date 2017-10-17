@@ -277,6 +277,7 @@ let config = {
         //失效刷新
         invalidTips: function () {
             this.el.find( '.data-invalid' ).removeClass('freshtip');
+            this.el.find( '.data-invalid' ).removeClass('unfreshtip');
             this.el.find( '.data-invalid' )[0].innerHTML = this.data.myInvalid ? '数据失效，已刷新。' : '数据失效，请刷新。';
             if(this.data.myInvalid) {
                 this.el.find( '.data-invalid' ).addClass('freshtip');
