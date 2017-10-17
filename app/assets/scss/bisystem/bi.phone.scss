@@ -1,11 +1,19 @@
 @media screen and (max-width: 960px) {
     body {
         .views-header {
+            height: 44px !important;
+            > div {
+                line-height: 44px !important;
+            }
             .nav-tabs {
                 width: 100%;
+                height: 44px;
                 overflow-x: auto !important;
                 .icon-chart {
                     display: none;
+                }
+                a {
+                    line-height: 44px;
                 }
                 &::-webkit-scrollbar {
                     height: 0;
@@ -16,6 +24,7 @@
             }
         }
         .cells-container {
+            height: calc(100% - 45px) !important;
             padding: 0 .5em;
             box-sizing: border-box;
             .cells {
