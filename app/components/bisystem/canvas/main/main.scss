@@ -7,37 +7,13 @@ $print-height: 1485px;
     position: relative;
     .views-header {
         width: 100%;
-        height: 50px;
+        height: 60px;
         font-size: 12px;
-        background-color: #374157;
+        background: #FFFFFF;
+        border-bottom: 1px solid #e4e4e4;
         >div{
             height: 100%;
-        }
-
-        &.clearfix {
-            & {
-                background-color: #FFFFFF;
-            }
-            .nav-tabs {
-                a {
-                    color: #666666;
-                    background: #FFFFFF;
-                }
-            }
-            .views-header-right {
-                position: absolute;
-                width: 300px;
-                text-align: right;
-                font-size: 12px;
-                height: 50px;
-                //line-height: 50px;
-                right: 0;
-            }
-        }
-        &.manager {
-            .nav-tabs {
-                width: calc(100% - 320px);
-            }
+            line-height: 60px;
         }
     }
     &.manage {
@@ -46,7 +22,7 @@ $print-height: 1485px;
     .cells-container {
         position: absolute;
         width: 100%;
-        height: calc(100% - 51px);
+        height: calc(100% - 61px);
         overflow: auto;
         z-index: 90;
         &.client {
@@ -92,4 +68,6 @@ $print-height: 1485px;
         }
     }
 }
+
+@import "../../../../assets/scss/bisystem/bi.phone";
 

@@ -15,7 +15,7 @@
         .error-msg {
             position: absolute;
             top: 35px;
-            left: 30px;
+            left: 35px;
             min-width: 100px;
         }
     }
@@ -51,7 +51,8 @@
                 display: none;
             }
             .error-msg {
-                top: -2px;
+                top: 14px;
+                left: -298px;
             }
         }
     }

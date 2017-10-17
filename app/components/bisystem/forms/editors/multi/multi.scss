@@ -1,7 +1,7 @@
 @mixin div-equal {
     display: inline-block;
     width: 33.3%;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .form-chart-multi {
@@ -10,10 +10,10 @@
             .form-group-chart {
                 position: relative;
                 margin-bottom: 20px;
-                >div{
+                > div {
                     @include div-equal;
                 }
-                >div:last-child{
+                > div:last-child {
                     width: 100%;
                 }
                 .form-chart-radio {
@@ -26,6 +26,7 @@
                 }
             }
         }
+
     }
     h3:last-child {
         min-width: 774px;
