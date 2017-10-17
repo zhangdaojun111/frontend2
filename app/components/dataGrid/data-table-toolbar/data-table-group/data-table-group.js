@@ -14,6 +14,7 @@ let config = {
     data: {
         initialGroup:[],
         group:[],
+        pregroup:[],
         tableId: null,
         gridoptions: null,
         fields: [],
@@ -40,11 +41,13 @@ let config = {
         this.el.find('.group-data-list, .grouping-data-list').sortable({
             connectWith: ".connectedSortable",
             stop: ()=> {
+                let changeChecked = false;
                 this.data.group = [];
                 let dom = $('.grouping-data-list').find('.group-data-item');
                 for (let i = 0; i < dom.length; i++) {
                     this.data.group.push(dom[i].attributes['field'].nodeValue);
                 }
+
                 if(this.data.group && this.data.groupFields && this.data.group.toString() == this.data.groupFields.toString()) {
                     this.el.find('.resetGroup').css('color','#999999');
                 } else if(!this.data.group && !this.data.groupFields){
@@ -52,13 +55,18 @@ let config = {
                 } else {
                     this.el.find('.resetGroup').css('color','#0F79EF');
                 }
+                console.log(this.data.group.toString()+"--------"+this.data.groupFields.toString())
+                if(this.data.group.toString() != this.data.pregroup.toString()){
+                    changeChecked = true;
+                }
                 dataTableService.savePreference({
                     action: 'group',
                     table_id: this.data.tableId,
                     group: JSON.stringify(this.data.group)
                 });
                 HTTP.flush();
-                this.actions.onGroupChange( this.data.group );
+                this.actions.onGroupChange( this.data.group, changeChecked );
+                this.data.pregroup = this.data.group;
             }
         }).disableSelection();
         this.actions.inputSearch();

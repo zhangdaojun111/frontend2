@@ -1213,9 +1213,7 @@ let config = {
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
-                if(this.data.groupCheck) {
-                    msgBox.hideLoadingRoot();
-                }
+                msgBox.hideLoadingSelf();
             })
             HTTP.flush();
         },
@@ -1711,10 +1709,12 @@ let config = {
             });
         },
         //分组触发
-        onGroupChange: function (group) {
+        onGroupChange: function (group ,changeChecked) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
             this.data.myGroup = group;
-            msgBox.showLoadingRoot();
+            if(group.length != 0 || changeChecked){
+                msgBox.showLoadingSelf();
+            }
             this.actions.getGridData();
         },
         //列宽改变
@@ -2477,6 +2477,7 @@ let config = {
                 this.data.groupCheck = !this.data.groupCheck;
                 this.actions.onGroupChange(this.data.myGroup)
             } else {
+                msgBox.showLoadingSelf();
                 this.data.closePanel = true;
                 this.el.find('.group-btn').find('span').html('分组');
                 setTimeout( ()=>{
