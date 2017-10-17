@@ -108,6 +108,9 @@ let ViewVideo = {
     afterRender(){
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         this.actions.setBackground();
+        if(this.data.showFileList == false){
+            this.el.find('.videoList').hide();
+        }
         for(let item of this.data.rows){
             let ele = this.el.find('#'+item.file_id);
              ele.find('.video-file-name').attr('title',item.file_name);

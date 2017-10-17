@@ -74,7 +74,6 @@ let config = {
                 }
                 let fileId = this.data._controlItem['fileId'];
                 let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
-                console.dir(src);
                 if(this.data.file.type.indexOf('image') != -1) {
                     PMAPI.openPreview({list:[{file_id:fileId}],id:fileId});
                 } else if (this.data.file.type == 'video/mp4') {
@@ -83,8 +82,9 @@ let config = {
                     ViewVideo.data.currentVideoId = fileId;
                     ViewVideo.data.is_view = true;
                     ViewVideo.data.videoSrc = src;
+                    ViewVideo.data.showFileList = false;
                     PMAPI.openDialogByComponent(ViewVideo, {
-                        width: 800,
+                        width: 700,
                         height: 600,
                         title: '视频播放器'
                     });
