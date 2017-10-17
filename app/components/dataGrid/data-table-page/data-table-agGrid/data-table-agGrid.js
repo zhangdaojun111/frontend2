@@ -2466,9 +2466,9 @@ let config = {
             if( !this.el.find('.group-btn')[0] ){
                 return;
             }
-            let Taht = this;
+            let that = this;
             this.el.on('click','.group-btn',_.debounce( ()=>{
-                Taht.actions.calcGroup();
+                that.actions.calcGroup();
             },500 ))
         },
         //分组打开关闭
