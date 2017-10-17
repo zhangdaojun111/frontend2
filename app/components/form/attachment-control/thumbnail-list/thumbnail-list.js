@@ -5,6 +5,7 @@
 import template from './thumbnail-list.html';
 import './thumbnail-list.scss';
 import Component from "../../../../lib/component";
+import Preview from '../../../util/preview/preview';
 
 let config = {
     template:template,
@@ -143,17 +144,15 @@ let config = {
             let imgEle = $('<img class="thumbnail-'+i+'" style="width: 50px;height: 50px;padding: 5px">');
             this.el.find('.thumbnail-anchor').append(imgEle);
             imgEle.on('click',(event)=>{
+                let preview = new Preview(_.defaultsDeep({},this.data,{currentIndex:i}));
+                let ele = $('<div class="preview"></div>');
+                ele.appendTo(document.body);
+                preview.render(ele);
                 if(!this.data.items[this.data.currentIndex+i]){
                     return;
                 }
                 let src = '/download_attachment/?file_id='+Object.keys(this.data.items[this.data.currentIndex+i])[0]+'&download=0';
-                this.el.find('.preview').attr('src',src).css('display','block');
                 event.stopPropagation();
-                $(document).click((event2)=>{
-                    if(event2.target.classList.value != 'preview'){
-                        this.el.find('.preview').css('display','none');
-                    }
-                })
             })
         }
         this.actions.setMoveController();
@@ -163,7 +162,7 @@ let config = {
 }
 
 export default class ThumbnailList extends Component{
-    constructor(data){
-        super(config,{items:data});
+    constructor(data,dinput_type){
+        super(config,{items:data,dinput_type:dinput_type});
     }
 }
