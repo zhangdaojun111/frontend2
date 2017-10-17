@@ -5,7 +5,9 @@
 import template from './range.html';
 import Component from '../../../../../../../../lib/component';
 import './range.scss';
-import {canvasCellService} from '../../../../../../../../services/bisystem/canvas.cell.service';
+import msgbox from '../../../../../../../../lib/msgbox';
+
+
 let config = {
     template: template,
     data: {},
@@ -34,18 +36,29 @@ let config = {
                     this.el.find('.week input').prop('disabled',true);
                     break;
             }
-
         },
         /**
          *设置时间范围
          */
         setDateValue(names){
-            const dateStart = _.first(names);
-            const dateEnd = _.last(names);
-            this.data.startValue = dateStart;
-            this.data.endValue = dateEnd;
-            this.el.find('.date-start').val(dateStart);
-            this.el.find('.date-end').val(dateEnd);
+            const dateStart = _.min(names.map(item => Date.parse(item)));
+            const dateEnd = _.max(names.map(item => Date.parse(item)));
+
+            for (let item of names) {
+                if (Date.parse(item) === dateStart) {
+                    this.data.startValue = item;
+                    break;
+                }
+            };
+
+            for (let item of names) {
+                if (Date.parse(item) === dateEnd) {
+                    this.data.endValue = item;
+                    break;
+                }
+            }
+            this.el.find('.date-start').val(this.data.startValue);
+            this.el.find('.date-end').val(this.data.endValue);
         }
     },
     binds:[
@@ -64,7 +77,13 @@ let config = {
             event:'click',
             selector:'.search-custom-btn',
             callback:function (context,event) {
-                this.trigger('onChangeDateData', {'startValue': this.el.find('.date-start').val(),'endValue':this.el.find('.date-end').val(),type:'custom'})
+                let startValue = this.el.find('.date-start').val();
+                let endValue = this.el.find('.date-end').val();
+                if (endValue < startValue) {
+                    msgbox.alert('开始时间不能大于结束时间');
+                } else {
+                    this.trigger('onChangeDateData', {'startValue': startValue,'endValue':endValue,type:'custom'})
+                };
             }
         }
     ],

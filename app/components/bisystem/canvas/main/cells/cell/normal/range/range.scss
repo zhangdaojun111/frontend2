@@ -3,6 +3,7 @@
     height: 24px;
     line-height: 24px;
     overflow: hidden;
+    position:relative;
     .normal-date-options {
         float: left;
         label {
@@ -19,19 +20,25 @@
         }
     }
     .normal-date-time {
-        float: right;
+        position:absolute;
+        right:0;
+        top:0;
         span {
             font-weight: bold;
-            margin: 0 4px;
+            margin: 0 2px;
             color: #333333;
         }
         input {
             border: 1px solid #d4d4d4;;
-            width: 120px;
-            padding:3px;
+            width: 115px;
+            padding:3px 0;
             &::-webkit-inner-spin-button {
                 visibility: hidden;
             }
+        }
+        .search-custom-btn{
+            position: relative;
+            top:3px;
         }
     }
 }
