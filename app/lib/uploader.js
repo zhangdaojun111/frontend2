@@ -313,7 +313,7 @@ class Uploader {
                     }
                 }
             } else {
-                fileItem['state']='on';
+                fileItem['state']='error';
                 this.settings['options']['error'](res.error);
                 if(!res.warning_msg){
                     delete this.fileList[name][code];

@@ -94,12 +94,14 @@ let config = {
             }
             let newFile = {}
             let n = 0;
+            let currentCode ='';
             for( let code in this.data.fileData ){
                 n++;
                 if( n==num ){
-                    newFile[code] = this.data.fileData[code]
+                    newFile[code] = this.data.fileData[code];
+                    currentCode = code;
                 }else {
-                    this.uploader.deleteFileByCode( code,'/upload_data/' )
+                    this.uploader.deleteFileByCode( code,'/upload_data/' );
                 }
             }
             this.data.fileData = newFile;
@@ -158,6 +160,7 @@ let config = {
                     }
                 }else {
                     this.data.warning_msg = '';
+                    this.uploader.deleteFileByCode( currentCode,'/upload_data/' );
                     if( res.warning_msg ){
                         let warning_msg = res.warning_msg || {};
                         let warning_list = res.warning_list || [];
