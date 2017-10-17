@@ -15,6 +15,7 @@ let config = {
     data:{
         comment:"",
     },
+
     actions:{
         showQuill() {
             this.data.quill.container.firstChild.innerHTML = this.data.comment.rows[0] ? this.data.comment.rows[0][0] : '';
