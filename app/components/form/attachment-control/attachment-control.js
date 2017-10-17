@@ -243,7 +243,7 @@ let config = {
                             if (this.data['thumbnailListComponent']) {
                                 this.data['thumbnailListComponent'].actions.addItem(obj);
                             } else if(this.data.dinput_type == 23) {
-                                let comp = new ThumbnailList([obj]);
+                                let comp = new ThumbnailList([obj],this.data.dinput_type);
                                 comp.render(this.el.find('.thumbnail-list-anchor'));
                                 this.data['thumbnailListComponent'] = comp;
                             }
@@ -303,7 +303,7 @@ let config = {
                         return;
                     }
                     if (res.rows.length != 0) {
-                        let comp = new ThumbnailList(res.rows);
+                        let comp = new ThumbnailList(res.rows,this.data.dinput_type);
                         comp.render(this.el.find('.thumbnail-list-anchor'));
                         this.data['thumbnailListComponent'] = comp;
                     }

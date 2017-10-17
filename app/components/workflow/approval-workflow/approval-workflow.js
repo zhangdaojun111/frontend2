@@ -206,8 +206,6 @@ let config={
                 height: 300,
                 title: '提示'
             }).then((res)=>{
-                console.log(res);
-                console.log("11111112222222222222")
                 if(res.determine){
                     Mediator.publish('workflow:comment',res.comment);
                     Mediator.publish("approval:recordPass",this.data.imgInfo);
@@ -225,8 +223,6 @@ let config={
                 title: '提示'
             }).then((res)=>{
                 if(res.determine===true){
-                    console.log(res);
-                    console.log('00000000000000000000000000');
                     Mediator.publish('workflow:comment',res.comment);
                     Mediator.publish('approval:recordRejStart',res.determine);
                 }
@@ -266,7 +262,6 @@ let config={
                 }
             ).then(res=>{
                 if(!res.onlyclose){
-                    console.log("bbbbbbbbbbbbbbbbbbbbb");
                     Mediator.publish('workflow:comment',res.comment);
                     Mediator.publish('approval:rejToAny',res.id);
                 }else {
@@ -320,8 +315,6 @@ let config={
                 title:`加签节点`,
                 modal:true
             }).then(res=>{
-                console.log(res);
-                console.log("-------------------")
                 if(!res.onlyclose){
                     Mediator.publish('workflow:comment',res.comment);
                     Mediator.publish("approval:signUser",{
@@ -406,8 +399,8 @@ let config={
             WorkFlow.show(msg.data[0],'#drawflow');
         }); // zj
 
-        Mediator.subscribe('workflow:hufei',(res)=>{
-            console.log(res);
+        this.el.on('click','.workflow-main',()=>{
+            this.el.find('.preview-node').hide();
         })
 
         this.el.on('click','.gz',()=>{
