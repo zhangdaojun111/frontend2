@@ -193,6 +193,7 @@ let config = {
                 this.data.childComponents.push(calendarSetItem);
                 this.append(calendarSetItem, this.el.find('.set-items'));
             });
+            this.el.find('.set-btn').attr('disabled',false)
             // this.hideLoading();
         },
 
