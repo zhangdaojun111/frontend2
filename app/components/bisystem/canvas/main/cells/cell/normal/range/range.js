@@ -70,6 +70,7 @@ let config = {
                     $(context).parents('label').siblings().removeClass('option-active');
                 }
                 this.trigger('onChangeDateData', {'startValue': this.data.startValue,'endValue':this.data.endValue,type:$(context).val()})
+                return false;
             }
         },
         {   //选中状态(1周 1月 半年 1年 全部)
@@ -83,6 +84,7 @@ let config = {
                 } else {
                     this.trigger('onChangeDateData', {'startValue': startValue,'endValue':endValue,type:'custom'})
                 };
+                return false;
             }
         }
     ],

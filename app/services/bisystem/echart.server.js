@@ -78,7 +78,7 @@ export class EchartsService {
         let isStack = false; // 判断是否堆叠
 
         yAxis.forEach((y,i) => {
-           isStack = cellOption.yAxis[i] && cellOption.yAxis[i]['group'];
+           isStack = cellOption.yAxis[i] && cellOption.yAxis[i]['group'] ? true : false;
 
             legend.push(y[nameType]);
             if (nameType === 'new_name') {
@@ -178,11 +178,12 @@ export class EchartsService {
         let isZero = false;
         for(let y of yAxis){
             if(y.type.type == 'bar'&& !cellOption['yHorizontal']&& firstMin >= 0){
-                let isZero = true;
+                isZero = true;
                 break;
             }
         };
         if (!isStack) {
+            console.log(isZero);
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
         };
 
@@ -303,9 +304,10 @@ export class EchartsService {
             }
         };
 
+
         //x轴为3日期,5日期时间,12年份,30年月类型字段时开启数据缩放
         let dateType = ['3','5','12','30'];
-        if(cellOption['xAxis'] && cellOption['xAxis']['type'] && dateType.indexOf(cellOption['xAxis']['type']) != -1){
+        if(cellOption['xAxis'] && cellOption['xAxis']['type'] && dateType.indexOf(cellOption['xAxis']['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] += 30;
             linebarOption['dataZoom']=[{
                 type: 'slider',
