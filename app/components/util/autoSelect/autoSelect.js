@@ -269,6 +269,18 @@ let config = {
         resetAutoSelect:function () {
             this.el.find('.auto-select-text').val('');
             this.el.find('ul li').addClass('match-visible').show();
+        },
+        delayHideComp:function () {
+            console.log(this.data.mouseActive);
+            if(this.data.mouseActive === true){
+                let that = this;
+                this.data.timer = window.setTimeout(function () {
+                    that.actions.hideSelectBox();
+                },500)
+            }
+        },
+        removeHideComp:function () {
+            window.clearTimeout(this.data.timer);
         }
     },
     binds:[
@@ -311,9 +323,14 @@ let config = {
             event: 'mouseleave.visible',
             selector: '.auto-select-component',
             callback: function () {
-                if(this.data.mouseActive === true) {
-                    this.actions.hideSelectBox();
-                }
+               this.actions.delayHideComp();
+            }
+        },
+        {
+            event: 'mouseenter',
+            selector: '.auto-select-component',
+            callback: function () {
+               this.actions.removeHideComp();
             }
         },
         {
