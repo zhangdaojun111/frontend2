@@ -1,0 +1,32 @@
+@media screen and (max-width: 960px) {
+    body {
+        .views-header {
+            .nav-tabs {
+                width: 100%;
+                .icon-chart {
+                    display: none;
+                }
+            }
+            .views-header-right {
+                display: none;
+            }
+        }
+        .cells-container {
+            .cells {
+                > .cell {
+                    display: none;
+                }
+                .cell {
+                    position: static !important;
+                    max-width: 100%;
+                    margin-top: 1%;
+                    .bread-crumb-nav {
+                        .original-data-btn {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
