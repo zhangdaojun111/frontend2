@@ -376,6 +376,7 @@ let systemMessageUtil = {
             speechSynthesis.speak(msg);
         }
         this.el = $(html).appendTo('body');
+        let that = this;
         this.el.erdsDialog({
             width: 800,
             height: 600,
@@ -383,6 +384,7 @@ let systemMessageUtil = {
             title: dialogTitle,
             close: function () {
                 $(this).erdsDialog('destroy');
+                that.el.remove();
             }
         })
     }
