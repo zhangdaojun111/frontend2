@@ -1213,7 +1213,9 @@ let config = {
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
-                msgBox.hideLoadingSelf();
+                if(this.data.groupCheck) {
+                    msgBox.hideLoadingSelf();
+                }
             })
             HTTP.flush();
         },
@@ -1712,7 +1714,7 @@ let config = {
         onGroupChange: function (group ,changeChecked) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
             this.data.myGroup = group;
-            if(group.length != 0 || changeChecked){
+            if(changeChecked){
                 msgBox.showLoadingSelf();
             }
             this.actions.getGridData();
@@ -2477,7 +2479,6 @@ let config = {
                 this.data.groupCheck = !this.data.groupCheck;
                 this.actions.onGroupChange(this.data.myGroup)
             } else {
-                msgBox.showLoadingSelf();
                 this.data.closePanel = true;
                 this.el.find('.group-btn').find('span').html('分组');
                 setTimeout( ()=>{

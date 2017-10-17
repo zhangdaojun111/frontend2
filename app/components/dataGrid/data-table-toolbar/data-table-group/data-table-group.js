@@ -17,6 +17,7 @@ let config = {
         pregroup:[],
         tableId: null,
         gridoptions: null,
+        changeChecked: false,
         fields: [],
         myGroup:[],
         groupField:[],
@@ -41,7 +42,7 @@ let config = {
         this.el.find('.group-data-list, .grouping-data-list').sortable({
             connectWith: ".connectedSortable",
             stop: ()=> {
-                let changeChecked = false;
+                this.data.changeChecked = false;
                 this.data.group = [];
                 let dom = $('.grouping-data-list').find('.group-data-item');
                 for (let i = 0; i < dom.length; i++) {
@@ -55,9 +56,8 @@ let config = {
                 } else {
                     this.el.find('.resetGroup').css('color','#0F79EF');
                 }
-                console.log(this.data.group.toString()+"--------"+this.data.groupFields.toString())
                 if(this.data.group.toString() != this.data.pregroup.toString()){
-                    changeChecked = true;
+                    this.data.changeChecked = true;
                 }
                 dataTableService.savePreference({
                     action: 'group',
@@ -65,7 +65,7 @@ let config = {
                     group: JSON.stringify(this.data.group)
                 });
                 HTTP.flush();
-                this.actions.onGroupChange( this.data.group, changeChecked );
+                this.actions.onGroupChange( this.data.group, this.data.changeChecked );
                 this.data.pregroup = this.data.group;
             }
         }).disableSelection();
@@ -79,7 +79,7 @@ let config = {
         //重置
         this.el.find( '.resetGroup' ).on( 'click',()=>{
             this.reload();
-            this.actions.onGroupChange( this.data.groupFields );
+            this.actions.onGroupChange( this.data.groupFields,this.data.changeChecked );
         })
 
     }
