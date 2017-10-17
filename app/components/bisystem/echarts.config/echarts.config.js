@@ -172,7 +172,8 @@ const radar = {
         bottom: 0,
         orient: 'vertical',
         data: [],
-        selected: {}
+        selected: {},
+        type: 'scroll'
     },
     radar: [
         {
@@ -239,7 +240,8 @@ const linebar = {
     legend: {
         top: 0,
         data: [],
-        selected: {}
+        selected: {},
+        type: 'scroll'
     },
     grid: {
         left: 30,

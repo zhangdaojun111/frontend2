@@ -385,6 +385,13 @@ let FormEntrys = {
 		this.childForm[tableId].actions.changeToEdit();
 	},
 
+    //转到查看模式
+
+    changeToView(tableId) {
+        this.childForm[tableId].data.isOtherChangeView = true;//如果是外部模块的转编辑模式
+        this.childForm[tableId].actions.changeToView();
+    },
+
 	//代码容错 el必须为一个jq对象
 	checkConfig(config) {
 		if (!(config.el instanceof jQuery)) {
@@ -425,6 +432,7 @@ let FormEntrys = {
 		//创建请求
 		let json = this.createPostJson();
 		res = await FormService.getFormData(json);   //将表单名称发送给工作流
+
 
 		Mediator.emit('form: dataRes', res);
 

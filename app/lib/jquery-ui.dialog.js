@@ -48,6 +48,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         this.option('height', height);
         this.option('position', {my: "center top", at: "center top", of: window});
         this.fullScreen = true;
+        this.options.resizeMax && this.options.resizeMax();
 
         if (this.uiDialogTitlebarFull) {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
@@ -62,6 +63,8 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         this.option('height', this.options.originHeight);
         this.option('position', {my: "center", at: "center", of: window});
         this.fullScreen = false;
+        this.options.resizeMin && this.options.resizeMin();
+
         if (this.uiDialogTitlebarFull) {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-newwin");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");

@@ -186,6 +186,10 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/aside_table.png') no-repeat;
     }
+    .rich-text-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/rich_text_icon.png') no-repeat;
+    }
 }
 
 @mixin chart-com {
