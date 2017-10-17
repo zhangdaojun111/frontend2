@@ -311,7 +311,6 @@ function getLoginController() {
          * 用户登录
          */
         userLogin:function (username,password) {
-            debugger;
             if(password === ''){
                 $(".warn-info").html('密码不能为空');
                 return;
@@ -335,8 +334,6 @@ function getLoginController() {
                     }
                     info = JSON.stringify(info);
                     window.localStorage.setItem('password_info',info);
-                    console.log(that.nextUrl);
-                    debugger;
                     $(window).attr('location',that.nextUrl);
                 }else if(result.success === 0){
                     $(".warn-info").html(result['error']).show();
@@ -356,7 +353,7 @@ function getLoginController() {
             let position = url.indexOf('=');
             url = url.substr(position + 1);
             if(url && url !== '/'){
-                this.nextUrl = url;
+                this.nextUrl = decodeURIComponent(url);
             }
         }
     };
