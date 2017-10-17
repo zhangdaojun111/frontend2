@@ -172,6 +172,10 @@ let config = {
             this.data.rows = data.rows;
             this.actions.loadData(data);
         },
+        /**
+         * 根据消息数量和每页显示数量进行前端排序或后端排序
+         * @param $event
+         */
         onSortChanged:function ($event) {
             //分情况进行前端排序或后端排序
             if(!this.data.frontendSort){
@@ -217,6 +221,10 @@ let config = {
                 this.actions.openDialog($event);
             }
         },
+        /**
+         * 根据消息类型按不同方式展示具体消息
+         * @param $event
+         */
         openDialog:function ($event) {
             let data = $event.data;
             // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
@@ -258,6 +266,9 @@ let config = {
                 this.actions._postReadData(JSON.stringify([data.id]));
             }
         },
+        /**
+         * 根据用户偏好初始化分页工具
+         */
         initPagination:function () {
             this.pagination = new dataPagination({
                 page: 1,
