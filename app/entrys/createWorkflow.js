@@ -164,6 +164,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })().then(res=>{
                 msgBox.hideLoadingSelf();
                 if(res.success===1){
+                    FormEntrys.changeToView(wfObj.tableid);
                     msgBox.showTips(`执行成功`);
                     let isdraft = true;
                     $("#startNew").show().on('click',()=>{

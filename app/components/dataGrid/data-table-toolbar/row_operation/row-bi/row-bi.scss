@@ -20,6 +20,10 @@
             padding: 1px;
             cursor: pointer;
         }
+        .next {
+            position: static;
+        }
+
         .cantClick {
             background-color: #afafaf;
         }
