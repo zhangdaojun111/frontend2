@@ -40,23 +40,29 @@ let config = {
         selectItem: function (item) {
             if (this.data.multiSelect === true) {
                 let choosed = this.el.find('input:checked');
+                let tempStr = [];
                 choosed = Array.from(choosed).map((item) => {
                     let $item = $(item);
+                    tempStr.push($item.data('name').replace(/\'/g, ''));
                     return {
                         id: $item.data('id').replace(/\'/g, ''),
                         name: $item.data('name').replace(/\'/g, ''),
                     }
                 });
                 this.data.choosed = choosed;
+                tempStr = tempStr.join(',');
+                this.el.find('.result').attr('title',tempStr);
             } else {
                 if (item.find('input:checkbox')[0].checked) {
                     this.data.choosed = [{
                         id: item.data('id').replace(/\'/g, ''),
                         name: item.data('name').replace(/\'/g, ''),
                     }];
+                    this.el.find('.result').attr('title',item.data('name').replace(/\'/g, ''));
                     this.actions.hideSelectBox();
                 } else {
                     this.data.choosed = [];
+                    this.el.find('.result').removeAttr('title');
                 }
             }
             this.actions.renderChoosed();
