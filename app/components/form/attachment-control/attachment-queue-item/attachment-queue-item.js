@@ -127,7 +127,7 @@ let config = {
                 this.el.find('.cancel-attaching').css('display','none');
                 this.el.find('.delete-file').css('display','inline');
 
-                if(this.data.real_type == 9){
+                if(this.data.real_type == 9 || this.data.real_type == 33){
                     this.el.find('.preview').css('display','inline');
                     if(this.data.file.type.indexOf('image') == -1 && this.data.file.type != 'video/mp4'){
                         this.el.find('.preview').css({'color':'grey','cursor':'auto'});
