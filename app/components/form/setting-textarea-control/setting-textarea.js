@@ -58,6 +58,7 @@ let config = {
         }
     ],
     afterRender() {
+        this.el.find('.ui-width').attr('title', this.data.value[-1]);
         this.el.find('.ui-width').css('width',this.data.width);
         this.actions.fillData();
         // this.actions.openSettingDialog();

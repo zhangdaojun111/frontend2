@@ -43,6 +43,14 @@ let config={
         if(!this.data.is_view){
             this.el.find('.ui-selector').css('visibility','visible').addClass('icon-fl');
         }
+        if(this.data.is_view){
+            for(let k in this.data.options) {
+                if(this.data.value == this.data.options[k].value) {
+                    this.el.find('.dropdown').attr('title',this.data.options[k].label)
+                }
+            }
+        }
+
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }

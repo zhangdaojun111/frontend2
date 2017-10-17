@@ -111,6 +111,7 @@ let config = {
 
         //查看模式/编辑模式
         if (this.data.is_view) {
+            this.el.find('.ui-width').attr('title', this.data.value)
             this.el.find('.ui-width').attr('disabled', true);
             this.el.find('.input-img').css('pointer-events', 'none');
         } else {
