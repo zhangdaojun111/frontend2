@@ -17,7 +17,7 @@ let config = {
     },
     actions:{
         showQuill() {
-            this.data.quill.container.firstChild.innerHTML = this.data.comment.rows[0][0];
+            this.data.quill.container.firstChild.innerHTML = this.data.comment.rows[0] ? this.data.comment.rows[0][0] : '';
             this.el.find('.editor').show();
             this.el.find('.comment-ql-content').hide();
         }

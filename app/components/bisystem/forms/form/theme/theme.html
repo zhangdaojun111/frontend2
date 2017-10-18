@@ -1,0 +1,12 @@
+<div class="form-chart-theme">
+    <h4 class="form-label">
+        <span>{{label}}</span>
+        {{#if required}}<i class="start-icon"></i>{{/if}}
+        <b class="error-msg"></b>
+    </h4>
+    <div class="form-theme clearfix">
+        {{#each colors}}
+        <span id="{{this}}"><b {{{theme_background @this}}}></b></span>
+        {{/each}}
+    </div>
+</div>
