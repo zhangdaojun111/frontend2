@@ -61,6 +61,13 @@
     }
     li {
         font-size: 12px;
+        .name-label{
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
         .root {
             padding-left: 18px;
             height: 30px;
@@ -82,6 +89,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+
         }
         .child-hide {
             max-height: 0;
