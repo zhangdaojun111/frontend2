@@ -1,17 +1,17 @@
 <div class="clearfix">
     {{#if unvisible}}
-        <a href="javascript:void(0);" style="color:#ccc;">权限受限</a>
+        <a href="javascript:void(0);" style="color:#ccc;margin:2px 4px">权限受限</a>
     {{else if be_control_condition}}
-        <a href="javascript:void(0);" style="color:#ccc;">被修改条件限制</a>
+        <a href="javascript:void(0);" style="color:#ccc;margin:2px 4px">被修改条件限制</a>
     {{else}}
-        <div style="display: inline-block;color:#1789FC;position: relative;top: 0;" class="view-attached-list">共{{value.length}}个文件</div>
+        <div style="display: inline-block;color:#1789FC;position: relative;top: 0;margin:2px 4px" class="view-attached-list">共{{value.length}}个文件</div>
         {{#unless is_view}}
             <!--上传文件，截图上传-->
             <input type="file" class="selecting-file" style="display: none;" multiple>
-            <input type="button" class='upload-file' value="上传文件">
-            <input type="button" class="shot-screen" value="截图上传">
+            <input type="button" class='upload-file' style="margin:2px 4px" value="上传文件">
+            <input type="button" class="shot-screen" style="margin:2px 4px" value="截图上传">
             <div class="upload-process-queue"></div>
-            <div class="ellipses" style="display: none; cursor: pointer;">......</div>
+            <div class="ellipses" style="display: none; cursor: pointer;margin:2px 4px">......</div>
         {{/unless}}
         <div class="thumbnail-list-anchor"></div>
     <div>

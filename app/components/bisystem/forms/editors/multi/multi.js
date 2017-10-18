@@ -7,9 +7,9 @@ import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 import {ChartEditor} from './chart/chart';
-import './multi.scss'
+import './multi.scss';
 
-// let succ = true;
+
 let config = {
     template: template,
     actions: {
@@ -81,7 +81,6 @@ let config = {
                 sources: sources,
                 theme: data.theme,
             };
-            console.log(chart);
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
@@ -98,6 +97,7 @@ let config = {
                 this.save(chart);
             }
             config.data.succ = true;
+
         },
 
         /**
