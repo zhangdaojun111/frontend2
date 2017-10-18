@@ -41,7 +41,10 @@ ApprovalWorkflow.showDom().then(function (component) {
         btnType:'none',
         table_id: obj.table_id
     });
-    setTimeout(()=> component.hideLoading(),1000)
+    Mediator.subscribe("form:formAlreadyCreate",()=>{
+        component.hideLoading();
+    });
+    // setTimeout(()=> component.hideLoading(),1000)
 });
 
 //订阅form data
@@ -198,16 +201,14 @@ const approveWorkflow = (para) => {
     }
     para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);
-    console.log(para);
-    console.log(comment);
-    // console.log(9999999999888888888888)
-    // console.log('88888888888888888888888')
+    msgBox.showLoadingSelf();
     (async function () {
         return workflowService.approveWorkflowRecord({
             url: '/approve_workflow_record/',
             data: para
         });
     })().then(res => {
+        msgBox.hideLoadingSelf();
         if(res.success===1){
             msgBox.alert(`操作成功`);
             PMAPI.sendToParent({
