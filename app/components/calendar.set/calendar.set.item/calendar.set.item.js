@@ -124,7 +124,8 @@ let config = {
                 selectedOptsId.push(newItem['id']);
             }
             this.data.preViewText = selectedOptsText.toString();
-            this.el.find('.preview-text').html(this.data.preViewText);
+            this.el.find('.preview-text').html(this.data.preViewText).attr('title',this.data.preViewText);
+
         },
 
         /**
@@ -309,8 +310,7 @@ let config = {
         }
 
         this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text.toString();
-        console.log(this.data.preViewText);
-        this.el.find('.preview-text').text(this.data.preViewText);
+        this.el.find('.preview-text').text(this.data.preViewText).attr('title',this.data.preViewText);
         this.el.find('.set-color').attr("value", this.data.rowSetData.color);
         this.actions.editableFalse();
     },
