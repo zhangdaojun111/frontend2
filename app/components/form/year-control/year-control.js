@@ -61,10 +61,11 @@ export default class YearControl extends Component{
     constructor(data,events){
         let myDate = new Date();
         let myYear = myDate.getFullYear();
+        data.options = [];
         for( let i=5;i>=-10;i-- ){
-            config.data.options.push( { "label": String(myYear + i),"value": String(myYear + i)} );
+            data.options.push( { "label": String(myYear + i),"value": String(myYear + i)} );
         }
-        config.data.options.unshift({"label":"请选择","value":"请选择"});
+        data.options.unshift({"label":"请选择","value":"请选择"});
         super(config,data,events);
     }
 }
