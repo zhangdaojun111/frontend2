@@ -26,9 +26,11 @@ let config = {
                     this.formItems['countColumn'].data.name = this.componentId;
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
+                    this.el.find('.form-chart-multi-chart').addClass('countColumn-width');
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
+                    this.el.find('.form-chart-multi-chart').removeClass('countColumn-width');
                 };
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
