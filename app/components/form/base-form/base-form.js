@@ -1880,6 +1880,18 @@ let config = {
             this.data.childComponent[_this.department.dfield].data["options"] = arr;
             this.data.childComponent[_this.department.dfield].reload();
         },
+        //给外部提供cacheNew cacheOld
+        getCacheData(){
+            let formValue=this.actions.createFormValue(this.data.data,true);
+            let data = this.actions.handleFormData(formValue);
+            let formDataOld = this.data.oldData;
+            let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
+            let obj_old = this.actions.createCacheData(formDataOld, data, false, this);
+            return {
+                obj_new,
+                obj_old
+            }
+        },
     },
     afterRender() {
         this.actions.createFormControl();

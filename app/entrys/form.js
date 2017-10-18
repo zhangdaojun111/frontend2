@@ -490,11 +490,12 @@ let FormEntrys = {
 
 	//对外部模块提供获取表单数据接口
 	//@param tableId表名 isCheck是否需要baseform执行表单数据验证
-	getFormValue(tableId, isCheck) {
-		if (!this.childForm[tableId]) {
-			return;
-		}
-		return this.childForm[tableId].actions.getFormValue(isCheck);
-	},
+    getFormValue(tableId, isCheck,needCache) {
+        if (!this.childForm[tableId]) {
+            return;
+        }
+
+        return needCache?Object.assign({formValue:this.childForm[tableId].actions.getFormValue(isCheck)},this.childForm[tableId].actions.getCacheData()):this.childForm[tableId].actions.getFormValue(isCheck);
+    },
 }
 export default FormEntrys
