@@ -142,7 +142,7 @@ let config = {
                                 is_view:this.data.is_view,
                                 control_id:this.data.id
                             };
-                            PMAPI.openDialogToSelfByComponent(_.defaultsDeep({},{data:obj},AttachmentList), {
+                            PMAPI.openDialogByComponent(_.defaultsDeep({},{data:obj},AttachmentList), {
                                 width: 700,
                                 height: 500,
                                 title: "浏览上传文件"
@@ -277,6 +277,7 @@ let config = {
             }
         },
         _updateDeleted:function(res){
+            Storage.init('null');
             let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
             if(!deletedFiles){
                 return;
