@@ -78,8 +78,10 @@ let config = {
 
         //重置
         this.el.find( '.resetGroup' ).on( 'click',()=>{
-            this.reload();
-            this.actions.onGroupChange( this.data.groupFields,this.data.changeChecked );
+            if(this.el.find('.resetGroup').css('color') != 'rgb(153, 153, 153)'){
+                this.reload();
+                this.actions.onGroupChange( this.data.groupFields,this.data.changeChecked );
+            }
         })
 
     }
