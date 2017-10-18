@@ -171,7 +171,7 @@ let config = {
             this.data.tabOpen = !this.data.tabOpen;
             setTimeout( ()=>{
                 this.el.find( '.diary-user' ).eq(0).animate( { 'left':this.data.tabOpen ? '0px' : '-470px' } );
-                this.el.find( '.calc-user' )[0].innerHTML = this.data.tabOpen ? '《 ':' 》';
+                this.el.find( '.calc-user' )[0].className = this.data.tabOpen ? 'calc-user icon-aggrid-shouhui':'calc-user icon-aggrid-quxiao';
             },this.data.tabOpen ? 0 : 200 )
             setTimeout( ()=>{
                 this.el.find( '.diary-grid' )[0].style.width = this.data.tabOpen ? 'calc(100% - 500px)':' calc(100% - 30px)';
