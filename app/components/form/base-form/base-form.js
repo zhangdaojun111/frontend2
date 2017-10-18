@@ -156,6 +156,7 @@ let config = {
         //给外部提供formValue格式数据
         //@param isCheck判断是否需要执行表单校验
         getFormValue(isCheck) {
+            this.actions.changeValueForChildTable(this.data.data);
             return isCheck ? this.actions.createFormValue(this.data.data, true) : this.actions.createFormValue(this.data.data);
         },
 

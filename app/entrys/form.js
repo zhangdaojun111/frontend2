@@ -104,7 +104,10 @@ let FormEntrys = {
 				record_id: this.data.recordId,
 				reload_draft_data: this.data.reloadDraftData,
 				from_workflow: this.data.fromWorkFlow,
-				table_id: this.data.tableId
+				table_id: this.data.tableId,
+                parent_table_id: this.data.parentTableId||'',
+                parent_real_id: this.data.parentRealId||'',
+            	parent_temp_id: this.data.parentTempId||'',
 			}
 			this.data.isloadWorkflow = true;
 		} else if (this.data.fromApprove && this.data.realId == '') {//审批流程
