@@ -94,12 +94,14 @@ let config = {
             }
             let newFile = {}
             let n = 0;
+            let currentCode ='';
             for( let code in this.data.fileData ){
                 n++;
                 if( n==num ){
-                    newFile[code] = this.data.fileData[code]
+                    newFile[code] = this.data.fileData[code];
+                    currentCode = code;
                 }else {
-                    this.uploader.deleteFileByCode( code,'/upload_data/' )
+                    this.uploader.deleteFileByCode( code,'/upload_data/' );
                 }
             }
             this.data.fileData = newFile;
@@ -171,6 +173,8 @@ let config = {
                                 }
                                 this.data.warning_msg = warning_msg;
                                 this.actions.import();
+                            } else {
+                                this.uploader.deleteFileByCode( currentCode,'/upload_data/' );
                             }
                         } )
                     }else {

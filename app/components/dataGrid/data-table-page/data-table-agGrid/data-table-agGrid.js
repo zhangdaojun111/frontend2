@@ -1214,7 +1214,7 @@ let config = {
                     msgBox.showTips( '数据刷新成功。' )
                 }
                 if(this.data.groupCheck) {
-                    msgBox.hideLoadingRoot();
+                    msgBox.hideLoadingSelf();
                 }
             })
             HTTP.flush();
@@ -1711,10 +1711,12 @@ let config = {
             });
         },
         //分组触发
-        onGroupChange: function (group) {
+        onGroupChange: function (group ,changeChecked) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
             this.data.myGroup = group;
-            msgBox.showLoadingRoot();
+            if(changeChecked){
+                msgBox.showLoadingSelf();
+            }
             this.actions.getGridData();
         },
         //列宽改变
@@ -2440,9 +2442,9 @@ let config = {
         //定制列
         customColumnClick: function () {
             if( this.el.find('.custom-column-btn')[0] ){
-                let That = this;
+                let that = this;
                 this.el.find( '.custom-column-btn' ).on( 'click',_.debounce( ()=>{
-                    That.actions.calcCustomColumn();
+                    that.actions.calcCustomColumn();
                 },500 ) )
             }
         },
@@ -2464,10 +2466,10 @@ let config = {
             if( !this.el.find('.group-btn')[0] ){
                 return;
             }
-            let Taht = this;
+            let that = this;
             this.el.on('click','.group-btn',_.debounce( ()=>{
-                Taht.actions.calcGroup();
-            },500 ))
+                that.actions.calcGroup();
+            },500 ));
         },
         //分组打开关闭
         calcGroup: function () {

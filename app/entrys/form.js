@@ -104,7 +104,10 @@ let FormEntrys = {
 				record_id: this.data.recordId,
 				reload_draft_data: this.data.reloadDraftData,
 				from_workflow: this.data.fromWorkFlow,
-				table_id: this.data.tableId
+				table_id: this.data.tableId,
+                parent_table_id: this.data.parentTableId||'',
+                parent_real_id: this.data.parentRealId||'',
+            	parent_temp_id: this.data.parentTempId||'',
 			}
 			this.data.isloadWorkflow = true;
 		} else if (this.data.fromApprove && this.data.realId == '') {//审批流程
@@ -487,11 +490,12 @@ let FormEntrys = {
 
 	//对外部模块提供获取表单数据接口
 	//@param tableId表名 isCheck是否需要baseform执行表单数据验证
-	getFormValue(tableId, isCheck) {
-		if (!this.childForm[tableId]) {
-			return;
-		}
-		return this.childForm[tableId].actions.getFormValue(isCheck);
-	},
+    getFormValue(tableId, isCheck,needCache) {
+        if (!this.childForm[tableId]) {
+            return;
+        }
+
+        return needCache?Object.assign({formValue:this.childForm[tableId].actions.getFormValue(isCheck)},this.childForm[tableId].actions.getCacheData()):this.childForm[tableId].actions.getFormValue(isCheck);
+    },
 }
 export default FormEntrys
