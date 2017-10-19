@@ -183,7 +183,6 @@ export class EchartsService {
             }
         };
         if (!isStack) {
-            console.log(isZero);
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
         };
 
@@ -206,15 +205,14 @@ export class EchartsService {
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax;
             };
-
             linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
                 inverse: false,
                 scale: true,
                 splitNumber: splitNumber,
-                max: secondMax,
-                min: secondMin,
+                max: secondMax > linebarOption['yAxis'][0]['max'] ? linebarOption['yAxis'][0]['max'] : firstMax,
+                min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
                 interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
                 axisLabel: {
                     inside: false
@@ -324,7 +322,7 @@ export class EchartsService {
                     endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                     rangeMode: ['value', 'value']
                 }]
-        }
+        };
         return linebarOption;
     }
 

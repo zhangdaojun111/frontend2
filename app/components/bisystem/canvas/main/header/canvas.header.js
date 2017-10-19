@@ -27,6 +27,8 @@ let config = {
          * 添加画布块
          */
         addCell() {
+            let scrollHeight = $('.cells-container').offset().top();
+            console.log(scrollHeight);
             const layout = {
                 attribute:[],
                 layout_id: '',
