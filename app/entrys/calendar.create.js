@@ -10,7 +10,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import FormEntrys from './form';
 
 console.log(window.config.real_id);
-FormEntrys.createForm({
+FormEntrys.initForm({
     table_id: window.config.table_id,
     real_id: window.config.real_id,
     seqId:'',
