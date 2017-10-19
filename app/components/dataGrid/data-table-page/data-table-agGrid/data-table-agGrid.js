@@ -142,8 +142,6 @@ let config = {
         batchIdList: [],
         //选择的数据
         selectIds: [],
-        //编辑模式
-        isEditable: false,
         //第一次进入加载footer数据
         firstGetFooterData: true,
         //是否返回在途footer数据
@@ -2662,9 +2660,11 @@ let config = {
             }
             this.actions.getGridData();
         },
+        onCellDoubleClicked: function (data) {
+        },
         //点击cell
         onCellClicked: function (data) {
-            if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
+            if( !data.data || data.data.myfooter || this.data.doubleClick || this.data.editMode ){
                 return;
             }
             //防止双击和单击的误操作
@@ -3078,7 +3078,7 @@ let config = {
                 table_id : d['table_id'],
                 btnType: 'new',
                 data_from_row_id: data.data['_id'],
-                operation_table_id: this.data.tableId,
+
                 operation_id: d.id
             };
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
@@ -3335,6 +3335,7 @@ let config = {
             onCellClicked: this.actions.onCellClicked,
             onCellValueChanged: this.actions.onCellValueChanged,
             onRowDoubleClicked: this.actions.onRowDoubleClicked,
+            onCellDoubleClicked: this.actions.onCellDoubleClicked,
             setRowStyle: this.actions.setRowStyle,
             rowDataChanged: this.actions.rowDataChanged,
             onRowSelected: this.actions.onRowSelected
