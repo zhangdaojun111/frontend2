@@ -14,6 +14,7 @@ import {HTTP} from '../../../lib/http';
 import {dataTableService} from "../../../services/dataGrid/data-table.service"
 import Mediator from '../../../lib/mediator';
 
+let gridPref;
 let config = {
     template: template,
     data:{
@@ -35,7 +36,7 @@ let config = {
                 first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
                 currentPage: this.pagination.data.currentPage
             });
-            this.showLoading();
+            // this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
                 this.data.total = data.total;
                 this.actions.setSortModel();
@@ -43,16 +44,15 @@ let config = {
                     rowData: data.rows
                 });
                 this.pagination.actions.setPagination(data.total, param.currentPage);
-                this.hideLoading();
+                // this.hideLoading();
+                this.agGrid.gridOptions.api.sizeColumnsToFit();
             });
         },
         setSortModel:function () {
             if(this.data.total > this.data.rows){
                 this.data.frontendSort = false;
-                // console.log('启用后端排序');
             }else{
                 this.data.frontendSort = true;
-                // console.log('启用前端排序');
             }
             this.agGrid.gridOptions["enableServerSideSorting"] = !this.data.frontendSort;
             this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
@@ -66,7 +66,6 @@ let config = {
                 if (res) {
                     let rows = this.agGrid.gridOptions.api.getSelectedRows();
                     let checkIds = rows.map((item) => {
-                        console.log(item);
                         if(item.is_read === 0){
                             unread_count++;
                         }
@@ -173,6 +172,10 @@ let config = {
             this.data.rows = data.rows;
             this.actions.loadData(data);
         },
+        /**
+         * 根据消息数量和每页显示数量进行前端排序或后端排序
+         * @param $event
+         */
         onSortChanged:function ($event) {
             //分情况进行前端排序或后端排序
             if(!this.data.frontendSort){
@@ -218,6 +221,10 @@ let config = {
                 this.actions.openDialog($event);
             }
         },
+        /**
+         * 根据消息类型按不同方式展示具体消息
+         * @param $event
+         */
         openDialog:function ($event) {
             let data = $event.data;
             // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
@@ -242,8 +249,9 @@ let config = {
             } else {
                 systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
             }
+
             // 查看操作通过前端自己刷新未读，审批通过loadData刷新
-            if($event.event.srcElement.className.includes('view')){
+            if($event.data.handle_status_text !== '待审批'){
                 if($event.node.data.is_read === 0){
                     $event.node.data.is_read = 1;
                     this.agGrid.actions.refreshView();
@@ -258,6 +266,9 @@ let config = {
                 this.actions._postReadData(JSON.stringify([data.id]));
             }
         },
+        /**
+         * 根据用户偏好初始化分页工具
+         */
         initPagination:function () {
             this.pagination = new dataPagination({
                 page: 1,
@@ -267,13 +278,14 @@ let config = {
             this.pagination.render(this.el.find('.pagination'));
             this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
             this.actions.loadData();
-        }
+            this.hideLoading();
+        },
     },
     afterRender: function () {
         let gridDom = this.el.find('.grid');
         let that = this;
         //设置表格表头信息
-        this.agGrid = new agGrid({
+        gridPref = this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
             onRowDoubleClicked:that.actions.onRowDoubleClicked,
@@ -303,7 +315,7 @@ let config = {
             this.actions.batchApprove();
         }).on('click', '.batchDelete', () => {
             this.actions.batchDelete();
-        })
+        });
     }
 };
 
@@ -316,14 +328,33 @@ class SystemMessage extends Component {
 let systemMessageUtil = {
     el: null,
     show: function () {
-        this.el = $("<div>").appendTo('body');
+        this.el = $("<div class='user-system-message'>").appendTo('body');
         let systemMessage = new SystemMessage();
         systemMessage.render(this.el);
+        let sysDom = this.el.find('.system-message');
         this.el.erdsDialog({
             width: 1200,
             height: 580,
             modal: true,
+            maxable: true,
+            defaultMax: false,
             title: '消息提醒',
+            resizeMax:function () {
+                sysDom.addClass('maximize-model');
+                systemMessage.showLoading();
+                setTimeout(function () {
+                    gridPref.gridOptions.api.sizeColumnsToFit();
+                    systemMessage.hideLoading();
+                },500);
+            },
+            resizeMin:function () {
+                sysDom.removeClass('maximize-model');
+                systemMessage.showLoading();
+                setTimeout(function () {
+                    gridPref.gridOptions.api.sizeColumnsToFit();
+                    systemMessage.hideLoading();
+                },500);
+            },
             close: function () {
                 $(this).erdsDialog('destroy');
                 systemMessage.destroySelf();
@@ -356,6 +387,7 @@ let systemMessageUtil = {
             speechSynthesis.speak(msg);
         }
         this.el = $(html).appendTo('body');
+        let that = this;
         this.el.erdsDialog({
             width: 800,
             height: 600,
@@ -363,6 +395,7 @@ let systemMessageUtil = {
             title: dialogTitle,
             close: function () {
                 $(this).erdsDialog('destroy');
+                that.el.remove();
             }
         })
     }

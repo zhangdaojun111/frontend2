@@ -102,7 +102,6 @@ let config = {
 }
 export default class BuildChoose extends Component {
 	constructor(data) {
-		console.log(data);
 		super(config, data);
 	}
 }

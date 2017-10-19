@@ -156,6 +156,7 @@ let config = {
         //给外部提供formValue格式数据
         //@param isCheck判断是否需要执行表单校验
         getFormValue(isCheck) {
+            this.actions.changeValueForChildTable(this.data.data);
             return isCheck ? this.actions.createFormValue(this.data.data, true) : this.actions.createFormValue(this.data.data);
         },
 
@@ -374,13 +375,13 @@ let config = {
                 }
             }
             //子表必填
-            // for (let d in allData) {
-            //     if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
-            //         error = true;
-            //         errorMsg = '子表字段:' + allData[d].label + '是必填！';
-            //         break;
-            //     }
-            // }
+            for (let d in allData) {
+                if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
+                    error = true;
+                    errorMsg = '子表字段:' + allData[d].label + '是必填！';
+                    break;
+                }
+            }
             return {
                 error,
                 errorMsg
@@ -622,6 +623,17 @@ let config = {
                             dfield2value: JSON.stringify(dfield2value)
                         });
                     }
+                }
+            }
+        },
+        /**
+         * 从编辑转到查看模式
+         */
+        async changeToView(){
+            for (let key in this.data.data) {
+                if (this.data.childComponent[key]) {
+                    this.data.childComponent[key].data.is_view = this.data.data[key].is_view =1;
+                    this.data.childComponent[key].reload();
                 }
             }
         },
@@ -989,19 +1001,15 @@ let config = {
 
         //必填性改变
         requiredChange(_this) {
-            if (_this.data.value === '' || _this.data.value.length === 0 || JSON.stringify(_this.data.value) === "{}") {
+            if (_this.data.value === '' || _this.data.value.length === 0 || JSON.stringify(_this.data.value) === "{}" ) {
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
             } else {
                 _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
-
-            //子表必填性改变
-            if (_this.data.type == 'Songrid' && _this.data.total == 0) {
+            //富文本必填性改变
+            if(_this.data.type == 'Editor' && ( _this.data.value.replace(/<.*?>/ig,"").replace(/\s/g, "") === '' )){
                 _this.el.find('#requiredLogo').removeClass().addClass('required');
-            }else {
-                _this.el.find('#requiredLogo').removeClass().addClass('required2');
             }
-
         },
         //赋值
         setFormValue(dfield, value) {
@@ -1466,8 +1474,10 @@ let config = {
                     this.actions.setCountData();
                 }
             }
+
             //保存父表数据
-            window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(data);
+            this.data.data[data['dfield']].total =  data['total'];
+            window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
         },
         //打开统计穿透
         openCount(data) {
@@ -1608,7 +1618,7 @@ let config = {
                     _this.data.viewMode = 'ViewChild';
                 }
                 PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`, {
-                    width: 800,
+                    width: 1100,
                     height: 600,
                     title: `子表`,
                     modal: true
@@ -1693,6 +1703,10 @@ let config = {
                 let type = single.data('type');
                 if (data[key].required) {
                     data[key]['requiredClass'] = data[key].value == '' ? 'required' : 'required2';
+
+                    if(type == 'Songrid') {
+                        data[key]['requiredClass'] = data[key].total== 0 ? 'required' : 'required2';
+                    }
                 }
                 if (single.data('width')) {
                     data[key]['width'] = single.data('width') + 'px';
@@ -1713,8 +1727,9 @@ let config = {
                         this.data.childComponent[data[key].dfield] = correspondence;
                         break;
                     case 'Songrid':
-                        let popupType = single.data('popupType') || 0;
+                        let popupType = single.data('popuptype') || 0;
                         data[key]['temp_id'] = data['temp_id']['value'];
+                        data[key]['popup'] = popupType;
                         let songrid = new Songrid(Object.assign(data[key], {popupType: popupType}), actions);
                         songrid.render(single);
                         this.data.childComponent[data[key].dfield] = songrid;
@@ -1864,6 +1879,18 @@ let config = {
             this.data.data[_this.department.dfield]["options"] = arr;
             this.data.childComponent[_this.department.dfield].data["options"] = arr;
             this.data.childComponent[_this.department.dfield].reload();
+        },
+        //给外部提供cacheNew cacheOld
+        getCacheData(){
+            let formValue=this.actions.createFormValue(this.data.data,true);
+            let data = this.actions.handleFormData(formValue);
+            let formDataOld = this.data.oldData;
+            let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
+            let obj_old = this.actions.createCacheData(formDataOld, data, false, this);
+            return {
+                obj_new,
+                obj_old
+            }
         },
     },
     afterRender() {

@@ -7,6 +7,8 @@ import Component from "../../../../lib/component";
 import browserMD5File from 'browser-md5-file';
 import {FormService} from "../../../../services/formService/formService";
 import msgbox from '../../../../lib/msgbox';
+import {PMAPI} from "../../../../lib/postmsg";
+import ViewVideo from "../../view-video/view-video";
 
 let config = {
     template: template,
@@ -66,31 +68,27 @@ let config = {
             event:'click',
             selector:'.preview',
             callback:function () {
-                if(this.el.find('.preview-contain').is(":visible")){
-                    this.el.find('.preview-contain').hide();
-                } else {
-                    if(this.data._controlItem.process != 100){
-                        msgbox.showTips('数据上传未完成！');
-                        return;
-                    }
-                    let fileId = this.data._controlItem['fileId'];
-                    let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
-                    if(this.data.file.type.indexOf('image') != -1) {
-                        this.el.find('.preview-contain').show();
-                        let ele = $('<img src="'+src+'">');
-                        this.el.find('.preview-anchor').empty().append(ele);
-                    } else if (this.data.file.type == 'video/mp4') {
-                        this.el.find('.preview-contain').show();
-                        let ele = $('<video width="400" controls><source src="'+src+'" type="video/mp4">您的浏览器不支持HTML5</video>');
-                        this.el.find('.preview-anchor').empty().append(ele);
-                    }
+                if(this.data._controlItem.process != 100){
+                    msgbox.showTips('数据上传未完成！');
+                    return;
                 }
-            }
-        }, {
-            event:'click',
-            selector:'.hide-preview',
-            callback: function () {
-                this.el.find('.preview-contain').hide();
+                let fileId = this.data._controlItem['fileId'];
+                let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
+                if(this.data.file.type.indexOf('image') != -1) {
+                    PMAPI.openPreview({list:[{file_id:fileId}],id:fileId});
+                } else if (this.data.file.type == 'video/mp4') {
+                    ViewVideo.data.rows = [{file_id:fileId,file_name:this.data._controlItem.file.name}];
+                    ViewVideo.data.dinput_type = this.data.real_type;
+                    ViewVideo.data.currentVideoId = fileId;
+                    ViewVideo.data.is_view = true;
+                    ViewVideo.data.videoSrc = src;
+                    ViewVideo.data.showFileList = false;
+                    PMAPI.openDialogByComponent(ViewVideo, {
+                        width: 700,
+                        height: 600,
+                        title: '视频播放器'
+                    });
+                }
             }
         }
     ],
@@ -125,9 +123,12 @@ let config = {
                 this.el.find('.pause-attaching').css('display','none');
                 this.el.find('.cancel-attaching').css('display','none');
                 this.el.find('.delete-file').css('display','inline');
-                this.el.find('.preview').css('display','inline');
-                if(this.data.file.type.indexOf('image') == -1 && this.data.file.type != 'video/mp4'){
-                    this.el.find('.preview').css({'color':'grey','cursor':'auto'});
+
+                if(this.data.real_type == 9 || this.data.real_type == 33){
+                    this.el.find('.preview').css('display','inline');
+                    if(this.data.file.type.indexOf('image') == -1 && this.data.file.type != 'video/mp4'){
+                        this.el.find('.preview').css({'color':'grey','cursor':'auto'});
+                    }
                 }
             }
         },

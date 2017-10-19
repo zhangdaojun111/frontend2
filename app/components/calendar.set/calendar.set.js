@@ -60,10 +60,12 @@ let config = {
          */
         getMultiSelectDropdown: function () {
             let res = this.data.filedHead;
+            console.log(res);
             this.data.dropdown = [];
             this.data.dropdownForRes = [{id: '', name: ''}];
             for (let columenListIndex in res) {
                 let item = res[columenListIndex];
+                console.log(item);
                 if (item['dinput_type'] === "3" || item['dinput_type'] === "5" || item["real_type"] === "3" || item["real_type"] === "5") {
                     this.data.rowTitle.push(item);
                 }
@@ -73,12 +75,15 @@ let config = {
                         name: res[columenListIndex]['name'],
                         id: res[columenListIndex]['id']
                     });
-                    this.data.dropdownForRes.push({
-                        name: res[columenListIndex]['name'],
-                        id: res[columenListIndex]['id']
-                    })
+                    if(item['dinput_type'] !== '27') {
+                        this.data.dropdownForRes.push({
+                            name: res[columenListIndex]['name'],
+                            id: res[columenListIndex]['id']
+                        })
+                    }
                 }
             }
+            console.log(this.data.dropdownForRes);
             this.actions.getSetting(this.data.tableId);
         },
 
@@ -188,6 +193,8 @@ let config = {
                 this.data.childComponents.push(calendarSetItem);
                 this.append(calendarSetItem, this.el.find('.set-items'));
             });
+
+            this.el.find('.set-btn').attr('disabled',false)
             // this.hideLoading();
         },
 

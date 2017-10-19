@@ -49,6 +49,9 @@ let config = {
         if(this.data.value){
             this.quill.pasteHTML(this.data.value);
         }
+        if (this.data.is_view) {
+            this.el.find('.wrap').attr('title', this.data.value.replace(/<.*?>/ig,""))
+        }
         this.quill.on('text-change', _.debounce(() => {
             this.actions.publishMessage();
         }, 1000));

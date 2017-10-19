@@ -15,7 +15,7 @@ import browserMD5File from 'browser-md5-file';
 import AttachmentList from '../attachment-list/attachment-list';
 import ViewVideo from '../view-video/view-video';
 
-let preview_file = ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"];
+let preview_file = ["gif","jpg","jpeg","png","wmv","mp4"];
 
 let config = {
     template: template,
@@ -111,6 +111,9 @@ let config = {
                 if(this.data.value.length == 0){
                     return;
                 }
+                //初始化清空一下缓存
+                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                Storage.deleteItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
                 FormService.getAttachment({
                     file_ids:JSON.stringify(this.data.value),
                     dinput_type:this.data.dinput_type
@@ -240,7 +243,7 @@ let config = {
                             if (this.data['thumbnailListComponent']) {
                                 this.data['thumbnailListComponent'].actions.addItem(obj);
                             } else if(this.data.dinput_type == 23) {
-                                let comp = new ThumbnailList([obj]);
+                                let comp = new ThumbnailList([obj],this.data.dinput_type);
                                 comp.render(this.el.find('.thumbnail-list-anchor'));
                                 this.data['thumbnailListComponent'] = comp;
                             }
@@ -274,7 +277,6 @@ let config = {
             }
         },
         _updateDeleted:function(res){
-            Storage.init((new URL(document.URL)).searchParams.get('key'));
             let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
             if(!deletedFiles){
                 return;
@@ -282,6 +284,7 @@ let config = {
             for(let file of deletedFiles){
                 this.data.value.splice(this.data.value.indexOf(file),1);
             }
+            this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
             this.trigger('changeValue',this.data);
         }
     },
@@ -300,7 +303,7 @@ let config = {
                         return;
                     }
                     if (res.rows.length != 0) {
-                        let comp = new ThumbnailList(res.rows);
+                        let comp = new ThumbnailList(res.rows,this.data.dinput_type);
                         comp.render(this.el.find('.thumbnail-list-anchor'));
                         this.data['thumbnailListComponent'] = comp;
                     }

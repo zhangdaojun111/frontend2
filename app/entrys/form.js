@@ -19,8 +19,7 @@ let FormEntrys = {
 		this.emitTableName(res);
 		if (!CreateFormServer.checkRes(res)) {
 			return;
-		}
-		;
+		};
 		console.timeEnd('获取表单数据的时间');
 		console.time('form创建时间');
 		CreateFormServer.renderForm(res);

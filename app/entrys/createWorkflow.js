@@ -30,8 +30,10 @@ let wfObj,temp_ids=[];
 let timer;
 let formSave = false;
 let formValue;
+let isSuccessSubmit;
 Mediator.subscribe('workflow:choose', (msg)=> {
     // temp_ids=[];
+    isSuccessSubmit = true;
     $("#singleFlow").click();
     $("#submitWorkflow").show();
     $("#startNew").hide();
@@ -79,7 +81,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
             timer=setInterval(()=>{
                 let formNew = CreateForm.getFormValue(wfObj.tableid,false);
                 let formNewStr = JSON.stringify(formNew);
-                if(formNewStr != formValue){
+                if(formNewStr != formValue && isSuccessSubmit){
                     formValue = formNewStr;
                     intervalSave(CreateFormServer.getFormValue(wfObj.tableid,false));
                 }
@@ -158,17 +160,20 @@ Mediator.subscribe('workflow:submit', (res)=> {
             let postData={
                 flow_id:wfObj.id,
                 focus_users:JSON.stringify(focusArr)||[],
-                data:JSON.stringify(formData)
+                data:JSON.stringify(formData.formValue),
+                cache_new:JSON.stringify(formData.obj_new),
+                cache_old:JSON.stringify(formData.obj_old),
             };
             (async function () {
                 return await workflowService.createWorkflowRecord(postData);
             })().then(res=>{
                 msgBox.hideLoadingSelf();
                 if(res.success===1){
+                    isSuccessSubmit = false;
+                    FormEntrys.changeToView(wfObj.tableid);
                     msgBox.showTips(`执行成功`);
                     let isdraft = true;
                     $("#startNew").show().on('click',()=>{
-                        // console.log("46666666666666");
                         if(isdraft){
                             Mediator.publish('workflow:choose',wfObj);
                             $("#startNew").hide();
