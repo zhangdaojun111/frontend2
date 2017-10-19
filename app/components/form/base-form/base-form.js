@@ -108,7 +108,10 @@ let config = {
                         let options = [{value: val, label: val}];
                         if (FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
                             let options = [{value: val, label: val}];
-                            this.data.childComponent[songridDfield].data["options"] = this.data.data[songridDfield]["options"] = options;
+                            this.data.data[songridDfield]["options"] = options;
+                            if(this.data.childComponent[songridDfield]){
+	                            this.data.childComponent[songridDfield].data["options"]  = options;
+                            }
                         }
                         if(val || val =='') {
                             this.actions.setFormValue(songridDfield, val);
@@ -1015,9 +1018,12 @@ let config = {
         setFormValue(dfield, value) {
             let data = this.data.data[dfield];
             if (data) {
+	            data["value"] = value;
                 let childComponet = this.data.childComponent[dfield];
-                childComponet.data["value"] = data["value"] = value;
-                childComponet.reload();
+                if(childComponet){
+	                childComponet.data["value"] = value
+	                childComponet.reload();
+                }
                 // this.actions.triggerSingleControl(dfield);
             }
         },
@@ -1232,7 +1238,7 @@ let config = {
         async changeToEdit() { //重新获取动态数据 （temp_id会变）
             this.data.isView = 0;
             let json = this.actions.createPostJson();
-            let res = await FormService.getDynamicDataImmediately(json);
+            let res = await FormService.getDynamicData(json);
             for (let key in res.data) {
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
                 if (this.data.childComponent[key]) {
@@ -1918,6 +1924,8 @@ let config = {
 
 class BaseForm extends Component {
     constructor(formData) {
+    	console.log('传进来的是啥');
+    	console.log(formData);
         config.template = formData.template;
         //存父子表关系
         if (!window.top.frontendRelation) {
