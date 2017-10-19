@@ -100,7 +100,6 @@
         </div>
     </div>
 </div>
-
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
 <script type="text/javascript" src="http://localhost:8080/scripts/login.js"></script>
@@ -110,6 +109,5 @@
 <script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
 <script type="text/javascript" src=" {{ "/client/static/login.js"|version }}"></script>
 {% endifequal %}
-
 </body>
 </html>

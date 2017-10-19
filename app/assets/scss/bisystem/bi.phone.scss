@@ -2,6 +2,8 @@
     body {
         .views-header {
             height: 44px !important;
+            -webkit-overflow-scrolling: touch;
+            overflow:scroll;
             > div {
                 line-height: 44px !important;
             }
@@ -26,10 +28,11 @@
         }
         .cells-container {
             height: calc(100% - 45px) !important;
-            padding: 0 .5em;
-            box-sizing: border-box;
             -webkit-overflow-scrolling: touch;
             overflow:scroll;
+            &::-webkit-scrollbar {
+                width: 0;
+            }
             .cells {
                 > .cell {
                     display: none;

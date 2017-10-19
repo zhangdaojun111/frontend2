@@ -40,6 +40,10 @@ let config = {
          * 渲染cell
          */
         renderCell() {
+            let windowSize = $(window).width();
+            if (windowSize <= 1024) {
+                this.data.cell.size.width = 'auto';
+            };
             this.el.find('.cell').css(this.data.cell.size);
             this.cellTitle = new CanvasCellTitleComponent({},{
                 /**

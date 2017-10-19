@@ -7,7 +7,6 @@ import Component from '../../../../../../../../lib/component';
 import './range.scss';
 import msgbox from '../../../../../../../../lib/msgbox';
 
-
 let config = {
     template: template,
     data: {},
