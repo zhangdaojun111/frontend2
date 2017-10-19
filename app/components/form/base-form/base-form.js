@@ -1891,6 +1891,8 @@ let config = {
 
 class BaseForm extends Component {
     constructor(formData) {
+    	console.log('传进来的是啥');
+    	console.log(formData);
         config.template = formData.template;
         //存父子表关系
         if (!window.top.frontendRelation) {

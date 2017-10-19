@@ -16,6 +16,7 @@ import WorkFlow from '../../components/workflow/workflow-drawflow/workflow';
 import TreeView from '../../components/util/tree/tree';
 import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
+import {CreateFormServer} from "../../services/formService/CreateFormServer";
 AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
     Mediator.subscribe("form:formAlreadyCreate",()=>{
@@ -58,25 +59,23 @@ Mediator.publish('workflow:getKey', obj.key);
         $('.workflow-foot').hide();
         $('.workflow-flex').hide();
         $('#place-form').html('');
-        FormEntrys.createForm({
-            el: $('#place-form'),
-            is_view: is_view,
-            from_focus: 0,
-            table_id: obj.table_id,
-            parent_table_id: obj.parent_table_id,
-            parent_real_id: obj.parent_real_id,
-            parent_temp_id: obj.parent_temp_id,
-            parent_record_id: obj.parent_record_id,
-            btnType: obj.btnType,
-            real_id: obj.real_id,
-            temp_id: obj.temp_id,
-            isAddBuild: obj.isAddBuild,
-            id: obj.id,
-            key: obj.key,
-            action: action
-        });
+        FormEntrys.initForm({el: $('#place-form'),
+		    is_view: is_view,
+		    from_focus: 0,
+		    table_id: obj.table_id,
+		    parent_table_id: obj.parent_table_id,
+		    parent_real_id: obj.parent_real_id,
+		    parent_temp_id: obj.parent_temp_id,
+		    parent_record_id: obj.parent_record_id,
+		    btnType: obj.btnType,
+		    real_id: obj.real_id,
+		    temp_id: obj.temp_id,
+		    isAddBuild: obj.isAddBuild,
+		    id: obj.id,
+		    key: obj.key,
+		    action: action});
         setTimeout(()=>{
-            cache_old= FormEntrys.getFormValue(obj.table_id,true);
+            cache_old= CreateFormServer.getFormValue(obj.table_id,true);
         },1000)
     } else {
         Mediator.publish('workflow:getParams', res.data.flow_data);
@@ -107,7 +106,7 @@ Mediator.subscribe('workflow:getflows', (res) => {
         obj.form_id = res.form_id;
     }
     $('#place-form').html('');
-    FormEntrys.createForm({
+    FormEntrys.initForm({
         el: $('#place-form'),
         form_id: res.form_id,
         flow_id: res.flow_id,
@@ -133,7 +132,7 @@ Mediator.subscribe('workflow:getflows', (res) => {
         is_batch: obj.is_batch
     });
     setTimeout(()=>{
-        cache_old= FormEntrys.getFormValue(obj.table_id,true);
+        cache_old= CreateFormServer.getFormValue(obj.table_id,true);
     },1000)
 });
 let focusArr = [];
@@ -141,7 +140,7 @@ Mediator.subscribe('workflow:focus-users', (res) => {
     focusArr = res;
 })
 Mediator.subscribe('workflow:submit', (res) => {
-    let formData = FormEntrys.getFormValue(obj.table_id,true);
+    let formData = CreateFormServer.getFormValue(obj.table_id,true);
     if (formData.error) {
         msgBox.alert(`${formData.errorMessage}`);
     } else {
@@ -199,5 +198,5 @@ Mediator.subscribe('workflow:changeToEdit',(res)=>{
     }
     // $("#add-wf").find('#print').removeClass('addPrint');
     is_view = 0;
-    FormEntrys.changeToEdit(res);
+    C.changeToEdit(res);
 })

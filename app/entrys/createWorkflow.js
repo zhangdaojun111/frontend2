@@ -18,6 +18,7 @@ import FormEntrys from './form';
 import msgBox from '../lib/msgbox';
 import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import jsplumb from 'jsplumb';
+import {CreateFormServer} from "../services/formService/CreateFormServer";
 
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
@@ -50,7 +51,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         //auto saving draft  草稿自动保存
         is_draft=is_draft==true?1:0;
         $('#place-form').html('');
-        FormEntrys.createForm({
+	    FormEntrys.initForm({
             reload_draft_data:is_draft,
             table_id:msg.tableid,
             flow_id:msg.id,
@@ -76,11 +77,11 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         // let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
-                let formNew = FormEntrys.getFormValue(wfObj.tableid,false);
+                let formNew = CreateForm.getFormValue(wfObj.tableid,false);
                 let formNewStr = JSON.stringify(formNew);
                 if(formNewStr != formValue){
                     formValue = formNewStr;
-                    intervalSave(FormEntrys.getFormValue(wfObj.tableid,false));
+                    intervalSave(CreateFormServer.getFormValue(wfObj.tableid,false));
                 }
             },15*1000);
         };
@@ -148,7 +149,7 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
 Mediator.subscribe('workflow:submit', (res)=> {
 
     if($("#workflow-form:visible").length>0){
-        let formData=FormEntrys.getFormValue(wfObj.tableid,true);
+        let formData=CreateFormServer.getFormValue(wfObj.tableid,true);
         if(formData.error){
             msgBox.alert(`${formData.errorMessage}`);
         }else{
