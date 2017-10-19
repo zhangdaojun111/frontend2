@@ -211,7 +211,7 @@ export class EchartsService {
                 inverse: false,
                 scale: true,
                 splitNumber: splitNumber,
-                max: secondMax > linebarOption['yAxis'][0]['max'] ? linebarOption['yAxis'][0]['max'] : firstMax,
+                max: secondMax,
                 min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
                 interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
                 axisLabel: {
