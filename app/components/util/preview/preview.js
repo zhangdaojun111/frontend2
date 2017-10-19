@@ -6,7 +6,7 @@ import template from './preview.html';
 import Component from "../../../lib/component";
 import './preview.css';
 
-let preview_file = ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"];
+let preview_file = ["gif","jpg","jpeg","png","wmv","mp4"];
 
 let config = {
     template:template,
@@ -221,10 +221,8 @@ let config = {
         this.data.lastPreviewableIndex = this.data.list.length - 1;
         console.dir(this.data);
         if(this.data.currentIndex == undefined){
-            console.log('here1');
-            this.data.currentIndex = this.actions._getCurrentIndex(this.data.id);
+             this.data.currentIndex = this.actions._getCurrentIndex(this.data.id);
         } else {
-            console.log('here2');
             this.data.id = Object.keys(this.data.list[this.data.currentIndex])[0];
         }
         console.log('id:'+this.data.id);
