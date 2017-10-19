@@ -1683,6 +1683,13 @@ let config = {
                     history[key]['old_value'] = history[key]['old_value'].replace(/\n/g, ";");
                 }
             }
+            //处理富文本模板标签
+            if (data.type == 'Editor') {
+                for (let key in history) {
+                    history[key]['new_value'] = history[key]['new_value'].replace(/<.*?>/ig,"");
+                    history[key]['old_value'] = history[key]['old_value'].replace(/<.*?>/ig,"");
+                }
+            }
             History.data.history_data = history;
             PMAPI.openDialogByComponent(History, {
                 width: 800,
