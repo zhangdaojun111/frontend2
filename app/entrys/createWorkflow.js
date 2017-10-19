@@ -79,7 +79,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         // let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
-                let formNew = CreateForm.getFormValue(wfObj.tableid,false);
+                let formNew = CreateFormServer.getFormValue(wfObj.tableid,false);
                 let formNewStr = JSON.stringify(formNew);
                 if(formNewStr != formValue && isSuccessSubmit){
                     formValue = formNewStr;
@@ -151,7 +151,7 @@ Mediator.subscribe('workflow:focus-users', (res)=> {
 Mediator.subscribe('workflow:submit', (res)=> {
 
     if($("#workflow-form:visible").length>0){
-        let formData=CreateFormServer.getFormValue(wfObj.tableid,true);
+        let formData=CreateFormServer.getFormValue(wfObj.tableid,true,true);
         if(formData.error){
             msgBox.alert(`${formData.errorMessage}`);
         }else{
@@ -170,7 +170,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
                 msgBox.hideLoadingSelf();
                 if(res.success===1){
                     isSuccessSubmit = false;
-                    FormEntrys.changeToView(wfObj.tableid);
+                    CreateFormServer.changeToView(wfObj.tableid);
                     msgBox.showTips(`执行成功`);
                     let isdraft = true;
                     $("#startNew").show().on('click',()=>{
