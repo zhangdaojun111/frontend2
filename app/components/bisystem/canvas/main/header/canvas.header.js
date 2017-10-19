@@ -45,7 +45,6 @@ let config = {
             };
             this.trigger('onAddCell', layout);
         },
-
         // /**
         //  * 当前选中的视图
         //  * @param id 当前视图的id
