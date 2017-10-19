@@ -204,7 +204,6 @@ export class EchartsService {
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax;
             };
-
             linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
