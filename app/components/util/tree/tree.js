@@ -69,9 +69,11 @@ let config = {
             }
         },
         selectAll:function(tree){
-            this.actions._cruiseWholeTree(tree,(node,tree)=>{
-                this.actions._cruiseSelectNode(node,tree);
-            })
+            setTimeout(() => { //保证树初始化完毕后才能进行操作，解决二次选择的时候报错问题
+                this.actions._cruiseWholeTree(tree, (node, tree) => {
+                    this.actions._cruiseSelectNode(node, tree);
+                })
+            },0);
         },
         _cruiseSelectNode:function(node,tree){
             if(node){
@@ -84,9 +86,11 @@ let config = {
             }
         },
         reverseAll:function (tree) {
-            this.actions._cruiseWholeTree(tree,(node,tree)=>{
-                this.actions._toggleCheckNode(node,tree);
-            });
+            setTimeout(() => {
+                this.actions._cruiseWholeTree(tree, (node, tree) => {
+                    this.actions._toggleCheckNode(node, tree);
+                });
+            },0);
         },
         _cruiseWholeTree: function (tree,func) {
             let start = tree.treeview('getNode',0);
