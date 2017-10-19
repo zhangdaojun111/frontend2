@@ -200,7 +200,6 @@ export class EchartsService {
             if (10 * secondMaxText > 30) {
                 linebarOption['grid']['right'] = 10 * secondMaxText;
             };
-
             const splitNumber = 5;
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax;
