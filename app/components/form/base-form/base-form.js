@@ -1238,7 +1238,7 @@ let config = {
         async changeToEdit() { //重新获取动态数据 （temp_id会变）
             this.data.isView = 0;
             let json = this.actions.createPostJson();
-            let res = await FormService.getDynamicDataImmediately(json);
+            let res = await FormService.getDynamicData(json);
             for (let key in res.data) {
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
                 if (this.data.childComponent[key]) {
