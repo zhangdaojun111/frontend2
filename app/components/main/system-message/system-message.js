@@ -21,7 +21,7 @@ let config = {
         frontendSort:true,      //排序方式（前端/后端）
         total:0,
         rows:100,
-        getDataList:{"sortOrder":-1,sortField:""},     //后端排序参数
+        getDataList:{sortOrder:-1,sortField:""},     //后端排序参数
         tableId:'user-message'
     },
     actions: {
@@ -86,12 +86,18 @@ let config = {
          */
         _postReadData: function (ids) {
             this.showLoading();
+            let that = this;
             HTTP.postImmediately('/remark_or_del_msg/', {
                 checkIds: ids
             }).then((res) => {
                 this.hideLoading();
                 if (res.success === 1) {
-                    this.actions.loadData();
+                    this.actions.loadData(
+                        {
+                            sortOrder:that.data.getDataList.sortOrder,
+                            sortField:that.data.getDataList.sortField,
+                        }
+                    );
                 }
             });
         },
