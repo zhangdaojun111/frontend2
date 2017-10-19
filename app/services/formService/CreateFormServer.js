@@ -1,6 +1,7 @@
 import FormBase from '../../components/form/base-form/base-form';
 import {FormService} from './formService'
 import Mediator from '../../lib/mediator';
+import {CreateForm} from '../../components/form/createFormVersionTable/createForm'
 
 export const CreateFormServer={
 	//存储所有创建的baseForm组件
