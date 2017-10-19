@@ -141,6 +141,8 @@ class YaXis extends Base {
      * @param yAxis = y轴数据
      */
     setValue(yAxis) {
+        if (yAxis.length === 0) return false;
+
         Object.keys(this.data.yAxis).forEach(key => {
             this.data.yAxis[key].destroySelf()
             delete this.data.yAxis[key];

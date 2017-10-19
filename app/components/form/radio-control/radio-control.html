@@ -15,14 +15,13 @@
                 <input class="df-input-radio print" type="radio"  value="{{value}}" readonly>{{ label }}
             </label>
         {{/group}}
-        <div style="display: inline-block;   position: relative;  top: 7px;">
+        <div style="display: inline-block;   position: absolute;  top: 7px; min-width: 110px;">
             {{#if required}}
             <span id="requiredLogo" class="{{requiredClass}}" ></span>
             {{/if}}
-            <a href="javascript:void(0);" class="add-item noprint visible" style="    position: relative; top: -7px;" title="添加新选项"> + </a>
+            <a href="javascript:void(0);" class="add-item noprint visible" style=" position: relative; top: -8px;" title="添加新选项"> + </a>
             <a href="javascript:void(0);" class="ui-history icon-history form-icon visible" title="修改历史"></a>
         </div>
-
     {{/if}}
     </div>
 </div>

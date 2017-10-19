@@ -14,8 +14,10 @@ let config = {
     data: {
         initialGroup:[],
         group:[],
+        pregroup:[],
         tableId: null,
         gridoptions: null,
+        changeChecked: false,
         fields: [],
         myGroup:[],
         groupField:[],
@@ -40,11 +42,13 @@ let config = {
         this.el.find('.group-data-list, .grouping-data-list').sortable({
             connectWith: ".connectedSortable",
             stop: ()=> {
+                this.data.changeChecked = false;
                 this.data.group = [];
                 let dom = $('.grouping-data-list').find('.group-data-item');
                 for (let i = 0; i < dom.length; i++) {
                     this.data.group.push(dom[i].attributes['field'].nodeValue);
                 }
+
                 if(this.data.group && this.data.groupFields && this.data.group.toString() == this.data.groupFields.toString()) {
                     this.el.find('.resetGroup').css('color','#999999');
                 } else if(!this.data.group && !this.data.groupFields){
@@ -52,13 +56,17 @@ let config = {
                 } else {
                     this.el.find('.resetGroup').css('color','#0F79EF');
                 }
+                if(this.data.group.toString() != this.data.pregroup.toString()){
+                    this.data.changeChecked = true;
+                }
                 dataTableService.savePreference({
                     action: 'group',
                     table_id: this.data.tableId,
                     group: JSON.stringify(this.data.group)
                 });
                 HTTP.flush();
-                this.actions.onGroupChange( this.data.group );
+                this.actions.onGroupChange( this.data.group, this.data.changeChecked );
+                this.data.pregroup = this.data.group;
             }
         }).disableSelection();
         this.actions.inputSearch();
@@ -70,8 +78,10 @@ let config = {
 
         //重置
         this.el.find( '.resetGroup' ).on( 'click',()=>{
-            this.reload();
-            this.actions.onGroupChange( this.data.groupFields );
+            if(this.el.find('.resetGroup').css('color') != 'rgb(153, 153, 153)'){
+                this.reload();
+                this.actions.onGroupChange( this.data.groupFields,this.data.changeChecked );
+            }
         })
 
     }

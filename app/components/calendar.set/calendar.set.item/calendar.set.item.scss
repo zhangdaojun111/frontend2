@@ -6,6 +6,15 @@
     border-bottom: 1px solid #E4E4E4;
     .table-item-checkbox{
     }
+    .preview-text{
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        /* autoprefixer: off*/
+        -webkit-box-orient: vertical;
+        /* autoprefixer: on*/
+        -webkit-line-clamp: 2;
+    }
     .set-table-item{
         padding: 10px 0px;
         width: 9%;

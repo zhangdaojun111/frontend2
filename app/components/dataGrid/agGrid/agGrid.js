@@ -94,6 +94,8 @@ let config = {
                 onCellValueChanged: this.data.onCellValueChanged,
                 //行双击
                 onRowDoubleClicked: this.data.onRowDoubleClicked,
+                //单元格双击
+                onCellDoubleClicked: this.data.onCellDoubleClicked,
                 //分组
                 getNodeChildDetails: (rowItem)=>{
                     if ( rowItem.group||Object.is(rowItem.group,'')||Object.is(rowItem.group,0) ) {
@@ -123,6 +125,8 @@ let config = {
                 onSortChanged: this.data.onSortChanged,
                 //行选择
                 onRowSelected: this.data.onRowSelected,
+                //单元格双击
+                onCellDoubleClicked: this.data.onCellDoubleClicked,
                 //设置颜色
                 getRowStyle: (param)=>{
                     return this.data.setRowStyle( param )

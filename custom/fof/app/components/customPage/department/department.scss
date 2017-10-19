@@ -1,0 +1,141 @@
+.department-con {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    .ui-link{
+        cursor: pointer;
+    }
+    .ag-cell-value {
+        padding: 0px 8px!important;
+        line-height: 30px;
+    }
+    .tips {
+        position: absolute;
+        display: flex;
+        i {
+            background: url("../../../../../../app/assets/images/dataGrid/tab-title.png") no-repeat;
+            width: 16px;
+            height: 16px;
+            display: block;
+            margin-right: 20px;
+            margin-top: 21px;
+            margin-left: 15px;
+        }
+        span {
+            line-height: 60px;
+        }
+    }
+    .btn-nav {
+        height: 60px;
+        width: 100%;
+        .query-tips,.exports-tips{
+            position: absolute;
+            width: 200px;
+            height: 70px;
+            background: #fff;
+            text-align: center;
+            line-height: 70px;
+            right: calc(50% - 100px);
+            top: calc(50% - 100px);
+            box-shadow: 0 0 5px #ccc;
+            z-index: 100;
+            font-size:14px;
+            background: rgba(255, 255, 255, 0.7);
+            .query-tips-delete,.exports-tips-delete {
+                position: absolute;
+                display: block;
+                color: #999;
+                width: 16px;
+                height: 16px;
+                right: 0px;
+                cursor: pointer;
+                background: url("../../../../../../app/assets/images/framework/close.png") no-repeat scroll center center transparent;
+            }
+            .title {
+                display: inline-flex;
+            }
+            .text {
+                display: inline-block;
+                width: 84px;
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
+            }
+        }
+        .dataGrid-btn-group {
+            //float: right;
+            //display: block;
+            margin-right: 10px;
+            //line-height: 30px;
+            //height: 30px;
+            &.flex {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                height: 60px;
+            }
+            a {
+                cursor: pointer;
+                margin-left: 30px;
+                position: relative;
+                color: #B399A6;
+                text-decoration: none;
+                font-size: 12px;
+                display: flex;
+                align-items: center;
+                i{
+                    margin-right: 4px;
+                }
+            }
+
+            .departmentSratch-label {
+                position: relative;
+                .departmentSratch {
+                    border: 1px solid #E4E4E4;
+                    height: 20px;
+                }
+                .departmentSratch-icon {
+                    background: url("../../../../../../app/assets/images/framework/search.png");
+                    width: 16px;
+                    height: 16px;
+                    position: absolute;
+                    right: 3px;
+                    top: 3px;
+                }
+            }
+        }
+    }
+
+    .ag-grid-con {
+        height: calc(100% - 75px);
+        position: relative;
+        #data-agGrid {
+            width: 100%;
+            position: relative;
+            height: 100%;
+        }
+        .custom-columns-panel {
+            width: 200px;
+            height: 100%;
+            background: #f0f0f0;
+            position: absolute;
+            display: block;
+            right: -200px;
+            z-index: 1;
+            top: 0px;
+        }
+    }
+    @media screen and (max-width: 1100px){
+        .dataGrid-btn-group {
+            span {
+                display: none;
+            }
+            a{
+                margin-left: 30px !important;
+            }
+        }
+    }
+}

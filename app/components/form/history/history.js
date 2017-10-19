@@ -13,8 +13,10 @@ let css = `.history td{
                   width: auto;
             }
             .table-history{
-                    display: flex;
+                    display: table;
                     border: 1px solid #E4E4E4;
+                    min-width: 780px;
+                    width: auto;
                     margin: 10px;
                     text-align: left;
                     margin-bottom: 50px;
@@ -28,8 +30,7 @@ let css = `.history td{
                 margin: 0 auto;
                 width: 99%;
                 max-width: 100%;
-                margin-bottom: 8px;
-                margin-top: 8px;              
+                margin: 5px 3px 5px 4px;             
             }
             table tr:nth-child(odd){
                 background: #FFFFFF;

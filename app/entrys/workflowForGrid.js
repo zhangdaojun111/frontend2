@@ -99,7 +99,7 @@ const workflowForGrid={
             }
         });
 
-        FormEntrys.createForm({
+        FormEntrys.initForm({
             el: $('#place-form'),
             form_id: obj.form_id,
             record_id: obj.record_id,

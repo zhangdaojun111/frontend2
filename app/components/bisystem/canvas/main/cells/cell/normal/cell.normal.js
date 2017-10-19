@@ -21,11 +21,65 @@ let config = {
     },
     actions: {
         /**
-         * 显示字段数据范围
+         * 获取（一周 一月 半年 一年 全部）获取数据
+         * @param value {startValue:x轴第一个数据,endValue:x轴第2个数据,type:'week'}
          */
-        showNormalDataRange(){
-            this.normalRange = new NormalRangeComponent();
-            this.append(this.normalRange,this.el.find('.chart-normal-data-range'));
+       async getChangeDateData(value) {
+           let deep_info = {};
+           deep_info[this.data.floor] = this.data['xAxis'];
+           const layouts = {
+                chart_id: this.data.cellChart.cell.chart_id,
+                floor: this.data.floor,
+                view_id: this.data.viewId,
+                layout_id:  this.data.cellChart.cell.layout_id,
+                xOld: this.data.xOld,
+                row_id:window.config.row_id,
+                deep_info: deep_info,
+                startValue:value['startValue'],
+                endValue:value['endValue'],
+                type:value['type']
+            };
+            const data = {
+                'layouts': [JSON.stringify(layouts)],
+                'query_type': 'deep',
+                'is_deep': 1
+            };
+
+            const res = await this.normalChart.getDeepData(data);
+            if (res[0] && res[0].success === 1) {
+                if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
+                    let cellChart = _.cloneDeep(this.data.cellChart);
+                    cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
+                    cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
+                    cellChart['cell']['attribute'] = [];
+                    cellChart['cell']['select'] = [];
+                    this.actions.updateChart(cellChart);
+                };
+            }
+        },
+
+        /**
+         * 判断是否显示时间字段
+         */
+        judgeDateZoom(cellChart) {
+            let type = cellChart.chart.xAxis.type;
+            if(type==3||type==5||type==12||type==30){
+                this.el.find('.echarts-cell').addClass('.date-filed');
+                this.normalRange = new NormalRangeComponent({id:this.data.id}, {
+                    // 通过（一周 一月 半年 一年 全部）获取数据
+                    onChangeDateData: (value) => {
+                        this.actions.getChangeDateData(value);
+                    }
+                });
+                this.append(this.normalRange,this.el.find('.chart-normal-date-zoom'));
+                this.normalRange.actions.rangeChoose(type);
+                this.normalRange.actions.setDateValue(cellChart.chart.data.xAxis);
+            }else {
+                if (this.normalRange) {
+                    this.normalRange.destroySelf();
+                };
+                this.el.find('.echarts-cell').removeClass('.date-filed');
+            }
         },
         /**
          * 当有原始数据保存的时候，优先处理原始数据
@@ -63,7 +117,6 @@ let config = {
             return cellChart;
         },
 
-
         echartsInit() {
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
@@ -95,6 +148,7 @@ let config = {
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle',this.data);
         },
+
         updateChart(data) {
             //重新渲染echarts
             const option = this.normalChart.lineBarOption(data);
@@ -155,9 +209,8 @@ let config = {
                     view_id: this.data.viewId,
                     layout_id:  this.data.cellChart.cell.layout_id,
                     xOld: this.data.xOld,
-                    row_id:0,
+                    row_id:window.config.row_id,
                     deep_info: deep_info,
-
                 };
                 const data = {
                     'layouts': [JSON.stringify(layouts)],
@@ -206,7 +259,10 @@ let config = {
     },
     firstAfterRender() {
         this.actions.echartsInit();
-        // this.actions.showNormalDataRange();
+        //是否显示时间字段
+        if (window.config.bi_user !== 'manager') {
+            this.actions.judgeDateZoom(this.data.cellChart);
+        };
     },
     beforeDestory() {
 
