@@ -30,6 +30,15 @@ let toolbarOption = [
 
 let config = {
     template: template,
+    binds:[
+        {
+            event: 'click',
+            selector: '.ui-history',
+            callback: function(){
+                this.events.emitHistory(this.data)
+            }
+        },
+    ],
     data: {},
     actions: {
         publishMessage: function () {
