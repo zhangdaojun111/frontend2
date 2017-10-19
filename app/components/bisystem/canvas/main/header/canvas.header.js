@@ -27,8 +27,7 @@ let config = {
          * 添加画布块
          */
         addCell() {
-            let scrollHeight = $('.cells-container').offset().top();
-            console.log(scrollHeight);
+            let scrollHeight = $('.cells-container').scrollTop();
             const layout = {
                 attribute:[],
                 layout_id: '',
@@ -38,7 +37,7 @@ let config = {
                 deep_clear: "0",
                 size: {
                     left: 100,
-                    top: 100,
+                    top: scrollHeight > 100 ? scrollHeight : 100,
                     width: 300,
                     height: 300,
                     zIndex: 1
