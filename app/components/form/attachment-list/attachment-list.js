@@ -75,73 +75,6 @@ let css = `
     .attachment-list .table-bordered  thead  tr  td {
       border-bottom-width: 2px;
     }
-    .my-mask{
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        left: 0;
-        top: 0;
-    }
-    .closeImg{
-        position: absolute;
-        right:20px;
-        top:20px;
-        cursor: pointer;
-        z-index: 10;
-    }
-    .mask-div{
-        position: absolute;
-        z-index: 2;
-        background: black;
-        height: 100%;
-        width: 100%;
-        opacity: 0.3;
-    }
-    .img-pre{
-        vertical-align: middle;
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%,-50%);
-        z-index: 10;
-        max-height:80%;
-    }
-    .operator-buttons{
-        position: absolute;
-        transform: translate(50%,-50%);
-        right: 50%;
-        bottom: 0;
-        width: 350px;
-        height: 50px;
-        z-index: 10;
-        padding:0 20px;
-        background: rgba(0,0,0,0.3);
-        padding-top: 5px;
-        display:flex;
-        align-items:center;
-        justify-content: center;
-    }
-    .operator-buttons li{
-        padding:5px 15px;
-    }
-    .scale {
-        font-size:20px;
-        color:white;
-    }
-    .previous {
-        z-index: 10;
-        position: absolute;
-        left: 20px;
-        top: 50%;
-        cursor: pointer;
-    }
-    .next {
-        z-index: 10;
-        position: absolute;
-        right: 20px;
-        top: 50%;
-        cursor: pointer;
-    }
     `;
 let AttachmentList = {
     template: template.replace(/\"/g, '\''),
@@ -161,6 +94,9 @@ let AttachmentList = {
             selector:'.pre',
             callback:function (event) {
                 let id = event.dataset.id;
+                if(id == undefined){
+                    return;
+                }
                 PMAPI.openPreview({list:this.data.list,id:id});
             }
         }, {
