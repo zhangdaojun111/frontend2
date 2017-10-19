@@ -2158,6 +2158,12 @@ let config = {
             }
             for( let k in this.data.colControlData ){
                 let field = this.data.colControlData[k];
+                //必填
+                if( field.required && data[field.dfield] == '' ){
+                    err['type'] = true;
+                    err['err'] = '字段“' + field.label + '”是必填的，请修改。';
+                    return err;
+                }
                 //数字类型
                 if( fieldTypeService.numOrText( field.real_type ) && data[field.dfield] != undefined ){
                     if( field.numArea && field.numArea !== "" ){
@@ -2167,12 +2173,6 @@ let config = {
                         if( num>field.numArea.max || num<field.numArea.min ){
                             err['type'] = true;
                             err['err'] = '字段“' + field.label + '”，当前值：' + num +'，数据错误，错误原因：' + field.numArea.error + '，请修改。';
-                            return err;
-                        }
-                        //必填
-                        if( field.required && data[field.dfield] == '' ){
-                            err['type'] = true;
-                            err['err'] = '字段“' + field.label + '”是必填的，请修改。';
                             return err;
                         }
                         //整数小数
