@@ -108,7 +108,10 @@ let config = {
                         let options = [{value: val, label: val}];
                         if (FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
                             let options = [{value: val, label: val}];
-                            this.data.childComponent[songridDfield].data["options"] = this.data.data[songridDfield]["options"] = options;
+                            this.data.data[songridDfield]["options"] = options;
+                            if(this.data.childComponent[songridDfield]){
+	                            this.data.childComponent[songridDfield].data["options"]  = options;
+                            }
                         }
                         if(val || val =='') {
                             this.actions.setFormValue(songridDfield, val);
@@ -1015,9 +1018,12 @@ let config = {
         setFormValue(dfield, value) {
             let data = this.data.data[dfield];
             if (data) {
+	            data["value"] = value;
                 let childComponet = this.data.childComponent[dfield];
-                childComponet.data["value"] = data["value"] = value;
-                childComponet.reload();
+                if(childComponet){
+	                childComponet.data["value"] = value
+	                childComponet.reload();
+                }
                 // this.actions.triggerSingleControl(dfield);
             }
         },
