@@ -6,7 +6,7 @@ import template from './preview.html';
 import Component from "../../../lib/component";
 import './preview.css';
 
-let preview_file = ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"];
+let preview_file = ["gif","jpg","jpeg","png","wmv","mp4"];
 
 let config = {
     template:template,
