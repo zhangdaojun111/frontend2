@@ -52,6 +52,9 @@ let config = {
         if (this.data.is_view) {
             this.el.find('.wrap').attr('title', this.data.value.replace(/<.*?>/ig,""))
         }
+        if(this.data.history){
+            this.el.find('.ui-history').css('visibility','visible');
+        }
         this.quill.on('text-change', _.debounce(() => {
             this.actions.publishMessage();
         }, 1000));
