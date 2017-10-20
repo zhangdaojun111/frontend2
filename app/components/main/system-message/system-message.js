@@ -388,7 +388,7 @@ let systemMessageUtil = {
     showMessageDetail: function (dialogTitle, msgTitle, msgContent, speak = false) {
         let html = `
             <div class="component-msg-detail">
-                <h3>${msgTitle}</h3>
+                <h3 class="msg-title">${msgTitle}</h3>
                 <pre class="text">${msgContent}</pre>
             </div>
         `;
@@ -408,6 +408,8 @@ let systemMessageUtil = {
             modal: true,
             title: dialogTitle,
             close: function () {
+                //关闭语音提示
+                speechSynthesis.stop();
                 $(this).erdsDialog('destroy');
                 that.el.remove();
             }
