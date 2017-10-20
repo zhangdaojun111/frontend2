@@ -47,6 +47,7 @@ let config = {
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
                 });
+
                 this.pagination.actions.setPagination(data.total, param.currentPage);
                 // this.hideLoading();
                 this.agGrid.gridOptions.api.sizeColumnsToFit();
@@ -190,7 +191,7 @@ let config = {
                 if( data && data.sort === "asc" ){
                     this.data.getDataParams = {
                         rows: this.pagination.data.rows,
-                        page: this.pagination.data.currentPage,
+                        currentPage: this.pagination.data.currentPage,
                         first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
                         sortField: data.colId,
                         sortOrder: 1
@@ -198,7 +199,7 @@ let config = {
                 }else if(data && data.sort === "desc"){
                     this.data.getDataParams = {
                         rows: this.pagination.data.rows,
-                        page: this.pagination.data.currentPage,
+                        currentPage: this.pagination.data.currentPage,
                         first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
                         sortField: data.colId,
                         sortOrder: -1
@@ -206,7 +207,7 @@ let config = {
                 }else{
                     this.data.getDataParams = {
                         rows: this.pagination.data.rows,
-                        page: this.pagination.data.currentPage,
+                        currentPage: this.pagination.data.currentPage,
                         first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
                     };
                 }
@@ -283,7 +284,7 @@ let config = {
          */
         initPagination:function () {
             this.pagination = new dataPagination({
-                page: 1,
+                currentPage: 1,
                 rows: this.data.rows,
                 tableId:this.data.tableId
             });
