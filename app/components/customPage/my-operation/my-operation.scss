@@ -85,5 +85,16 @@
       width: 100%;
       clear: both;
     }
+    .component-date-control {
+      img {
+        top: 0px !important;
+      }
+    }
+    .component-time-control {
+      width: 100%;
+      div:first-child{
+        width: 100%;
+      }
+    }
   }
 }
