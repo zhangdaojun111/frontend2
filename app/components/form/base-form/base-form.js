@@ -1689,6 +1689,13 @@ let config = {
                     history[key]['old_value'] = history[key]['old_value'].replace(/\n/g, ";");
                 }
             }
+            //处理富文本模板标签
+            if (data.type == 'Editor') {
+                for (let key in history) {
+                    history[key]['new_value'] = history[key]['new_value'].replace(/<.*?>/ig,"");
+                    history[key]['old_value'] = history[key]['old_value'].replace(/<.*?>/ig,"");
+                }
+            }
             History.data.history_data = history;
             PMAPI.openDialogByComponent(History, {
                 width: 800,
@@ -1889,6 +1896,9 @@ let config = {
         //给外部提供cacheNew cacheOld
         getCacheData(){
             let formValue=this.actions.createFormValue(this.data.data,true);
+            if(formValue.error){
+            	return formValue;
+            }
             let data = this.actions.handleFormData(formValue);
             let formDataOld = this.data.oldData;
             let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
