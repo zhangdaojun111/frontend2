@@ -1234,20 +1234,15 @@ let config = {
             if( this.data.firstRender ){
                 //渲染其他组件
                 this.actions.renderAgGrid();
-                let d = {
-                    rowData: this.data.rowData
-                }
-                //赋值
-                this.agGrid.actions.setGridData(d);
             }else {
                 this.actions.calcSelectData( 'get' );
-                let d = {
-                    rowData: this.data.rowData,
-                    footerData: this.data.footerData
-                }
-                //赋值
-                this.agGrid.actions.setGridData(d);
             }
+            let d = {
+                rowData: this.data.rowData,
+                footerData: this.data.footerData
+            }
+            //赋值
+            this.agGrid.actions.setGridData(d);
             //对应关系回显
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                 this.actions.setCorrespondenceSelect();
