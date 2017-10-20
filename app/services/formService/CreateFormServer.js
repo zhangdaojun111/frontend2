@@ -445,7 +445,7 @@ export const CreateFormServer={
 		let $newWrap = this.data.el.find('.form-print-position');
 		formBase.render($newWrap);
 		Mediator.publish('form:formAlreadyCreate', 'success');
-		Mediator.publish('form:formAlreadyCreate'+this.data.tableId, 'success');
+		Mediator.publish('form:formAlreadyCreate'+this.tableId, 'success');
 		console.timeEnd('form创建时间');
 		//给工作流传表单初始数据
 		let valueChange = this.getFormValue(this.data.tableId, false)
