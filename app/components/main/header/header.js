@@ -140,13 +140,13 @@ let config = {
             callback: function () {
                 this.data.asideSize = this.data.asideSize === 'full' ? 'mini' : 'full';
                 Mediator.emit('aside:size', this.data.asideSize);
+                PMAPI.sendToAllChildren({
+                    type: PMENUM.aside_fold,
+                    data: 'data'
+                });
                 if (this.data.asideSize === 'full') {
                     this.actions.setSizeToFull();
                 } else {
-                    PMAPI.sendToAllChildren({
-                        type: PMENUM.aside_fold,
-                        data: 'data'
-                    });
                     this.actions.setSizeToMini();
                 }
             }
