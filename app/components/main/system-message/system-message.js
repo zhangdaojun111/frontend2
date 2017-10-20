@@ -392,7 +392,9 @@ let systemMessageUtil = {
                 <pre class="text">${msgContent}</pre>
             </div>
         `;
+        speak = true;
         if (speak) {
+            console.log('do read');
             let msg = new SpeechSynthesisUtterance(msgTitle.toString() + msgContent.toString());
             msg.lang = 'zh';
             msg.voice = speechSynthesis.getVoices().filter(function(voice) {
@@ -409,7 +411,7 @@ let systemMessageUtil = {
             title: dialogTitle,
             close: function () {
                 //关闭语音提示
-                speechSynthesis.stop();
+                speechSynthesis.cancel();
                 $(this).erdsDialog('destroy');
                 that.el.remove();
             }
