@@ -40,8 +40,15 @@
             .floatingFilter-box {
                 padding: 5px 8px 0px 8px;
                 .component-time-control {
+                    width: 100%;
                     div:first-child{
                         top: -2px;
+                        width: 100%;
+                    }
+                }
+                .component-date-control {
+                    img {
+                        top: 0px!important;
                     }
                 }
                 .dynamic-form-input{
