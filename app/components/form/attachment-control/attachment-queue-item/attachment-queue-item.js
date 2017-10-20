@@ -200,9 +200,8 @@ let config = {
                 formData.append('per_size', item.pack_size);
                 formData.append('content_type', item.file.type);
                 formData.append('dinput_type', this.data.real_type);
-                let date =  new Date().getTime();
-                formData.append('time_stamp',date);
-                formData.append('string_stamp', date);
+                formData.append('time_stamp',this.data.timestamp);
+                formData.append('string_stamp', this.data.timestamp);
                 let errorCallback = this.data.toolbox?this.data.toolbox.showError:undefined;
                 FormService.uploadAttachment(item.url, formData, this.actions.processEvent, (res) => {
                     if (res.success) {
@@ -233,6 +232,7 @@ let config = {
         }
     },
     afterRender:function () {
+        this.data.timestamp =  new Date().getTime();
         this.actions.startUploadFile();
     }
 }
