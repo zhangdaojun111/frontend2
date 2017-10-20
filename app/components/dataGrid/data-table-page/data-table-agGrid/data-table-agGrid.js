@@ -3362,6 +3362,11 @@ let config = {
                 this.actions.getHeaderData();
             })
         }
+
+        PMAPI.subscribe(PMENUM.aside_fold, () => {
+            console.log($('.ui-dialog').width());
+            $('.ui-dialog').width('calc(100% - 3px)');
+        });
         this.actions.getHeaderData();
     }
 }

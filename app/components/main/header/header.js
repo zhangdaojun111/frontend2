@@ -8,7 +8,8 @@ import {systemMessageUtil} from '../system-message/system-message';
 import {SysSetting} from "../system-setting/system-setting"
 import {postMessageUtil} from '../post-message/post-message';
 import {GlobalSearch} from '../global-search/global-search';
-import {OnlineDisplay} from "../online-users/online-users"
+import {OnlineDisplay} from "../online-users/online-users";
+import {PMAPI, PMENUM} from '../../../lib/postmsg';
 
 let config = {
     template: template,
@@ -142,6 +143,10 @@ let config = {
                 if (this.data.asideSize === 'full') {
                     this.actions.setSizeToFull();
                 } else {
+                    PMAPI.sendToAllChildren({
+                        type: PMENUM.aside_fold,
+                        data: 'data'
+                    });
                     this.actions.setSizeToMini();
                 }
             }
