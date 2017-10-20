@@ -23,20 +23,6 @@ let config = {
         inputBoxValue:'',
     },
     actions: {
-        rendItem: function () {
-            let _this = this;
-            this.data.expertItemData.forEach((row) => {
-                // this.append(new expertItem(row), $('.expert-search').find('.condition-search-ul')[config.rendItemNum]);
-                this.append(new expertItem(row), this.el.find('.condition-search-ul'));
-            });
-            this.rendItemNum ++ ;
-            // this.el.find('.condition-search-li').on('click', function() {
-            //     _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html());
-            //     _this.actions.setSelectValue($(this).find('.searchType').html());
-            //     _this.actions.setInputType($(this).find('.searchType').html());
-            //     _this.actions.hideList();
-            // })
-        },
         showList: function() {
             this.el.find('.condition-search-ul').css('display','block');
             this.ulChecked = !this.ulChecked;
@@ -114,23 +100,34 @@ let config = {
         },
         delete: function() {
             this.destroySelf();
-        }
+        },
+        //搜索事件
+        inputSearch: function () {
+            this.el.find( '.condition-search-li-input' ).on( 'input',_.debounce( ()=>{
+                let val = this.el.find( '.condition-search-li-input' )[0].value;
+                let lis = this.el.find( '.condition-search-li' );
+                for( let li of lis ){
+                    li.style.display = li.attributes.name.value.indexOf( val ) == -1 && val!='' ? 'none':'block'
+                }
+            },1000))
+        },
     },
     afterRender: function() {
-        this.actions.rendItem();
         let epSearch = new expertSearch();
         this.ulChecked = true;
         // this.data.inputList = this.el.find('.condition-search-input').val();
         // debugger
         let _this = this;
         this.el.on('click','.condition-search-li', function() {
-            _this.actions.setInputValue($(this).find('.name').html(),$(this).find('.searchField').html(),$(this).find('.searchType').html());
-            _this.actions.setSelectValue($(this).find('.searchType').html());
-            _this.actions.setInputType($(this).find('.searchType').html());
-            _this.data.inputBoxName = $(this).find('.name').html();
-            _this.data.inputBoxValue = $(this).find('.searchField').html();
+            _this.actions.setInputValue($(this).attr('name'),$(this).attr('searchField'),$(this).attr('searchType'));
+            _this.actions.setSelectValue($(this).attr('searchType'));
+            _this.actions.setInputType($(this).attr('searchType'));
+            _this.data.inputBoxName = $(this).attr('name');
+            _this.data.inputBoxValue = $(this).attr('searchField');
             _this.data.relationSelect = _this.el.find('.condition-search-select.relation').val();
             _this.actions.hideList();
+            _this.el.find('.condition-search-li-input').val('')
+            _this.el.find( '.condition-search-li' ).css('display','block')
         }).on('change','.condition-search-select.relation',function(){
             _this.data.relationSelect = $(this).val();
         }).on('change','.condition-search-select.left-select',function(){
@@ -150,6 +147,7 @@ let config = {
             this.actions.delete();
             // epSearch.actions.showAddBtn();
         });
+        this.actions.inputSearch();
     }
 }
 class expertCondition extends Component {

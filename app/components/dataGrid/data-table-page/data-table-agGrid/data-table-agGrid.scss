@@ -161,7 +161,11 @@
             }
         }
     }
-
+    .component-date-control {
+        img {
+            top: 0px !important;
+        }
+    }
     .dataGrid-edit-group {
         //float: right;
         display: none;
