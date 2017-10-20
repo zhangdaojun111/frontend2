@@ -96,7 +96,7 @@ let config = {
             }).then((res) => {
                 this.hideLoading();
                 if (res.success === 1) {
-                    this.actions.loadData(this.data.getDataParams);
+                    that.actions.loadData(that.data.getDataParams);
                 }
             });
         },
@@ -173,7 +173,7 @@ let config = {
          * @param data
          */
         onPaginationChanged: function (data) {
-            data = _.defaultsDeep(data,this.data.getDataParams);
+            this.data.getDataParams = _.defaultsDeep(data,this.data.getDataParams);
             this.data.rows = data.rows;
             this.actions.loadData(this.data.getDataParams);
         },
