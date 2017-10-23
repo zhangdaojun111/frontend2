@@ -472,7 +472,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '是否显示某一Y轴字段'
+                        value:1, name: '是否展示某一Y轴字段'
                     }
                 ],
                 type: 'checkbox',
@@ -594,7 +594,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '是否展示多少条'
+                        value:1, name: '默认展示多少条数据'
                     }
                 ],
                 type: 'checkbox',
@@ -612,7 +612,7 @@ let config = {
                 label: '',
                 name: 'limitNum',
                 defaultValue: 10,
-                placeholder: '请输入显示多少条',
+                placeholder: '请输入显示多少条数据',
                 category: 'number',
                 type: 'text',
                 events: {}
