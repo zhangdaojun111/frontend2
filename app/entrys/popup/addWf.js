@@ -19,8 +19,12 @@ import {PMAPI, PMENUM} from '../../lib/postmsg';
 import {CreateFormServer} from "../../services/formService/CreateFormServer";
 AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
+    let isshow = true;
     Mediator.subscribe("form:formAlreadyCreate",()=>{
-        component.hideLoading();
+        if(isshow){
+            component.hideLoading();
+            isshow = false;
+        }
     });
     // setTimeout(()=>component.hideLoading(),1000)
 });
