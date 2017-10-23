@@ -154,7 +154,7 @@ function getLoginController() {
              * 移动下载
              */
             this.$mobileDownload.on('click',function () {
-                console.log('打开移动下载页面');
+                window.open('https://test.erdstest.com:8809/download/download.html?referrer=');
             });
 
             /**
