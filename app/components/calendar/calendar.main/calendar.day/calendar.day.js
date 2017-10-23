@@ -23,9 +23,9 @@ let config = {
 };
 
 class CalendarDay extends Component {
-    constructor(data) {
+    constructor(data, newconfig) {
         config.data.data = data;
-        super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 

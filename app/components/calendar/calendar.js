@@ -148,8 +148,8 @@ let config = {
 };
 
 class Calendar extends Component {
-    constructor() {
-        super(config);
+    constructor(newconfig = {}) {
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 
