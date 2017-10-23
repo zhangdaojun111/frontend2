@@ -190,7 +190,11 @@ export const CreateFormServer={
 				for (let dict of staticData["data"]) {
 					if (dict["dfield"] == dfield) {
 						for (let k in dynamicData["data"][dfield]) {
-							dict[k] = dynamicData["data"][dfield][k];
+							if(k == 'options'){
+								dict[k]=dict[k].concat(dynamicData["data"][dfield][k]);
+							}else{
+								dict[k] = dynamicData["data"][dfield][k];
+							}
 						}
 					}
 				}
