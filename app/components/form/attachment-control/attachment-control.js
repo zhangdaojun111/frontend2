@@ -64,11 +64,6 @@ let config = {
                     let fileId = new Date().getTime();
                     fileArray.push({id:fileId,name:name});
                 }
-                let toolbox ={
-                    update:function () {},
-                    finish:function () {},
-                    showError:function () {}
-                };
                 for(let i = 0, length = files.length;i < length; i++){
                     let file = files[i];
                     let fileItem = fileArray[i];
@@ -89,7 +84,7 @@ let config = {
                                 }
                             }
                         }
-                        this.actions.controlUploadingForFile(file,fileItem.id,toolbox);
+                        this.actions.controlUploadingForFile(file,fileItem.id,this.data.toolbox);
                     });
                 }
                 //清空文件选择器，不影响下一次选择

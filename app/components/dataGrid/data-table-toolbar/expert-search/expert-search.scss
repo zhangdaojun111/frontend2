@@ -167,11 +167,20 @@
                     line-height: 30px;
                     border: 1px solid rgb(201, 201, 201);
                     background: rgb(255, 255, 255);
-                    .condition-search-li {
+                    .condition-search-li,.search {
                         padding: 0 8px;
-                        &:hover {
-                            background: #f2f2f2;
+                        .condition-search-li-input {
+                            width: 100%;
+                            height: 18px;
+                            border: 1px solid rgb(201, 201, 201);
+                            background: url(../../../../assets/images/calendar/calendar-search.png) no-repeat scroll right center transparent;
                         }
+                    }
+                    .condition-search-li:hover {
+                        background: #f2f2f2;
+                    }
+                    .search {
+
                     }
                 }
                 .condition-search-ul::-webkit-scrollbar {
@@ -180,13 +189,13 @@
                 }
                 .condition-search-ul::-webkit-scrollbar-thumb {
                     border-radius: 5px;
-                    -webkit-box-shadow: inset 0 0 5px rgba(242,242,242,0.290196);
-                    background: rgba(242,242,242,0.2);
+                    -webkit-box-shadow: inset 0 0 5px rgba(156, 156, 156, 0.290196);
+                    background: rgba(156, 156, 156, 0.2);
                 }
                 .condition-search-ul::-webkit-scrollbar-track {
-                    -webkit-box-shadow: inset 0 0 5px rgba(242,242,242,0.290196);
+                    -webkit-box-shadow: inset 0 0 5px rgba(156, 156, 156, 0.290196);
                     border-radius: 0;
-                    background: rgba(242,242,242,0.2);
+                    background: rgba(156, 156, 156, 0.1);
                 }
             }
             .condition-search-value {

@@ -15,7 +15,14 @@
     <div class="condition-search-box">
         <input class="condition-search-box-input icon-aggrid-select" placeholder="请选择" readonly="readonly" type="text">
         <ul class="condition-search-ul">
-
+            <li class="search">
+                <input class="condition-search-li-input" type="text" placeholder="搜索">
+            </li>
+            {{#expertItemData}}
+            <li class="condition-search-li" name="{{name}}" searchField="{{searchField}}" searchType="{{searchType}}">
+                {{name}}
+            </li>
+            {{/expertItemData}}
         </ul>
     </div>
     <select class="condition-search-select icon-aggrid-select relation">

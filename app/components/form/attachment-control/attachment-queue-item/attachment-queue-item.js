@@ -219,11 +219,12 @@ let config = {
                     } else {
                         this.data._controlItem.uploadingState = 'failed';
                         if(this.data.toolbox){
-                            this.data.toolbox.showError({fileId:this.data.fileOrder,msg:"传输中断"});
+                            this.data.toolbox.showError({fileId:this.data.fileOrder,msg:res.error});
                         } else {
-                            msgbox.alert('传输中断！');
+                            msgbox.alert(res.error);
                         }
-                        this.actions.showReuploadingButton();
+                        // this.actions.showReuploadingButton();
+                        this.el.remove();
                     }
                 },errorCallback);
             }
