@@ -179,6 +179,8 @@ input::-webkit-input-placeholder{
     overflow: hidden;
     input[type=checkbox] {
         margin: 2px;
+        width:12px;
+        height:12px;
         position: relative;
     }
     input[type=checkbox]:before {
@@ -211,6 +213,8 @@ input::-webkit-input-placeholder{
     overflow: hidden;
     input[type=radio] {
         margin: 2px;
+        width:12px;
+        height:12px;
         position: relative;
     }
     input[type=radio]:before {

@@ -114,9 +114,9 @@ let config = {
 };
 
 export class CanvasMain extends Component {
-    constructor(data, events) {
+    constructor(data, events,extendConfig) {
         config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
-        super(config, data, events);
+        super($.extend(true,{},config,extendConfig), data, events);
     }
 }
 
