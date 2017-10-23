@@ -15,7 +15,6 @@ import leftContentFinished from './leftContent.finished/leftContent.finished';
 import RightContentWorkFlow from '../right-content/right.content.workflowcontent/right.content.workflowcontent';
 import {CalendarService} from "../../../services/calendar/calendar.service"
 import {CalendarWorkflowData} from '../calendar.main/calendar.workflow/calendar.workflow';
-
 let config = {
     template: template,
     data: {
@@ -125,7 +124,7 @@ let config = {
                 '/iframe/addWf/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
                 {
                     width: "900",
-                    height: '520',
+                    height: '540',
                     title: '日历表',
                     modal: true,
                     //customSize: true,
@@ -199,9 +198,9 @@ let config = {
 };
 
 class Leftcontent extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data.calendarTreeData = data;
-        super(config);
+        super($.extend(true,{},config,newConfig));
     }
 }
 

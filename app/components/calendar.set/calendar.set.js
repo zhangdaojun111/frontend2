@@ -435,9 +435,9 @@ let config = {
 };
 
 class CalendarSet extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data.tableId = data;
-        super(config);
+        super($.extend(true,{},config,newConfig));
     }
 }
 

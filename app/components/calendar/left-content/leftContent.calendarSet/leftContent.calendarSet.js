@@ -257,9 +257,9 @@ let config = {
 };
 
 class LeftcontentCalendarset extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data.calendarTreeData = data;
-        super(config);
+        super(config,$.extend(true,{},config,newConfig));
     }
 }
 
