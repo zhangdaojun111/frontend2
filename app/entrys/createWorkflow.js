@@ -144,12 +144,7 @@ Mediator.subscribe('workflow:getGridinfo',(res)=>{
 /*
 ***submit workflow data 提交工作流
  */
-let focusArr=[];
-Mediator.subscribe('workflow:focus-users', (res)=> {
-    focusArr=res;
-})
 Mediator.subscribe('workflow:submit', (res)=> {
-
     if($("#workflow-form:visible").length>0){
         let formData=CreateFormServer.getFormValue(wfObj.tableid,true,true);
         if(formData.error){
@@ -159,7 +154,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
             $("#submitWorkflow").hide();
             let postData={
                 flow_id:wfObj.id,
-                focus_users:JSON.stringify(focusArr)||[],
+                focus_users:JSON.stringify(res)||[],
                 data:JSON.stringify(formData.formValue),
                 cache_new:JSON.stringify(formData.obj_new),
                 cache_old:JSON.stringify(formData.obj_old),
