@@ -87,11 +87,11 @@ function getLoginController() {
             /**
              * 登录按钮
              */
-            this.$loginBtn.on('click', () => {
+            this.$loginBtn.on('click', _.debounce(() => {
                 // console.log(this.username_value,this.password_value,);
                 // this.password_value = this.passwordInputComp.data.password_value;
                 this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
-            });
+            },300));
 
             /**
              * 注册按钮
@@ -160,15 +160,16 @@ function getLoginController() {
             /**
              * 键盘绑定
              */
-            $(document).keypress((event) => {
+            $(document).on('keypress',_.debounce((event) => {
                 if(event.keyCode === 13){
+                    console.log('abc');
                     if(this.isOpposite === false){
                         this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
                     }else{
                         this.$submitFindPw.click();
                     }
                 }
-            })
+            },300))
         },
 
         /**

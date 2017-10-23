@@ -152,6 +152,20 @@ let config = {
             callback: _.debounce(function(context) {
                 this.actions.search(context.value);
             }, 1000)
+        },
+        {
+            event:'focus',
+            selector:'label.search input',
+            callback:function (context) {
+                $(context).parent().addClass('highlight');
+            }
+        },
+        {
+            event:'blur',
+            selector:'label.search input',
+            callback:function (context) {
+                $(context).parent().removeClass('highlight');
+            }
         }
     ],
 
