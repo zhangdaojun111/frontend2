@@ -21,9 +21,9 @@ export class CellTableComponent extends CellBaseComponent {
     //     config.actions.init(cellChart);
     //     super(config);
     // }
-    constructor(data,event) {
+    constructor(data,event,extendConfig) {
         let cellChart = CellTableComponent.init(data);
-        super(config,cellChart,event);
+        super($.extend(true,{},config,extendConfig),cellChart,event);
     }
 
     static init(cellChart) {

@@ -47,7 +47,7 @@ let config = {
 };
 
 export class CanvasOriginalAdvancedItemComponent extends Component {
-    constructor(data,events) {
-        super(config,data,events);
+    constructor(data,events,extendConfig) {
+        super($.extend(true,{},config,extendConfig),data,events);
     }
 }

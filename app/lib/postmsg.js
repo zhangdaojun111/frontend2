@@ -56,6 +56,7 @@ export const PMENUM = {
     show_loading:'16',          //打开loading
     hide_loading:'17',          //隐藏loading
     open_preview:'18',          //打开图片浏览
+    aside_fold: '19'
 }
 
 /**

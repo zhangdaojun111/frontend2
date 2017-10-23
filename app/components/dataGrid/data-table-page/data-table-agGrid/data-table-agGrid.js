@@ -3249,6 +3249,8 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
+            w = window.screen.width*0.8;
+            h = window.screen.height*0.6;
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
@@ -3374,6 +3376,11 @@ let config = {
                 this.actions.getHeaderData();
             })
         }
+
+        PMAPI.subscribe(PMENUM.aside_fold, () => {
+            console.log($('.ui-dialog').width());
+            $('.ui-dialog').width('calc(100% - 3px)');
+        });
         this.actions.getHeaderData();
     }
 }

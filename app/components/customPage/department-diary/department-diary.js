@@ -211,7 +211,6 @@ let config = {
         } )
     }
 }
-
 class departmentDiary extends Component {
     constructor(data) {
         for (let d in data) {

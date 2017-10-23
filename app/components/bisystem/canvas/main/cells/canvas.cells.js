@@ -172,7 +172,7 @@ let config = {
 };
 
 export class CanvasCellsComponent extends Component {
-    constructor(id, events) {
-        super(config, {currentViewId: id});
+    constructor(id, events,extendConfig) {
+        super($.extend(true,{},config,extendConfig), {currentViewId: id});
     }
 }

@@ -35,7 +35,10 @@ let config = {
             let WorkFlowList = workflowService.getWorkfLow({}),
                 FavWorkFlowList = workflowService.getWorkfLowFav({});
             Promise.all([WorkFlowList, FavWorkFlowList]).then(res => {
-                WorkFlowCreate.loadData(res);
+                let obj = {};
+                obj.tree = res[0];
+                obj.fav = res[1];
+                WorkFlowCreate.loadData(obj);
             });
             HTTP.flush();
         }
