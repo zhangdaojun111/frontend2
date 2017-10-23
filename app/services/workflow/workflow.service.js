@@ -78,5 +78,8 @@ export const workflowService={
     },
     approveManyWorkflow(params){
         return HTTP.postImmediately('/approve_many_workflow/', params)
+    },
+    nodeAttachment(params){
+        return HTTP.getImmediately('/node_attachment/', params)
     }
 }

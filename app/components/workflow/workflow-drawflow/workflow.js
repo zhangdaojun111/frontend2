@@ -12,6 +12,7 @@ import {workflowService} from '../../../services/workflow/workflow.service';
 import jsplumb from 'jsplumb';
 import approvalOpinion from '../approval-opinion/approval-opinion'
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
+import Attachment from '../../form/attachment-list/attachment-list';
 let config = {
     template: template,
     data: {
@@ -106,10 +107,11 @@ let config = {
                         }
                     }
                         //如果节点有附件
-                        // if (__this.hasAttachmentNodeList.indexOf(id) != -1) {
-                        //     attachment = '<span class="has-attachment-span">+</span>';
-                        //     styleClass += ' has-attachment';
-                        // }
+                    if (__this.data.node_attachments.indexOf(id) != -1) {
+                        attachment = '<span class="has-attachment-span">+</span>';
+                        styleClass += ' has-attachment';
+
+                    }
                         // //判断流程节点图片
                         // if(value.id.indexOf('start') != -1){
                         //     __this[style]['backgroundImage']= 'url("' + __this.imgNodeStart + '")';
@@ -455,12 +457,57 @@ let config = {
                     }
                 });
             }
+        },
+        /**
+         * 查看附件
+         * 点击节点弹出附件弹出框
+         */
+        async fj(e) {
+            let filename = /\.(png|PNG|gif|GIF|JPG|jpg|jpeg|JPEG)$/;
+            let nodeId = $(e).parent().attr('id');
+            let res = await workflowService.nodeAttachment({
+                type: 'single',
+                node: nodeId,
+                workflow_id: this.data.id,
+            });
+            for (let i in res.node_attachments) {
+                if (filename.test(res.node_attachments[i].file_name)) {
+                    res.node_attachments[i].isImg = true;
+                    res.node_attachments[i].isPreview = true;
+                } else {
+                    res.node_attachments[i].isImg = false;
+                    res.node_attachments[i].isPreview = false;
+                }
+            }
+
+            Attachment.data['list'] = res.node_attachments;
+            Attachment.data['is_view'] = 1;
+            PMAPI.openDialogByComponent(Attachment, {
+                width: 600,
+                height: 400,
+                title: '附件查看',
+                modal: true
+            }).then((res) => {
+                this.data.showfj = true;
+            })
         }
 
     },
+    binds: [
+        {
+            event: 'click',
+            selector: '.has-attachment-span',
+            callback: _.debounce(function(e){
+                if(this.data.showfj){
+                    this.actions.fj(e);
+                }
+                this.data.showfj = false;
+            }, 500)
+        }
+    ],
     afterRender: function() {
         this.actions.init();
-
+        this.data.showfj = true;
         this.el.on('click', '#zoomIn', () => {
             this.actions.zoomInNodeflow();
         });
