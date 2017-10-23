@@ -152,7 +152,7 @@ let config = {
         })
         //订阅 select list click
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
-            WorkFlow.show(msg.data.tree,'#drawflow');
+            WorkFlow.show(msg.data[0],'#drawflow');
         })
         Mediator.subscribe("workflow:contentClose",(msg)=>{
             this.actions.contentClose();
