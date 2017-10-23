@@ -225,4 +225,12 @@ let config = {
     }
 }
 
-export const HeaderInstance = new Component(config, {});
+class HeaderComponent extends Component{
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig))
+    }
+}
+
+export {HeaderComponent};
+
+// export const HeaderInstance = new Component(config, {});

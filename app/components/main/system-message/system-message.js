@@ -334,8 +334,8 @@ let config = {
 };
 
 class SystemMessage extends Component {
-    constructor(data) {
-        super(config, data);
+    constructor(newConfig) {
+        super($.extend(true,{},config,newConfig));
     }
 }
 
