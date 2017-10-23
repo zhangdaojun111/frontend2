@@ -14,6 +14,8 @@ let config = {
     template: template,
     data: {
         favList:[],
+        tree:[],
+        fav:[],
         favoDel:false, //常用工作流是否显示删除按钮
         boxshow:true, //是否隐藏常用工作流按钮
     },
@@ -43,9 +45,9 @@ let config = {
         delBtn:function(temp){
             let el = $(temp).find('.delFav');
             let id = el.attr('data-id');
-            for(let i=0;i<this.data[1].rows.length;i++){
-                if(this.data[1].rows[i].id == id){
-                    this.data[1].rows.splice(i,1);
+            for(let i=0;i<this.data.fav.rows.length;i++){
+                if(this.data.fav.rows[i].id == id){
+                    this.data.fav.rows.splice(i,1);
                 }
             }
             let parents = el.parents('div')[0];
@@ -58,7 +60,7 @@ let config = {
          */
         init(){
             $('#addFav').hide();
-            this.data.favList=this.data[1].rows;
+            this.data.favList=this.data.fav.rows;
             if(this.data.id!==undefined){
                 let flag=true;
                 for (let {id} of this.data.favList) {
@@ -77,21 +79,21 @@ let config = {
          */
         addFav(){
             Mediator.publish('workflow:addFav', this.data.id);
-            let len = this.data[1].rows.length;
-            for(let i = 0;i<this.data[0].data.length;i++){
-                for(let j = 0;j<this.data[0].data[i].children.length;j++){
-                    if(this.data[0].data[i].children[j].id == this.data.id){
-                        this.data[1].rows[len] = {
-                            id : this.data[0].data[i].children[j].id,
-                            wf_form_id : this.data[0].data[i].children[j].form_id,
-                            wf_name : this.data[0].data[i].children[j].label,
-                            wf_table_id : this.data[0].data[i].children[j].table_id
+            let len = this.data.fav.rows.length;
+            for(let i = 0;i<this.data.tree.data.length;i++){
+                for(let j = 0;j<this.data.tree.data[i].children.length;j++){
+                    if(this.data.tree.data[i].children[j].id == this.data.id){
+                        this.data.fav.rows[len] = {
+                            id : this.data.tree.data[i].children[j].id,
+                            wf_form_id : this.data.tree.data[i].children[j].form_id,
+                            wf_name : this.data.tree.data[i].children[j].label,
+                            wf_table_id : this.data.tree.data[i].children[j].table_id
                         };
                     };
                 }
             }
             this.el.find('.J_workflow-content').children().remove();
-            this.data[1].rows.forEach((row)=>{
+            this.data.fav.rows.forEach((row)=>{
                 this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
             });
             this.actions.init();
@@ -134,9 +136,9 @@ let config = {
         this.actions.init();
         this.data.boxshow = true;
         //添加流程下来菜单
-        this.append(new WorkFlowTree(this.data[0]), this.el.find('.J_select-container'));
+        this.append(new WorkFlowTree(this.data.tree), this.el.find('.J_select-container'));
         //添加常用工作流组件
-        this.data[1].rows.forEach((row)=>{
+        this.data.fav.rows.forEach((row)=>{
             this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
         });
 
@@ -150,7 +152,7 @@ let config = {
         })
         //订阅 select list click
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
-            WorkFlow.show(msg.data[0],'#drawflow');
+            WorkFlow.show(msg.data.tree,'#drawflow');
         })
         Mediator.subscribe("workflow:contentClose",(msg)=>{
             this.actions.contentClose();
@@ -162,10 +164,14 @@ let config = {
 }
 
 class WorkFlowCreate extends Component{
-    constructor (data){
-        super(config,data);
-    }
+    // constructor (data){
+    //     super(config,data);
+    //     console.log(this);
+    // }
 
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
+    }
 }
 
 export default {
