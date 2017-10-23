@@ -46,8 +46,7 @@ let config={
     }
 }
 export default class Correspondence extends Component{
-    constructor(data,events,newCofig){
-        //super(config,data,events);
-        super($.extend(true,{},config,newConfig))
+    constructor(data,events){
+        super(config,data,events);
     }
 }
