@@ -123,8 +123,9 @@ let config = {
                 selectedOptsText.push(newItem['name']);
                 selectedOptsId.push(newItem['id']);
             }
-            this.data.preViewText = selectedOptsText;
-            this.el.find('.preview-text').html(this.data.preViewText);
+            this.data.preViewText = selectedOptsText.toString();
+            this.el.find('.preview-text').html(this.data.preViewText).attr('title',this.data.preViewText);
+
         },
 
         /**
@@ -308,8 +309,8 @@ let config = {
             this.el.find('.set-remind-method').html('设置提醒方式');
         }
 
-        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
-        this.el.find('.preview-text').text(this.data.preViewText);
+        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text.toString();
+        this.el.find('.preview-text').text(this.data.preViewText).attr('title',this.data.preViewText);
         this.el.find('.set-color').attr("value", this.data.rowSetData.color);
         this.actions.editableFalse();
     },

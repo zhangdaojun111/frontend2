@@ -108,7 +108,10 @@ let config = {
                         let options = [{value: val, label: val}];
                         if (FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
                             let options = [{value: val, label: val}];
-                            this.data.childComponent[songridDfield].data["options"] = this.data.data[songridDfield]["options"] = options;
+                            this.data.data[songridDfield]["options"] = options;
+                            if(this.data.childComponent[songridDfield]){
+	                            this.data.childComponent[songridDfield].data["options"]  = options;
+                            }
                         }
                         if(val || val =='') {
                             this.actions.setFormValue(songridDfield, val);
@@ -156,6 +159,7 @@ let config = {
         //给外部提供formValue格式数据
         //@param isCheck判断是否需要执行表单校验
         getFormValue(isCheck) {
+            this.actions.changeValueForChildTable(this.data.data);
             return isCheck ? this.actions.createFormValue(this.data.data, true) : this.actions.createFormValue(this.data.data);
         },
 
@@ -635,6 +639,7 @@ let config = {
                     this.data.childComponent[key].reload();
                 }
             }
+            this.actions.triggerControl();
         },
 
         /**
@@ -846,6 +851,7 @@ let config = {
             } else {
                 return formValue;
             }
+            
         },
 
         //判断一下日期的类型，并且进行限制
@@ -1014,9 +1020,12 @@ let config = {
         setFormValue(dfield, value) {
             let data = this.data.data[dfield];
             if (data) {
+	            data["value"] = value;
                 let childComponet = this.data.childComponent[dfield];
-                childComponet.data["value"] = data["value"] = value;
-                childComponet.reload();
+                if(childComponet){
+	                childComponet.data["value"] = value
+	                childComponet.reload();
+                }
                 // this.actions.triggerSingleControl(dfield);
             }
         },
@@ -1231,7 +1240,7 @@ let config = {
         async changeToEdit() { //重新获取动态数据 （temp_id会变）
             this.data.isView = 0;
             let json = this.actions.createPostJson();
-            let res = await FormService.getDynamicDataImmediately(json);
+            let res = await FormService.getDynamicData(json);
             for (let key in res.data) {
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
                 if (this.data.childComponent[key]) {
@@ -1682,6 +1691,13 @@ let config = {
                     history[key]['old_value'] = history[key]['old_value'].replace(/\n/g, ";");
                 }
             }
+            //处理富文本模板标签
+            if (data.type == 'Editor') {
+                for (let key in history) {
+                    history[key]['new_value'] = history[key]['new_value'].replace(/<.*?>/ig,"");
+                    history[key]['old_value'] = history[key]['old_value'].replace(/<.*?>/ig,"");
+                }
+            }
             History.data.history_data = history;
             PMAPI.openDialogByComponent(History, {
                 width: 800,
@@ -1879,6 +1895,21 @@ let config = {
             this.data.childComponent[_this.department.dfield].data["options"] = arr;
             this.data.childComponent[_this.department.dfield].reload();
         },
+        //给外部提供cacheNew cacheOld
+        getCacheData(){
+            let formValue=this.actions.createFormValue(this.data.data,true);
+            if(formValue.error){
+            	return formValue;
+            }
+            let data = this.actions.handleFormData(formValue);
+            let formDataOld = this.data.oldData;
+            let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
+            let obj_old = this.actions.createCacheData(formDataOld, data, false, this);
+            return {
+                obj_new,
+                obj_old
+            }
+        },
     },
     afterRender() {
         this.actions.createFormControl();
@@ -1905,6 +1936,8 @@ let config = {
 
 class BaseForm extends Component {
     constructor(formData) {
+    	console.log('传进来的是啥');
+    	console.log(formData);
         config.template = formData.template;
         //存父子表关系
         if (!window.top.frontendRelation) {

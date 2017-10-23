@@ -186,6 +186,17 @@ let config={
         if(!this.data.is_view && this.data.can_add_item){
             this.el.find('.add-item').css('visibility','visible').addClass('icon-fl')
         }
+        if(this.data.is_view){
+            let arr = new Array();
+            for(let k1 in this.data.options) {
+                for(let k2 in this.data.value) {
+                    if(this.data.value[k2] == this.data.options[k1].value) {
+                        arr.push(this.data.options[k1].label);
+                    }
+                }
+                this.el.find('.form-control').attr('title',arr);
+            }
+        }
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }

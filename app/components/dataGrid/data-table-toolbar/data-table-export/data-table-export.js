@@ -182,10 +182,11 @@ let css = `
     font-style: normal;
     font-size: 12px;
     color: #FFFFFF !important;
-    text-decoration:none
-}
-.btn-name{
-margin-top:7px;
+    text-decoration:none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 26px;
 }
 #right1{
 top:0

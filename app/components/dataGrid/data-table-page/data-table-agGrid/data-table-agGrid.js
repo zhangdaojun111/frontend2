@@ -142,8 +142,6 @@ let config = {
         batchIdList: [],
         //选择的数据
         selectIds: [],
-        //编辑模式
-        isEditable: false,
         //第一次进入加载footer数据
         firstGetFooterData: true,
         //是否返回在途footer数据
@@ -1214,7 +1212,7 @@ let config = {
                     msgBox.showTips( '数据刷新成功。' )
                 }
                 if(this.data.groupCheck) {
-                    msgBox.hideLoadingRoot();
+                    msgBox.hideLoadingSelf();
                 }
             })
             HTTP.flush();
@@ -1711,10 +1709,12 @@ let config = {
             });
         },
         //分组触发
-        onGroupChange: function (group) {
+        onGroupChange: function (group ,changeChecked) {
             this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , true)
             this.data.myGroup = group;
-            msgBox.showLoadingRoot();
+            if(changeChecked){
+                msgBox.showLoadingSelf();
+            }
             this.actions.getGridData();
         },
         //列宽改变
@@ -1889,6 +1889,18 @@ let config = {
             //搜索
             if( this.el.find( '.float-search-btn' )[0] ){
                 this.el.find( '.float-search-btn' ).on( 'click',()=>{
+                    if (this.data.isShowFloatingFilter && this.data.filterParam.filter.length != 0) {
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
+                        }
+                        this.data.queryList = {};
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getGridData();
+                    }
                     let height = this.data.isShowFloatingFilter ? 0:30;
                     this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                     this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
@@ -2158,6 +2170,12 @@ let config = {
             }
             for( let k in this.data.colControlData ){
                 let field = this.data.colControlData[k];
+                //必填
+                if( field.required && data[field.dfield] == '' ){
+                    err['type'] = true;
+                    err['err'] = '字段“' + field.label + '”是必填的，请修改。';
+                    return err;
+                }
                 //数字类型
                 if( fieldTypeService.numOrText( field.real_type ) && data[field.dfield] != undefined ){
                     if( field.numArea && field.numArea !== "" ){
@@ -2167,12 +2185,6 @@ let config = {
                         if( num>field.numArea.max || num<field.numArea.min ){
                             err['type'] = true;
                             err['err'] = '字段“' + field.label + '”，当前值：' + num +'，数据错误，错误原因：' + field.numArea.error + '，请修改。';
-                            return err;
-                        }
-                        //必填
-                        if( field.required && data[field.dfield] == '' ){
-                            err['type'] = true;
-                            err['err'] = '字段“' + field.label + '”是必填的，请修改。';
                             return err;
                         }
                         //整数小数
@@ -2440,9 +2452,9 @@ let config = {
         //定制列
         customColumnClick: function () {
             if( this.el.find('.custom-column-btn')[0] ){
-                let That = this;
+                let that = this;
                 this.el.find( '.custom-column-btn' ).on( 'click',_.debounce( ()=>{
-                    That.actions.calcCustomColumn();
+                    that.actions.calcCustomColumn();
                 },500 ) )
             }
         },
@@ -2464,10 +2476,10 @@ let config = {
             if( !this.el.find('.group-btn')[0] ){
                 return;
             }
-            let Taht = this;
+            let that = this;
             this.el.on('click','.group-btn',_.debounce( ()=>{
-                Taht.actions.calcGroup();
-            },500 ))
+                that.actions.calcGroup();
+            },500 ));
         },
         //分组打开关闭
         calcGroup: function () {
@@ -2660,9 +2672,11 @@ let config = {
             }
             this.actions.getGridData();
         },
+        onCellDoubleClicked: function (data) {
+        },
         //点击cell
         onCellClicked: function (data) {
-            if( !data.data || this.data.isEditable || data.data.myfooter || this.data.doubleClick ){
+            if( !data.data || data.data.myfooter || this.data.doubleClick || this.data.editMode ){
                 return;
             }
             //防止双击和单击的误操作
@@ -3076,6 +3090,7 @@ let config = {
                 table_id : d['table_id'],
                 btnType: 'new',
                 data_from_row_id: data.data['_id'],
+
                 operation_id: d.id
             };
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
@@ -3234,6 +3249,8 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
+            w = window.screen.width*0.8;
+            h = window.screen.height*0.6;
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
@@ -3332,6 +3349,7 @@ let config = {
             onCellClicked: this.actions.onCellClicked,
             onCellValueChanged: this.actions.onCellValueChanged,
             onRowDoubleClicked: this.actions.onRowDoubleClicked,
+            onCellDoubleClicked: this.actions.onCellDoubleClicked,
             setRowStyle: this.actions.setRowStyle,
             rowDataChanged: this.actions.rowDataChanged,
             onRowSelected: this.actions.onRowSelected
@@ -3358,6 +3376,11 @@ let config = {
                 this.actions.getHeaderData();
             })
         }
+
+        PMAPI.subscribe(PMENUM.aside_fold, () => {
+            console.log($('.ui-dialog').width());
+            $('.ui-dialog').width('calc(100% - 3px)');
+        });
         this.actions.getHeaderData();
     }
 }

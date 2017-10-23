@@ -21,7 +21,11 @@ let config = {
         frontendSort:true,      //排序方式（前端/后端）
         total:0,
         rows:100,
-        getDataList:{"sortOrder":-1,sortField:""},     //后端排序参数
+        getDataParams:{           //后端排序参数
+            rows:100,
+            first:0,
+            currentPage:1
+        },
         tableId:'user-message'
     },
     actions: {
@@ -29,13 +33,13 @@ let config = {
          * 根据参数（页码）向后台发送请求，获取渲染该页所需数据
          * @param _param
          */
-        loadData: function (_param) {
-            _param = _param || {};
-            let param = _.defaultsDeep(_param, {
-                rows: this.pagination.data.rows,
-                first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
-                currentPage: this.pagination.data.currentPage
-            });
+        loadData: function (param) {
+            // _param = _param || {};
+            // let param = _.defaultsDeep(_param, {
+            //     rows: this.pagination.data.rows,
+            //     first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
+            //     currentPage: this.pagination.data.currentPage
+            // });
             // this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
                 this.data.total = data.total;
@@ -43,6 +47,7 @@ let config = {
                 this.agGrid.actions.setGridData({
                     rowData: data.rows
                 });
+
                 this.pagination.actions.setPagination(data.total, param.currentPage);
                 // this.hideLoading();
                 this.agGrid.gridOptions.api.sizeColumnsToFit();
@@ -86,12 +91,13 @@ let config = {
          */
         _postReadData: function (ids) {
             this.showLoading();
+            let that = this;
             HTTP.postImmediately('/remark_or_del_msg/', {
                 checkIds: ids
             }).then((res) => {
                 this.hideLoading();
                 if (res.success === 1) {
-                    this.actions.loadData();
+                    that.actions.loadData(that.data.getDataParams);
                 }
             });
         },
@@ -137,7 +143,7 @@ let config = {
                 // customSize:true
             },data).then(res => {
                 if(res.refresh === true){
-                    that.actions.loadData();
+                    that.actions.loadData(this.data.getDataParams);
                 }
             });
         },
@@ -157,7 +163,7 @@ let config = {
                         is_del: 1
                     }).then((res) => {
                         if (res.success === 1) {
-                            this.actions.loadData();
+                            this.actions.loadData(this.data.getDataParams);
                         }
                     });
                 }
@@ -168,9 +174,9 @@ let config = {
          * @param data
          */
         onPaginationChanged: function (data) {
-            data = _.defaultsDeep(data,this.data.getDataList);
+            this.data.getDataParams = _.defaultsDeep(data,this.data.getDataParams);
             this.data.rows = data.rows;
-            this.actions.loadData(data);
+            this.actions.loadData(this.data.getDataParams);
         },
         /**
          * 根据消息数量和每页显示数量进行前端排序或后端排序
@@ -182,23 +188,30 @@ let config = {
                 //后端排序
                 console.log('启用后端排序');
                 let data = this.agGrid.gridOptions.api.getSortModel()[0];
-                let sortPostData = {};
                 if( data && data.sort === "asc" ){
-                    this.data.getDataList.sortOrder = 1;
-                    this.data.getDataList.sortField = data.colId;
-                    sortPostData = {
+                    this.data.getDataParams = {
+                        rows: this.pagination.data.rows,
+                        currentPage: this.pagination.data.currentPage,
+                        first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
                         sortField: data.colId,
-                        sortOrder: this.data.getDataList.sortOrder
-                    }
+                        sortOrder: 1
+                    };
                 }else if(data && data.sort === "desc"){
-                    this.data.getDataList.sortOrder = -1;
-                    this.data.getDataList.sortField = data.colId;
-                    sortPostData = {
+                    this.data.getDataParams = {
+                        rows: this.pagination.data.rows,
+                        currentPage: this.pagination.data.currentPage,
+                        first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
                         sortField: data.colId,
-                        sortOrder: this.data.getDataList.sortOrder
-                    }
+                        sortOrder: -1
+                    };
+                }else{
+                    this.data.getDataParams = {
+                        rows: this.pagination.data.rows,
+                        currentPage: this.pagination.data.currentPage,
+                        first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
+                    };
                 }
-                this.actions.loadData(sortPostData);
+                this.actions.loadData(this.data.getDataParams);
             }else{
                 //前端排序
                 console.log('启用前端排序');
@@ -243,7 +256,7 @@ let config = {
                     customSize:true
                 }).then((result) => {
                     if (result.refresh === true) {
-                        this.actions.loadData();
+                        this.actions.loadData(this.data.getDataParams);
                     }
                 })
             } else {
@@ -271,13 +284,14 @@ let config = {
          */
         initPagination:function () {
             this.pagination = new dataPagination({
-                page: 1,
+                currentPage: 1,
                 rows: this.data.rows,
                 tableId:this.data.tableId
             });
             this.pagination.render(this.el.find('.pagination'));
             this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
-            this.actions.loadData();
+            this.data.getDataParams.rows = this.data.rows;
+            this.actions.loadData(this.data.getDataParams);
             this.hideLoading();
         },
     },

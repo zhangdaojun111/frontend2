@@ -116,6 +116,7 @@ let config = {
             this.formItems['chartAssignment'].trigger('onChange');
             this.formItems['echartX'].trigger('onChange');
             this.formItems['defaultY'].trigger('onChange');
+            this.formItems['limit'].trigger('onChange');
 
             // 获取数据来源
             ChartFormService.getChartSource().then(res => {
@@ -193,7 +194,6 @@ let config = {
                    }
                }
             });
-
             let advancedDataTemplates = this.formItems.advancedDataTemplates.getValue();
             let chart = {
                 advancedDataTemplates: advancedDataTemplates.length > 0 && advancedDataTemplates[0].code  && advancedDataTemplates[0].result ? advancedDataTemplates : [],
@@ -216,8 +216,8 @@ let config = {
                 yHorizontal: data.yHorizontal[0] ? true : false,
                 yHorizontalColumns: data.yHorizontalColumns[0] ? {marginBottom:data.marginBottomx} : {},
                 ySelectedGroup: data.defaultY[0] ? ySelectedGroup : [],
+                limit: data.limit[0] ? data.limitNum : 0,
             };
-
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
             } else {
@@ -293,6 +293,8 @@ let config = {
             } else {
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
+            this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
+            this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
         },
     },
     data: {
@@ -582,6 +584,35 @@ let config = {
                 name: 'marginBottom',
                 defaultValue: '',
                 placeholder: 'x轴下边距',
+                category: 'number',
+                type: 'text',
+                events: {}
+            },
+            {
+                label: '',
+                name: 'limit',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '是否展示多少条'
+                    }
+                ],
+                type: 'checkbox',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['limitNum'].el.show();
+                        } else {
+                            this.formItems['limitNum'].el.hide();
+                        }
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'limitNum',
+                defaultValue: 10,
+                placeholder: '请输入显示多少条',
                 category: 'number',
                 type: 'text',
                 events: {}
