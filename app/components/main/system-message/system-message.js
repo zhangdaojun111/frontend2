@@ -379,10 +379,9 @@ let systemMessageUtil = {
 
     },
     /**
-     * 显示单条信息详细内容
+     * 传入单条消息或消息数组，进行显示和朗读
      * @param dialogTitle
-     * @param msgTitle
-     * @param msgContent
+     * @param data
      * @param speak
      */
     showMessageDetail: function (dialogTitle, data, speak = false) {
@@ -398,18 +397,14 @@ let systemMessageUtil = {
         }else{
             for(let msg of data){
                 html += `
-           
                     <h3 class="msg-title">${msg.title}</h3>
-                    <pre class="text">${msg.msg_content}</pre>
-                
+                    <pre class="text">${msg.content}</pre>                
             `;
-                readMsg += msg.title.toString() + msg.msg_content.toString();
+                readMsg += msg.title.toString() + msg.content.toString();
             }
             html += `</div>`;
         }
-        console.log(html);
-        console.log('fff',readMsg);
-        debugger;
+
         if (speak) {
             let msg = new SpeechSynthesisUtterance(readMsg);
             msg.lang = 'zh';

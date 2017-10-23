@@ -63,6 +63,8 @@
 
 .component-msg-detail {
     text-align: center;
+    box-sizing: border-box;
+    padding-bottom: 50px !important;
     .msg-title {
         font-size: 16px;
         color: #333;
@@ -71,7 +73,7 @@
     .text {
         text-align: left;
         line-height: 22px;
-        padding: 0 50px 50px 50px;
+        padding: 0 50px;
         white-space: pre-wrap;
         word-wrap: break-word;
     }
