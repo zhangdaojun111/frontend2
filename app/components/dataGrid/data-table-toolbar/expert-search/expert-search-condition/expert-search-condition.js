@@ -21,6 +21,7 @@ let config = {
         relationSelect:'',
     },
     actions: {
+        // 加载下拉搜索条件
         renderItem: function (){
             this.data.expertItemData.forEach((item)=>{
                 let obj = {};
@@ -29,7 +30,9 @@ let config = {
                 obj['py'] = item['searchType'];
                 this.data.expertSelect.push(obj);
             })
+            this.actions.loadSelect();
         },
+        // 加载下拉组件
         loadSelect: function(){
             let _this = this;
             let selectData = {
@@ -46,6 +49,7 @@ let config = {
             }
             this.append(new AutoSelect(selectData),this.el.find('.condition-search-box'))
         },
+        // 下拉组件点击事件
         itemOnSelect: function(item){
             let id = item[0]['id'];
             let name = item[0]['name'];
@@ -54,6 +58,7 @@ let config = {
             this.actions.setSelectValue(type);
             this.actions.setInputType(type);
         },
+        // 获取点击的搜索条件的type
         itemType: function (id){
             let type = null;
             this.data.expertItemData.forEach((item)=>{
@@ -63,15 +68,13 @@ let config = {
             })
             return type
         },
-        // setInputObject: function(object,nextObject) {
-        //     this.inputObject = object;
-        //     this.inputNextObject = nextObject;
-        // },
+        //设置搜索条件框的值
         setInputValue: function(value,name,type) {
             this.el.find('.result').val(value);
             this.el.find('.result').attr('name',name);
             this.el.find('.result').attr('search-type',type);
         },
+        //设置搜索值框的类型
         setInputType: function(type) {
             // this.append(new DateTimeControl('', function(data){}),this.el.find('.condition-search-ul'));
             switch (type) {
@@ -108,6 +111,7 @@ let config = {
             // this.inputNextObject.attr("type",inputType);
             // this.inputNextObject.attr("title",type);
         },
+        // 设置关系选择框的数据
         setSelectValue: function(type) {
             let optionHtmlOne = `<option value="$regex">包含</option>
                                 <option value="exact">等于</option>
@@ -146,7 +150,6 @@ let config = {
     },
     afterRender: function() {
         this.actions.renderItem();
-        this.actions.loadSelect();
         let epSearch = new expertSearch();
         this.ulChecked = true;
         // this.data.inputList = this.el.find('.condition-search-input').val();
