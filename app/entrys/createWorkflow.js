@@ -37,6 +37,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     $("#singleFlow").click();
     $("#submitWorkflow").show();
     $("#startNew").hide();
+    $('#addFollower').show();
     wfObj=msg;
     (async function () {
         WorkFlow.createFlow({flow_id:msg.id,el:"#flow-node"});
@@ -168,6 +169,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
                     CreateFormServer.changeToView(wfObj.tableid);
                     msgBox.showTips(`执行成功`);
                     let isdraft = true;
+                    $('#addFollower').hide();
                     $("#startNew").show().on('click',()=>{
                         if(isdraft){
                             Mediator.publish('workflow:choose',wfObj);
