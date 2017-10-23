@@ -15,7 +15,7 @@ import leftContentFinished from './leftContent.finished/leftContent.finished';
 import RightContentWorkFlow from '../right-content/right.content.workflowcontent/right.content.workflowcontent';
 import {CalendarService} from "../../../services/calendar/calendar.service"
 import {CalendarWorkflowData} from '../calendar.main/calendar.workflow/calendar.workflow';
-
+import {rightContent} from "../right-content/right-content"
 let config = {
     template: template,
     data: {
@@ -199,9 +199,9 @@ let config = {
 };
 
 class Leftcontent extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data.calendarTreeData = data;
-        super(config);
+        super($.extend(true,{},config,newConfig));
     }
 }
 
