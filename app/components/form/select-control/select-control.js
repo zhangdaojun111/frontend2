@@ -76,6 +76,6 @@ let config={
 }
 export default class SelectControl extends Component{
     constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig))
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

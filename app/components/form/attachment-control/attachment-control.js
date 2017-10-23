@@ -321,7 +321,7 @@ let config = {
     }
 };
 export default class AttachmentControl extends Component {
-    constructor(data, event) {
-        super(config, data, event);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

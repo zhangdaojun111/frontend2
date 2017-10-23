@@ -160,7 +160,7 @@ let config = {
 }
 
 export default class ThumbnailList extends Component{
-    constructor(data,dinput_type){
-        super(config,{items:data,dinput_type:dinput_type});
+    constructor(data,dinput_type,newConfig){
+        super($.extend(true,{},config,newConfig),{items:data,dinput_type:dinput_type});
     }
 }

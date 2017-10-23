@@ -236,8 +236,8 @@ let config = {
 }
 
 export default class AttachmentQueueItem extends Component{
-    constructor(data,event){
+    constructor(data,event,newConfig){
         config.data.fileSize = config.actions.getReadableFileSize(data.file.size);
-        super(config,data,event);
+        super($.extend(true,{},config,newConfig),data,event);
     }
 }
