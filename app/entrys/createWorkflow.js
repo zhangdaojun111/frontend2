@@ -186,7 +186,6 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })
         }
     }else{
-        console.log(temp_ids);
         let postData={
             type:1,
             temp_ids:JSON.stringify(temp_ids),
@@ -201,11 +200,14 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })().then(res=>{
                 msgBox.hideLoadingSelf();
                 if(res.success===1){
-                    msgBox.alert(`${res.error}`);
+                    msgBox.showTips(`执行成功`);
+                    $('#addFollower').hide();
+                    let isdraft = true;
                     $("#startNew").show().on('click',()=>{
                         Mediator.publish('workflow:choose',wfObj);
                         $("#startNew").hide();
                         $("#submitWorkflow").show();
+                        isdraft = false;
                     });
                     WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
                 }else{
