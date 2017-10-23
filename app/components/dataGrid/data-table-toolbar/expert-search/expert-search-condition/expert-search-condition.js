@@ -1,44 +1,76 @@
-
+/**
+ * Created by zhr
+ */
 import Component from "../../../../../lib/component";
 import template from './expert-search-condition.html';
 import '../expert-search.scss';
 import expertItem from './expert-search-item/expert-search-item';
 import DateTimeControl from "../../../../form/datetime-control/datetime-control";
 import DateControl from "../../grid-data-control/grid-data-control";
+import {AutoSelect} from '../../../../util/autoSelect/autoSelect';
 import TimeControl from "../../../../form/time-control/time-control";
 import expertSearch from '../expert-search';
 let config = {
     template: template,
-    inputObject: null,
-    inputNextObject: null,
-    rendItemNum:0,
-    ulChecked: true,
     data: {
         expertItemData: [],
+        expertSelect: [],
         inputValue:'',
         leftSelect:'0',
         rightSelect:'0',
         relationSelect:'',
-        inputBoxName:'',
-        inputBoxValue:'',
     },
     actions: {
-        showList: function() {
-            this.el.find('.condition-search-ul').css('display','block');
-            this.ulChecked = !this.ulChecked;
+        renderItem: function (){
+            this.data.expertItemData.forEach((item)=>{
+                let obj = {};
+                obj['id'] = item['searchField'];
+                obj['name'] = item['name'];
+                obj['py'] = item['searchType'];
+                this.data.expertSelect.push(obj);
+            })
         },
-        hideList: function() {
-            this.el.find('.condition-search-ul').css('display','none');
-            this.ulChecked = !this.ulChecked;
+        loadSelect: function(){
+            let _this = this;
+            let selectData = {
+                list: this.data.expertSelect,
+                choosed: [],
+                multiSelect: false,
+                editable: true,
+                width:'172px',
+                onSelect:function(choosed) {
+                    if(choosed.length != 0){
+                        _this.actions.itemOnSelect(choosed)
+                    }
+                }
+            }
+            this.append(new AutoSelect(selectData),this.el.find('.condition-search-box'))
         },
-        setInputObject: function(object,nextObject) {
-            this.inputObject = object;
-            this.inputNextObject = nextObject;
+        itemOnSelect: function(item){
+            let id = item[0]['id'];
+            let name = item[0]['name'];
+            let type = this.actions.itemType(id);
+            this.actions.setInputValue(name,id,type);
+            this.actions.setSelectValue(type);
+            this.actions.setInputType(type);
         },
+        itemType: function (id){
+            let type = null;
+            this.data.expertItemData.forEach((item)=>{
+                if(id == item['searchField']) {
+                    type = item['searchType'];
+                }
+            })
+            return type
+        },
+        // setInputObject: function(object,nextObject) {
+        //     this.inputObject = object;
+        //     this.inputNextObject = nextObject;
+        // },
         setInputValue: function(value,name,type) {
-            this.inputObject.val(value);
-            this.inputObject.attr('name',name);
-            this.inputObject.attr('title',type);
+            this.el.find('.result').val(value);
+            this.el.find('.result').attr('name',name);
+            this.el.find('.result').attr('search-type',type);
         },
         setInputType: function(type) {
             // this.append(new DateTimeControl('', function(data){}),this.el.find('.condition-search-ul'));
@@ -113,22 +145,14 @@ let config = {
         },
     },
     afterRender: function() {
+        this.actions.renderItem();
+        this.actions.loadSelect();
         let epSearch = new expertSearch();
         this.ulChecked = true;
         // this.data.inputList = this.el.find('.condition-search-input').val();
         // debugger
         let _this = this;
-        this.el.on('click','.condition-search-li', function() {
-            _this.actions.setInputValue($(this).attr('name'),$(this).attr('searchField'),$(this).attr('searchType'));
-            _this.actions.setSelectValue($(this).attr('searchType'));
-            _this.actions.setInputType($(this).attr('searchType'));
-            _this.data.inputBoxName = $(this).attr('name');
-            _this.data.inputBoxValue = $(this).attr('searchField');
-            _this.data.relationSelect = _this.el.find('.condition-search-select.relation').val();
-            _this.actions.hideList();
-            _this.el.find('.condition-search-li-input').val('')
-            _this.el.find( '.condition-search-li' ).css('display','block')
-        }).on('change','.condition-search-select.relation',function(){
+        this.el.on('change','.condition-search-select.relation',function(){
             _this.data.relationSelect = $(this).val();
         }).on('change','.condition-search-select.left-select',function(){
             _this.data.leftSelect = $(this).val();
@@ -136,13 +160,6 @@ let config = {
             _this.data.rightSelect = $(this).val();
         }).on('change','.condition-search-input',function(){
             _this.data.inputValue = $(this).val();
-        }).on('click','.condition-search-box-input', function() {
-            if (_this.ulChecked){
-                _this.actions.showList();
-            } else {
-                _this.actions.hideList();
-            }
-            _this.actions.setInputObject($(this),$(this).parent().parent().find('.condition-search-input'))
         }).on('click','.condition-search-delete',()=>{
             this.actions.delete();
             // epSearch.actions.showAddBtn();

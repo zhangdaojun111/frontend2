@@ -66,6 +66,7 @@ let config={
                 _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             };
             let autoSelect=new AutoSelect(data);
+            debugger
             this.append(autoSelect,el);
         }
         this.data.isInit=false;

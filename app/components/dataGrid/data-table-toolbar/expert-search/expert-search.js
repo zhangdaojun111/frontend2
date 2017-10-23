@@ -123,9 +123,9 @@ let config = {
 
                 //由于选择一个常用查询后 改变其查询值 new一个组件时push到数组的值是不会发生变化的
 
-                if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'number') {
+                if(this.el.find('.result').eq(i).attr('search-type') == 'number') {
                     obj['cond']['keyword'] = Number(this.el.find('.condition-search-value').find('input').eq(i).val());
-                } else if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'date') {
+                } else if(this.el.find('.result').eq(i).attr('search-type') == 'date') {
                     obj['cond']['keyword'] = $.trim(this.el.find('.condition-search-value').find('input').eq(i).val());
                 } else {
                     obj['cond']['keyword'] = this.el.find('.condition-search-value').find('input').eq(i).val();
@@ -141,9 +141,9 @@ let config = {
                     obj['cond']['rightBracket'] = '0'
                 }
                 obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
-                obj['cond']['searchBy'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
-                obj['cond']['searchByName'] = this.el.find('.condition-search-box-input').eq(i).val();
-                obj['cond']['searchByNew'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
+                obj['cond']['searchBy'] = this.el.find('.result').eq(i).attr('name');
+                obj['cond']['searchByName'] = this.el.find('.result').eq(i).val();
+                obj['cond']['searchByNew'] = this.el.find('.result').eq(i).attr('name');
                 obj['relation'] = this.el.find('.condition-search-select.radio').eq(i).val()
                 // if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
                 //     obj['relation'] = '$or';
@@ -181,9 +181,9 @@ let config = {
                 this.el.find('.condition-search-select.relation').eq(j).html(html)
                 // this.el.find('.condition-search-input').eq(j).val(searchData[j]['cond']['keyword']);
                 this.el.find('.condition-search-select.relation').eq(j).val(searchData[j]['cond']['operate']);
-                this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchBy']);
-                this.el.find('.condition-search-box-input').eq(j).val(searchData[j]['cond']['searchByName']);
-                this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchByNew']);
+                this.el.find('.result').eq(j).attr('name',searchData[j]['cond']['searchBy']);
+                this.el.find('.result').eq(j).val(searchData[j]['cond']['searchByName']);
+                this.el.find('.result').eq(j).attr('name',searchData[j]['cond']['searchByNew']);
                 this.el.find('.condition-search-select.radio').eq(j).val(searchData[j]['relation']);
                 // if(searchData[j]['relation'] == "$or") {
                 //     this.el.find('.condition-search-radio.or').eq(j).prop('checked',true);
@@ -212,19 +212,19 @@ let config = {
                 if(item.name == type) {
                     switch (item.searchType) {
                         case "datetime":
-                            this.el.find('.condition-search-box-input').eq(index).attr('title','datetime');
+                            this.el.find('.result').eq(index).attr('search-type','datetime');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateTimeControl = new DateTimeControl({value: value},{changeValue:function(data){}});
                             dateTimeControl.render(this.el.find('.condition-search-value').eq(index));
                             break;
                         case "date":
-                            this.el.find('.condition-search-box-input').eq(index).attr('title','date');
+                            this.el.find('.result').eq(index).attr('search-type','date');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateControl = new DateControl({value: value},{changeValue:function(data){}});
                             dateControl.render(this.el.find('.condition-search-value').eq(index));
                             break;
                         case "time":
-                            this.el.find('.condition-search-box-input').eq(index).attr('title','time');
+                            this.el.find('.result').eq(index).attr('search-type','time');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let timeControl = new TimeControl({value: value},{changeValue:function(data){}});
                             timeControl.render(this.el.find('.condition-search-value').eq(index));
@@ -234,7 +234,7 @@ let config = {
                             this.el.find('.condition-search-value').eq(index).find('.condition-search-input').val(value);
                             break;
                         case "number":
-                            this.el.find('.condition-search-box-input').eq(index).attr('title','number');
+                            this.el.find('.result').eq(index).attr('search-type','number');
                             this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="number">`);
                             this.el.find('.condition-search-input').eq(index).val(value);
                             break;
