@@ -614,7 +614,6 @@ let config = {
         this.drawForm();
         this.actions.init();
 
-        // console.log(this.data);
         if (this.data.id) {
             this.actions.fillChart(this.data.chart);
         };
@@ -623,8 +622,8 @@ let config = {
 }
 
 class LineBarEditor extends Base {
-    constructor(data, event) {
-        super(config, data, event);
+    constructor(data, event,extendConfig) {
+        super($.extend(true,{},config,extendConfig), data, event);
     }
 }
 export {LineBarEditor}

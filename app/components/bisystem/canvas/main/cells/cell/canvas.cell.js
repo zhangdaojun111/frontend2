@@ -250,8 +250,8 @@ let config = {
 
 export class CanvasCellComponent extends Component {
 
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data, events,extendConfig) {
+        super($.extend(true,{},config,extendConfig), data, events);
         // config.data.biUser = window.config.bi_user === 'client' ? false : true;
         // super(config);
         // this.data.cell = data['cell'];

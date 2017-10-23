@@ -72,7 +72,7 @@ let config = {
     ],
     afterRender(){
         let toolbarOptions = [{ size: [ 'small', false, 'large', 'huge' ]},{ 'header': [1, 2, 3, 4, 5, 6]},{ 'list': 'ordered'}, { 'list': 'bullet' },'image'];
-        // console.log(this.data);
+
         this.data.quill = new Quill(`#comment${this.componentId}`, {
             theme: 'snow',
             modules: {
@@ -91,12 +91,12 @@ export class CellCommentComponent extends CellBaseComponent {
     //     this.data.comment = cellChart['chart']['data'];
     // }
 
-    constructor(data,event) {
+    constructor(data,event,extendConfig) {
         data.cellChart = {
             cell: data.cell,
             chart: data.chart,
         };
-        super(config,data,event);
+        super($.extend(true,{},config,extendConfig),data,event);
         this.data.comment = this.data.cellChart['chart']['data'];
         this.data.componentId = this.componentId;
     }
