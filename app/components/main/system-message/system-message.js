@@ -388,6 +388,9 @@ let systemMessageUtil = {
         let html = '<div class="component-msg-detail">';
         let readMsg = '';
         if($.isArray(data) === false){
+            if(data.content){
+                data.msg_content = data.content;
+            }
             html += `
                 <h3 class="msg-title">${data.title}</h3>
                 <pre class="text">${data.msg_content}</pre>
