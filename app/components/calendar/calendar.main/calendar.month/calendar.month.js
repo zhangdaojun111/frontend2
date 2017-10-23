@@ -37,7 +37,7 @@ let config = {
 };
 
 class CalendarMonth extends Component {
-    constructor(data, newconfig) {
+    constructor(data, newconfig = {}) {
         config.data.monthBodyDataList = data;
         super($.extend(true ,{}, config, newconfig));
     }
