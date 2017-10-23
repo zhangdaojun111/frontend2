@@ -125,7 +125,7 @@ let config = {
                 '/iframe/addWf/?table_id=1639_8QvxFmFvVpK33bVPXdk8hD',
                 {
                     width: "900",
-                    height: '520',
+                    height: '540',
                     title: '日历表',
                     modal: true,
                     //customSize: true,
