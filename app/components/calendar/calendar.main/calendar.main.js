@@ -827,9 +827,9 @@ let config = {
 };
 
 class CalendarMain extends Component {
-    constructor(data, newconfig = {}) {
+    constructor(data) {
         config.data.cancel_fields = data;
-        super($.extend(true ,{}, config, newconfig));
+        super(config);
     }
 }
 

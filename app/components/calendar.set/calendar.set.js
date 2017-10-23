@@ -65,7 +65,7 @@ let config = {
             this.data.dropdownForRes = [{id: '', name: ''}];
             for (let columenListIndex in res) {
                 let item = res[columenListIndex];
-                console.log(item);
+                // console.log(item);
                 if (item['dinput_type'] === "3" || item['dinput_type'] === "5" || item["real_type"] === "3" || item["real_type"] === "5") {
                     this.data.rowTitle.push(item);
                 }
