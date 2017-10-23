@@ -217,7 +217,7 @@ let config = {
     }
 };
 export class CanvasHeaderComponent extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data, events,extendConfig) {
+        super($.extend(true,{},config,extendConfig), data, events);
     }
 }
