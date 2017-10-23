@@ -163,6 +163,9 @@ class Uploader {
     getProgressParams(name){
         let array = [];
         for(let code of Object.keys(this.fileList[name])){
+            if(this.fileList[name][code]['state']=='pre-delete'){
+                continue;
+            }
             array.push({
                 id:this.getFileId(name,code),
                 name:this.fileList[name][code].filename

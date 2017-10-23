@@ -7,6 +7,7 @@
     height: 100%;
     width: 100%;
     margin-bottom: 50px;//解决时间框下拉框弹出撑开form的抖动
+    overflow-x: auto;
     @import "dateTime";
     input, textarea, select{
         font-family: '微软雅黑';

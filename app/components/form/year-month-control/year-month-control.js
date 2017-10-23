@@ -88,6 +88,11 @@ let config={
         if(this.data.value != ''){
             yearData['choosed'][0] = {name:this.data.value.split('-')[0],id:this.data.value.split('-')[0]};
             monthData['choosed'][0] = {name:this.data.value.split('-')[1],id:this.data.value.split('-')[1]};
+            if (this.data.is_view) {
+                this.el.find('.year').attr('title', yearData['choosed'][0].name);
+                this.el.find('.month').attr('title', monthData['choosed'][0].name)
+            }
+
         }
         else{
             // yearData['choosed'][0] = {name:myYear,id:myYear};

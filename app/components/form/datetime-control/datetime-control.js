@@ -78,6 +78,7 @@ let config = {
             this.el.find('.ui-history').css('visibility','hidden');
         }
         if (this.data.is_view) {
+            this.el.find('.form-control').attr('title', this.data.value)
             this.el.find('.ui-width').attr('disabled', true);
             this.el.find('.datetime-control').css('pointer-events','none');
         } else {

@@ -18,6 +18,7 @@ import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
+import {CreateFormServer} from "../services/formService/CreateFormServer";
 
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
 serchStr.split('&').forEach(res => {
@@ -31,7 +32,7 @@ console.log(obj);
 ApprovalWorkflow.showDom().then(function (component) {
     WorkFlowGrid.showGrid();
     WorkFlowForm.showForm();
-    FormEntrys.createForm({
+    FormEntrys.initForm({
         el: $('#place-form'),
         form_id: obj.form_id,
         record_id: obj.record_id,
@@ -41,7 +42,10 @@ ApprovalWorkflow.showDom().then(function (component) {
         btnType:'none',
         table_id: obj.table_id
     });
-    setTimeout(()=> component.hideLoading(),1000)
+    Mediator.subscribe("form:formAlreadyCreate",()=>{
+        component.hideLoading();
+    });
+    // setTimeout(()=> component.hideLoading(),1000)
 });
 
 //订阅form data
@@ -185,7 +189,7 @@ function GetQueryString(name)
 //审批操作
 const approveWorkflow = (para) => {
     let key=GetQueryString('key');
-    let formData=FormEntrys.getFormValue(obj.table_id,true);
+    let formData=CreateFormServer.getFormValue(obj.table_id,true);
         // comment=$('#comment').val();
     para.data={};
     if(agorfo){
@@ -198,16 +202,14 @@ const approveWorkflow = (para) => {
     }
     para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);
-    console.log(para);
-    console.log(comment);
-    // console.log(9999999999888888888888)
-    // console.log('88888888888888888888888')
+    msgBox.showLoadingSelf();
     (async function () {
         return workflowService.approveWorkflowRecord({
             url: '/approve_workflow_record/',
             data: para
         });
     })().then(res => {
+        msgBox.hideLoadingSelf();
         if(res.success===1){
             msgBox.alert(`操作成功`);
             PMAPI.sendToParent({
@@ -275,7 +277,7 @@ Mediator.subscribe('approval:rejToAny', (id) => {
 //驳回至发起人，重新发起
 Mediator.subscribe("approval:re-app", (msg) => {
     let key=GetQueryString('key');
-    let formData=FormEntrys.getFormValue(obj.table_id,true);
+    let formData=CreateFormServer.getFormValue(obj.table_id,true);
     if(formData.error){
         msgBox.alert(`${formData.errorMessage}`);
     }else{

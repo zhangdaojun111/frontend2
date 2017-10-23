@@ -26,7 +26,7 @@ let config = {
     actions: {
         approveWorkflow(para){
             let key=obj.key;
-            let formData=FormEntrys.getFormValue(obj.table_id),
+            let formData=CreateFormServer.getFormValue(obj.table_id),
                 comment=$('#comment').val();
             para.data=JSON.stringify(formData);
             para.comment=comment;

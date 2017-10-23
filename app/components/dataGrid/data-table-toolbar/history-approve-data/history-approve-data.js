@@ -39,10 +39,10 @@ let config = {
         },
         // 渲染触发历史
         renderStrTable:function(){
-            this.append(new strikeTable({trigger_work_records: this.triggerWorkRecords}), this.el.find('.history-table-box.strike'));
-            // this.triggerWorkRecords.forEach((row) => {
-            //     this.append(new strikeTable(row), this.el.find('.history-table-box.strike'));
-            // });
+            // this.append(new strikeTable({trigger_work_records: this.triggerWorkRecords}), this.el.find('.history-table-box.strike'));
+            this.triggerWorkRecords.forEach((row) => {
+                this.append(new strikeTable(row), this.el.find('.history-table-box.strike'));
+            });
         },
         afterGetMsg:function() {
             this.recordHistory = [];

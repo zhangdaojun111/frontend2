@@ -38,10 +38,17 @@
             border-right: 1px solid rgba(228, 228, 228, 1) !important;
             //padding: 0px 8px;
             .floatingFilter-box {
-                padding: 5px 10px 0px 10px;
+                padding: 5px 8px 0px 8px;
                 .component-time-control {
+                    width: 100%;
                     div:first-child{
                         top: -2px;
+                        width: 100%;
+                    }
+                }
+                .component-date-control {
+                    img {
+                        top: 0px!important;
                     }
                 }
                 .dynamic-form-input{
