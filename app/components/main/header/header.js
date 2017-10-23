@@ -116,7 +116,7 @@ let config = {
          */
         onSocketNotice: function (data = {}) {
             systemMessageUtil.showMessageDetail('推送消息', data.title, data.content, true);
-        }
+        },
         // setOnlineNum:function () {
         //     //更新在线人数
         //     GlobalService.getOnlineUserData().done((result) => {
@@ -131,6 +131,61 @@ let config = {
         //         }
         //     })
         // }
+        /**
+         * 自动弹出未处理的推送消息
+         */
+        dealPostMsg:function () {
+            let msgs = window.config.sysConfig.notice;
+            // let msgs = [{create_time: "2017-10-23 11:08:28",
+            //     flow_id: 0,
+            //     form_id: 0,
+            //     handle_status: 7,
+            //     handle_status_text: "其他",
+            //     id: "59ed5d2cd8e9e42e3633ace4",
+            //     is_read: 0,
+            //     msg_content: " 徐艳 给 赵俨 加了一个新任务： [frontend2][framework]framework模块代码继承重构 ，请查收 !",
+            //     msg_type: "推送消息",
+            //     msg_type_num: 4,
+            //     publisher: "-",
+            //     record_id: 0,
+            //     record_status: 0,
+            //     title: "【ERDS开发任务】您又有新任务了，请查收",
+            //     url: ""},
+            //     {create_time: "2017-10-23 11:08:28",
+            //         flow_id: 0,
+            //         form_id: 0,
+            //         handle_status: 7,
+            //         handle_status_text: "其他",
+            //         id: "59ed5d2cd8e9e42e3633ace4",
+            //         is_read: 0,
+            //         msg_content: " abcdefg模块代码继承重构 ，请查收 !",
+            //         msg_type: "推送消息",
+            //         msg_type_num: 4,
+            //         publisher: "-",
+            //         record_id: 0,
+            //         record_status: 0,
+            //         title: "222222222",
+            //         url: ""},
+            //     {create_time: "2017-10-23 11:08:28",
+            //         flow_id: 0,
+            //         form_id: 0,
+            //         handle_status: 7,
+            //         handle_status_text: "其他",
+            //         id: "59ed5d2cd8e9e42e3633ace4",
+            //         is_read: 0,
+            //         msg_content: " 测试测试测试测试测试测试测试测试测试模块代码继承重构 ，请查收 !",
+            //         msg_type: "推送消息",
+            //         msg_type_num: 4,
+            //         publisher: "-",
+            //         record_id: 0,
+            //         record_status: 0,
+            //         title: "kkkkkk",
+            //         url: ""}
+            // ];
+            if(msgs && msgs.length > 0){
+                systemMessageUtil.showMessageDetail('推送消息', msgs, true);
+            }
+        }
     },
     binds: [
         {
@@ -214,6 +269,7 @@ let config = {
         });
         //加载全局搜索窗口
         this.actions.initGlobalSearch();
+        this.actions.dealPostMsg();
     },
 
     beforeDestory: function () {

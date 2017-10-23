@@ -260,7 +260,7 @@ let config = {
                     }
                 })
             } else {
-                systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
+                systemMessageUtil.showMessageDetail(data.msg_type_text, data);
             }
 
             // 查看操作通过前端自己刷新未读，审批通过loadData刷新
@@ -385,17 +385,33 @@ let systemMessageUtil = {
      * @param msgContent
      * @param speak
      */
-    showMessageDetail: function (dialogTitle, msgTitle, msgContent, speak = false) {
-        let html = `
-            <div class="component-msg-detail">
-                <h3 class="msg-title">${msgTitle}</h3>
-                <pre class="text">${msgContent}</pre>
+    showMessageDetail: function (dialogTitle, data, speak = false) {
+        let html = '<div class="component-msg-detail">';
+        let readMsg = '';
+        if($.isArray(data) === false){
+            html += `
+                <h3 class="msg-title">${data.title}</h3>
+                <pre class="text">${data.msg_content}</pre>
             </div>
         `;
-        speak = true;
+            readMsg = data.title.toString() + data.msg_content.toString();
+        }else{
+            for(let msg of data){
+                html += `
+           
+                    <h3 class="msg-title">${msg.title}</h3>
+                    <pre class="text">${msg.msg_content}</pre>
+                
+            `;
+                readMsg += msg.title.toString() + msg.msg_content.toString();
+            }
+            html += `</div>`;
+        }
+        console.log(html);
+        console.log('fff',readMsg);
+        debugger;
         if (speak) {
-            console.log('do read');
-            let msg = new SpeechSynthesisUtterance(msgTitle.toString() + msgContent.toString());
+            let msg = new SpeechSynthesisUtterance(readMsg);
             msg.lang = 'zh';
             msg.voice = speechSynthesis.getVoices().filter(function(voice) {
                 return voice.name == 'Whisper';
