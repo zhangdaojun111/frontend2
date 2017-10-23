@@ -3237,6 +3237,10 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
+            w = document.documentElement.clientWidth*0.8;
+            console.log(w);
+            h = window.screen.height*0.6;
+            console.log(window.screen.width, window.screen.height);
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
