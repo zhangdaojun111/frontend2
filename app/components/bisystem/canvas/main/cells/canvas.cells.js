@@ -95,6 +95,7 @@ let config = {
             this.data.cells[cellLayout.componentId] = cellLayout;
         },
 
+
         /**
          * 根据当前视图id，得到当前视图画布块布局，大小
          */
