@@ -90,13 +90,13 @@ let config = {
             let lastNum = EndNum;
             this.data.firstNum = firstNum;
             this.data.EndNum = EndNum;
-            if(EndNum > 100){
-                lastNum = 100;
+            if(EndNum > 50){
+                lastNum = 50;
             }
             for(let i= 0;i < lastNum;i ++){
                 this.append(new CalendarRemindTaskItem({data:taskData[firstNum + i], type: this.data.type}), this.el.find('.task-list'));
             }
-            this.data.firstNum += 100;
+            this.data.firstNum += 50;
         },
 
 

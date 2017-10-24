@@ -116,10 +116,12 @@ let config = {
          * @param type
          */
         getCalendarData: function (data,type){
+            Mediator.emit('Calendar: showLoading', 1);
             this.showLoading();
             CalendarService.getCalendarData(data).then( res=>{
                 if(res) {
                     this.hideLoading();
+                    Mediator.emit('Calendar: showLoading', 0);
                 }
                 console.log(res);
                 this.data.date2settings = res['date2csids'];
