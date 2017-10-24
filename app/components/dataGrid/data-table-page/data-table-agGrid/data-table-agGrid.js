@@ -1195,7 +1195,7 @@ let config = {
                     footerPostData = {
                         table_id: postData.table_id,
                         tableType: postData.tableType,
-                        filter: postData.postData
+                        filter: postData.filter
                     }
                 }
                 let footer = dataTableService.getFooterData( footerPostData );
