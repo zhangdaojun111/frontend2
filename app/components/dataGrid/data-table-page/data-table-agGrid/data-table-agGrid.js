@@ -1283,7 +1283,7 @@ let config = {
                 postData = {
                     table_id: postData.table_id,
                     tableType: postData.tableType,
-                    filter: postData.postData
+                    filter: postData.filter
                 }
             }
             console.log( postData )
