@@ -217,6 +217,8 @@ let config = {
         project: '',
         //二维表改变的值
         cellChangeValue: {},
+        //工作流表单查看操作
+        cannotopenform: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -2998,6 +3000,14 @@ let config = {
             if( this.data.permission.edit == 0 && type == 'edit' ){
                 msgBox.alert( '没有编辑权限' );
             }
+            if(this.data.cannotopenform == '1'){
+                msgBox.alert( "已完成工作的子表不能" + obj[type] );
+                return true
+            }
+            if(this.data.cannotopenform == '2'){
+                msgBox.alert( "在途工作的表单不能" + obj[type] );
+                return true
+            }
         },
         //操作列点击事件
         gridHandle: function ( data ) {
@@ -3005,10 +3015,9 @@ let config = {
             console.log( data )
             console.log( this.data.namespace )
             if( data.event.srcElement.className == 'gridView' ){
-                this.actions.viewOrEditPerm( 'view' );
                 console.log( '查看' )
                 let btnType = 'view';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 || this.actions.viewOrEditPerm( 'view' ) ){
                     btnType = 'none';
                 }
                 let obj = {
@@ -3032,8 +3041,10 @@ let config = {
                 this.actions.openSelfIframe( url,title );
             }
             if( data.event.srcElement.className == 'gridEdit' ){
-                this.actions.viewOrEditPerm( 'edit' );
                 console.log( '编辑' )
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 || this.actions.viewOrEditPerm( 'edit' ) ){
+                    btnType = 'none';
+                }
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -3174,9 +3185,8 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
-            this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
-            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
+            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter||this.actions.viewOrEditPerm( 'view' ) ){
                 return;
             }
             let obj = {
