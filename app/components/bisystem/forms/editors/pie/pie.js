@@ -336,9 +336,9 @@ let config = {
 }
 
 class PieEditor extends Base {
-    constructor(data) {
+    constructor(data,extendConfig) {
         config.data.chart_id = data.id ? data.id : null;
-        super(config);
+        super($.extend(true,{},config,extendConfig));
     }
 }
 
