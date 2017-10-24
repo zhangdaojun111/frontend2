@@ -78,6 +78,7 @@ let config = {
         },
         setSelectValue: function(type) {
             let optionHtmlOne = `<option value="$regex">包含</option>
+                                <option value="nor">不包含</option>
                                 <option value="exact">等于</option>
                                 <option value="$ne">不等于</option>`,
                 optionHtmlTwo = `<option value="$regex">包含</option>

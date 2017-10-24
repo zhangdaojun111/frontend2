@@ -31,6 +31,7 @@ module.exports = {
     calendarSetRemind: path.resolve(APP_PATH, 'entrys/popup/calendarSetRemind.js'),
     calendarSet: path.resolve(APP_PATH, 'entrys/calendar.set.js'),
     calendarCreate: path.resolve(APP_PATH, 'entrys/calendar.create.js'),
+    calendarOpenForm: path.resolve(APP_PATH, 'entrys/popup/calendarOpenForm.js'),
     calendarOpenSetting: path.resolve(APP_PATH, 'entrys/popup/calendarOpenSetting.js'),
     calendarExport: path.resolve(APP_PATH, 'entrys/popup/calendarExport.js'),
     calendarOpenRemind: path.resolve(APP_PATH, 'entrys/popup/calendarOpenRemind.js'),

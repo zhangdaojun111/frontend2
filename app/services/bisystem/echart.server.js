@@ -183,7 +183,6 @@ export class EchartsService {
             }
         };
         if (!isStack) {
-            console.log(isZero);
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
         };
 
@@ -201,12 +200,10 @@ export class EchartsService {
             if (10 * secondMaxText > 30) {
                 linebarOption['grid']['right'] = 10 * secondMaxText;
             };
-
             const splitNumber = 5;
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax;
             };
-
             linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
@@ -214,7 +211,7 @@ export class EchartsService {
                 scale: true,
                 splitNumber: splitNumber,
                 max: secondMax,
-                min: secondMin,
+                min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
                 interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
                 axisLabel: {
                     inside: false
@@ -304,7 +301,6 @@ export class EchartsService {
             }
         };
 
-
         //x轴为3日期,5日期时间,12年份,30年月类型字段时开启数据缩放
         let dateType = ['3','5','12','30'];
         if(cellOption['xAxis'] && cellOption['xAxis']['type'] && dateType.indexOf(cellOption['xAxis']['type']) != -1 && window.config.bi_user !== 'manager'){
@@ -325,7 +321,7 @@ export class EchartsService {
                     endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                     rangeMode: ['value', 'value']
                 }]
-        }
+        };
         return linebarOption;
     }
 

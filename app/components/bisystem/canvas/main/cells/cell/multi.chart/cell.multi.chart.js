@@ -37,12 +37,12 @@ export class CellMultiChartComponent extends CellBaseComponent {
     //     super(config);
     //     this.data.id += this.componentId;
     // }
-    constructor(data,event) {
+    constructor(data,event,extendConfig) {
         data.cellChart = {
             cell: data.cell,
             chart: data.chart
         };
-        super(config,data,event);
+        super($.extend(true,{},config,extendConfig),data,event);
         this.data.id += this.componentId;
     }
 }

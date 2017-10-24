@@ -21,6 +21,47 @@
     }
 }
 
+@mixin div-equal {
+    display: inline-block;
+    width: 33.3%;
+    margin-top: 20px;
+}
+
+.form-chart-multi-chart {
+    .form-group-chart {
+        position: relative;
+        margin-bottom: 20px;
+        > div {
+            @include div-equal;
+        }
+        > div:last-child {
+            width: 100%;
+        }
+        > div:nth-last-child(2) {
+            margin-top: 0;
+            padding-right: 66.7%;
+        }
+        .form-chart-radio {
+            label {
+                margin: 8px;
+                border: 1px solid #e4e4e4;
+                padding: 10px 24px;
+                background: #F2F2F2;
+            }
+        }
+    }
+}
+
+//行级模式下
+.countColumn-width {
+    .form-group-chart {
+        > div:nth-last-child(2) {
+            margin-left: 33.3%;
+            padding-right: 0;
+        }
+    }
+}
+
 .form-group-chart {
     .remove-y-btn {
         position: absolute;
@@ -51,8 +92,7 @@
                 display: none;
             }
             .error-msg {
-                top: 14px;
-                left: -298px;
+                top: -6px;
             }
         }
     }
@@ -69,6 +109,5 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-
     }
 }

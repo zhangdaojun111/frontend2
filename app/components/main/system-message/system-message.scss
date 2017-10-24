@@ -63,10 +63,12 @@
 
 .component-msg-detail {
     text-align: center;
-    h3 {
+    box-sizing: border-box;
+    padding-bottom: 50px !important;
+    .msg-title {
         font-size: 16px;
         color: #333;
-        padding: 40px;
+        padding: 40px 70px;
     }
     .text {
         text-align: left;

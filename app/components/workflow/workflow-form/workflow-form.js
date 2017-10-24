@@ -191,9 +191,13 @@ let config = {
 }
 
 class WorkFlowForm extends Component {
-    constructor(data){
-        config.data = data;
-        super(config);
+    // constructor(data){
+    //     config.data = data;
+    //     super(config);
+    // }
+
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

@@ -10,8 +10,8 @@ import 'quill/dist/quill.snow.css';
 import Component from '../../lib/component';
 
 export class BiBaseComponent extends Component{
-    constructor(config) {
-        super(config)
+    constructor(config,extendConfig) {
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
