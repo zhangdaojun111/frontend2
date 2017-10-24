@@ -560,6 +560,9 @@ let config = {
                         let conditinField = '';
                         if (condition["optionfield"] != null) {
                             //通过id查找field
+                            console.log( "---------------" )
+                            console.log( "---------------" )
+                            console.log( this.data.fieldsData )
                             for (let col of this.data.fieldsData) {
                                 if (col["id"] == condition["optionfield"]) {
                                     conditinField = col["field"];
@@ -574,25 +577,25 @@ let config = {
                                     break;
                                 }
                                 case '>': {
-                                    if (params.data.conditinField > condition["context"]) {
+                                    if (params.data[conditinField] > condition["context"]) {
                                         color = 'rgba(255,0,0,1)'
                                     }
                                     break;
                                 }
                                 case '<': {
-                                    if (params.data.conditinField < condition["context"]) {
+                                    if (params.data[conditinField] < condition["context"]) {
                                         color = 'rgba(255,0,0,1)'
                                     }
                                     break;
                                 }
                                 case '<=': {
-                                    if (params.data.conditinField <= condition["context"]) {
+                                    if (params.data[conditinField] <= condition["context"]) {
                                         color = 'rgba(255,0,0,1)'
                                     }
                                     break;
                                 }
                                 case '>=': {
-                                    if (params.data.conditinField >= condition["context"]) {
+                                    if (params.data[conditinField] >= condition["context"]) {
                                         color = 'rgba(255,0,0,1)'
                                     }
                                     break;
