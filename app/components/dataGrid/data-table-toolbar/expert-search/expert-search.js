@@ -275,8 +275,7 @@ let config = {
                 rightBracketNum = 0;
             try {
                 this.data.searchInputList.forEach((item) => {
-                    debugger
-                    if (item['cond']['keyword'] == '') {
+                    if (item['cond']['keyword'] === '') {
                         msgBox.alert('查询值不能为空！');
                         checkedPost = false;
                         foreach.break=new Error("StopIteration");
