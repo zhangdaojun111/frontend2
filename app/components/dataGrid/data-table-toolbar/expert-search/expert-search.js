@@ -156,7 +156,6 @@ let config = {
                 obj['relation'] = this.el.find('.condition-search-select.radio').eq(i).val()
                 this.data.searchInputList.push(obj);
             }
-            debugger
             this.actions.checkedSubmitData(name)
 
         },
@@ -276,6 +275,7 @@ let config = {
                 rightBracketNum = 0;
             try {
                 this.data.searchInputList.forEach((item) => {
+                    debugger
                     if (item['cond']['keyword'] == '') {
                         msgBox.alert('查询值不能为空！');
                         checkedPost = false;
