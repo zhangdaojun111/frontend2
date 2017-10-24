@@ -58,6 +58,8 @@ let config = {
             const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
             if (res['success'] === 1) {
                 try {
+                    console.log(res['data']['data']);
+                    console.log(this);
                     this.actions.loadCellChart(res['data']['data']);
                 } catch (e){
 
@@ -112,13 +114,14 @@ let config = {
 
             // 获取画布块最大zindex
             this.data.cellMaxZindex = Math.max(...zIndex);
+
             // 获取画布块的chart数据
             const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
-            this.hideLoading();
             if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
 
                 //结束加载动画
-                // this.hideLoading();
+                this.hideLoading();
+
                 if (res['success'] == 0) {
                     msgbox.alert(res['error']);
                     return false;
@@ -165,9 +168,9 @@ let config = {
             event: 'scroll',
             selector: '',
             callback: function (context, event) {
-               let curScrollTop = $(context).scrollTop();
-               // console.log($(context))
-               // console.log(context.innerHeight());
+               // let top = $(context).scrollTop();
+               // console.log($(context).height());
+               // console.log(top);
             }
         },
     ],
