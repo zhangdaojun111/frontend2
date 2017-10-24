@@ -218,8 +218,10 @@ let config = {
          * @param tableId
          */
         reset: function (tableId) {
+            let field_ids = [];
             // 重置每行数据
             for (let a of this.data.allRows) {
+                field_ids.push(a['field_id']);
                 a['isSelected'] = false;
                 a['is_show_at_home_page'] = false;
                 a['color'] = "#000000";
@@ -249,8 +251,8 @@ let config = {
                 }
             }
             CalendarSetService.resetCalendar(tableId, this.data.allRows).then(res => {
-                console.log(res);
                 if (res['success'] === 1) {
+                    Mediator.emit('Calendar:calendarReset', field_ids);
                     MSG.alert('重置成功');
                     setTimeout(() => {
                         this.el.find('.set-items').empty();

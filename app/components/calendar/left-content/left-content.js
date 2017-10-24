@@ -103,7 +103,9 @@ let config = {
                     height: '760',
                     modal: true,
                     customSize: true,
-                },
+                },{
+                    cancel_fields:this.data.LeftCalendarSet.data.cancel_fields
+                }
             ).then(data => {
                 console.log(data);
                 CalendarService.getCalendarTreeData().then(res => {
@@ -111,7 +113,8 @@ let config = {
                     Mediator.emit('Calendar: tool', {toolMethod: 'refresh', type: 'closeSetting', data:res['cancel_fields']});
                     this.data.cancelFields = res['cancel_fields'];
                     this.el.find('.left-calendar-set').empty();
-                    this.append(new LeftContentCalendarSet(res), this.el.find('.left-calendar-set'));
+                    this.data.LeftCalendarSet = new LeftContentCalendarSet(res);
+                    this.append(this.data.LeftCalendarSet, this.el.find('.left-calendar-set'));
                 });
             });
         },
@@ -173,7 +176,8 @@ let config = {
         this.el.tooltip();
         this.el.css({"height": "100%", "width": "100%"});
         this.actions.getCalendarTreeData();
-        this.append(new LeftContentCalendarSet(this.data.calendarTreeData), this.el.find('.left-calendar-set'));
+        this.data.LeftCalendarSet = new LeftContentCalendarSet(this.data.calendarTreeData);
+        this.append(this.data.LeftCalendarSet, this.el.find('.left-calendar-set'));
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.el.find('.item-content-3').empty();
             data.forEach((row) => {
