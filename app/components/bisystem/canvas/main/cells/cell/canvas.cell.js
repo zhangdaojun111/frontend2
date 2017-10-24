@@ -79,7 +79,6 @@ let config = {
                 });
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
-                this.cellChart = this.data.cellComponent;
             }
         },
 

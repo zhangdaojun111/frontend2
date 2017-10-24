@@ -14,6 +14,50 @@ let config = {
         cellMaxZindex: 0,
     },
     actions: {
+        /**
+         * 瀑布流方式加载cell chart data 数据
+         */
+        async waterfallLoadingCellData(option) {
+            let top = option.top;
+            let layouts = [];
+            let cells = [];
+            Object.keys(this.data.cells).forEach(key => {
+                if (top >= this.data.cells[key].data.cell.size.top && !this.data.cells[key].data.chart) {
+                    layouts.push(this.data.cells[key].data.layout);
+                    cells.push(this.data.cells[key]);
+                }
+            });
+            // 获取画布块的chart数据
+            if (layouts.length > 0) {
+                const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
+                if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
+
+                    if (res['success'] == 0) {
+                        msgbox.alert(res['error']);
+                        return false;
+                    };
+
+                    // 当返回成功时，通知各个cell渲染chart数据
+                    cells.map((item,index) => {
+                        item.setChartData(res[index]);
+                    })
+                }
+            };
+
+        },
+        isScrollStop() {
+            // 判断此刻到顶部的距离是否和1秒前的距离相等
+            if(this.el.scrollTop() == this.data.curScrollTop) {
+                console.log("scroll bar is stopping!");
+                this.actions.waterfallLoadingCellData({top: this.el.height() + this.data.curScrollTop});
+                clearInterval(this.data.interval);
+                this.data.interval = null;
+            }
+        },
+
+        /**
+         * 实例化画布块，并返回实例化的对象
+         */
         makeCell(data) {
             let cell = new CanvasCellComponent(data,{
 
@@ -58,8 +102,6 @@ let config = {
             const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
             if (res['success'] === 1) {
                 try {
-                    console.log(res['data']['data']);
-                    console.log(this);
                     this.actions.loadCellChart(res['data']['data']);
                 } catch (e){
 
@@ -90,7 +132,6 @@ let config = {
                 };
                 let cell = this.actions.makeCell(data);
                 this.data.cells[cell.componentId] = cell;
-
                 // 在客户模式下获取有没有下穿记录
                 let deep_info = {};
                 if (val.is_deep == 0) {
@@ -99,7 +140,7 @@ let config = {
                     deep_info[val.deep.floor] = val.deep.xOld.map(x => x['name'])
                 };
 
-                layouts.push(JSON.stringify({
+                this.data.cells[cell.componentId].data.layout = JSON.stringify({
                     chart_id: val.chart_id ? val.chart_id : 0,
                     floor: val.is_deep == 0 ? 0 : userMode === 'client' ? val.deep['floor'] : 0,
                     view_id: this.data.currentViewId,
@@ -108,29 +149,11 @@ let config = {
                     row_id: 0,
                     deep_info: deep_info,
                     sort: val.sort
-                }));
-
+                });
             });
 
             // 获取画布块最大zindex
             this.data.cellMaxZindex = Math.max(...zIndex);
-
-            // 获取画布块的chart数据
-            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
-            if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
-                //结束加载动画
-                this.hideLoading();
-
-                if (res['success'] == 0) {
-                    msgbox.alert(res['error']);
-                    return false;
-                };
-
-                // 当返回成功时，通知各个cell渲染chart数据
-                Object.keys(this.data.cells).map((key,index) => {
-                    this.data.cells[key].setChartData(res[index]);
-                })
-            }
         },
 
         /**
@@ -167,17 +190,21 @@ let config = {
             event: 'scroll',
             selector: '',
             callback: function (context, event) {
-               // let top = $(context).scrollTop();
-               // console.log($(context).height());
-               // console.log(top);
+               let curScrollTop = $(context).scrollTop();
+               if (!this.data.interval) {
+                   this.data.interval = setInterval(() => {
+                       this.actions.isScrollStop();
+                   }, 1000);
+               };
+               this.data.curScrollTop = curScrollTop;
             }
         },
     ],
 
-    afterRender() {
+    async afterRender() {
         // 加载loading动画;
-        this.showLoading();
-        this.actions.getCellLayout();
+        await this.actions.getCellLayout();
+        this.actions.waterfallLoadingCellData({top: this.el.height()});
     },
     beforeDestory() {}
 };
