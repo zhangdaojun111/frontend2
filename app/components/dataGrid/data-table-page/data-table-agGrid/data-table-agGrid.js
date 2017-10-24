@@ -1269,6 +1269,13 @@ let config = {
         //请求footer数据
         getFooterData: function () {
             let postData = this.actions.createPostData();
+            if( this.data.viewMode == 'source_data' ){
+                postData = {
+                    table_id: postData.table_id,
+                    tableType: postData.tableType,
+                    filter: postData.postData
+                }
+            }
             dataTableService.getFooterData( postData ).then( res=>{
                 this.data.footerData = dgcService.createFooterData( res );
                 let d = {
