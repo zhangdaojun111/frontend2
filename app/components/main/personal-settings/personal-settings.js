@@ -35,7 +35,6 @@ function getData(component_instance) {
 let config = {
     template:template,
     data:{
-        targetUserName:'',
         isCapsLock:false,
     },
     actions:{
@@ -179,7 +178,8 @@ let config = {
          * 显示他人登录界面
          */
         otherLogin:function () {
-            LoginByOther.show();
+            let newConfig = {};
+            LoginByOther.show(newConfig);
         },
         // //初始化头像
         // initAvatar:function () {
@@ -348,17 +348,15 @@ let config = {
 };
 
 class PersonalSetting extends Component{
-    constructor(userName,mode){
-        super(config);
-        this.data.targetUserName = userName;
-        this.data.mode = mode;
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
 
 export const PersonSetting  = {
     el:null,
     show: function() {
-        let component = new PersonalSetting("","self");
+        let component = new PersonalSetting();
         this.el = $('<div class="personal-setting-page">').appendTo(document.body);
         getData(component);
         component.render(this.el);

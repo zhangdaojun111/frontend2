@@ -97,7 +97,7 @@ let config = {
 };
 
 class CalendarRemind extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         console.log(data);
         config.data.remindTable = data.remindTable;
         config.data.remindDateProp = data.remindDateProp;
@@ -107,7 +107,7 @@ class CalendarRemind extends Component {
         config.data.remindDate = data.remindDate;
         config.data.remindTime = data.remindTime;
         config.data.remindRealId = data.remindRealId;
-        super(config);
+        super( $.extend(true ,{}, config, newconfig));
     }
 }
 export default CalendarRemind;

@@ -144,10 +144,10 @@ let config = {
 };
 
 class TableGrid extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         config.data.bodyData = data['bodyData'];
         config.data.type = data.type;
-        super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 

@@ -27,9 +27,10 @@ let config = {
 };
 
 class CalendarWeek extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         [config.data.weekListHead, config.data.weekData] = data;
-        super(config);
+        // super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 
