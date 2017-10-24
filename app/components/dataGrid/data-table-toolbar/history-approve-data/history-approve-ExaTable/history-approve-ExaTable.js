@@ -27,8 +27,8 @@ class examineTable extends Component {
     //     config.data = data
     //     super(config)
     // }
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 export default examineTable
