@@ -285,12 +285,12 @@
     #form-paging-tabs-control{
         width: 1200px;
         margin: 0 auto;
-        ul[role="tablist"] {
+        ul {
             padding: 0;
             margin: 0;
             background: none;
             border: none;
-            li[role="tab"] {
+            li {
                 display: block;
                 float: left;
                 font-size: 12px;
