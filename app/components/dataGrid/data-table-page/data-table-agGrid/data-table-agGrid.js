@@ -1190,7 +1190,15 @@ let config = {
             let remindData = dataTableService.getReminRemindsInfo({table_id:this.data.tableId});
             post_arr = [body,remindData]
             if( !this.data.firstGetFooterData ){
-                let footer = dataTableService.getFooterData( postData );
+                let footerPostData = postData;
+                if( this.data.viewMode == 'source_data' ){
+                    footerPostData = {
+                        table_id: postData.table_id,
+                        tableType: postData.tableType,
+                        filter: postData.postData
+                    }
+                }
+                let footer = dataTableService.getFooterData( footerPostData );
                 post_arr.push( footer )
             }
             Promise.all(post_arr).then((res)=> {
@@ -1269,6 +1277,8 @@ let config = {
         //请求footer数据
         getFooterData: function () {
             let postData = this.actions.createPostData();
+            console.log( "请求footer数据" )
+            console.log( this.data.viewMode )
             if( this.data.viewMode == 'source_data' ){
                 postData = {
                     table_id: postData.table_id,
@@ -1276,6 +1286,7 @@ let config = {
                     filter: postData.postData
                 }
             }
+            console.log( postData )
             dataTableService.getFooterData( postData ).then( res=>{
                 this.data.footerData = dgcService.createFooterData( res );
                 let d = {
