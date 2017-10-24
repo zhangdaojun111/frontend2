@@ -68,8 +68,8 @@ let config={
     }
 }
 class RadioControl extends Component {
-    constructor(data,events){
-        super(config,data,events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 
