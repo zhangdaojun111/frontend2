@@ -11,13 +11,15 @@ import CalendarSettingItem from './calendar.setting.item/calendar.setting.item';
 import CalendarSet from '../../calendar.set/calendar.set';
 import {CalendarSetService} from "../../../services/calendar/calendar.set.service"
 import {SettingMenuComponent} from '../calendar.setting.menu/setting.menu';
-
+import {PMAPI, PMENUM} from '../../../lib/postmsg';
+import {CalendarService} from '../../../services/calendar/calendar.service';
 let config = {
     template: template,
     data: {
         menu: [],
         isHide: true,
-        calendarSet: []
+        calendarSet: [],
+        cancel_fields:[],
     },
     actions: {
         getFilterMenu: function (keyValue, subMenu) {
@@ -89,6 +91,14 @@ let config = {
         //     calendarSetItem.data.menuItem = item;
         //     this.append(calendarSetItem, this.el.find('.setting-content'));
         // });
+        PMAPI.getIframeParams(window.config.key).then(params => {
+            this.data.cancel_fields = params.data.cancel_fields;
+        });
+        Mediator.on('Calendar:calendarReset', data => {
+            this.data.cancel_fields = _.difference(this.data.cancel_fields, data);
+            let preference = {"content": this.data.cancel_fields};
+            CalendarService.getCalendarPreference(preference);
+        });
         let settingMenuComponent = new SettingMenuComponent({list: this.data.menu});
         this.append(settingMenuComponent, this.el.find('.setting-content'));
         Mediator.on('calendar-set-left:calendar-set', data => {

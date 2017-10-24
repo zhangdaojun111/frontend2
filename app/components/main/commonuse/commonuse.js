@@ -131,8 +131,8 @@ let config = {
 }
 
 class CommonUse extends Component {
-    constructor(data) {
-        super(config, data);
+    constructor(newConfig,data) {
+        super($.extend(true,{},config,newConfig));
     }
 }
 

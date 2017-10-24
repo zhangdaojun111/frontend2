@@ -150,8 +150,8 @@ let config = {
 };
 
 class FindPassword extends Component{
-    constructor(){
-        super(config);
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
 
