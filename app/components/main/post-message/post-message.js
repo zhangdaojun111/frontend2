@@ -221,11 +221,9 @@ let config = {
 }
 
 class PostMessage extends Component {
-
-    constructor(data) {
-        super(config, data);
+    constructor(newConfig) {
+        super($.extend(true,{},config,newConfig));
     }
-
 }
 
 let postMessageUtil = {

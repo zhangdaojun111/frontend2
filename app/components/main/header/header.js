@@ -81,7 +81,6 @@ let config = {
          * 有未读的消息显示红点提醒
          */
         displayMessageUnread: function (data) {
-            console.log('do reset red point')
             let badge = parseInt(data.badge);
             if (_.isNaN(badge)) {
                 badge = 0;
@@ -226,4 +225,12 @@ let config = {
     }
 }
 
-export const HeaderInstance = new Component(config, {});
+class HeaderComponent extends Component{
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig))
+    }
+}
+
+export {HeaderComponent};
+
+// export const HeaderInstance = new Component(config, {});
