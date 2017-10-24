@@ -58,6 +58,8 @@ let config = {
             const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
             if (res['success'] === 1) {
                 try {
+                    console.log(res['data']['data']);
+                    console.log(this);
                     this.actions.loadCellChart(res['data']['data']);
                 } catch (e){
 
@@ -161,7 +163,17 @@ let config = {
             });
         }
     },
-    binds: [],
+    binds: [
+        { //滚动距离
+            event: 'scroll',
+            selector: '',
+            callback: function (context, event) {
+               let top = $(context).scrollTop();
+               console.log($(context).height());
+               console.log(top);
+            }
+        },
+    ],
 
     afterRender() {
         // 加载loading动画;
