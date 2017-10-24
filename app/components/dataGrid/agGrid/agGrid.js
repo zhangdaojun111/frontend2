@@ -186,7 +186,7 @@ class agGrid extends Component {
     //     super(config);
     // }
     constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
+        super($.extend(true,config,newConfig,{data:data||{}}));
     }
 }
 
