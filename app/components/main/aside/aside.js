@@ -172,15 +172,7 @@ let config = {
          * 打开个人信息设置页面
          */
         showInfoSet:function () {
-            // PersonSetting.show();
-            let tempConfig = {
-                actions:{
-                    showModifyPassword:function () {
-                        console.log('覆盖测试');
-                    },
-                }
-            }
-            // PersonSetting.showUserInfo({'name':'赵俨'})
+            PersonSetting.show();
         },
         /**
          * 设置用户头像

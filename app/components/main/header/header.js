@@ -80,7 +80,6 @@ let config = {
          * 有未读的消息显示红点提醒
          */
         displayMessageUnread: function (data) {
-            console.log('do reset red point')
             let badge = parseInt(data.badge);
             if (_.isNaN(badge)) {
                 badge = 0;
