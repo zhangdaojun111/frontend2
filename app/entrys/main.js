@@ -5,12 +5,17 @@ import '../assets/scss/main.scss';
 import '../assets/scss/framework/framework-base.scss';
 import {SocketMgr} from '../lib/socket';
 import '../assets/scss/framework/framework-base.scss'
-import {IframeInstance} from '../components/main/iframes/iframes';
-import {HeaderInstance} from '../components/main/header/header';
-import {AsideInstance} from '../components/main/aside/aside';
+import {IframeComponent} from '../components/main/iframes/iframes';
+import {HeaderComponent} from '../components/main/header/header';
+import {AsideComponent} from '../components/main/aside/aside';
 import '../assets/scss/dataGrid/dataGrid-icon.scss';
 import {Storage} from "../lib/storage";
 SocketMgr.connect();
+
+let AsideInstance = new AsideComponent();
+let HeaderInstance = new HeaderComponent();
+let IframeInstance = new IframeComponent();
+
 _.defaultsDeep(AsideInstance.data, {
     systemName: window.config.sysConfig.logic_config.sap_login_system_name,
     avatar: window.config.sysConfig.userInfo.avatar,
