@@ -118,7 +118,6 @@ let config = {
             // 获取画布块的chart数据
             const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
             if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
-
                 //结束加载动画
                 this.hideLoading();
 
