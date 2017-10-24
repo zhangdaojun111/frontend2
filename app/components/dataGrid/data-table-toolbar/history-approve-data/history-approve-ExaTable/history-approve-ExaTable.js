@@ -23,9 +23,12 @@ let config = {
     }
 }
 class examineTable extends Component {
-    constructor(data) {
-        config.data = data
-        super(config)
+    // constructor(data) {
+    //     config.data = data
+    //     super(config)
+    // }
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
 export default examineTable
