@@ -18,13 +18,13 @@
                 {{#fields}}
                 {{#if candrag}}
                 <li field="{{field}}" name="{{name}}" class="ui-state-default">
-                    <i class="custom-checkbox icon-aggrid-cus checkbox-uncheck"></i><span title="{{name}}" class="custom-name">{{name}}</span>
-                    <i class="custom-fix-l icon-aggrid-cus"></i><i class="custom-fix-r icon-aggrid-cus"></i>
+                    <i class="custom-checkbox icon-aggrid-cus checkbox-uncheck" ></i><span title="{{name}}" class="custom-name">{{name}}</span>
+                    <i class="custom-fix-l icon-aggrid-cus" title="固定在最左"></i><i class="custom-fix-r icon-aggrid-cus" title="固定在最右" title="固定在最右"></i>
                 </li>
                 {{else}}
                 <li field="{{field}}" name="{{name}}" class="custom-disabled">
-                    <i class="custom-checkbox icon-aggrid-cus checkbox-uncheck"></i><span title="{{name}}" class="custom-name">{{name}}</span>
-                    <i class="custom-fix-l icon-aggrid-cus" style="display: none;"></i><i class="custom-fix-r icon-aggrid-cus" style="display: none;"></i>
+                    <i class="custom-checkbox icon-aggrid-cus checkbox-uncheck" ></i><span title="{{name}}" class="custom-name">{{name}}</span>
+                    <i class="custom-fix-l icon-aggrid-cus" title="固定在最左" style="display: none;"></i><i class="custom-fix-r icon-aggrid-cus" title="固定在最右" style="display: none;"></i>
                 </li>
                 {{/if}}
                 {{/fields}}
