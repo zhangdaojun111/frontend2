@@ -37,6 +37,7 @@ import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
 import ContractControl from "../contract-control/contract-control";
 import '../../../../node_modules/jquery-ui/ui/widgets/tabs';
+import {CreateFormServer} from "../../../services/formService/CreateFormServer";
 let config = {
     template: '',
     data: {
@@ -1242,6 +1243,9 @@ let config = {
             let json = this.actions.createPostJson();
             let res = await FormService.getDynamicData(json);
             for (let key in res.data) {
+            	if(res.data[key].options){
+		            res.data[key].options=this.data.data[key].options.concat(res.data[key].options);
+	            }
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
                 if (this.data.childComponent[key]) {
                     this.data.childComponent[key].data = Object.assign({}, this.data.childComponent[key].data, res.data[key]);
@@ -1657,7 +1661,13 @@ let config = {
                 this.data.viewMode = 'viewFromCorrespondence';
             }
             let _this = this;
-            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${window.config.table_id}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
+            console.log('######')
+            console.log('######')
+            console.log('######')
+            console.log('######')
+            console.log('######')
+	        console.log(CreateFormServer.data.tableId);
+            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${CreateFormServer.data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
                 width: 1400,
                 height: 800,
                 title: `对应关系`,
@@ -1929,7 +1939,9 @@ let config = {
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
-
+        this.el.find("#form-paging-tabs-control ul li").on('click', function () {
+            $(this).css('background','#F2F2F2').siblings().css('background','#ffffff');
+        })
     },
     beforeDestory() {
         this.el.off();
