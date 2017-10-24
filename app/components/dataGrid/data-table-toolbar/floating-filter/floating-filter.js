@@ -27,7 +27,7 @@ let config = {
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className = 'filter-input filter-input-' + searchFiled;
                         this.eGui.style.height = '25px';
-                        this.eFilterInput.style.width = '80%';
+                        // this.eFilterInput.style.width = '80%';
                         this.eFilterInput.style.height = '15px';
                         this.eFilterInput.style.lineHeight = '20px';
                         this.eFilterInput.style.color = 'rgb(85,85,85)';
@@ -49,6 +49,7 @@ let config = {
                         },1000 ))
                     }else if( colInfo  == 'time' ){  //使用时间插件
                         let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){
+                            debugger
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                         }});
                         timeControl.render($(this.eGui));
@@ -78,7 +79,7 @@ let config = {
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className = 'filter-input filter-input-' + searchFiled;
                         this.eGui.style.height = '25px';
-                        this.eFilterInput.style.width = '80%';
+                        // this.eFilterInput.style.width = '80%';
                         this.eFilterInput.style.height = '15px';
                         this.eFilterInput.style.lineHeight = '20px';
                         this.eFilterInput.style.color = 'rgb(85,85,85)';

@@ -27,6 +27,7 @@ let config = {
          * 添加画布块
          */
         addCell() {
+            let scrollHeight = $('.cells-container').scrollTop();
             const layout = {
                 attribute:[],
                 layout_id: '',
@@ -36,7 +37,7 @@ let config = {
                 deep_clear: "0",
                 size: {
                     left: 100,
-                    top: 100,
+                    top: scrollHeight > 100 ? scrollHeight : 100,
                     width: 300,
                     height: 300,
                     zIndex: 1
@@ -44,7 +45,6 @@ let config = {
             };
             this.trigger('onAddCell', layout);
         },
-
         // /**
         //  * 当前选中的视图
         //  * @param id 当前视图的id
@@ -217,7 +217,7 @@ let config = {
     }
 };
 export class CanvasHeaderComponent extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data, events,extendConfig) {
+        super($.extend(true,{},config,extendConfig), data, events);
     }
 }

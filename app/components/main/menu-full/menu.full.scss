@@ -26,6 +26,11 @@
         &.edit {
             display: none;
         }
+
+        &.highlight{
+            border-bottom: 1px solid rgb(204,204,204);
+            background-image: url("../../../assets/images/framework/highlight-search.png");
+        }
     }
 
     &.mini {

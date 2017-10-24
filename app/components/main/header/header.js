@@ -8,7 +8,8 @@ import {systemMessageUtil} from '../system-message/system-message';
 import {SysSetting} from "../system-setting/system-setting"
 import {postMessageUtil} from '../post-message/post-message';
 import {GlobalSearch} from '../global-search/global-search';
-import {OnlineDisplay} from "../online-users/online-users"
+import {OnlineDisplay} from "../online-users/online-users";
+import {PMAPI, PMENUM} from '../../../lib/postmsg';
 
 let config = {
     template: template,
@@ -134,6 +135,10 @@ let config = {
             callback: function () {
                 this.data.asideSize = this.data.asideSize === 'full' ? 'mini' : 'full';
                 Mediator.emit('aside:size', this.data.asideSize);
+                PMAPI.sendToAllChildren({
+                    type: PMENUM.aside_fold,
+                    data: 'data'
+                });
                 if (this.data.asideSize === 'full') {
                     this.actions.setSizeToFull();
                 } else {
