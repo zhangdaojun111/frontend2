@@ -23,6 +23,9 @@ import {CreateFormServer} from "../services/formService/CreateFormServer";
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
 
+let component = new WorkflowInitial();
+component.render($('#WorkflowInitial'));
+
 /*
 ***订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
  */
