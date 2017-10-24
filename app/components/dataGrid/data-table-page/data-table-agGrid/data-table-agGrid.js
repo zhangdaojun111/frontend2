@@ -1189,22 +1189,29 @@ let config = {
             let body = dataTableService.getTableData( postData );
             let remindData = dataTableService.getReminRemindsInfo({table_id:this.data.tableId});
             post_arr = [body,remindData]
-            if( !this.data.firstGetFooterData ){
-                let footerPostData = postData;
-                if( this.data.viewMode == 'source_data' ){
-                    footerPostData = {
-                        table_id: postData.table_id,
-                        tableType: postData.tableType,
-                        filter: postData.filter
-                    }
-                }
-                let footer = dataTableService.getFooterData( footerPostData );
+            if( !this.data.firstGetFooterData && this.data.viewMode != 'source_data' ){
+                let footer = dataTableService.getFooterData( postData );
                 post_arr.push( footer )
             }
             Promise.all(post_arr).then((res)=> {
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
                     this.actions.setGridData( res );
+                    //内置相关查看原始数据获取footer
+                    if( this.data.viewMode == 'source_data' ){
+                        let filterIds = []
+                        for( let d of this.data.rowData ){
+                            filterIds.push( d['_id'] );
+                        }
+                        let footerPostData = {
+                            table_id: postData.source_table_id,
+                            tableType: postData.tableType,
+                            filter: JSON.stringify( {
+                                _id: { $in: filterIds }
+                            } )
+                        }
+                        this.actions.getFooterData( footerPostData );
+                    }
                     if(this.data.fristGetCorrespondence && this.data.viewMode == 'viewFromCorrespondence'){
                         this.actions.checkCorrespondence();
                         this.data.fristGetCorrespondence = false;
@@ -1275,18 +1282,8 @@ let config = {
             }catch(e){}
         },
         //请求footer数据
-        getFooterData: function () {
-            let postData = this.actions.createPostData();
-            console.log( "请求footer数据" )
-            console.log( this.data.viewMode )
-            if( this.data.viewMode == 'source_data' ){
-                postData = {
-                    table_id: postData.table_id,
-                    tableType: postData.tableType,
-                    filter: postData.filter
-                }
-            }
-            console.log( postData )
+        getFooterData: function (data) {
+            let postData = data || this.actions.createPostData();
             dataTableService.getFooterData( postData ).then( res=>{
                 this.data.footerData = dgcService.createFooterData( res );
                 let d = {
