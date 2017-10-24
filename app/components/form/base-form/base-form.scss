@@ -285,6 +285,9 @@
     #form-paging-tabs-control{
         width: 1200px;
         margin: 0 auto;
+        li{
+            background-color: #ffffff;
+        }
         ul[role="tablist"] {
             padding: 0;
             margin: 0;
@@ -294,7 +297,6 @@
                 display: block;
                 float: left;
                 font-size: 12px;
-                background-color: #ffffff;
                 line-height: 30px;
                 position: relative;
                 top:2px;
