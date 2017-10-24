@@ -554,15 +554,12 @@ let config = {
             //是否是重要字段（入库之前检测下是否为空）
             if (colDef.main_type && colDef.main_type.id != null) {
                 //兼容日期规则控件
-                if (myValue || myValue == '' || myValue == undefined || (params.value[-1] != undefined && params.value[-1] == '')) {
+                if (myValue == '' || myValue == undefined || (params.value[-1] != undefined && params.value[-1] == '')) {
                     let conditionAll = colDef.main_type["condition"];
                     for (let condition of conditionAll) {
                         let conditinField = '';
                         if (condition["optionfield"] != null) {
                             //通过id查找field
-                            console.log( "---------------" )
-                            console.log( "---------------" )
-                            console.log( this.data.fieldsData )
                             for (let col of this.data.fieldsData) {
                                 if (col["id"] == condition["optionfield"]) {
                                     conditinField = col["field"];
