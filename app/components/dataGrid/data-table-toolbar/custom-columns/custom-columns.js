@@ -45,6 +45,16 @@ let config = {
                         li.querySelectorAll('i')[0].className = s.hide ? 'custom-checkbox icon-aggrid-cus checkbox-uncheck' : 'custom-checkbox icon-aggrid-cus checkbox-check';
                         li.querySelectorAll('i')[1].className = s.pinned == 'left' ? 'custom-fix-l icon-aggrid-cus l-shi' : 'custom-fix-l icon-aggrid-cus l-kong';
                         li.querySelectorAll('i')[2].className = s.pinned == 'right' ? 'custom-fix-r icon-aggrid-cus r-shi' : 'custom-fix-r icon-aggrid-cus r-kong';
+                        if(s.pinned == 'left') {
+                            li.querySelectorAll('i')[1].setAttribute('title','取消锁定')
+                        } else {
+                            li.querySelectorAll('i')[1].setAttribute('title','固定在最左')
+                        }
+                        if(s.pinned == 'right') {
+                            li.querySelectorAll('i')[2].setAttribute('title','取消锁定')
+                        } else {
+                            li.querySelectorAll('i')[2].setAttribute('title','固定在最右')
+                        }
                         if( this.data.dragFields.indexOf( s.colId )!=-1 ){
                             li.className = s.pinned ? 'custom-disabled':'ui-state-default';
                         }

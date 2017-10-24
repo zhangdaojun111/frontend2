@@ -228,7 +228,7 @@ let config = {
 };
 
 class CalendarRemindTaskItem extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         config.data.remindTaskItemData = data['data'];
         config.data.type = data['type'];
         if(data['data']['data3show']) {
@@ -258,7 +258,7 @@ class CalendarRemindTaskItem extends Component {
                 config.data.isNone = true;
             }
         }
-        super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 

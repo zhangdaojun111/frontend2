@@ -40,10 +40,10 @@ let config = {
 };
 
 class CalendarScheduleItem extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         config.data.dayDate = data['dayDate'];
         config.data.dayScheduleList = data['dayScheduleList'];
-        super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 
