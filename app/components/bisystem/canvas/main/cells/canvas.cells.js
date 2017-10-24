@@ -121,7 +121,6 @@ let config = {
 
                 //结束加载动画
                 this.hideLoading();
-
                 if (res['success'] == 0) {
                     msgbox.alert(res['error']);
                     return false;
