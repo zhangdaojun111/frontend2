@@ -69,7 +69,7 @@ let config = {
             selector:'.open-form',
             callback:function () {
                 PMAPI.openDialogByIframe(
-                    `/calendar_mgr/create/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
+                    `/iframe/calendarOpenForm/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
                     {
                         width: "1700",
                         height: '800',

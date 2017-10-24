@@ -116,22 +116,17 @@ let config = {
          * 显示单条推送消息
          */
         onSocketNotice: function (data = {}) {
-            systemMessageUtil.showMessageDetail('推送消息', data.title, data.content, true);
+            systemMessageUtil.showMessageDetail('推送消息', data, true);
+        },
+        /**
+         * 自动弹出未处理的推送消息
+         */
+        dealPostMsg:function () {
+            let msgs = window.config.sysConfig.notice;
+            if(msgs && msgs.length > 0){
+                systemMessageUtil.showMessageDetail('推送消息', msgs, true);
+            }
         }
-        // setOnlineNum:function () {
-        //     //更新在线人数
-        //     GlobalService.getOnlineUserData().done((result) => {
-        //         if(result.success === 1){
-        //             if(result.total <= 999){
-        //                 this.el.find('.online-num').find('span').html(result.total);
-        //             }else{
-        //                 this.el.find('.online-num').find('span').html("999+");
-        //             }
-        //         }else{
-        //             console.log("获取数据失败");
-        //         }
-        //     })
-        // }
     },
     binds: [
         {
@@ -219,6 +214,7 @@ let config = {
         });
         //加载全局搜索窗口
         this.actions.initGlobalSearch();
+        this.actions.dealPostMsg();
     },
 
     beforeDestory: function () {
