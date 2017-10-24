@@ -168,9 +168,9 @@ let config = {
             event: 'scroll',
             selector: '',
             callback: function (context, event) {
-               let top = $(context).scrollTop();
-               console.log($(context).height());
-               console.log(top);
+               // let top = $(context).scrollTop();
+               // console.log($(context).height());
+               // console.log(top);
             }
         },
     ],
