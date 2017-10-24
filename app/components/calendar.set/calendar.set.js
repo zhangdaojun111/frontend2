@@ -65,7 +65,7 @@ let config = {
             this.data.dropdownForRes = [{id: '', name: ''}];
             for (let columenListIndex in res) {
                 let item = res[columenListIndex];
-                console.log(item);
+                // console.log(item);
                 if (item['dinput_type'] === "3" || item['dinput_type'] === "5" || item["real_type"] === "3" || item["real_type"] === "5") {
                     this.data.rowTitle.push(item);
                 }
@@ -435,9 +435,9 @@ let config = {
 };
 
 class CalendarSet extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data.tableId = data;
-        super(config);
+        super($.extend(true,{},config,newConfig));
     }
 }
 
