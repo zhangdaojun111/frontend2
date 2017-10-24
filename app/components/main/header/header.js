@@ -115,7 +115,7 @@ let config = {
          * 显示单条推送消息
          */
         onSocketNotice: function (data = {}) {
-            systemMessageUtil.showMessageDetail('推送消息', data.title, data.content, true);
+            systemMessageUtil.showMessageDetail('推送消息', data, true);
         },
         // setOnlineNum:function () {
         //     //更新在线人数
