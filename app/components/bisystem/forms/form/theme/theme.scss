@@ -1,17 +1,24 @@
+.form-label {
+    i{
+        color: red;
+        margin-left: 10px;
+    }
+}
+
 .form-theme {
-    padding: 4px 74px 0 74px;
+    padding: 10px 240px 0 10px;
     span {
         background: #f5f5f5;
         float: left;
         padding: 5px 20px;
         margin: 0 5px 5px 0;
-        cursor: pointer;
+        cursor: move;
         b {
             display: inline-block;
             width: 16px;
             height: 16px;
-            background: rgb(114, 190, 255);
         }
+
     }
 }
 

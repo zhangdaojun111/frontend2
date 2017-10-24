@@ -285,12 +285,12 @@
     #form-paging-tabs-control{
         width: 1200px;
         margin: 0 auto;
-        ul {
+        ul[role="tablist"] {
             padding: 0;
             margin: 0;
             background: none;
             border: none;
-            li {
+            li[role="tab"] {
                 display: block;
                 float: left;
                 font-size: 12px;
@@ -312,6 +312,9 @@
                     cursor: pointer;
                 }
             }
+            li[role="tab"]:first-child {
+                background: #F2F2F2;
+            }
         }
 
         .ui-tabview-panels {
@@ -327,10 +330,10 @@
             margin: 0;
             padding: 0;
         }
-        .ui-state-active {
-            // border: none;
-            background: #F2F2F2;
-        }
+        //.ui-state-active {
+        //    // border: none;
+        //    background: #F2F2F2;
+        //}
         .ui-tabs-panel {
             padding: 0;
             display: table;

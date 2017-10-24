@@ -283,7 +283,7 @@ html.bi, body.bi {
             margin-bottom: 40px;
         }
         .form-chart-wrapper {
-            padding-left: 80px;
+            padding-left: 10px;
         }
         .form-label {
             padding-left: 10px;
@@ -293,6 +293,10 @@ html.bi, body.bi {
                 display: inline-block;
                 padding: 6px 8px;
                 color: #ffffff;
+            }
+            .start-icon{
+                vertical-align: middle;
+                margin-bottom: 2px;
             }
             .required, .error-msg {
                 color: red;

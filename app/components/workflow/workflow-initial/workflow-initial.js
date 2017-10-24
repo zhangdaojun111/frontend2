@@ -110,11 +110,11 @@ let config = {
     }
 };
 class WorkflowInitial extends Component {
-    constructor(data) {
-        super(config, data);
+    // constructor(data) {
+    //     super(config, data);
+    // }
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
-
-let component = new WorkflowInitial();
-let el = $('#WorkflowInitial');
-component.render(el);
+export default WorkflowInitial;

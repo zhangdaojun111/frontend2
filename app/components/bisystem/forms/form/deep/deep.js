@@ -58,7 +58,6 @@ let config = {
     afterRender(){
     }
 }
-
 class Deep extends Base {
     constructor(data, event,extendConfig){
         super($.extend(true,{},config,extendConfig), data, event)
