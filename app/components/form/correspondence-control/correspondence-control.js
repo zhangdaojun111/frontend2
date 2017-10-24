@@ -7,6 +7,7 @@ import Component from '../../../lib/component'
 import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import './correspondence-control.scss';
 import template from './correspondence-control.html';
+import {CreateFormServer} from "../../../services/formService/CreateFormServer";
 
 let config={
     template:template,
@@ -29,7 +30,7 @@ let config={
     afterRender(){
         let config={
             tableId:this.data.value,
-            parentTableId:window.config.table_id,
+            parentTableId:CreateFormServer.data.tableId,
             parentTempId:this.data.temp_id,
             rowId:this.data.parent_temp_id || '',
             viewMode:'viewFromCorrespondence',

@@ -14,6 +14,8 @@ export const CreateFormServer={
 	data: {},
 	//初始化配置数据
 	init(config = {}) {
+		console.log('初始化config');
+		console.log(config);
 		this.data = {}
 		//表名
 		this.data.tableId = config.table_id || '';
