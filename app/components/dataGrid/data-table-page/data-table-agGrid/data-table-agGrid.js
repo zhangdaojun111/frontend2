@@ -552,7 +552,7 @@ let config = {
             //是否是重要字段（入库之前检测下是否为空）
             if (colDef.main_type && colDef.main_type.id != null) {
                 //兼容日期规则控件
-                if (myValue == '' || myValue == undefined || (params.value[-1] != undefined && params.value[-1] == '')) {
+                if (myValue || myValue == '' || myValue == undefined || (params.value[-1] != undefined && params.value[-1] == '')) {
                     let conditionAll = colDef.main_type["condition"];
                     for (let condition of conditionAll) {
                         let conditinField = '';
