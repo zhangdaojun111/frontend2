@@ -190,7 +190,11 @@ export const CreateFormServer={
 				for (let dict of staticData["data"]) {
 					if (dict["dfield"] == dfield) {
 						for (let k in dynamicData["data"][dfield]) {
-							dict[k] = dynamicData["data"][dfield][k];
+							if(k == 'options'){
+								dict[k]=dict[k].concat(dynamicData["data"][dfield][k]);
+							}else{
+								dict[k] = dynamicData["data"][dfield][k];
+							}
 						}
 					}
 				}
@@ -418,8 +422,8 @@ export const CreateFormServer={
 	checkRes(res){
 		Mediator.emit('form: dataRes', res);
 		Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
-		if(res[1]['error'] == '您没有数据查看权限' || res[1]['error'] == '您没有查看该条数据的权限'  ) {
-			this.data.el.find('.form-print-position').append('<p style="font-size:20px;text-align: center;position: relative;top: 35px">您没有数据查看权限</p>');
+		if(res[1]['error'] == '您没有数据查看权限' || res[1]['error'] == '您没有查看该条数据的权限' || res[0]['error'] == '您没有数据查看权限' || res[0]['error'] == '您没有查看该条数据的权限'  ) {
+			this.data.el.find('.form-print-position').append('<p style="font-size:20px;text-align: center;margin-top: 35px;margin-bottom: 3px;">您没有数据查看权限</p>');
 			Mediator.publish('form:formAlreadyCreate' + this.tableId, 'success');
 			return false;
 		}

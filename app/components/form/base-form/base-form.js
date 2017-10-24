@@ -1242,6 +1242,9 @@ let config = {
             let json = this.actions.createPostJson();
             let res = await FormService.getDynamicData(json);
             for (let key in res.data) {
+            	if(res.data[key].options){
+		            res.data[key].options=this.data.data[key].options.concat(res.data[key].options);
+	            }
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
                 if (this.data.childComponent[key]) {
                     this.data.childComponent[key].data = Object.assign({}, this.data.childComponent[key].data, res.data[key]);
