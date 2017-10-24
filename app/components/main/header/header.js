@@ -117,45 +117,11 @@ let config = {
         onSocketNotice: function (data = {}) {
             systemMessageUtil.showMessageDetail('推送消息', data, true);
         },
-        // setOnlineNum:function () {
-        //     //更新在线人数
-        //     GlobalService.getOnlineUserData().done((result) => {
-        //         if(result.success === 1){
-        //             if(result.total <= 999){
-        //                 this.el.find('.online-num').find('span').html(result.total);
-        //             }else{
-        //                 this.el.find('.online-num').find('span').html("999+");
-        //             }
-        //         }else{
-        //             console.log("获取数据失败");
-        //         }
-        //     })
-        // }
         /**
          * 自动弹出未处理的推送消息
          */
         dealPostMsg:function () {
             let msgs = window.config.sysConfig.notice;
-            // let msgs = [{
-            //     content: " 徐艳 给 赵俨 加了一个新任务： [frontend2][framework]framework模块代码继承重构 ，请查收 !",
-            //     title: "【ERDS开发任务】您又有新任务了，请查收",
-            //    },
-            //     {content: " abcdefg模块代码继承重构 ，请查收 !",
-            //         title: "222222222",
-            //     },
-            //     {content: " 测试测试测试测试测试测试测试测试测试模块代码继承重构 ，请查收 !",
-            //         title: "kkkkkk",
-            //         },
-            //     {content: " 测试测试测试测试测试测试测试测试测试模块代码继承重构 ，请查收 !",
-            //         title: "kkkkkk",
-            //         },
-            //     {content: " 测试测试测试测试测试测试测试测试测试模块代码继承重构 ，请查收 !",
-            //         title: "kkkkkk",
-            //         },
-            //     {content: " 测试测试测试测试测试测试测试测试测试模块代码继承重构 ，请查收 !",
-            //         title: "kkkkkk",
-            //        }
-            // ];
             if(msgs && msgs.length > 0){
                 systemMessageUtil.showMessageDetail('推送消息', msgs, true);
             }
