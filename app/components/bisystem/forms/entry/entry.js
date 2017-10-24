@@ -17,14 +17,12 @@ let config = {
         components:components,
     },
     actions: {},
-    afterRender() {
-        console.log(components)
-    },
+    afterRender() {},
     firstRender() {}
 };
 
 export class FormEntryComponent extends BiBaseComponent {
-    constructor() {
-        super(config)
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig))
     }
 }

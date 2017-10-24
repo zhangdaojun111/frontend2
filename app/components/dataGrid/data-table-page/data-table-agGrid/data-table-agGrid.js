@@ -1884,6 +1884,18 @@ let config = {
             //搜索
             if( this.el.find( '.float-search-btn' )[0] ){
                 this.el.find( '.float-search-btn' ).on( 'click',()=>{
+                    if (this.data.isShowFloatingFilter && this.data.filterParam.filter.length != 0) {
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
+                        }
+                        this.data.queryList = {};
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getGridData();
+                    }
                     let height = this.data.isShowFloatingFilter ? 0:30;
                     this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                     this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
@@ -3232,6 +3244,8 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
+            w = window.screen.width*0.8;
+            h = window.screen.height*0.6;
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
@@ -3357,6 +3371,11 @@ let config = {
                 this.actions.getHeaderData();
             })
         }
+
+        PMAPI.subscribe(PMENUM.aside_fold, () => {
+            console.log($('.ui-dialog').width());
+            $('.ui-dialog').width('calc(100% - 3px)');
+        });
         this.actions.getHeaderData();
     }
 }

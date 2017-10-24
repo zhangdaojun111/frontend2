@@ -193,6 +193,7 @@ const radar = {
     ]
 };
 
+
 // 漏斗图
 const funnel = {
     animation : false,

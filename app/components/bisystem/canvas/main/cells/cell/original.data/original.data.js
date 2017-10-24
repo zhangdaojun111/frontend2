@@ -346,10 +346,10 @@ let config = {
 };
 
 export class CanvasOriginalDataComponent extends Component {
-    constructor(data,events) {
+    constructor(data,events,extendConfig) {
         let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
         config.template = originalData.template ? originalData.template : template;
-        super(config,originalData,events);
+        super($.extend(true,{},config,extendConfig),originalData,events);
     }
     /**
      * 处理初始化数据 用于组装需要的数据格式

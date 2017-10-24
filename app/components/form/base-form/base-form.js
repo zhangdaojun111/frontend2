@@ -639,6 +639,7 @@ let config = {
                     this.data.childComponent[key].reload();
                 }
             }
+            this.actions.triggerControl();
         },
 
         /**
@@ -850,6 +851,7 @@ let config = {
             } else {
                 return formValue;
             }
+            
         },
 
         //判断一下日期的类型，并且进行限制

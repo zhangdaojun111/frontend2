@@ -7,7 +7,6 @@ import Component from '../../../../../../../../lib/component';
 import './range.scss';
 import msgbox from '../../../../../../../../lib/msgbox';
 
-
 let config = {
     template: template,
     data: {},
@@ -99,7 +98,7 @@ let config = {
 };
 
 export class NormalRangeComponent extends Component {
-    constructor(data,event) {
-        super(config,data,event)
+    constructor(data,event,extendConfig) {
+        super($.extend(true,{},config,extendConfig),data,event)
     }
 }
