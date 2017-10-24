@@ -20,9 +20,13 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import jsplumb from 'jsplumb';
 import {CreateFormServer} from "../services/formService/CreateFormServer";
 
+
+
+let component = new WorkflowInitial();
+component.render($('#WorkflowInitial'));
+
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
-
 /*
 ***订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
  */
