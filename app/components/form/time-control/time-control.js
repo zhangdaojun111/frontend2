@@ -151,7 +151,11 @@ let config = {
         }
 
         this.el.on("click", '.timeInput', function () {
-            time.css({'display': 'block','position':'absolute'});
+            if(_this.data.isAgGrid){
+                time.css({'position': 'fixed','display':'block'});
+            }else{
+                time.css({'display': 'block','position':'absolute'});
+            }
             if (_this.data.value) {
                 timeInput.val(_this.data.value);
             } else {
