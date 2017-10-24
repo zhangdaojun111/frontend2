@@ -4,7 +4,7 @@
     {{else if be_control_condition }}
     <p class="info">被修改条件限制</p>
     {{else}}
-    <div style="position: relative; float: left;">
+    <div style="position: relative; float: left;" class="time-control-wrap">
         <input type="text" disabled class="ui-calendar ui-width dynamic-form-input timeInput"  placeholder="时:分:秒" onkeyup="this.value = this.value.replace(/[^\d:&' '&]|_/ig,'')"
                value="{{value}}">
         <a href="javascript:void(0);" class="input-img icon-time form-icon"></a>

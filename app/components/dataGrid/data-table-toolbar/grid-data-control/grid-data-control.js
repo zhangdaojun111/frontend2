@@ -126,40 +126,42 @@ let config = {
                 let currentTime = new Date().getTime();
                 selectTime = new Date(_val).getTime();
                 //timeType 是否可以选择之前的日期，before:只能选择之前的日期，after：只能选择之后的，all：可以选择全部
-                if (_this.data['timeType']) {
-                    if (_this.data['timeType'] == 'after') {
-                        if (selectTime < currentTime) {
-                            msgbox.alert("所选日期不能早于当前日期！");
+                if(!_this.data.isAgGrid){
+                    if (_this.data['timeType']) {
+                        if (_this.data['timeType'] == 'after') {
+                            if (selectTime < currentTime) {
+                                msgbox.alert("所选日期不能早于当前日期！");
+                                if(!_this.data.isAgGrid){
+                                    _this.data.value = "请选择";
+                                    _.debounce(function () {
+                                        _this.events.changeValue(_this.data)
+                                    }, 200)();
+                                }
+
+                            }
+                        } else if (_this.data['timeType'] == 'before') {
+                            if (selectTime > currentTime) {
+                                msgbox.alert("所选日期不能晚于当前日期！");
+                                if(!_this.data.isAgGrid){
+                                    _this.data.value = "请选择";
+                                    _.debounce(function () {
+                                        _this.events.changeValue(_this.data)
+                                    }, 200)();
+                                }
+
+                            }
+                        } else if (_this.data['timeType'] == 'all') {
                             if(!_this.data.isAgGrid){
-                                _this.data.value = "请选择";
+                                _this.data.value = selectTime1.replace(/\//g, "-");
                                 _.debounce(function () {
                                     _this.events.changeValue(_this.data)
                                 }, 200)();
                             }
 
                         }
-                    } else if (_this.data['timeType'] == 'before') {
-                        if (selectTime > currentTime) {
-                            msgbox.alert("所选日期不能晚于当前日期！");
-                            if(!_this.data.isAgGrid){
-                                _this.data.value = "请选择";
-                                _.debounce(function () {
-                                    _this.events.changeValue(_this.data)
-                                }, 200)();
-                            }
-
-                        }
-                    } else if (_this.data['timeType'] == 'all') {
-                        if(!_this.data.isAgGrid){
-                            _this.data.value = selectTime1.replace(/\//g, "-");
-                            _.debounce(function () {
-                                _this.events.changeValue(_this.data)
-                            }, 200)();
-                        }
-
+                    } else {
+                        console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'date-control');
                     }
-                } else {
-                    console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'date-control');
                 }
             },
             onClose: function(timeText) {

@@ -173,7 +173,6 @@ let config = {
          */
         showInfoSet:function () {
             PersonSetting.show();
-            // PersonSetting.showUserInfo({'name':'赵俨'})
         },
         /**
          * 设置用户头像
@@ -377,4 +376,11 @@ let config = {
     }
 };
 
-export const AsideInstance = new Component(config);
+class AsideComponent extends Component{
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig))
+    }
+}
+
+export {AsideComponent};
+// export const AsideInstance = new Component(config);

@@ -31,11 +31,12 @@ let config = {
     }
 }
 class historyTable extends Component {
-    constructor(data) {
-        config.data = data
-        super(config)
+    // constructor(data) {
+    //     config.data = data
+    //     super(config)
+    // }
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
-export default historyTable/**
- * Created by dell on 2017/8/21.
- */
+export default historyTable

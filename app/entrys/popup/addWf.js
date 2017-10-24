@@ -148,6 +148,7 @@ Mediator.subscribe('workflow:submit', (res) => {
     if (formData.error) {
         msgBox.alert(`${formData.errorMessage}`);
     } else {
+        msgBox.showLoadingSelf();
         let postData = {
             flow_id: obj.flow_id,
             focus_users: JSON.stringify(focusArr) || [],
@@ -177,6 +178,7 @@ Mediator.subscribe('workflow:submit', (res) => {
                 return workflowService.addUpdateTableData(postData);
             }
         })().then(res => {
+            msgBox.hideLoadingSelf();
             if (res.success === 1) {
                 msgBox.showTips(`保存成功`);
                 PMAPI.sendToRealParent({

@@ -260,7 +260,7 @@ let config = {
                     }
                 })
             } else {
-                systemMessageUtil.showMessageDetail(data.msg_type_text, data.title, data.msg_content);
+                systemMessageUtil.showMessageDetail(data.msg_type_text, data);
             }
 
             // 查看操作通过前端自己刷新未读，审批通过loadData刷新
@@ -334,8 +334,8 @@ let config = {
 };
 
 class SystemMessage extends Component {
-    constructor(data) {
-        super(config, data);
+    constructor(newConfig) {
+        super($.extend(true,{},config,newConfig));
     }
 }
 
@@ -379,21 +379,37 @@ let systemMessageUtil = {
 
     },
     /**
-     * 显示单条信息详细内容
+     * 传入单条消息或消息数组，进行显示和朗读
      * @param dialogTitle
-     * @param msgTitle
-     * @param msgContent
+     * @param data
      * @param speak
      */
-    showMessageDetail: function (dialogTitle, msgTitle, msgContent, speak = false) {
-        let html = `
-            <div class="component-msg-detail">
-                <h3>${msgTitle}</h3>
-                <pre class="text">${msgContent}</pre>
+    showMessageDetail: function (dialogTitle, data, speak = false) {
+        let html = '<div class="component-msg-detail">';
+        let readMsg = '';
+        if($.isArray(data) === false){
+            if(data.content){
+                data.msg_content = data.content;
+            }
+            html += `
+                <h3 class="msg-title">${data.title}</h3>
+                <pre class="text">${data.msg_content}</pre>
             </div>
         `;
+            readMsg = data.title.toString() + data.msg_content.toString();
+        }else{
+            for(let msg of data){
+                html += `
+                    <h3 class="msg-title">${msg.title}</h3>
+                    <pre class="text">${msg.content}</pre>                
+            `;
+                readMsg += msg.title.toString() + msg.content.toString();
+            }
+            html += `</div>`;
+        }
+
         if (speak) {
-            let msg = new SpeechSynthesisUtterance(msgTitle.toString() + msgContent.toString());
+            let msg = new SpeechSynthesisUtterance(readMsg);
             msg.lang = 'zh';
             msg.voice = speechSynthesis.getVoices().filter(function(voice) {
                 return voice.name == 'Whisper';
@@ -408,6 +424,8 @@ let systemMessageUtil = {
             modal: true,
             title: dialogTitle,
             close: function () {
+                //关闭语音提示
+                speechSynthesis.cancel();
                 $(this).erdsDialog('destroy');
                 that.el.remove();
             }

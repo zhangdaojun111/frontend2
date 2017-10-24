@@ -391,14 +391,12 @@ let config = {
             this.cancelEvents();
         }
     }
-}
+};
 
 class AutoSelect extends Component {
-
     constructor(data, events) {
         super(config, data, events);
     }
-
 }
 
 export {AutoSelect}

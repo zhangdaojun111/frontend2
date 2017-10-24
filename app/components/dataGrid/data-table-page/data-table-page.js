@@ -3,10 +3,8 @@ import template from './data-table-page.html';
 import './data-table-page.scss';
 import {HTTP} from "../../../lib/http";
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
-import msgBox from '../../../lib/msgbox';
-import dataTableAgGrid from "../data-table-page/data-table-agGrid/data-table-agGrid"
-import fastSearch from "../data-table-toolbar/fast-search/fast-search"
-import {dataTableService} from "../../../services/dataGrid/data-table.service"
+import dataTableAgGrid from "./data-table-agGrid/data-table-agGrid";
+import {dataTableService} from "../../../services/dataGrid/data-table.service";
 let config = {
     template: template,
     data: {
@@ -111,11 +109,14 @@ let config = {
 
 
 class dataTablePage extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-        }
-        super(config);
+    // constructor(data) {
+    //     for (let d in data) {
+    //         config.data[d] = data[d]
+    //     }
+    //     super(config);
+    // }
+    constructor(data,newConfig){
+        super($.extend(true,config,newConfig,{data:data||{}}));
     }
 }
 

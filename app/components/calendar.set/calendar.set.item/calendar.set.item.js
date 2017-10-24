@@ -320,7 +320,7 @@ let config = {
 };
 
 class CalendarSetItem extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data.rowSetData = data.rowData;
         config.data.dropdown = data.dropdown;
         config.data.dropdownForRes = data.dropdownForRes;
@@ -333,7 +333,7 @@ class CalendarSetItem extends Component {
         config.data.copypeople = data.copypeople;
         config.data.emailAddressList = data.emailAddressList;
         config.data.emailAddress = data.emailAddress;
-        super(config);
+        super($.extend(true,{},config,newConfig));
     }
 }
 

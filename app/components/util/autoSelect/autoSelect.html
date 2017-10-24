@@ -8,9 +8,9 @@
         <ul class="auto-select-ul">
             {{#each list}}
             <li class="match-visible" data-id="'{{id}}'" data-name="'{{name}}'" data-py="'{{py}}'">
-                <label class="custom-checkbox">
+                <label class="custom-checkbox clearfix">
                     <input type="checkbox" class="checkbox" name="" data-id="'{{id}}'" value="'{{id}}'" data-name="'{{name}}'"/>
-                    <span>{{name}}</span>
+                    <span title="{{name}}">{{name}}</span>
                 </label>
             </li>
             {{/each}}
