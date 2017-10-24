@@ -126,8 +126,10 @@ let config = {
 
                 if(this.el.find('.result').eq(i).attr('search-type') == 'number') {
                     obj['cond']['keyword'] = Number(this.el.find('.condition-search-value').find('input').eq(i).val());
+                    obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
                 } else if(this.el.find('.result').eq(i).attr('search-type') == 'date') {
                     obj['cond']['keyword'] = $.trim(this.el.find('.condition-search-value').find('input').eq(i).val());
+                    obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
                 } else {
                     if(this.el.find('.condition-search-select.relation').eq(i).val() == 'nor') {
                         let keyword = this.el.find('.condition-search-value').find('input').eq(i).val();
