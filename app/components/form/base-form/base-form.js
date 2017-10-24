@@ -1656,6 +1656,12 @@ let config = {
                 this.data.viewMode = 'viewFromCorrespondence';
             }
             let _this = this;
+            console.log('######')
+            console.log('######')
+            console.log('######')
+            console.log('######')
+            console.log('######')
+	        console.log(CreateFormServer.data.tableId);
             PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${CreateFormServer.data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
                 width: 1400,
                 height: 800,
