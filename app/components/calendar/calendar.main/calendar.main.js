@@ -126,12 +126,12 @@ let config = {
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
                 this.data.fieldInfos = res['field_infos'];
-                if(type === 'calendar') {
-                    this.actions.monthDataTogether();
-                }else {
-                    this.actions.makeScheduleData(data.from_date, data.to_date);
-                }
-                this.actions.getDataCount();
+                // if(type === 'calendar') {
+                //     this.actions.monthDataTogether();
+                // }else {
+                //     this.actions.makeScheduleData(data.from_date, data.to_date);
+                // }
+                // this.actions.getDataCount();
             });
         },
 
@@ -399,22 +399,27 @@ let config = {
                         let i = 0;
                         for( let c of calendarDate ){
                             if( c.id === d ){
-                                i++
+                                i++;
+                                c.count += 1;
                             }
                         }
                         if( i === 0 ){
-                            calendarDate.push( { id:d,date:day.dataTime } );
+                            calendarDate.push( { id:d,date:day.dataTime,count: 1 } );
                         }
                     }
                 }
             }
-
+            console.log(calendarDate);
             day['data'] = [];
             for( let set of calendarDate ){
                 let setDetail = this.data.calendarSettings[set.id];
                 // console.log(setDetail);
+                let count = 0;
                 for( let select of setDetail['selectedOpts_data'] ){
-
+                    count += 1;
+                    // if(count > 1000) {
+                    //     continue;
+                    // }
                     if( select[setDetail['field_id']].indexOf(day.dataTime) === -1 ){
                         continue;
                     }
@@ -428,7 +433,7 @@ let config = {
                         arrData['dfield'] = setDetail.dfield;
                         arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 1 );
                         arrData['isDrag'] = setDetail.is_drag;
-                        arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
+                        // arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
                         arrData['real_id'] = JSON.stringify( [select._id] );
                         arrData['tableName'] = this.data.tableid2name[setDetail.table_id];
                         arrData['fieldId'] = setDetail.field_id;
@@ -440,10 +445,10 @@ let config = {
                         if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
                             selectFieldId = setDetail['selectedEnums'][0];
                             arrData['selectOption'] = [];
-                            arrData['selectOption'] = setDetail['selectedEnums_options'][selectFieldId] || [];
+                            arrData['selectOption'] = [];
                             arrData['selectFieldId'] = selectFieldId;
-                            arrData['selectField'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dfield : '';
-                            arrData['selectFieldName'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dname : '';
+                            arrData['selectField'] = '';
+                            arrData['selectFieldName'] = '';
                             arrData['isSetSelect'] = true;
                         }else {
                             arrData['isSetSelect'] = false;
@@ -476,6 +481,7 @@ let config = {
                         //循环里面每一个小的数据
                         let data3show = [];
                         let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
+                        console.log(select_3);
                         let everyData_3 = [];
                         // console.log(select_3);
                         for( let key in select_3 ){
@@ -519,6 +525,7 @@ let config = {
                 }
             }
 
+
             // 工作流数据
             if(this.data.isShowWorkflowData) {
                 for( let d of this.data.workflowData ){
@@ -546,7 +553,6 @@ let config = {
                     this.actions.getDayData(day);
                 }
             }
-
             this.el.find('.calendar-main-content').empty();
             if(this.data.calendarContent === 'month') {
                 this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));

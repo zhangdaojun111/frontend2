@@ -196,5 +196,16 @@ export const CalendarHandleDataService = {
 
         return this.weekDataList;
     },
+
+    date2settings: {},
+    calendarSettings: {},
+    tableid2name: {},
+    fieldInfos: {},
+    get
+    
+    // handleDayData: function (id, date, count) {
+    //
+    // }
 };
+
 
