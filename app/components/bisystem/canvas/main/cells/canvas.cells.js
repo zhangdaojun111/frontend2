@@ -45,6 +45,15 @@ let config = {
             };
 
         },
+        isScrollStop() {
+            // 判断此刻到顶部的距离是否和1秒前的距离相等
+            if(this.el.scrollTop() == this.data.curScrollTop) {
+                console.log("scroll bar is stopping!");
+                this.actions.waterfallLoadingCellData({top: this.el.height() + this.data.curScrollTop});
+                clearInterval(this.data.interval);
+                this.data.interval = null;
+            }
+        },
 
         /**
          * 实例化画布块，并返回实例化的对象
@@ -182,8 +191,12 @@ let config = {
             selector: '',
             callback: function (context, event) {
                let curScrollTop = $(context).scrollTop();
-                this.actions.waterfallLoadingCellData({top: this.el.height() + curScrollTop});
-
+               if (!this.data.interval) {
+                   this.data.interval = setInterval(() => {
+                       this.actions.isScrollStop();
+                   }, 1000);
+               };
+               this.data.curScrollTop = curScrollTop;
             }
         },
     ],
