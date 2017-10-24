@@ -105,10 +105,8 @@ let config = {
     },
 
     afterRender:function(){
-        this.showLoading();
         //根据判断是否单行模式加载header
         this.actions.headLoad();
-        this.hideLoading();
     },
     beforeDestory:function () {}
 };
