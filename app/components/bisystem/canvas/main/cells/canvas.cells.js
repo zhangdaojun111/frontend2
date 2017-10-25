@@ -35,7 +35,7 @@ let config = {
         },
 
         /**
-         * 瀑布流方式加载cell chart data 数据
+         * 瀑布流方式加载cell chart data 数据(pc端的处理)
          * @param option = {top：scrollbar的滚动距离}
          */
         async waterfallLoadingCellData(option) {
@@ -52,6 +52,34 @@ let config = {
                     cells.push(this.data.cells[key]);
                 };
             });
+            // 获取画布块的chart数据
+            if (layouts.length > 0) {
+                this.actions.getCellChartData(layouts,cells);
+            };
+
+        },
+
+        /**
+         * 瀑布流方式加载cell chart data 数据(移动端的处理)
+         * @param option = {top：scrollbar的滚动距离}
+         */
+        async phoneWaterfallLoadingCellData(option) {
+            let top = option.top;
+            let layouts = [];
+            let cells = [];
+            let viewAllHeight = 0; // 手机端可视区域需要加载cells的总高度
+            for (let key of Object.keys(this.data.cells)) {
+                if (viewAllHeight <= this.el.height() + top && !this.data.cells[key].data.chart) {
+                    layouts.push(this.data.cells[key].data.layout);
+                    cells.push(this.data.cells[key]);
+                };
+
+                if (viewAllHeight > this.el.height() + top) {
+                    break;
+                } else {
+                    viewAllHeight += this.data.cells[key].data.cell.size.height;
+                }
+            };
             // 获取画布块的chart数据
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
@@ -86,7 +114,12 @@ let config = {
             // 判断此刻到顶部的距离是否和1秒前的距离相等
             if(this.el.scrollTop() == this.data.curScrollTop) {
                 console.log("scroll bar is stopping!");
-                this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
+                let windowSize = $(window).width();
+                if (windowSize && windowSize <= 960) {
+                    this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
+                } else {
+                    this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
+                };
                 clearInterval(this.data.interval);
                 this.data.interval = null;
             }
@@ -243,7 +276,12 @@ let config = {
         // 加载loading动画;
         await this.actions.getCellLayout();
         if (this.data) {
-            this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+            let windowSize = $(window).width();
+            if (windowSize && windowSize <= 960) {
+                this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
+            } else {
+                this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+            };
         };
     },
     beforeDestory() {}
