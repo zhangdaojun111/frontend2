@@ -90,12 +90,11 @@ let config = {
                 onSaveCanvas: () => {
                     this.data.cells.actions.saveCanvas();
                 },
-                onWhenPrintCellDataFinish: () => {
+                onWhenPrintCellDataFinish: async () => {
                     msgbox.showLoadingRoot();
-                    this.data.cells.actions.cellsDataIsFinish().then(res => {
-                        msgbox.hideLoadingRoot();
-                        window.print();
-                    }) ;
+                    const res = await this.data.cells.actions.cellsDataIsFinish();
+                    window.print();
+                    msgbox.hideLoadingRoot();
                 }
             });
             this.append(header, this.el.find('.views-header'));

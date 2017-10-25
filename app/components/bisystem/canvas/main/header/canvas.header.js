@@ -184,6 +184,7 @@ let config = {
             selector:'.print-btn',
             callback: function (context,event) {
                 this.trigger('onWhenPrintCellDataFinish');
+                return false;
             }
         },
     ],
