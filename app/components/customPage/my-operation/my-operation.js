@@ -130,7 +130,8 @@ let config = {
                 this.data.rowData = res[0].rows;
                 this.data.total = res[0].history_num;
                 let obj = {
-                    rowData: this.data.rowData
+                    rowData: this.data.rowData,
+                    noFooter: true,
                 }
                 this.agGrid.actions.setGridData( obj );
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
@@ -270,14 +271,8 @@ let config = {
 }
 
 class myOperation extends Component {
-    // constructor(data) {
-    //     for( let d in data ){
-    //         config.data[d] = data[d];
-    //     }
-    //     super(config);
-    // }
     constructor(data,newConfig){
-        super($.extend(true,config,newConfig,{data:data||{}}));
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

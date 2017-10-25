@@ -85,11 +85,18 @@ let config = {
             // }
             let header = new CanvasHeaderComponent({}, {
                 onAddCell: (cell) => {
-                    this.data.cells.actions.addCell(cell)
+                    this.data.cells.actions.addCell(cell);
                 },
                 onSaveCanvas: () => {
-                    this.data.cells.actions.saveCanvas()
+                    this.data.cells.actions.saveCanvas();
                 },
+                onWhenPrintCellDataFinish: async () => {
+                    msgbox.showLoadingRoot();
+                    const res = await this.data.cells.actions.cellsDataIsFinish();
+                    window.print();
+                    msgbox.hideLoadingRoot();
+
+                }
             });
             this.append(header, this.el.find('.views-header'));
             this.data.headerComponents = header;

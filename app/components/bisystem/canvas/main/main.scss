@@ -73,6 +73,15 @@ $print-height: 1485px;
         header{
             display: none !important;
         }
+        .cells-container {
+            .cells {
+                .cell-chart {
+                    .chart-normal-date-zoom {
+                        display: none;
+                    }
+                }
+            }
+        }
     }
 }
 

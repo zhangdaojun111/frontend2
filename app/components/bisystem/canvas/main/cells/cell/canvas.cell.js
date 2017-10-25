@@ -41,7 +41,7 @@ let config = {
          */
         renderCell() {
             let windowSize = $(window).width();
-            if (windowSize <= 1024) {
+            if (windowSize && windowSize <= 960) {
                 this.data.cell.size.width = 'auto';
             };
             this.el.find('.cell').css(this.data.cell.size);
@@ -79,7 +79,6 @@ let config = {
                 });
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
-                this.cellChart = this.data.cellComponent;
             }
         },
 

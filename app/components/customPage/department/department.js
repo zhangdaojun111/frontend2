@@ -102,6 +102,7 @@ let config = {
                 let gridData = {
                     columnDefs: this.data.columnDefs,
                     rowData: this.data.rowData,
+                    noFooter: true,
                     footerData: this.data.footerData,
                     fieldsData: this.data.fieldsData,
                     onColumnResized: this.actions.onColumnResized,
@@ -449,14 +450,8 @@ let config = {
 }
 
 class department extends Component {
-    // constructor(data) {
-    //     for( let d in data ){
-    //         config.data[d] = data[d];
-    //     }
-    //     super(config);
-    // }
     constructor(data,newConfig){
-        super($.extend(true,config,newConfig,{data:data||{}}));
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 
