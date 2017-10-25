@@ -183,7 +183,7 @@ let config = {
             event:'click',
             selector:'.print-btn',
             callback: function (context,event) {
-                window.print();
+                this.trigger('onWhenPrintCellDataFinish');
             }
         },
     ],
