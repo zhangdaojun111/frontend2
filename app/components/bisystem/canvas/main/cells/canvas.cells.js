@@ -199,7 +199,7 @@ let config = {
                if (!this.data.interval) {
                    this.data.interval = setInterval(() => {
                        this.actions.isScrollStop();
-                   }, 1000);
+                   }, 500);
                };
                this.data.curScrollTop = curScrollTop;
             }
