@@ -99,27 +99,25 @@ let config = {
         Mediator.on('getDefaultFocusUsers', (data) => {
             console.log(data);
             workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
-                console.log(res);
+                this.data.htmlStr = [];
                 this.data.allUsersInfo = res.rows;
                 // console.log(this.data.allUsersInfo);
                 for(let key in data['updateuser2focususer']) {
-                    // if( key === data['current_user_id'] ){
-                    //     this.data.focusUsersId = data['updateuser2focususer'][key];
-                    //     for(let i of this.data.focusUsersId) {
-                    //         console.log(i);
-                    //     }
-                    // }
                     this.data.idArr = data['updateuser2focususer'][key];
-                    for(let i of this.data.focusUsersId) {
+                    for(let i of this.data.idArr) {
+                        console.log(i);
                         this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
+                        this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];
+                        this.data.htmlStr.push(`<span class="selectSpan">${this.data.allUsersInfo[i]['name']}</span>`);
                     }
                 }
-
+                this.el.find('#addFollowerList').html(this.data.htmlStr);
             })
 
         });
         this.el.on('click', '#addFollower', () => {
             console.log(typeof this.data.user);
+            this.data.user = this.data.focusUsers;
             PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
                 width: 800,
                 height: 620,
