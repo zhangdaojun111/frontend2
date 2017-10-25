@@ -84,7 +84,6 @@ let config = {
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
             };
-
         },
 
         /**
