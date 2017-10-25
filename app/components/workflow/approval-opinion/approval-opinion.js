@@ -49,7 +49,7 @@ let css=`
     }
     .workflow-alertbox #comment{
         border: 1px solid #e4e4e4;
-        height: 165px;
+        height: 100px;
         resize: none;
         width: 100%;
         box-sizing: border-box;

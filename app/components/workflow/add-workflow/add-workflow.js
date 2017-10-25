@@ -80,7 +80,7 @@ let config={
                     this.el.find('.workflow-foot').hide();
                     this.el.find('.workflow-flex').hide();
                     $('#place-form').html('');
-                    FormEntrys.createForm({
+                    FormEntrys.initForm({
                         el: $('#place-form'),
                         is_view: this.data.is_view,
                         from_focus: 0,
@@ -163,7 +163,7 @@ let config={
                 obj.form_id = res.form_id;
             }
             $('#place-form').html('');
-            FormEntrys.createForm({
+            FormEntrys.initForm({
                 el: $('#place-form'),
                 form_id: res.form_id,
                 flow_id: res.flow_id,
