@@ -18,6 +18,9 @@
         .option-disabled {
             color: #DDDDDD;
         }
+        input[type=radio]{
+            height: 13px;
+        }
     }
     .normal-date-time {
         position:absolute;
