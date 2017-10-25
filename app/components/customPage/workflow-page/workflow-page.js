@@ -195,6 +195,7 @@ let config = {
         renderGrid: function () {
             let gridData = {
                 columnDefs: this.data.columnDefs,
+                noFooter: true,
                 rowData: this.data.rowData,
                 footerData: this.data.footerData,
                 fieldsData: this.data.fieldsData,
@@ -821,16 +822,12 @@ let config = {
         this.actions.getData();
     }
 }
-
 class workflowPage extends Component {
-    // constructor(data) {
-    //     for( let d in data ){
-    //         config.data[d] = data[d];
-    //     }
-    //     super(config);
-    // }
     constructor(data,newConfig){
-        super($.extend(true,config,newConfig,{data:data||{}}));
+        for (let d in data) {
+            config.data[d] = data[d];
+        }
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

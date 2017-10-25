@@ -891,7 +891,7 @@ let config = {
         //设置搜索input值，解决拖动列排序后重新渲染floatingFilter的input导致显示为空
         setFloatingFilterInput: function () {
             for( let k in this.data.searchValue ){
-                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
+                try{this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];}catch(e){}
             }
         },
         //floatingFilter拼参数，接收floatingFilter改变的参数，拼装成搜索需要的参数
@@ -1852,15 +1852,26 @@ let config = {
                     }
                     this.el.find(e.target).parent().attr( 'currentId',id );
                     let state = gridoptions.columnApi.getColumnState();
+                    let saveArr = [];
                     for( let s of state ){
                         if( ignore.indexOf( s.colId ) == -1 ){
                             s.hide = arr.indexOf( s.colId ) == -1 && id != 0 ? true:false;
                         }
+                        if( ignore.indexOf( s.colId ) == -1 && s.hide ){
+                            saveArr.push( s.colId );
+                        }
                     }
+                    dataTableService.savePreference({
+                        action: 'ignoreFields',
+                        table_id: this.data.tableId,
+                        ignoreFields: JSON.stringify( saveArr )
+                    });
+                    HTTP.flush();
                     gridoptions.columnApi.setColumnState( state );
                     if( !this.data.noNeedCustom ){
                         this.customColumnsCom.actions.makeSameSate();
                     }
+                    this.actions.setFloatingFilterInput();
                 } );
                 this.el.find('.SheetPage ul li:first').addClass('active1');
                 this.el.find('.SheetPage ul li').on('click',function () {
@@ -3431,14 +3442,11 @@ let config = {
 }
 
 class dataTableAgGrid extends Component {
-    // constructor(data) {
-    //     for (let d in data) {
-    //         config.data[d] = data[d]
-    //     }
-    //     super(config);
-    // }
     constructor(data,newConfig){
-        super($.extend(true,config,newConfig,{data:data||{}}));
+        for (let d in data) {
+            config.data[d] = data[d];
+        }
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 
