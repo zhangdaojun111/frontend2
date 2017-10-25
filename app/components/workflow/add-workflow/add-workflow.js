@@ -97,9 +97,9 @@ let config={
                         key: obj.key,
                         action: this.data.action
                     });
-                    setTimeout(()=>{
-                        _this.data.cache_old= FormEntrys.getFormValue(_this.data.obj.table_id,true);
-                    },1000)
+                    // setTimeout(()=>{
+                    //     _this.data.cache_old= FormEntrys.getFormValue(_this.data.obj.table_id,true);
+                    // },1000)
                 } else {
                     // Mediator.publish('workflow:getParams', res.data.flow_data);
                     _this.actions.handleParams(res['data']['flow_data']);
