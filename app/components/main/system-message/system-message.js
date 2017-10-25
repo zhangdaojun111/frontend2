@@ -302,6 +302,7 @@ let config = {
         gridPref = this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
+            noFooter: true,
             onRowDoubleClicked:that.actions.onRowDoubleClicked,
             onSortChanged: this.actions.onSortChanged,
             footerData:[]
