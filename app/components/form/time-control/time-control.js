@@ -72,7 +72,11 @@ let config = {
             event: 'click',
             selector: '.input-img',
             callback: function () {
-                this.el.find('.time').css({'position': 'fixed'}).toggle();
+                if(this.data.isAgGrid){
+                    this.el.find('.time').css({'position': 'fixed'}).toggle();
+                }else{
+                    this.el.find('.time').css({'position': 'absolute'}).toggle();
+                }
             }
         },
 
@@ -147,7 +151,11 @@ let config = {
         }
 
         this.el.on("click", '.timeInput', function () {
-            time.css({'position': 'fixed','display':'block'});
+            if(_this.data.isAgGrid){
+                time.css({'position': 'fixed','display':'block'});
+            }else{
+                time.css({'display': 'block','position':'absolute'});
+            }
             if (_this.data.value) {
                 timeInput.val(_this.data.value);
             } else {
