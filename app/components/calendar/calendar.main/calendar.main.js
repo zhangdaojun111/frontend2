@@ -126,12 +126,13 @@ let config = {
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
                 this.data.fieldInfos = res['field_infos'];
-                // if(type === 'calendar') {
-                //     this.actions.monthDataTogether();
-                // }else {
-                //     this.actions.makeScheduleData(data.from_date, data.to_date);
-                // }
-                // this.actions.getDataCount();
+                CalendarService.saveFieldInfos(this.data.fieldInfos);
+                if(type === 'calendar') {
+                    this.actions.monthDataTogether();
+                }else {
+                    this.actions.makeScheduleData(data.from_date, data.to_date);
+                }
+                this.actions.getDataCount();
             });
         },
 
@@ -393,6 +394,7 @@ let config = {
         getDayData: function (day) {
             //获取当日包含的设置
             let calendarDate = [];
+            let sum = 0;
             for( let date in this.data.date2settings ){
                 if( date.indexOf( day['dataTime'] ) !== -1 ){
                     for( let d of this.data.date2settings[date] ){
@@ -406,16 +408,15 @@ let config = {
                         if( i === 0 ){
                             calendarDate.push( { id:d,date:day.dataTime,count: 1 } );
                         }
+                        sum += 1
                     }
                 }
             }
-            console.log(calendarDate);
             day['data'] = [];
             for( let set of calendarDate ){
                 let setDetail = this.data.calendarSettings[set.id];
-                // console.log(setDetail);
                 let count = 0;
-                for( let select of setDetail['selectedOpts_data'] ){
+                for( let select of setDetail['selectedRepresents_data'] ){
                     count += 1;
                     // if(count > 1000) {
                     //     continue;
@@ -437,67 +438,67 @@ let config = {
                         arrData['real_id'] = JSON.stringify( [select._id] );
                         arrData['tableName'] = this.data.tableid2name[setDetail.table_id];
                         arrData['fieldId'] = setDetail.field_id;
+                        arrData['fieldValue'] = setDetail['selectedRepresents_data'][0][setDetail.field_id] || '';
                         arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
                         arrData['type'] = 1;
                         arrData['isShow'] = this.data.searchText === '' ? true : false;
                         arrData['selectedRepresents'] = setDetail['selectedRepresents'][0] || '';
+                        arrData['selectedOpts'] = setDetail['selectedOpts'];
                         let selectFieldId = '';
                         if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
                             selectFieldId = setDetail['selectedEnums'][0];
                             arrData['selectOption'] = [];
-                            arrData['selectOption'] = [];
+                            arrData['selectOption'] = setDetail['selectedEnums_options'][selectFieldId] || [];
                             arrData['selectFieldId'] = selectFieldId;
-                            arrData['selectField'] = '';
-                            arrData['selectFieldName'] = '';
+                            arrData['selectField'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dfield : '';
+                            arrData['selectFieldName'] = this.data.fieldInfos[selectFieldId]?this.data.fieldInfos[selectFieldId].dname : '';
                             arrData['isSetSelect'] = true;
                         }else {
                             arrData['isSetSelect'] = false;
                         }
 
                         //循环里面每一个小的数据
-                        let data2show = [];
-                        let everyData = [];
-                        for( let key in select ){
-                            if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
-                                continue;
-                            }
-                            everyData.push( {
-                                fieldId: key,
-                                _id: select['_id'],
-                                fieldName: this.data.fieldInfos[key]['dname'] || '',
-                                fieldValue: select[key] || '',
-                            } )
-                        }
-                        for( let d of everyData ){
-                            if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
-                                arrData['isShow'] = true;
-                                break;
-                            }
-                        }
-
-                        data2show.push( everyData );
-                        arrData['data2show'] = data2show;
+                        // let data2show = [];
+                        // let everyData = [];
+                        // for( let key in select ){
+                        //     if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
+                        //         continue;
+                        //     }
+                        //     everyData.push( {
+                        //         fieldId: key,
+                        //         _id: select['_id'],
+                        //         fieldName: this.data.fieldInfos[key]['dname'] || '',
+                        //         fieldValue: select[key] || '',
+                        //     } )
+                        // }
+                        // for( let d of everyData ){
+                        //     if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
+                        //         arrData['isShow'] = true;
+                        //         break;
+                        //     }
+                        // }
+                        //
+                        // data2show.push( everyData );
+                        // arrData['data2show'] = data2show;
 
                         //循环里面每一个小的数据
                         let data3show = [];
-                        let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
-                        console.log(select_3);
+                        // let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
                         let everyData_3 = [];
-                        // console.log(select_3);
-                        for( let key in select_3 ){
+                        for( let key in select ){
                             if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
                                 continue;
                             }
                             everyData_3.push( {
                                 fieldId: key,
-                                _id: select_3['_id'],
+                                _id: select['_id'],
                                 fieldName: this.data.fieldInfos[key]['dname'] || '',
-                                fieldValue: select_3[key] || ''
+                                fieldValue: select[key] || ''
                             } );
                             if( selectFieldId !== '' ){
                                 everyData_3[0]['selectValue'] = '';
                                 for( let s of setDetail['selectedEnums_data'] ){
-                                    if( s._id === select_3['_id'] ){
+                                    if( s._id === select['_id'] ){
                                         let selectLabel = s[selectFieldId];
                                         for( let o of arrData['selectOption'] ){
                                             if( o.label === selectLabel ){
