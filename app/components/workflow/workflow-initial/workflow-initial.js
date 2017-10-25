@@ -97,7 +97,8 @@ let config = {
                 users:this.data.user
             }).then(res => {
                 if (!res.onlyclose) {
-                    for (var k in res) {
+                    this.data.htmlStr = [];
+                    for (let k in res) {
                         this.data.nameArr.push(res[k]);
                         this.data.htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
                         this.data.idArr.push(k);
