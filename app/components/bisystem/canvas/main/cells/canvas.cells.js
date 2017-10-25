@@ -22,7 +22,11 @@ let config = {
             let layouts = [];
             let cells = [];
             Object.keys(this.data.cells).forEach(key => {
-                if (top >= this.data.cells[key].data.cell.size.top && !this.data.cells[key].data.chart) {
+                let cellSizeTop = this.data.cells[key].data.cell.size.top;
+                let cellSizeHeight = this.data.cells[key].data.cell.size.height;
+                let startSection = top <= cellSizeTop + cellSizeHeight;
+                let endSection = cellSizeTop > this.el.height() + top ? false : true;
+                if (startSection && endSection && !this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
                 }
@@ -49,7 +53,7 @@ let config = {
             // 判断此刻到顶部的距离是否和1秒前的距离相等
             if(this.el.scrollTop() == this.data.curScrollTop) {
                 console.log("scroll bar is stopping!");
-                this.actions.waterfallLoadingCellData({top: this.el.height() + this.data.curScrollTop});
+                this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
                 clearInterval(this.data.interval);
                 this.data.interval = null;
             }
@@ -205,7 +209,7 @@ let config = {
     async afterRender() {
         // 加载loading动画;
         await this.actions.getCellLayout();
-        this.actions.waterfallLoadingCellData({top: this.el.height()});
+        this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
     },
     beforeDestory() {}
 };
