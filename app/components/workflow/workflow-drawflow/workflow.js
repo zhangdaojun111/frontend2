@@ -570,6 +570,7 @@ let WorkFlow={
             }});
         })()
         .then(msg=>{
+            Mediator.emit('getDefaultFocusUsers', msg['data'][0]);
             let component = new WF(msg.data[0]);
             this.WorkFlow=component;
             let el = $(o.el);
