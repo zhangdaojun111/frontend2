@@ -160,6 +160,12 @@ let config = {
                 timeInput.val(_this.data.value);
             } else {
                 timeInput.val(now);
+                if(!_this.data.isAgGrid){
+                    _this.data.value = now;
+                    _.debounce(function () {
+                        _this.events.changeValue(_this.data)
+                    }, 200)();
+                }
             }
         })
         this.el.on("click", '.plus', function () {
