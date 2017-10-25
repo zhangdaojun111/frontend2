@@ -15,6 +15,7 @@ import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import SettingPrint from '../../form/setting-print/setting-print'
 import FormEntrys from "../../../entrys/form";
+import {CreateFormServer} from '../../../services/formService/CreateFormServer';
 let config={
     template: template,
     data:{
@@ -98,7 +99,7 @@ let config={
                         action: this.data.action
                     });
                     setTimeout(()=>{
-                        _this.data.cache_old= FormEntrys.getFormValue(_this.data.obj.table_id,true);
+                        _this.data.cache_old= CreateFormServer.getFormValue(_this.data.obj.table_id,true);
                     },1000)
                 } else {
                     // Mediator.publish('workflow:getParams', res.data.flow_data);
@@ -187,7 +188,7 @@ let config={
                 is_batch: obj.is_batch
             });
             setTimeout(()=>{
-                this.data.cache_old = FormEntrys.getFormValue(obj.table_id,true);
+                this.data.cache_old = CreateFormServer.getFormValue(obj.table_id,true);
             },1000)
         },
         hideWorkflowSelect(res) {
@@ -206,7 +207,7 @@ let config={
          */
         submitAddWorkflow() {
             let obj = this.data.obj;
-            let formData = FormEntrys.getFormValue(obj.table_id,true);
+            let formData = CreateFormServer.getFormValue(obj.table_id,true);
             if (formData.error) {
                 msgBox.alert(`${formData.errorMessage}`);
             } else {
@@ -269,7 +270,7 @@ let config={
                 $("#add-wf").find('#print').removeClass('addPrint');
             }
             this.data.is_view = 0;
-            FormEntrys.changeToEdit(res);
+            CreateFormServer.changeToEdit(res);
         }
     },
     afterRender(){
