@@ -41,7 +41,7 @@ let config = {
          */
         renderCell() {
             let windowSize = $(window).width();
-            if (windowSize <= 1024) {
+            if (windowSize <= 960) {
                 this.data.cell.size.width = 'auto';
             };
             this.el.find('.cell').css(this.data.cell.size);
