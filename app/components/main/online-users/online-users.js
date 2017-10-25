@@ -105,8 +105,8 @@ let config = {
 };
 
 class OnlineUser extends Component {
-    constructor(){
-        super(config)
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig))
     }
 }
 

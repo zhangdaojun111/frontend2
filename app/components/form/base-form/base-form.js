@@ -406,7 +406,7 @@ let config = {
         //检查是否是默认值的触发条件
         async validDefault(originalData, val) {
             if (this.data.baseIdsLocal.indexOf(originalData["dfield"]) == -1) {
-                this.baseIdsLocal.push(originalData["dfield"]);
+                this.data.baseIdsLocal.push(originalData["dfield"]);
             }
             this.data.baseIdsLocalDict[originalData["dfield"]] = val;
             if (this.data.base_fields.sort().toString() == this.data.baseIdsLocal.sort().toString()) {
@@ -414,7 +414,7 @@ let config = {
                 let json = {
                     flow_id: this.data.flowId || "",
                     base_field_2_value: JSON.stringify(this.data.baseIdsLocalDict),
-                    temp_id: this.data.temp_id["value"]
+                    temp_id: this.data.data.temp_id["value"]
                 };
                 let res = await FormService.getDefaultValue(json);
                 for (let key in res["data"]) {
@@ -454,7 +454,7 @@ let config = {
                             if (type == 'setting-textarea') {
                                 this.data.childComponent[key].actions.loadSettingtextarea(value);
                             }
-                            this.setFormValue(key, value);
+                            this.actions.setFormValue(key, value);
                         }
                     }
                 }
@@ -1302,8 +1302,10 @@ let config = {
                                 arr.push(dfield);
                             }
                         }
-                        this.data.childComponent[dfield].data = data;
-                        this.data.childComponent[dfield].reload();
+                        if(this.data.childComponent[dfield]){
+	                        this.data.childComponent[dfield].data = data;
+	                        this.data.childComponent[dfield].reload();
+                        }
                     }
                 }
             }

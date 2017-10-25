@@ -15,7 +15,28 @@ let config = {
     },
     actions: {
         /**
-         * 瀑布流方式加载cell chart data 数据
+         * 获取画布块数据
+         * @param cells 需要渲染的画布块数据的组件
+         */
+        async getCellChartData(layouts,cells) {
+            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
+            if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
+
+                if (res['success'] == 0) {
+                    msgbox.alert(res['error']);
+                    return false;
+                };
+
+                // 当返回成功时，通知各个cell渲染chart数据
+                cells.map((item,index) => {
+                    item.setChartData(res[index]);
+                })
+            };
+        },
+
+        /**
+         * 瀑布流方式加载cell chart data 数据(pc端的处理)
+         * @param option = {top：scrollbar的滚动距离}
          */
         async waterfallLoadingCellData(option) {
             let top = option.top;
@@ -29,31 +50,76 @@ let config = {
                 if (startSection && endSection && !this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
-                }
+                };
             });
             // 获取画布块的chart数据
             if (layouts.length > 0) {
-                const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
-                if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
-
-                    if (res['success'] == 0) {
-                        msgbox.alert(res['error']);
-                        return false;
-                    };
-
-                    // 当返回成功时，通知各个cell渲染chart数据
-                    cells.map((item,index) => {
-                        item.setChartData(res[index]);
-                    })
-                }
+                this.actions.getCellChartData(layouts,cells);
             };
 
         },
+
+        /**
+         * 瀑布流方式加载cell chart data 数据(移动端的处理)
+         * @param option = {top：scrollbar的滚动距离}
+         */
+        async phoneWaterfallLoadingCellData(option) {
+            let top = option.top;
+            let layouts = [];
+            let cells = [];
+            let viewAllHeight = 0; // 手机端可视区域需要加载cells的总高度
+            for (let key of Object.keys(this.data.cells)) {
+                if (viewAllHeight <= this.el.height() + top && !this.data.cells[key].data.chart) {
+                    layouts.push(this.data.cells[key].data.layout);
+                    cells.push(this.data.cells[key]);
+                };
+
+                if (viewAllHeight > this.el.height() + top) {
+                    break;
+                } else {
+                    viewAllHeight += this.data.cells[key].data.cell.size.height;
+                }
+            };
+            // 获取画布块的chart数据
+            if (layouts.length > 0) {
+                this.actions.getCellChartData(layouts,cells);
+            };
+
+        },
+
+        /**
+         * 是否加载了所有的画布块数据
+         */
+        async cellsDataIsFinish() {
+            let layouts = [];
+            let cells = [];
+            Object.keys(this.data.cells).forEach(key => {
+                if (!this.data.cells[key].data.chart) {
+                    layouts.push(this.data.cells[key].data.layout);
+                    cells.push(this.data.cells[key]);
+                };
+            });
+
+            // 获取画布块的chart数据
+            if (layouts.length > 0) {
+                await this.actions.getCellChartData(layouts,cells);
+            };
+
+            return new Promise((resolve, reject) => {
+                resolve('finish');
+            })
+        },
+
         isScrollStop() {
             // 判断此刻到顶部的距离是否和1秒前的距离相等
             if(this.el.scrollTop() == this.data.curScrollTop) {
                 console.log("scroll bar is stopping!");
-                this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
+                let windowSize = $(window).width();
+                if (windowSize && windowSize <= 960) {
+                    this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
+                } else {
+                    this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
+                };
                 clearInterval(this.data.interval);
                 this.data.interval = null;
             }
@@ -98,6 +164,7 @@ let config = {
             let cellLayout = this.actions.makeCell(data);
             this.data.cells[cellLayout.componentId] = cellLayout;
         },
+
 
         /**
          * 根据当前视图id，得到当前视图画布块布局，大小
@@ -198,7 +265,7 @@ let config = {
                if (!this.data.interval) {
                    this.data.interval = setInterval(() => {
                        this.actions.isScrollStop();
-                   }, 1000);
+                   }, 500);
                };
                this.data.curScrollTop = curScrollTop;
             }
@@ -208,7 +275,14 @@ let config = {
     async afterRender() {
         // 加载loading动画;
         await this.actions.getCellLayout();
-        this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+        if (this.data) {
+            let windowSize = $(window).width();
+            if (windowSize && windowSize <= 960) {
+                this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
+            } else {
+                this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+            };
+        };
     },
     beforeDestory() {}
 };

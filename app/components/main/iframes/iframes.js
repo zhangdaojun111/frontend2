@@ -55,7 +55,8 @@ import {TabService} from "../../../services/main/tabService"
 
 let maxIframeCount = 15;
 
-export const IframeInstance = new Component({
+// export const IframeInstance = new Component({
+let config = {
     template: template,
     data: {
         hash: {},                //实时保存当前打开的iframes的相关信息
@@ -699,7 +700,7 @@ export const IframeInstance = new Component({
         });
 
         //初始化保存视图组件
-        this.saveView = new SaveView(this.data.sort,this.actions.closeSaveViewPage);
+        this.saveView = new SaveView({},this.data.sort,this.actions.closeSaveViewPage);
         this.saveView.render(this.el.find('.view-save-component'));
 
         // this.el.on('click', '.tabs .item .close', function () {
@@ -746,4 +747,14 @@ export const IframeInstance = new Component({
     beforeDestory: function () {
         Mediator.removeAll('menu');
     }
-});
+};
+
+class IframeComponent extends Component {
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
+    }
+}
+
+export {IframeComponent};
+
+

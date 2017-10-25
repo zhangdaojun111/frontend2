@@ -32,18 +32,18 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
             margin-left: 200px;
             margin-top: 150px;
 
-            .login-main-title {
+            .company-info {
                 color: white;
                 line-height: 30px;
                 font-size: 20px;
                 text-align: center;
             }
 
-            .login-version-title{
-                color: $panel_color;
-                text-align: center;
-                font-size: 12px;
-            }
+            //.login-version-title{
+            //    color: $panel_color;
+            //    text-align: center;
+            //    font-size: 12px;
+            //}
 
             .white-panel {
                 background-color: #ffffff;
@@ -52,16 +52,28 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                 height: 240px;
                 border-radius: 2%;
 
-                h2 {
-                    padding-top: 15px;
-                    height: 40px;
-                    line-height: 20px;
-                    color: black;
-                    //font-size: 0.9em;
+                .panel-header{
+                    height: 30px;
+                    border-radius: 6px;
+                    line-height: 30px;
                     text-align: center;
+                    background-color: #fafafa;
+                    .panel-title {
+                        line-height: 30px;
+                    }
                 }
 
+                //h2 {
+                //    padding-top: 15px;
+                //    height: 40px;
+                //    line-height: 20px;
+                //    color: black;
+                //    //font-size: 0.9em;
+                //    text-align: center;
+                //}
+
                 form {
+                    margin-top: 25px;
                     .form-group{
                         position: relative;
                         height: 40px;

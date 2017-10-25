@@ -251,11 +251,14 @@ let config = {
 }
 
 class dataTableImport extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-        }
-        super(config);
+    // constructor(data) {
+    //     for (let d in data) {
+    //         config.data[d] = data[d]
+    //     }
+    //     super(config);
+    // }
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

@@ -20,9 +20,13 @@ import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-
 import jsplumb from 'jsplumb';
 import {CreateFormServer} from "../services/formService/CreateFormServer";
 
+
+
+let component = new WorkflowInitial();
+component.render($('#WorkflowInitial'));
+
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
-
 /*
 ***订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
  */
@@ -37,6 +41,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
     $("#singleFlow").click();
     $("#submitWorkflow").show();
     $("#startNew").hide();
+    $('#addFollower').show();
     wfObj=msg;
     (async function () {
         WorkFlow.createFlow({flow_id:msg.id,el:"#flow-node"});
@@ -144,12 +149,7 @@ Mediator.subscribe('workflow:getGridinfo',(res)=>{
 /*
 ***submit workflow data 提交工作流
  */
-let focusArr=[];
-Mediator.subscribe('workflow:focus-users', (res)=> {
-    focusArr=res;
-})
 Mediator.subscribe('workflow:submit', (res)=> {
-
     if($("#workflow-form:visible").length>0){
         let formData=CreateFormServer.getFormValue(wfObj.tableid,true,true);
         if(formData.error){
@@ -159,7 +159,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
             $("#submitWorkflow").hide();
             let postData={
                 flow_id:wfObj.id,
-                focus_users:JSON.stringify(focusArr)||[],
+                focus_users:JSON.stringify(res)||[],
                 data:JSON.stringify(formData.formValue),
                 cache_new:JSON.stringify(formData.obj_new),
                 cache_old:JSON.stringify(formData.obj_old),
@@ -173,6 +173,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
                     CreateFormServer.changeToView(wfObj.tableid);
                     msgBox.showTips(`执行成功`);
                     let isdraft = true;
+                    $('#addFollower').hide();
                     $("#startNew").show().on('click',()=>{
                         if(isdraft){
                             Mediator.publish('workflow:choose',wfObj);
@@ -189,7 +190,6 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })
         }
     }else{
-        console.log(temp_ids);
         let postData={
             type:1,
             temp_ids:JSON.stringify(temp_ids),
@@ -204,11 +204,14 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })().then(res=>{
                 msgBox.hideLoadingSelf();
                 if(res.success===1){
-                    msgBox.alert(`${res.error}`);
+                    msgBox.showTips(`执行成功`);
+                    $('#addFollower').hide();
+                    let isdraft = true;
                     $("#startNew").show().on('click',()=>{
                         Mediator.publish('workflow:choose',wfObj);
                         $("#startNew").hide();
                         $("#submitWorkflow").show();
+                        isdraft = false;
                     });
                     WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
                 }else{

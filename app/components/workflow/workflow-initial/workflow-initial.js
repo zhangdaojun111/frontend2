@@ -25,7 +25,10 @@ let config = {
     template: template,
     data: {
         user: [],
-        allowagrid: true //允许agrid只加载一次
+        allowagrid: true, //允许agrid只加载一次,
+        nameArr: [], //关注人姓名
+        idArr: [], //关注人id
+        htmlStr: [] // 关注人添加的html代码
     },
     actions: {
         /*
@@ -44,6 +47,7 @@ let config = {
         }
     },
     afterRender() {
+
         this.actions.get_workflow_info();
         this.el.on('click', '#workflowClose', () => {
                 Mediator.publish("workflow:contentClose");
@@ -72,14 +76,16 @@ let config = {
             this.el.find('#workflow-form').hide();
         });
         this.el.on('click', '#submitWorkflow', () => {
-            let user = [];
-            Mediator.subscribe('workflow:focus-users', (res) => {
-                this.data.user = res;
-            })
             Mediator.publish('workflow:submit', this.data.user);
         });
         Mediator.subscribe('workflow:choose', (res) => {
             this.data.allowagrid = true;
+            //清空关注人列表
+            this.data.nameArr = [];
+            this.data.htmlStr =  [];
+            this.data.idArr = [];
+            this.data.user = [];
+            this.el.find('#addFollowerList').empty();
         })
         this.el.on('click', '#addFollower', () => {
             PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
@@ -91,16 +97,12 @@ let config = {
                 users:this.data.user
             }).then(res => {
                 if (!res.onlyclose) {
-                    let nameArr = [],
-                        idArr = [],
-                        htmlStr = [];
                     for (var k in res) {
-                        nameArr.push(res[k]);
-                        htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
-                        idArr.push(k);
+                        this.data.nameArr.push(res[k]);
+                        this.data.htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
+                        this.data.idArr.push(k);
                     }
-                    this.el.find('#addFollowerList').html(htmlStr);
-                    Mediator.publish('workflow:focus-users', idArr);
+                    this.el.find('#addFollowerList').html(this.data.htmlStr);
                     this.data.user=res;
                 }
             })
@@ -108,11 +110,11 @@ let config = {
     }
 };
 class WorkflowInitial extends Component {
-    constructor(data) {
-        super(config, data);
+    // constructor(data) {
+    //     super(config, data);
+    // }
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
-
-let component = new WorkflowInitial();
-let el = $('#WorkflowInitial');
-component.render(el);
+export default WorkflowInitial;
