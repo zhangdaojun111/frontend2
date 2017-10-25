@@ -276,19 +276,19 @@ let config = {
                 rightBracketNum = 0;
             try {
                 this.data.searchInputList.forEach((item) => {
-                    if (item['cond']['keyword'] == '') {
+                    if (item['cond']['keyword'] === '') {
                         msgBox.alert('查询值不能为空！');
                         checkedPost = false;
                         foreach.break=new Error("StopIteration");
-                    } else if (item['cond']['searchByName'] == '') {
+                    } else if (item['cond']['searchByName'] === '') {
                         msgBox.alert('查询条件不能为空！');
                         checkedPost = false;
                         foreach.break=new Error("StopIteration");
                     }
-                    if (item['cond']['leftBracket'] == '(') {
+                    if (item['cond']['leftBracket'] === '(') {
                         leftBracketNum++;
                     }
-                    if (item['cond']['rightBracket'] == ')') {
+                    if (item['cond']['rightBracket'] === ')') {
                         rightBracketNum++;
                     }
                 })
