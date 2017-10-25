@@ -95,6 +95,7 @@ let config = {
                     const res = await this.data.cells.actions.cellsDataIsFinish();
                     window.print();
                     msgbox.hideLoadingRoot();
+
                 }
             });
             this.append(header, this.el.find('.views-header'));
