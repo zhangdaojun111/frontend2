@@ -163,7 +163,7 @@ let config={
                 obj.form_id = res.form_id;
             }
             $('#place-form').html('');
-            FormEntrys.createForm({
+            FormEntrys.initForm({
                 el: $('#place-form'),
                 form_id: res.form_id,
                 flow_id: res.flow_id,
