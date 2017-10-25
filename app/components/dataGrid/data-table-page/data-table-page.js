@@ -59,6 +59,7 @@ let config = {
                         tableName: this.data.tableName,
                         tableType: 'in_process',
                         viewMode: 'in_process',
+                        showTabs: this.actions.showTabs,
                         gridTips: '在途'
                     };
                     this.inProcessGrid = new dataTableAgGrid(obj);
@@ -110,6 +111,7 @@ let config = {
 
 class dataTablePage extends Component {
     constructor(data,newConfig){
+
         super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }

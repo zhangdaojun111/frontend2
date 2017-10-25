@@ -822,9 +822,11 @@ let config = {
         this.actions.getData();
     }
 }
-
 class workflowPage extends Component {
     constructor(data,newConfig){
+        for (let d in data) {
+            config.data[d] = data[d];
+        }
         super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
