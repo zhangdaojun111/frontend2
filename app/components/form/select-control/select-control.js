@@ -66,6 +66,7 @@ let config={
                 _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             };
             let autoSelect=new AutoSelect(data);
+            debugger
             this.append(autoSelect,el);
         }
         this.data.isInit=false;
@@ -75,7 +76,7 @@ let config={
     }
 }
 export default class SelectControl extends Component{
-    constructor(data,events){
-        super(config,data,events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

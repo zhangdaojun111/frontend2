@@ -37,6 +37,7 @@ import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
 import ContractControl from "../contract-control/contract-control";
 import '../../../../node_modules/jquery-ui/ui/widgets/tabs';
+import {CreateFormServer} from "../../../services/formService/CreateFormServer";
 let config = {
     template: '',
     data: {
@@ -406,7 +407,7 @@ let config = {
         //检查是否是默认值的触发条件
         async validDefault(originalData, val) {
             if (this.data.baseIdsLocal.indexOf(originalData["dfield"]) == -1) {
-                this.baseIdsLocal.push(originalData["dfield"]);
+                this.data.baseIdsLocal.push(originalData["dfield"]);
             }
             this.data.baseIdsLocalDict[originalData["dfield"]] = val;
             if (this.data.base_fields.sort().toString() == this.data.baseIdsLocal.sort().toString()) {
@@ -414,7 +415,7 @@ let config = {
                 let json = {
                     flow_id: this.data.flowId || "",
                     base_field_2_value: JSON.stringify(this.data.baseIdsLocalDict),
-                    temp_id: this.data.temp_id["value"]
+                    temp_id: this.data.data.temp_id["value"]
                 };
                 let res = await FormService.getDefaultValue(json);
                 for (let key in res["data"]) {
@@ -454,7 +455,7 @@ let config = {
                             if (type == 'setting-textarea') {
                                 this.data.childComponent[key].actions.loadSettingtextarea(value);
                             }
-                            this.setFormValue(key, value);
+                            this.actions.setFormValue(key, value);
                         }
                     }
                 }
@@ -639,6 +640,7 @@ let config = {
                     this.data.childComponent[key].reload();
                 }
             }
+            this.actions.triggerControl();
         },
 
         /**
@@ -850,6 +852,7 @@ let config = {
             } else {
                 return formValue;
             }
+            
         },
 
         //判断一下日期的类型，并且进行限制
@@ -1240,6 +1243,9 @@ let config = {
             let json = this.actions.createPostJson();
             let res = await FormService.getDynamicData(json);
             for (let key in res.data) {
+            	if(res.data[key].options){
+		            res.data[key].options=this.data.data[key].options.concat(res.data[key].options);
+	            }
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
                 if (this.data.childComponent[key]) {
                     this.data.childComponent[key].data = Object.assign({}, this.data.childComponent[key].data, res.data[key]);
@@ -1300,8 +1306,10 @@ let config = {
                                 arr.push(dfield);
                             }
                         }
-                        this.data.childComponent[dfield].data = data;
-                        this.data.childComponent[dfield].reload();
+                        if(this.data.childComponent[dfield]){
+	                        this.data.childComponent[dfield].data = data;
+	                        this.data.childComponent[dfield].reload();
+                        }
                     }
                 }
             }
@@ -1653,7 +1661,13 @@ let config = {
                 this.data.viewMode = 'viewFromCorrespondence';
             }
             let _this = this;
-            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${window.config.table_id}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
+            console.log('######')
+            console.log('######')
+            console.log('######')
+            console.log('######')
+            console.log('######')
+	        console.log(CreateFormServer.data.tableId);
+            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${CreateFormServer.data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
                 width: 1400,
                 height: 800,
                 title: `对应关系`,
@@ -1896,6 +1910,9 @@ let config = {
         //给外部提供cacheNew cacheOld
         getCacheData(){
             let formValue=this.actions.createFormValue(this.data.data,true);
+            if(formValue.error){
+            	return formValue;
+            }
             let data = this.actions.handleFormData(formValue);
             let formDataOld = this.data.oldData;
             let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
@@ -1922,7 +1939,9 @@ let config = {
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
-
+        this.el.find("#form-paging-tabs-control ul li").on('click', function () {
+            $(this).css('background','#F2F2F2').siblings().css('background','#ffffff');
+        })
     },
     beforeDestory() {
         this.el.off();

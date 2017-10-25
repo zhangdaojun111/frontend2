@@ -78,6 +78,9 @@
             }
         }
     }
+    .ag-floating-bottom {
+        display: none!important;
+    }
     .btn-nav.flex {
         display: flex;
         align-items: center;
@@ -119,6 +122,17 @@
             }
         }
     }
+    //.component-time-control {
+    //    width: 100%;
+    //    div:first-child{
+    //        width: 100%;
+    //    }
+    //}
+    //.component-date-control {
+    //    img {
+    //        top: 0px !important;
+    //    }
+    //}
     .dataGrid-commonQuery {
         //display: none;
         float: left;

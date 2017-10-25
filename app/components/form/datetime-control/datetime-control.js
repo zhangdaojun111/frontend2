@@ -107,6 +107,7 @@ let config = {
             changeMonth: true,
             changeYear: true,
             dateFormat: "yy-mm-dd",
+            yearRange:"1900:2999",
             defaultDate: new Date(_this.data.value),
             timeFormat: 'HH:mm:ss', //格式化时间
             showOn: 'both',//设置触发选择器为button/focus
@@ -251,7 +252,7 @@ let config = {
     }
 }
 export default class DateTimeControl extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

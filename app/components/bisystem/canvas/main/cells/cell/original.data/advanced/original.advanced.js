@@ -38,7 +38,6 @@ let config = {
          * 编辑模式时使用
          */
         setValue(data) {
-            console.log(data);
             this.data.itemId = data.itemId;
             this.data.name = data.name;
             this.data.compute_model = JSON.stringify(data.compute_model);
@@ -139,7 +138,7 @@ let config = {
 };
 
 export class CanvasOriginalAdvancedComponent extends Component {
-    constructor(data,events) {
-        super(config,data,events);
+    constructor(data,events,extendConfig) {
+        super($.extend(true,{},config,extendConfig),data,events);
     }
 }

@@ -151,7 +151,11 @@ let config = {
         }
 
         this.el.on("click", '.timeInput', function () {
-            time.css({'display': 'block','position':'absolute'});
+            if(_this.data.isAgGrid){
+                time.css({'position': 'fixed','display':'block'});
+            }else{
+                time.css({'display': 'block','position':'absolute'});
+            }
             if (_this.data.value) {
                 timeInput.val(_this.data.value);
             } else {
@@ -229,7 +233,7 @@ let config = {
     }
 }
 export default class TimeControl extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

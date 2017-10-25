@@ -3,7 +3,7 @@ $font-color: #e4e4e4;
 .bi-table {
     overflow: auto;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 10px);
     box-sizing: border-box;
     border: 1px solid $font-color;
     table {

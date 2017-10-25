@@ -56,7 +56,6 @@ function getLoginController() {
             this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
             this.passwordInputComp.render($wrap);
             $('.login-content').show();
-
             //系统名称改变
             this.$loginMainTitle.on('change', () => {
                 this.systemName = this.$loginMainTitle.val();
@@ -88,11 +87,11 @@ function getLoginController() {
             /**
              * 登录按钮
              */
-            this.$loginBtn.on('click', () => {
+            this.$loginBtn.on('click', _.debounce(() => {
                 // console.log(this.username_value,this.password_value,);
                 // this.password_value = this.passwordInputComp.data.password_value;
                 this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
-            });
+            },300));
 
             /**
              * 注册按钮
@@ -155,21 +154,22 @@ function getLoginController() {
              * 移动下载
              */
             this.$mobileDownload.on('click',function () {
-                console.log('打开移动下载页面');
+                window.open('https://test.erdstest.com:8809/download/download.html?referrer=');
             });
 
             /**
              * 键盘绑定
              */
-            $(document).keypress((event) => {
+            $(document).on('keypress',_.debounce((event) => {
                 if(event.keyCode === 13){
+                    console.log('abc');
                     if(this.isOpposite === false){
                         this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
                     }else{
                         this.$submitFindPw.click();
                     }
                 }
-            })
+            },300))
         },
 
         /**

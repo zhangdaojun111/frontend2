@@ -7,6 +7,7 @@
     height: 100%;
     width: 100%;
     margin-bottom: 50px;//解决时间框下拉框弹出撑开form的抖动
+    overflow-x: auto;
     @import "dateTime";
     input, textarea, select{
         font-family: '微软雅黑';
@@ -284,12 +285,12 @@
     #form-paging-tabs-control{
         width: 1200px;
         margin: 0 auto;
-        ul {
+        ul[role="tablist"] {
             padding: 0;
             margin: 0;
             background: none;
             border: none;
-            li {
+            li[role="tab"] {
                 display: block;
                 float: left;
                 font-size: 12px;
@@ -311,6 +312,9 @@
                     cursor: pointer;
                 }
             }
+            li[role="tab"]:first-child {
+                background: #F2F2F2;
+            }
         }
 
         .ui-tabview-panels {
@@ -319,21 +323,21 @@
             padding-top: 50px;
             min-height: 430px;
         }
-         .ui-tabs-anchor {
+        .ui-tabs-anchor {
             float: none;
         }
         .ui-tabs .ui-tabs-nav {
             margin: 0;
             padding: 0;
         }
-       .ui-state-active {
-           // border: none;
-            background: #F2F2F2;
-        }
-       .ui-tabs-panel {
-           padding: 0;
-           display: table;
-           margin: 0 auto;
+        //.ui-state-active {
+        //    // border: none;
+        //    background: #F2F2F2;
+        //}
+        .ui-tabs-panel {
+            padding: 0;
+            display: table;
+            margin: 0 auto;
         }
     }
 

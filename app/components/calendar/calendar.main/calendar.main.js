@@ -121,6 +121,7 @@ let config = {
                 if(res) {
                     this.hideLoading();
                 }
+                console.log(res);
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
@@ -826,9 +827,9 @@ let config = {
 };
 
 class CalendarMain extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         config.data.cancel_fields = data;
-        super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 

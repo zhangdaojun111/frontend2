@@ -105,18 +105,16 @@ let config = {
     },
 
     afterRender:function(){
-        this.showLoading();
         //根据判断是否单行模式加载header
         this.actions.headLoad();
-        this.hideLoading();
     },
     beforeDestory:function () {}
 };
 
 export class CanvasMain extends Component {
-    constructor(data, events) {
+    constructor(data, events,extendConfig) {
         config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
-        super(config, data, events);
+        super($.extend(true,{},config,extendConfig), data, events);
     }
 }
 

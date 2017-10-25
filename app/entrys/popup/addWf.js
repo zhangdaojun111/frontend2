@@ -19,8 +19,12 @@ import {PMAPI, PMENUM} from '../../lib/postmsg';
 import {CreateFormServer} from "../../services/formService/CreateFormServer";
 AddWf.showDom().then(function (component) {
     WorkFlowForm.showForm();
+    let isshow = true;
     Mediator.subscribe("form:formAlreadyCreate",()=>{
-        component.hideLoading();
+        if(isshow){
+            component.hideLoading();
+            isshow = false;
+        }
     });
     // setTimeout(()=>component.hideLoading(),1000)
 });
@@ -144,6 +148,7 @@ Mediator.subscribe('workflow:submit', (res) => {
     if (formData.error) {
         msgBox.alert(`${formData.errorMessage}`);
     } else {
+        msgBox.showLoadingSelf();
         let postData = {
             flow_id: obj.flow_id,
             focus_users: JSON.stringify(focusArr) || [],
@@ -173,6 +178,7 @@ Mediator.subscribe('workflow:submit', (res) => {
                 return workflowService.addUpdateTableData(postData);
             }
         })().then(res => {
+            msgBox.hideLoadingSelf();
             if (res.success === 1) {
                 msgBox.showTips(`保存成功`);
                 PMAPI.sendToRealParent({

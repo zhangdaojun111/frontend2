@@ -79,11 +79,11 @@ let config = {
 };
 
 class CalendarSchedule extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         config.data.scheduleStart = data.startDate;
         config.data.scheduleEnd = data.endDate;
         config.data.scheduleDataList = data.scheduleDataList;
-        super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 

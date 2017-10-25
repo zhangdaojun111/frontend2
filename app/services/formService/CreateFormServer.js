@@ -1,6 +1,7 @@
 import FormBase from '../../components/form/base-form/base-form';
 import {FormService} from './formService'
 import Mediator from '../../lib/mediator';
+import {CreateForm} from '../../components/form/createFormVersionTable/createForm'
 
 export const CreateFormServer={
 	//存储所有创建的baseForm组件
@@ -13,6 +14,8 @@ export const CreateFormServer={
 	data: {},
 	//初始化配置数据
 	init(config = {}) {
+		console.log('初始化config');
+		console.log(config);
 		this.data = {}
 		//表名
 		this.data.tableId = config.table_id || '';
@@ -189,7 +192,11 @@ export const CreateFormServer={
 				for (let dict of staticData["data"]) {
 					if (dict["dfield"] == dfield) {
 						for (let k in dynamicData["data"][dfield]) {
-							dict[k] = dynamicData["data"][dfield][k];
+							if(k == 'options'){
+								dict[k]=dict[k].concat(dynamicData["data"][dfield][k]);
+							}else{
+								dict[k] = dynamicData["data"][dfield][k];
+							}
 						}
 					}
 				}
@@ -417,8 +424,8 @@ export const CreateFormServer={
 	checkRes(res){
 		Mediator.emit('form: dataRes', res);
 		Mediator.publish('workflow:getWorkflowTitle', res[0].table_name);
-		if(res[1]['error'] == '您没有数据查看权限' || res[1]['error'] == '您没有查看该条数据的权限'  ) {
-			this.data.el.find('.form-print-position').append('<p style="font-size:20px;text-align: center;position: relative;top: 35px">您没有数据查看权限</p>');
+		if(res[1]['error'] == '您没有数据查看权限' || res[1]['error'] == '您没有查看该条数据的权限' || res[0]['error'] == '您没有数据查看权限' || res[0]['error'] == '您没有查看该条数据的权限'  ) {
+			this.data.el.find('.form-print-position').append('<p style="font-size:20px;text-align: center;margin-top: 35px;margin-bottom: 3px;">您没有数据查看权限</p>');
 			Mediator.publish('form:formAlreadyCreate' + this.tableId, 'success');
 			return false;
 		}
@@ -444,7 +451,7 @@ export const CreateFormServer={
 		let $newWrap = this.data.el.find('.form-print-position');
 		formBase.render($newWrap);
 		Mediator.publish('form:formAlreadyCreate', 'success');
-		Mediator.publish('form:formAlreadyCreate'+this.data.tableId, 'success');
+		Mediator.publish('form:formAlreadyCreate'+this.tableId, 'success');
 		console.timeEnd('form创建时间');
 		//给工作流传表单初始数据
 		let valueChange = this.getFormValue(this.data.tableId, false)

@@ -217,6 +217,8 @@ let config = {
         project: '',
         //二维表改变的值
         cellChangeValue: {},
+        //工作流表单查看操作
+        cannotopenform: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -572,25 +574,25 @@ let config = {
                                     break;
                                 }
                                 case '>': {
-                                    if (params.data.conditinField > condition["context"]) {
+                                    if (params.data[conditinField] > condition["context"]) {
                                         color = 'rgba(255,0,0,1)'
                                     }
                                     break;
                                 }
                                 case '<': {
-                                    if (params.data.conditinField < condition["context"]) {
+                                    if (params.data[conditinField] < condition["context"]) {
                                         color = 'rgba(255,0,0,1)'
                                     }
                                     break;
                                 }
                                 case '<=': {
-                                    if (params.data.conditinField <= condition["context"]) {
+                                    if (params.data[conditinField] <= condition["context"]) {
                                         color = 'rgba(255,0,0,1)'
                                     }
                                     break;
                                 }
                                 case '>=': {
-                                    if (params.data.conditinField >= condition["context"]) {
+                                    if (params.data[conditinField] >= condition["context"]) {
                                         color = 'rgba(255,0,0,1)'
                                     }
                                     break;
@@ -1192,7 +1194,7 @@ let config = {
             let body = dataTableService.getTableData( postData );
             let remindData = dataTableService.getReminRemindsInfo({table_id:this.data.tableId});
             post_arr = [body,remindData]
-            if( !this.data.firstGetFooterData ){
+            if( !this.data.firstGetFooterData && this.data.viewMode != 'source_data' ){
                 let footer = dataTableService.getFooterData( postData );
                 post_arr.push( footer )
             }
@@ -1200,6 +1202,21 @@ let config = {
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
                     this.actions.setGridData( res );
+                    //内置相关查看原始数据获取footer
+                    if( this.data.viewMode == 'source_data' ){
+                        let filterIds = []
+                        for( let d of this.data.rowData ){
+                            filterIds.push( d['_id'] );
+                        }
+                        let footerPostData = {
+                            table_id: postData.source_table_id,
+                            tableType: postData.tableType,
+                            filter: JSON.stringify( {
+                                _id: { $in: filterIds }
+                            } )
+                        }
+                        this.actions.getFooterData( footerPostData );
+                    }
                     if(this.data.fristGetCorrespondence && this.data.viewMode == 'viewFromCorrespondence'){
                         this.actions.checkCorrespondence();
                         this.data.fristGetCorrespondence = false;
@@ -1237,20 +1254,15 @@ let config = {
             if( this.data.firstRender ){
                 //渲染其他组件
                 this.actions.renderAgGrid();
-                let d = {
-                    rowData: this.data.rowData
-                }
-                //赋值
-                this.agGrid.actions.setGridData(d);
             }else {
                 this.actions.calcSelectData( 'get' );
-                let d = {
-                    rowData: this.data.rowData,
-                    footerData: this.data.footerData
-                }
-                //赋值
-                this.agGrid.actions.setGridData(d);
             }
+            let d = {
+                rowData: this.data.rowData,
+                footerData: this.data.footerData
+            }
+            //赋值
+            this.agGrid.actions.setGridData(d);
             //对应关系回显
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                 this.actions.setCorrespondenceSelect();
@@ -1275,8 +1287,8 @@ let config = {
             }catch(e){}
         },
         //请求footer数据
-        getFooterData: function () {
-            let postData = this.actions.createPostData();
+        getFooterData: function (data) {
+            let postData = data || this.actions.createPostData();
             dataTableService.getFooterData( postData ).then( res=>{
                 this.data.footerData = dgcService.createFooterData( res );
                 let d = {
@@ -1892,6 +1904,18 @@ let config = {
             //搜索
             if( this.el.find( '.float-search-btn' )[0] ){
                 this.el.find( '.float-search-btn' ).on( 'click',()=>{
+                    if (this.data.isShowFloatingFilter && this.data.filterParam.filter.length != 0) {
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
+                        }
+                        this.data.queryList = {};
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getGridData();
+                    }
                     let height = this.data.isShowFloatingFilter ? 0:30;
                     this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                     this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
@@ -3001,6 +3025,14 @@ let config = {
             if( this.data.permission.edit == 0 && type == 'edit' ){
                 msgBox.alert( '没有编辑权限' );
             }
+            if(this.data.cannotopenform == '1'){
+                msgBox.alert( "已完成工作的子表不能" + obj[type] );
+                return true
+            }
+            if(this.data.cannotopenform == '2'){
+                msgBox.alert( "在途工作的表单不能" + obj[type] );
+                return true
+            }
         },
         //操作列点击事件
         gridHandle: function ( data ) {
@@ -3008,10 +3040,9 @@ let config = {
             console.log( data )
             console.log( this.data.namespace )
             if( data.event.srcElement.className == 'gridView' ){
-                this.actions.viewOrEditPerm( 'view' );
                 console.log( '查看' )
                 let btnType = 'view';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 || this.actions.viewOrEditPerm( 'view' ) ){
                     btnType = 'none';
                 }
                 let obj = {
@@ -3035,8 +3066,10 @@ let config = {
                 this.actions.openSelfIframe( url,title );
             }
             if( data.event.srcElement.className == 'gridEdit' ){
-                this.actions.viewOrEditPerm( 'edit' );
                 console.log( '编辑' )
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 || this.actions.viewOrEditPerm( 'edit' ) ){
+                    btnType = 'none';
+                }
                 let obj = {
                     table_id: this.data.tableId,
                     parent_table_id: this.data.parentTableId,
@@ -3103,7 +3136,7 @@ let config = {
                 table_id : d['table_id'],
                 btnType: 'new',
                 data_from_row_id: data.data['_id'],
-
+                operation_table_id: this.data.tableId,
                 operation_id: d.id
             };
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
@@ -3177,9 +3210,8 @@ let config = {
         onRowDoubleClicked: function (data) {
             console.log( "行双击查看" )
             console.log( data )
-            this.actions.viewOrEditPerm( 'view' );
             //屏蔽分组行
-            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter ){
+            if( data.data.group||Object.is(data.data.group,'')||Object.is(data.data.group,0)||this.data.editMode||data.data.myfooter||this.actions.viewOrEditPerm( 'view' ) ){
                 return;
             }
             let obj = {
@@ -3262,6 +3294,8 @@ let config = {
         },
         //打开局部的弹窗
         openSelfIframe: function ( url,title,w,h ) {
+            w = window.screen.width*0.8;
+            h = window.screen.height*0.6;
             PMAPI.openDialogToSelfByIframe( url,{
                     width: w || 1400,
                     height: h || 800,
@@ -3387,16 +3421,24 @@ let config = {
                 this.actions.getHeaderData();
             })
         }
+
+        PMAPI.subscribe(PMENUM.aside_fold, () => {
+            console.log($('.ui-dialog').width());
+            $('.ui-dialog').width('calc(100% - 3px)');
+        });
         this.actions.getHeaderData();
     }
 }
 
 class dataTableAgGrid extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-        }
-        super(config);
+    // constructor(data) {
+    //     for (let d in data) {
+    //         config.data[d] = data[d]
+    //     }
+    //     super(config);
+    // }
+    constructor(data,newConfig){
+        super($.extend(true,config,newConfig,{data:data||{}}));
     }
 }
 

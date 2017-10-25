@@ -113,6 +113,7 @@ let config = {
             changeYear: true,
             changeMonth: true,
             dateFormat: "yy-mm-dd",
+            yearRange:"1900:2999",
             defaultDate: new Date(_this.data.value),
             showOn: 'both',//设置触发选择器为button/focus
             //buttonImage:"../../../assets/images/form/icon-rili.png",
@@ -240,7 +241,7 @@ let config = {
     }
 }
 export default class DateControl extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

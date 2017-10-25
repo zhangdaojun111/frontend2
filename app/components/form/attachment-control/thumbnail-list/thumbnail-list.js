@@ -145,12 +145,11 @@ let config = {
             let imgEle = $('<img class="thumbnail-'+i+'" style="width: 50px;height: 50px;padding: 5px">');
             this.el.find('.thumbnail-anchor').append(imgEle);
             imgEle.on('click',(event)=>{
-                PMAPI.openPreview({list:this.data.items,currentIndex:i});
                 if(!this.data.items[this.data.currentIndex+i]){
                     return;
                 }
-                let src = '/download_attachment/?file_id='+Object.keys(this.data.items[this.data.currentIndex+i])[0]+'&download=0';
-                event.stopPropagation({list:this.data.items,currentIndex:i});
+                PMAPI.openPreview({list:this.data.items,currentIndex:this.data.currentIndex+i});
+                event.stopPropagation({list:this.data.items,currentIndex:this.data.currentIndex+i});
             })
         }
         this.actions.setMoveController();
@@ -160,7 +159,7 @@ let config = {
 }
 
 export default class ThumbnailList extends Component{
-    constructor(data,dinput_type){
-        super(config,{items:data,dinput_type:dinput_type});
+    constructor(data,dinput_type,newConfig){
+        super($.extend(true,{},config,newConfig),{items:data,dinput_type:dinput_type});
     }
 }

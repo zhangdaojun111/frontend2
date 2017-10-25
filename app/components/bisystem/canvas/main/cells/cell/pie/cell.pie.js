@@ -180,8 +180,8 @@ let config = {
 }
 
 export class CellPieComponent extends CellBaseComponent {
-    constructor(data,event) {
-        super(config,data,event);
+    constructor(data,event,extendConfig) {
+        super($.extend(true,{},config,extendConfig),data,event);
         this.actions.initPie();
     }
 

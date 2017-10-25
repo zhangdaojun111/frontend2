@@ -8,7 +8,8 @@ import {systemMessageUtil} from '../system-message/system-message';
 import {SysSetting} from "../system-setting/system-setting"
 import {postMessageUtil} from '../post-message/post-message';
 import {GlobalSearch} from '../global-search/global-search';
-import {OnlineDisplay} from "../online-users/online-users"
+import {OnlineDisplay} from "../online-users/online-users";
+import {PMAPI, PMENUM} from '../../../lib/postmsg';
 
 let config = {
     template: template,
@@ -80,7 +81,6 @@ let config = {
          * 有未读的消息显示红点提醒
          */
         displayMessageUnread: function (data) {
-            console.log('do reset red point')
             let badge = parseInt(data.badge);
             if (_.isNaN(badge)) {
                 badge = 0;
@@ -115,22 +115,17 @@ let config = {
          * 显示单条推送消息
          */
         onSocketNotice: function (data = {}) {
-            systemMessageUtil.showMessageDetail('推送消息', data.title, data.content, true);
+            systemMessageUtil.showMessageDetail('推送消息', data, true);
+        },
+        /**
+         * 自动弹出未处理的推送消息
+         */
+        dealPostMsg:function () {
+            let msgs = window.config.sysConfig.notice;
+            if(msgs && msgs.length > 0){
+                systemMessageUtil.showMessageDetail('推送消息', msgs, true);
+            }
         }
-        // setOnlineNum:function () {
-        //     //更新在线人数
-        //     GlobalService.getOnlineUserData().done((result) => {
-        //         if(result.success === 1){
-        //             if(result.total <= 999){
-        //                 this.el.find('.online-num').find('span').html(result.total);
-        //             }else{
-        //                 this.el.find('.online-num').find('span').html("999+");
-        //             }
-        //         }else{
-        //             console.log("获取数据失败");
-        //         }
-        //     })
-        // }
     },
     binds: [
         {
@@ -139,6 +134,10 @@ let config = {
             callback: function () {
                 this.data.asideSize = this.data.asideSize === 'full' ? 'mini' : 'full';
                 Mediator.emit('aside:size', this.data.asideSize);
+                PMAPI.sendToAllChildren({
+                    type: PMENUM.aside_fold,
+                    data: 'data'
+                });
                 if (this.data.asideSize === 'full') {
                     this.actions.setSizeToFull();
                 } else {
@@ -214,6 +213,7 @@ let config = {
         });
         //加载全局搜索窗口
         this.actions.initGlobalSearch();
+        this.actions.dealPostMsg();
     },
 
     beforeDestory: function () {
@@ -225,4 +225,12 @@ let config = {
     }
 }
 
-export const HeaderInstance = new Component(config, {});
+class HeaderComponent extends Component{
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig))
+    }
+}
+
+export {HeaderComponent};
+
+// export const HeaderInstance = new Component(config, {});

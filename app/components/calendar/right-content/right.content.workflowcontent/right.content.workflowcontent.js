@@ -56,9 +56,9 @@ let config = {
 };
 
 class RightContentWorkFlow extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data = data;
-        super(config);
+        super($.extend(true,{},config,newConfig));
     }
 }
 

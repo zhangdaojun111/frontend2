@@ -200,6 +200,8 @@ let config = {
                 formData.append('per_size', item.pack_size);
                 formData.append('content_type', item.file.type);
                 formData.append('dinput_type', this.data.real_type);
+                formData.append('time_stamp',this.data.timestamp);
+                formData.append('string_stamp', this.data.timestamp);
                 let errorCallback = this.data.toolbox?this.data.toolbox.showError:undefined;
                 FormService.uploadAttachment(item.url, formData, this.actions.processEvent, (res) => {
                     if (res.success) {
@@ -219,24 +221,26 @@ let config = {
                     } else {
                         this.data._controlItem.uploadingState = 'failed';
                         if(this.data.toolbox){
-                            this.data.toolbox.showError({fileId:this.data.fileOrder,msg:"传输中断"});
+                            this.data.toolbox.showError({fileId:this.data.fileOrder,msg:res.error});
                         } else {
-                            msgbox.alert('传输中断！');
+                            msgbox.alert(res.error);
                         }
-                        this.actions.showReuploadingButton();
+                        // this.actions.showReuploadingButton();
+                        this.el.remove();
                     }
                 },errorCallback);
             }
         }
     },
     afterRender:function () {
+        this.data.timestamp =  new Date().getTime();
         this.actions.startUploadFile();
     }
 }
 
 export default class AttachmentQueueItem extends Component{
-    constructor(data,event){
+    constructor(data,event,newConfig){
         config.data.fileSize = config.actions.getReadableFileSize(data.file.size);
-        super(config,data,event);
+        super($.extend(true,{},config,newConfig),data,event);
     }
 }

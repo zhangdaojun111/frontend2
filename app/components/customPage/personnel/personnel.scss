@@ -119,6 +119,17 @@
                 align-items: center;
                 justify-content: flex-end;
             }
+            //.component-time-control {
+            //    width: 100%;
+            //    div:first-child{
+            //        width: 100%;
+            //    }
+            //}
+            //.component-date-control {
+            //    img {
+            //        top: 0px!important;
+            //    }
+            //}
             .dataGrid-commonQuery {
                 //display: none;
                 margin-top: 3px;
@@ -206,7 +217,11 @@
             height: 30px;
             width: 100%
         }
+        .ag-floating-bottom {
+            display: none!important;
+        }
     }
+
     @media screen and (min-width: 1100px) and (max-width: 1400px){
         .dataGrid-btn-group {
             span {

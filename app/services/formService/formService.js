@@ -85,8 +85,7 @@ export const FormService = {
     },
     //获取默认值数据
     getDefaultValue(json) {
-        let res = HTTP.post('get_workflow_default_values', json);
-        HTTP.flush();
+        let res = HTTP.postImmediately({url:'/get_workflow_default_values/', data:json});
         return res;
     },
     //获取相关数据

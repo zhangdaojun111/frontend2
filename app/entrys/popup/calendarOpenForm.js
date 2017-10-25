@@ -7,7 +7,7 @@
 import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
 
-import FormEntrys from './form';
+import FormEntrys from '../form';
 
 console.log(window.config.real_id);
 FormEntrys.initForm({
