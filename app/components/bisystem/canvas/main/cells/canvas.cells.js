@@ -190,6 +190,7 @@ let config = {
             });
         }
     },
+
     binds: [
         { //滚动距离
             event: 'scroll',
