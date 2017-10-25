@@ -3323,7 +3323,7 @@ let config = {
         //延时刷新
         timeDelayRefresh: function(){
             this.actions.setInvalid();
-            this.pagination.actions.timeDelayRefresh();
+            try{this.pagination.actions.timeDelayRefresh();}catch(e){};
         },
         //返回批量工作流导入后数据
         returnBatchData: function (ids) {
