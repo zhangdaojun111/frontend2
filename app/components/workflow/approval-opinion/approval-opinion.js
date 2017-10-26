@@ -57,6 +57,7 @@ let config = {
         let changeValue = (res) => {
             console.log(res.value);
             this.data.fileList = res.value;
+            console.log(this.data.fileList);
         };
         let attachmentControl = new AttachmentControl(json, {changeValue: changeValue});
         this.append(attachmentControl, this.el.find('.workflow-attachment-box'));

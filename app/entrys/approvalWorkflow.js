@@ -193,8 +193,9 @@ const approveWorkflow = (para) => {
             para.data = JSON.stringify(formData);
         }
     }
+    console.log(attachmentComment);
     para.comment=comment;
-    para.comment_attachment = attachmentComment;
+    para['comment_attachment'] = attachmentComment;
     para.focus_users=JSON.stringify(focusArr);
     msgBox.showLoadingSelf();
     console.log(para);
@@ -221,6 +222,7 @@ const approveWorkflow = (para) => {
 Mediator.subscribe('workflow:comment',(res)=>{
     comment = res.comment;
     attachmentComment = res.attachment;
+
 })
 
 Mediator.subscribe('approval:recordPass', (data) => {
