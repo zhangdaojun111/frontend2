@@ -1341,7 +1341,13 @@ let config = {
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
             if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
-                this.actions.validDefault(data, data['value']);
+                if(data.type == 'Input'){
+                    setTimeout(()=>{
+                        this.actions.validDefault(data, data['value']);
+                    },3000)
+                }else {
+                    this.actions.validDefault(data, data['value']);
+                }
             }
             //统计功能
             this.actions.myUseFieldsofcountFunc();
