@@ -1,7 +1,6 @@
 .excute-con {
-    width: 1000px;
+    width: 920px;
     margin: 0 auto;
-    margin-top: -1px;
     div {
         border: 1px solid #afafaf;
         border-top: none;
@@ -18,9 +17,11 @@
     }
     .span1 {
         width: 200px;
+        border-right: 1px solid #afafaf;
     }
     .span2 {
         width: 500px;
+        border-right: 1px solid #afafaf;
     }
     .span3 {
         width: 200px;

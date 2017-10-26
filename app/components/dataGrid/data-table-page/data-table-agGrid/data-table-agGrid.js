@@ -3167,10 +3167,14 @@ let config = {
             let fun=data['frontendAddress'].split(':')[0];
             let params=data['frontendAddress'].split(':')[1];
 
+            let json = {};
+            let url = '/iframe/rowOperation/';
+            let winTitle = '';
+            let w = 1400,h = 800
             switch( fun ){
                 //行级操作-BI
                 case 'bi':{
-                    let json = {
+                    json = {
                         parent_table_id: customTableId,
                         rowId: customRowId,
                         operation_id: row_op_id,
@@ -3179,18 +3183,35 @@ let config = {
                     }
                     console.log( '行级BI参数' )
                     console.log( json )
-                    let url = '/iframe/rowOperation/?operationType=bi';
-                    let winTitle = '行级BI';
-                    PMAPI.openDialogByIframe( url,{
-                        width: 1400,
-                        height: 800,
-                        title: winTitle,
-                        modal:true
-                    },json ).then( (data)=>{
-                    } )
+                    url = '/iframe/rowOperation/?operationType=bi';
+                    winTitle = '行级BI';
+                    break;
+                }
+                case 'sexecute':{
+                    json = {
+                        params: params,
+                        rowId: customRowId,
+                        operation_id: row_op_id,
+                        allRowData: this.data.rowData,
+                        field: 'f16',
+                        tableId: this.data.tableId
+                    }
+                    w = 930
+                    h = 500
+                    console.log( '执行操作参数' )
+                    console.log( json )
+                    url = '/iframe/rowOperation/?operationType=excute';
+                    winTitle = '执行操作';
                     break;
                 }
             }
+            PMAPI.openDialogByIframe( url,{
+                width: w,
+                height: h,
+                title: winTitle,
+                modal:true
+            },json ).then( (data)=>{
+            } )
         },
         //行双击
         onRowDoubleClicked: function (data) {
