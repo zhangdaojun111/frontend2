@@ -3,6 +3,7 @@
   height:26px;
   position: relative;
   top: -3px;
+  display: flex;
 }
 .df-input-radio-status{
   position: absolute;
@@ -61,7 +62,7 @@ input:focus{
     position: absolute;
     border: 1px solid #D4CACA;
     border-radius: 50%;
-    top: 2px;
+    top: 8px;
     left: 0;
     /*z-index:-1;*/
 }
