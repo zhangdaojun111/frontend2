@@ -147,6 +147,7 @@ let config={
                 case 'follow-view' :
                     appendDiv.find(".preview-node1").html(addFollow);
                     $("#cloneId1").find('.add-follow').remove();
+                    $("#cloneId1").find('.follow-name-list').removeAttr('id');
                     appendDiv.find(".preview-node1").toggle().siblings().hide();
                     break;
                 case 'flow-view' :

@@ -97,7 +97,11 @@ let config = {
                             left: left - theBestLeft,
                             width: __this.data.node_width+'px',
                         };
-                        myTitle = __this[handlerType] + text;
+                        if(__this[handlerType]) {
+                            myTitle = __this[handlerType] + text;
+                        }else{
+                            myTitle = text;
+                        }
                         if (value['handler_relation']) {
                             text = value['handler_relation'] == 0 ? '临时(会签)' : '临时(并行)';
                         }
@@ -448,16 +452,18 @@ let config = {
         },
         //切换流程图
         togglePicture() {
-
+            let that =  this;
             if (this.data.pictureOption == '事务图') {
                 this.data.pictureOption = '节点图';
                 this.el.find(".togglePic-text").text('节点图');
+                let arr = that.data.draged.reverse();
                 this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
                         let originaltext = $this.attr("originaltext");
                         let originaltitle = $this.attr("originaltitle");
-                        $(this).html(originaltext).attr("title", originaltitle);
+                        let html = arr.pop();
+                        $this.html(html).attr("title", originaltitle);
                     }
                 });
             }
@@ -467,10 +473,13 @@ let config = {
                 this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
+                        let html = $this.html();
                         let eventName = $this.attr("eventname");
+                        that.data.draged.push(html);
                         $this.html(eventName).attr("title", eventName);
                     }
                 });
+
             }
         },
         /**
@@ -523,6 +532,7 @@ let config = {
     afterRender: function() {
         this.actions.init();
         this.data.showfj = true;
+        this.data.draged = [];
         this.el.on('click', '#zoomIn', () => {
             this.actions.zoomInNodeflow();
         });
