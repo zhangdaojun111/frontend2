@@ -415,7 +415,10 @@ let config = {
         UserInfoService.getAllUsersInfo().then(user => {
             this.data.copypeople = [];
             for (let data of user.rows) {
-                this.data.copypeople.push({name: data.name, id: data.id});
+                console.log(data.name,data.name.indexOf('离职'));
+                if(data.name.indexOf('离职') === -1){
+                    this.data.copypeople.push({name: data.name, id: data.id});
+                }
             }
         });
 

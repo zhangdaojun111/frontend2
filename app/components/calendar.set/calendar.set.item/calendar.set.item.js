@@ -151,6 +151,7 @@ let config = {
                     emailAddress: this.data.emailAddress,
                 }).then(data => {
                 if (!data.onlyclose) {
+                    console.log(this.data.rowSetData.sms = data['sms']);
                     this.data.rowSetData.email = data['email'];
                     this.data.rowSetData.sms = data['sms'];
                     let showMethod = '';
