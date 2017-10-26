@@ -455,13 +455,9 @@ let config = {
                             if (type == 'setting-textarea') {
                                 this.data.childComponent[key].actions.loadSettingtextarea(value);
                             }
-                            if(type == 'Input'){
-                                setTimeout(()=>{
-                                    this.actions.setFormValue(key, value);
-                                },3000)
-                            }else{
+                            setTimeout(()=>{
                                 this.actions.setFormValue(key, value);
-                            }
+                            },3000)
                         }
                     }
                 }
