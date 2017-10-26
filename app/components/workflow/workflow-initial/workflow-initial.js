@@ -28,7 +28,10 @@ let config = {
         allowagrid: true, //允许agrid只加载一次,
         nameArr: [], //关注人姓名
         idArr: [], //关注人id
-        htmlStr: [] // 关注人添加的html代码
+        htmlStr: [], // 关注人添加的html代码
+        allUsersInfo: {},
+        focusUsersId: [],
+        focusUsers: {},
     },
     actions: {
         /*
@@ -44,10 +47,16 @@ let config = {
                 WorkFlowCreate.loadData(obj);
             });
             HTTP.flush();
-        }
+        },
+
+        // getAllUsers() {
+        //     workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
+        //         this.data.allUsersInfo = res.rows;
+        //         console.log(this.data.allUsersInfo);
+        //     })
+        // }
     },
     afterRender() {
-
         this.actions.get_workflow_info();
         this.el.on('click', '#workflowClose', () => {
                 Mediator.publish("workflow:contentClose");
@@ -86,8 +95,29 @@ let config = {
             this.data.idArr = [];
             this.data.user = [];
             this.el.find('#addFollowerList').empty();
-        })
+        });
+        Mediator.on('getDefaultFocusUsers', (data) => {
+            console.log(data);
+            workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
+                this.data.htmlStr = [];
+                this.data.allUsersInfo = res.rows;
+                // console.log(this.data.allUsersInfo);
+                for(let key in data['updateuser2focususer']) {
+                    this.data.idArr = data['updateuser2focususer'][key];
+                    for(let i of this.data.idArr) {
+                        console.log(i);
+                        this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
+                        this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];
+                        this.data.htmlStr.push(`<span class="selectSpan">${this.data.allUsersInfo[i]['name']}</span>`);
+                    }
+                }
+                this.el.find('#addFollowerList').html(this.data.htmlStr);
+            })
+
+        });
         this.el.on('click', '#addFollower', () => {
+            console.log(typeof this.data.user);
+            this.data.user = this.data.focusUsers;
             PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
                 width: 800,
                 height: 620,
@@ -97,7 +127,8 @@ let config = {
                 users:this.data.user
             }).then(res => {
                 if (!res.onlyclose) {
-                    for (var k in res) {
+                    this.data.htmlStr = [];
+                    for (let k in res) {
                         this.data.nameArr.push(res[k]);
                         this.data.htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
                         this.data.idArr.push(k);

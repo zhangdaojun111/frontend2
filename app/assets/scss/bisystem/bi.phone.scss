@@ -26,7 +26,6 @@
                 display: none;
             }
         }
-
         .cells-container {
             height: calc(100% - 45px) !important;
             -webkit-overflow-scrolling: touch;
@@ -48,6 +47,7 @@
                         }
                     }
                     .cell-chart {
+                        padding: 0;
                         .chart-normal-date-zoom {
                             display: none;
                         }

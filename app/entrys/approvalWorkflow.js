@@ -143,6 +143,10 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         }
     )
 })().then(function (res) {
+    let cannotopenform = '';
+    if(res['record_info']['status'] === '已完成') {
+        cannotopenform = '1';
+    }
     Mediator.publish("workflow:aggridorform",res);
     is_batch = res.record_info.is_batch;
     if(is_batch==1){
@@ -153,6 +157,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         tableId:obj.table_id,
         recordId: obj.record_id,
         viewMode:"approveBatch",
+        cannotopenform: cannotopenform,
     });
     AgGrid.actions.returnBatchData = function (ids) {
         temp_ids=ids;
