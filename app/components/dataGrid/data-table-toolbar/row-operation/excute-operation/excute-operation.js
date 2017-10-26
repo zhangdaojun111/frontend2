@@ -59,7 +59,7 @@ let config = {
                     deployItem: item,
                     exc_tasks: arr.join( ',' )
                 }
-                dataTableService.excuteOperation( this.data.params.substring( 5 ),json ).then( res=>{
+                dataTableService.excuteOperation( this.data.params.substring( 4 ),json ).then( res=>{
                     if(res["success"] == 1){
                         msgBox.alert(res["message"]);
                     }else{
