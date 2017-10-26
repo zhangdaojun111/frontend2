@@ -1,0 +1,44 @@
+.excute-con {
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: -1px;
+    div {
+        border: 1px solid #afafaf;
+        border-top: none;
+        height: 40px;
+    }
+    input:hover {
+        cursor: pointer;
+    }
+    span {
+        display: inline-block;
+        text-align: center;
+        font-size: 12px;
+        line-height: 40px;
+    }
+    .span1 {
+        width: 200px;
+    }
+    .span2 {
+        width: 500px;
+    }
+    .span3 {
+        width: 200px;
+    }
+    .submit {
+        font-family: '\5FAE\8F6F\96C5\9ED1';
+        text-align: center;
+        font-weight: 400;
+        cursor: pointer;
+        font-style: normal;
+        font-size: 12px;
+        color: #FFFFFF !important;
+        text-decoration: none;
+        border: none;
+        width: 50px;
+        height: 20px;
+        line-height: 10px;
+        background-color: rgba(0, 136, 255, 1);
+        border-radius: 2px;
+    }
+}
