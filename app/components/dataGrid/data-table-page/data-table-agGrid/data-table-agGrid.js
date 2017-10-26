@@ -851,24 +851,24 @@ let config = {
             } catch (e) {
                 rowStatus = 0;
             }
-            let str = '<div style="text-align:center;"><a class="gridView" style="color:#0088ff;cursor: pointer">查看</a>';
+            let str = '<div style="text-align:center;"><a class="gridView">查看</a>';
             if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'deleteHanding') {
                 if (this.data.isFixed || rowStatus == 2 || this.data.permission.cell_edit == 0) {
                     str += ' | <span style="color: darkgrey;cursor: pointer">编辑</span>';
                     str += ' | <a style="color: darkgrey;cursor: pointer">历史</a>';
                 } else {
-                    str += ' | <a  class="gridEdit" style="color:#0088ff;cursor: pointer">编辑</a>';
-                    str += ' | <a  class="gridHistory" style="color:#0088ff;cursor: pointer">历史</a>';
+                    str += ' | <a  class="gridEdit" >编辑</a>';
+                    str += ' | <a  class="gridHistory">历史</a>';
                 }
                 operateWord = operateWord + 4;
             }
             if (this.data.viewMode == 'approveBatch') {
-                str += ' | <a  class="gridEdit" style="color:#0088ff;">编辑</a>';
+                str += ' | <a  class="gridEdit">编辑</a>';
                 operateWord = operateWord + 2;
             }
             if (this.data.customOperateList) {
                 for (let d of this.data.customOperateList) {
-                    str += ` | <a class="customOperate" id="${ d["id"] }" style="color:#0088ff;cursor: pointer">${ d["name"] }</a>`;
+                    str += ` | <a class="customOperate" id="${ d["id"] }">${ d["name"] }</a>`;
                     operateWord = operateWord + (d["name"] ? d["name"].length : 0);
                 }
             }
@@ -876,7 +876,7 @@ let config = {
                 for (let ro of this.data.rowOperation) {
                     if (ro.frontend_addr && ro.frontend_addr == 'export_row') {
                         let selectedRows = JSON.stringify([params.data._id])
-                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.pageId }&selectedRows=${ selectedRows }' style="color:#337ab7;">${ ro["name"] }</a>`;
+                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.pageId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
                         operateWord = operateWord + (ro["name"] ? ro["name"].length : 0);
                     } else {
                         str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" style="color:#337ab7;">${ ro["name"] }</a>`;
@@ -891,7 +891,7 @@ let config = {
         //设置搜索input值，解决拖动列排序后重新渲染floatingFilter的input导致显示为空
         setFloatingFilterInput: function () {
             for( let k in this.data.searchValue ){
-                try{this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];}catch(e){}
+                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
             }
         },
         //floatingFilter拼参数，接收floatingFilter改变的参数，拼装成搜索需要的参数
@@ -1852,26 +1852,15 @@ let config = {
                     }
                     this.el.find(e.target).parent().attr( 'currentId',id );
                     let state = gridoptions.columnApi.getColumnState();
-                    let saveArr = [];
                     for( let s of state ){
                         if( ignore.indexOf( s.colId ) == -1 ){
                             s.hide = arr.indexOf( s.colId ) == -1 && id != 0 ? true:false;
                         }
-                        if( ignore.indexOf( s.colId ) == -1 && s.hide ){
-                            saveArr.push( s.colId );
-                        }
                     }
-                    dataTableService.savePreference({
-                        action: 'ignoreFields',
-                        table_id: this.data.tableId,
-                        ignoreFields: JSON.stringify( saveArr )
-                    });
-                    HTTP.flush();
                     gridoptions.columnApi.setColumnState( state );
                     if( !this.data.noNeedCustom ){
                         this.customColumnsCom.actions.makeSameSate();
                     }
-                    this.actions.setFloatingFilterInput();
                 } );
                 this.el.find('.SheetPage ul li:first').addClass('active1');
                 this.el.find('.SheetPage ul li').on('click',function () {
