@@ -20,7 +20,7 @@ let config = {
         params: '',
         rowId: '',
         tableId: '',
-        deploylist: [111],
+        deploylist: [],
         firstRender: true
     },
     actions: {
