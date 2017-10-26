@@ -10,6 +10,7 @@ let config = {
     template: template,
     data: {
         // css: css.replace(/(\n)/g, ''),
+        fileList: [],
     },
     binds:[
         {
@@ -24,6 +25,7 @@ let config = {
                         determine:true,
                         key: this.key,
                         comment: this.data.comment,
+                        attachment: this.data.fileList
                     }
                 })
             }
@@ -48,7 +50,15 @@ let config = {
         }
     },
     afterRender(){
-        let attachmentControl = new AttachmentControl();
+        let json = {
+            value: [],
+            dinput_type: '9',
+        };
+        let changeValue = (res) => {
+            console.log(res.value);
+            this.data.fileList = res.value;
+        };
+        let attachmentControl = new AttachmentControl(json, {changeValue: changeValue});
         this.append(attachmentControl, this.el.find('.workflow-attachment-box'));
     },
     beforeDestory(){

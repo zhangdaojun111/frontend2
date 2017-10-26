@@ -42,10 +42,10 @@
           width: 80px;
 
         }
-        //&:nth-child(4){
-        //  flex-grow: 2;
-        //  width: 100px;
-        //}
+        &.comment-attachment{
+          color: #1789fc;
+          cursor: pointer;
+        }
       }
       &:last-child{
         border-bottom: none;

@@ -27,6 +27,7 @@ serchStr.split('&').forEach(res => {
 });
 is_view=obj.btnType==='view'?1:0;
 let comment='';
+let attachmentComment = [];
 console.log(obj);
 
 ApprovalWorkflow.showDom().then(function (component) {
@@ -50,6 +51,7 @@ ApprovalWorkflow.showDom().then(function (component) {
 
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
+    console.log(res);
     ApprovalHeader.showheader(res.record_info);
     WorkflowRecord.showRecord(res.record_info);
     let current_node_arr = res.record_info.current_node.split('、');
@@ -75,20 +77,6 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     if(is_view){
         $('#add-home').find('#addFollower').hide();
     }
-
-    // zj
-    // (async function () {
-    //     return workflowService.getWorkflowInfo({url: '/get_all_users/'});
-    // })().then(users => {
-    //     for(let i in focus){
-    //         nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
-    //     }
-    //     $('#add-home #addFollowerList').html(nameArr);
-    //     if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
-    //         $('#approval-workflow').find('.for-hide').hide();
-    //         $('#approval-workflow').find('#re-app').hide();
-    //     };
-    // })
 
     //审批工作流
     (async function () {
@@ -206,8 +194,10 @@ const approveWorkflow = (para) => {
         }
     }
     para.comment=comment;
+    para.comment_attachment = attachmentComment;
     para.focus_users=JSON.stringify(focusArr);
     msgBox.showLoadingSelf();
+    console.log(para);
     (async function () {
         return workflowService.approveWorkflowRecord({
             url: '/approve_workflow_record/',
@@ -229,7 +219,8 @@ const approveWorkflow = (para) => {
     })
 };
 Mediator.subscribe('workflow:comment',(res)=>{
-    comment = res;
+    comment = res.comment;
+    attachmentComment = res.attachment;
 })
 
 Mediator.subscribe('approval:recordPass', (data) => {

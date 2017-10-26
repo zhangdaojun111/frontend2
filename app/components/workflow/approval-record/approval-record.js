@@ -6,6 +6,8 @@
 import Component from '../../../lib/component';
 import template from '././approval-record.html';
 import '././approval-record.scss';
+import AttachmentList from "../../form/attachment-list/attachment-list";
+import {PMAPI} from '../../../lib/postmsg';
 
 let config={
     template: template,
@@ -53,6 +55,18 @@ let config={
         this.el.on("mousemove",".tipsText",function (e) {
             let J_tooltip=$("#J_tooltip");
             self.actions.tipsMousemove(pos,J_tooltip,e)
+        });
+        this.el.on('click', '.comment-attachment', () => {
+            if(this.data.comment_attachment.length > 0) {
+                AttachmentList.data.list = this.data.comment_attachment;
+                // AttachmentList.data.dinput_type = dinput_type;
+                AttachmentList.data.is_view = true;
+                PMAPI.openDialogByComponent(AttachmentList,{
+                    width: 900,
+                    height: 600,
+                    title: '附件列表'
+                })
+            }
         })
     }
 

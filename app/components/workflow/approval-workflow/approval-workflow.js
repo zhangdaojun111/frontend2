@@ -212,7 +212,7 @@ let config={
             ).then(res => {
                 console.log(res);
                 if(res.determine){
-                    Mediator.publish('workflow:comment',res.comment);
+                    Mediator.publish('workflow:comment',res);
                     Mediator.publish("approval:recordPass",this.data.imgInfo);
                 }
             })
