@@ -132,11 +132,29 @@ let config={
             o.sigh_type=__this.el.find('[name="addHandlerType"]:checked').val();
             o.sigh_user_id=__this.data.sigh_user_id;
             if(o.sigh_user_id){
-                PMAPI.openDialogByComponent(approvalOpinion,{
-                    width: 450,
-                    height: 300,
-                    title: '提示'
-                }).then(res=>{
+                // PMAPI.openDialogByComponent(approvalOpinion,{
+                //     width: 450,
+                //     height: 300,
+                //     title: '提示'
+                // }).then(res=>{
+                //     if(res.determine){
+                //         // Mediator.publish('workflow:comment',res.comment);
+                //         o.comment = res.comment;
+                //         PMAPI.sendToParent({
+                //             type: PMENUM.close_dialog,
+                //             key:__this.data.key,
+                //             data:o
+                //         })
+                //     }
+                // })
+                PMAPI.openDialogByIframe(
+                    '/iframe/approvalOpinion/',
+                    {
+                        width: 450,
+                        height:300,
+                        title:'提示'
+                    }
+                ).then(res => {
                     if(res.determine){
                         // Mediator.publish('workflow:comment',res.comment);
                         o.comment = res.comment;
@@ -148,11 +166,6 @@ let config={
                     }
                 })
 
-                // PMAPI.sendToParent({
-                //     type: PMENUM.close_dialog,
-                //     key:__this.data.key,
-                //     data:o
-                // })
             }else{
                 msgBox.alert("请选择一名加签人员");
             }

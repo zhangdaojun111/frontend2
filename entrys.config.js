@@ -38,5 +38,6 @@ module.exports = {
     main: path.resolve(APP_PATH, 'entrys/main.js'),
     register: path.resolve(APP_PATH, 'entrys/register.js'),
     resultDisplay: path.resolve(APP_PATH, 'entrys/resultDisplay.js'),
-    findPassword: path.resolve(APP_PATH, 'entrys/findPassword.js')
+    findPassword: path.resolve(APP_PATH, 'entrys/findPassword.js'),
+    approvalOpinion: path.resolve(APP_PATH, 'entrys/popup/approvalOpinion.js'),
 }
