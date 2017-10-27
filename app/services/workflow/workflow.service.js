@@ -29,6 +29,12 @@ export const workflowService={
     addWorkflowFavorite(params){
         return HTTP.postImmediately('/add_workflow_favorite/', params)
     },
+    //请求附件数据
+    getAttachmentList(json){
+        let res = HTTP.post('query_attachment_list', json);
+        HTTP.flush();
+        return res;
+    },
     //审批工作流
     //
     approveWorkflowRecord(params){

@@ -8,6 +8,7 @@ import template from '././approval-record.html';
 import '././approval-record.scss';
 import AttachmentList from "../../form/attachment-list/attachment-list";
 import {PMAPI} from '../../../lib/postmsg';
+import {workflowService} from '../../../services/workflow/workflow.service';
 
 let config={
     template: template,
@@ -22,18 +23,21 @@ let config={
                 console.log("++++++++++++++++++++");
                 console.log(this.data.approve_tips[e.id]);
                 if(this.data.approve_tips[e.id].comment_attachment.length > 0) {
-                    let fieldList = [];
-                    for(let a of this.data.approve_tips[e.id].comment_attachment) {
-                        let json = {};
-                        json['file_id'] = a;
-                        fieldList.push(json);
-                    }
-                    AttachmentList.data.list = fieldList;
-                    AttachmentList.data.is_view = true;
-                    PMAPI.openDialogByComponent(AttachmentList,{
-                        width: 900,
-                        height: 600,
-                        title: '附件列表'
+                    let params = {
+                        file_ids: JSON.stringify(this.data.approve_tips[e.id].comment_attachment),
+                        dinput_type: '9'
+                    };
+                    workflowService.getAttachmentList(params).then(res => {
+                        console.log(res);
+                        if(res.success){
+                            AttachmentList.data.list = res.rows;
+                            AttachmentList.data.is_view = true;
+                            PMAPI.openDialogByComponent(AttachmentList,{
+                                width: 900,
+                                height: 600,
+                                title: '附件列表'
+                            })
+                        }
                     })
                 }
             }
