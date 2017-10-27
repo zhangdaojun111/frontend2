@@ -60,8 +60,8 @@ let config={
             console.log("++++++++++++++++++++")
             console.log("++++++++++++++++++++")
             console.log("++++++++++++++++++++")
-            console.log(this.data.comment_attachment);
-            if(this.data.comment_attachment.length > 0) {
+            console.log(this.data.approve_tips);
+            if(this.data.approve_tips.comment_attachment.length > 0) {
                 AttachmentList.data.list = this.data.comment_attachment;
                 AttachmentList.data.is_view = true;
                 PMAPI.openDialogByComponent(AttachmentList,{
