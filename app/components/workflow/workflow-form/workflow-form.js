@@ -190,11 +190,8 @@ let config = {
             let arr = res.split('=');
             obj[arr[0]] = arr[1];
         });
-        if(obj.btnType == 'view' || obj.btnType == 'edit'|| obj.btnType == 'none' || obj.btnType == 'new'){
-            this.data.isshowfjbtn = true;
-            if(obj.key && location.pathname != "/wf/approval/"){
-                this.el.find('#printBtn').show();
-            }
+        if(obj.key && location.pathname != "/wf/approval/"){
+            this.el.find('#printBtn').show();
         }
         this.data.key=obj.key;
         this.data.view = obj.btnType == 'edit'? 1 : 0;
@@ -227,7 +224,7 @@ let config = {
             this.actions.printSetting();
         })
         Mediator.subscribe('workFlow:record_info',(res)=>{
-            if(res.attachment.length && this.data.isshowfjbtn){
+            if(res.attachment.length){
                 this.data.attachment = res.attachment;
                 this.el.find('.newfj').show();
             }else{
