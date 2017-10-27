@@ -206,7 +206,7 @@ let config={
                 '/iframe/approvalOpinion/',
                 {
                     width: 450,
-                    height:600,
+                    height:350,
                     title:'提示'
                 }
             ).then(res => {
@@ -222,13 +222,14 @@ let config={
                 '/iframe/approvalOpinion/',
                 {
                     width: 450,
-                    height:300,
+                    height:350,
                     title:'提示'
                 }
             ).then(res => {
                 if(res.determine===true){
-                    Mediator.publish('workflow:comment',res.comment);
-                    Mediator.publish('approval:recordRejStart',res.determine);
+                    // Mediator.publish('workflow:comment',res.comment);
+                    // Mediator.publish('approval:recordRejStart',res.determine);
+                    Mediator.publish('approval:recordRejStart',res);
                 }
             })
         },
@@ -237,13 +238,14 @@ let config={
                 '/iframe/approvalOpinion/',
                 {
                     width: 450,
-                    height:300,
+                    height:350,
                     title:'提示'
                 }
             ).then(res => {
                 if(res.determine===true){
-                    Mediator.publish('workflow:comment',res.comment);
-                    Mediator.publish('approval:appRejUp',res.determine);
+                    // Mediator.publish('workflow:comment',res.comment);
+                    // Mediator.publish('approval:appRejUp',res.determine);
+                    Mediator.publish('approval:appRejUp',res);
                 }
             })
         },

@@ -258,7 +258,7 @@ Mediator.subscribe('approval:recordPass', (data) => {
     });
 });
 Mediator.subscribe('approval:appRejUp', (ispass) => {
-    if (ispass) {
+    if (ispass.determine) {
         approveWorkflow({
             record_id: obj.record_id,
             action: 1,
@@ -266,7 +266,7 @@ Mediator.subscribe('approval:appRejUp', (ispass) => {
     }
 });
 Mediator.subscribe('approval:recordRejStart', (ispass) => {
-    if (ispass) {
+    if (ispass.determine) {
         approveWorkflow({
             record_id: obj.record_id,
             action: 2,

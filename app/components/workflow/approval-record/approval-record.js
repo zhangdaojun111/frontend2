@@ -57,9 +57,12 @@ let config={
             self.actions.tipsMousemove(pos,J_tooltip,e)
         });
         this.el.on('click', '.comment-attachment', () => {
+            console.log("++++++++++++++++++++")
+            console.log("++++++++++++++++++++")
+            console.log("++++++++++++++++++++")
+            console.log(this.data.comment_attachment);
             if(this.data.comment_attachment.length > 0) {
                 AttachmentList.data.list = this.data.comment_attachment;
-                // AttachmentList.data.dinput_type = dinput_type;
                 AttachmentList.data.is_view = true;
                 PMAPI.openDialogByComponent(AttachmentList,{
                     width: 900,
