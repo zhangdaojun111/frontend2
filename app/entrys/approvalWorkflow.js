@@ -51,7 +51,12 @@ ApprovalWorkflow.showDom().then(function (component) {
 
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
-    console.log(res);
+    let count = 0;
+    for(let comment of res.record_info.approve_tips) {
+        comment['index'] = count;
+        count += 1;
+    }
+    console.log(res.record_info.approve_tips);
     ApprovalHeader.showheader(res.record_info);
     WorkflowRecord.showRecord(res.record_info);
     let current_node_arr = res.record_info.current_node.split('、');

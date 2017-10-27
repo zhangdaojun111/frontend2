@@ -12,6 +12,28 @@ import {PMAPI} from '../../../lib/postmsg';
 let config={
     template: template,
     data:{},
+    binds: [
+        {
+            event: 'click',
+            selector: '.comment-attachment',
+            callback: function (e) {
+                console.log("++++++++++++++++++++");
+                console.log("++++++++++++++++++++");
+                console.log("++++++++++++++++++++");
+                console.log(this.data.approve_tips);
+                if(this.data.approve_tips[e.id].length > 0) {
+                    console.log(this.data.approve_tips[e.id]);
+                    AttachmentList.data.list = this.data.approve_tips[e.id].comment_attachment;
+                    AttachmentList.data.is_view = true;
+                    PMAPI.openDialogByComponent(AttachmentList,{
+                        width: 900,
+                        height: 600,
+                        title: '附件列表'
+                    })
+                }
+            }
+        },
+    ],
     actions:{
         tipsMouseover:function (pos,txt,event) {
             if(txt!=''){
@@ -56,21 +78,21 @@ let config={
             let J_tooltip=$("#J_tooltip");
             self.actions.tipsMousemove(pos,J_tooltip,e)
         });
-        this.el.on('click', '.comment-attachment', () => {
-            console.log("++++++++++++++++++++")
-            console.log("++++++++++++++++++++")
-            console.log("++++++++++++++++++++")
-            console.log(this.data.approve_tips);
-            if(this.data.approve_tips.comment_attachment.length > 0) {
-                AttachmentList.data.list = this.data.comment_attachment;
-                AttachmentList.data.is_view = true;
-                PMAPI.openDialogByComponent(AttachmentList,{
-                    width: 900,
-                    height: 600,
-                    title: '附件列表'
-                })
-            }
-        })
+        // this.el.on('click', '.comment-attachment', () => {
+        //     console.log("++++++++++++++++++++");
+        //     console.log("++++++++++++++++++++");
+        //     console.log("++++++++++++++++++++");
+        //     console.log(this.data.approve_tips, this);
+        //     if(this.data.approve_tips.comment_attachment.length > 0) {
+        //         AttachmentList.data.list = this.data.comment_attachment;
+        //         AttachmentList.data.is_view = true;
+        //         PMAPI.openDialogByComponent(AttachmentList,{
+        //             width: 900,
+        //             height: 600,
+        //             title: '附件列表'
+        //         })
+        //     }
+        // })
     }
 
 };
