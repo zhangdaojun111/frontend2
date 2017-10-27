@@ -212,8 +212,8 @@ let config={
             ).then(res => {
                 console.log(res);
                 if(res.determine){
-                    Mediator.publish('workflow:comment',res);
-                    Mediator.publish("approval:recordPass",this.data.imgInfo);
+                    // Mediator.publish('workflow:comment',res);
+                    Mediator.publish("approval:recordPass",{imgInfo: this.data.imgInfo, comment: res});
                 }
             })
         },

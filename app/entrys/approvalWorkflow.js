@@ -194,17 +194,34 @@ const approveWorkflow = (para) => {
         }
     }
     console.log(attachmentComment);
-    para.comment=comment;
-    para['comment_attachment'] = attachmentComment;
+    // para.comment=comment;
+    // para['comment_attachment'] = attachmentComment;
     para.focus_users=JSON.stringify(focusArr);
     msgBox.showLoadingSelf();
     console.log(para);
-    (async function () {
-        return workflowService.approveWorkflowRecord({
-            url: '/approve_workflow_record/',
-            data: para
-        });
-    })().then(res => {
+    // (async function () {
+    //     return workflowService.approveWorkflowRecord({
+    //         url: '/approve_workflow_record/',
+    //         data: para
+    //     });
+    // })().then(res => {
+    //     msgBox.hideLoadingSelf();
+    //     if(res.success===1){
+    //         msgBox.alert(`操作成功`);
+    //         PMAPI.sendToParent({
+    //             type: PMENUM.close_dialog,
+    //             key:key,
+    //             data:{refresh:true}
+    //         })
+    //     }else{
+    //         msgBox.alert(`失败：${res.error}`);
+    //     }
+    //
+    // })
+    workflowService.approveWorkflowRecord({
+        url: '/approve_workflow_record/',
+        data: para
+    }).then(res => {
         msgBox.hideLoadingSelf();
         if(res.success===1){
             msgBox.alert(`操作成功`);
@@ -216,24 +233,28 @@ const approveWorkflow = (para) => {
         }else{
             msgBox.alert(`失败：${res.error}`);
         }
-
     })
+
 };
 Mediator.subscribe('workflow:comment',(res)=>{
+    console.log(res);
     comment = res.comment;
     attachmentComment = res.attachment;
-
+    console.log('111111111111');
 })
 
 Mediator.subscribe('approval:recordPass', (data) => {
+    console.log(data);
     approveWorkflow({
         record_id: obj.record_id,
         action: 0, // 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
         node_id: null, //驳回节点id
         sigh_type: 0, //加签类型  0：前 1：后
         sigh_user_id: '',
-        sign: data[0],
-        delSign:data[1],
+        sign: data['imgInfo'][0],
+        delSign:data['imgInfo'][1],
+        comment_attachment: JSON.stringify(data['comment']['attachment']),
+        comment: data['comment']['comment'],
     });
 });
 Mediator.subscribe('approval:appRejUp', (ispass) => {

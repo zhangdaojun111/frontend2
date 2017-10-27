@@ -18,6 +18,7 @@ let config = {
             selector: '.J_sure',
             callback: function (event) {
                 this.actions.determine();
+                console.log(this.data.fileList);
                 PMAPI.sendToParent({
                     type: '1',
                     key: window.config.key,
@@ -56,7 +57,9 @@ let config = {
         };
         let changeValue = (res) => {
             console.log(res.value);
+            res.value = ["59f29541d8e9e40830680b3a", "59f29545d8e9e4082a680b3a"];
             this.data.fileList = res.value;
+            // this.data.fileList = ["59f29541d8e9e40830680b3a", "59f29545d8e9e4082a680b3a"];
             console.log(this.data.fileList);
         };
         let attachmentControl = new AttachmentControl(json, {changeValue: changeValue});
