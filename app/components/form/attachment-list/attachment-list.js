@@ -144,6 +144,7 @@ let AttachmentList = {
         this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         //给各个href赋值，解决dinput_type在引号中无法获得的问题
         for(let item of this.data.list){
+            console.log(item);
             let ele =this.el.find('#'+item.file_id);
             ele.find('.download-url').attr('href','/download_attachment/?file_id='+item.file_id+'&download=1&dinput_type='+this.data.dinput_type);
             let previewUrl = ele.find('.preview-url');

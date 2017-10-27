@@ -22,7 +22,7 @@ let config={
                 console.log("++++++++++++++++++++");
                 console.log(this.data.approve_tips[e.id]);
                 if(this.data.approve_tips[e.id].comment_attachment.length > 0) {
-                    console.log(this.data.approve_tips[e.id]);
+                    console.log(this.data.approve_tips[e.id].comment_attachment);
                     AttachmentList.data.list = this.data.approve_tips[e.id].comment_attachment;
                     AttachmentList.data.is_view = true;
                     PMAPI.openDialogByComponent(AttachmentList,{
