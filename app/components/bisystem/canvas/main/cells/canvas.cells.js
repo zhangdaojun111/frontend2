@@ -42,7 +42,7 @@ let config = {
             let top = option.top;
             let layouts = [];
             let cells = [];
-            let cellsHeight = this.el.height() ? this.el.height() : 940;
+            let cellsHeight = this.el.height();
             Object.keys(this.data.cells).forEach(key => {
                 let cellSizeTop = this.data.cells[key].data.cell.size.top;
                 let cellSizeHeight = this.data.cells[key].data.cell.size.height;
@@ -273,7 +273,6 @@ let config = {
     ],
 
     async afterRender() {
-
         // 加载loading动画;
         await this.actions.getCellLayout();
 

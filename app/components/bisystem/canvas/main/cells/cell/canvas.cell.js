@@ -41,15 +41,9 @@ let config = {
          */
         renderCell() {
             let windowSize = $(document).width();
-            console.log(windowSize);
             if (windowSize && windowSize <= 960) {
                 this.data.cell.size.width = 'auto';
             };
-            // 这个是因为在iframe打开 高度和宽度 = 0的兼容解决问题
-            if (windowSize === 0) {
-                this.el.find('.cell-chart').css({'width':this.data.cell.size.width - 20,'height':this.data.cell.size.height - 30});
-            };
-
             this.el.find('.cell').css(this.data.cell.size);
             this.cellTitle = new CanvasCellTitleComponent({},{
                 /**
