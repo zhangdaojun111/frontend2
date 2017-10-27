@@ -53,9 +53,9 @@ let config = {
             let columnData = [
                 {headerName: '操作类型', width: 100,field:'operation_type',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none', 'operation_type', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
-                {headerName: '操作目标', width: 100,field:'obj_name', floatingFilterComponent: this.floatingFilterCom.actions.createFilter('text', 'obj_name', this.data.searchValue, this.data.searchOldValue),
+                {headerName: '操作目标', width: 100,field:'obj_name', floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none', 'obj_name', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
-                {headerName: '操作时间', minWidth: 160,field:'create_time',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('datetime', 'create_time', this.data.searchValue, this.data.searchOldValue),
+                {headerName: '操作时间', minWidth: 160,field:'create_time',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none', 'create_time', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '级联结果', width: 100,field:'cache_result',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none' , 'cache_result', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
@@ -132,7 +132,6 @@ let config = {
                 this.data.total = res[0].history_num;
                 let obj = {
                     rowData: this.data.rowData,
-                    noFooter: true,
                 }
                 this.agGrid.actions.setGridData( obj );
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
@@ -149,10 +148,13 @@ let config = {
             }
             if( this.data.filterParam['common_filter_id'] ){
                 json['filter'] = json['filter'] || [];
-                for( let a of this.data.filterParam.expertFilter ){
-                    json['filter'].push( a );
+                let len = this.data.filterParam.expertFilter.length - 1;
+                for(let i = len; i>=0; i--){
+                    json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
-
+                // for( let a of this.data.filterParam.expertFilter ){
+                //     json['filter'].push( a );
+                // }
             }
             json = dgcService.returnQueryParams( json );
             if( json.filter && json.filter != '' ){
@@ -273,6 +275,9 @@ let config = {
 
 class myOperation extends Component {
     constructor(data,newConfig){
+        for (let d in data) {
+            config.data[d] = data[d];
+        }
         super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }

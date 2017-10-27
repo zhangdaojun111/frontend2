@@ -49,7 +49,6 @@ let config = {
                         },1000 ))
                     }else if( colInfo  == 'time' ){  //使用时间插件
                         let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){
-                            debugger
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                         }});
                         timeControl.render($(this.eGui));
