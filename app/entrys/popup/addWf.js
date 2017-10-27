@@ -215,7 +215,7 @@ Mediator.subscribe('workflow:changeToEdit',(res)=>{
     //$("#add-wf").find('.J_hide').removeClass('hide');
     if(obj.is_batch !== '1') {
         $("#add-wf").find('.J_hide').removeClass('hide');
-        $("#add-wf").find('#print').removeClass('addPrint');
+        // $("#add-wf").find('#print').removeClass('addPrint');
     }
     // $("#add-wf").find('#print').removeClass('addPrint');
     is_view = 0;

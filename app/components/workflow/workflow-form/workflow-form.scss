@@ -44,6 +44,33 @@
             font-weight: 700;
         }
     }
+    .newfj{
+        height: 16px;
+        width: 52px;
+        line-height: 16px;
+        cursor: pointer;
+        display: none;
+        margin-right: 3px;
+        & > i{
+            display: inline-block;
+            float: left;
+            margin-right: 5px;
+        }
+    }
+    .printBtn {
+        height: 16px;
+        width: 52px;
+        line-height: 16px;
+        margin-left: 5px;
+        cursor: pointer;
+        margin-right: 3px;
+        display: none;
+        & > i {
+            display: inline-block;
+            float: left;
+            margin-right: 5px;
+        }
+    }
     .place-form {
         position: relative;
         padding: 20px 10px;

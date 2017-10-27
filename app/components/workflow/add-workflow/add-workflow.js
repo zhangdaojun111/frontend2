@@ -26,25 +26,6 @@ let config={
         focusArr: []
     },
     actions:{
-        /**
-         * @method 自定义页眉
-         */
-        async printSetting(){
-            let res = await FormService.getPrintSetting()
-            // if(res.succ == 1){
-            SettingPrint.data['key'] = this.data.key;
-            if (res.data && res.data.length && res.data.length != 0) {
-                SettingPrint.data['printTitles'] = res['data'];
-                SettingPrint.data['myContent'] = res['data'][0]['content'] || '';
-                SettingPrint.data['selectNum'] = parseInt(res['data']['index']) || 1;
-            }
-            PMAPI.openDialogByComponent(SettingPrint, {
-                width: 400,
-                height: 210,
-                title: '自定义页眉',
-                modal: true
-            })
-        },
         openAddFollower() {
             PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
                 width: 800,
@@ -267,7 +248,7 @@ let config={
         changeToEdit(res) {
             if(this.data.obj.is_batch !== '1') {
                 $("#add-wf").find('.J_hide').removeClass('hide');
-                $("#add-wf").find('#print').removeClass('addPrint');
+                // $("#add-wf").find('#print').removeClass('addPrint');
             }
             this.data.is_view = 0;
             CreateFormServer.changeToEdit(res);
@@ -292,7 +273,7 @@ let config={
         if(this.data.obj.is_batch === "1"){
             // $("#add-wf").find('#print').addClass('addPrint');
             // $("#add-wf").find('.J_hide').addClass('hide');
-            this.el.find('#print').addClass('addPrint');
+            // this.el.find('#print').addClass('addPrint');
             this.el.find('.J_hide').addClass('hide');
         }
 
@@ -300,7 +281,7 @@ let config={
             // $("#add-wf").find('.J_hide').addClass('hide');
             // $("#add-wf").find('#print').addClass('addPrint');
             this.el.find('.J_hide').addClass('hide');
-            this.el.find('#print').addClass('addPrint');
+            // this.el.find('#print').addClass('addPrint');
         }
 
         this.actions.getWorkflowFromData();
@@ -321,8 +302,6 @@ let config={
             $(el.target).hide();
             this.el.find("#subAddworkflow").show();
             this.el.find("#addFollower").show();
-        }).on('click', '#print', () => {
-            this.actions.printSetting();
         }).on('click', '#addFollower', () => {
             this.actions.openAddFollower();
         });
