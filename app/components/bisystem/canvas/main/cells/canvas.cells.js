@@ -42,11 +42,12 @@ let config = {
             let top = option.top;
             let layouts = [];
             let cells = [];
+            let cellsHeight = this.el.height() ? this.el.height() : 940;
             Object.keys(this.data.cells).forEach(key => {
                 let cellSizeTop = this.data.cells[key].data.cell.size.top;
                 let cellSizeHeight = this.data.cells[key].data.cell.size.height;
                 let startSection = top <= cellSizeTop + cellSizeHeight;
-                let endSection = cellSizeTop > this.el.height() + top ? false : true;
+                let endSection = cellSizeTop > cellsHeight + top ? false : true;
                 if (startSection && endSection && !this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
@@ -272,8 +273,10 @@ let config = {
     ],
 
     async afterRender() {
+
         // 加载loading动画;
         await this.actions.getCellLayout();
+
         if (this.data) {
             let windowSize = $(window).width();
             if (windowSize && windowSize <= 960) {
