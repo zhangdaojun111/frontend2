@@ -21,7 +21,7 @@ let config={
                 console.log("++++++++++++++++++++");
                 console.log("++++++++++++++++++++");
                 console.log(this.data.approve_tips[e.id]);
-                if(this.data.approve_tips[e.id].length > 0) {
+                if(this.data.approve_tips[e.id].comment_attachment.length > 0) {
                     console.log(this.data.approve_tips[e.id]);
                     AttachmentList.data.list = this.data.approve_tips[e.id].comment_attachment;
                     AttachmentList.data.is_view = true;
