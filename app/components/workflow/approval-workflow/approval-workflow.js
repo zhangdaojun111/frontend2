@@ -206,7 +206,7 @@ let config={
                 '/iframe/approvalOpinion/',
                 {
                     width: 450,
-                    height:350,
+                    height:450,
                     title:'提示'
                 }
             ).then(res => {
@@ -222,7 +222,7 @@ let config={
                 '/iframe/approvalOpinion/',
                 {
                     width: 450,
-                    height:350,
+                    height:450,
                     title:'提示'
                 }
             ).then(res => {
@@ -238,7 +238,7 @@ let config={
                 '/iframe/approvalOpinion/',
                 {
                     width: 450,
-                    height:350,
+                    height:450,
                     title:'提示'
                 }
             ).then(res => {
@@ -262,9 +262,10 @@ let config={
                     record_id:obj.record_id
                 }
             ).then(res=>{
+                console.log(res);
                 if(!res.onlyclose){
-                    Mediator.publish('workflow:comment',res.comment);
-                    Mediator.publish('approval:rejToAny',res.id);
+                    // Mediator.publish('workflow:comment',res.comment);
+                    Mediator.publish('approval:rejToAny',res);
                 }else {
                     this.el.find(".approval-btn-sel").removeClass('active');
                 }
@@ -282,10 +283,12 @@ let config={
                 modal:true
             }).then(res=>{
                 if(!res.onlyclose){
-                    Mediator.publish('workflow:comment',res.comment);
+                    // Mediator.publish('workflow:comment',res.comment);
                     Mediator.publish("approval:signUser",{
                         sigh_type:res.sigh_type,
-                        sigh_user_id:res.sigh_user_id
+                        sigh_user_id:res.sigh_user_id,
+                        comment: res.comment,
+                        attachment: res.attachment,
                     });
                 }
             })
@@ -301,7 +304,7 @@ let config={
                     },{users:this.data.focus_users}).then(res=>{
                         if(!res.onlyclose){
                             let nameArr=[],idArr=[],htmlStr=[];
-                            for(var k in res){
+                            for(let k in res){
                                 nameArr.push(res[k]);
                                 htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
                                 idArr.push(k);
@@ -322,7 +325,7 @@ let config={
                     },{users:this.data.focus_users}).then(res=>{
                         if(!res.onlyclose){
                             let nameArr=[],idArr=[],htmlStr=[];
-                            for(var k in res){
+                            for(let k in res){
                                 nameArr.push(res[k]);
                                 htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
                                 idArr.push(k);

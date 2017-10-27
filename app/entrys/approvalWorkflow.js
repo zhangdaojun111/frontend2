@@ -26,8 +26,6 @@ serchStr.split('&').forEach(res => {
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
-let comment='';
-let attachmentComment = [];
 console.log(obj);
 
 ApprovalWorkflow.showDom().then(function (component) {
@@ -198,9 +196,6 @@ const approveWorkflow = (para) => {
             para.data = JSON.stringify(formData);
         }
     }
-    console.log(attachmentComment);
-    // para.comment=comment;
-    // para['comment_attachment'] = attachmentComment;
     para.focus_users=JSON.stringify(focusArr);
     msgBox.showLoadingSelf();
     console.log(para);
@@ -241,12 +236,12 @@ const approveWorkflow = (para) => {
     })
 
 };
-Mediator.subscribe('workflow:comment',(res)=>{
-    console.log(res);
-    comment = res.comment;
-    attachmentComment = res.attachment;
-    console.log('111111111111');
-})
+// Mediator.subscribe('workflow:comment',(res)=>{
+//     console.log(res);
+//     comment = res.comment;
+//     attachmentComment = res.attachment;
+//     console.log('111111111111');
+// })
 
 Mediator.subscribe('approval:recordPass', (data) => {
     console.log(data);
@@ -267,6 +262,8 @@ Mediator.subscribe('approval:appRejUp', (ispass) => {
         approveWorkflow({
             record_id: obj.record_id,
             action: 1,
+            comment_attachment: JSON.stringify(ispass['attachment']),
+            comment: ispass['comment'],
         });
     }
 });
@@ -275,6 +272,8 @@ Mediator.subscribe('approval:recordRejStart', (ispass) => {
         approveWorkflow({
             record_id: obj.record_id,
             action: 2,
+            comment_attachment: JSON.stringify(ispass['attachment']),
+            comment: ispass['comment'],
         });
     }
 });
@@ -284,18 +283,23 @@ Mediator.subscribe('approval:signUser', (signObj) => {
         action: 9,
         sigh_type: signObj.sigh_type,
         sigh_user_id: signObj.sigh_user_id,
+        comment: signObj.comment,
+        comment_attachment: JSON.stringify(signObj.attachment),
     });
 });
-Mediator.subscribe('approval:rejToAny', (id) => {
-    if(id.length==21){
-        id=id.slice(5);
-    }else if(id.length==19){
-        id=id.slice(3);
-    }
+Mediator.subscribe('approval:rejToAny', (res) => {
+    console.log(res);
+    // if(res.id.length === 21){
+    //     res.id = res.id.slice(5);
+    // }else if(res.id.length === 19){
+    //     res.id = res.id.slice(3);
+    // }
     approveWorkflow({
         record_id: obj.record_id,
         action: 6,
-        node_id: id,
+        node_id: res.rejectId,
+        comment: res.data.comment,
+        comment_attachment: JSON.stringify(res.data['attachment']),
     });
 });
 //驳回至发起人，重新发起

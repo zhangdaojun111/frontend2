@@ -54,6 +54,9 @@
         display: flex;
         padding: 10px;
         font-size: 12px;
+        height: 120px;
+        margin-bottom: 10px;
+        overflow: auto;
         .file-count {
             color: #1789fc;
         }

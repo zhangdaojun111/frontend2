@@ -151,13 +151,14 @@ let config={
                     '/iframe/approvalOpinion/',
                     {
                         width: 450,
-                        height:300,
+                        height:450,
                         title:'提示'
                     }
                 ).then(res => {
                     if(res.determine){
                         // Mediator.publish('workflow:comment',res.comment);
                         o.comment = res.comment;
+                        o.attachment = res.attachment;
                         PMAPI.sendToParent({
                             type: PMENUM.close_dialog,
                             key:__this.data.key,

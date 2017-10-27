@@ -298,7 +298,8 @@ let config = {
                 let can_reject = e.getAttribute("canreject");
                 let text = e.getAttribute("title");
                 this.rejectId = e.getAttribute("id");
-                if (can_reject === 1) {
+                console.log(typeof can_reject);
+                if (can_reject === '1') {
                     // PMAPI.openDialogByComponent(approvalOpinion,{
                     //     width: 450,
                     //     height: 300,
@@ -310,19 +311,21 @@ let config = {
                     //         Mediator.publish('approval:rejToAny',this.rejectId);
                     //     }
                     // })
+
                     PMAPI.openDialogByIframe(
                         '/iframe/approvalOpinion/',
                         {
                             width: 450,
-                            height:300,
+                            height:450,
                             title:'提示'
                         }
                     ).then(res => {
                         console.log(res);
                         if(res.determine){
-                            this.comment = res.comment;
-                            Mediator.publish('workflow:comment',res.comment);
-                            Mediator.publish('approval:rejToAny',this.rejectId);
+                            // this.comment = res.comment;
+                            // Mediator.publish('workflow:comment',res.comment);
+                            // Mediator.publish('approval:rejToAny',this.rejectId);
+                            Mediator.publish('approvalRejToAny: data',{rejectId: this.rejectId, data: res});
                         }
                     })
                 }
