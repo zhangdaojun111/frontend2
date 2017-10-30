@@ -100,7 +100,7 @@
                         padding-left: 8px;
                         display: inline-block;
                         box-sizing: border-box;
-                        width: 86%;
+                        width: calc(100% - 40px);
                         overflow: hidden;
                         white-space: nowrap;
                         text-overflow: ellipsis;

@@ -207,6 +207,7 @@ let config = {
             this.data.emailAddressList = params.data.emailAddressList;
             this.data.recipients = params.data.recipients;
             this.data.copypeople = params.data.copypeople;
+            console.log(this.data.copypeople);
             this.data.recipients_per = params.data.recipients_per;
             this.data.sms = params.data.sms;
             this.data.email = params.data.email;

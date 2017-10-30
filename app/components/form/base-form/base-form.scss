@@ -52,6 +52,7 @@
         position: relative;
         .info {
             color: #ccc;
+            cursor: default;
         }
         .inline {
             display: inline;
@@ -181,7 +182,7 @@
         vertical-align: middle;
         display: inline-block;
         content: "\271A";
-        color: #0E7AEF;
+        color: #2298f4;
         font-size: 1.5em;
         // font-weight: bold;
         margin-left: 10px;
@@ -227,7 +228,7 @@
     }
     .ui-link {
         text-decoration: underline;
-        color: #0e7aef;
+        color: #2298f4;
         font-size: 16px;
     }
     .ui-del {

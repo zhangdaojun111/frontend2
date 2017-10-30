@@ -119,6 +119,8 @@ let config = {
                     // title:"审批工作流",
                     modal:true,
                     customSize: true,
+                }).then(data => {
+                    Mediator.emit('Calendar: tool', {toolMethod: 'refreshData'});
                 })
             });
         }
