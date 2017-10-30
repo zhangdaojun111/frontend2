@@ -3361,6 +3361,10 @@ let config = {
             this.data.common_filter_id = data.table_data.common_filter_id || '';
             this.actions.setGridData( gridRes );
             this.actions.renderAgGrid(true);
+            //高级查询
+            if( this.el.find( '.expert-search-btn' )[0] ){
+                this.actions.renderExpertSearch();
+            }
             //高级查询参数
             this.actions.firstFooterCommonFilterId(data.advanced_query);
             this.actions.createPostData();
