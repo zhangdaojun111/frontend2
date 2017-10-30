@@ -1594,7 +1594,7 @@ let config = {
             return json;
         },
         //渲染agGrid（根据存在的按钮，为按钮事件，渲染分组定制列，分页等组件）
-        renderAgGrid: function () {
+        renderAgGrid: function (cache) {
             //渲染定制列
             if( this.el.find('.custom-column-btn')[0] ){
                 //如果有定制列修改偏好状态
@@ -1669,7 +1669,7 @@ let config = {
                 }
             }
             //高级查询
-            if( this.el.find( '.expert-search-btn' )[0] ){
+            if( this.el.find( '.expert-search-btn' )[0] && !cache ){
                 this.actions.renderExpertSearch();
                 this.actions.getExpertSearchData();
             }
@@ -3357,9 +3357,10 @@ let config = {
             //数据
             let gridRes = [data.table_data,data.reminds_infos,data.footer_data];
             this.data.firstGetFooterData = false;
-            // this.data.firstRender = false;
+            this.data.firstRender = false;
             this.data.common_filter_id = data.table_data.common_filter_id || '';
             this.actions.setGridData( gridRes );
+            this.actions.renderAgGrid(true);
             //高级查询参数
             this.actions.firstFooterCommonFilterId(data.advanced_query);
             this.actions.createPostData();
