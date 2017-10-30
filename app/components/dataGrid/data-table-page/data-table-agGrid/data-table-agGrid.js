@@ -3366,7 +3366,13 @@ let config = {
                 this.actions.renderExpertSearch();
                 this.actions.firstFooterCommonFilterId(data.advanced_query);
                 this.actions.createPostData();
-                this.actions.setExpertSearchData( data.advanced_query )
+                let addNameAry = '';
+                for( let d of data.advanced_query ){
+                    if( d.id = this.data.common_filter_id){
+                        addNameAry = d.name;
+                    }
+                }
+                this.actions.setExpertSearchData( data.advanced_query,addNameAry )
             }
             try {
                 this.data.showTabs(1);
