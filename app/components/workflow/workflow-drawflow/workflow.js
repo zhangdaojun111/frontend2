@@ -316,7 +316,7 @@ let config = {
                         '/iframe/approvalOpinion/',
                         {
                             width: 540,
-                            height: 600,
+                            height: 530,
                             title:'提示'
                         }
                     ).then(res => {
