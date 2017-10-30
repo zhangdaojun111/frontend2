@@ -29,6 +29,12 @@ export const workflowService={
     addWorkflowFavorite(params){
         return HTTP.postImmediately('/add_workflow_favorite/', params)
     },
+    //请求附件数据
+    getAttachmentList(json){
+        let res = HTTP.post('query_attachment_list', json);
+        HTTP.flush();
+        return res;
+    },
     //审批工作流
     //
     approveWorkflowRecord(params){
@@ -81,5 +87,11 @@ export const workflowService={
     },
     nodeAttachment(params){
         return HTTP.getImmediately('/node_attachment/', params)
-    }
+    },
+
+    //获取文件名后缀
+    getFileExtension (filename) {
+        return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+    },
+    preview_file : ["gif","jpg","jpeg","png","wmv","mp4"],
 }
