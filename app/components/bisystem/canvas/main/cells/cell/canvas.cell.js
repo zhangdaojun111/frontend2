@@ -40,7 +40,7 @@ let config = {
          * 渲染cell
          */
         renderCell() {
-            let windowSize = $(window).width();
+            let windowSize = $(document).width();
             if (windowSize && windowSize <= 960) {
                 this.data.cell.size.width = 'auto';
             };
