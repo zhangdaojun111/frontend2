@@ -49,10 +49,10 @@ let config = {
                         arr.push( checkItem[i] )
                     }
                 }
-                if( arr.length == 0 ){
-                    msgBox.alert( '请选择任务' );
-                    return;
-                }
+                // if( arr.length == 0 ){
+                //     msgBox.alert( '请选择任务' );
+                //     return;
+                // }
                 let json = {
                     table_id: this.data.tableId,
                     rowId: this.data.rowId,
