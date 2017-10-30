@@ -3364,11 +3364,10 @@ let config = {
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
                 this.actions.renderExpertSearch();
+                this.actions.firstFooterCommonFilterId(data.advanced_query);
+                this.actions.createPostData();
+                this.actions.setExpertSearchData( data.advanced_query )
             }
-            //高级查询参数
-            this.actions.firstFooterCommonFilterId(data.advanced_query);
-            this.actions.createPostData();
-            this.actions.setExpertSearchData( data.advanced_query )
             try {
                 this.data.showTabs(1);
                 this.hideLoading();
