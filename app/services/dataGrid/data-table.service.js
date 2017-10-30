@@ -113,6 +113,10 @@ export const dataTableService = {
     getBIField: function ( json ) {
         return HTTP.postImmediately('/folder_preference/',json);
     },
+    //执行行级操作
+    excuteOperation: function ( url , json ) {
+        return HTTP.postImmediately( url , json );
+    },
     setImgDataAndNum(res,imgData,imgSelect){
         imgData = res;
         let imgTotal = res.rows.length;
