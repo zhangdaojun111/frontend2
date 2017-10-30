@@ -63,7 +63,8 @@ let config = {
          */
         judgeDateZoom(cellChart) {
             let type = cellChart.chart.xAxis.type;
-            if(type==3||type==5||type==12||type==30){
+            console.log(this.data.cellChart.chart['yHorizontal']);
+            if(!this.data.cellChart.chart['yHorizontal'] && (type==3||type==5||type==12||type==30) ){
                 this.el.find('.echarts-cell').addClass('.date-filed');
                 this.normalRange = new NormalRangeComponent({id:this.data.id}, {
                     // 通过（一周 一月 半年 一年 全部）获取数据

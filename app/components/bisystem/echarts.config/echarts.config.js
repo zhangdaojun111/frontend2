@@ -245,10 +245,11 @@ const linebar = {
         type: 'scroll'
     },
     grid: {
-        left: 30,
-        right: 30,
+        left: 0,
+        right: 0,
         bottom: 30,
-        top: 50
+        top: 50,
+        containLabel: true
     },
     xAxis: [
         {
