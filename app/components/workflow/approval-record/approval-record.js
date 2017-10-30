@@ -30,8 +30,24 @@ let config={
                     workflowService.getAttachmentList(params).then(res => {
                         console.log(res);
                         if(res.success){
-                            AttachmentList.data.list = res.rows;
+                            let list = res["rows"];
+                            for( let data of list ){
+                                //附件名称编码转换
+                                let str = workflowService.getFileExtension( data.file_name );
+                                if( workflowService.preview_file.indexOf( str.toLowerCase() ) !== -1 ){
+                                    data["isPreview"] = true;
+                                    if( workflowService.preview_file.indexOf(str.toLowerCase()) <4){
+                                        data["isImg"] = true;
+                                    }else{
+                                        data["isImg"] = false;
+                                    }
+                                }else{
+                                    data["isPreview"] = false;
+                                }
+                            }
+                            AttachmentList.data.list = list;
                             AttachmentList.data.is_view = true;
+                            // AttachmentList.data.dinput_type = '23';
                             PMAPI.openDialogByComponent(AttachmentList,{
                                 width: 900,
                                 height: 600,

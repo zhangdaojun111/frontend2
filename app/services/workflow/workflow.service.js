@@ -87,5 +87,11 @@ export const workflowService={
     },
     nodeAttachment(params){
         return HTTP.getImmediately('/node_attachment/', params)
-    }
+    },
+
+    //获取文件名后缀
+    getFileExtension (filename) {
+        return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+    },
+    preview_file : ["gif","jpg","jpeg","png","wmv","mp4"],
 }
