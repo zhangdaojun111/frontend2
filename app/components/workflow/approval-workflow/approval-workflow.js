@@ -205,8 +205,8 @@ let config={
             PMAPI.openDialogByIframe(
                 '/iframe/approvalOpinion/',
                 {
-                    width: 450,
-                    height:450,
+                    width: 540,
+                    height: 600,
                     title:'提示'
                 }
             ).then(res => {
@@ -221,8 +221,8 @@ let config={
             PMAPI.openDialogByIframe(
                 '/iframe/approvalOpinion/',
                 {
-                    width: 450,
-                    height:450,
+                    width: 540,
+                    height: 600,
                     title:'提示'
                 }
             ).then(res => {
@@ -237,8 +237,8 @@ let config={
             PMAPI.openDialogByIframe(
                 '/iframe/approvalOpinion/',
                 {
-                    width: 450,
-                    height:450,
+                    width: 540,
+                    height: 600,
                     title:'提示'
                 }
             ).then(res => {
