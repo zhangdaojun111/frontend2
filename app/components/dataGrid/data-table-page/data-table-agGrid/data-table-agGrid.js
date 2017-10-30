@@ -3357,7 +3357,7 @@ let config = {
             //数据
             let gridRes = [data.table_data,data.reminds_infos,data.footer_data];
             this.data.firstGetFooterData = false;
-            this.data.firstRender = false;
+            // this.data.firstRender = false;
             this.data.common_filter_id = data.table_data.common_filter_id || '';
             this.actions.setGridData( gridRes );
             //高级查询参数
