@@ -635,6 +635,26 @@ let config = {
             // let tempList = window.config.commonUse.data;
             // this.actions.findTabInfo(menu,tempList,this.data.commonUseList);
             // IframesManager.initIframes(this.data.commonUseList, this.data.iframes);
+        },
+
+        loadHidingIframes: function () {
+            let that = this;
+            function loadIframe(iframe) {
+                iframe.attr('src', iframe.attr('_src'));
+                iframe.removeAttr('_src');
+                iframe.on('load', function () {
+                    start();
+                })
+            }
+            function start() {
+                let iframe = that.data.iframes.find('iframe[_src]:last');
+                if (iframe.length) {
+                    loadIframe(iframe);
+                }
+            }
+            setTimeout(() => {
+                start();
+            }, 3000);
         }
     },
     binds:[
@@ -790,29 +810,11 @@ let config = {
                     this.actions.openIframe(k.id,k.url,k.name);
                 }
                 this.actions.focusIframe(data[data.length - 1].id);
+                this.actions.loadHidingIframes();
             }
         });
 
-        let that = this;
-        
-        function loadIframe(iframe) {
-            iframe.attr('src', iframe.attr('_src'));
-            iframe.removeAttr('_src');
-            iframe.on('load', function () {
-                start();
-            })
-        }
-
-        function start() {
-            let iframe = that.data.iframes.find('iframe[_src]:last');
-            if (iframe.length) {
-                loadIframe(iframe);
-            }
-        }
-        
-        setTimeout(() => {
-            start();
-        }, 3000);
+        this.actions.loadHidingIframes();
 
     },
 
