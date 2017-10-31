@@ -281,6 +281,7 @@ let config = {
         validForm(allData, formValue) {
             let error = false;
             let errorMsg = "";
+            let errArr = [];
             for (let key in formValue) {
                 let data = allData[key];
                 //如果该dfield是父表填充子表的，那就不验证
@@ -296,10 +297,12 @@ let config = {
                 if (data["required"]) {
                     if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]" || JSON.stringify(val) == "{}") {
                         error = true;
-                        errorMsg = `${ data["label"] }是必填项!`;
-                        break;
+                        errArr.push(data["label"]+'是必填项!');
+                        errorMsg = errArr;
+                        continue;
                     }
                 }
+
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
