@@ -60,13 +60,29 @@ let config = {
         searchTreeNode: function (inputComp, tree) {
             var keyword = inputComp.val();
             tree.treeview('clearSearch');
-            if (keyword && keyword != '' && keyword != ' ') {
-                tree.treeview('search', [keyword, {
-                    ignoreCase: true,
-                    exactMatch: false,
-                    revealResults: true
-                }])
+            tree.treeview('enableAll');
+            // if (keyword && keyword != '' && keyword != ' ') {
+            //     tree.treeview('search', [keyword, {
+            //         ignoreCase: true,
+            //         exactMatch: false,
+            //         revealResults: true
+            //     }]);
+            // }
+            if(keyword == undefined || keyword == '' || keyword == ' '){
+                tree.treeview('expandAll', {level: 10, silent: true});
+                return;
             }
+            tree.treeview('collapseAll');
+            let filteredNodes = tree.treeview('search', [keyword, {
+                        ignoreCase: true,
+                        exactMatch: false,
+                        revealResults: true
+                    }]);
+            let siblings = tree.treeview('getSiblings',tree.treeview('getNode',0));
+            siblings = siblings||[];
+            siblings.push(tree.treeview('getNode',0));
+            let unrelatedNodes = this.actions._getUnrelatedNodes(siblings,filteredNodes);
+            tree.treeview('disableNode',[unrelatedNodes,{silent:true}]);
         },
         selectAll:function(tree){
             setTimeout(() => { //保证树初始化完毕后才能进行操作，解决二次选择的时候报错问题
@@ -74,6 +90,18 @@ let config = {
                     this.actions._cruiseSelectNode(node, tree);
                 })
             },0);
+        },
+        _getUnrelatedNodes:function (nodes,filteredNodes) {
+            let unrelatedNodes = [];
+            nodes.forEach(node=>{
+                if(!(filteredNodes.includes(node)||node.state.expanded)){
+                    unrelatedNodes.push(node);
+                }
+                if(!filteredNodes.includes(node)&&node.nodes){
+                    unrelatedNodes = unrelatedNodes.concat(this.actions._getUnrelatedNodes(node.nodes,filteredNodes));
+                }
+            });
+            return unrelatedNodes;
         },
         _cruiseSelectNode:function(node,tree){
             if(node){
@@ -101,7 +129,6 @@ let config = {
                     func(sibling,tree);
                 })
             }
-
         },
         _toggleCheckNode:function (node, tree) {
             if(node){
