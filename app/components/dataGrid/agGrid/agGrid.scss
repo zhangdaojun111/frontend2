@@ -41,7 +41,7 @@
                 padding: 5px 8px 0px 8px;
                 .component-time-control {
                     width: 100%;
-                    div:first-child{
+                    .time-control-wrap {
                         top: -2px;
                         width: 100%;
                     }
@@ -140,7 +140,7 @@
             margin: -5px 5px;
         }
         .ui-link {
-            color: #0088ff;
+            color: #2298f4;
             text-decoration: none;
         }
         .ui-link:hover {
@@ -169,7 +169,7 @@
                 a {
                     &.ag-text-style {
                         text-decoration: blink;
-                        color: #0097FE;
+                        color: #2298f4;
                     }
                     &.ag-text-style:hover {
                         text-decoration: underline;
@@ -202,6 +202,10 @@
         }
         .ag-row-selected {
             background-color: #97DDFF!important;
+        }
+        .gridView,.gridEdit,.gridHistory,.customOperate,.rowOperation {
+            color: #2298f4 !important;
+            cursor: pointer;
         }
     }
 

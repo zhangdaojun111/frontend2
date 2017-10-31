@@ -147,6 +147,7 @@ let config={
                 case 'follow-view' :
                     appendDiv.find(".preview-node1").html(addFollow);
                     $("#cloneId1").find('.add-follow').remove();
+                    $("#cloneId1").find('.follow-name-list').removeAttr('id');
                     appendDiv.find(".preview-node1").toggle().siblings().hide();
                     break;
                 case 'flow-view' :
@@ -201,54 +202,54 @@ let config={
         },
         appPass() {
             Mediator.publish('workflow:appPass');
-            PMAPI.openDialogByComponent(approvalOpinion,{
-                width: 450,
-                height: 300,
-                title: '提示'
-            }).then((res)=>{
-                if(res.determine){
-                    Mediator.publish('workflow:comment',res.comment);
-                    Mediator.publish("approval:recordPass",this.data.imgInfo);
+            PMAPI.openDialogByIframe(
+                '/iframe/approvalOpinion/',
+                {
+                    width: 540,
+                    height: 530,
+                    title:'提示'
                 }
-                // if(res===true){
-                //     Mediator.publish("approval:recordPass",this.data.imgInfo);
-                // }
+            ).then(res => {
+                console.log(res);
+                if(res.determine){
+                    // Mediator.publish('workflow:comment',res);
+                    Mediator.publish("approval:recordPass",{imgInfo: this.data.imgInfo, comment: res});
+                }
             })
         },
         appRejStart(){
-            // msgBox.confirm("确定驳回发起人")
-            PMAPI.openDialogByComponent(approvalOpinion,{
-                width: 450,
-                height: 300,
-                title: '提示'
-            }).then((res)=>{
+            PMAPI.openDialogByIframe(
+                '/iframe/approvalOpinion/',
+                {
+                    width: 540,
+                    height: 530,
+                    title:'提示'
+                }
+            ).then(res => {
                 if(res.determine===true){
-                    Mediator.publish('workflow:comment',res.comment);
-                    Mediator.publish('approval:recordRejStart',res.determine);
+                    // Mediator.publish('workflow:comment',res.comment);
+                    // Mediator.publish('approval:recordRejStart',res.determine);
+                    Mediator.publish('approval:recordRejStart',res);
                 }
             })
         },
         appRejUp(){
-            // msgBox.confirm("确定驳回上一级")
-            PMAPI.openDialogByComponent(approvalOpinion,{
-                width: 450,
-                height: 300,
-                title: '提示'
-            }).then((res)=>{
+            PMAPI.openDialogByIframe(
+                '/iframe/approvalOpinion/',
+                {
+                    width: 540,
+                    height: 530,
+                    title:'提示'
+                }
+            ).then(res => {
                 if(res.determine===true){
-                    Mediator.publish('workflow:comment',res.comment);
-                    Mediator.publish('approval:appRejUp',res.determine);
+                    // Mediator.publish('workflow:comment',res.comment);
+                    // Mediator.publish('approval:appRejUp',res.determine);
+                    Mediator.publish('approval:appRejUp',res);
                 }
             })
         },
         appRejAny(){
-            // PMAPI.openDialogByComponent(ApprovalDialog, {
-            //     width: 900,
-            //     height: 600,
-            //     title: '驳回到任意节点'
-            // }).then((data) => {
-            //
-            // });
             PMAPI.openDialogByIframe('/iframe/approvalDialog/',
                 {
                     title: '驳回任意节点',
@@ -261,48 +262,14 @@ let config={
                     record_id:obj.record_id
                 }
             ).then(res=>{
+                console.log(res);
                 if(!res.onlyclose){
-                    Mediator.publish('workflow:comment',res.comment);
-                    Mediator.publish('approval:rejToAny',res.id);
+                    // Mediator.publish('workflow:comment',res.comment);
+                    Mediator.publish('approval:rejToAny',res);
                 }else {
                     this.el.find(".approval-btn-sel").removeClass('active');
                 }
             });
-            // this.el.find('.rejContainer').show();
-            // this.el.find('.closeSpan').remove();
-            // let container = this.el.find('.workflow-draw-box')[0];
-            // container.style.transform = 'scale(1)';
-            // container.id = "rej";
-            // let e = document.documentElement, g = document.getElementsByTagName('body')[0], w = window.innerWidth || e.clientWidth || g.clientWidth, h = window.innerHeight || e.clientHeight || g.clientHeight;
-            // container.style.position = "fixed";
-            // container.style.top = "0";
-            // container.style.left = "0";
-            // container.style.right = "0";
-            // container.style.bottom = "0";
-            // container.style.backgroundColor = "#fff";
-            // container.style.width = w + 'px';
-            // container.style.height = h + 'px';
-            // container.style.marginTop = 0;
-            // container.style.margin = 0;
-            // container.style.zIndex = '99';
-            // container.style.overflow = 'auto';
-            // let ocloseSpan = document.createElement('span');
-            // ocloseSpan.className = 'closeSpan';
-            // ocloseSpan.style['float'] = 'right';
-            // ocloseSpan.style.cursor = 'pointer';
-            // ocloseSpan.style.fontSize = '30px';
-            // ocloseSpan.style.border = '1px solid #ddd';
-            // ocloseSpan.innerHTML = '&nbsp;×&nbsp;';
-            // ocloseSpan.addEventListener('click', (event) => {
-            //     container.id = "";
-            //     container.style.height ='100px';
-            //     container.style.width = '100%';
-            //     container.style.position = "relative";
-            //     container.style.zIndex = '0';
-            //     container.style.overflow = 'visible';
-            //     ocloseSpan.style.display = 'none';
-            // });
-            // container.appendChild(ocloseSpan);
         },
         reApp(){
             Mediator.publish('approval:re-app');
@@ -316,10 +283,12 @@ let config={
                 modal:true
             }).then(res=>{
                 if(!res.onlyclose){
-                    Mediator.publish('workflow:comment',res.comment);
+                    // Mediator.publish('workflow:comment',res.comment);
                     Mediator.publish("approval:signUser",{
                         sigh_type:res.sigh_type,
-                        sigh_user_id:res.sigh_user_id
+                        sigh_user_id:res.sigh_user_id,
+                        comment: res.comment,
+                        attachment: res.attachment,
                     });
                 }
             })
@@ -335,7 +304,7 @@ let config={
                     },{users:this.data.focus_users}).then(res=>{
                         if(!res.onlyclose){
                             let nameArr=[],idArr=[],htmlStr=[];
-                            for(var k in res){
+                            for(let k in res){
                                 nameArr.push(res[k]);
                                 htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
                                 idArr.push(k);
@@ -356,7 +325,7 @@ let config={
                     },{users:this.data.focus_users}).then(res=>{
                         if(!res.onlyclose){
                             let nameArr=[],idArr=[],htmlStr=[];
-                            for(var k in res){
+                            for(let k in res){
                                 nameArr.push(res[k]);
                                 htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
                                 idArr.push(k);
@@ -373,26 +342,6 @@ let config={
     afterRender(){
         this.showLoading();
         let __this=this;
-
-        // workflowService.getWorkflowInfo({
-        //     url: '/get_workflow_info/',
-        //     data: {
-        //         flow_id: obj.flow_id,
-        //         record_id: obj.record_id
-        //     }
-        // }).then(res => {
-        //     let a=res.data[0]['updateuser2focususer'];
-        //     for(let i in a){
-        //         for(let j in a[i]){
-        //             this.data.focus.push(a[i][j]);
-        //         }
-        //     }
-        //     this.actions.workflowFocused(this.data.focus);
-        //     let wffComponent = new WorkFlowForm();
-        //     wffComponent.actions.addImg(res);
-        //     this.data.workflowData=res.data[0];
-        //     WorkFlow.show(res.data[0],'#drawflow');
-        // }); //zj
 
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             this.data.workflowData=msg.data[0];

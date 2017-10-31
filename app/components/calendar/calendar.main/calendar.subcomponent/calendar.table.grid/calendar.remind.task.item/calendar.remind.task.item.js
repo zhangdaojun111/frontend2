@@ -119,6 +119,8 @@ let config = {
                     // title:"审批工作流",
                     modal:true,
                     customSize: true,
+                }).then(data => {
+                    Mediator.emit('Calendar: tool', {toolMethod: 'refreshData'});
                 })
             });
         }
@@ -228,7 +230,7 @@ let config = {
 };
 
 class CalendarRemindTaskItem extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         config.data.remindTaskItemData = data['data'];
         config.data.type = data['type'];
         if(data['data']['data3show']) {
@@ -258,7 +260,7 @@ class CalendarRemindTaskItem extends Component {
                 config.data.isNone = true;
             }
         }
-        super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 

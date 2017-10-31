@@ -25,7 +25,7 @@ input, textarea, select {
 }
 
 ::-webkit-scrollbar {
-    width: 6px;
+    width: 10px;
     height: 10px;
 }
 
@@ -43,7 +43,7 @@ input, textarea, select {
 }
 
 ::-webkit-scrollbar-thumb:horizontal {
-    width: 6px;
+    width: 10px;
     background-color: #999999;
     //border-radius: 4px;
 }

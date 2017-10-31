@@ -65,7 +65,7 @@ let config = {
             this.data.dropdownForRes = [{id: '', name: ''}];
             for (let columenListIndex in res) {
                 let item = res[columenListIndex];
-                console.log(item);
+                // console.log(item);
                 if (item['dinput_type'] === "3" || item['dinput_type'] === "5" || item["real_type"] === "3" || item["real_type"] === "5") {
                     this.data.rowTitle.push(item);
                 }
@@ -218,8 +218,10 @@ let config = {
          * @param tableId
          */
         reset: function (tableId) {
+            let field_ids = [];
             // 重置每行数据
             for (let a of this.data.allRows) {
+                field_ids.push(a['field_id']);
                 a['isSelected'] = false;
                 a['is_show_at_home_page'] = false;
                 a['color'] = "#000000";
@@ -249,8 +251,8 @@ let config = {
                 }
             }
             CalendarSetService.resetCalendar(tableId, this.data.allRows).then(res => {
-                console.log(res);
                 if (res['success'] === 1) {
+                    Mediator.emit('Calendar:calendarReset', field_ids);
                     MSG.alert('重置成功');
                     setTimeout(() => {
                         this.el.find('.set-items').empty();
@@ -413,7 +415,10 @@ let config = {
         UserInfoService.getAllUsersInfo().then(user => {
             this.data.copypeople = [];
             for (let data of user.rows) {
-                this.data.copypeople.push({name: data.name, id: data.id});
+                console.log(data.name,data.name.indexOf('离职'));
+                if(data.name.indexOf('离职') === -1){
+                    this.data.copypeople.push({name: data.name, id: data.id});
+                }
             }
         });
 
@@ -435,9 +440,9 @@ let config = {
 };
 
 class CalendarSet extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data.tableId = data;
-        super(config);
+        super($.extend(true,{},config,newConfig));
     }
 }
 

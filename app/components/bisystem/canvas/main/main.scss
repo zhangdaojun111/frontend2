@@ -52,9 +52,16 @@ $print-height: 1485px;
         width:100%;
         background: #ffffff;
         z-index: 91;
-        p {
-            color:#666666;
+        .empty-view-message{
+           position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-70%);
+            p {
+                color:#666666;
+            }
         }
+
     }
 }
 
@@ -65,6 +72,15 @@ $print-height: 1485px;
     .component-bi-canvas-main{
         header{
             display: none !important;
+        }
+        .cells-container {
+            .cells {
+                .cell-chart {
+                    .chart-normal-date-zoom {
+                        display: none;
+                    }
+                }
+            }
         }
     }
 }

@@ -95,8 +95,11 @@ let config={
 
         }
         else{
-            // yearData['choosed'][0] = {name:myYear,id:myYear};
-            // monthData['choosed'][0] = {name:myDate.getMonth() + 1,id:myDate.getMonth() + 1};
+             yearData['choosed'][0] = {name:myYear,id:myYear};
+             monthData['choosed'][0] = {name:myDate.getMonth() + 1,id:myDate.getMonth() + 1};
+             let val = myYear+'-'+(myDate.getMonth() + 1);
+             _this.data.value = val;
+             _.debounce(function(){_this.events.changeValue(_this.data)},200)();
         }
         this.destroyChildren();
         this.append(new AutoSelect(yearData),this.el.find('.year'));

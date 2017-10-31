@@ -7,7 +7,8 @@ $(document).ready(function(){
         parentRealId: window.config.parentRealId,
         parentTableId: window.config.parentTableId,
         parentTempId: window.config.parentTempId,
-        isSuperUser: window.config.isSuperUser
+        isSuperUser: window.config.isSuperUser,
+        viewMode: window.config.viewMode
     };
     let dataImport = new dataTableImport(obj);
     dataImport.render($('#dataImport'));

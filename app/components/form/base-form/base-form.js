@@ -37,6 +37,7 @@ import Songrid from '../songrid-control/songrid-control';
 import Correspondence from '../correspondence-control/correspondence-control';
 import ContractControl from "../contract-control/contract-control";
 import '../../../../node_modules/jquery-ui/ui/widgets/tabs';
+import {CreateFormServer} from "../../../services/formService/CreateFormServer";
 let config = {
     template: '',
     data: {
@@ -406,7 +407,7 @@ let config = {
         //检查是否是默认值的触发条件
         async validDefault(originalData, val) {
             if (this.data.baseIdsLocal.indexOf(originalData["dfield"]) == -1) {
-                this.baseIdsLocal.push(originalData["dfield"]);
+                this.data.baseIdsLocal.push(originalData["dfield"]);
             }
             this.data.baseIdsLocalDict[originalData["dfield"]] = val;
             if (this.data.base_fields.sort().toString() == this.data.baseIdsLocal.sort().toString()) {
@@ -414,7 +415,7 @@ let config = {
                 let json = {
                     flow_id: this.data.flowId || "",
                     base_field_2_value: JSON.stringify(this.data.baseIdsLocalDict),
-                    temp_id: this.data.temp_id["value"]
+                    temp_id: this.data.data.temp_id["value"]
                 };
                 let res = await FormService.getDefaultValue(json);
                 for (let key in res["data"]) {
@@ -454,7 +455,7 @@ let config = {
                             if (type == 'setting-textarea') {
                                 this.data.childComponent[key].actions.loadSettingtextarea(value);
                             }
-                            this.setFormValue(key, value);
+                            this.actions.setFormValue(key, value);
                         }
                     }
                 }
@@ -1242,6 +1243,12 @@ let config = {
             let json = this.actions.createPostJson();
             let res = await FormService.getDynamicData(json);
             for (let key in res.data) {
+            	if(res.data[key].options){
+                    if(!this.data.data[key].options){
+                        this.data.data[key].options=[];
+                    }
+		            res.data[key].options=this.data.data[key].options.concat(res.data[key].options);
+	            }
                 this.data.data[key] = Object.assign({}, this.data.data[key], res.data[key]);
                 if (this.data.childComponent[key]) {
                     this.data.childComponent[key].data = Object.assign({}, this.data.childComponent[key].data, res.data[key]);
@@ -1302,8 +1309,10 @@ let config = {
                                 arr.push(dfield);
                             }
                         }
-                        this.data.childComponent[dfield].data = data;
-                        this.data.childComponent[dfield].reload();
+                        if(this.data.childComponent[dfield]){
+	                        this.data.childComponent[dfield].data = data;
+	                        this.data.childComponent[dfield].reload();
+                        }
                     }
                 }
             }
@@ -1332,7 +1341,13 @@ let config = {
             //检查是否是默认值的触发条件
             // if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
             if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
-                this.actions.validDefault(data, data['value']);
+                if(data.type == 'Input'){
+                    setTimeout(()=>{
+                        this.actions.validDefault(data, data['value']);
+                    },3000)
+                }else {
+                    this.actions.validDefault(data, data['value']);
+                }
             }
             //统计功能
             this.actions.myUseFieldsofcountFunc();
@@ -1655,7 +1670,13 @@ let config = {
                 this.data.viewMode = 'viewFromCorrespondence';
             }
             let _this = this;
-            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${window.config.table_id}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
+            console.log('######')
+            console.log('######')
+            console.log('######')
+            console.log('######')
+            console.log('######')
+	        console.log(CreateFormServer.data.tableId);
+            PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${CreateFormServer.data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
                 width: 1400,
                 height: 800,
                 title: `对应关系`,
@@ -1745,7 +1766,12 @@ let config = {
                         let popupType = single.data('popuptype') || 0;
                         data[key]['temp_id'] = data['temp_id']['value'];
                         data[key]['popup'] = popupType;
-                        let songrid = new Songrid(Object.assign(data[key], {popupType: popupType}), actions);
+                        //获取表单数据（子表导入用）
+                        let formData = {};
+                        for( let k in data ){
+                            formData[k] = data[k].value || '';
+                        }
+                        let songrid = new Songrid(Object.assign(data[key], {popupType: popupType,formData: JSON.stringify(formData)}), actions);
                         songrid.render(single);
                         this.data.childComponent[data[key].dfield] = songrid;
                         break;
@@ -1836,6 +1862,8 @@ let config = {
                         break;
                     case 'Attachment':
                     case 'Picture':
+                        console.log('111111111111111111111111111');
+                        console.log(data[key]);
                         let attachmentControl = new AttachmentControl(data[key], actions);
                         attachmentControl.render(single);
                         this.data.childComponent[data[key].dfield] = attachmentControl;
@@ -1927,7 +1955,9 @@ let config = {
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
-
+        this.el.find("#form-paging-tabs-control ul li").on('click', function () {
+            $(this).css('background','#F2F2F2').siblings().css('background','#ffffff');
+        })
     },
     beforeDestory() {
         this.el.off();

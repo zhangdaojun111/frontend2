@@ -12,6 +12,7 @@
                 <div class="tit-col">时间</div>
                 <div class="tit-col">动作</div>
                 <div class="tit-col">审批意见</div>
+                <div class="tit-col">附件</div>
             </div>
 
             <div class="workflow-record-list">
@@ -21,6 +22,7 @@
                         <div class="txt-item">{{this.handler_time}}</div>
                         <div class="txt-item">{{this.approve_result}}</div>
                         <div class="txt-item tipsText">{{this.comment}}</div>
+                        <div class="txt-item comment-attachment" id="{{this.index}}">{{this.comment_attachment.length}}个附件</div>
                     </div>
                 {{/each}}
             </div>

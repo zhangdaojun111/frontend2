@@ -302,6 +302,7 @@ let config = {
         gridPref = this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
+            noFooter: true,
             onRowDoubleClicked:that.actions.onRowDoubleClicked,
             onSortChanged: this.actions.onSortChanged,
             footerData:[]
@@ -334,8 +335,8 @@ let config = {
 };
 
 class SystemMessage extends Component {
-    constructor(data) {
-        super(config, data);
+    constructor(newConfig) {
+        super($.extend(true,{},config,newConfig));
     }
 }
 

@@ -35,7 +35,7 @@ let css = `
     .attachment-list .table-bordered  tbody  tr  td a{
         text-decoration: none;
          margin-right: 25px;
-         color:#0088FF;       
+         color:#2298f4;       
     }
     
     .attachment-list .table  thead  tr  th,

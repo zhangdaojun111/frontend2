@@ -290,7 +290,7 @@ let config = {
             // this.actions.showChildrenAtFull();
         }
     }
-}
+};
 
 class FullMenuItem extends Component {
     constructor(data, event) {

@@ -27,10 +27,10 @@ let config = {
 };
 
 class CalendarTableBody extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         config.data.currentData = data['item']['weekList'];
         config.data.index = data.index;
-        super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 

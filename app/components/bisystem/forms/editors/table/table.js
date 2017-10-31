@@ -289,10 +289,10 @@ let config = {
                 type: 'select'
             },
             {
-                label: '请输入显示多少多少列(默认10条)',
+                label: '请输入显示多少列(默认10条)',
                 name: 'countNum',
                 defaultValue: 10,
-                placeholder: '请输入显示多少多少列(默认10条)',
+                placeholder: '请输入显示多少列(默认10条)',
                 category: 'number',
                 type: 'text'
             },

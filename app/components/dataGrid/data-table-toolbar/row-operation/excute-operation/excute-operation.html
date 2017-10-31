@@ -1,0 +1,20 @@
+<div class="excute-con">
+    <div style="background: #FAFAFA;font-weight: bold;border-top: 1px solid #afafaf;">
+        <span class="span1">选项</span>
+        <span class="span2">任务</span>
+        <span class="span3">执行</span>
+    </div>
+    {{#each deploylist}}
+    <div>
+        <span class="item-name span1">{{this}}</span>
+        <span class="span2">
+            更新<input type="checkbox">&nbsp;&nbsp;
+            清空<input type="checkbox">&nbsp;&nbsp;
+            编译<input type="checkbox">
+        </span>
+        <span class="span3">
+            <button class="submit">执行</button>
+        </span>
+    </div>
+    {{/each}}
+</div>
