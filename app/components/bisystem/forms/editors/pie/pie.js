@@ -266,6 +266,12 @@ let config = {
                 defaultValue: '',
                 placeholder: '选择y轴字段',
                 required: true,
+                rules: [
+                    {
+                        errorMsg: 'y轴不能为空',
+                        type: 'required'
+                    }
+                ],
                 type: 'autocomplete'
             },
             {
@@ -274,6 +280,12 @@ let config = {
                 defaultValue: [],
                 list: [],
                 required: true,
+                rules: [
+                    {
+                        errorMsg: 'y轴不能为空',
+                        type: 'required'
+                    }
+                ],
                 type: 'checkbox',
                 events: {}
             },
