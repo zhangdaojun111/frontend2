@@ -256,13 +256,13 @@ let config = {
     ],
 
     afterRender: function () {
-        Mediator.on('Calendar: showLoading', data => {
-            if(data === 1){
-                this.cancelEvents();
-            }else{
-                this.bindEvents();
-            }
-        });
+        // Mediator.on('Calendar: showLoading', data => {
+        //     if(data === 1){
+        //         this.cancelEvents();
+        //     }else{
+        //         this.bindEvents();
+        //     }
+        // });
     },
     firstAfterRender: function () {
         this.actions.showFirst();

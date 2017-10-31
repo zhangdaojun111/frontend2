@@ -116,11 +116,13 @@ let config = {
          * @param type
          */
         getCalendarData: function (data,type){
+            console.log(22222);
             Mediator.emit('Calendar: showLoading', 1);
             this.showLoading();
             CalendarService.getCalendarData(data).then( res=>{
                 if(res) {
                     this.hideLoading();
+                    console.log(1111);
                     Mediator.emit('Calendar: showLoading', 0);
                 }
                 console.log(res);
