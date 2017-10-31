@@ -78,6 +78,11 @@ let config = {
                         exactMatch: false,
                         revealResults: true
                     }]);
+            //展开筛选出的节点
+            filteredNodes.forEach(node=>{
+                tree.treeview('expandNode',[node, { levels: 2, silent: true } ]);
+            });
+            //隐藏不相关节点
             let siblings = tree.treeview('getSiblings',tree.treeview('getNode',0));
             siblings = siblings||[];
             siblings.push(tree.treeview('getNode',0));
