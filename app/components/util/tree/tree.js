@@ -126,7 +126,9 @@ let config = {
             let siblings = tree.treeview('getSiblings',start);
             if(siblings){
                 siblings.forEach(sibling=>{
-                    func(sibling,tree);
+                    if(!sibling.state.disabled){
+                        func(sibling,tree);
+                    }
                 })
             }
         },
@@ -263,7 +265,6 @@ let config = {
         if (!this.data.options.isSearch) {
             this.el.find("#search-in-tree").hide();
         } else {
-            var timeout = null;
             var inputComp = this.el.find('#search-in-tree');
             this.el.on('input', '#search-in-tree', _.debounce(() => {
                 treeview.actions.searchTreeNode(inputComp, tree)
