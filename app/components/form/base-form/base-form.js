@@ -298,7 +298,7 @@ let config = {
                     if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]" || JSON.stringify(val) == "{}") {
                         error = true;
                         errArr.push(data["label"]+'是必填项!');
-                        errorMsg = errArr;
+                        errorMsg = errArr.join(' ');
                         continue;
                     }
                 }
