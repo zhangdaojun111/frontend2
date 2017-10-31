@@ -1,3 +1,9 @@
 .date-filed {
     height: calc(100% - 24px) !important;
 }
+.count-chart-maxText {
+    position: absolute;
+    left:0;
+    top:0;
+    opacity: 0;
+}
