@@ -302,7 +302,15 @@ let config = {
                         continue;
                     }
                 }
-
+                //子表必填
+                for (let d in allData) {
+                    if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
+                        error = true;
+                        errArr.push('子表字段:'+allData[d].label+'是必填!');
+                        errorMsg =Array.from(new Set(errArr)).join(' ') ;
+                        break;
+                    }
+                }
                 //正则检查
                 if (val != "" && data["reg"] !== "") {
                     for (let r in data["reg"]) {
@@ -379,14 +387,6 @@ let config = {
                         errorMsg = "小数不能超过12位！无法保存！";
                         break;
                     }
-                }
-            }
-            //子表必填
-            for (let d in allData) {
-                if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
-                    error = true;
-                    errorMsg = '子表字段:' + allData[d].label + '是必填！';
-                    break;
                 }
             }
             return {
