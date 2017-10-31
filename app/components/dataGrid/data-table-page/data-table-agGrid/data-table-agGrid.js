@@ -1551,7 +1551,7 @@ let config = {
                     this.el.find('.btn-nav-con').append(dom);
                     setTimeout(()=>{
                         this.el.find('.query-tips').css('display','none');
-                    },5000)
+                    },3000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -1599,7 +1599,7 @@ let config = {
             return json;
         },
         //渲染agGrid（根据存在的按钮，为按钮事件，渲染分组定制列，分页等组件）
-        renderAgGrid: function () {
+        renderAgGrid: function (cache) {
             //渲染定制列
             if( this.el.find('.custom-column-btn')[0] ){
                 //如果有定制列修改偏好状态
@@ -1674,7 +1674,7 @@ let config = {
                 }
             }
             //高级查询
-            if( this.el.find( '.expert-search-btn' )[0] ){
+            if( this.el.find( '.expert-search-btn' )[0] && !cache ){
                 this.actions.renderExpertSearch();
                 this.actions.getExpertSearchData();
             }
@@ -1687,6 +1687,7 @@ let config = {
             if( this.data.gridTips ){
                 this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
+            console.timeEnd( '渲染时间' )
         },
         //触发导出
         onExport: function () {
@@ -3400,10 +3401,14 @@ let config = {
             this.data.firstRender = false;
             this.data.common_filter_id = data.table_data.common_filter_id || '';
             this.actions.setGridData( gridRes );
-            //高级查询参数
-            this.actions.firstFooterCommonFilterId(data.advanced_query);
-            this.actions.createPostData();
-            this.actions.setExpertSearchData( data.advanced_query )
+            this.actions.renderAgGrid(true);
+            //高级查询
+            if( this.el.find( '.expert-search-btn' )[0] ){
+                this.actions.renderExpertSearch();
+                this.actions.setExpertSearchData( data.advanced_query )
+                this.actions.firstFooterCommonFilterId(data.advanced_query);
+                this.actions.createPostData();
+            }
             try {
                 this.data.showTabs(1);
                 this.hideLoading();
@@ -3411,6 +3416,7 @@ let config = {
         }
     },
     afterRender: function () {
+        console.time( '渲染时间' )
         //发送表单tableId（订阅刷新数据用
         if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 && !this.data.departmentDiary ){
             TabService.onOpenTab( this.data.tableId ).done((result) => {
@@ -3450,6 +3456,19 @@ let config = {
         if( window.config.data_cached == 1 && this.data.viewMode == 'normal' ){
             console.log( '加载cache数据' )
             this.actions.renderCacheData( window.config.cached_data )
+            console.timeEnd( '渲染时间' )
+            return;
+        }
+
+        if( this.data.viewMode == 'normal' ){
+            let data = window.config.cached_data;
+            console.log( "只加载Header的cache数据" )
+            console.log( data )
+            console.log( window.config )
+            //表头
+            let headerRes = [data.preferences,data.column_list,data.tab_page,data.operation,data.prepare_params];
+            this.actions.setHeaderData( headerRes );
+            this.actions.getGridData();
             return;
         }
 

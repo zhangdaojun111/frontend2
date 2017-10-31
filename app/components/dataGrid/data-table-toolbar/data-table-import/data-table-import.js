@@ -136,10 +136,10 @@ let config = {
                 showError:function () {}
             }
             //只有在文件大小大于1MB的时候才会显示进度条
-            if(Object.values(this.data.fileData)[0].file.size >= 1000000){
+            // if(Object.values(this.data.fileData)[0].file.size >= 1000000){
                 let progressParams = this.uploader.getProgressParams(this.data.key);
                 toolbox = msgBox.showProgress(progressParams);
-            }
+            // }
             this.uploader.upload('/upload_data/',{}, toolbox.update,(res)=>{
                 if( res.success ){
                     toolbox.finish(res);
