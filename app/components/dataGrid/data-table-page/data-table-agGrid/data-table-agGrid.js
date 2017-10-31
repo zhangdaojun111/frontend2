@@ -1489,8 +1489,8 @@ let config = {
                 json['is_report'] = 1;
             }
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
-                json['rows'] = 99999;
-                json['first'] = 0;
+                // json['rows'] = 99999;
+                // json['first'] = 0;
                 json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
@@ -1651,7 +1651,7 @@ let config = {
             //     this.append(new fastSearch(d), this.el.find('.fast-search-con'))
             // }
             //渲染分页
-            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence','newFormCount','reportTable2']
+            let noPagination = ['in_process','newFormCount','reportTable2']
             if( noPagination.indexOf( this.data.viewMode ) == -1 ){
                 this.data.pagination = true;
                 let paginationData = {
