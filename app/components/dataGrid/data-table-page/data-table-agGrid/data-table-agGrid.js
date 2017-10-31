@@ -2877,7 +2877,7 @@ let config = {
                         viewMode: 'source_data'
                     }
                     let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                    let winTitle = this.data.tableName + '->' + obj.tableName;
+                    let winTitle = data.colDef.tableName + '->' + obj.tableName;
                     this.actions.openSourceDataGrid( url,winTitle );
                 }
             }
