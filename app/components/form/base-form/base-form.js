@@ -1857,6 +1857,8 @@ let config = {
                         break;
                     case 'Attachment':
                     case 'Picture':
+                        console.log('111111111111111111111111111');
+                        console.log(data[key]);
                         let attachmentControl = new AttachmentControl(data[key], actions);
                         attachmentControl.render(single);
                         this.data.childComponent[data[key].dfield] = attachmentControl;

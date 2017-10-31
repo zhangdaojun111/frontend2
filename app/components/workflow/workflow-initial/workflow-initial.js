@@ -104,6 +104,7 @@ let config = {
                 // console.log(this.data.allUsersInfo);
                 for(let key in data['updateuser2focususer']) {
                     this.data.idArr = data['updateuser2focususer'][key];
+                    this.data.htmlStr = [];
                     for(let i of this.data.idArr) {
                         console.log(i);
                         this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
@@ -112,12 +113,12 @@ let config = {
                     }
                 }
                 this.el.find('#addFollowerList').html(this.data.htmlStr);
+                this.data.user = this.data.focusUsers;
             })
 
         });
         this.el.on('click', '#addFollower', () => {
-            console.log(typeof this.data.user);
-            this.data.user = this.data.focusUsers;
+            // this.data.user = this.data.focusUsers;
             PMAPI.openDialogByIframe(`/iframe/addfocus/`, {
                 width: 800,
                 height: 620,
