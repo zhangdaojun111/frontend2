@@ -2912,7 +2912,7 @@ let config = {
                         parentRealId: data.data._id
                     }
                     let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                    let winTitle = this.data.tableName + '->' + obj.tableName;
+                    let winTitle = data.colDef.tableName + '->' + obj.tableName;
                     this.actions.openSourceDataGrid( url,winTitle );
                 } )
                 HTTP.flush();
@@ -2932,7 +2932,7 @@ let config = {
                     source_field_dfield: data.colDef.field_content.count_field_dfield || '',
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                let winTitle = this.data.tableName + '->' + obj.tableName;
+                let winTitle = data.colDef.tableName + '->' + obj.tableName;
                 this.actions.openSourceDataGrid( url,winTitle );
             }
             // 子表
@@ -2950,7 +2950,7 @@ let config = {
                     source_field_dfield: data.colDef.field_content.child_field_dfield || '',
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                let winTitle = this.data.tableName + '->' + obj.tableName;
+                let winTitle = data.colDef.tableName + '->' + obj.tableName;
                 this.actions.openSourceDataGrid( url,winTitle );
             }
             //二维表数据穿透
