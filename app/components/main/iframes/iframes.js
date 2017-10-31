@@ -8,7 +8,7 @@ import './iframe.scss';
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import {SaveView} from "./new-save-view/new-save-view";
 import {TabService} from "../../../services/main/tabService";
-import {IframesManager} from "../../../lib/iframes-manager";
+// import {IframesManager} from "../../../lib/iframes-manager";
 
 // let IframeOnClick = {
 //     resolution: 200,
@@ -78,53 +78,61 @@ let config = {
         commonUseList:[]          //保存常用iframes，用于预加载
     },
     actions: {
+
         /**
          * 根据id、url、name打开iframe
          * @param id
          * @param url
          * @param name
          */
-        openIframe: function (id, url, name) {
-            this.actions.sendOpenRequest(id);
+        _openIframe: function (id, url, name) {
+            // this.actions.sendOpenRequest(id);
             id = id.toString();
             if (this.data.hash[id] === undefined) {
                 let tab = $(`<div class="item" iframeid="${id}" title="${name}">${name}<a class="close icon-framework-close" iframeid="${id}"></a></div>`)
                     .prependTo(this.data.tabs);
                 //根据id查询该iframe是否已经预加载，如果已经预加载直接取用iframe
-                let dom = IframesManager.getIframe(id),iframe;
-                if(dom !== undefined && dom.length > 0){
-                    iframe = $('<div class="item">').append(dom[0]).appendTo(this.data.iframes);
-                }else{
-                    iframe = $(`<div class="item"><iframe id="${id}" src="${url}"></iframe></div>`).appendTo(this.data.iframes);
-                }
-
+                // let dom = IframesManager.getIframe(id),iframe;
+                // if(dom !== undefined && dom.length > 0){
+                //     iframe = $('<div class="item">').append(dom[0]).appendTo(this.data.iframes);
+                // }else{
+                //
+                // }
+                let iframe = $(`<div class="item"><iframe id="${id}" _src="${url}"></iframe></div>`).appendTo(this.data.iframes);
                 let originIframe = iframe.find('iframe');
-
+                iframe.hide();
                 // this.showLoading(this.data.iframes);
                 // window.clearTimeout(this.data.loadingTimer);
                 // this.data.loadingTimer = window.setTimeout(() => {
                 //     this.hideLoading();
                 // }, 500);
 
-                originIframe.on('load', function () {
-                    console.log('load');
-                    PMAPI.sendToIframe(originIframe[0], {
-                        type: PMENUM.open_iframe_data,
-                        data: {
-                            iframe: 'load'
-                        }
-                    });
-                });
+                // originIframe.on('load', function () {
+                //     PMAPI.sendToIframe(originIframe[0], {
+                //         type: PMENUM.open_iframe_data,
+                //         data: {
+                //             iframe: 'load'
+                //         }
+                //     });
+                // });
 
                 this.data.hash[id] = {id, url, name, tab, iframe};
                 this.data.sort.push(id);
                 this.data.count++;
             }
-            this.actions.focusIframe(id);
+            // this.actions.focusIframe(id);
             if (this.data.count > maxIframeCount) {
                 this.actions.closeFirstIframe();
             }
             this.actions.adaptTabWidth();
+        },
+
+        /**
+         * 方法同上，新增与后台同步tab信息的功能
+         */
+        openIframe: function (id, url, name) {
+            this.actions._openIframe(id, url, name);
+            this.actions.sendOpenRequest(id);
         },
         /**
          * 打开iframe时向后台发送请求，后台记录未关闭的iframe
@@ -218,7 +226,14 @@ let config = {
                     type: PMENUM.iframe_silent
                 })
             }
+
             this.data.focus = this.data.hash[id];
+            let iframe = this.data.focus.iframe.find('iframe');
+            let src = iframe.attr('src');
+            if (!src) {
+                iframe.attr('src', iframe.attr('_src'));
+                iframe.removeAttr('_src');
+            }
             this.data.focus.iframe.show();
             this.data.focus.tab.addClass('focus');
 
@@ -324,6 +339,7 @@ let config = {
          * @param event
          */
         controlTabs:function (event) {
+            debugger;
             let name = event.target.textContent;
             if(name === '关闭标签'){
                 this.actions.closeFocusTab();
@@ -340,6 +356,7 @@ let config = {
                 let id = event.target.attributes.item_id.value;
                 let url = event.target.attributes.item_url.value;
                 this.actions.openIframe(id,url,name);
+                this.actions.focusIframe(id);
             }
         },
         // getTabIdByName:function (name,nodes) {
@@ -471,9 +488,13 @@ let config = {
             this.actions.sortTabs(this.data.autoOpenList,this.data.timeList);
             this.data.autoOpenList =  this.data.autoOpenList.concat(this.data.biCalendarList);
             //依次打开各标签
-            for(let k of this.data.autoOpenList){
-                this.actions.openIframe(k.id,k.url,k.name);
+            if (this.data.autoOpenList.length) {
+                for(let k of this.data.autoOpenList){
+                    this.actions._openIframe(k.id,k.url,k.name);
+                }
+                this.actions.focusIframe(this.data.autoOpenList[this.data.autoOpenList.length - 1].id);
             }
+
         },
         /**
          * 使用id取time值，再根据time排序
@@ -568,6 +589,7 @@ let config = {
                 let url = "/search_result?searchContent=" + content;
                 let name = "搜索结果";
                 this.actions.openIframe(id,url,name);
+                this.actions.focusIframe(id);
             }
         },
         /**
@@ -609,10 +631,10 @@ let config = {
          * 预加载常用iframes
          */
         preLoadIframes:function () {
-            let menu = window.config.menu;
-            let tempList = window.config.commonUse.data;
-            this.actions.findTabInfo(menu,tempList,this.data.commonUseList);
-            IframesManager.initIframes(this.data.commonUseList);
+            // let menu = window.config.menu;
+            // let tempList = window.config.commonUse.data;
+            // this.actions.findTabInfo(menu,tempList,this.data.commonUseList);
+            // IframesManager.initIframes(this.data.commonUseList, this.data.iframes);
         }
     },
     binds:[
@@ -711,7 +733,7 @@ let config = {
         this.data.iframes = this.el.find('.iframes');
         this.actions.setTabsCount();
         this.actions.readyOpenTabs();
-        this.actions.preLoadIframes();
+        // this.actions.preLoadIframes();
 
         let that = this;
         $(window).resize(function () {          //监听浏览器大小变化，自适应标签宽度
@@ -722,6 +744,9 @@ let config = {
         //初始化保存视图组件
         this.saveView = new SaveView({},this.data.sort,this.actions.closeSaveViewPage);
         this.saveView.render(this.el.find('.view-save-component'));
+
+
+
 
 
         // this.el.on('click', '.tabs .item .close', function () {
@@ -739,7 +764,8 @@ let config = {
 
     firstAfterRender: function () {
         Mediator.on('menu:item:openiframe', (data) => {
-            this.actions.openIframe(data.id, data.url, data.name)
+            this.actions.openIframe(data.id, data.url, data.name);
+            this.actions.focusIframe(data.id);
         });
         Mediator.on('search:displayreuslt',(data) => {
             this.actions.displaySearchResult(data);
@@ -751,7 +777,7 @@ let config = {
                 this.actions.setSizeToMini();
             }
         });
-
+        console.log(window.config);
         // Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
         // Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
         // Mediator.on('socket:one_the_way_invalid', this.actions.sendMsgToIframes);
@@ -759,10 +785,35 @@ let config = {
 
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签
-            for(let k of data){
-                this.actions.openIframe(k.id,k.url,k.name);
+            if (data.length) {
+                for(let k of data){
+                    this.actions.openIframe(k.id,k.url,k.name);
+                }
+                this.actions.focusIframe(data[data.length - 1].id);
             }
-        })
+        });
+
+        let that = this;
+        
+        function loadIframe(iframe) {
+            iframe.attr('src', iframe.attr('_src'));
+            iframe.removeAttr('_src');
+            iframe.on('load', function () {
+                start();
+            })
+        }
+
+        function start() {
+            let iframe = that.data.iframes.find('iframe[_src]:last');
+            if (iframe.length) {
+                loadIframe(iframe);
+            }
+        }
+        
+        setTimeout(() => {
+            start();
+        }, 3000);
+
     },
 
     beforeDestory: function () {
