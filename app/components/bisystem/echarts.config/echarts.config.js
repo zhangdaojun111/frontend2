@@ -113,7 +113,8 @@ const pie = {
         orient: 'vertical',
         left: 'right',
         bottom: 0,
-        data: []
+        data: [],
+        type: 'scroll'
     },
     series: [
         {
@@ -171,7 +172,8 @@ const radar = {
         bottom: 0,
         orient: 'vertical',
         data: [],
-        selected: {}
+        selected: {},
+        type: 'scroll'
     },
     radar: [
         {
@@ -190,6 +192,7 @@ const radar = {
         },
     ]
 };
+
 
 // 漏斗图
 const funnel = {
@@ -238,7 +241,8 @@ const linebar = {
     legend: {
         top: 0,
         data: [],
-        selected: {}
+        selected: {},
+        type: 'scroll'
     },
     grid: {
         left: 30,

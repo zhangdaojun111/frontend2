@@ -2,7 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8" content="width=device-width, initial-scale=1">
+    <!--<meta charset="UTF-8" content="width=device-width, initial-scale=1">-->
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=yes" />
     <title>登录</title>
     <!--{% ifequal window_type 'develop'%}-->
     <!--{% else %}-->
@@ -15,12 +16,15 @@
     <!--登录界面标题-->
     <div class="bg-div">
         <div class="login-content">
-            <h1 class="login-main-title">欢迎使用 <strong>ERDS</strong>企业管理系统</h1>
-            <div class="login-version-title">v1.1.0.0</div>
+            <h1 class="company-info"></h1>
+            <!--<div class="login-version-title">v1.1.0.0</div>-->
             <!--无需下载，显示表单和版本-->
             <div class="white-panel login-container">
-                <h2 class="company-info"></h2>
+                <!--<h2 class="company-info"></h2>-->
                 <!--登录表单开始-->
+                <div class="panel-header">
+                    <span class="panel-title">用户登录</span>
+                </div>
                 <form class="login-form" onsubmit="return false">
                     <!--登录用户名和密码-->
                     <div class="form-group">
@@ -110,6 +114,5 @@
 <script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
 <script type="text/javascript" src=" {{ "/client/static/login.js"|version }}"></script>
 {% endifequal %}
-
 </body>
 </html>

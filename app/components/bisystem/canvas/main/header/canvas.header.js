@@ -19,13 +19,15 @@ let config = {
         menus: {},
         isAdmin: window.config.is_admin,
         isSelf: window.config.bi_views.self,
-        headerMenus:[],
+        markSingle:'',
+        // headerMenus:[],
     },
     actions: {
         /**
          * 添加画布块
          */
         addCell() {
+            let scrollHeight = $('.cells-container').scrollTop();
             const layout = {
                 attribute:[],
                 layout_id: '',
@@ -35,7 +37,7 @@ let config = {
                 deep_clear: "0",
                 size: {
                     left: 100,
-                    top: 100,
+                    top: scrollHeight > 100 ? scrollHeight : 100,
                     width: 300,
                     height: 300,
                     zIndex: 1
@@ -43,7 +45,6 @@ let config = {
             };
             this.trigger('onAddCell', layout);
         },
-
         // /**
         //  * 当前选中的视图
         //  * @param id 当前视图的id
@@ -59,63 +60,63 @@ let config = {
         //     }
         // },
 
-        /**
-         * 初始化加载时隐藏的更多目录框
-         */
-        hideMoreMenu(){
-            let childWidth = 0;
-            let navTabsWidth = this.el.find('.nav-tabs').width();
-            this.el.find('.child-menu').css('left',navTabsWidth);//child-menu隐藏目录框显示的位置
-            this.el.find('.nav-tabs div').each((index,val)=>{//首次加载后的目录，将自身，自身的宽，显示属性添加到headerMenus数组中
-                this.data.headerMenus.push({'header':$(val),'width':$(val).width(),'show':true});
-                childWidth += $(val).outerWidth();
-                if(childWidth >= navTabsWidth){//当前目录宽的和大于nav-tabs的宽时 将其余的目录添加到child-menu隐藏目录框中 并将其属性show变为false
-                    this.el.find('.nav-tabs-select').show();
-                    $(val).appendTo(this.el.find('.child-menu'));
-                    this.data.headerMenus[index].show = false;
-                }
-            });
-        },
-        /**
-         *当窗口大小改变时 更多目录框的显示随之改变
-         */
-        windowChange(){
-            let childWidth = 0;
-            let navTabsWidth = this.el.find('.nav-tabs').width();
-            let navTabsLen = this.el.find('.nav-tabs div').length-1;
-            let staus = true;
-            this.el.find('.child-menu').css('left',navTabsWidth);
-            this.data.headerMenus.forEach((val,index)=>{
-                if (val.show){
-                    childWidth += val.width;
-                    if(childWidth >= navTabsWidth){
-                        val.show = false;
-                        if(this.el.find('.child-menu div').length!==0 && index===navTabsLen && staus){
-                            this.el.find('.child-menu div:first-child').before(val.header);
-                        }else {
-                            val.header.appendTo(this.el.find('.child-menu'));
-                            staus = false;
-                        }
-                    }
-                }else{
-                    childWidth += val.width;
-                    if(childWidth < navTabsWidth){
-                        val.show = true;
-                        val.header.appendTo(this.el.find('.nav-tabs'));
-                    }else {
-                        return;
-                    }
-                }
-
-            });
-            //下拉图标的显示与隐藏
-            if(this.el.find('.child-menu div').length){
-                this.el.find('.nav-tabs-select').css('visibility','visible');
-            }else{
-                this.el.find('.nav-tabs-select').css('visibility','hidden');
-            }
-
-        },
+        // /**
+        //  * 初始化加载时隐藏的更多目录框
+        //  */
+        // hideMoreMenu(){
+        //     let childWidth = 0;
+        //     let navTabsWidth = this.el.find('.nav-tabs').width();
+        //     this.el.find('.child-menu').css('left',navTabsWidth);//child-menu隐藏目录框显示的位置
+        //     this.el.find('.nav-tabs div').each((index,val)=>{//首次加载后的目录，将自身，自身的宽，显示属性添加到headerMenus数组中
+        //         this.data.headerMenus.push({'header':$(val),'width':$(val).width(),'show':true});
+        //         childWidth += $(val).width();
+        //         if(childWidth >= navTabsWidth){//当前目录宽的和大于nav-tabs的宽时 将其余的目录添加到child-menu隐藏目录框中 并将其属性show变为false
+        //             this.el.find('.nav-tabs-select').show();
+        //             $(val).appendTo(this.el.find('.child-menu'));
+        //             this.data.headerMenus[index].show = false;
+        //         }
+        //     });
+        // },
+        // /**
+        //  *当窗口大小改变时 更多目录框的显示随之改变
+        //  */
+        // windowChange(){
+        //     let childWidth = 0;
+        //     let navTabsWidth = this.el.find('.nav-tabs').width();
+        //     let navTabsLen = this.el.find('.nav-tabs div').length-1;
+        //     let staus = true;
+        //     this.el.find('.child-menu').css('left',navTabsWidth);
+        //     this.data.headerMenus.forEach((val,index)=>{
+        //         if (val.show){
+        //             childWidth += val.width;
+        //             if(childWidth >= navTabsWidth){
+        //                 val.show = false;
+        //                 if(this.el.find('.child-menu div').length!==0 && index===navTabsLen && staus){
+        //                     this.el.find('.child-menu div:first-child').before(val.header);
+        //                 }else {
+        //                     val.header.appendTo(this.el.find('.child-menu'));
+        //                     staus = false;
+        //                 }
+        //             }
+        //         }else{
+        //             childWidth += val.width;
+        //             if(childWidth < navTabsWidth){
+        //                 val.show = true;
+        //                 val.header.appendTo(this.el.find('.nav-tabs'));
+        //             }else {
+        //                 return;
+        //             }
+        //         }
+        //
+        //     });
+        //     //下拉图标的显示与隐藏
+        //     if(this.el.find('.child-menu div').length){
+        //         this.el.find('.nav-tabs-select').css('visibility','visible');
+        //     }else{
+        //         this.el.find('.nav-tabs-select').css('visibility','hidden');
+        //     }
+        //
+        // },
         /**
          * 未选中的所有目录取消选中状态
          * @param menuId 选中的目录id
@@ -170,29 +171,30 @@ let config = {
                 })
             }
         },
-        { //点击显示更多目录
-            event:'click',
-            selector:'.nav-tabs-select',
-            callback: function (context,event) {
-                event.stopPropagation();
-                this.el.find('.child-menu').css('visibility','visible');
-            }
-        },
+        // { //点击显示更多目录
+        //     event:'click',
+        //     selector:'.nav-tabs-select',
+        //     callback: function (context,event) {
+        //         event.stopPropagation();
+        //         this.el.find('.child-menu').css('visibility','visible');
+        //     }
+        // },
         { //调用打印
             event:'click',
             selector:'.print-btn',
             callback: function (context,event) {
-                window.print();
+                this.trigger('onWhenPrintCellDataFinish');
+                return false;
             }
         },
     ],
     afterRender() {
-
         //新窗口隐藏新窗口图标
         if(window === window.parent){
             this.el.find('.new-window').hide();
         }
         this.data.views = window.config.bi_views;
+
         // 渲染header视图列表
         this.data.views.forEach(viewData => {
             let menu = new CanvasHeaderMenuComponent(viewData,{
@@ -205,37 +207,18 @@ let config = {
         });
 
 
-        //第一次渲染之后隐藏多的目录
-        this.actions.hideMoreMenu();
-
-
-        // console.log(this.data.menus);
-
-
-
     },
     firstAfterRender(){
-        //当窗口大小改变时 更多目录框的显示随之改变
-
-        $(window).resize(()=> {
-            this.actions.windowChange();
-        });
-        //点击更多目录框外 隐藏显示框
-        $(document.body).bind('click.menu',()=>{
-            this.el.find('.child-menu').css('visibility','hidden');
-        })
+        //修改单页模式下的url地址
+         if(window.config.query_mark === "single"){
+            this.el.find('.new-window').prop('href',`/bi/index/${window.location.search}`);
+        }
     },
     beforeDestory(){
-
-        //当destory时销毁全局document.body click事件
-        $(document.body).off('click.menu');
-
-        //当destory时销毁全局window resize
-        $(window).off('resize');
     }
 };
 export class CanvasHeaderComponent extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data, events,extendConfig) {
+        super($.extend(true,{},config,extendConfig), data, events);
     }
 }

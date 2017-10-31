@@ -118,8 +118,8 @@ let config = {
                     floatingFilterComponent: this.floatingFilterCom.actions.createFilter(s.type , s.field, this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true},
                     enableRowGroup: true,
-                    suppressSorting: s.type == 'none'?true : false,
-                    sortField: s.type == 'none'?'' : s.field,
+                    suppressSorting: false,
+                    sortField: col["field"],
                     suppressResize: false,
                     suppressMovable: false
                 }
@@ -195,6 +195,7 @@ let config = {
         renderGrid: function () {
             let gridData = {
                 columnDefs: this.data.columnDefs,
+                noFooter: true,
                 rowData: this.data.rowData,
                 footerData: this.data.footerData,
                 fieldsData: this.data.fieldsData,
@@ -535,7 +536,7 @@ let config = {
                 }
                 if( this.data.filterParam.filter.length == 0 ){
                     let dom = `<div class='query-tips'><span class="query-tips-delete"></span><span class="title">加载常用查询&lt;<span class="text">${this.data.filterParam['common_filter_name']}</span>&gt;</span></div>`;
-                    this.el.find('.btn-nav-con').append(dom);
+                    this.el.find('.btn-nav').append(dom);
                     setTimeout(()=>{
                         this.el.find('.query-tips').css('display','none');
                     },5000)
@@ -821,13 +822,12 @@ let config = {
         this.actions.getData();
     }
 }
-
 class workflowPage extends Component {
-    constructor(data) {
-        for( let d in data ){
+    constructor(data,newConfig){
+        for (let d in data) {
             config.data[d] = data[d];
         }
-        super(config);
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

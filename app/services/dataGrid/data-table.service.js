@@ -113,6 +113,10 @@ export const dataTableService = {
     getBIField: function ( json ) {
         return HTTP.postImmediately('/folder_preference/',json);
     },
+    //执行行级操作
+    excuteOperation: function ( url , json ) {
+        return HTTP.postImmediately( url , json );
+    },
     setImgDataAndNum(res,imgData,imgSelect){
         imgData = res;
         let imgTotal = res.rows.length;
@@ -136,5 +140,9 @@ export const dataTableService = {
     getFileExtension (filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
     },
-    preview_file : ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"],
+    preview_file : ["gif","jpg","jpeg","png","wmv","mp4"],
+    //获取定制表对应的table_id
+    getCustomTableId: function ( json ) {
+        return HTTP.postImmediately( '/get_custom_table_id/',json )
+    }
 }

@@ -106,6 +106,7 @@ let config = {
         }
     ],
     afterRender() {
+        this.el.find('.ui-width').attr('title', this.data.value)
         this.el.find('.ui-width').css('width', this.data.width);
         //如果是统计字段有值 显示穿透查看
         if(this.data.dtype==10 && this.data.value){
@@ -121,8 +122,8 @@ let config = {
 }
 
 class ReadonlyControl extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 

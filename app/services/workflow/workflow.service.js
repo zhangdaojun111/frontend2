@@ -17,6 +17,9 @@ export const workflowService={
     addUpdateTableData(params){
         return HTTP.postImmediately('/add_update_table_data/', params)
     },
+    createWorkflowRecord(params){
+        return HTTP.postImmediately('/create_workflow_record/', params)
+    },
     validateDraftData(params){
         return HTTP.postImmediately('/validate_draft_data/', params)
     },
@@ -25,6 +28,12 @@ export const workflowService={
     },
     addWorkflowFavorite(params){
         return HTTP.postImmediately('/add_workflow_favorite/', params)
+    },
+    //请求附件数据
+    getAttachmentList(json){
+        let res = HTTP.post('query_attachment_list', json);
+        HTTP.flush();
+        return res;
     },
     //审批工作流
     //
@@ -75,5 +84,14 @@ export const workflowService={
     },
     approveManyWorkflow(params){
         return HTTP.postImmediately('/approve_many_workflow/', params)
-    }
+    },
+    nodeAttachment(params){
+        return HTTP.getImmediately('/node_attachment/', params)
+    },
+
+    //获取文件名后缀
+    getFileExtension (filename) {
+        return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
+    },
+    preview_file : ["gif","jpg","jpeg","png","wmv","mp4"],
 }

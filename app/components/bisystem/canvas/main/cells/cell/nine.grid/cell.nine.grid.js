@@ -32,9 +32,9 @@ let config = {
 };
 
 export class CellNineGridComponent extends CellBaseComponent {
-    constructor(data,event) {
+    constructor(data,event,extendConfig) {
         let cellChart = CellNineGridComponent.init(data);
-        super(config,cellChart,event);
+        super($.extend(true,{},config,extendConfig),cellChart,event);
     }
 
     /**

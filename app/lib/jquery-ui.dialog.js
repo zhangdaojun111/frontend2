@@ -33,7 +33,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         this.option('position', {my: "center", at: "center", of: window});
         this.fullScreen = false;
         if (this.uiDialogTitlebarFull) {
-            this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
+            this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-newwin");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
             $(this.uiDialogTitlebarFull[0].firstChild).attr('title','全屏');
         }
@@ -48,10 +48,11 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         this.option('height', height);
         this.option('position', {my: "center top", at: "center top", of: window});
         this.fullScreen = true;
+        this.options.resizeMax && this.options.resizeMax();
 
         if (this.uiDialogTitlebarFull) {
             this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
-            this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
+            this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-newwin");
             $(this.uiDialogTitlebarFull[0].firstChild).attr('title','还原');
             this._addClass($(this.uiDialog[0]), "ui-dialog-maximize");
         }
@@ -62,8 +63,10 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
         this.option('height', this.options.originHeight);
         this.option('position', {my: "center", at: "center", of: window});
         this.fullScreen = false;
+        this.options.resizeMin && this.options.resizeMin();
+
         if (this.uiDialogTitlebarFull) {
-            this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "ui-icon-newwin");
+            this._removeClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-newwin");
             this._addClass($(this.uiDialogTitlebarFull[0].firstChild), "icon-maximize");
             $(this.uiDialogTitlebarFull[0].firstChild).attr('title','全屏');
         }

@@ -58,11 +58,11 @@ let config = {
          * 获取用户快捷设置参数并解析
          */
         getItemData:function () {
-            let biStatus = window.config.sysConfig.logic_config.login_show_bi || "10";
+            let biStatus = window.config.sysConfig.logic_config.client_login_show_bi || "10";
             this.data.biSort = biStatus.split('')[0];
             this.data.biStatus = biStatus.split('')[1];
 
-            let calendarStatus = window.config.sysConfig.logic_config.login_show_calendar || "20";
+            let calendarStatus = window.config.sysConfig.logic_config.client_login_show_calendar || "20";
             this.data.calendarSort = calendarStatus.split('')[0];
             this.data.calendarStatus = calendarStatus.split('')[1];
 
@@ -73,8 +73,14 @@ let config = {
          */
         addCheckbox:function () {
             let $parent = this.el.find('.sortable-box');
-            let $ul = $("<li class='isShow-calendar sort-item' title='拖动调整顺序'><input class='calendar-Show' title='点击设置此功能' type='checkbox'><span>登录时自动开启日历</span>" +
-                "<i class='drag-icon icon-framework-drag'></i></li>");
+            let $ul = $(`
+                <li class='isShow-calendar sort-item' title='拖动调整顺序'>
+                    <label class='custom-checkbox' style='display: inline'>
+                        <input class='calendar-Show' title='点击设置此功能' type='checkbox'>
+                    </label>
+                    <span>登录时自动开启日历</span>
+                    <i class='drag-icon icon-framework-drag'></i>
+                </li>`);
             if(this.data.calendarSort === "1"){
                 $parent.append($ul);
             }else{
@@ -118,8 +124,8 @@ let config = {
             UserInfoService.saveUserConfig(json,json2).then((result) => {
                 that.hideLoading();
                 if(result[0].succ === 1 && result[1].succ === 1){
-                    window.config.sysConfig.logic_config.login_show_bi = result[0].data.toString();
-                    window.config.sysConfig.logic_config.login_show_calendar = result[1].data.toString();
+                    window.config.sysConfig.logic_config.client_login_show_bi = result[0].data.toString();
+                    window.config.sysConfig.logic_config.client_login_show_calendar = result[1].data.toString();
                     msgbox.alert("设置保存成功");
                     SysSetting.hide();
                 }else{
@@ -217,8 +223,8 @@ let config = {
 };
 
 class SettingPage extends Component{
-    constructor(){
-        super(config)
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
 

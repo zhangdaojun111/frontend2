@@ -9,9 +9,18 @@ import template from './workflow-form.html';
 import './workflow-form.scss';
 
 import Mediator from '../../../lib/mediator';
+import Attachment from '../../form/attachment-list/attachment-list';
+import {FormService} from "../../../services/formService/formService";
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
+import SettingPrint from '../../form/setting-print/setting-print';
 
 let config = {
     template: template,
+    data:{
+        attachment:[], //表单附件
+        isshowprintbtn: false, //是否显示打印附件按钮
+        isshowfjbtn: false
+    },
     actions: {
         showImgDel(e){
             let ev = $(e.target).children('i');
@@ -26,6 +35,11 @@ let config = {
             let em = el.next();
             em.remove();
             el.remove();
+            if(el.hasClass('deloldimg')){
+                console.log();
+                let id = el.attr('data-imgid');
+                this.data.delsign.push(parseInt(id));
+            }
         },
 
         /**
@@ -62,10 +76,19 @@ let config = {
             let len =imgInfo.length;
             let html = " ";
             for (let i=0;i<len;i++){
-                let left = imgInfo[i].viewLeft+"%";
-                let top = imgInfo[i].viewTop+"%";
-                html += `<img class="oldImg noprint" src="/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
-                html += `<img class="printimg printS" src="/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
+                let left = imgInfo[i].viewLeft + "%";
+                let top = imgInfo[i].viewTop + "%";
+                // console.log(window.config);
+                if(imgInfo[i].user == window.config.ID&&this.data.view){
+                    html += `<div class='deloldimg noprint'  data-imgid=${imgInfo[i].id} style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px ">
+                            <img style="max-height:150px;width:100%" src='/download_attachment/?file_id=${imgInfo[i].file_id}&download=0'/>
+                                <i class='J_del'>X</i>
+                         </div>`;
+                    html += `<img class="printS printimg" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px "  src='/download_attachment/?file_id=${imgInfo[i].file_id}&download=0'/>`;
+                }else {
+                    html += `<img class="oldImg noprint" src="/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
+                    html += `<img class="printimg printS" src="/download_attachment/?file_id=${imgInfo[i].file_id}&download=0" style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px " />`;
+                }
             }
             this.el.find(".form-print-position").append(html);
         },
@@ -96,6 +119,59 @@ let config = {
                 this.formTrans = true;
             }
             this.el.find(".place-form").toggle();
+        },
+        /**
+         * @method 自定义页眉
+         */
+        async printSetting(){
+            let res = await FormService.getPrintSetting()
+            // if(res.succ == 1){
+            SettingPrint.data['key'] = this.data.key;
+            if (res.data && res.data.length && res.data.length != 0) {
+                SettingPrint.data['printTitles'] = res['data'];
+                SettingPrint.data['myContent'] = res['data'][0]['content'] || '';
+                SettingPrint.data['selectNum'] = parseInt(res['data']['index']) || 1;
+            }
+            PMAPI.openDialogByComponent(SettingPrint, {
+                width: 400,
+                height: 210,
+                title: '自定义页眉',
+                modal: true
+            })
+        },
+        /**
+         * 附件查看
+         */
+        newfj() {
+            let filename = /\.(png|PNG|gif|GIF|JPG|jpg|jpeg|JPEG)$/;
+            let filem = /\.(mp4)$/;
+            let node_attachments = this.data.attachment;
+            for (let i in node_attachments) {
+                node_attachments[i].file_id = node_attachments[i].attachment_id;
+                node_attachments[i].file_name = node_attachments[i].name;
+                if (filename.test(node_attachments[i].file_name)) {
+                    node_attachments[i].isImg = true;
+                    node_attachments[i].isPreview = true;
+                } else {
+                    node_attachments[i].isImg = false;
+                    node_attachments[i].isPreview = false;
+                }
+                // node_attachments[i].dinput_type=9;
+                if (filem.test(node_attachments[i].file_name)) {
+                    node_attachments[i].isImg = false;
+                    node_attachments[i].isPreview = true;
+                    node_attachments[i].dinput_type = 9;
+                }
+            }
+            Attachment.data['list'] = node_attachments;
+            Attachment.data['is_view'] = 1;
+            PMAPI.openDialogByComponent(Attachment, {
+                width: 600,
+                height: 400,
+                title: '附件查看',
+
+                modal: true
+            })
         }
     },
     binds:[
@@ -109,8 +185,19 @@ let config = {
     ],
     afterRender: function() {
         // this.showLoading();
+        let serchStr = location.search.slice(1),obj={};
+        serchStr.split('&').forEach(res => {
+            let arr = res.split('=');
+            obj[arr[0]] = arr[1];
+        });
+        if(obj.key && location.pathname != "/wf/approval/"){
+            this.el.find('#printBtn').show();
+        }
+        this.data.key=obj.key;
+        this.data.view = obj.btnType == 'edit'? 1 : 0;
         let __this=this;
         this.formTrans = false;
+        this.data.delsign=[];
         this.el.on("mouseenter",".imgseal",function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","block");
@@ -118,11 +205,34 @@ let config = {
         this.el.on("mouseleave",'.imgseal',function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","none");
-
+        })
+        this.el.on("mouseenter",".deloldimg",function(e){
+            let ev = $(this).find('.J_del');
+            ev.css("display","block");
+        }),
+        this.el.on("mouseleave",'.deloldimg',function(e){
+            let ev = $(this).find('.J_del');
+            ev.css("display","none");
         })
         this.el.on("click",'.J_del',(e)=>{
             this.actions.delimg(e);
         })
+        this.el.on('click','#newfj',()=>{
+            this.actions.newfj();
+        });
+        this.el.on('click','#printBtn', () => {
+            this.actions.printSetting();
+        })
+        Mediator.subscribe('workFlow:record_info',(res)=>{
+            if(res.attachment.length){
+                this.data.attachment = res.attachment;
+                this.el.find('.newfj').show();
+            }else{
+                this.data.attachment = [];
+                this.el.find('.newfj').hide();
+
+            }
+        });
         Mediator.subscribe('workflow:getFormTrans',(e)=>{
             if(!e){
                if(this.formTrans) {
@@ -140,7 +250,11 @@ let config = {
             this.actions.showImg();
         });
         Mediator.subscribe("workflow:appPass",(e)=>{
-            Mediator.publish('workflow:sendImgInfo',this.actions.collectImg());
+
+            let arr = [];
+            arr.push(JSON.stringify(this.actions.collectImg()));
+            arr.push(JSON.stringify(this.data.delsign));
+            Mediator.publish('workflow:sendImgInfo',arr);
         });
         //获取表名，通过form传给我们表名
         Mediator.subscribe("workflow:getWorkflowTitle",res=>{
@@ -157,9 +271,13 @@ let config = {
 }
 
 class WorkFlowForm extends Component {
-    constructor(data){
-        config.data = data;
-        super(config);
+    // constructor(data){
+    //     config.data = data;
+    //     super(config);
+    // }
+
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

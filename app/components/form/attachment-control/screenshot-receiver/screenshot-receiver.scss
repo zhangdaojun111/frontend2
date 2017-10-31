@@ -1,8 +1,6 @@
 .screenshot {
-    // max-width: 500px;
     min-height: 250px;
     background: white;
-    border: 1px solid #ccc;
 }
 .paste-tip {
     height: 40px;
@@ -15,20 +13,20 @@
     bottom: 0;
     margin: auto;
     text-align: center;
-    padding: 110px 0;
+    padding: 245px 0;
 }
 .screenshot-image {
-    //height: 100%;
-    //width: 100%;
     height: auto;
     width: auto;
-    min-width: 490px;
+    min-width: 500px;
 }
 .btn-save-rechoose {
-    float: right;
-    margin: 5px 0;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 10px 10px;
     .comfirm-n-save, .cancel-to-rechoose{
-        width: 91px;
+        width: 90px;
         height: 30px;
         background: inherit;
         background-color: #08f;
@@ -42,7 +40,7 @@
         color: #fff;
         cursor: pointer;
     }
-    .cancel-to-rechoose{
-        width: 96px;
+    .comfirm-n-save {
+        margin-right: 10px;
     }
 }

@@ -26,6 +26,11 @@
         &.edit {
             display: none;
         }
+
+        &.highlight{
+            border-bottom: 1px solid rgb(204,204,204);
+            background-image: url("../../../assets/images/framework/highlight-search.png");
+        }
     }
 
     &.mini {
@@ -46,11 +51,13 @@
             display: none;
         }
         .menu-full {
-            overflow-y: visible;
-            overflow-x: visible;
+            direction: rtl;
             .root {
+                overflow-x:hidden;
+                overflow-y:auto;
+                direction: ltr;
                 li {
-                    position: relative;
+                    position: static;
                     z-index: 100;
                 }
                 > li > .menu-full-item {
@@ -73,7 +80,7 @@
                     }
                 }
                 .childlist {
-                    position: absolute;
+                    position: fixed;
                     background-color: #f5f5f5;
                     left: 100%;
 

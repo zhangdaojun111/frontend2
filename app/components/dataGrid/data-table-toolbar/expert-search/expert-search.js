@@ -24,10 +24,12 @@ let config = {
     radioId: 0,
     id: null,
     name:'',
+    autoSearch: false,
     isEdit: false,
     itemChecked:false,
     itemDeleteChecked:false,
     optionHtmlOne : `<option value="$regex">包含</option>
+                    <option value="nor">不包含</option>
                     <option value="exact">等于</option>
                     <option value="$ne">不等于</option>`,
     optionHtmlTwo : `<option value="$regex">包含</option>
@@ -75,7 +77,7 @@ let config = {
             $(dom).appendTo(this.el.find('.condition-search-container'));
             // this.append(epCondition, this.el.find('.condition-search-container'));
             this.data.searchInputAry.push(epCondition.data);
-            this.el.find('.condition-search-item').css({'paddingLeft':'84px','borderTop':'1px solid #e4e4e4'});
+            this.el.find('.condition-search-item').css({'paddingLeft':'83px','borderTop':'1px solid #e4e4e4'});
             this.el.find('.condition-search-select.radio').css('display','none');
             this.el.find('.condition-search-delete').css('visibility','hidden');
             this.el.find('.left-choice').addClass('active');
@@ -122,12 +124,22 @@ let config = {
 
                 //由于选择一个常用查询后 改变其查询值 new一个组件时push到数组的值是不会发生变化的
 
-                if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'number') {
+                if(this.el.find('.result').eq(i).attr('search-type') == 'number') {
                     obj['cond']['keyword'] = Number(this.el.find('.condition-search-value').find('input').eq(i).val());
-                } else if(this.el.find('.condition-search-box-input').eq(i).attr('title') == 'date') {
+                    obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
+                } else if(this.el.find('.result').eq(i).attr('search-type') == 'date') {
                     obj['cond']['keyword'] = $.trim(this.el.find('.condition-search-value').find('input').eq(i).val());
+                    obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
                 } else {
-                    obj['cond']['keyword'] = this.el.find('.condition-search-value').find('input').eq(i).val();
+                    if(this.el.find('.condition-search-select.relation').eq(i).val() == 'nor') {
+                        let keyword = this.el.find('.condition-search-value').find('input').eq(i).val();
+                        obj['cond']['operate'] = '$regex';
+                        obj['cond']['keyword'] = `^((?!${keyword}).)*$`;
+                    }
+                    else {
+                        obj['cond']['keyword'] = this.el.find('.condition-search-value').find('input').eq(i).val();
+                        obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
+                    }
                 }
                 if(this.el.find('.condition-search-choice.left-choice').eq(i).hasClass('active')){
                     obj['cond']['leftBracket'] = '('
@@ -139,14 +151,11 @@ let config = {
                 } else {
                     obj['cond']['rightBracket'] = '0'
                 }
-                obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
-                obj['cond']['searchBy'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
-                obj['cond']['searchByName'] = this.el.find('.condition-search-box-input').eq(i).val();
-                obj['cond']['searchByNew'] = this.el.find('.condition-search-box-input').eq(i).attr('name');
+                // obj['cond']['operate'] = this.el.find('.condition-search-select.relation').eq(i).val()
+                obj['cond']['searchBy'] = this.el.find('.result').eq(i).attr('name');
+                obj['cond']['searchByName'] = this.el.find('.result').eq(i).val();
+                obj['cond']['searchByNew'] = this.el.find('.result').eq(i).attr('name');
                 obj['relation'] = this.el.find('.condition-search-select.radio').eq(i).val()
-                // if(this.el.find('.condition-search-radio.or').eq(i).prop('checked') == true) {
-                //     obj['relation'] = '$or';
-                // }
                 this.data.searchInputList.push(obj);
             }
             this.actions.checkedSubmitData(name)
@@ -157,11 +166,15 @@ let config = {
             this.el.find('.condition-search-container').find('div').remove();
             this.actions.rendSearchItem();
             for(let i = 0; i<searchData.length-1; i++) {
-                this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
+                let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
+                let dom = document.createElement('div');
+                dom.className = 'condition-search-choice';
+                this.append(epCondition, $(dom));
+                $(dom).appendTo(this.el.find('.condition-search-container'));
             }
             for(let j = 0;j<searchData.length;j++) {
                 let html = this.actions.checkedRelationType(searchData[j]['cond']['searchByName']);
-                this.actions.checkedInputType(searchData[j]['cond']['searchByName'],searchData[j]['cond']['keyword'],j)
+                this.actions.checkedInputType(searchData[j]['cond']['searchByName'],searchData[j]['cond']['keyword'],j,html,searchData[j]['cond']['operate'])
                 if(searchData[j]['cond']['leftBracket'] == '(') {
                     this.el.find('.condition-search-choice.left-choice').eq(j).addClass('active')
                 } else {
@@ -172,17 +185,13 @@ let config = {
                 } else {
                     this.el.find('.condition-search-choice.right-choice').eq(j).removeClass('active')
                 }
-                this.el.find('.condition-search-select.relation').eq(j).html(html)
-                // this.el.find('.condition-search-input').eq(j).val(searchData[j]['cond']['keyword']);
-                this.el.find('.condition-search-select.relation').eq(j).val(searchData[j]['cond']['operate']);
-                this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchBy']);
-                this.el.find('.condition-search-box-input').eq(j).val(searchData[j]['cond']['searchByName']);
-                this.el.find('.condition-search-box-input').eq(j).attr('name',searchData[j]['cond']['searchByNew']);
+                // this.el.find('.condition-search-select.relation').eq(j).html(html)
+                // this.el.find('.condition-search-select.relation').eq(j).val(searchData[j]['cond']['operate']);
+                this.el.find('.result').eq(j).attr('name',searchData[j]['cond']['searchBy']);
+                this.el.find('.result').eq(j).val(searchData[j]['cond']['searchByName']);
+                this.el.find('.result').eq(j).attr('name',searchData[j]['cond']['searchByNew']);
                 this.el.find('.condition-search-select.radio').eq(j).val(searchData[j]['relation']);
-                // if(searchData[j]['relation'] == "$or") {
-                //     this.el.find('.condition-search-radio.or').eq(j).prop('checked',true);
-                //     this.el.find('.condition-search-radio.and').eq(j).prop('checked',false);
-                // }
+
             }
         },
         //加载不同查询条件的查询关系
@@ -201,36 +210,60 @@ let config = {
             return htmlStr;
         },
         //加载不同查询条件的输入框类型
-        checkedInputType: function(type, value, index){
+        checkedInputType: function(type, value, index, html, relation){
             this.data.fieldsData.forEach((item)=> {
                 if(item.name == type) {
                     switch (item.searchType) {
                         case "datetime":
+                            this.el.find('.result').eq(index).attr('search-type','datetime');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateTimeControl = new DateTimeControl({value: value},{changeValue:function(data){}});
                             dateTimeControl.render(this.el.find('.condition-search-value').eq(index));
+                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                         case "date":
+                            this.el.find('.result').eq(index).attr('search-type','date');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateControl = new DateControl({value: value},{changeValue:function(data){}});
                             dateControl.render(this.el.find('.condition-search-value').eq(index));
+                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                         case "time":
+                            this.el.find('.result').eq(index).attr('search-type','time');
                             this.el.find('.condition-search-input').eq(index).remove();
                             let timeControl = new TimeControl({value: value},{changeValue:function(data){}});
                             timeControl.render(this.el.find('.condition-search-value').eq(index));
+                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                         case "text":
+                            let str = /\^\(\(\?!/;
                             this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="text">`);
-                            this.el.find('.condition-search-input').eq(index).val(value);
+                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            if(str.test(value)){
+                                let length = value.length - 5;
+                                let newValue = value.substring(5,length);
+                                this.el.find('.condition-search-value').eq(index).find('.condition-search-input').val(newValue);
+                                this.el.find('.condition-search-select.relation').eq(index).val('nor');
+                            } else {
+                                this.el.find('.condition-search-select.relation').eq(index).val(relation);
+                                this.el.find('.condition-search-value').eq(index).find('.condition-search-input').val(value);
+                            }
                             break;
                         case "number":
+                            this.el.find('.result').eq(index).attr('search-type','number');
                             this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="number">`);
                             this.el.find('.condition-search-input').eq(index).val(value);
+                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                         case "person":
                             this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="text">`);
-                            this.el.find('.condition-search-input').eq(index).val(value);
+                            this.el.find('.condition-search-value').eq(index).find('.condition-search-input').val(value);
+                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                     }
                 }
@@ -243,19 +276,19 @@ let config = {
                 rightBracketNum = 0;
             try {
                 this.data.searchInputList.forEach((item) => {
-                    if (item['cond']['keyword'] == '') {
+                    if (item['cond']['keyword'] === '') {
                         msgBox.alert('查询值不能为空！');
                         checkedPost = false;
                         foreach.break=new Error("StopIteration");
-                    } else if (item['cond']['searchByName'] == '') {
+                    } else if (item['cond']['searchByName'] === '') {
                         msgBox.alert('查询条件不能为空！');
                         checkedPost = false;
                         foreach.break=new Error("StopIteration");
                     }
-                    if (item['cond']['leftBracket'] == '(') {
+                    if (item['cond']['leftBracket'] === '(') {
                         leftBracketNum++;
                     }
-                    if (item['cond']['rightBracket'] == ')') {
+                    if (item['cond']['rightBracket'] === ')') {
                         rightBracketNum++;
                     }
                 })
@@ -272,12 +305,14 @@ let config = {
                         // this.data.saveTemporaryCommonQuery(this.data.searchInputList);
                         let searchId = '临时高级查询',searchName = '临时高级查询',appendChecked = true;
                         this.data.commonQuery.forEach((item) => {
-                            if(item.id == this.id) {
+                            if(item.id == this.id &&
+                                JSON.parse(item.queryParams)[0]['cond']['keyword'] == this.data.searchInputList[0]['cond']['keyword'] &&
+                                JSON.parse(item.queryParams).length == this.data.searchInputList.length) {
                                 searchId = item.id;
                                 searchName = item.name;
                                 appendChecked = false;
                             }
-                        })
+                        });
                         PMAPI.closeIframeDialog(window.config.key, {
                             type:'temporaryQuery',
                             appendChecked:appendChecked,
@@ -430,16 +465,31 @@ let config = {
         // },
         // 接受父组件传数据过来后
         afterGetMsg:function() {
-            if(this.data.commonQuery.length == 0){
-                this.el.find('.common-search-compile').css('display','none')
+            if (this.data.commonQuery.length == 0) {
+                this.el.find('.common-search-compile').css('display', 'none')
             } else {
-                this.data.commonQuery.forEach((item)=> {
+                this.data.commonQuery.forEach((item) => {
                     this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
                 })
             }
             this.actions.rendSearchItem();
             this.itemDeleteChecked = false;
             this.isEdit = false;
+            if(this.data.bi) {
+                this.el.find('.common-search').css('display', 'none');
+                this.el.find('.save-button').css('display', 'none');
+                this.el.find('.save-img').css('display', 'none');
+                if(this.data.commonQuery.length != 0){
+                    this.name = this.data.commonQuery[0].name;
+                    this.id = this.data.commonQuery[0].id;
+                    this.itemChecked = true;
+                    this.data.searchInputList = JSON.parse(this.data.commonQuery[0]['queryParams']);
+                    this.actions.showSearchData(JSON.parse(this.data.commonQuery[0]['queryParams']));
+                    if (this.itemDeleteChecked) {
+                        this.isEdit = true;
+                    }
+                }
+            }
             let _this = this;
             this.el.on('click','.condition-search-add',function() {
                 // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
@@ -517,11 +567,8 @@ let config = {
 
 }
 class expertSearch extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-        }
-        super(config)
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 export default expertSearch

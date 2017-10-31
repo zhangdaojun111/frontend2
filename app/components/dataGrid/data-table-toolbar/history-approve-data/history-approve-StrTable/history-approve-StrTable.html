@@ -1,21 +1,24 @@
-   {{#trigger_work_records}}
-    <div class="history-table-part">
-        <p class="history-table-time">
-            <span class="img icon-aggrid-select"></span>
-            <span>触发历史</span>
-        </p>
-        </table>
-        <div class="history-table">
-            <div class="history-table-header strike">
-                <span class="user">触发人</span>
-                <span class="time">触发时间</span>
-                <span class="work">触发的工作流</span>
-            </div>
-            <div class="history-table-body strike">
-
+<div class="history-table-part">
+    <p class="history-table-title" title="false">
+        <span class="img icon-aggrid-select"></span>
+        <span>{{time}}</span>
+        <span class="editName">修改人:{{user}}</span>
+    </p>
+    </table>
+    <div class="history-table">
+        <div class="history-table-header strike">
+            <span class="user">触发人</span>
+            <span class="time">触发时间</span>
+            <span class="work">触发的工作流</span>
+        </div>
+        <div class="history-table-body strike">
+            <div class="history-table-item">
+                <span class="user">{{user}}</span>
+                <span class="time">{{time}}</span>
+                <span class="work">{{work}}</span>
             </div>
         </div>
     </div>
-    {{/trigger_work_records}}
+</div>
 
 

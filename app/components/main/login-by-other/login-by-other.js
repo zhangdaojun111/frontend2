@@ -31,7 +31,11 @@ let config = {
                     this.data.userData = result.rows;
                     for (let row of this.data.userData){
                         if(row.name && row.name.trim() !== '' && row.id && row.id.trim() !== ''){
-                            row.py = row.f7_p.join(',');
+                            if( row.f7_p ){
+                                row.py = row.f7_p.join(',');
+                            }else {
+                                row.py = ''
+                            }
                             tempData.push(row);
                         }
                     }
@@ -108,8 +112,8 @@ let config = {
 };
 
 class LoginOther extends Component{
-    constructor(){
-        super(config);
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
 

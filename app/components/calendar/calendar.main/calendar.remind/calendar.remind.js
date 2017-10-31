@@ -3,8 +3,10 @@
  */
 import Component from "../../../../lib/component";
 import template from './calendar.remind.html';
-//import './calendar.remind.scss';
+import './calendar.remind.scss';
+import {PMAPI} from '../../../../lib/postmsg';
 
+/*
 let css = `
 .remind-wrap {
     width: calc(100% - 60px);
@@ -31,6 +33,8 @@ let css = `
     width: 96%;
     padding: 0px 5px;
     height: 30px;
+    overflow:hidden;
+    text-overflow:ellipsis
 }
 .start, .end {
     width: 46.7%;
@@ -41,8 +45,9 @@ let css = `
     margin: 5px 5px 5px 0px;
 }
 `
+*/
 
-let CalendarRemind = {
+let config = {
     template: template,
     data: {
         remindTable: '',
@@ -53,7 +58,7 @@ let CalendarRemind = {
         remindRealId: '',
         remindDate: '',
         remindTime: '',
-        css: css.replace(/(\n)/g, '')
+        // css: css.replace(/(\n)/g, '')
     },
     actions: {
 
@@ -64,7 +69,7 @@ let CalendarRemind = {
             selector:'.open-form',
             callback:function () {
                 PMAPI.openDialogByIframe(
-                    `/calendar_mgr/create/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
+                    `/iframe/calendarOpenForm/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
                     {
                         width: "1700",
                         height: '800',
@@ -74,7 +79,8 @@ let CalendarRemind = {
         }
     ],
     afterRender: function() {
-        this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
+        console.log(this.data.remindDetail)
+        // this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         // this.el.on('click', '.open-form', () => {
         //     PMAPI.openDialogByIframe(
         //         `/calendar_mgr/create/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
@@ -86,8 +92,22 @@ let CalendarRemind = {
         // })
     },
     beforeDestory: function () {
-        this.data.style.remove();
+        // this.data.style.remove();
     }
 };
 
+class CalendarRemind extends Component {
+    constructor(data, newconfig = {}) {
+        console.log(data);
+        config.data.remindTable = data.remindTable;
+        config.data.remindDateProp = data.remindDateProp;
+        config.data.remindDetail = data.remindDetail;
+        config.data.remindDateTime = data.remindDateTime;
+        config.data.remindTableId = data.remindTableId;
+        config.data.remindDate = data.remindDate;
+        config.data.remindTime = data.remindTime;
+        config.data.remindRealId = data.remindRealId;
+        super( $.extend(true ,{}, config, newconfig));
+    }
+}
 export default CalendarRemind;

@@ -16,9 +16,10 @@
                         <div class="root J_root"><i class="workflow-icon-box workflow-icon-file"></i>{{this.label}}</div>
                         <div class="child-list">
                             {{#each this.children}}
-                            <div class="child-item J_child-item" data-id="{{this.id}}" data-formId="{{this.form_id}}" data-tableId="{{this.table_id}}">
+                            <div class="child-item" data-id="{{this.id}}" data-formId="{{this.form_id}}" data-tableId="{{this.table_id}}">
                                 <i class="workflow-icon-box workflow-icon-twofile"></i>
-                                {{this.label}}
+                                <!--{{this.label}}-->
+                                <span title="{{this.label}}" class="name-label J_child-item" data-id="{{this.id}}" data-formId="{{this.form_id}}" data-tableId="{{this.table_id}}">{{this.label}}<span>
                             </div>
                             {{/each}}
                         </div>

@@ -1,0 +1,59 @@
+@media screen and (max-width: 960px) {
+    body {
+        .views-header {
+            height: 44px !important;
+            -webkit-overflow-scrolling: touch;
+            overflow:scroll;
+            > div {
+                line-height: 44px !important;
+            }
+            .nav-tabs {
+                width: 100%;
+                height: 44px;
+                overflow-x: auto !important;
+                font-size: 1.4em;
+                .icon-chart {
+                    display: none;
+                }
+                a {
+                    line-height: 44px;
+                }
+                &::-webkit-scrollbar {
+                    height: 0;
+                }
+            }
+            .views-header-right {
+                display: none;
+            }
+        }
+        .cells-container {
+            height: calc(100% - 45px) !important;
+            -webkit-overflow-scrolling: touch;
+            overflow:scroll;
+            &::-webkit-scrollbar {
+                width: 0;
+            }
+            .cells {
+                > .cell {
+                    display: none;
+                }
+                .cell {
+                    position: static !important;
+                    max-width: 100%;
+                    margin-top: 1%;
+                    .bread-crumb-nav {
+                        .original-data-btn {
+                            display: none;
+                        }
+                    }
+                    .cell-chart {
+                        padding: 0;
+                        .chart-normal-date-zoom {
+                            display: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

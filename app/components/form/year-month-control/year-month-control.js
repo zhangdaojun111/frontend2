@@ -88,10 +88,18 @@ let config={
         if(this.data.value != ''){
             yearData['choosed'][0] = {name:this.data.value.split('-')[0],id:this.data.value.split('-')[0]};
             monthData['choosed'][0] = {name:this.data.value.split('-')[1],id:this.data.value.split('-')[1]};
+            if (this.data.is_view) {
+                this.el.find('.year').attr('title', yearData['choosed'][0].name);
+                this.el.find('.month').attr('title', monthData['choosed'][0].name)
+            }
+
         }
         else{
-            // yearData['choosed'][0] = {name:myYear,id:myYear};
-            // monthData['choosed'][0] = {name:myDate.getMonth() + 1,id:myDate.getMonth() + 1};
+             yearData['choosed'][0] = {name:myYear,id:myYear};
+             monthData['choosed'][0] = {name:myDate.getMonth() + 1,id:myDate.getMonth() + 1};
+             let val = myYear+'-'+(myDate.getMonth() + 1);
+             _this.data.value = val;
+             _.debounce(function(){_this.events.changeValue(_this.data)},200)();
         }
         this.destroyChildren();
         this.append(new AutoSelect(yearData),this.el.find('.year'));
@@ -103,7 +111,7 @@ let config={
     }
 }
 export default class YearMonthControl extends Component{
-    constructor(data,events){
-        super(config,data,events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

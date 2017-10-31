@@ -9,12 +9,12 @@ import {componentsJson} from './loadFormChart.json';
 
 // 将对象转化为数组
 let components = [];
-Object.keys(componentsJson).map(key => {components.push(componentsJson[key])})
+Object.keys(componentsJson).map(key => {components.push(componentsJson[key])});
 
 let config = {
     template: template,
     data: {
-        components:components
+        components:components,
     },
     actions: {},
     afterRender() {},
@@ -22,7 +22,7 @@ let config = {
 };
 
 export class FormEntryComponent extends BiBaseComponent {
-    constructor() {
-        super(config)
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig))
     }
 }

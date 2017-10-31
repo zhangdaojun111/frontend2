@@ -70,34 +70,62 @@
         .data-invalid {
 
         }
-
         @keyframes freshTip {
             0% {
-                color: rgb(20,138,252);
+                color: #0088ff;
             }
             16% {
                 color: #fff;
             }
             33% {
-                color: rgb(20,138,252);
+                color: #0088ff;
             }
             49% {
                 color: #fff;
             }
             66% {
-                color: rgb(20,138,252);
+                color: #0088ff;
             }
             82% {
                 color: #fff;
             }
             100% {
-                color: rgb(20,138,252);
+                color: #0088ff;
             }
         }
         .freshtip {
             font-weight: normal;
             margin-left: 10px;
             animation: freshTip 4s;
+            animation-fill-mode: forwards;
+        }
+        @keyframes unfreshTip {
+            0% {
+                color: #ff5400;
+            }
+            16% {
+                color: #fff;
+            }
+            33% {
+                color: #ff5400;
+            }
+            49% {
+                color: #fff;
+            }
+            66% {
+                color: #ff5400;
+            }
+            82% {
+                color: #fff;
+            }
+            100% {
+                color: #ff5400;
+            }
+        }
+        .unfreshtip {
+            font-weight: normal;
+            margin-left: 10px;
+            animation: unfreshTip 4s;
             animation-fill-mode: forwards;
         }
     }

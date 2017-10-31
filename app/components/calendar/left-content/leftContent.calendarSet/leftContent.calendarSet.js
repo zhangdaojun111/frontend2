@@ -133,7 +133,7 @@ let config = {
             });
             if (isAllGroupChecked && this.el.find('.label-select-all-show').length > 0) {
                 this.el.find(".checkbox_a3").addClass('label-select-all-checked');
-            }else if (this.el.find('.label-select-all-show').length === 0) {
+            } else if (this.el.find('.label-select-all-show').length === 0) {
                 this.el.find(".checkbox_a3").removeClass('label-select-all-checked');
             }
         },
@@ -159,7 +159,7 @@ let config = {
                 this.data.hide_table = {'tableName': "", 'table_Id': ''};
             }
             this.data.calendarTreeData.rows.forEach((data) => {
-                if(!this.data.hide_item_table.includes(data.table_id)){
+                if (!this.data.hide_item_table.includes(data.table_id)) {
                     this.append(new LeftContentSelect(data, this.data.calendarTreeData.cancel_fields, this.data.hide_item_table, this.data.rows,
                         this.events.checkBoxCheck), this.el.find('.remind-group'));
                 }
@@ -194,7 +194,7 @@ let config = {
          *从隐藏栏中显示日历树
          */
         showRemindType: function (data) {
-            if(this.el.find(".label-select-all-show").length === 0){
+            if (this.el.find(".label-select-all-show").length === 0) {
                 this.el.find(".checkbox_a3").addClass('label-select-all-checked');
             }
             for (let i = 0; i < this.data.hide_tables.length; i++) {
@@ -257,9 +257,9 @@ let config = {
 };
 
 class LeftcontentCalendarset extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data.calendarTreeData = data;
-        super(config);
+        super(config,$.extend(true,{},config,newConfig));
     }
 }
 

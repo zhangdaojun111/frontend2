@@ -40,23 +40,29 @@ let config = {
         selectItem: function (item) {
             if (this.data.multiSelect === true) {
                 let choosed = this.el.find('input:checked');
+                let tempStr = [];
                 choosed = Array.from(choosed).map((item) => {
                     let $item = $(item);
+                    tempStr.push($item.data('name').replace(/\'/g, ''));
                     return {
                         id: $item.data('id').replace(/\'/g, ''),
                         name: $item.data('name').replace(/\'/g, ''),
                     }
                 });
                 this.data.choosed = choosed;
+                tempStr = tempStr.join(',');
+                this.el.find('.result').attr('title',tempStr);
             } else {
                 if (item.find('input:checkbox')[0].checked) {
                     this.data.choosed = [{
                         id: item.data('id').replace(/\'/g, ''),
                         name: item.data('name').replace(/\'/g, ''),
                     }];
+                    this.el.find('.result').attr('title',item.data('name').replace(/\'/g, ''));
                     this.actions.hideSelectBox();
                 } else {
                     this.data.choosed = [];
+                    this.el.find('.result').removeAttr('title');
                 }
             }
             this.actions.renderChoosed();
@@ -125,6 +131,7 @@ let config = {
                 this.listWrap.hide();
                 this.data.isSelectBoxDisplayed = false;
                 this.actions.stopListenKeyboard();
+                this.el.find('.result').blur();
             }
         },
         /**
@@ -269,6 +276,18 @@ let config = {
         resetAutoSelect:function () {
             this.el.find('.auto-select-text').val('');
             this.el.find('ul li').addClass('match-visible').show();
+        },
+        delayHideComp:function () {
+            console.log(this.data.mouseActive);
+            if(this.data.mouseActive === true){
+                let that = this;
+                this.data.timer = window.setTimeout(function () {
+                    that.actions.hideSelectBox();
+                },500)
+            }
+        },
+        removeHideComp:function () {
+            window.clearTimeout(this.data.timer);
         }
     },
     binds:[
@@ -311,9 +330,14 @@ let config = {
             event: 'mouseleave.visible',
             selector: '.auto-select-component',
             callback: function () {
-                if(this.data.mouseActive === true) {
-                    this.actions.hideSelectBox();
-                }
+               this.actions.delayHideComp();
+            }
+        },
+        {
+            event: 'mouseenter',
+            selector: '.auto-select-component',
+            callback: function () {
+               this.actions.removeHideComp();
             }
         },
         {
@@ -367,14 +391,12 @@ let config = {
             this.cancelEvents();
         }
     }
-}
+};
 
 class AutoSelect extends Component {
-
     constructor(data, events) {
         super(config, data, events);
     }
-
 }
 
 export {AutoSelect}

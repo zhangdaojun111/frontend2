@@ -78,7 +78,7 @@ let config = {
          */
         updateY(data) {
             this.data.ySource = data;
-            Object.keys(this.data.yAxis).forEach(key => {
+            Object.keys(this.data.yAxis).forEach((key,index) => {
                 this.data.yAxis[key].field.setList(data);
             });
             this.trigger('onUpdate')
@@ -117,8 +117,8 @@ let config = {
 }
 
 class YaXis extends Base {
-    constructor(data, event) {
-        super(config, data, event)
+    constructor(data, event,extendConfig) {
+        super($.extend(true,{},config,extendConfig), data, event)
     }
 
     /**
@@ -141,6 +141,8 @@ class YaXis extends Base {
      * @param yAxis = y轴数据
      */
     setValue(yAxis) {
+        if (yAxis.length === 0) return false;
+
         Object.keys(this.data.yAxis).forEach(key => {
             this.data.yAxis[key].destroySelf()
             delete this.data.yAxis[key];

@@ -111,6 +111,7 @@ let config = {
 
         //查看模式/编辑模式
         if (this.data.is_view) {
+            this.el.find('.ui-width').attr('title', this.data.value)
             this.el.find('.ui-width').attr('disabled', true);
             this.el.find('.input-img').css('pointer-events', 'none');
         } else {
@@ -150,11 +151,21 @@ let config = {
         }
 
         this.el.on("click", '.timeInput', function () {
-            time.css({'display': 'block','position':'absolute'});
+            if(_this.data.isAgGrid){
+                time.css({'position': 'fixed','display':'block'});
+            }else{
+                time.css({'display': 'block','position':'absolute'});
+            }
             if (_this.data.value) {
                 timeInput.val(_this.data.value);
             } else {
                 timeInput.val(now);
+                if(!_this.data.isAgGrid){
+                    _this.data.value = now;
+                    _.debounce(function () {
+                        _this.events.changeValue(_this.data)
+                    }, 200)();
+                }
             }
         })
         this.el.on("click", '.plus', function () {
@@ -228,7 +239,7 @@ let config = {
     }
 }
 export default class TimeControl extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

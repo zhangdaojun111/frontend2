@@ -61,7 +61,7 @@ let config = {
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '级联详情', width: 100,field:'cache_detail',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none' , 'cache_detail', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellRenderer:(param)=>{
-                    return '<div style="text-align: center;color:#0E7AEF;">详情</div>'
+                    return '<div style="text-align: center;color:#2298f4;cursor: pointer">详情</div>'
                 },cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '本表结果', width: 100,field:'result_type',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none', 'result_type', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellRenderer:(param)=>{
@@ -74,7 +74,7 @@ let config = {
                 },cellStyle:{'font-style': 'normal','text-align':'center'}},
                 {headerName: '本表详情', width: 100,field:'operation',floatingFilterComponent: this.floatingFilterCom.actions.createFilter('none' , 'operation', this.data.searchValue, this.data.searchOldValue),
                     floatingFilterComponentParams: {suppressFilterButton: true}, suppressSorting: true,suppressMenu: true,cellRenderer:()=>{
-                    return '<div style="text-align: center;color:#0E7AEF;">详情</div>'
+                    return '<div style="text-align: center;color:#2298f4;">详情</div>'
                 },cellStyle:{'font-style': 'normal','text-align':'center'}}
             ];
             this.data.columnDefs = columnData;
@@ -89,6 +89,7 @@ let config = {
             let gridData = {
                 columnDefs: this.data.columnDefs,
                 rowData: this.data.rowData,
+                noFooter: true,
                 floatingFilter: true,
                 onColumnResized: this.actions.onColumnResized,
                 onSortChanged: this.actions.onSortChanged,
@@ -130,7 +131,8 @@ let config = {
                 this.data.rowData = res[0].rows;
                 this.data.total = res[0].history_num;
                 let obj = {
-                    rowData: this.data.rowData
+                    rowData: this.data.rowData,
+                    noFooter: true,
                 }
                 this.agGrid.actions.setGridData( obj );
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
@@ -270,11 +272,8 @@ let config = {
 }
 
 class myOperation extends Component {
-    constructor(data) {
-        for( let d in data ){
-            config.data[d] = data[d];
-        }
-        super(config);
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

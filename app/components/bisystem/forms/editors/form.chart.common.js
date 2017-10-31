@@ -18,18 +18,23 @@ let chartName = {
     type: 'text',
     events: {}
 };
+let countColumn = {
+    label: '统计字段',
+    name: 'countColumn',
+    defaultValue: {},
+    type: 'radio',
+    list:[],
+    events: {}
+};
+
 let theme = {
     label: '选择颜色',
     name: 'theme',
     defaultValue: '',
-    type: 'radio',
-    list:[
-        {value:'blue', name:'蓝色'},
-        {value: 'green',name: '绿色'},
-        {value: 'grayBlue', name:'灰蓝色'}
-    ],
-    events: {}
+    type: 'theme',
+    list:[]
 };
+
 let icon = {
     label: '选择图标',
     name: 'icon',
@@ -44,4 +49,4 @@ let button = {
     class:'back-chart'
 };
 
-export {chartName, theme, icon,button};
+export {chartName,theme, icon,button,countColumn};

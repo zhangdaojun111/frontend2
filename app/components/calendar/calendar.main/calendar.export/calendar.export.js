@@ -56,8 +56,8 @@ let config = {
     },
 };
 class CalendarExport extends Component {
-    constructor() {
-        super(config);
+    constructor(newconfig = {}) {
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 export default CalendarExport;

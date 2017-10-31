@@ -25,6 +25,7 @@ let config={
         },300));
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
+            this.el.find('.ui-width').attr('title', this.data.value)
             this.el.find('.ui-width').attr('disabled',true);
         }else{
             this.el.find('.ui-width').attr('disabled',false);
@@ -45,8 +46,8 @@ let config={
     }
 }
 class TextAreaControl extends Component {
-    constructor(data,events){
-        super(config,data,events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 

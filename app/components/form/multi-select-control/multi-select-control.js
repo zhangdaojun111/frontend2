@@ -109,7 +109,7 @@ let config={
             if(this.data.sMuiltOption && this.data.sMuiltOption.length >0 &&[0]['label'] == '-'){
                 this.data.sMuiltOption[0]['value']='-';
             }
-            if(this.data.options[0]['label'] == '-'){
+            if(this.data.options[0] && this.data.options[0]['label'] && this.data.options[0]['label'] == '-'){
                 this.data.options[0]['value']='-';
             }
             let data1=_.defaultsDeep({},this.data);
@@ -186,6 +186,17 @@ let config={
         if(!this.data.is_view && this.data.can_add_item){
             this.el.find('.add-item').css('visibility','visible').addClass('icon-fl')
         }
+        if(this.data.is_view){
+            let arr = new Array();
+            for(let k1 in this.data.options) {
+                for(let k2 in this.data.value) {
+                    if(this.data.value[k2] == this.data.options[k1].value) {
+                        arr.push(this.data.options[k1].label);
+                    }
+                }
+                this.el.find('.form-control').attr('title',arr);
+            }
+        }
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }
@@ -227,7 +238,7 @@ let config={
 
                 this.setData('childSelect', {});
                 let el=this.el.find('#multi-select');
-                if(this.data.options[0]['label'] == '-'){
+                if(this.data.options[0] && this.data.options[0]['label'] && this.data.options[0]['label'] == '-'){
                     this.data.options[0]['value']='-';
                 }
                 if(this.data.isViewOptions && this.data.isViewOptions.length>0 && this.data.isViewOptions[0]['label'] == '-'){
@@ -256,6 +267,7 @@ let config={
                 this.data.childSelect=autoSelect;
                 this.append(autoSelect,el);
             }else {
+                console.log('这里?');
                 this.data.originalList = {};
                 for( let o of this.data['options'] ){
                     let str = o.label;
@@ -289,7 +301,7 @@ let config={
     }
 }
 export default class MultiSelectControl extends Component{
-    constructor(data,events){
-        super(config,data,events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

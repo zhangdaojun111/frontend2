@@ -60,7 +60,7 @@ let config = {
                 this.data.columnDefs = [
                     number,dgcService.selectCol,
                     {headerName: '操作',field: 'myOperate', width: 120,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                        return '<div style="text-align:center;"><a class="ui-link" id="departView" style="color:#337ab7;">查看</a> | <a class="ui-link" id="departModify" style="color:#337ab7;">编辑</a><div>';
+                        return '<div style="text-align:center;"><a class="ui-link" id="departView">查看</a> | <a class="ui-link" id="departModify">编辑</a><div>';
                     }},
                     { headerName: '部门', field: 'f5',cellRenderer: 'group',suppressMenu: true, tooltipField:'f5' }
                 ]
@@ -102,6 +102,7 @@ let config = {
                 let gridData = {
                     columnDefs: this.data.columnDefs,
                     rowData: this.data.rowData,
+                    noFooter: true,
                     footerData: this.data.footerData,
                     fieldsData: this.data.fieldsData,
                     onColumnResized: this.actions.onColumnResized,
@@ -227,7 +228,14 @@ let config = {
                         height: 360,
                         title: '导出数据'
                     }).then((data) => {
-
+                        let dom = `<div class='exports-tips'><span class="exports-tips-delete"></span><span class="title">导出成功</span></div>`;
+                        this.el.find('.btn-nav').append(dom);
+                        setTimeout(()=>{
+                            this.el.find('.exports-tips').css('display','none');
+                        },3000)
+                        this.el.find('.exports-tips-delete').on('click', ()=> {
+                            this.el.find('.exports-tips').css('display','none');
+                        })
                     });
                 } )
             }
@@ -442,11 +450,8 @@ let config = {
 }
 
 class department extends Component {
-    constructor(data) {
-        for( let d in data ){
-            config.data[d] = data[d];
-        }
-        super(config);
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

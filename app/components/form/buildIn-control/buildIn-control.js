@@ -43,6 +43,14 @@ let config={
         if(!this.data.is_view){
             this.el.find('.ui-selector').css('visibility','visible').addClass('icon-fl');
         }
+        if(this.data.is_view){
+            for(let k in this.data.options) {
+                if(this.data.value == this.data.options[k].value) {
+                    this.el.find('.dropdown').attr('title',this.data.options[k].label)
+                }
+            }
+        }
+
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }
@@ -70,7 +78,7 @@ let config={
     }
 }
 export default class BuildInControl extends Component{
-    constructor(data,events){
-        super(config,data,events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

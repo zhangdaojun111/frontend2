@@ -60,7 +60,7 @@ export class EchartsService {
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
         };
-        // console.log(cellOption);
+
         // 组合图采用new_name，下穿图采用name
         const nameType = (cellOption.chartAssignment && cellOption.chartAssignment.val) === 1 ? 'new_name' : 'name';
         const [legend, series] = [[], []];
@@ -75,7 +75,11 @@ export class EchartsService {
         let secondMaxTextYnum = [];
         let maxXnum = [];
         let maxYTextNum; // y轴数字toSting().length最大字数
+        let isStack = false; // 判断是否堆叠
+
         yAxis.forEach((y,i) => {
+           isStack = cellOption.yAxis[i] && cellOption.yAxis[i]['group'] ? true : false;
+
             legend.push(y[nameType]);
             if (nameType === 'new_name') {
                 if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
@@ -163,17 +167,26 @@ export class EchartsService {
                 };
             }
         };
-        let firstMax = ToolPlugin.fixMaxNumber(Math.max.apply(null, firstMaxYnum));
-        let firstMin = ToolPlugin.fixMinNumber(Math.min.apply(null, firstMinYnum));
-        let secondMax = ToolPlugin.fixMaxNumber(Math.max.apply(null, secondMaxYnum));
-        let secondMin = ToolPlugin.fixMinNumber(Math.min.apply(null, secondMinYnum));
+        let firstMax = Math.max.apply(null, firstMaxYnum);
+        let firstMin = Math.min.apply(null, firstMinYnum);
+        let secondMax = Math.max.apply(null, secondMaxYnum);
+        let secondMin = Math.min.apply(null, secondMinYnum);
         let firstMaxText = Math.max.apply(null, firstMaxTextYnum);
         let secondMaxText = Math.max.apply(null, secondMaxTextYnum);
         let maxXTextNum = Math.max.apply(null, maxXnum);
+        //如果数据里面有柱状图，则y轴起始点从0开始
+        let isZero = false;
+        for(let y of yAxis){
+            if(y.type.type == 'bar'&& !cellOption['yHorizontal']&& firstMin >= 0){
+                isZero = true;
+                break;
+            }
+        };
+        if (!isStack) {
+            linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
+        };
 
-
-        linebarOption['yAxis'][0]['min'] = firstMin;
-        linebarOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
+        linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
             if (10 * firstMaxText > 30) {
                 linebarOption['grid']['left'] = 10 * firstMaxText;
@@ -187,9 +200,10 @@ export class EchartsService {
             if (10 * secondMaxText > 30) {
                 linebarOption['grid']['right'] = 10 * secondMaxText;
             };
-
             const splitNumber = 5;
-            linebarOption['yAxis'][0]['max'] = firstMax;
+            if(!isStack) {
+                linebarOption['yAxis'][0]['max'] = firstMax;
+            };
             linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
@@ -197,7 +211,7 @@ export class EchartsService {
                 scale: true,
                 splitNumber: splitNumber,
                 max: secondMax,
-                min: secondMin,
+                min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
                 interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
                 axisLabel: {
                     inside: false
@@ -286,6 +300,28 @@ export class EchartsService {
                 }
             }
         };
+
+        //x轴为3日期,5日期时间,12年份,30年月类型字段时开启数据缩放
+        let dateType = ['3','5','12','30'];
+        if(cellOption['xAxis'] && cellOption['xAxis']['type'] && dateType.indexOf(cellOption['xAxis']['type']) != -1 && window.config.bi_user !== 'manager'){
+            linebarOption['grid']['bottom'] += 30;
+            linebarOption['dataZoom']=[{
+                type: 'slider',
+                xAxisIndex: 0,
+                bottom:'0',
+                height:20,
+                startValue: linebarOption['xAxis'][0]['data'][0],
+                endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
+                rangeMode: ['value', 'value']
+            },
+                {
+                    type: 'inside',
+                    xAxisIndex: 0,
+                    startValue: linebarOption['xAxis'][0]['data'][0],
+                    endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
+                    rangeMode: ['value', 'value']
+                }]
+        };
         return linebarOption;
     }
 
@@ -311,7 +347,7 @@ export class EchartsService {
         pieOption['legend'].data = legend;
         pieOption['series'][0].data = series;
         pieOption['series'][0].name = title;
-        pieOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
+        pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         return pieOption;
     }
 
@@ -332,7 +368,7 @@ export class EchartsService {
         let multillist = cellOption['data']['multillist'];
         // tableHeight 为多表图表中每一个图表的高度
         let tableHeight = (cellHeight - Math.max(offset * (multillist.length - 1), 0) - Math.max(12 * (multillist.length - 1), 0) - gridFirstTop) / multillist.length;
-        let colors = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
+        let colors = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         multillist.forEach((option, index, list) => {
             // mutiListOption['dataZoom'][0]['xAxisIndex'].push(index);
             // mutiListOption['dataZoom'][1]['xAxisIndex'].push(index);
@@ -409,7 +445,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     radarOption(cellChart) {
-        console.log(cellChart);
         let cellOption = cellChart['chart'];
         const radarOption = EchartsOption.getEchartsConfigOption('radar');
         let maxNumList = [];
@@ -445,7 +480,7 @@ export class EchartsService {
                 max: Math.max.apply(null, maxNumList)
             });
         });
-        radarOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
+        radarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         return radarOption;
     }
 

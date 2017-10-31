@@ -101,6 +101,10 @@ export const progressConfig = {
         },
         update:function({fileId:i,progress:n}) {
             this.el.find('#'+i).find('.progress-liquid').css('width',n+'%').text(n+'%');
+            if(n == 100){
+                this.el.find('#'+i).find('.cancel-upload').css('display','none');
+                this.el.find('#'+i).find('.post-upload-process').css('display','inline-block');
+            }
         },
         finish:function (i) {
             this.el.find('#'+i).find('.cancel-upload').remove();
@@ -133,6 +137,9 @@ export const progressConfig = {
         for(let i=0,length=this.data.files.length;i < length;i++){
             $(this.el.find('.process-item')[i]).attr('id',this.data.files[i].id);
             $(this.el.find('.cancel-upload')[i]).attr('itemid',this.data.files[i].id);
+            if(this.data.unCancellable){
+                $(this.el.find('.cancel-upload')[i]).css('display','none');
+            }
         }
     },
     beforeDestroy:function () {

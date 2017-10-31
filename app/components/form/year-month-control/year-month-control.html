@@ -4,15 +4,15 @@
     {{else if be_control_condition }}
         <a href="javascript:void(0);" class="info">被修改条件限制</a>
     {{else}}
-        <div class="year" style="float: left"></div>
-        <span style="float: left;">年</span>
-        <div class="month" style="float: left"></div>
-        <span style="float: left;">月</span>
+        <div class="year" style="float: left; width: 100px;"></div>
+       <span style="float: left;"> &nbsp;年 &nbsp;</span>
+        <div class="month" style="float: left;width: 100px;"></div>
+        <span style="float: left;"> &nbsp;月</span>
         <div style="float: left;">
             {{#if required}}
                 <span id="requiredLogo" class="{{requiredClass}}" ></span>
             {{/if}}
-            <a href="javascript:void(0);" class="ui-history icon-history form-icon visible" title="修改历史"></a>
+            <a href="javascript:void(0);" class="ui-history icon-history form-icon visible" style="position: relative; top: -2px" title="修改历史"></a>
         </div>
     {{/if}}
 </div>

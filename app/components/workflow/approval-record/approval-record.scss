@@ -10,15 +10,15 @@
       &:last-child{
         border-right: none;
       }
-      &:nth-child(1),&:nth-child(2),&:nth-child(3){
+      &:nth-child(1),&:nth-child(2),&:nth-child(3),&:nth-child(4),&:nth-child(5){
         flex-grow: 1;
         width: 80px;
 
       }
-      &:nth-child(4){
-        flex-grow: 2;
-        width: 100px;
-      }
+      //&:nth-child(4){
+      //  flex-grow: 2;
+      //  width: 100px;
+      //}
     }
   }
   .workflow-record-list{
@@ -26,6 +26,7 @@
     .workflow-record-item{
       border-bottom: 1px solid #ddd;
       .txt-item{
+        font-size: 12px;
         border-right: 1px solid #ddd;
         height: 35px;
         line-height: 35px;
@@ -36,14 +37,14 @@
         &:last-child{
           border-right: none;
         }
-        &:nth-child(1),&:nth-child(2),&:nth-child(3){
+        &:nth-child(1),&:nth-child(2),&:nth-child(3),&:nth-child(4),&:nth-child(5){
           flex-grow: 1;
           width: 80px;
 
         }
-        &:nth-child(4){
-          flex-grow: 2;
-          width: 100px;
+        &.comment-attachment{
+          color: #1789fc;
+          cursor: pointer;
         }
       }
       &:last-child{

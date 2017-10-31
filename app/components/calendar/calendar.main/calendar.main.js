@@ -116,11 +116,12 @@ let config = {
          * @param type
          */
         getCalendarData: function (data,type){
-            //this.showLoading();
+            this.showLoading();
             CalendarService.getCalendarData(data).then( res=>{
                 if(res) {
-                    //this.hideLoading();
+                    this.hideLoading();
                 }
+                console.log(res);
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
@@ -411,6 +412,7 @@ let config = {
             day['data'] = [];
             for( let set of calendarDate ){
                 let setDetail = this.data.calendarSettings[set.id];
+                // console.log(setDetail);
                 for( let select of setDetail['selectedOpts_data'] ){
 
                     if( select[setDetail['field_id']].indexOf(day.dataTime) === -1 ){
@@ -433,6 +435,7 @@ let config = {
                         arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
                         arrData['type'] = 1;
                         arrData['isShow'] = this.data.searchText === '' ? true : false;
+                        arrData['selectedRepresents'] = setDetail['selectedRepresents'][0] || '';
                         let selectFieldId = '';
                         if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
                             selectFieldId = setDetail['selectedEnums'][0];
@@ -457,7 +460,7 @@ let config = {
                                 fieldId: key,
                                 _id: select['_id'],
                                 fieldName: this.data.fieldInfos[key]['dname'] || '',
-                                fieldValue: select[key] || ''
+                                fieldValue: select[key] || '',
                             } )
                         }
                         for( let d of everyData ){
@@ -474,6 +477,7 @@ let config = {
                         let data3show = [];
                         let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
                         let everyData_3 = [];
+                        // console.log(select_3);
                         for( let key in select_3 ){
                             if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
                                 continue;
@@ -499,6 +503,7 @@ let config = {
                                 }
                             }
                         }
+                        // console.log(everyData_3)
                         for( let d of everyData_3 ){
                             if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
                                 arrData['isShow'] = true;
@@ -622,14 +627,19 @@ let config = {
             if(data.toolMethod === 'refresh') {
                 this.data.cancel_fields = data['data'];
                 if(this.data.calendarContent !== 'schedule') {
-                    CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+                    if(data['type'] !== 'closeSetting') {
+                        CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+                    }
                     this.actions.getCalendarData({
                         from_date: this.data.from_date,
                         to_date: this.data.to_date,
                         cancel_fields: JSON.stringify(this.data.cancel_fields)
                     },'calendar');
                 } else {
-                    CalendarWorkflowData.getWorkflowData(this.data.scheduleStart, this.data.scheduleEnd);
+                    // CalendarWorkflowData.getWorkflowData(this.data.scheduleStart, this.data.scheduleEnd);
+                    if(data['type'] !== 'closeSetting') {
+                        CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+                    }
                     this.actions.getCalendarData({
                         from_date: this.data.scheduleStart,
                         to_date: this.data.scheduleEnd,
@@ -637,6 +647,24 @@ let config = {
                     });
                 }
 
+            }else if(data.toolMethod === 'refreshData'){
+                if(this.data.calendarContent !== 'schedule') {
+                    CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+
+                    this.actions.getCalendarData({
+                        from_date: this.data.from_date,
+                        to_date: this.data.to_date,
+                        cancel_fields: JSON.stringify(this.data.cancel_fields)
+                    },'calendar');
+                } else {
+                    // CalendarWorkflowData.getWorkflowData(this.data.scheduleStart, this.data.scheduleEnd);
+                    CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
+                    this.actions.getCalendarData({
+                        from_date: this.data.scheduleStart,
+                        to_date: this.data.scheduleEnd,
+                        cancel_fields: JSON.stringify(this.data.cancel_fields)
+                    });
+                }
             }else if(data.toolMethod === 'export') {
                 PMAPI.openDialogByIframe(
                     '/iframe/calendarExport/',
@@ -817,9 +845,9 @@ let config = {
 };
 
 class CalendarMain extends Component {
-    constructor(data) {
+    constructor(data, newconfig = {}) {
         config.data.cancel_fields = data;
-        super(config);
+        super($.extend(true ,{}, config, newconfig));
     }
 }
 

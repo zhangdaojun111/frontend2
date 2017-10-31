@@ -148,14 +148,15 @@ let config = {
                 this.data.currentPage = 1;
                 this.actions.resetPagination( this.data.total );
                 this.actions.onPaginationChanged();
+
                 if( this.data.tableId ){
-                    // console.log("pageSize数据保存：" + Number(this.data.rows));
-                    // dataTableService.savePreference({
-                    //     'action': 'pageSize',
-                    //     table_id: this.data.tableId,
-                    //     pageSize: Number(this.data.rows)
-                    // });
-                    // HTTP.flush();
+                    console.log("pageSize数据保存：" + Number(this.data.rows));
+                    dataTableService.savePreference({
+                        'action': 'pageSize',
+                        table_id: this.data.tableId,
+                        pageSize: Number(this.data.rows)
+                    });
+                    HTTP.flush();
                 }
             },1000 ) ).on( 'input','.enterPageNum',_.debounce( ()=>{
                 let input = this.el.find( '.enterPageNum' )[0];
@@ -276,11 +277,17 @@ let config = {
         //失效刷新
         invalidTips: function () {
             this.el.find( '.data-invalid' ).removeClass('freshtip');
+            this.el.find( '.data-invalid' ).removeClass('unfreshtip');
             this.el.find( '.data-invalid' )[0].innerHTML = this.data.myInvalid ? '数据失效，已刷新。' : '数据失效，请刷新。';
+            if(this.data.myInvalid) {
+                this.el.find( '.data-invalid' ).addClass('freshtip');
+            } else {
+                this.el.find( '.data-invalid' ).addClass('unfreshtip');
+            }
             if( this.data.myInvalid ){
                 this.actions.onPaginationChanged( true );
             }
-            this.el.find( '.data-invalid' ).addClass('freshtip');
+            // this.el.find( '.data-invalid' ).addClass('freshtip');
             this.data.myInvalid = false;
         },
         //延时刷新
@@ -320,11 +327,8 @@ let config = {
     }
 };
 class dataPagination extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-        }
-        super(config);
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

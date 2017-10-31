@@ -9,6 +9,12 @@
                 <div class="toolbar"></div>
                 <div class="editor"></div>
             {{/if}}
+            <div style="float: left">
+                {{#if required}}
+                <span id="requiredLogo" class="{{requiredClass}}"></span>
+                {{/if}}
+                <a href="javascript:void(0);" class="ui-history icon-history form-icon visible" style="position: relative; top: -2px;" title="修改历史"></a>
+            </div>
         </div>
     </div>
 </div>

@@ -1,6 +1,9 @@
 .radio-wrap{
   line-height: 30px;
   height:26px;
+  position: relative;
+  top: -3px;
+  display: flex;
 }
 .df-input-radio-status{
   position: absolute;
@@ -8,7 +11,7 @@
   top: 50%;
   width: 7px;
   height: 7px;
-  background: #0E7AEF;
+  background: #2298f4;
   transform: translate(-50%,-50%);
   border-radius: 50%;
   /*opacity:0;*/
@@ -59,7 +62,7 @@ input:focus{
     position: absolute;
     border: 1px solid #D4CACA;
     border-radius: 50%;
-    top: 2px;
+    top: 8px;
     left: 0;
     /*z-index:-1;*/
 }
