@@ -27,7 +27,9 @@ let config = {
         fileData: {},
         //是否更多
         needMore: false,
-        warning_msg: ''
+        warning_msg: '',
+        viewMode: 'normal',
+        formData: '',
     },
     actions: {
         prepareWorkflowData: function () {
@@ -113,6 +115,9 @@ let config = {
                 parent_temp_id: this.data.parentTempId,
                 is_batch: this.data.isBatch,
                 flow_id: this.data.flowId
+            }
+            if( this.data.viewMode == 'EditChild' ){
+                json['parent_data'] = this.data.formData
             }
             if( this.data.needMore ){
                 json['has_create_user'] = this.el.find( '.has_create_user' ).parent('td').attr('name');
@@ -209,7 +214,10 @@ let config = {
         }
     },
     afterRender: function (){
-        if( this.data.isBatch == '0' ){
+        PMAPI.getIframeParams(window.config.key).then((res) => {
+            this.data.formData = res.data.formData || '';
+        })
+        if( this.data.isBatch == '0' && this.data.viewMode != 'EditChild' ){
             this.showLoading();
             this.actions.prepareWorkflowData();
         }
@@ -228,7 +236,6 @@ let config = {
         } )
         this.el.on('click','.radio-container', function(){
             if(!$(this).find('.radio-in').hasClass('active')){
-                debugger
                 if($(this).parent('td').attr('name') == 1){
                     $(this).parent('td').attr('name', 0)
                 } else {

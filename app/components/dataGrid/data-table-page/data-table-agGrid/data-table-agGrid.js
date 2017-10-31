@@ -218,7 +218,9 @@ let config = {
         //二维表改变的值
         cellChangeValue: {},
         //工作流表单查看操作
-        cannotopenform: ''
+        cannotopenform: '',
+        //表单数据（子表导入用）
+        formData: ''
     },
     //生成的表头数据
     columnDefs: [],
@@ -1559,6 +1561,7 @@ let config = {
                     // msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
                 }else {
                     delete json['common_filter_id'];
+                    delete json['is_filter'];
                 }
             }
             if( this.data.groupCheck ){
@@ -1959,11 +1962,15 @@ let config = {
                         parentRealId: this.data.parentRealId,
                         parentTempId: this.data.parentTempId,
                         isBatch: this.data.viewMode == 'createBatch'?1:0,
-                        isSuperUser: window.config.is_superuser || 0
+                        isSuperUser: window.config.is_superuser || 0,
+                        viewMode: this.data.viewMode
+                    }
+                    let data = {
+                        formData: this.data.formData,
                     }
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
-                    this.actions.openDialog( url,winTitle,600,650 );
+                    this.actions.openDialog( url,winTitle,600,650,data );
                 } )
             }
             //导出
@@ -2878,7 +2885,7 @@ let config = {
                         viewMode: 'source_data'
                     }
                     let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                    let winTitle = this.data.tableName + '->' + obj.tableName;
+                    let winTitle = data.colDef.tableName + '->' + obj.tableName;
                     this.actions.openSourceDataGrid( url,winTitle );
                 }
             }
@@ -2907,7 +2914,7 @@ let config = {
                         parentRealId: data.data._id
                     }
                     let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                    let winTitle = this.data.tableName + '->' + obj.tableName;
+                    let winTitle = data.colDef.tableName + '->' + obj.tableName;
                     this.actions.openSourceDataGrid( url,winTitle );
                 } )
                 HTTP.flush();
@@ -2927,7 +2934,7 @@ let config = {
                     source_field_dfield: data.colDef.field_content.count_field_dfield || '',
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                let winTitle = this.data.tableName + '->' + obj.tableName;
+                let winTitle = data.colDef.tableName + '->' + obj.tableName;
                 this.actions.openSourceDataGrid( url,winTitle );
             }
             // 子表
@@ -2945,7 +2952,7 @@ let config = {
                     source_field_dfield: data.colDef.field_content.child_field_dfield || '',
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
-                let winTitle = this.data.tableName + '->' + obj.tableName;
+                let winTitle = data.colDef.tableName + '->' + obj.tableName;
                 this.actions.openSourceDataGrid( url,winTitle );
             }
             //二维表数据穿透
@@ -3307,7 +3314,7 @@ let config = {
             } )
         },
         //打开弹窗
-        openDialog: function ( url,title,w,h ) {
+        openDialog: function ( url,title,w,h,data ) {
             //暂时刷新方法
             let defaultMax = false;
             PMAPI.openDialogByIframe( url,{
@@ -3317,7 +3324,7 @@ let config = {
                 modal:true,
                 defaultMax: defaultMax,
                 customSize: defaultMax
-            } ).then( (data)=>{
+            },data ).then( (data)=>{
                 if( data.type == "batch" ){
                     this.data.batchIdList = data.ids;
                     this.actions.returnBatchData( data.ids );

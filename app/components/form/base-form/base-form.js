@@ -1766,7 +1766,12 @@ let config = {
                         let popupType = single.data('popuptype') || 0;
                         data[key]['temp_id'] = data['temp_id']['value'];
                         data[key]['popup'] = popupType;
-                        let songrid = new Songrid(Object.assign(data[key], {popupType: popupType}), actions);
+                        //获取表单数据（子表导入用）
+                        let formData = {};
+                        for( let k in data ){
+                            formData[k] = data[k].value || '';
+                        }
+                        let songrid = new Songrid(Object.assign(data[key], {popupType: popupType,formData: JSON.stringify(formData)}), actions);
                         songrid.render(single);
                         this.data.childComponent[data[key].dfield] = songrid;
                         break;
