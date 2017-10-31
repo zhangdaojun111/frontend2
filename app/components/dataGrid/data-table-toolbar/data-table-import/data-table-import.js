@@ -179,6 +179,7 @@ let config = {
                         } )
                     }else {
                         msgBox.alert( res.error );
+                        this.data.fileData = {};
                     }
                 }
                 this.actions.fileTip();
