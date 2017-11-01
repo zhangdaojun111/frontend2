@@ -307,3 +307,11 @@ btn-div{
 #addFollower{
 	cursor: pointer;
 }
+#dialog{
+  box-sizing: border-box;
+  border: 1px solid #e4e4e4;
+  border-top: 0;
+  &.ui-dialog-title {
+    color: #ffffff;
+  }
+}

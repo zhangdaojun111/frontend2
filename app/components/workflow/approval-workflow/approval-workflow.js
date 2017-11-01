@@ -150,30 +150,55 @@ let config={
                     // $("#cloneId1").find('.add-follow').remove();
                     // $("#cloneId1").find('.follow-name-list').removeAttr('id');
                     // appendDiv.find(".preview-node1").toggle().siblings().hide();
-                    console.log(addFollow, appendDiv);
-                    PMAPI.openDialogByIframe(
-                        '/iframe/followerDialog/',
-                        {
-                            width: window.screen.width,
-                            height: '200',
-                            title: '关注人'
-                        },{
 
-                        }
-                    ).then(res => {
+
+                    // this.actions.createDialog(appendDiv,'关注人');
+                    let dialogHtml = `<div id="dialog" title='关注人'></div>`;
+                    appendDiv.find(".preview-node1").html(dialogHtml);
+                    appendDiv.find("#dialog").html(addFollow);
+                    $("#cloneId1").find('.add-follow').remove();
+                    $( "#dialog" ).dialog({
+                        position: 'absolute',
+                        top: 0,
+                        width: window.screen.width,
 
                     });
                     break;
                 case 'flow-view' :
-                    appendDiv.find(".preview-node2").html(flowNode);
-                    $("#cloneId2").find('#togglePic').remove();
-                    appendDiv.find(".preview-node2").toggle().siblings().hide();
+                    // appendDiv.find(".preview-node2").html(flowNode);
+                    // $("#cloneId2").find('#togglePic').remove();
+                    // appendDiv.find(".preview-node2").toggle().siblings().hide();
+                    let dialogHtml2 = `<div id="dialog" title='流程节点图'></div>`;
+                    appendDiv.find(".preview-node2").html(dialogHtml2);
+                    appendDiv.find("#dialog").html(flowNode);
+                    $("#cloneId1").find('.add-follow').remove();
+                    $( "#dialog" ).dialog({
+                        position: 'absolute',
+                        top: 0,
+                        width: window.screen.width,
+
+                    });
                     break;
                 case 'record-view' :
-                    appendDiv.find(".preview-node3").html(workflowRecord);
-                    appendDiv.find(".preview-node3").toggle().siblings().hide();
+                    // appendDiv.find(".preview-node3").html(workflowRecord);
+                    // appendDiv.find(".preview-node3").toggle().siblings().hide();
+                    let dialogHtml3 = `<div id="dialog" title='流程节点图'></div>`;
+                    appendDiv.find(".preview-node3").html(dialogHtml3);
+                    appendDiv.find("#dialog").html(workflowRecord);
+                    $("#cloneId1").find('.add-follow').remove();
+                    $( "#dialog" ).dialog({
+                        position: 'absolute',
+                        top: 0,
+                        width: window.screen.width,
+
+                    });
                     break;
             }
+        },
+
+        createDialog: function (appendDiv, title) {
+            let dialogHtml = `<div id="dialog" title=${title}></div>`;
+            appendDiv.find(".preview-node1").html(dialogHtml);
         },
         /**
          *
@@ -323,9 +348,10 @@ let config={
                                 htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
                                 idArr.push(k);
                             }
-                            this.el.find('#addFollowerList').html(htmlStr);
+                            // this.el.find('#addFollowerList').html(htmlStr);
                             Mediator.publish('workflow:focus-users',idArr);
                             this.data.focus_users = res;
+                            $('.follow-name-list').html(htmlStr);
                         }
                     })
                 });
@@ -344,9 +370,10 @@ let config={
                                 htmlStr.push(`<span class="selectSpan">${res[k]}</span>`);
                                 idArr.push(k);
                             }
-                            this.el.find('#addFollowerList').html(htmlStr);
+                            // this.el.find('#addFollowerList').html(htmlStr);
                             Mediator.publish('workflow:focus-users',idArr);
                             this.data.focus_users = res;
+                            $('.follow-name-list').html(htmlStr);
                         }
                     })
                 });
