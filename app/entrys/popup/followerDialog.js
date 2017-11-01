@@ -8,3 +8,5 @@ import FollowerDialog from '../../components/workflow/approval-workflow/follower
 let followerDialog = new FollowerDialog();
 
 followerDialog.render($('#followerDialog'));
+
+console.log(window.config.iframe);

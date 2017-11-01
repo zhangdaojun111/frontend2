@@ -146,23 +146,23 @@ let config={
             let workflowRecord=this.el.find("#workflow-record").clone().attr('id','cloneId3');
             switch (type){
                 case 'follow-view' :
-                    appendDiv.find(".preview-node1").html(addFollow);
-                    $("#cloneId1").find('.add-follow').remove();
-                    $("#cloneId1").find('.follow-name-list').removeAttr('id');
-                    appendDiv.find(".preview-node1").toggle().siblings().hide();
+                    // appendDiv.find(".preview-node1").html(addFollow);
+                    // $("#cloneId1").find('.add-follow').remove();
+                    // $("#cloneId1").find('.follow-name-list').removeAttr('id');
+                    // appendDiv.find(".preview-node1").toggle().siblings().hide();
                     console.log(addFollow, appendDiv);
-                    // PMAPI.openDialogByIframe(
-                    //     '/iframe/followerDialog/',
-                    //     {
-                    //         width: window.screen.width,
-                    //         height: '200',
-                    //         title: '关注人'
-                    //     },{
-                    //
-                    //     }
-                    // ).then(res => {
-                    //
-                    // });
+                    PMAPI.openDialogByIframe(
+                        '/iframe/followerDialog/',
+                        {
+                            width: window.screen.width,
+                            height: '200',
+                            title: '关注人'
+                        },{
+
+                        }
+                    ).then(res => {
+
+                    });
                     break;
                 case 'flow-view' :
                     appendDiv.find(".preview-node2").html(flowNode);
