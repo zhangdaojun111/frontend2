@@ -317,7 +317,7 @@ export class EchartsService {
                     rangeMode: ['value', 'value']
                 }]
         };
-        console.log(linebarOption);
+        // console.log(linebarOption);
 
         return linebarOption;
     }
