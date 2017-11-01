@@ -82,7 +82,8 @@ let config = {
             let siblings = tree.treeview('getSiblings',tree.treeview('getNode',0));
             siblings = siblings||[];
             siblings.push(tree.treeview('getNode',0));
-            let unrelatedNodes = this.actions._getUnrelatedNodes(siblings,filteredNodes);
+            let unrelatedNodes = [];
+             this.actions._getUnrelatedNodes(siblings,filteredNodes,unrelatedNodes,tree);
             tree.treeview('disableNode',[unrelatedNodes,{silent:true}]);
             //展开筛选出的节点
             filteredNodes.forEach(node=>{
@@ -96,17 +97,23 @@ let config = {
                 })
             },0);
         },
-        _getUnrelatedNodes:function (nodes,filteredNodes) {
-            let unrelatedNodes = [];
+        _getUnrelatedNodes:function (nodes,filteredNodes,unrelatedNodes,tree) {
+            let isSiblingsFiltered = false;
+            let isChildFiltered = {};
             nodes.forEach(node=>{
-                if(!(filteredNodes.includes(node)||node.state.expanded)){
+                isChildFiltered[node.id] = false;
+                if(node.nodes){ //计算其及子孙节点里面有没有搜索出的节点
+                    isChildFiltered[node.id] = this.actions._getUnrelatedNodes(node.nodes,filteredNodes,unrelatedNodes,tree)||filteredNodes.includes(node);
+                }
+                isSiblingsFiltered = isSiblingsFiltered || isChildFiltered[node.id];
+            });
+            nodes.forEach(node=>{
+                let parent = tree.treeview('getParent',node);
+                if(!(isChildFiltered[node.id]||(filteredNodes.includes(parent) && (!isSiblingsFiltered)))){
                     unrelatedNodes.push(node);
                 }
-                if(node.nodes){
-                    unrelatedNodes = unrelatedNodes.concat(this.actions._getUnrelatedNodes(node.nodes,filteredNodes));
-                }
             });
-            return unrelatedNodes;
+            return isSiblingsFiltered;
         },
         _cruiseSelectNode:function(node,tree){
             if(node){
