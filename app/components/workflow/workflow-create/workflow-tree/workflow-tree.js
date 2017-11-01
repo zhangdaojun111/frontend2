@@ -12,7 +12,10 @@ let config = {
     template: template,
     data:{
         treeArr:[],
-        showTree:true //显示下拉菜单
+        showTree:true, //显示下拉菜单
+        totleChild:0,
+        actNum:0,
+        scrTop:0,
     },
     actions: {
         /**
@@ -20,6 +23,7 @@ let config = {
          */
         toogleTree:function(){
             let tree = this.el.find(".J_tree");
+            let word = this.el.find('.J_child-item').eq(0).attr('title');
             tree.toggle();
             let len = this.el.find(".tree-list").children('li').length;
             for(let i = 0; i < len;i++){
@@ -29,7 +33,7 @@ let config = {
                    this.el.find('.tree-list li').eq(i).find('.child-list').children('.child-item').removeClass('hide xixi');
                 }
             }
-            this.el.find('.J_search').val("");
+            this.el.find('.J_search').val("").focus();
             this.data.showTree = !this.data.showTree;
         },
         //
@@ -39,14 +43,35 @@ let config = {
          */
         toogletip:function(e){
             let childList = $(e.target).siblings(".child-list");
+            let hideBack = childList.children('.child-back').length;
+            let childitem = childList.children('.child-item');
+            let parentLi = $(e.target).parent();
+            let parentLiNext = parentLi.nextAll();
+            let nextLen =  parentLiNext.length;
             let root = this.el.find(childList);
+            let rootParent = root.parent();
             let tip = root.hasClass('child-hide');
-            if(tip){
-                root.removeClass('child-hide');
-            }else{
-                root.addClass('child-hide');
+            let nexti = -1;
+            for(let i = 0;i < nextLen; i++){
+                if(!$(parentLiNext[i]).hasClass('haha') && !$(parentLiNext[i]).hasClass('hide')){
+                    nexti = i;
+                    break;
+                }
             }
-            
+            if(tip){
+                rootParent.removeClass('haha');
+                root.removeClass('child-hide');
+                this.data.totleChild += childitem.length;
+            }else{
+                if(hideBack && nexti != -1){
+                    $(parentLiNext[nexti]).find('.child-item').not('.hide').eq(0).addClass('child-back');
+                }
+                root.find('.child-item').removeClass('child-back');
+                rootParent.addClass('haha');
+                root.addClass('child-hide');
+                this.data.totleChild -= childitem.length;
+            }
+            this.el.find('.J_search').focus();
         },
         /**
          * 点击下来菜单中的子菜单，显示工作流
@@ -73,7 +98,6 @@ let config = {
             let arr = {};
             let str = {}; 
             let li =  this.el.find('.tree-list li');
-
             let len = this.el.find(".tree-list").children('li').length;
             for(let i = 0; i < len;i++){
                 li.eq(i).removeClass('hide xixi');
@@ -137,13 +161,67 @@ let config = {
                 }
  
             }
-            
+            this.el.find('.tree-list').find('.child-back').removeClass('child-back');
+            let addNode = li.filter('.xixi').not('.haha').find('.child-list').find('.xixi');
+            let newNode = li.not('.haha').find('.child-item');
+            console.log(addNode);
+            console.log(newNode);
+            if(addNode.length){
+                addNode.eq(0).addClass("child-back");
+            }else{
+                newNode.eq(0).addClass('child-back');
+            }
+
+        },
+        changeHelder(event,that){
+            let keyNum = event.keyCode;
+            let Notnode = that.el.find('li').not('.hide,.haha');
+            let nodelist = Notnode.find('.child-list').not('.child-hide').find('.child-item').not('.hide');
+            let len = nodelist.length;
+            let selectContent = this.el.find('.select-content');
+            let contentTop = selectContent.scrollTop();
+            for (let i = 0;i < len; i++){
+                if(nodelist.eq(i).hasClass("child-back")){
+                    that.data.actNum = i;
+                }
+            }
+            if(keyNum == 38 && that.data.actNum != 0){
+                that.data.actNum--;
+                let node = nodelist.eq(that.data.actNum);
+                let nodeup = nodelist.eq(that.data.actNum+1);
+                selectContent.scrollTop(contentTop-30);
+                node.addClass('child-back');
+                nodeup.removeClass('child-back');
+            }else if(keyNum == 40 && that.data.actNum < len-1){
+                that.data.actNum++;
+                let node = nodelist.eq(that.data.actNum);
+                let nodeup = nodelist.eq(that.data.actNum-1);
+                selectContent.scrollTop(contentTop+30);
+                node.addClass('child-back')
+                nodeup.removeClass('child-back');
+            }else if(keyNum == 13){
+                nodelist.eq(that.data.actNum).find('.J_child-item').click();
+            }
+        },
+        showChild(e){
+            let nodelist = this.el.find('.child-item');
+            let len = nodelist.length;
+            for(let i = 0; i < len; i++){
+                nodelist.eq(i).removeClass('child-back');
+            }
+            $(e.currentTarget).addClass('child-back');
+        },
+        init(){
+            this.el.find('.J_child-item').eq(0).parent('.child-item').addClass('child-back');
         }
     },
     binds:[
 
     ],
     afterRender: function() {
+        let that = this;
+        this.data.totleChild = this.el.find('.J_child-item').length;
+        this.actions.init();
         Mediator.subscribe('workflow:choose', (msg)=> {
             let rootNode = this.el.find('.J_select-Workflow');
             rootNode.text(msg.name);
@@ -163,11 +241,16 @@ let config = {
            this.actions.toogleTree(e);
            e.stopPropagation();
        });
-
        this.el.on('click','.J_root',(e)=>{
            this.actions.toogletip(e);
            e.stopPropagation(e);
        });
+       this.el.on('mouseenter','.child-item',(e)=>{
+           this.actions.showChild(e);
+       });
+       this.el.on('keydown','.J_tree',function(event){
+           that.actions.changeHelder(event,that);
+       })
        this.el.on('click','.J_child-item',(e)=>{
             this.actions.clickChild(e);
        })
