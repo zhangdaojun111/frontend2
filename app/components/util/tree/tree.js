@@ -78,16 +78,16 @@ let config = {
                         exactMatch: false,
                         revealResults: true
                     }]);
-            //展开筛选出的节点
-            filteredNodes.forEach(node=>{
-                tree.treeview('expandNode',[node, { levels: 2, silent: true } ]);
-            });
             //隐藏不相关节点
             let siblings = tree.treeview('getSiblings',tree.treeview('getNode',0));
             siblings = siblings||[];
             siblings.push(tree.treeview('getNode',0));
             let unrelatedNodes = this.actions._getUnrelatedNodes(siblings,filteredNodes);
             tree.treeview('disableNode',[unrelatedNodes,{silent:true}]);
+            //展开筛选出的节点
+            filteredNodes.forEach(node=>{
+                tree.treeview('expandNode',[node, { levels: 2, silent: true } ]);
+            });
         },
         selectAll:function(tree){
             setTimeout(() => { //保证树初始化完毕后才能进行操作，解决二次选择的时候报错问题
@@ -102,7 +102,7 @@ let config = {
                 if(!(filteredNodes.includes(node)||node.state.expanded)){
                     unrelatedNodes.push(node);
                 }
-                if(!filteredNodes.includes(node)&&node.nodes){
+                if(node.nodes){
                     unrelatedNodes = unrelatedNodes.concat(this.actions._getUnrelatedNodes(node.nodes,filteredNodes));
                 }
             });
