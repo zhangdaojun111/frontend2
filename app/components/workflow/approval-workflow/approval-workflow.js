@@ -16,6 +16,7 @@ import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import approvalOpinion from '../approval-opinion/approval-opinion'
 import WorkFlowForm from '../workflow-form/workflow-form';
 import WorkFlowGrid from '../workflow-grid/workflow-grid';
+import followerDialog from '../approval-workflow/followerDialog/followerDialog';
 
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
 serchStr.split('&').forEach(res => {
@@ -149,6 +150,19 @@ let config={
                     $("#cloneId1").find('.add-follow').remove();
                     $("#cloneId1").find('.follow-name-list').removeAttr('id');
                     appendDiv.find(".preview-node1").toggle().siblings().hide();
+                    console.log(addFollow, appendDiv);
+                    // PMAPI.openDialogByIframe(
+                    //     '/iframe/followerDialog/',
+                    //     {
+                    //         width: window.screen.width,
+                    //         height: '200',
+                    //         title: '关注人'
+                    //     },{
+                    //
+                    //     }
+                    // ).then(res => {
+                    //
+                    // });
                     break;
                 case 'flow-view' :
                     appendDiv.find(".preview-node2").html(flowNode);
