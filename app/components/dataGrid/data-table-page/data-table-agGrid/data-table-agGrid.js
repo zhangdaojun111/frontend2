@@ -1287,6 +1287,12 @@ let config = {
                 this.data.showTabs(1);
                 this.hideLoading();
             }catch(e){}
+            if(res[0].hasOwnProperty('error')){
+                if(res[0].error == '您没有数据查看权限'){
+                    this.el.find('.ag-body-viewport-wrapper').html('<div style="width: 100%;height: 100%;background: #fff;position: relative;z-index: 1;"><p style="position: absolute;top: 50%;left: 50%;' +
+                            'width: 200px;height: 20px;line-height: 20px;text-align: center;margin-left: -100px;margin-top: -10px;font-size: 16px">'+res[0].error+'</p></div>')
+                }
+            }
         },
         //请求footer数据
         getFooterData: function (data) {
