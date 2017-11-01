@@ -15,7 +15,7 @@ import browserMD5File from 'browser-md5-file';
 import AttachmentList from '../attachment-list/attachment-list';
 import ViewVideo from '../view-video/view-video';
 
-let preview_file = ["gif","jpg","jpeg","png","txt","pdf","lua","sql","rm","rmvb","wmv","mp4","3gp","mkv","avi"];
+let preview_file = ["gif","jpg","jpeg","png","wmv","mp4"];
 
 let config = {
     template: template,
@@ -64,16 +64,11 @@ let config = {
                     let fileId = new Date().getTime();
                     fileArray.push({id:fileId,name:name});
                 }
-                let toolbox ={
-                    update:function () {},
-                    finish:function () {},
-                    showError:function () {}
-                };
                 for(let i = 0, length = files.length;i < length; i++){
                     let file = files[i];
                     let fileItem = fileArray[i];
                     browserMD5File(file, (err,md5)=>{
-                        if(this.data.queue){
+                        if(this.data.queue ){
                             for(let item of this.data.queue){
                                 if(file.name == item.file.name && md5 == item.md5){
                                     msgBox.showTips('文件已上传');
@@ -89,7 +84,7 @@ let config = {
                                 }
                             }
                         }
-                        this.actions.controlUploadingForFile(file,fileItem.id,toolbox);
+                        this.actions.controlUploadingForFile(file,fileItem.id,this.data.toolbox);
                     });
                 }
                 //清空文件选择器，不影响下一次选择
@@ -111,6 +106,9 @@ let config = {
                 if(this.data.value.length == 0){
                     return;
                 }
+                //初始化清空一下缓存
+                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                Storage.deleteItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
                 FormService.getAttachment({
                     file_ids:JSON.stringify(this.data.value),
                     dinput_type:this.data.dinput_type
@@ -139,7 +137,7 @@ let config = {
                                 is_view:this.data.is_view,
                                 control_id:this.data.id
                             };
-                            PMAPI.openDialogToSelfByComponent(_.defaultsDeep({},{data:obj},AttachmentList), {
+                            PMAPI.openDialogByComponent(_.defaultsDeep({},{data:obj},AttachmentList), {
                                 width: 700,
                                 height: 500,
                                 title: "浏览上传文件"
@@ -156,7 +154,7 @@ let config = {
                                 control_id:this.data.id,
                                 is_view:this.data.is_view
                             }
-                            PMAPI.openDialogToSelfByComponent(_.defaultsDeep({},{data:obj},ViewVideo), {
+                            PMAPI.openDialogByComponent(_.defaultsDeep({},{data:obj},ViewVideo), {
                                 width: 780,
                                 height: 500,
                                 title: '视频播放器'
@@ -199,16 +197,21 @@ let config = {
                         if (event.event == 'delete') {
                             ele.remove();
                             this.data.queueItemEles.splice(this.data.queueItemEles.indexOf(ele),1);
-                            if (event.data != undefined) {
-                                this.data.queue.splice(this.data.queue.indexOf(event.data),1);
-                                this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
-                                this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
-                                if (this.data['thumbnailListComponent']) {
-                                    this.data['thumbnailListComponent'].actions.deleteItem(event.data.fileId);
-                                    if(this.data.value.length == 0){
-                                        delete this.data['thumbnailListComponent'];
+                            if (event.data != undefined){
+                                let i = 0;
+                                let l = this.data.queue.length;
+                                for(; i < l; i++){
+                                    let item = this.data.queue[i];
+                                    if(item.file.name == event.data.file.name && item.md5 == event.data.md5){
+                                        break;
                                     }
                                 }
+                                if(i < l){
+                                    this.data.queue.splice(i,1);
+                                }
+                                this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
+                                this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                                this.actions._deleteItemFromThumbnailList(event.data.fileId);
                                 this.events.changeValue(this.data);
                                 this.actions._playQueueItems();
                                 if(this.data.value.length == 0){
@@ -217,9 +220,9 @@ let config = {
                             }
                         }
                         if (event.event == 'finished') {
-                            this.data.queue.push(event.data);
                             this.data.value = this.data.value == '' ? [] : this.data.value;
                             this.data.value.push(event.data.fileId);
+                            ele.attr('id',event.data.fileId);
                             this.data.queue.push(event.data);
                             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                             this.trigger('changeValue', this.data);
@@ -231,7 +234,7 @@ let config = {
                             if (this.data['thumbnailListComponent']) {
                                 this.data['thumbnailListComponent'].actions.addItem(obj);
                             } else if(this.data.dinput_type == 23) {
-                                let comp = new ThumbnailList([obj]);
+                                let comp = new ThumbnailList([obj],this.data.dinput_type);
                                 comp.render(this.el.find('.thumbnail-list-anchor'));
                                 this.data['thumbnailListComponent'] = comp;
                             }
@@ -246,6 +249,14 @@ let config = {
             this.data.queueItemEles.unshift(ele);
             this.actions._playQueueItems();
             this.data.attachmentQueueItemComps[i]=item;
+        },
+        _deleteItemFromThumbnailList:function (fileId) {
+            if (this.data['thumbnailListComponent']) {
+                this.data['thumbnailListComponent'].actions.deleteItem(fileId);
+                if(this.data.value.length == 0){
+                    delete this.data['thumbnailListComponent'];
+                }
+            }
         },
         //调整上传文件条目，仅显示3条
         _playQueueItems:function () {
@@ -265,14 +276,19 @@ let config = {
             }
         },
         _updateDeleted:function(res){
-            Storage.init((new URL(document.URL)).searchParams.get('key'));
+            Storage.init('null');
             let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
             if(!deletedFiles){
                 return;
             }
-            for(let file of deletedFiles){
+             for(let file of deletedFiles){
                 this.data.value.splice(this.data.value.indexOf(file),1);
+                this.el.find('#'+file).remove();
+                if(this.data.dinput_type == 23){
+                    this.actions._deleteItemFromThumbnailList(file);
+                }
             }
+            this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
             this.trigger('changeValue',this.data);
         }
     },
@@ -291,7 +307,7 @@ let config = {
                         return;
                     }
                     if (res.rows.length != 0) {
-                        let comp = new ThumbnailList(res.rows);
+                        let comp = new ThumbnailList(res.rows,this.data.dinput_type);
                         comp.render(this.el.find('.thumbnail-list-anchor'));
                         this.data['thumbnailListComponent'] = comp;
                     }
@@ -314,7 +330,7 @@ let config = {
     }
 };
 export default class AttachmentControl extends Component {
-    constructor(data, event) {
-        super(config, data, event);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

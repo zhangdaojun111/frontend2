@@ -18,10 +18,15 @@ import FormEntrys from './form';
 import msgBox from '../lib/msgbox';
 import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import jsplumb from 'jsplumb';
+import {CreateFormServer} from "../services/formService/CreateFormServer";
+
+
+
+let component = new WorkflowInitial();
+component.render($('#WorkflowInitial'));
 
 WorkFlowForm.showForm();
 WorkFlowGrid.showGrid();
-
 /*
 ***订阅workflow choose事件，获取工作流info并发布getInfo,获取草稿
  */
@@ -29,10 +34,14 @@ let wfObj,temp_ids=[];
 let timer;
 let formSave = false;
 let formValue;
+let isSuccessSubmit;
 Mediator.subscribe('workflow:choose', (msg)=> {
+    // temp_ids=[];
+    isSuccessSubmit = true;
     $("#singleFlow").click();
     $("#submitWorkflow").show();
     $("#startNew").hide();
+    $('#addFollower').show();
     wfObj=msg;
     (async function () {
         WorkFlow.createFlow({flow_id:msg.id,el:"#flow-node"});
@@ -49,7 +58,7 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         //auto saving draft  草稿自动保存
         is_draft=is_draft==true?1:0;
         $('#place-form').html('');
-        FormEntrys.createForm({
+	    FormEntrys.initForm({
             reload_draft_data:is_draft,
             table_id:msg.tableid,
             flow_id:msg.id,
@@ -75,11 +84,11 @@ Mediator.subscribe('workflow:choose', (msg)=> {
         // let timer;
         const autoSaving=function(){
             timer=setInterval(()=>{
-                let formNew = FormEntrys.getFormValue(wfObj.tableid,false);
+                let formNew = CreateFormServer.getFormValue(wfObj.tableid,false);
                 let formNewStr = JSON.stringify(formNew);
-                if(formNewStr != formValue){
+                if(formNewStr != formValue && isSuccessSubmit){
                     formValue = formNewStr;
-                    intervalSave(FormEntrys.getFormValue(wfObj.tableid,false));
+                    intervalSave(CreateFormServer.getFormValue(wfObj.tableid,false));
                 }
             },15*1000);
         };
@@ -140,31 +149,38 @@ Mediator.subscribe('workflow:getGridinfo',(res)=>{
 /*
 ***submit workflow data 提交工作流
  */
-let focusArr=[];
-Mediator.subscribe('workflow:focus-users', (res)=> {
-    focusArr=res;
-})
 Mediator.subscribe('workflow:submit', (res)=> {
     if($("#workflow-form:visible").length>0){
-        let formData=FormEntrys.getFormValue(wfObj.tableid,true);
+        let formData=CreateFormServer.getFormValue(wfObj.tableid,true,true);
         if(formData.error){
             msgBox.alert(`${formData.errorMessage}`);
         }else{
+            msgBox.showLoadingSelf();
             $("#submitWorkflow").hide();
             let postData={
                 flow_id:wfObj.id,
-                focus_users:JSON.stringify(focusArr)||[],
-                data:JSON.stringify(formData)
+                focus_users:JSON.stringify(res)||[],
+                data:JSON.stringify(formData.formValue),
+                cache_new:JSON.stringify(formData.obj_new),
+                cache_old:JSON.stringify(formData.obj_old),
             };
             (async function () {
                 return await workflowService.createWorkflowRecord(postData);
             })().then(res=>{
+                msgBox.hideLoadingSelf();
                 if(res.success===1){
-                    msgBox.alert(`${res.error}`);
+                    isSuccessSubmit = false;
+                    CreateFormServer.changeToView(wfObj.tableid);
+                    msgBox.showTips(`执行成功`);
+                    let isdraft = true;
+                    $('#addFollower').hide();
                     $("#startNew").show().on('click',()=>{
-                        Mediator.publish('workflow:choose',wfObj);
-                        $("#startNew").hide();
-                        $("#submitWorkflow").show();
+                        if(isdraft){
+                            Mediator.publish('workflow:choose',wfObj);
+                            $("#startNew").hide();
+                            $("#submitWorkflow").show();
+                            isdraft = false;
+                        }
                     });
                     WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
                 }else{
@@ -174,29 +190,39 @@ Mediator.subscribe('workflow:submit', (res)=> {
             })
         }
     }else{
-        $("#submitWorkflow").hide();
         let postData={
             type:1,
             temp_ids:JSON.stringify(temp_ids),
             flow_id:wfObj.id,
             unique_check:0
         };
-        (async function () {
-            return await workflowService.createWorkflowRecord(postData);
-        })().then(res=>{
-            if(res.success===1){
-                msgBox.alert(`${res.error}`);
-                $("#startNew").show().on('click',()=>{
-                    Mediator.publish('workflow:choose',wfObj);
-                    $("#startNew").hide();
+        if(temp_ids.length){
+            msgBox.showLoadingSelf();
+            $("#submitWorkflow").hide();
+            (async function (){
+                return await workflowService.createWorkflowRecord(postData);
+            })().then(res=>{
+                msgBox.hideLoadingSelf();
+                if(res.success===1){
+                    msgBox.showTips(`执行成功`);
+                    $('#addFollower').hide();
+                    let isdraft = true;
+                    $("#startNew").show().on('click',()=>{
+                        Mediator.publish('workflow:choose',wfObj);
+                        $("#startNew").hide();
+                        $("#submitWorkflow").show();
+                        isdraft = false;
+                    });
+                    WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
+                }else{
+                    msgBox.alert(`${res.error}`);
                     $("#submitWorkflow").show();
-                });
-                WorkFlow.createFlow({flow_id:wfObj.id,record_id:res.record_id,el:"#flow-node"});
-            }else{
-                msgBox.alert(`${res.error}`);
-                $("#submitWorkflow").show();
-            }
-        })
+                }
+            })
+            temp_ids=[];
+        }else{
+            msgBox.alert(`请上传数据`);
+        }
     }
     
 });

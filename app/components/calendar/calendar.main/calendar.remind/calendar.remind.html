@@ -1,49 +1,47 @@
 <div class="remind-wrap">
     <table style="width: 100%">
-        <tr class="remind-row">
-            <td class="title">所属表：</td>
-            <td class="calendar-form-content">
+        <div class="remind-row">
+            <span class="title">所属表：</span>
+            <div class="calendar-form-content">
                 <span class="res-form">{{remindTable}}</span>
-            </td>
-        </tr>
-        <tr class="remind-row">
-            <td class="title">日期属性：</td>
-            <td class="calendar-form-content">
+            </div>
+        </div>
+        <div class="remind-row">
+            <span class="title">日期属性：</span>
+            <div class="calendar-form-content">
                 <span class="date-attr">{{remindDateProp}}</span>
-            </td>
-        </tr>
-        <tr class="remind-row">
-            <td class="title">时间：</td>
-            <td>
+            </div>
+        </div>
+        <div class="remind-row">
+            <span class="title">时间：</span>
+            <div class="calendar-form-content date-time">
                 <span class="start">{{remindDate}}</span>
                 <span class="end">{{remindTime}}</span>
-            </td>
-        </tr>
-        <tr class="remind-row">
-            <td class="title">详情：</td>
-            <td>
-                <table class="detail">
-                    {{#each remindDetail}}
-                        {{#each this}}
-                        <tr class="remind-row">
-                            <td class="title">{{this.fieldName}}</td>
-                            <td class="calendar-form-content">
-                                <span class="remind-span">{{this.fieldValue}}</span>
-                            </td>
-                        </tr>
-                        {{/each}}
-                    {{/each}}
-                    <tr class="remind-row">
-                        <td class="title">表单：</td>
-                        <td class="calendar-form-content">
-                            <span class="remind-span">
-                                <a href="javascript:void(0);" style="outline: none" class="open-form">打开表单</a>
-                            </span>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+            </div>
+        </div>
+        <div class="remind-row flex">
+            <span class="title">详情：</span>
+            <div class="detail">
+                {{#each remindDetail}}
+                {{#each this}}
+                <div class="remind-row">
+                    <span class="title">{{this.fieldName}}</span>
+                    <div class="detail-calendar-form-content">
+                        <span class="remind-span">{{this.fieldValue}}</span>
+                    </div>
+                </div>
+                {{/each}}
+                {{/each}}
+                <div class="remind-row">
+                    <span class="title">表单：</span>
+                    <div class="detail-calendar-form-content">
+                        <span class="remind-span">
+                            <a href="javascript:void(0);" style="outline: none" class="open-form">打开表单</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </table>
 
 </div>

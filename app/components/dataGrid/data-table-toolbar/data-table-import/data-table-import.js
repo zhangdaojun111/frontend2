@@ -94,12 +94,14 @@ let config = {
             }
             let newFile = {}
             let n = 0;
+            let currentCode ='';
             for( let code in this.data.fileData ){
                 n++;
                 if( n==num ){
-                    newFile[code] = this.data.fileData[code]
+                    newFile[code] = this.data.fileData[code];
+                    currentCode = code;
                 }else {
-                    this.uploader.deleteFileByCode( code,'/upload_data/' )
+                    this.uploader.deleteFileByCode( code,'/upload_data/' );
                 }
             }
             this.data.fileData = newFile;
@@ -171,10 +173,13 @@ let config = {
                                 }
                                 this.data.warning_msg = warning_msg;
                                 this.actions.import();
+                            } else {
+                                this.uploader.deleteFileByCode( currentCode,'/upload_data/' );
                             }
                         } )
                     }else {
                         msgBox.alert( res.error );
+                        this.data.fileData = {};
                     }
                 }
                 this.actions.fileTip();
@@ -247,11 +252,8 @@ let config = {
 }
 
 class dataTableImport extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-        }
-        super(config);
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

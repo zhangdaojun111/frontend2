@@ -1,0 +1,11 @@
+<div class="form-chart-theme">
+    <h4 class="form-label">
+        <span>{{label}}</span>
+        <i>拖动改变配色方案</i>
+    </h4>
+    <div class="form-theme clearfix">
+        {{#each colors}}
+        <span id="{{this}}"><b {{{theme_background @this}}}></b></span>
+        {{/each}}
+    </div>
+</div>

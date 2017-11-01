@@ -39,6 +39,7 @@ function getLoginController() {
         $submitFindPw:$('.submit-find-account'),    //查找密码提交按钮
         $mobileDownload:$('.mobile-download-btn'),  //移动下载按钮
         $selfServiceUpdate:$('.self-service-update'),   //自助更新按钮
+        nextUrl:'/index',
 
         /**
          * 检测浏览器是否可用
@@ -55,7 +56,6 @@ function getLoginController() {
             this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
             this.passwordInputComp.render($wrap);
             $('.login-content').show();
-
             //系统名称改变
             this.$loginMainTitle.on('change', () => {
                 this.systemName = this.$loginMainTitle.val();
@@ -87,11 +87,11 @@ function getLoginController() {
             /**
              * 登录按钮
              */
-            this.$loginBtn.on('click', () => {
+            this.$loginBtn.on('click', _.debounce(() => {
                 // console.log(this.username_value,this.password_value,);
                 // this.password_value = this.passwordInputComp.data.password_value;
                 this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
-            });
+            },300));
 
             /**
              * 注册按钮
@@ -154,21 +154,22 @@ function getLoginController() {
              * 移动下载
              */
             this.$mobileDownload.on('click',function () {
-                console.log('打开移动下载页面');
+                window.open('https://test.erdstest.com:8809/download/download.html?referrer=');
             });
 
             /**
              * 键盘绑定
              */
-            $(document).keypress((event) => {
+            $(document).on('keypress',_.debounce((event) => {
                 if(event.keyCode === 13){
+                    console.log('abc');
                     if(this.isOpposite === false){
                         this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
                     }else{
                         this.$submitFindPw.click();
                     }
                 }
-            })
+            },300))
         },
 
         /**
@@ -310,7 +311,6 @@ function getLoginController() {
          * 用户登录
          */
         userLogin:function (username,password) {
-            // console.log(username,password);
             if(password === ''){
                 $(".warn-info").html('密码不能为空');
                 return;
@@ -334,7 +334,7 @@ function getLoginController() {
                     }
                     info = JSON.stringify(info);
                     window.localStorage.setItem('password_info',info);
-                    $(window).attr('location','/index');
+                    $(window).attr('location',that.nextUrl);
                 }else if(result.success === 0){
                     $(".warn-info").html(result['error']).show();
                 }
@@ -344,6 +344,17 @@ function getLoginController() {
         },
         setPasswordValue:function (value) {
             loginController.password_value = value;
+        },
+        /**
+         * 获取url并解析，判断是否直接跳转页面
+         */
+        getNextUrl:function () {
+            let url = window.location.search;
+            let position = url.indexOf('=');
+            url = url.substr(position + 1);
+            if(url && url !== '/'){
+                this.nextUrl = decodeURIComponent(url);
+            }
         }
     };
     return loginController;
@@ -357,9 +368,11 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 }
 
 let controller = getLoginController();
-let isNeedDownload = controller.browser_check();
+controller.formInit();  //初始化表单控件
+controller.getNextUrl();       //根据url判断是否跳转页面
+// let isNeedDownload = controller.browser_check();     //暂时屏蔽
+let isNeedDownload = false;
 if( isNeedDownload === false){      //正常显示登录表单
-    controller.formInit();  //初始化表单控件
     controller.infoInit();  //初始化最近访问用户和密码
     LoginService.getVersionInfo().done((result) => {
         if(result.success === 1){
@@ -384,5 +397,6 @@ if( isNeedDownload === false){      //正常显示登录表单
     });
 }else{
     //显示浏览器下载提示,隐藏其余部分
+    $('.login-content').hide();
     $(".need-download").show();
 }

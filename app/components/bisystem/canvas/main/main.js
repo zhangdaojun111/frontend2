@@ -68,9 +68,7 @@ let config = {
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
             if (this.data.currentViewId) {
-                if (!this.data.singleMode) {
-                    this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
-                }
+                this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                 this.data.cells.render(this.el.find('.cells-container'));
 
@@ -87,11 +85,18 @@ let config = {
             // }
             let header = new CanvasHeaderComponent({}, {
                 onAddCell: (cell) => {
-                    this.data.cells.actions.addCell(cell)
+                    this.data.cells.actions.addCell(cell);
                 },
                 onSaveCanvas: () => {
-                    this.data.cells.actions.saveCanvas()
+                    this.data.cells.actions.saveCanvas();
                 },
+                onWhenPrintCellDataFinish: async () => {
+                    msgbox.showLoadingRoot();
+                    const res = await this.data.cells.actions.cellsDataIsFinish();
+                    window.print();
+                    msgbox.hideLoadingRoot();
+
+                }
             });
             this.append(header, this.el.find('.views-header'));
             this.data.headerComponents = header;
@@ -107,18 +112,21 @@ let config = {
     },
 
     afterRender:function(){
-        this.showLoading();
+        if (self.frameElement && self.frameElement.tagName == "IFRAME") {
+            let w = $(self.frameElement).closest('.iframes').width();
+            let h = $(self.frameElement).closest('.iframes').height();
+            $('html.bi').css({'width':w,'height':h});
+        }
         //根据判断是否单行模式加载header
         this.actions.headLoad();
-        this.hideLoading();
     },
     beforeDestory:function () {}
 };
 
 export class CanvasMain extends Component {
-    constructor(data, events) {
+    constructor(data, events,extendConfig) {
         config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
-        super(config, data, events);
+        super($.extend(true,{},config,extendConfig), data, events);
     }
 }
 

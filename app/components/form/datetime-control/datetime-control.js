@@ -78,6 +78,7 @@ let config = {
             this.el.find('.ui-history').css('visibility','hidden');
         }
         if (this.data.is_view) {
+            this.el.find('.form-control').attr('title', this.data.value)
             this.el.find('.ui-width').attr('disabled', true);
             this.el.find('.datetime-control').css('pointer-events','none');
         } else {
@@ -106,6 +107,7 @@ let config = {
             changeMonth: true,
             changeYear: true,
             dateFormat: "yy-mm-dd",
+            yearRange:"1900:2999",
             defaultDate: new Date(_this.data.value),
             timeFormat: 'HH:mm:ss', //格式化时间
             showOn: 'both',//设置触发选择器为button/focus
@@ -250,7 +252,7 @@ let config = {
     }
 }
 export default class DateTimeControl extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

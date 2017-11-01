@@ -1,11 +1,12 @@
 import {Base} from '../base';
 import template from './radar.html';
 
-import {chartName,theme,icon,button} from '../form.chart.common';
+import {chartName,theme,icon,button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
+import 'jquery-ui/ui/widgets/sortable.js';
 
 let config = {
     template: template,
@@ -17,6 +18,17 @@ let config = {
         async getFields(data) {
             let table = data ? data : null;
             if (table) {
+                if (table.count_fields.length > 0) {
+                    let fields =[];
+                    fields = table.count_fields.map(item => {
+                        return {value: JSON.stringify(item), name: item.name}
+                    });
+                    this.formItems['countColumn'].setList(fields);
+                    this.formItems['countColumn'].el.show();
+                } else {
+                    this.formItems['countColumn'].actions.clear();
+                    this.formItems['countColumn'].el.hide();
+                };
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']);
@@ -50,6 +62,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
+            this.formItems['countColumn'].el.hide();
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
@@ -104,8 +117,9 @@ let config = {
             let chart = {
                 assortment: 'radar',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn:'',
-                filter: data.filter,
+                countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
+                filter: data.filter.filter,
+                filter_source: data.filter.filter_source,
                 columns:data.columns,
                 product:data.product,
                 icon: data.icon,
@@ -135,9 +149,10 @@ let config = {
         fillChart(chart) {
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
+            this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue(chart['filter']);
+            this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['product'].setValue(chart['product']);
         }
@@ -164,6 +179,7 @@ let config = {
                     }
                 }
             },
+            countColumn,
             theme,
             icon,
             {
@@ -212,6 +228,24 @@ let config = {
                     onChange:function(value) {
                         this.formItems['columns'].clearErrorMsg();
                         this.formItems['choosed'].actions.update(value);
+                        let me = this;
+                        // 以选择列名排序
+                        let sort_items = this.formItems['choosed'].el.find('.form-chart-clo');
+                        sort_items.sortable({
+                            'update': function(event, ui) {
+                                let sort_columns_list = sort_items.sortable( "toArray");
+                                let columns = [];
+                                sort_columns_list.forEach(item => {
+                                    for (let column of me.formItems['columns'].data.value) {
+                                        if (column.id === item) {
+                                            columns.push(column);
+                                            break;
+                                        };
+                                    }
+                                })
+                                me.formItems['columns'].data.value = columns;
+                            }
+                        })
                     }
                 }
             },
@@ -252,15 +286,15 @@ let config = {
 
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
-        }
+        };
 
-    }
+    },
 }
 
 class RadarEditor extends Base {
-    constructor(data) {
+    constructor(data,extendConfig) {
         config.data.chart_id = data.id ? data.id : null;
-        super(config);
+        super($.extend(true,{},config,extendConfig));
     }
 }
 

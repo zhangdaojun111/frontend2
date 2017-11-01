@@ -63,8 +63,8 @@ let config = {
 };
 
 class FileResult extends Component{
-    constructor(data){
-        super(config);
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig));
         this.data.searchData = data;
     }
 }

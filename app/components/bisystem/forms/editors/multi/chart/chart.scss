@@ -3,11 +3,11 @@
     .form-label {
         position: absolute;
         border: none;
-        left: 45px;
+        left: 0;
         span {
             position: absolute;
             top: -22px;
-            left: 31px;
+            left: 3px;
             min-width: 100px;
             background: none;
             color: #666;
@@ -15,8 +15,49 @@
         .error-msg {
             position: absolute;
             top: 35px;
-            left: 30px;
+            left: 10px;
             min-width: 100px;
+        }
+    }
+}
+
+@mixin div-equal {
+    display: inline-block;
+    width: 33.3%;
+    margin-top: 20px;
+}
+
+.form-chart-multi-chart {
+    .form-group-chart {
+        position: relative;
+        margin-bottom: 20px;
+        > div {
+            @include div-equal;
+        }
+        > div:last-child {
+            width: 100%;
+        }
+        > div:nth-last-child(2) {
+            margin-top: 0;
+            padding-right: 66.7%;
+        }
+        .form-chart-radio {
+            label {
+                margin: 8px;
+                border: 1px solid #e4e4e4;
+                padding: 10px 24px;
+                background: #F2F2F2;
+            }
+        }
+    }
+}
+
+//行级模式下
+.countColumn-width {
+    .form-group-chart {
+        > div:nth-last-child(2) {
+            margin-left: 33.3%;
+            padding-right: 0;
         }
     }
 }
@@ -51,8 +92,22 @@
                 display: none;
             }
             .error-msg {
-                top: -2px;
+                top: -6px;
             }
+        }
+    }
+    .form-chart-radio {
+        @include msg-show;
+        .form-label {
+            span {
+                top: -28px;
+            }
+        }
+        label {
+            border: none !important;
+            background: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
         }
     }
 }

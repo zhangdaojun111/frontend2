@@ -13,13 +13,16 @@
         border: 1px solid #ddd;
         height: 30px;
         line-height: 30px;
-        padding: 0;
+        padding-right: 20px;
         outline: none;
         text-indent: 10px;
         box-sizing: border-box;
         z-index: 100;
         background-color: #fff;
         cursor: pointer;
+        overflow: hidden;
+        white-space:nowrap;
+        text-overflow: ellipsis;
     }
     .triangle {
         position: absolute;
@@ -95,6 +98,12 @@
                     span {
                         margin: 0!important;
                         padding-left: 8px;
+                        display: inline-block;
+                        box-sizing: border-box;
+                        width: calc(100% - 40px);
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
                     }
                 }
             }

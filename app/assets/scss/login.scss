@@ -32,18 +32,18 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
             margin-left: 200px;
             margin-top: 150px;
 
-            .login-main-title {
+            .company-info {
                 color: white;
                 line-height: 30px;
                 font-size: 20px;
                 text-align: center;
             }
 
-            .login-version-title{
-                color: $panel_color;
-                text-align: center;
-                font-size: 12px;
-            }
+            //.login-version-title{
+            //    color: $panel_color;
+            //    text-align: center;
+            //    font-size: 12px;
+            //}
 
             .white-panel {
                 background-color: #ffffff;
@@ -52,16 +52,28 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                 height: 240px;
                 border-radius: 2%;
 
-                h2 {
-                    padding-top: 15px;
-                    height: 40px;
-                    line-height: 20px;
-                    color: black;
-                    //font-size: 0.9em;
+                .panel-header{
+                    height: 30px;
+                    border-radius: 6px;
+                    line-height: 30px;
                     text-align: center;
+                    background-color: #fafafa;
+                    .panel-title {
+                        line-height: 30px;
+                    }
                 }
 
+                //h2 {
+                //    padding-top: 15px;
+                //    height: 40px;
+                //    line-height: 20px;
+                //    color: black;
+                //    //font-size: 0.9em;
+                //    text-align: center;
+                //}
+
                 form {
+                    margin-top: 25px;
                     .form-group{
                         position: relative;
                         height: 40px;
@@ -137,7 +149,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                     .remember-pw-group {
                         width: 80px;
                         height: 20px;
-                        margin-top: 5px;
+                        margin-top: 12px;
                         margin-left: 27px;
                         color: rgba(72, 72, 72, 0.73);
 
@@ -155,12 +167,12 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                         width: 100%;
                         height: 20px;
                         line-height: 20px;
-                        margin-top: 5px;
+                        margin-top: 3px;
                         color: red;
                         text-align: center;
                     }
                     .panel-bottom {
-                        height: 50px;
+                        height: 54px;
                         border-top: solid 1px rgba(212, 212, 212, 0.24);
                         .find-pw-group {
                             margin-left: 30px;
@@ -190,12 +202,14 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                             cursor: pointer;
                             width: 90px;
                             height: 30px;
+                            box-sizing: border-box;
+                            padding: 1px 6px;
                             color: white;
                             background-color: #686868;
                             border-radius: 5px;
                             border: 0;
-                            margin-left: 80px;
-                            margin-top: 10px;
+                            margin-left: 86px;
+                            margin-top: 12px;
                         }
                     }
                 }

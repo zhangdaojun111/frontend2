@@ -40,6 +40,10 @@ let config = {
          * 渲染cell
          */
         renderCell() {
+            let windowSize = $(document).width();
+            if (windowSize && windowSize <= 960) {
+                this.data.cell.size.width = 'auto';
+            };
             this.el.find('.cell').css(this.data.cell.size);
             this.cellTitle = new CanvasCellTitleComponent({},{
                 /**
@@ -75,7 +79,6 @@ let config = {
                 });
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
-                this.cellChart = this.data.cellComponent;
             }
         },
 
@@ -85,7 +88,6 @@ let config = {
         cellDragandResize() {
             let dragCell = this.el.find('.cell');
             const dragOption = {
-                cursor: "crosshair",
                 containment: '.cells-container',
                 grid: [10, 10],
                 stop: (event, ui) => {
@@ -247,8 +249,8 @@ let config = {
 
 export class CanvasCellComponent extends Component {
 
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data, events,extendConfig) {
+        super($.extend(true,{},config,extendConfig), data, events);
         // config.data.biUser = window.config.bi_user === 'client' ? false : true;
         // super(config);
         // this.data.cell = data['cell'];

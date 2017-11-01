@@ -9,20 +9,23 @@ let config = {
             this.$root.show();
         }
     },
-    firstAfterRender:function () {
+    afterRender:function () {
         this.$root = this.el.find('.loading-component-box');
     },
 };
 
 let Loading = {
     showLoading(){
+        if(this.loadingComponent && this.loadingComponent.el !== null){
+            return;
+        }
         this.$wrap = $("<div class='loading-component-box'>").appendTo(document.body);
         this.loadingComponent = new Component(config);
         this.loadingComponent.render(this.$wrap);
         this.loadingComponent.actions.show();
     },
     hideLoading(){
-        if(this.loadingComponent){
+        if(this.loadingComponent && this.loadingComponent.el !== null){
             this.loadingComponent.destroySelf();
             this.$wrap.remove();
         }

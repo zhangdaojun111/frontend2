@@ -10,9 +10,47 @@
         <div class="txt"><span>{{name}}</span></div>
     </div>
     <div class="approval-info-item flex">
+        <div class="i-block blue"></div>
+        <!--<div class="tit">当前节点</div>-->
+        <!--<div class="txt"><span>{{current_node}}</span></div>-->
+        <!--<div class="approval-control flex">-->
+            <!--<div class="approval-btn approval-pass for-hide" id="app-pass">审批通过</div>-->
+            <!--<div class="approval-btn-sel for-hide">-->
+                <!--<div class="approval-curr-txt">驳回到</div>-->
+                <!--<div class="approval-sel-down">-->
+                    <!--<div class="approval-btn btn-transition1" id="app-rej-up">上一级</div>-->
+                    <!--<div class="approval-btn btn-transition2" id="app-rej-any">任意节点</div>-->
+                    <!--<div class="approval-btn btn-transition3" id="app-rej-start">发起人</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="approval-btn approval-add for-hide" id="app-add">加签</div>-->
+            <!--<div class="approval-btn approval-pass for-hide" id="re-app">重新申请</div>-->
+        <!--</div>-->
+        <div class="tit">附加功能</div>
+        <div class="gz approval-btn for-hide clearfix">
+            <i class="gz-icon workflow-icon-box workflow-icon-gz"></i>
+            签章
+        </div>
+        <div  class=" printBtn" onclick="window.print();">
+            <i class="workflow-icon-box workflow-icon-print"></i>
+            打印
+        </div>
+    </div>
+
+    <div class="approval-info-item flex">
+        <!--<div class="gz approval-btn for-hide clearfix">-->
+            <!--<i class="gz-icon workflow-icon-box workflow-icon-gz"></i>-->
+            <!--签章-->
+        <!--</div>-->
+        <!--<div  class=" printBtn" onclick="window.print();">-->
+            <!--<i class="workflow-icon-box workflow-icon-print"></i>-->
+            <!--打印-->
+        <!--</div>-->
+
+
         <div class="i-block red"></div>
         <div class="tit">当前节点</div>
-        <div class="txt"><span>{{current_node}}</span></div>
+        <div class="txt current-name" title="{{current_node}}"><span>{{current_node}}</span></div>
         <div class="approval-control flex">
             <div class="approval-btn approval-pass for-hide" id="app-pass">审批通过</div>
             <div class="approval-btn-sel for-hide">
@@ -25,17 +63,6 @@
             </div>
             <div class="approval-btn approval-add for-hide" id="app-add">加签</div>
             <div class="approval-btn approval-pass for-hide" id="re-app">重新申请</div>
-        </div>
-    </div>
-
-    <div class="approval-info-item flex">
-        <div class="gz approval-btn for-hide clearfix">
-            <i class="gz-icon workflow-icon-box workflow-icon-gz"></i>
-            签章
-        </div>
-        <div  class=" printBtn" onclick="window.print();">
-            <i class="workflow-icon-box workflow-icon-print"></i>
-            打印
         </div>
     </div>
 </div>

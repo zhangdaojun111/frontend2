@@ -5,13 +5,13 @@
     <p class="info">权限受限</p>
     {{else}}
     <input type="password" value="{{value}}" readonly id="inputShow" class="dynamic-form-input ui-width">
-    <a href="javascript:;" id="edit" style="color: rgb(14, 122, 239); background: none;"
+    <a href="javascript:;" id="edit" style="color: #2298f4; background: none;"
        class="dynamic-form-input-a">编辑</a>
     <div style="float: left;">
         {{#if required}}
         <span id="requiredLogo" class="{{requiredClass}}"></span>
         {{/if}}
-        <a href="javascript:void(0);" class="ui-history icon-history form-icon visible" title="修改历史"></a>
+        <a href="javascript:void(0);" class="ui-history icon-history form-icon visible" title="修改历史" style="position: relative; top: -2px;"></a>
     </div>
 
     {{/if}}

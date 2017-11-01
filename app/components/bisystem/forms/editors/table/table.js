@@ -2,7 +2,7 @@ import {Base} from '../base';
 import template from './table.html';
 import './table.scss';
 
-import {chartName, theme, icon, button} from '../form.chart.common';
+import {chartName, theme, icon, button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -18,6 +18,17 @@ let config = {
         async getFields(data) {
             let table = data ? data : null;
             if (table) {
+                if (table.count_fields.length > 0) {
+                    let fields =[];
+                    fields = table.count_fields.map(item => {
+                        return {value: JSON.stringify(item), name: item.name}
+                    });
+                    this.formItems['countColumn'].setList(fields);
+                    this.formItems['countColumn'].el.show();
+                } else {
+                    this.formItems['countColumn'].actions.clear();
+                    this.formItems['countColumn'].el.hide();
+                };
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']['x_field']);
@@ -37,9 +48,11 @@ let config = {
         async loadColumns(columns) {
             if (this.formItems['columns']) {
                 if (columns) {
+                    this.data.xAxis = columns;
                     this.formItems['columns'].setList(columns);
                     this.formItems['sortColumns'].setList(columns);
                 } else { // 清空字段
+                    this.data.xAxis = [];
                     this.formItems['columns'].actions.clear();
                     this.formItems['choosed'].actions.clear();
                     this.formItems['table_single'].actions.clear();
@@ -52,6 +65,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
+           this.formItems['countColumn'].el.hide();
            this.formItems['single'].trigger('onChange');
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
@@ -99,7 +113,6 @@ let config = {
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
-
         /**
          * 保存图表数据
          */
@@ -108,12 +121,13 @@ let config = {
             let chart = {
                 assortment: 'table',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
-                countColumn:{},
+                countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 columns:data.columns,
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
-                filter: data.filter,
+                filter: data.filter.filter,
+                filter_source: data.filter.filter_source,
                 countNum: data.countNum,
                 single:data.single[0] ? data.single[0]: 0,
                 singleColumnWidthList:[],
@@ -144,9 +158,10 @@ let config = {
         fillChart(chart) {
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
+            this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue(chart['filter']);
+            this.formItems['filter'].setValue({filter: chart['filter']?chart['filter']: '', filter_source:chart['filter_source']?chart['filter_source']:[]});
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
@@ -157,6 +172,7 @@ let config = {
         }
     },
     data: {
+        xAxis:[],
         options: [
             chartName,
             {
@@ -177,6 +193,7 @@ let config = {
                     }
                 }
             },
+            countColumn,
             theme,
             icon,
             {
@@ -188,7 +205,7 @@ let config = {
                     onShowAdvancedSearchDialog() {
                         let data = {
                             tableId: this.formItems['source'].data.value ? this.formItems['source'].data.value.id : '',
-                            fieldsData: this.formItems['columns'].data.list,
+                            fieldsData: this.data.xAxis,
                             commonQuery: this.formItems['filter'].data.value && this.formItems['filter'].data.value.hasOwnProperty('filter') ? [this.formItems['filter'].data.value.filter_source] : null,
                         };
                         this.formItems['filter'].actions.showAdvancedDialog(data);
@@ -213,6 +230,26 @@ let config = {
                         this.formItems['columns'].clearErrorMsg();
                         this.formItems['choosed'].actions.update(value);
                         this.formItems['table_single'].actions.setColumns(value, this.formItems['columnNum'].getValue());
+
+                        let me = this;
+                        // 以选择列名排序
+                        let sort_items = this.formItems['choosed'].el.find('.form-chart-clo');
+                        sort_items.sortable({
+                            'update': function(event, ui) {
+                                let sort_columns_list = sort_items.sortable( "toArray");
+                                let columns = [];
+                                sort_columns_list.forEach(item => {
+                                    for (let column of me.formItems['columns'].data.value) {
+                                        if (column.id === item) {
+                                            columns.push(column);
+                                            break;
+                                        };
+                                    }
+                                })
+                                me.formItems['columns'].data.value = columns;
+                                me.formItems['table_single'].actions.setColumns(columns, me.formItems['columnNum'].getValue());
+                            }
+                        })
                     }
                 }
             },
@@ -252,10 +289,10 @@ let config = {
                 type: 'select'
             },
             {
-                label: '请输入显示多少多少列(默认10条)',
+                label: '请输入显示多少列(默认10条)',
                 name: 'countNum',
                 defaultValue: 10,
-                placeholder: '请输入显示多少多少列(默认10条)',
+                placeholder: '请输入显示多少列(默认10条)',
                 category: 'number',
                 type: 'text'
             },
@@ -343,16 +380,14 @@ let config = {
         this.actions.init();
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
-        }
-
+        };
     }
 }
 
 class TableEditor extends Base {
-    constructor(data) {
-
+    constructor(data,extendConfig) {
         config.data.chart_id = data.id ? data.id : null;
-        super(config);
+        super($.extend(true,{},config,extendConfig));
     }
 }
 

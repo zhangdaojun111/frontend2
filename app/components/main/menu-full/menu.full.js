@@ -152,6 +152,20 @@ let config = {
             callback: _.debounce(function(context) {
                 this.actions.search(context.value);
             }, 1000)
+        },
+        {
+            event:'focus',
+            selector:'label.search input',
+            callback:function (context) {
+                $(context).parent().addClass('highlight');
+            }
+        },
+        {
+            event:'blur',
+            selector:'label.search input',
+            callback:function (context) {
+                $(context).parent().removeClass('highlight');
+            }
         }
     ],
 
@@ -176,11 +190,11 @@ let config = {
     beforeDestory: () => {
         $(window).off('resize.menu')
     }
-}
+};
 
 class MenuComponent extends Component {
-    constructor(data){
-        super(config, data);
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig), data);
     }
 }
 

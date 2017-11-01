@@ -39,6 +39,7 @@ let config = {
         },
         // 渲染触发历史
         renderStrTable:function(){
+            // this.append(new strikeTable({trigger_work_records: this.triggerWorkRecords}), this.el.find('.history-table-box.strike'));
             this.triggerWorkRecords.forEach((row) => {
                 this.append(new strikeTable(row), this.el.find('.history-table-box.strike'));
             });
@@ -115,12 +116,8 @@ let config = {
     }
 }
 class historyApprove extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-
-        }
-        super(config)
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 export default historyApprove

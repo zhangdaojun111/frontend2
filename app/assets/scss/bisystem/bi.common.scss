@@ -22,6 +22,7 @@ html.bi, body.bi {
     height: 100%;
     .bi-container {
         height: 100%;
+        background: #f5f4f4;
     }
     .remove-icon {
         @include icon;
@@ -117,6 +118,10 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/new-chart.png') no-repeat;
     }
+    .new-charts-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/new_charts.png') no-repeat;
+    }
     .search-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/search.png') no-repeat;
@@ -124,6 +129,66 @@ html.bi, body.bi {
     .select-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/select.png') no-repeat;
+    }
+    .chart-barline-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_barline.png') no-repeat;
+    }
+    .chart-table-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_table.png') no-repeat;
+    }
+    .chart-radar-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_radar.png') no-repeat;
+    }
+    .chart-multip-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_multip.png') no-repeat;
+    }
+    .chart-ninegrid-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_ninegrid.png') no-repeat;
+    }
+    .chart-comment-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_comment.png') no-repeat;
+    }
+    .chart-pie-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_pie.png') no-repeat;
+    }
+    .aside-normal-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_barline.png') no-repeat;
+    }
+    .aside-comment-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_comment.png') no-repeat;
+    }
+    .aside-multilist-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_multip.png') no-repeat;
+    }
+    .aside-nineGrid-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_ninegrid.png') no-repeat;
+    }
+    .aside-pie-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_pie.png') no-repeat;
+    }
+    .aside-radar-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_radar.png') no-repeat;
+    }
+    .aside-table-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_table.png') no-repeat;
+    }
+    .rich-text-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/rich_text_icon.png') no-repeat;
     }
 }
 
@@ -218,7 +283,7 @@ html.bi, body.bi {
             margin-bottom: 40px;
         }
         .form-chart-wrapper {
-            padding-left: 80px;
+            padding-left: 10px;
         }
         .form-label {
             padding-left: 10px;
@@ -228,6 +293,10 @@ html.bi, body.bi {
                 display: inline-block;
                 padding: 6px 8px;
                 color: #ffffff;
+            }
+            .start-icon{
+                vertical-align: middle;
+                margin-bottom: 2px;
             }
             .required, .error-msg {
                 color: red;

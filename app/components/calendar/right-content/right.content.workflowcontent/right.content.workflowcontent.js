@@ -5,7 +5,7 @@
 import Component from "../../../../lib/component";
 import template from './right.content.workflowcontent.html';
 import './right.content.workflowcontent.scss';
-
+import Mediator from '../../../../lib/mediator';
 import {PMAPI} from '../../../../lib/postmsg';
 
 let config = {
@@ -37,7 +37,9 @@ let config = {
                     height: '900',
                     modal: true,
                     customSize: true,
-                })
+                }).then(data => {
+                Mediator.emit('Calendar: tool', {toolMethod: 'refreshData'});
+            })
         }
     },
     binds: [
@@ -56,9 +58,9 @@ let config = {
 };
 
 class RightContentWorkFlow extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data = data;
-        super(config);
+        super($.extend(true,{},config,newConfig));
     }
 }
 

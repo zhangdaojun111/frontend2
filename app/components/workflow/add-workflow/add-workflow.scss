@@ -17,6 +17,9 @@
         height: 0;
         overflow: hidden;
     }
+    #workflow-title{
+        height: 47px;
+    }
 }
 #app-workflow {
     .workflow-foot .workflow-box{
@@ -28,7 +31,9 @@
         bottom: 0px;
         width: 100%;
         justify-content: flex-end;
-        background: #fff;
+        background: #f2f2f2;
+        z-index: 1;
+        padding-top: 12px;
         div{
             background: #0088ff;
             width: 91px;
@@ -37,25 +42,9 @@
             border-radius: 4px;
             box-shadow: none;
             color: #fff;
-            margin-right: 9px;
+            margin-right: 35px;
             line-height: 30px;
             cursor: pointer;
-        }
-    }
-    .printBtn {
-        background: #fff;
-        position: absolute;
-        right: 14px;
-        height: 25px;
-        top: 22px;
-        width: 52px;
-        line-height: 16px;
-        margin-left: 5px;
-        cursor: pointer;
-        & > i {
-            display: inline-block;
-            float: left;
-            margin-right: 5px;
         }
     }
     .addPrint{
@@ -93,11 +82,10 @@
         #wf-select{
             cursor: pointer;
             border: 1px solid #d7d7d7;
-            border-radius: 4px;
             text-indent: 0;
             color: #666666;
             font-size: 12px;
-            height: 25px;
+            height: 30px;
             outline: none;
             box-shadow: none;
             -webkit-appearance:none;

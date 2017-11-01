@@ -151,7 +151,8 @@ let config={
                     let value = this.data.dataList[this.data.value][i];
                     d['list'].push({name: value, id: value});
                     d['choosed'].push({name: value, id: value});;
-                    this.data.hasChoose.set(i, value);
+                     this.data.hasChoose.set(i, value);
+
                 } else {
                     let set = new Set();
                     d['choosed']=[{name:'请选择',id:'请选择'}];
@@ -165,6 +166,9 @@ let config={
                 let autoSelect = new AutoSelect(d);
                 this.data.childDrop[i] = autoSelect;
                 this.append(autoSelect, this.el.find('.multi-drop'));
+                if (this.data.is_view && this.data.value) {
+                    $(this.el.find('.auto-select-component').get(i)).attr('title', d['choosed'][0].name);
+                }
             }
             this.data.isInit=false;
         }
@@ -205,7 +209,7 @@ let config={
     }
 }
 export default class MultiLinkageControl extends Component{
-    constructor(data,events){
-        super(config,data,events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }

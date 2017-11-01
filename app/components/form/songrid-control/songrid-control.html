@@ -5,15 +5,15 @@
         <p class="info">被修改条件限制</p>
     {{else}}
         {{#if popupType}}
-            <a href="javascript:void(0);" class="ui-forms-a">查看详情</a>
-        {{#if required}}
-            <span id="requiredLogo" class="required" ></span>
-        {{/if}}
+        <a href="javascript:void(0);" class="ui-forms-a">查看详情</a>
         <input type="hidden">
         {{else}}
         <div class="ui-songrid-box">
             <div class="songGrid"></div>
         </div>
+        {{#if required}}
+        <span id="requiredLogo" class="required" ></span>
+        {{/if}}
         {{/if}}
     {{/if}}
 </div>

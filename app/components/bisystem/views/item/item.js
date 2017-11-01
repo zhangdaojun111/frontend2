@@ -29,7 +29,7 @@ let config = {
                     if(res['success']===1){
                         this.trigger('onDelete',this.data);
                         msgbox.showTips('删除成功');
-                        this.destroySelf();
+                        window.location.reload();
                     }else{
                         msgbox.alert(res['error']);
                     }
@@ -79,14 +79,14 @@ let config = {
         }
     ],
     afterRender(){
-
+        this.el.prop('id', this.data.name)
     },
     firstAfterRender(){}
 };
 
 
 export class ViewItemComponent extends Component{
-    constructor(data,events) {
-        super(config,data,events);
+    constructor(data,events,extendConfig) {
+        super($.extend(true,{},config,extendConfig),data,events);
     }
 }

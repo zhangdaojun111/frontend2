@@ -18,6 +18,7 @@ import WorkFlow from '../components/workflow/workflow-drawflow/workflow';
 import Grid from '../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import {PMAPI,PMENUM} from '../lib/postmsg';
 import jsplumb from 'jsplumb';
+import {CreateFormServer} from "../services/formService/CreateFormServer";
 
 let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[],agorfo=true,is_batch=0;
 serchStr.split('&').forEach(res => {
@@ -25,13 +26,12 @@ serchStr.split('&').forEach(res => {
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
-
 console.log(obj);
 
 ApprovalWorkflow.showDom().then(function (component) {
     WorkFlowGrid.showGrid();
     WorkFlowForm.showForm();
-    FormEntrys.createForm({
+    FormEntrys.initForm({
         el: $('#place-form'),
         form_id: obj.form_id,
         record_id: obj.record_id,
@@ -41,11 +41,20 @@ ApprovalWorkflow.showDom().then(function (component) {
         btnType:'none',
         table_id: obj.table_id
     });
-    setTimeout(()=> component.hideLoading(),1000)
+    Mediator.subscribe("form:formAlreadyCreate",()=>{
+        component.hideLoading();
+    });
+    // setTimeout(()=> component.hideLoading(),1000)
 });
 
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
+    let count = 0;
+    for(let comment of res.record_info.approve_tips) {
+        comment['index'] = count;
+        count += 1;
+    }
+    console.log(res.record_info.approve_tips);
     ApprovalHeader.showheader(res.record_info);
     WorkflowRecord.showRecord(res.record_info);
     let current_node_arr = res.record_info.current_node.split('、');
@@ -71,20 +80,6 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     if(is_view){
         $('#add-home').find('#addFollower').hide();
     }
-
-    // zj
-    // (async function () {
-    //     return workflowService.getWorkflowInfo({url: '/get_all_users/'});
-    // })().then(users => {
-    //     for(let i in focus){
-    //         nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
-    //     }
-    //     $('#add-home #addFollowerList').html(nameArr);
-    //     if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
-    //         $('#approval-workflow').find('.for-hide').hide();
-    //         $('#approval-workflow').find('#re-app').hide();
-    //     };
-    // })
 
     //审批工作流
     (async function () {
@@ -139,6 +134,10 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         }
     )
 })().then(function (res) {
+    let cannotopenform = '';
+    if(res['record_info']['status'] === '已完成') {
+        cannotopenform = '1';
+    }
     Mediator.publish("workflow:aggridorform",res);
     is_batch = res.record_info.is_batch;
     if(is_batch==1){
@@ -149,6 +148,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         tableId:obj.table_id,
         recordId: obj.record_id,
         viewMode:"approveBatch",
+        cannotopenform: cannotopenform,
     });
     AgGrid.actions.returnBatchData = function (ids) {
         temp_ids=ids;
@@ -185,8 +185,8 @@ function GetQueryString(name)
 //审批操作
 const approveWorkflow = (para) => {
     let key=GetQueryString('key');
-    let formData=FormEntrys.getFormValue(obj.table_id,true),
-        comment=$('#comment').val();
+    let formData=CreateFormServer.getFormValue(obj.table_id,true);
+        // comment=$('#comment').val();
     para.data={};
     if(agorfo){
         if(formData.error){
@@ -196,14 +196,33 @@ const approveWorkflow = (para) => {
             para.data = JSON.stringify(formData);
         }
     }
-    para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);
-    (async function () {
-        return workflowService.approveWorkflowRecord({
-            url: '/approve_workflow_record/',
-            data: para
-        });
-    })().then(res => {
+    msgBox.showLoadingSelf();
+    console.log(para);
+    // (async function () {
+    //     return workflowService.approveWorkflowRecord({
+    //         url: '/approve_workflow_record/',
+    //         data: para
+    //     });
+    // })().then(res => {
+    //     msgBox.hideLoadingSelf();
+    //     if(res.success===1){
+    //         msgBox.alert(`操作成功`);
+    //         PMAPI.sendToParent({
+    //             type: PMENUM.close_dialog,
+    //             key:key,
+    //             data:{refresh:true}
+    //         })
+    //     }else{
+    //         msgBox.alert(`失败：${res.error}`);
+    //     }
+    //
+    // })
+    workflowService.approveWorkflowRecord({
+        url: '/approve_workflow_record/',
+        data: para
+    }).then(res => {
+        msgBox.hideLoadingSelf();
         if(res.success===1){
             msgBox.alert(`操作成功`);
             PMAPI.sendToParent({
@@ -214,33 +233,47 @@ const approveWorkflow = (para) => {
         }else{
             msgBox.alert(`失败：${res.error}`);
         }
-
     })
+
 };
+// Mediator.subscribe('workflow:comment',(res)=>{
+//     console.log(res);
+//     comment = res.comment;
+//     attachmentComment = res.attachment;
+//     console.log('111111111111');
+// })
 
 Mediator.subscribe('approval:recordPass', (data) => {
+    console.log(data);
     approveWorkflow({
         record_id: obj.record_id,
         action: 0, // 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
         node_id: null, //驳回节点id
         sigh_type: 0, //加签类型  0：前 1：后
         sigh_user_id: '',
-        sign: JSON.stringify(data),
+        sign: data['imgInfo'][0],
+        delSign:data['imgInfo'][1],
+        comment_attachment: JSON.stringify(data['comment']['attachment']),
+        comment: data['comment']['comment'],
     });
 });
 Mediator.subscribe('approval:appRejUp', (ispass) => {
-    if (ispass) {
+    if (ispass.determine) {
         approveWorkflow({
             record_id: obj.record_id,
             action: 1,
+            comment_attachment: JSON.stringify(ispass['attachment']),
+            comment: ispass['comment'],
         });
     }
 });
 Mediator.subscribe('approval:recordRejStart', (ispass) => {
-    if (ispass) {
+    if (ispass.determine) {
         approveWorkflow({
             record_id: obj.record_id,
             action: 2,
+            comment_attachment: JSON.stringify(ispass['attachment']),
+            comment: ispass['comment'],
         });
     }
 });
@@ -250,24 +283,29 @@ Mediator.subscribe('approval:signUser', (signObj) => {
         action: 9,
         sigh_type: signObj.sigh_type,
         sigh_user_id: signObj.sigh_user_id,
+        comment: signObj.comment,
+        comment_attachment: JSON.stringify(signObj.attachment),
     });
 });
-Mediator.subscribe('approval:rejToAny', (id) => {
-    if(id.length==21){
-        id=id.slice(5);
-    }else if(id.length==19){
-        id=id.slice(3);
-    }
+Mediator.subscribe('approval:rejToAny', (res) => {
+    console.log(res);
+    // if(res.id.length === 21){
+    //     res.id = res.id.slice(5);
+    // }else if(res.id.length === 19){
+    //     res.id = res.id.slice(3);
+    // }
     approveWorkflow({
         record_id: obj.record_id,
         action: 6,
-        node_id: id,
+        node_id: res.rejectId,
+        comment: res.data.comment,
+        comment_attachment: JSON.stringify(res.data['attachment']),
     });
 });
 //驳回至发起人，重新发起
 Mediator.subscribe("approval:re-app", (msg) => {
     let key=GetQueryString('key');
-    let formData=FormEntrys.getFormValue(obj.table_id,true);
+    let formData=CreateFormServer.getFormValue(obj.table_id,true);
     if(formData.error){
         msgBox.alert(`${formData.errorMessage}`);
     }else{

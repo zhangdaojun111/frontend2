@@ -5,6 +5,8 @@
 import template from './thumbnail-list.html';
 import './thumbnail-list.scss';
 import Component from "../../../../lib/component";
+// import Preview from '../../../util/preview/preview';
+import {PMAPI, PMENUM} from "../../../../lib/postmsg";
 
 let config = {
     template:template,
@@ -146,14 +148,8 @@ let config = {
                 if(!this.data.items[this.data.currentIndex+i]){
                     return;
                 }
-                let src = '/download_attachment/?file_id='+Object.keys(this.data.items[this.data.currentIndex+i])[0]+'&download=0';
-                this.el.find('.preview').attr('src',src).css('display','block');
-                event.stopPropagation();
-                $(document).click((event2)=>{
-                    if(event2.target.classList.value != 'preview'){
-                        this.el.find('.preview').css('display','none');
-                    }
-                })
+                PMAPI.openPreview({list:this.data.items,currentIndex:this.data.currentIndex+i});
+                event.stopPropagation({list:this.data.items,currentIndex:this.data.currentIndex+i});
             })
         }
         this.actions.setMoveController();
@@ -163,7 +159,7 @@ let config = {
 }
 
 export default class ThumbnailList extends Component{
-    constructor(data){
-        super(config,{items:data});
+    constructor(data,dinput_type,newConfig){
+        super($.extend(true,{},config,newConfig),{items:data,dinput_type:dinput_type});
     }
 }

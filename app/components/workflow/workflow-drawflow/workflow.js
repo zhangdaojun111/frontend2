@@ -10,7 +10,9 @@ import msgBox from '../../../lib/msgbox';
 import Mediator from '../../../lib/mediator';
 import {workflowService} from '../../../services/workflow/workflow.service';
 import jsplumb from 'jsplumb';
-
+import approvalOpinion from '../approval-opinion/approval-opinion'
+import {PMAPI,PMENUM} from '../../../lib/postmsg';
+import Attachment from '../../form/attachment-list/attachment-list';
 let config = {
     template: template,
     data: {
@@ -95,7 +97,11 @@ let config = {
                             left: left - theBestLeft,
                             width: __this.data.node_width+'px',
                         };
-                        myTitle = __this[handlerType] + text;
+                        if(__this[handlerType]) {
+                            myTitle = __this[handlerType] + text;
+                        }else{
+                            myTitle = text;
+                        }
                         if (value['handler_relation']) {
                             text = value['handler_relation'] == 0 ? '临时(会签)' : '临时(并行)';
                         }
@@ -105,10 +111,11 @@ let config = {
                         }
                     }
                         //如果节点有附件
-                        // if (__this.hasAttachmentNodeList.indexOf(id) != -1) {
-                        //     attachment = '<span class="has-attachment-span">+</span>';
-                        //     styleClass += ' has-attachment';
-                        // }
+                    if (__this.data.node_attachments.indexOf(id) != -1) {
+                        attachment = '<span class="has-attachment-span">+</span>';
+                        styleClass += ' has-attachment';
+
+                    }
                         // //判断流程节点图片
                         // if(value.id.indexOf('start') != -1){
                         //     __this[style]['backgroundImage']= 'url("' + __this.imgNodeStart + '")';
@@ -291,10 +298,34 @@ let config = {
                 let can_reject = e.getAttribute("canreject");
                 let text = e.getAttribute("title");
                 this.rejectId = e.getAttribute("id");
-                if (can_reject == 1) {
-                    msgBox.confirm(`您确定要驳回到【${text}】么？`).then(res=>{
-                        if(res){
-                            Mediator.publish('approval:rejToAny',this.rejectId);
+                console.log(typeof can_reject);
+                if (can_reject === '1') {
+                    // PMAPI.openDialogByComponent(approvalOpinion,{
+                    //     width: 450,
+                    //     height: 300,
+                    //     title: '提示'
+                    // }).then(res=>{
+                    //     if(res.determine){
+                    //         this.comment = res.comment;
+                    //         Mediator.publish('workflow:comment',res.comment);
+                    //         Mediator.publish('approval:rejToAny',this.rejectId);
+                    //     }
+                    // })
+
+                    PMAPI.openDialogByIframe(
+                        '/iframe/approvalOpinion/',
+                        {
+                            width: 540,
+                            height: 530,
+                            title:'提示'
+                        }
+                    ).then(res => {
+                        console.log(res);
+                        if(res.determine){
+                            // this.comment = res.comment;
+                            // Mediator.publish('workflow:comment',res.comment);
+                            // Mediator.publish('approval:rejToAny',this.rejectId);
+                            Mediator.publish('approvalRejToAny: data',{rejectId: this.rejectId, data: res});
                         }
                     })
                 }
@@ -424,16 +455,18 @@ let config = {
         },
         //切换流程图
         togglePicture() {
-
+            let that =  this;
             if (this.data.pictureOption == '事务图') {
                 this.data.pictureOption = '节点图';
                 this.el.find(".togglePic-text").text('节点图');
+                let arr = that.data.draged.reverse();
                 this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
                         let originaltext = $this.attr("originaltext");
                         let originaltitle = $this.attr("originaltitle");
-                        $(this).html(originaltext).attr("title", originaltitle);
+                        let html = arr.pop();
+                        $this.html(html).attr("title", originaltitle);
                     }
                 });
             }
@@ -443,17 +476,66 @@ let config = {
                 this.el.find(".draged-item").each(function () {
                     let $this = $(this);
                     if (!$this.hasClass('draged-maodian')) {
+                        let html = $this.html();
                         let eventName = $this.attr("eventname");
+                        that.data.draged.push(html);
                         $this.html(eventName).attr("title", eventName);
                     }
                 });
+
             }
+        },
+        /**
+         * 查看附件
+         * 点击节点弹出附件弹出框
+         */
+        async fj(e) {
+            let filename = /\.(png|PNG|gif|GIF|JPG|jpg|jpeg|JPEG)$/;
+            let nodeId = $(e).parent().attr('id');
+            let res = await workflowService.nodeAttachment({
+                type: 'single',
+                node: nodeId,
+                workflow_id: this.data.id,
+            });
+            for (let i in res.node_attachments) {
+                if (filename.test(res.node_attachments[i].file_name)) {
+                    res.node_attachments[i].isImg = true;
+                    res.node_attachments[i].isPreview = true;
+                } else {
+                    res.node_attachments[i].isImg = false;
+                    res.node_attachments[i].isPreview = false;
+                }
+            }
+
+            Attachment.data['list'] = res.node_attachments;
+            Attachment.data['is_view'] = 1;
+            PMAPI.openDialogByComponent(Attachment, {
+                width: 600,
+                height: 400,
+                title: '附件查看',
+                modal: true
+            }).then((res) => {
+                this.data.showfj = true;
+            })
         }
 
     },
+    binds: [
+        {
+            event: 'click',
+            selector: '.has-attachment-span',
+            callback: _.debounce(function(e){
+                if(this.data.showfj){
+                    this.actions.fj(e);
+                }
+                this.data.showfj = false;
+            }, 500)
+        }
+    ],
     afterRender: function() {
         this.actions.init();
-
+        this.data.showfj = true;
+        this.data.draged = [];
         this.el.on('click', '#zoomIn', () => {
             this.actions.zoomInNodeflow();
         });
@@ -472,13 +554,12 @@ let config = {
     }
 }
 
+
 class WF extends Component {
-    constructor(data){
-        super(config, data);
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
-
-
 
 let WorkFlow={
     show(data,elem){
@@ -507,6 +588,7 @@ let WorkFlow={
             }});
         })()
         .then(msg=>{
+            Mediator.emit('getDefaultFocusUsers', msg['data'][0]);
             let component = new WF(msg.data[0]);
             this.WorkFlow=component;
             let el = $(o.el);

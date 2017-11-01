@@ -30,9 +30,9 @@ let config = {
 }
 
 export class CellFunnelComponent extends BiBaseComponent {
-    constructor(cellChart) {
+    constructor(cellChart,extendConfig) {
         config.data.cellChart = cellChart ? cellChart : null;
-        super(config);
+        super($.extend(true,{},config,extendConfig));
         this.data.id += this.componentId
     }
 }

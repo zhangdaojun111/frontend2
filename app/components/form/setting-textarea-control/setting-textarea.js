@@ -58,6 +58,7 @@ let config = {
         }
     ],
     afterRender() {
+        this.el.find('.ui-width').attr('title', this.data.value[-1]);
         this.el.find('.ui-width').css('width',this.data.width);
         this.actions.fillData();
         // this.actions.openSettingDialog();
@@ -74,8 +75,8 @@ let config = {
 }
 
 class SettingTextareaControl extends Component {
-    constructor(data,events) {
-        super(config, data,events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 

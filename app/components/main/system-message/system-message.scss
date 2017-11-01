@@ -1,40 +1,19 @@
 .system-message {
     padding: 10px 10px 0 10px;
-    //.tool-bar{
-    //    padding-left: 1100px;
-    //    height: 30px;
-    //    line-height: 30px;
-    //    .float-search-btn{
-    //        display: flex;
-    //        align-items: center;
-    //        text-decoration: none;
-    //        position: relative;
-    //        outline: none;
-    //        .select{
-    //            vertical-align: baseline;
-    //            order: 1;
-    //        }
-    //        .icon-aggrid-filter{
-    //            margin-right: 4px;
-    //            order: 0;
-    //        }
-    //    }
-    //}
     .grid {
         height: 485px;
         width: 1175px;
         position: relative;
-        //margin: 10px 0 10px 0;
         border: double #e4e4e4;
         .ag-body-viewport{
             .grid-cell-info{
                 .ui-link{
                     outline: none;
+                    &.approve{
+                        color: red !important;
+                    }
                 }
-                &.already-read-icon{
-                    color: #31fc38;
-                }
-                &.not-read-icon, &.waiting-for-approval{
+                &.not-read-icon{
                     color:red;
                 }
             }
@@ -44,9 +23,6 @@
         height: 40px;
         clear: none;
         margin-top: 5px;
-        //.p-left select,.p-left > span:nth-child(1),.p-left > span:nth-child(3){
-        //   display: none;
-        //}
         div.p-page-con{
             float: left;
             height: 40px;
@@ -74,17 +50,31 @@
             cursor: pointer;
         }
     }
+
+    //最大化模式下的样式
+    &.maximize-model{
+        //padding: 10px 10px 0 10px;
+        .grid {
+            height: 855px;
+            width: 1895px;
+        }
+    }
 }
 
 .component-msg-detail {
     text-align: center;
-    h3 {
-        padding-bottom: 20px;
+    box-sizing: border-box;
+    padding-bottom: 50px !important;
+    .msg-title {
         font-size: 16px;
         color: #333;
-        padding: 20px;
+        padding: 40px 70px;
     }
     .text {
+        text-align: left;
         line-height: 22px;
+        padding: 0 50px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
     }
 }

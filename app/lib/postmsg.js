@@ -9,6 +9,7 @@ import msgbox from './msgbox';
 import {Storage} from "./storage";
 import {Progresses} from "../components/util/progresses/progresses";
 import Mediator from "./mediator";
+import Preview from "../components/util/preview/preview";
 
 
 /**
@@ -54,6 +55,8 @@ export const PMENUM = {
     get_data:'15',
     show_loading:'16',          //打开loading
     hide_loading:'17',          //隐藏loading
+    open_preview:'18',          //打开图片浏览
+    aside_fold: '19'
 }
 
 /**
@@ -189,6 +192,14 @@ window.addEventListener('message', function (event) {
             case PMENUM.hide_loading:
                 msgbox._hideLoading(data.data);
                 break;
+
+            case PMENUM.open_preview:
+                let preview = new Preview(data.data);
+                let ele = $('<div class="preview"></div>');
+                ele.appendTo(document.body);
+                preview.render(ele);
+                break;
+
             default:
                 console.log('postmsg listener: unsupported message');
         }
@@ -540,6 +551,18 @@ export const PMAPI = {
         }
         let end = str.indexOf('\n', start);
         return PMAPI._removeAllComments(str.replace(str.substring(start, end), ''));
+    },
+
+    openPreview(data){
+        return new Promise(function (resolve) {
+            let key = PMAPI._getKey();
+            dialogWaitHash[key] = resolve;
+            PMAPI.sendToParent({
+                type: PMENUM.open_preview,
+                key: key,
+                data: data,
+            }, location.origin);
+        });
     }
 
 }

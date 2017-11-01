@@ -58,7 +58,6 @@ let config = {
             });
             this.append(chartsComponent,this.el.find('.charts-items'));
         });
-
     },
     firstAfterRender() {
         Mediator.subscribe('bi:aside:update',(res) => {
@@ -81,8 +80,8 @@ let config = {
 };
 
 class AsideNavComponent extends Component{
-    constructor(data,events) {
-        super(config,data,events)
+    constructor(data,events,extendConfig) {
+        super($.extend(true,{},config,extendConfig),data,events)
     }
 }
 

@@ -16,6 +16,7 @@ export const LoginService = {
      */
     support:function () {
         let browser = this.currentBrowser();
+        console.log(browser);
         if (!browser['chrome']){
             this.needDownload = true;
         }
@@ -29,6 +30,7 @@ export const LoginService = {
         let Browser = {
         };
         let ua = navigator.userAgent.toLowerCase();
+        console.log(ua);
         let s;
         (s = ua.match(/msie ([\d.]+)/)) ? Browser['ie'] = s[1] :
             (s = ua.match(/firefox\/([\d.]+)/)) ? Browser['firefox'] = s[1] :

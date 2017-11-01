@@ -3,6 +3,7 @@
 <html lang="en" class="bi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>BI</title>
 </head>
 <body class="bi">
@@ -17,8 +18,9 @@
         query_mark: '{{query_mark|safe}}',
         operation_id: '{{operation_id|safe}}',
         folder_id: '{{folder_id|safe}}'
-    }
+    };
 </script>
+
 <div id="route-outlet" class="bi-container"></div>
 </body>
 {% ifequal config.window_type 'develop'%}

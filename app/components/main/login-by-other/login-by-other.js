@@ -112,8 +112,8 @@ let config = {
 };
 
 class LoginOther extends Component{
-    constructor(){
-        super(config);
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
 

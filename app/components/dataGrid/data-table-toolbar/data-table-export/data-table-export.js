@@ -178,13 +178,15 @@ let css = `
     font-family: '微软雅黑';
     text-align: center;
     font-weight: 400;
+    cursor:pointer;
     font-style: normal;
     font-size: 12px;
     color: #FFFFFF !important;
-    text-decoration:none
-}
-.btn-name{
-margin-top:7px;
+    text-decoration:none;
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 26px;
 }
 #right1{
 top:0
@@ -256,7 +258,7 @@ let exportSetting = {
         } ).on( 'click','#attachment',()=>{
             this.el.find('#attachment').toggleClass('export-input-check');
             this.actions.changeState( 'attachment' );
-        } ).on( 'click','.export-btn',()=>{
+        } ).on( 'click','.button-box',()=>{
             PMAPI.sendToParent( {
                 key: this.key,
                 type: PMENUM.close_dialog,

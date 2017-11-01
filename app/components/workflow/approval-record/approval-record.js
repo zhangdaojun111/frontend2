@@ -6,10 +6,59 @@
 import Component from '../../../lib/component';
 import template from '././approval-record.html';
 import '././approval-record.scss';
+import AttachmentList from "../../form/attachment-list/attachment-list";
+import {PMAPI} from '../../../lib/postmsg';
+import {workflowService} from '../../../services/workflow/workflow.service';
 
 let config={
     template: template,
     data:{},
+    binds: [
+        {
+            event: 'click',
+            selector: '.comment-attachment',
+            callback: function (e) {
+                console.log("++++++++++++++++++++");
+                console.log("++++++++++++++++++++");
+                console.log("++++++++++++++++++++");
+                console.log(this.data.approve_tips[e.id]);
+                if(this.data.approve_tips[e.id].comment_attachment.length > 0) {
+                    let params = {
+                        file_ids: JSON.stringify(this.data.approve_tips[e.id].comment_attachment),
+                        dinput_type: '9'
+                    };
+                    workflowService.getAttachmentList(params).then(res => {
+                        console.log(res);
+                        if(res.success){
+                            let list = res["rows"];
+                            for( let data of list ){
+                                //附件名称编码转换
+                                let str = workflowService.getFileExtension( data.file_name );
+                                if( workflowService.preview_file.indexOf( str.toLowerCase() ) !== -1 ){
+                                    data["isPreview"] = true;
+                                    if( workflowService.preview_file.indexOf(str.toLowerCase()) <4){
+                                        data["isImg"] = true;
+                                    }else{
+                                        data["isImg"] = false;
+                                    }
+                                }else{
+                                    data["isPreview"] = false;
+                                }
+                            }
+                            AttachmentList.data.list = list;
+                            AttachmentList.data.is_view = true;
+                            // AttachmentList.data.dinput_type = '23';
+                            PMAPI.openDialogByComponent(AttachmentList,{
+                                width: 900,
+                                height: 600,
+                                title: '附件列表'
+                            })
+                        }
+                    })
+                }
+            }
+        },
+    ],
     actions:{
         tipsMouseover:function (pos,txt,event) {
             if(txt!=''){
@@ -53,13 +102,32 @@ let config={
         this.el.on("mousemove",".tipsText",function (e) {
             let J_tooltip=$("#J_tooltip");
             self.actions.tipsMousemove(pos,J_tooltip,e)
-        })
+        });
+        // this.el.on('click', '.comment-attachment', () => {
+        //     console.log("++++++++++++++++++++");
+        //     console.log("++++++++++++++++++++");
+        //     console.log("++++++++++++++++++++");
+        //     console.log(this.data.approve_tips, this);
+        //     if(this.data.approve_tips.comment_attachment.length > 0) {
+        //         AttachmentList.data.list = this.data.comment_attachment;
+        //         AttachmentList.data.is_view = true;
+        //         PMAPI.openDialogByComponent(AttachmentList,{
+        //             width: 900,
+        //             height: 600,
+        //             title: '附件列表'
+        //         })
+        //     }
+        // })
     }
 
 };
 class workflowRecord extends Component{
-    constructor (data){
-        super(config,data);
+    // constructor (data){
+    //     super(config,data);
+    // }
+
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

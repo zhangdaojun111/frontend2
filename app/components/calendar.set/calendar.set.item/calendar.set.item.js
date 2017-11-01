@@ -123,8 +123,9 @@ let config = {
                 selectedOptsText.push(newItem['name']);
                 selectedOptsId.push(newItem['id']);
             }
-            this.data.preViewText = selectedOptsText;
-            this.el.find('.preview-text').html(this.data.preViewText);
+            this.data.preViewText = selectedOptsText.toString();
+            this.el.find('.preview-text').html(this.data.preViewText).attr('title',this.data.preViewText);
+
         },
 
         /**
@@ -150,6 +151,7 @@ let config = {
                     emailAddress: this.data.emailAddress,
                 }).then(data => {
                 if (!data.onlyclose) {
+                    console.log(this.data.rowSetData.sms = data['sms']);
                     this.data.rowSetData.email = data['email'];
                     this.data.rowSetData.sms = data['sms'];
                     let showMethod = '';
@@ -308,8 +310,8 @@ let config = {
             this.el.find('.set-remind-method').html('设置提醒方式');
         }
 
-        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text;
-        this.el.find('.preview-text').text(this.data.preViewText);
+        this.data.preViewText = this.actions.returnShow(this.data.rowSetData['selectedOpts']).text.toString();
+        this.el.find('.preview-text').text(this.data.preViewText).attr('title',this.data.preViewText);
         this.el.find('.set-color').attr("value", this.data.rowSetData.color);
         this.actions.editableFalse();
     },
@@ -319,7 +321,7 @@ let config = {
 };
 
 class CalendarSetItem extends Component {
-    constructor(data) {
+    constructor(data,newConfig) {
         config.data.rowSetData = data.rowData;
         config.data.dropdown = data.dropdown;
         config.data.dropdownForRes = data.dropdownForRes;
@@ -332,7 +334,7 @@ class CalendarSetItem extends Component {
         config.data.copypeople = data.copypeople;
         config.data.emailAddressList = data.emailAddressList;
         config.data.emailAddress = data.emailAddress;
-        super(config);
+        super($.extend(true,{},config,newConfig));
     }
 }
 

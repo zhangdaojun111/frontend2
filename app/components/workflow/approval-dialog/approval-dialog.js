@@ -9,7 +9,10 @@ import '../../../assets/scss/core/common.scss'
 import WorkFlow from '../workflow-drawflow/workflow';
 import {PMAPI,PMENUM} from "../../../lib/postmsg";
 import '../../../assets/scss/workflow/workflow-base.scss';
-let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
+import {CreateFormServer} from '../../../services/formService/CreateFormServer';
+import {workflowService} from '../../../services/workflow/workflow.service';
+
+let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];
@@ -26,7 +29,7 @@ let config = {
     actions: {
         approveWorkflow(para){
             let key=obj.key;
-            let formData=FormEntrys.getFormValue(obj.table_id),
+            let formData=CreateFormServer.getFormValue(obj.table_id),
                 comment=$('#comment').val();
             para.data=JSON.stringify(formData);
             para.comment=comment;
@@ -51,17 +54,39 @@ let config = {
         }
     },
     afterRender: function() {
-        Mediator.subscribe('approval:rejToAny', (id) => {
-            if(id.length === 21){
-                id=id.slice(5);
-            }else if(id.length === 19){
-                id=id.slice(3);
+        this.data.comment='';
+        // Mediator.subscribe('workflow:comment',(res)=>{
+        //     this.data.comment = res;
+        // })
+        // Mediator.subscribe('approval:rejToAny', (id) => {
+        //     if(id.length === 21){
+        //         id=id.slice(5);
+        //     }else if(id.length === 19){
+        //         id=id.slice(3);
+        //     }
+        //     PMAPI.sendToParent({
+        //         type: PMENUM.close_dialog,
+        //         key:this.data.key,
+        //         data:{
+        //             id:id,
+        //             comment:this.data.comment
+        //         }
+        //     })
+        // });
+        Mediator.subscribe('approvalRejToAny: data', (res) => {
+            if(res.rejectId.length === 21){
+                res.rejectId = res.rejectId.slice(5);
+            }else if(res.rejectId.length === 19){
+                res.rejectId = res.rejectId.slice(3);
             }
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:this.data.key,
-                data:id
-            })
+                data:{
+                    data: res
+                }
+            });
+            console.log(res);
         });
 
         PMAPI.getIframeParams(this.data.key).then(res=>{
@@ -76,11 +101,13 @@ let config = {
     }
 };
 class ApprovalDialog extends Component{
-    constructor (data){
-        super(config,data);
-
+    // constructor (data){
+    //     super(config,data);
+    //
+    // }
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
-
 }
 
 export default ApprovalDialog

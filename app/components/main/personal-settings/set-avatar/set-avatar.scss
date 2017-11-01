@@ -5,15 +5,17 @@ $sub_color:#0088ff;
         margin-top: 10px;
         span{
             display: inline-block;
-            margin-left: 10px;
+            margin: 0 5px 0 25px;
             height: 35px;
             line-height: 35px;
         }
 
         .post-btn{
             display: inline-block;
-            width: 100px;
-            height: 35px;
+            box-sizing: border-box;
+            padding: 1px 6px;
+            width: 90px;
+            height: 30px;
             background-color: $sub_color;
             position: relative;
             border: none;
@@ -21,13 +23,13 @@ $sub_color:#0088ff;
             cursor: pointer;
             overflow: hidden;
             color: white;
-            line-height: 35px;
+            line-height: 30px;
             text-align: center;
             top:10px;
 
             input{
-                width: 100px;
-                height: 35px;
+                width: 90px;
+                height: 30px;
                 position: absolute;
                 right: 0;
                 top: 0;
@@ -37,8 +39,8 @@ $sub_color:#0088ff;
     }
     .container-position{
         overflow: hidden;
-        margin-top: 10px;
-        margin-left: 75px;
+        margin-top: 15px;
+        margin-left: 95px;
         .avatar-container{
             box-sizing: border-box;
             width: 350px;
@@ -53,7 +55,7 @@ $sub_color:#0088ff;
 
             &.post-local-image{
                 background-image: url("../../../../assets/images/framework/post-local-image.png");
-                border:solid 1px #bfbfbf;
+                border:solid 1px #E4E4E4;
             }
         }
     }
@@ -64,7 +66,7 @@ $sub_color:#0088ff;
         margin-top: 20px;
         margin-left: 230px;
         border-radius: 50%;
-        border: solid 1px #bfbfbf;
+        border: solid 2px #E4E4E4;
         overflow: hidden;
         .avatar-result-square{
             background-color: #FFFFFF;
@@ -73,35 +75,24 @@ $sub_color:#0088ff;
 
     .bottom-box{
         color: white;
-        margin-top: 30px;
-        margin-left: 260px;
-        .save-avatar{
+        margin-top: 20px;
+        margin-left: 310px;
+        .save-avatar, .set-cancel{
             display: inline-block;
-            width: 100px;
-            height: 35px;
+            width: 90px;
+            height: 30px;
             background-color: $sub_color;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            line-height: 35px;
+            line-height: 30px;
             text-align: center;
             margin-right: 10px;
-        }
-
-        .set-cancel{
-            display: inline-block;
-            width: 100px;
-            height: 35px;
-            background-color: $sub_color;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            line-height: 35px;
-            text-align: center;
+            box-sizing: border-box;
+            padding: 1px 6px;
         }
     }
 }
-
 
 //jcrop.css
 

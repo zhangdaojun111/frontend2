@@ -6,6 +6,7 @@ import {Radio} from '../form/radio/radio';
 import {Checkbox} from '../form/checkbox/checkbox';
 import {Choosed} from '../form/choosed/choosed';
 import {Button} from '../form/button/button';
+import {Theme} from '../form/theme/theme';
 import {TableSingle} from '../form/single/single';
 import {Deep} from '../form/deep/deep';
 import {YaXis} from '../form/linebar.yAxis/yAxis';
@@ -25,6 +26,7 @@ let formItemTypes = {
     'checkbox': Checkbox,
     'choosed':Choosed,
     'button': Button,
+    'theme': Theme,
     'table_single': TableSingle,
     'deep': Deep,
     'yAxis': YaXis,
@@ -34,8 +36,8 @@ let formItemTypes = {
 }
 
 class Base extends Component {
-    constructor(config, data, event){
-        super(config, data, event);
+    constructor(config, data, event,extendConfig){
+        super($.extend(true,{},config,extendConfig), data, event);
     }
     drawForm(container){
         let options = this.data.options;

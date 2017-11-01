@@ -45,7 +45,12 @@ let config = {
                 let regReg = new RegExp(reg);
                 if (val != "" && reg !== "") {
                     for (let r in reg) {
-                        let regReg = eval(r);
+                        let regReg
+                        if (r.startsWith('/') && r.endsWith('/')) {
+                            regReg = eval(r);
+                        }else {
+                            regReg = new RegExp(r);
+                        }
                         let flag = regReg.test(val);
                         if (!flag) {
                             this.el.find("#error_tip").css("display", "inline-block");
@@ -145,6 +150,7 @@ let config = {
         }, 200));
         this.el.find('.ui-width').css('width', this.data.width);
         if (this.data.is_view) {
+            this.el.find('.ui-width').attr('title', this.data.value)
             this.el.find('.ui-width').attr('disabled', true);
         } else {
             this.el.find('.ui-width').attr('disabled', false);
@@ -163,8 +169,8 @@ let config = {
     }
 }
 class InputControl extends Component {
-    constructor(data, events) {
-        super(config, data, events);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 export default InputControl
