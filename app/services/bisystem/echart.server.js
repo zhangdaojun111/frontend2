@@ -32,19 +32,22 @@ export class EchartsService {
         let option = {};
         switch (chartType) {
             case 'pie':
-                option = this.pieOption(cellChart);
+                option = this.pieOption(cellChart);// 饼图处理
                 break;
             case 'multilist':
-                option = this.multiChartOption(cellChart);
+                option = this.multiChartOption(cellChart); // 多表处理
                 break;
             case 'normal':
                 option = this.lineBarOption(cellChart); // 折线柱状混合图
                 break;
             case 'radar':
-                option = this.radarOption(cellChart); // 折线柱状混合图
+                option = this.radarOption(cellChart); // 雷达图处理
                 break;
             case 'funnel':
-                option = this.funnelOption(cellChart); // 折线柱状混合图
+                option = this.funnelOption(cellChart); // 漏斗图处理
+                break;
+            case 'stylzie':
+                option = this.stylzieOption(cellChart); // 风格图处理
                 break;
         }
         return option;
@@ -498,6 +501,66 @@ export class EchartsService {
         });
         funnelOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         return funnelOption;
+    }
+
+    /**
+     * 风格箱处理
+     * @param chart = cellChart['chart']数据
+     */
+
+
+    stylzieOption(cellChart) {
+        console.log('xxxxxxxxxxxxxxxxxx');
+        var axisData = ['周一','周二','周三','很长很长的周四','周五','周六','周日'];
+        var data = axisData.map(function (item, i) {
+            return Math.round(Math.random() * 1000 * (i + 1));
+        });
+        var links = data.map(function (item, i) {
+            return {
+                source: i,
+                target: i + 1
+            };
+        });
+        links.pop();
+        let cellOption = cellChart['chart'];
+        const stylzieOption = {
+            title: {
+                text: '笛卡尔坐标系上的 Graph'
+            },
+            tooltip: {},
+            xAxis: {
+                type : 'category',
+                    boundaryGap : false,
+                    data : axisData
+            },
+            yAxis: {
+                type : 'value'
+            },
+            series: [
+                {
+                    type: 'graph',
+                    layout: 'none',
+                    coordinateSystem: 'cartesian2d',
+                    symbolSize: 40,
+                    label: {
+                        normal: {
+                            // show: true
+                        }
+                    },
+                    edgeSymbol: ['circle', 'arrow'],
+                    edgeSymbolSize: [4, 10],
+                    data: data,
+                    links: links,
+                    lineStyle: {
+                        normal: {
+                            color: '#2f4554'
+                        }
+                    }
+                }
+            ]
+        };
+        console.log(stylzieOption);
+        return stylzieOption;
     }
 
 
