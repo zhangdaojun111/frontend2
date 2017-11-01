@@ -1968,7 +1968,7 @@ let config = {
 }
 
 class BaseForm extends Component {
-    constructor(formData) {
+    constructor(formData,newConfig) {
     	console.log('传进来的是啥');
     	console.log(formData);
         config.template = formData.template;
@@ -1992,7 +1992,7 @@ class BaseForm extends Component {
         //存父表的newData
         window.top.frontendParentNewData[formData.data.tableId] = formData.data.data;
         window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value'] || '';
-        super(config, formData.data);
+	    super($.extend(true,{},config,newConfig), formData.data);
         console.log('表单数据');
         console.log(this.data);
     }
