@@ -27,25 +27,55 @@ serchStr.split('&').forEach(res => {
 });
 is_view=obj.btnType==='view'?1:0;
 console.log(obj);
+console.log(window.config.key)
+PMAPI.getIframeParams(obj.key).then(res => {
+    if(res.data.current_node) {
+        console.log(res);
+        if(res.data.current_node.indexOf(window.config.name)===-1){
+            console.log('111111111111');
+            is_view = 1;
+        }
+    }
 
-ApprovalWorkflow.showDom().then(function (component) {
-    WorkFlowGrid.showGrid();
-    WorkFlowForm.showForm();
-    FormEntrys.initForm({
-        el: $('#place-form'),
-        form_id: obj.form_id,
-        record_id: obj.record_id,
-        is_view: is_view,
-        from_approve: 1,
-        from_focus: 0,
-        btnType:'none',
-        table_id: obj.table_id
+    ApprovalWorkflow.showDom().then(function (component) {
+        WorkFlowGrid.showGrid();
+        WorkFlowForm.showForm();
+        FormEntrys.initForm({
+            el: $('#place-form'),
+            form_id: obj.form_id,
+            record_id: obj.record_id,
+            is_view: is_view,
+            from_approve: 1,
+            from_focus: 0,
+            btnType:'none',
+            table_id: obj.table_id
+        });
+        Mediator.subscribe("form:formAlreadyCreate",()=>{
+            component.hideLoading();
+        });
+        // setTimeout(()=> component.hideLoading(),1000)
     });
-    Mediator.subscribe("form:formAlreadyCreate",()=>{
-        component.hideLoading();
-    });
-    // setTimeout(()=> component.hideLoading(),1000)
 });
+// is_view=obj.btnType==='view'?1:0;
+//
+// ApprovalWorkflow.showDom().then(function (component) {
+//     WorkFlowGrid.showGrid();
+//     WorkFlowForm.showForm();
+//     FormEntrys.initForm({
+//         el: $('#place-form'),
+//         form_id: obj.form_id,
+//         record_id: obj.record_id,
+//         is_view: is_view,
+//         from_approve: 1,
+//         from_focus: 0,
+//         btnType:'none',
+//         table_id: obj.table_id
+//     });
+//     Mediator.subscribe("form:formAlreadyCreate",()=>{
+//         component.hideLoading();
+//     });
+//     // setTimeout(()=> component.hideLoading(),1000)
+// });
 
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
@@ -63,6 +93,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     console.log( current_node_arr )
     console.log( "---" )
     if(current_node_arr.indexOf(window.config.name)==-1){
+        is_view = 1;
         $('#approval-workflow').find('.for-hide').hide();
     };
     if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
