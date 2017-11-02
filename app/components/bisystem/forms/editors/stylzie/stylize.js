@@ -1,5 +1,5 @@
 import {Base} from '../base';
-import template from './pie.html';
+import template from './stylize.html';
 
 import {chartName,theme,icon,button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
@@ -45,22 +45,15 @@ let config = {
          * @param data 表格列表字段（x,y轴）
          */
         async loadColumns(data) {
-            if (this.formItems['columns']) {
+            if (this.formItems['dateAxis']) {
                 if (data) {
                     this.formItems['xAxis'].setList(data['x_field']);
                     this.formItems['yAxis'].setList(data['y_field']);
-                    this.formItems['columns'].setList(data['y_field']);
-                    this.formItems['deepX'].setList(data['x_field']);
-
+                    this.formItems['dateAxis'].setList(data['date_field']);
                 } else { // 清空字段
-                    this.formItems['columns'].actions.clear();
                     this.formItems['xAxis'].setList([]);
                     this.formItems['yAxis'].setList([]);
-                    this.formItems['deepX'].setList([]);
-                };
-                if (this.formItems['deeps']) {
-                    // 清除所有下穿字段数据
-                    this.formItems['deeps'].actions.clear();
+                    this.formItems['dateAxis'].setList([]);
                 };
             }
         },
@@ -68,10 +61,9 @@ let config = {
         /**
          * 初始化图表操作
          */
-       async init() {
+        async init() {
             this.formItems['countColumn'].el.hide();
-            this.formItems['pieType'].trigger('onChange', this.formItems['pieType'].data.value);
-           // 获取数据来源
+            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
                     this.formItems['source'].setList(res['data']);
@@ -81,17 +73,17 @@ let config = {
             });
 
             // 获取图标
-           ChartFormService.getChartIcon().then(res => {
-               if (res['success'] === 1) {
-                   let icons =[];
-                   icons = res['data'].map(icon => {
-                       return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
-                   });
-                   this.formItems['icon'].setList(icons)
-               } else {
-                   msgbox.alert(res['error'])
-               };
-           });
+            ChartFormService.getChartIcon().then(res => {
+                if (res['success'] === 1) {
+                    let icons =[];
+                    icons = res['data'].map(icon => {
+                        return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
+                    });
+                    this.formItems['icon'].setList(icons)
+                } else {
+                    msgbox.alert(res['error'])
+                };
+            });
 
         },
 
@@ -123,22 +115,17 @@ let config = {
         async saveChart() {
             let data = this.getData();
             let chart = {
-                assortment: 'pie',
+                assortment: 'stylzie',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 filter: data.filter.filter,
                 filter_source: data.filter.filter_source,
-                chartType: {
-                    name: '饼图',
-                    type: 'pie'
-                },
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
-                pieType: data.pieType == '1' ? {name: '单条数据', value: 1} : {name: '多条数据', value: 2},
                 xAxis:data.xAxis,
-                yAxis:data.pieType == '1' ? data.columns : data.yAxis,
-                deeps: data.pieType == '1' ? [] : data.deeps
+                yAxis:[data.yAxis],
+                dateAxis: data.dateAxis
             };
 
             let pass = true; // 判断表单是否验证通过
@@ -161,22 +148,15 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
-
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
             this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
-            this.formItems['columns'].setValue(chart['columns']);
-            this.formItems['pieType'].setValue(chart['pieType']['value']);
             this.formItems['xAxis'].setValue(chart['xAxis']);
-            if (chart['pieType']['value'] == 1) {
-                this.formItems['columns'].setValue(chart['yAxis']);
-            } else {
-                this.formItems['yAxis'].setValue(chart['yAxis']);
-                this.formItems['deeps'].setValue(chart['deeps']);
-            };
+            this.formItems['yAxis'].setValue(chart['yAxis'][0]);
+            this.formItems['dateAxis'].setValue(chart['dateAxis']);
         }
     },
     data: {
@@ -221,32 +201,6 @@ let config = {
                 }
             },
             {
-                label: '选择单条数据，多条数据',
-                name: 'pieType',
-                defaultValue: '1',
-                list: [
-                    {name:'多条', value:'2'},
-                    {name:'单条', value:'1'},
-                ],
-                type: 'select',
-                events: {
-                    onChange(value) {
-                        if (value == 1) {
-                            this.formItems['columns'].el.show();
-                            this.formItems['yAxis'].el.hide();
-                            this.formItems['deeps'].el.hide();
-                            this.formItems['deepX'].el.hide();
-                            this.formItems['deeps'].actions.clear();
-                        } else {
-                            this.formItems['columns'].el.hide();
-                            this.formItems['yAxis'].el.show();
-                            this.formItems['deeps'].el.show();
-                            this.formItems['deepX'].el.show();
-                        }
-                    }
-                }
-            },
-            {
                 label: 'x轴字段',
                 name: 'xAxis',
                 defaultValue: '',
@@ -275,41 +229,18 @@ let config = {
                 type: 'autocomplete'
             },
             {
-                label: '选择y轴数据',
-                name: 'columns',
-                defaultValue: [],
-                list: [],
+                label: '时间轴字段',
+                name: 'dateAxis',
+                defaultValue: '',
+                placeholder: '选择时间轴字段',
                 required: true,
                 rules: [
                     {
-                        errorMsg: 'y轴不能为空',
+                        errorMsg: '时间轴不能为空',
                         type: 'required'
                     }
                 ],
-                type: 'checkbox',
-                events: {}
-            },
-            {
-                label: '选择下穿x轴字段',
-                name: 'deepX',
-                defaultValue: '',
-                placeholder: '选择下穿x轴字段',
-                type: 'autocomplete',
-                events: {
-                    onSelect(value) {
-                        if (value) {
-                            this.formItems['deeps'].actions.update(value);
-                            this.formItems['deepX'].autoselect.actions.clearValue()
-                        };
-                    }
-                }
-            },
-            {
-                label: '',
-                name: 'deeps',
-                defaultValue: [],
-                type: 'deep',
-                events: {}
+                type: 'autocomplete'
             },
             {
                 label: '',
@@ -345,13 +276,13 @@ let config = {
         }
 
     }
-}
+};
 
-class PieEditor extends Base {
+class StylizeEditor extends Base {
     constructor(data,extendConfig) {
         config.data.chart_id = data.id ? data.id : null;
         super($.extend(true,{},config,extendConfig));
     }
 }
 
-export {PieEditor}
+export {StylizeEditor}

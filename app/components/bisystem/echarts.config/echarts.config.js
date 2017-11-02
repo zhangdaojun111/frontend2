@@ -245,10 +245,11 @@ const linebar = {
         type: 'scroll'
     },
     grid: {
-        left: 30,
-        right: 30,
+        left: 0,
+        right: 0,
         bottom: 30,
-        top: 50
+        top: 50,
+        containLabel: true
     },
     xAxis: [
         {
@@ -289,7 +290,105 @@ const linebar = {
 
 };
 
+// 风格箱图
+const stylzie = {
+    tooltip: {
+        formatter: function (value, index) {
+            return value.data[3]
+        }
+    },
+    grid: {
+        left: 0,
+        right: 25,
+        bottom: 10,
+        top: 30,
+        containLabel: true
+    },
+    xAxis: {
+        type : 'value',
+        min:0,
+        max:3,
+        data : [],
+        axisLabel: {
+            formatter:  function (value, index) {
+                let texts = [];
+                switch (index) {
+                    case 1:
+                        // code
+                        texts.push('大盘')
+                        break;
+                    case 3:
+                        // code
+                        texts.push('中盘')
+                        break;
+                    case 5:
+                        // code
+                        texts.push('小盘')
+                        break;
+                    default:
+                        texts.push('')
+                    // code
+                }
+                return texts
+            }
+        }
+    },
+    yAxis: {
+        type : 'value',
+        min:0,
+        max:3,
+        axisLabel: {
+            formatter:  function (value, index) {
+                let texts = [];
+                switch (index) {
+                    case 1:
+                        // code
+                        texts.push('价值')
+                        break;
+                    case 3:
+                        // code
+                        texts.push('平衡')
+                        break;
+                    case 5:
+                        // code
+                        texts.push('成长')
+                        break;
+                    default:
+                        texts.push('')
+                    // code
+                }
+                return texts
+            }
+        }
+    },
+    series: [
+        {
+            type: 'graph',
+            layout: 'none',
+            coordinateSystem: 'cartesian2d',
+            symbolSize: 10,
+            label: {
+                normal: {
+                    show: true,
+                    offset:[0, -10],
+                    formatter: function(value,index) {
+                        return value.data[2]
+                    }
+                }
+            },
+            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbolSize: [4, 10],
+            data: [],
+            links: [],
+            lineStyle: {
+                normal: {
+                    color: '#2f4554'
+                }
+            }
+        }
+    ]
 
+};
 export const EchartsOption = {
     blue: blueColors,
     green: greenColors,
@@ -312,6 +411,9 @@ export const EchartsOption = {
                 break;
             case 'linebar':
                 option = linebar;
+                break;
+            case 'stylzie':
+                option = stylzie;
                 break;
         }
         return ToolPlugin.clone(option);

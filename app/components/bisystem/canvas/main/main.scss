@@ -1,4 +1,4 @@
-$print-width:1050px;
+$print-width: 1050px;
 $print-height: 1485px;
 
 .component-bi-canvas-main {
@@ -11,7 +11,8 @@ $print-height: 1485px;
         font-size: 12px;
         background: #FFFFFF;
         border-bottom: 1px solid #e4e4e4;
-        >div{
+        box-sizing: border-box;
+        > div {
             height: 100%;
             line-height: 60px;
         }
@@ -22,7 +23,7 @@ $print-height: 1485px;
     .cells-container {
         position: absolute;
         width: 100%;
-        height: calc(100% - 61px);
+        height: calc(100% - 60px);
         overflow: auto;
         z-index: 90;
         &.client {
@@ -48,17 +49,17 @@ $print-height: 1485px;
     .empty-view {
         position: absolute;
         text-align: center;
-        height: 100%;
-        width:100%;
+        height: calc(100% - 60px);
+        width: 100%;
         background: #ffffff;
         z-index: 91;
-        .empty-view-message{
-           position: absolute;
+        .empty-view-message {
+            position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%,-70%);
+            transform: translate(-50%, -70%);
             p {
-                color:#666666;
+                color: #666666;
             }
         }
 
@@ -66,11 +67,11 @@ $print-height: 1485px;
 }
 
 @media print {
-    .bi-container,.cells-container.client{
-        background:transparent !important;
+    .bi-container, .cells-container.client {
+        background: transparent !important;
     }
-    .component-bi-canvas-main{
-        header{
+    .component-bi-canvas-main {
+        header {
             display: none !important;
         }
         .cells-container {
