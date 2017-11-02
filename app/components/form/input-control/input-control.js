@@ -149,13 +149,13 @@ let config = {
 			    timer=setTimeout(()=>{
 				    _this.actions.keyup();
 				    timer=null;
-			    },1000);
+			    },500);
 		    }else{
 			    clearTimeout(timer);
 			    timer=setTimeout(()=>{
 				    _this.actions.keyup();
 				    timer=null;
-			    },1000);
+			    },500);
 		    }
 	    });
         this.el.find('.ui-width').css('width', this.data.width);
