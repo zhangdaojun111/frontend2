@@ -355,7 +355,6 @@ const stylzie = {
     ]
 
 };
-
 export const EchartsOption = {
     blue: blueColors,
     green: greenColors,
