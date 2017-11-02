@@ -507,7 +507,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
 
-
     stylzieOption(cellChart) {
         let cellOption = cellChart['chart'];
         const stylzieOption = EchartsOption.getEchartsConfigOption('stylzie');
