@@ -3416,8 +3416,10 @@ let config = {
                 this.actions.createPostData();
             }
             try {
-                this.data.showTabs(1);
-                this.hideLoading();
+                setTimeout( ()=>{
+                    this.data.showTabs(1);
+                    this.hideLoading();
+                },200 )
             }catch(e){}
         }
     },
