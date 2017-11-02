@@ -81,9 +81,12 @@ let config = {
          * @param id
          * @param url
          * @param name
+         * @param flag
          */
-        openIframe: function (id, url, name) {
-            this.actions.sendOpenRequest(id);
+        openIframe: function (id, url, name, flag) {
+            if(flag !== false){
+                this.actions.sendOpenRequest(id);
+            }
             id = id.toString();
             if (this.data.hash[id] === undefined) {
                 let tab = $(`<div class="item" iframeid="${id}" title="${name}">${name}<a class="close icon-framework-close" iframeid="${id}"></a></div>`)
@@ -718,7 +721,7 @@ let config = {
 
     firstAfterRender: function () {
         Mediator.on('menu:item:openiframe', (data) => {
-            this.actions.openIframe(data.id, data.url, data.name)
+            this.actions.openIframe(data.id, data.url, data.name, data.flag)
         });
         Mediator.on('search:displayreuslt',(data) => {
             this.actions.displaySearchResult(data);
