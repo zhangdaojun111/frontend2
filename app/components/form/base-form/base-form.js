@@ -1328,14 +1328,18 @@ let config = {
             if (this.data.data[data.dfield]) {
                 this.data.data[data.dfield] = _.defaultsDeep({}, data);
             }
-            if (data.type == 'Buildin') {
+            if (data.type == 'Buildin' || data.type=='MultiLinkage') {
                 let id = data["id"];
                 let value;
-                for (let obj of data['options']) {
-                    if (obj.value == data.value) {
-                        value = obj.value;
-                        break;
-                    }
+                if(data.type == 'Buildin'){
+	                for (let obj of data['options']) {
+	                    if (obj.value == data.value) {
+	                        value = obj.value;
+	                        break;
+	                    }
+	                }
+                }else{
+                	value=data.value;
                 }
                 if(value && value != ''){
                     this.actions.setAboutData(id, value);
