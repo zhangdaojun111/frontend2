@@ -3431,7 +3431,6 @@ let config = {
                 }
             });
         }
-        this.showLoading();
         try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {
             columnDefs: this.columnDefs,
@@ -3462,7 +3461,10 @@ let config = {
             this.actions.renderCacheData( window.config.cached_data )
             try {
                 this.data.showTabs(1);
-                this.hideLoading();
+                let body = $('body');
+                body.find('.component-loading-cover').remove();
+                body.find('.component-loading-box').remove();
+                body.removeClass('component-loading-effect');
             }catch(e){}
             console.timeEnd( '渲染时间' )
             return;
@@ -3479,6 +3481,7 @@ let config = {
             this.actions.getGridData();
             return;
         }
+        this.showLoading();
 
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;
