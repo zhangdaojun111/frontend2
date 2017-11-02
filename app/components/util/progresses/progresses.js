@@ -113,8 +113,8 @@ export const progressConfig = {
         },
         error:function ({msg:msg,fileId:i}) {
             this.el.find('#'+i).find('.progress-bottle').css('display','none');
-            let text = this.el.find('#'+i).find('.progress-msg').text() + ": "+msg;
-            this.el.find('#'+i).find('.progress-msg').text(text).css({'color':'red','overflow':'visible','width':'380px','margin':'auto'});
+            // let text = this.el.find('#'+i).find('.progress-msg').text() + ": "+msg;
+            // this.el.find('#'+i).find('.progress-msg').text(text).css({'color':'red','overflow':'visible','width':'380px','margin':'auto'});
             this.el.find('#'+i).find('.cancel-upload').css('display','none');
             this.actions.closeDialogDelay();
         },
