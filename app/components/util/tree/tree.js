@@ -60,13 +60,35 @@ let config = {
         searchTreeNode: function (inputComp, tree) {
             var keyword = inputComp.val();
             tree.treeview('clearSearch');
-            if (keyword && keyword != '' && keyword != ' ') {
-                tree.treeview('search', [keyword, {
-                    ignoreCase: true,
-                    exactMatch: false,
-                    revealResults: true
-                }])
+            tree.treeview('enableAll');
+            // if (keyword && keyword != '' && keyword != ' ') {
+            //     tree.treeview('search', [keyword, {
+            //         ignoreCase: true,
+            //         exactMatch: false,
+            //         revealResults: true
+            //     }]);
+            // }
+            if(keyword == undefined || keyword == '' || keyword == ' '){
+                tree.treeview('expandAll', {level: 10, silent: true});
+                return;
             }
+            tree.treeview('collapseAll');
+            let filteredNodes = tree.treeview('search', [keyword, {
+                        ignoreCase: true,
+                        exactMatch: false,
+                        revealResults: true
+                    }]);
+            //隐藏不相关节点
+            let siblings = tree.treeview('getSiblings',tree.treeview('getNode',0));
+            siblings = siblings||[];
+            siblings.push(tree.treeview('getNode',0));
+            let unrelatedNodes = [];
+             this.actions._getUnrelatedNodes(siblings,filteredNodes,unrelatedNodes,tree);
+            tree.treeview('disableNode',[unrelatedNodes,{silent:true}]);
+            //展开筛选出的节点
+            filteredNodes.forEach(node=>{
+                tree.treeview('expandNode',[node, { levels: 2, silent: true } ]);
+            });
         },
         selectAll:function(tree){
             setTimeout(() => { //保证树初始化完毕后才能进行操作，解决二次选择的时候报错问题
@@ -74,6 +96,24 @@ let config = {
                     this.actions._cruiseSelectNode(node, tree);
                 })
             },0);
+        },
+        _getUnrelatedNodes:function (nodes,filteredNodes,unrelatedNodes,tree) {
+            let isSiblingsFiltered = false;
+            let isChildFiltered = {};
+            nodes.forEach(node=>{
+                isChildFiltered[node.id] = false;
+                if(node.nodes){ //计算其及子孙节点里面有没有搜索出的节点
+                    isChildFiltered[node.id] = this.actions._getUnrelatedNodes(node.nodes,filteredNodes,unrelatedNodes,tree)||filteredNodes.includes(node);
+                }
+                isSiblingsFiltered = isSiblingsFiltered || isChildFiltered[node.id];
+            });
+            nodes.forEach(node=>{
+                let parent = tree.treeview('getParent',node);
+                if(!(isChildFiltered[node.id]||(filteredNodes.includes(parent) && (!isSiblingsFiltered)))){
+                    unrelatedNodes.push(node);
+                }
+            });
+            return isSiblingsFiltered;
         },
         _cruiseSelectNode:function(node,tree){
             if(node){
@@ -98,10 +138,11 @@ let config = {
             let siblings = tree.treeview('getSiblings',start);
             if(siblings){
                 siblings.forEach(sibling=>{
-                    func(sibling,tree);
+                    if(!sibling.state.disabled){
+                        func(sibling,tree);
+                    }
                 })
             }
-
         },
         _toggleCheckNode:function (node, tree) {
             if(node){
@@ -236,7 +277,6 @@ let config = {
         if (!this.data.options.isSearch) {
             this.el.find("#search-in-tree").hide();
         } else {
-            var timeout = null;
             var inputComp = this.el.find('#search-in-tree');
             this.el.on('input', '#search-in-tree', _.debounce(() => {
                 treeview.actions.searchTreeNode(inputComp, tree)
