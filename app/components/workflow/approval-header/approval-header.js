@@ -33,6 +33,10 @@ let config = {
      * @param  approvalBtnToggle(dom对象，dom父元素)
      */
     afterRender: function() {
+        console.log(this.data);
+        if(this.data.is_batch) {
+            this.el.find('#app-add').hide();
+        }
         this.showLoading();
         let self=this;
         this.showgz = false;
