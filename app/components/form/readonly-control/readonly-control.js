@@ -19,15 +19,14 @@ let config = {
             //正则表达式的错误提示 regErrorMsg: string;
             let regErrorMsg;
             let val = this.el.find("input").val();
-            let func = this.data.func;
             let reg = this.data.reg;
-            let required = this.data.required
 
             //输入框输入时的实时验证提示
             let regReg = new RegExp(reg);
             if (val != "" && reg !== "") {
                 for (let r in reg) {
-                    let flag = regReg.test(val);
+	                let reg = eval(r);
+	                let flag = reg.test(val);
                     console.log("flagReg：" + flag);
                     if (!flag) {
                         this.el.find("#error_tip").css("display", "inline-block");
@@ -41,7 +40,6 @@ let config = {
                 // this.reload();
             }
             if (val != "" && this.data.numArea) {
-                let label = this.data.label;
                 let minNum = this.data.numArea.min;
                 let maxNum = this.data.numArea.max;
                 let errorInfo = this.data.numArea.error;

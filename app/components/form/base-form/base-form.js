@@ -1349,8 +1349,9 @@ let config = {
 				effect: data["effect"],
 				id: data['id']
 			};
-			this.actions.calcExpression(calcData, data['value']);
-			this.actions.webCalcExpression(data);
+			if(!this.actions.webCalcExpression(data)){
+				this.actions.calcExpression(calcData, data['value']);
+			};
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
 			}
@@ -1441,6 +1442,7 @@ let config = {
 								try {
 									if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
 										this.actions.set_value_for_form(eval(expression), f);
+										return true;
 									}
 								} catch (err) {
 									console.error(err);
