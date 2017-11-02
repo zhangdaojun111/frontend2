@@ -512,39 +512,13 @@ export class EchartsService {
     stylzieOption(cellChart) {
         let cellOption = cellChart['chart'];
         const stylzieOption = EchartsOption.getEchartsConfigOption('stylzie');
-        let data1 = [
-            [1.275154, 2.957587,1],
-            [1.344465, 2.603513,2],
-            [0.355083, 2.376585,3],
-            [1.852435, 1.547351,4],
-            [0.078973, 2.552013,5],
-            [0.993756, 0.884433,6],
-            [2.682252, 1.007573,7],
-            [2.087776, 2.878713,8],
-            [1.565978, 1.256985,9],
-            [2.441611, 0.444826,10],
-            [0.659487, 2.111284,11],
-            [0.459601, 2.618005,12],
-            [2.17768, 2.387793,13],
-            [2.920969, 2.917485,14],
-            [0.028814, 2.168078,15],
-            [2.625746, 2.119041,16],
-            [1.912363, 1.325108,17],
-            [0.551694, 2.814223,18],
-            [2.855808, 1.483301,19],
-            [2.594448, 2.856651,20],
-            [0.421993, 2.372646,21],
-            [1.650821, 1.407572,22],
-            [2.082902, 1.384412,23],
-            [0.718809, 2.492514,24],
-            [1.513623, 1.841029,25],
-            [1.822011, 2.607049,26],
-            [0.656297, 1.449872,27],
-            [1.919901, 2.439368,28],
-            [1.287749, 2.918836,29],
-            [1.576936, 2.977622,30],
-        ];
-        var links = data1.map(function (item, i) {
+        let data = _.cloneDeep(cellOption.data.xAxis).fill('');
+        cellOption.data.xAxis.forEach((val,index) => {
+            let item = [val,cellOption.data.yAxis[index], new Date(cellOption.data.dateAxis[index]).getDate(),cellOption.data.dateAxis[index]];
+            data[index] = item;
+        });
+        console.log(data);
+        let links = data.map(function (item, i) {
             return {
                 source: i,
                 target: i + 1
@@ -552,7 +526,7 @@ export class EchartsService {
         });
         links.pop();
         stylzieOption.series[0].links = links;
-        stylzieOption.series[0].data = data1;
+        stylzieOption.series[0].data = data;
         return stylzieOption;
     }
 
