@@ -397,6 +397,7 @@ let config = {
                 type: 'yAxis',
                 events: {
                     onSelectY: function(value){
+                        console.log(value);
                         this.actions.updateYSelectedGroup();
                     }
                 }

@@ -4,6 +4,7 @@ import {ViewItemComponent} from "./item/item";
 
 import {ViewsService} from "../../../services/bisystem/views.service";
 import {config as viewDialogConfig} from "./dialog/edit/dialog.edit";
+import {config as carouselConfig} from "./dialog/carousel/carousel";
 import {PMAPI} from '../../../lib/postmsg';
 import template from "./views.html";
 import msgbox from "../../../lib/msgbox";
@@ -39,23 +40,39 @@ let config = {
          */
         async createView() {
             viewDialogConfig.data.view = null;
-            const res = await PMAPI.openDialogByComponent(viewDialogConfig,{
+            const res = await PMAPI.openDialogByComponent(viewDialogConfig, {
                 width: 348,
                 height: 217,
                 title: '新建视图'
             });
             if (res['name']) {
                 ViewsService.update(res).then((res) => {
-                    if(res['success']===1){
+                    if (res['success'] === 1) {
                         this.data.views.push(res.data);
                         window.config.bi_views = this.data.views;
                         this.reload();
-                    }else{
+                    } else {
                         msgbox.alert(res['error']);
                     }
                 })
             }
             return false;
+        },
+        /**
+         * 设置轮播
+         */
+        async setCarousel() {
+            const res = await PMAPI.openDialogByComponent(carouselConfig,{
+                width: 348,
+                height: 217,
+                title: '设置轮播'
+            });
+            if(res){
+                // Mediator.emit('carousel:date',res);
+
+
+            }
+
         }
     },
     binds:[
@@ -71,6 +88,14 @@ let config = {
             selector:'.create',
             callback: function () {
                 this.actions.createView();
+            }
+
+        },
+        {
+            event:'click',
+            selector:'.carousel',
+            callback: function () {
+                this.actions.setCarousel();
             }
 
         },

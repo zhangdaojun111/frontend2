@@ -254,7 +254,8 @@ let config = {
                     msgbox.showTips(res['error']);
                 };
             });
-        }
+        },
+
     },
     binds: [
         { //滚动距离
