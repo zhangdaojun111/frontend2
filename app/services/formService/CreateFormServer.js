@@ -246,15 +246,17 @@ export const CreateFormServer={
 				}
 				for (let data of formData) {
 					data['tableId'] = this.tableId;
-					if (data.type == "year") {
+					if (data.type == "Year") {
 						if (data.value == "") {
 							data.value = String(myYear);
 						}
-					} else if (data.type == "correspondence") {
+					} else if (data.type == "Correspondence") {
 						data['parent_real_id'] = parentRealId;
 						data['parent_table_id'] = parentTableId;
 						data['parent_temp_id'] = parentTempId;
-					} else if (data.type == "datetime") {
+						console.log('这里给没给');
+						console.log(data);
+					} else if (data.type == "Datetime") {
 						// if( data.value.length == 19 ){
 						//     data.value = data.value.slice( 0,16 )
 						// }
@@ -265,7 +267,7 @@ export const CreateFormServer={
 					let recordId = res['record_info']['id'];
 					res.recordId = res['record_info']['id'];
 					for (let d of res.data) {
-						if (d['type'] == 'songrid') {
+						if (d['type'] == 'Songrid') {
 							d['recordId'] = recordId;
 						}
 					}
