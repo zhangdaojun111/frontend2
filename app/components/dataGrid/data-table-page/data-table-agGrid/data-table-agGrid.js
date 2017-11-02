@@ -220,7 +220,9 @@ let config = {
         //工作流表单查看操作
         cannotopenform: '',
         //表单数据（子表导入用）
-        formData: ''
+        formData: '',
+        //是否加载cache数据
+        cacheData: false,
     },
     //生成的表头数据
     columnDefs: [],
@@ -1283,9 +1285,12 @@ let config = {
                 });
             }
             this.actions.calcSelectData( 'set' );
+            let loadingTime = this.data.cacheData ? 200:0;
             try {
-                this.data.showTabs(1);
-                this.hideLoading();
+                setTimeout( ()=>{
+                    this.data.showTabs(1);
+                    this.hideLoading();
+                },loadingTime )
             }catch(e){}
             if(res[0].hasOwnProperty('error')){
                 if(res[0].error == '您没有数据查看权限'){
@@ -3398,6 +3403,7 @@ let config = {
             console.log( "cache数据" )
             console.log( data )
             console.log( window.config )
+            this.data.cacheData = true;
             //表头
             let headerRes = [data.preferences,data.column_list,data.tab_page,data.operation,data.prepare_params];
             this.actions.setHeaderData( headerRes );
@@ -3415,12 +3421,6 @@ let config = {
                 this.actions.firstFooterCommonFilterId(data.advanced_query);
                 this.actions.createPostData();
             }
-            try {
-                setTimeout( ()=>{
-                    this.data.showTabs(1);
-                    this.hideLoading();
-                },200 )
-            }catch(e){}
         }
     },
     afterRender: function () {
