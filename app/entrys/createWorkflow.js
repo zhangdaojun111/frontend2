@@ -178,6 +178,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
 		                is_view: 1,
 		                reload_draft_data:0,
 		                from_approve:1,
+		                btnType:'none',
 		                el:$('#place-form'),
 	                })
                     msgBox.showTips(`执行成功`);
