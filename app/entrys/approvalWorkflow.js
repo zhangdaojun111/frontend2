@@ -328,9 +328,9 @@ Mediator.subscribe('approval:rejToAny', (res) => {
     approveWorkflow({
         record_id: obj.record_id,
         action: 6,
-        node_id: res.rejectId,
-        comment: res.data.comment,
-        comment_attachment: JSON.stringify(res.data['attachment']),
+        node_id: res.data.rejectId,
+        comment: res.data.data.comment,
+        comment_attachment: JSON.stringify(res.data.data['attachment']),
     });
 });
 //驳回至发起人，重新发起
