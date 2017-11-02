@@ -118,7 +118,7 @@ export const OnlineDisplay = {
         component.render(this.el);
         this.el.erdsDialog({
             title: '在线用户',
-            width: 1200,
+            width: 1205,
             height: 580,
             modal: true,
             close: function() {

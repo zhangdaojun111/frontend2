@@ -281,6 +281,7 @@ let config = {
         validForm(allData, formValue) {
             let error = false;
             let errorMsg = "";
+            let errArr = [];
             for (let key in formValue) {
                 let data = allData[key];
                 //如果该dfield是父表填充子表的，那就不验证
@@ -296,7 +297,17 @@ let config = {
                 if (data["required"]) {
                     if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]" || JSON.stringify(val) == "{}") {
                         error = true;
-                        errorMsg = `${ data["label"] }是必填项!`;
+                        errArr.push(data["label"]+'是必填项!');
+                        errorMsg = errArr.join(' ');
+                        continue;
+                    }
+                }
+                //子表必填
+                for (let d in allData) {
+                    if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
+                        error = true;
+                        errArr.push('子表字段:'+allData[d].label+'是必填!');
+                        errorMsg =Array.from(new Set(errArr)).join(' ') ;
                         break;
                     }
                 }
@@ -376,14 +387,6 @@ let config = {
                         errorMsg = "小数不能超过12位！无法保存！";
                         break;
                     }
-                }
-            }
-            //子表必填
-            for (let d in allData) {
-                if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
-                    error = true;
-                    errorMsg = '子表字段:' + allData[d].label + '是必填！';
-                    break;
                 }
             }
             return {
@@ -1965,7 +1968,7 @@ let config = {
 }
 
 class BaseForm extends Component {
-    constructor(formData) {
+    constructor(formData,newConfig) {
     	console.log('传进来的是啥');
     	console.log(formData);
         config.template = formData.template;
@@ -1989,7 +1992,7 @@ class BaseForm extends Component {
         //存父表的newData
         window.top.frontendParentNewData[formData.data.tableId] = formData.data.data;
         window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value'] || '';
-        super(config, formData.data);
+	    super($.extend(true,{},config,newConfig), formData.data);
         console.log('表单数据');
         console.log(this.data);
     }
