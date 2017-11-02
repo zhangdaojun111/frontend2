@@ -517,6 +517,7 @@ export class EchartsService {
             let item = [val,cellOption.data.yAxis[index], new Date(cellOption.data.dateAxis[index]).getDate(),cellOption.data.dateAxis[index]];
             data[index] = item;
         });
+        // 如果时间是30 - 1号这种格式，需要把数据反转
         if (cellOption.data.dateAxis[0] > cellOption.data.dateAxis[cellOption.data.dateAxis.length - 1]) {
             data.reverse();
         };
