@@ -32,19 +32,22 @@ export class EchartsService {
         let option = {};
         switch (chartType) {
             case 'pie':
-                option = this.pieOption(cellChart);
+                option = this.pieOption(cellChart);// 饼图处理
                 break;
             case 'multilist':
-                option = this.multiChartOption(cellChart);
+                option = this.multiChartOption(cellChart); // 多表处理
                 break;
             case 'normal':
                 option = this.lineBarOption(cellChart); // 折线柱状混合图
                 break;
             case 'radar':
-                option = this.radarOption(cellChart); // 折线柱状混合图
+                option = this.radarOption(cellChart); // 雷达图处理
                 break;
             case 'funnel':
-                option = this.funnelOption(cellChart); // 折线柱状混合图
+                option = this.funnelOption(cellChart); // 漏斗图处理
+                break;
+            case 'stylzie':
+                option = this.stylzieOption(cellChart); // 风格图处理
                 break;
         }
         return option;
@@ -317,7 +320,7 @@ export class EchartsService {
                     rangeMode: ['value', 'value']
                 }]
         };
-        console.log(linebarOption);
+        // console.log(linebarOption);
 
         return linebarOption;
     }
@@ -498,6 +501,59 @@ export class EchartsService {
         });
         funnelOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         return funnelOption;
+    }
+
+    /**
+     * 风格箱处理
+     * @param chart = cellChart['chart']数据
+     */
+
+
+    stylzieOption(cellChart) {
+        let cellOption = cellChart['chart'];
+        const stylzieOption = EchartsOption.getEchartsConfigOption('stylzie');
+        let data1 = [
+            [3.275154, 2.957587,1],
+            [-3.344465, 2.603513,2],
+            [0.355083, -3.376585,3],
+            [1.852435, 3.547351,4],
+            [-2.078973, 2.552013,5],
+            [-0.993756, -0.884433,6],
+            [2.682252, 4.007573,7],
+            [-3.087776, 2.878713,8],
+            [-1.565978, -1.256985,9],
+            [2.441611, 0.444826,10],
+            [-0.659487, 3.111284,11],
+            [-0.459601, -2.618005,12],
+            [2.17768, 2.387793,13],
+            [-2.920969, 2.917485,14],
+            [-0.028814, -4.168078,15],
+            [3.625746, 2.119041,16],
+            [-3.912363, 1.325108,17],
+            [-0.551694, -2.814223,18],
+            [2.855808, 3.483301,19],
+            [-3.594448, 2.856651,20],
+            [0.421993, -2.372646,21],
+            [1.650821, 3.407572,22],
+            [-2.082902, 3.384412,23],
+            [-0.718809, -2.492514,24],
+            [4.513623, 3.841029,25],
+            [-4.822011, 4.607049,26],
+            [-0.656297, -1.449872,27],
+            [1.919901, 4.439368,28],
+            [-3.287749, 3.918836,29],
+            [-1.576936, -2.977622,30],
+        ];
+        var links = data1.map(function (item, i) {
+            return {
+                source: i,
+                target: i + 1
+            };
+        });
+        links.pop();
+        stylzieOption.series[0].links = links;
+        stylzieOption.series[0].data = data1;
+        return stylzieOption;
     }
 
 
