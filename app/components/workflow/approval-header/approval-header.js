@@ -35,7 +35,7 @@ let config = {
     afterRender: function() {
         console.log(this.data);
         if(this.data.is_batch) {
-            this.el.find('#app-add').hide();
+            this.el.find('.gz').hide();
         }
         this.showLoading();
         let self=this;
