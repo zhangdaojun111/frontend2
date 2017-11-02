@@ -288,7 +288,6 @@ const linebar = {
     ],
     series: []
 };
-
 // 风格箱图
 const stylzie = {
     tooltip: {},
