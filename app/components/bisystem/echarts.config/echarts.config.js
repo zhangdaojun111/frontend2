@@ -290,7 +290,11 @@ const linebar = {
 };
 // 风格箱图
 const stylzie = {
-    tooltip: {},
+    tooltip: {
+        formatter: function (value, index) {
+            return value.data[3]
+        }
+    },
     grid: {
         left: 0,
         right: 25,
@@ -307,15 +311,15 @@ const stylzie = {
             formatter:  function (value, index) {
                 let texts = [];
                 switch (index) {
-                    case 2:
+                    case 1:
                         // code
                         texts.push('大盘')
                         break;
-                    case 4:
+                    case 3:
                         // code
                         texts.push('中盘')
                         break;
-                    case 6:
+                    case 5:
                         // code
                         texts.push('小盘')
                         break;
@@ -335,15 +339,15 @@ const stylzie = {
             formatter:  function (value, index) {
                 let texts = [];
                 switch (index) {
-                    case 2:
+                    case 1:
                         // code
                         texts.push('价值')
                         break;
-                    case 4:
+                    case 3:
                         // code
                         texts.push('平衡')
                         break;
-                    case 6:
+                    case 5:
                         // code
                         texts.push('成长')
                         break;
@@ -366,7 +370,7 @@ const stylzie = {
                     show: true,
                     offset:[0, -10],
                     formatter: function(value,index) {
-                        return  index
+                        return value.data[2]
                     }
                 }
             },
