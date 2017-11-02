@@ -1301,9 +1301,18 @@ let config = {
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
 			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
 				if (data.type == 'Input') {
-					setTimeout(() => {
-						this.actions.validDefault(data, data['value']);
-					}, 3000)
+					if(!this.data.timer){
+						this.data.timer=setTimeout(()=>{
+							this.actions.validDefault(data, data['value']);
+							this.data.timer=null;
+						},3000);
+					}else{
+						clearTimeout(this.data.timer);
+						this.data.timer=setTimeout(()=>{
+							this.actions.validDefault(data, data['value']);
+							this.data.timer=null;
+						},3000);
+					}
 				} else {
 					this.actions.validDefault(data, data['value']);
 				}
