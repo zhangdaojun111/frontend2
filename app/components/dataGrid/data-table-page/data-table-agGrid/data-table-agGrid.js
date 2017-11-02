@@ -857,7 +857,7 @@ let config = {
             }
             let str = '<div style="text-align:center;"><a class="gridView">查看</a>';
             if (this.data.viewMode == 'normal' || this.data.viewMode == 'source_data' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'deleteHanding') {
-                if (this.data.isFixed || rowStatus == 2 || this.data.permission.cell_edit == 0) {
+                if (this.data.isFixed || rowStatus == 2 || this.data.permission.edit == 0) {
                     str += ' | <span style="color: darkgrey;cursor: pointer">编辑</span>';
                     str += ' | <a style="color: darkgrey;cursor: pointer">历史</a>';
                 } else {
@@ -3070,7 +3070,7 @@ let config = {
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
                 let btnType = 'view';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 || this.actions.viewOrEditPerm( 'view' ) ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm( 'view' ) ){
                     btnType = 'none';
                 }
                 let obj = {
