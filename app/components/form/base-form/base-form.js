@@ -2014,18 +2014,7 @@ let config = {
 			this.actions.addBtn();
 		}
 
-		//默认表单样式
-		if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
-			this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
-		}
-		this.el.find("#form-paging-tabs-control ul li").on('click', function () {
-			$(this).css('background', '#F2F2F2').siblings().css('background', '#ffffff');
-		})
-	},
-	beforeDestory() {
-		this.el.off();
-	}
-}
+    }}
 
 class BaseForm extends Component {
 	constructor(formData, newConfig) {

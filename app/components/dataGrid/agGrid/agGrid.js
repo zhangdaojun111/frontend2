@@ -76,7 +76,7 @@ let config = {
                 enableSorting: true,
                 sortingOrder: ['asc','desc','null'],
                 suppressRowClickSelection: true,
-                suppressColumnVirtualisation: true,
+                suppressColumnVirtualisation: false,
                 rowSelection: 'multiple',
                 headerHeight: 30,
                 rowHeight: 30,
