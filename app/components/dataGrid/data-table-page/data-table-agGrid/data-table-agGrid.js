@@ -3461,10 +3461,10 @@ let config = {
             this.actions.renderCacheData( window.config.cached_data )
             try {
                 this.data.showTabs(1);
-                // let body = $('body');
-                // body.find('.component-loading-cover').remove();
-                // body.find('.component-loading-box').remove();
-                // body.removeClass('component-loading-effect');
+                let body = $('body');
+                body.find('.component-loading-cover').remove();
+                body.find('.component-loading-box').remove();
+                body.removeClass('component-loading-effect');
             }catch(e){}
             console.timeEnd( '渲染时间' )
             return;
