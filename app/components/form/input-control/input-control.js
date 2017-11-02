@@ -20,9 +20,7 @@ let config = {
                 let regErrorMsg;
                 let val = this.el.find("input").val();
                 this.data.value = val;
-                _.debounce(function () {
-                    _this.events.changeValue(_this.data)
-                }, 200)();
+                 _this.events.changeValue(_this.data)
                 let func = this.data.func;
                 let reg = this.data.reg;
                 let required = this.data.required
@@ -145,9 +143,21 @@ let config = {
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible');
         }
-        this.el.find('.search').on('input', _.debounce(function () {
-            _this.actions.keyup();
-        }, 200));
+	    let timer=null;
+	    this.el.find('.search').on('input', function () {
+		    if(!timer){
+			    timer=setTimeout(()=>{
+				    _this.actions.keyup();
+				    timer=null;
+			    },500);
+		    }else{
+			    clearTimeout(timer);
+			    timer=setTimeout(()=>{
+				    _this.actions.keyup();
+				    timer=null;
+			    },500);
+		    }
+	    });
         this.el.find('.ui-width').css('width', this.data.width);
         if (this.data.is_view) {
             this.el.find('.ui-width').attr('title', this.data.value)
