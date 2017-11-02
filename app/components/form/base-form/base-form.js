@@ -1293,9 +1293,7 @@ let config = {
 						break;
 					}
 				}
-				if (value && value != '') {
-					this.actions.setAboutData(id, value);
-				}
+				this.actions.setAboutData(id, value);
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
