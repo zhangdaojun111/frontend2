@@ -295,6 +295,7 @@ const stylzie = {
             return value.data[3]
         }
     },
+
     grid: {
         left: 0,
         right: 25,
