@@ -220,7 +220,9 @@ let config = {
         //工作流表单查看操作
         cannotopenform: '',
         //表单数据（子表导入用）
-        formData: ''
+        formData: '',
+        //是否加载cache数据
+        cacheData: false,
     },
     //生成的表头数据
     columnDefs: [],
@@ -1229,6 +1231,10 @@ let config = {
                     if(this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild'){
                         Mediator.publish('form:songGridRefresh:'+this.data.tableId,this.data);
                     }
+                    try {
+                        this.data.showTabs(1);
+                        this.hideLoading();
+                    }catch(e){}
                 },time )
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
@@ -1282,11 +1288,6 @@ let config = {
                     this.data.originRowData[row['_id']]=JSON.parse(JSON.stringify(row));
                 });
             }
-            this.actions.calcSelectData( 'set' );
-            try {
-                this.data.showTabs(1);
-                this.hideLoading();
-            }catch(e){}
             if(res[0].hasOwnProperty('error')){
                 if(res[0].error == '您没有数据查看权限'){
                     this.el.find('.ag-body-viewport-wrapper').html('<div style="width: 100%;height: 100%;background: #fff;position: relative;z-index: 1;"><p style="position: absolute;top: 50%;left: 50%;' +
@@ -1495,8 +1496,8 @@ let config = {
                 json['is_report'] = 1;
             }
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
-                json['rows'] = 99999;
-                json['first'] = 0;
+                // json['rows'] = 99999;
+                // json['first'] = 0;
                 json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
@@ -1657,7 +1658,7 @@ let config = {
             //     this.append(new fastSearch(d), this.el.find('.fast-search-con'))
             // }
             //渲染分页
-            let noPagination = ['in_process','viewFromCorrespondence','editFromCorrespondence','newFormCount','reportTable2']
+            let noPagination = ['in_process','newFormCount','reportTable2']
             if( noPagination.indexOf( this.data.viewMode ) == -1 ){
                 this.data.pagination = true;
                 let paginationData = {
@@ -3398,6 +3399,7 @@ let config = {
             console.log( "cache数据" )
             console.log( data )
             console.log( window.config )
+            this.data.cacheData = true;
             //表头
             let headerRes = [data.preferences,data.column_list,data.tab_page,data.operation,data.prepare_params];
             this.actions.setHeaderData( headerRes );
@@ -3415,13 +3417,10 @@ let config = {
                 this.actions.firstFooterCommonFilterId(data.advanced_query);
                 this.actions.createPostData();
             }
-            try {
-                this.data.showTabs(1);
-                this.hideLoading();
-            }catch(e){}
         }
     },
     afterRender: function () {
+        this.showLoading();
         console.time( '渲染时间' )
         //发送表单tableId（订阅刷新数据用
         if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 && !this.data.departmentDiary ){
@@ -3433,7 +3432,6 @@ let config = {
                 }
             });
         }
-        this.showLoading();
         try{dgcService.accuracy = window.config.sysConfig.accuracy || 1000;}catch(e){}
         let gridData = {
             columnDefs: this.columnDefs,
@@ -3462,6 +3460,10 @@ let config = {
         if( window.config.data_cached == 1 && this.data.viewMode == 'normal' ){
             console.log( '加载cache数据' )
             this.actions.renderCacheData( window.config.cached_data )
+            try {
+                this.data.showTabs(1);
+                this.hideLoading();
+            }catch(e){}
             console.timeEnd( '渲染时间' )
             return;
         }
