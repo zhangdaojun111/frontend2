@@ -170,7 +170,16 @@ Mediator.subscribe('workflow:submit', (res)=> {
                 msgBox.hideLoadingSelf();
                 if(res.success===1){
                     isSuccessSubmit = false;
-                    CreateFormServer.changeToView(wfObj.tableid);
+                    // CreateFormServer.changeToView(wfObj.tableid);
+					$('#place-form').empty();
+	                FormEntrys.initForm({
+		                record_id: res.record_id,
+		                form_id: wfObj.formid,
+		                is_view: 1,
+		                reload_draft_data:0,
+		                from_approve:1,
+		                el:$('#place-form'),
+	                })
                     msgBox.showTips(`执行成功`);
                     let isdraft = true;
                     $('#addFollower').hide();
@@ -228,7 +237,9 @@ Mediator.subscribe('workflow:submit', (res)=> {
 });
 let temp_id=``;
 Mediator.subscribe('workFlow:record_info', (res) => {
-    temp_id=res.data.temp_id.value;
+	if(res.data && res.data.temp_id &&res.data.temp_id.value){
+		temp_id=res.data.temp_id.value || '';
+	}
 });
 
 
