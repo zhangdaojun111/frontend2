@@ -144,6 +144,7 @@ let config={
             let addFollow=this.el.find("#add-home").clone(true).attr('id','cloneId1');
             let flowNode=this.el.find("#flow-node").clone().attr('id','cloneId2');
             let workflowRecord=this.el.find("#workflow-record").clone().attr('id','cloneId3');
+            $( "#dialog" ).dialog('destroy').remove();
             switch (type){
                 case 'follow-view' :
                     // appendDiv.find(".preview-node1").html(addFollow);
@@ -157,11 +158,10 @@ let config={
                     appendDiv.find(".preview-node1").html(dialogHtml);
                     appendDiv.find("#dialog").html(addFollow);
                     $("#cloneId1").find('.add-follow').remove();
-                    $( "#dialog" ).dialog({
+                    let followerDialog = $( "#dialog" ).dialog({
                         position: 'absolute',
                         top: 0,
                         width: window.screen.width,
-
                     });
                     break;
                 case 'flow-view' :
