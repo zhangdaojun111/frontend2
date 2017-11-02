@@ -1962,8 +1962,8 @@ let config = {
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
             this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
         }
-        this.el.find("#form-paging-tabs-control ul li").on('click', function () {
-            $(this).css('background','#F2F2F2').siblings().css('background','#ffffff');
+        this.el.find("#form-paging-tabs-control  .paging-tabs-tabform").on('click', function () {
+            $(this).css('background','#ffffff').siblings().css('background','#F2F2F2');
         })
     },
     beforeDestory() {
