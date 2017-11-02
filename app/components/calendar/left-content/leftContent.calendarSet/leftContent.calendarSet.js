@@ -249,17 +249,10 @@ let config = {
         Mediator.on('calendar-left:showRemindType', data => {
             this.actions.showRemindType(data);
         });
-        Mediator.on('Calendar: showLoading', data => {
-            if(data === 1){
-                this.cancelEvents();
-            }else{
-                this.bindEvents();
-            }
-        });
     },
 
     beforeDestory: function () {
-        Mediator.removeAll('calendar-left:unshowData');
+        // Mediator.removeAll('calendar-left:unshowData');
     }
 };
 

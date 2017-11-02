@@ -717,6 +717,7 @@ let config = {
 
         // 获取左侧日历树中不显示数据
         Mediator.on('calendar-left:unshowData', data => {
+            console.log(11111);
             if(data['data']) {
                 this.data.isShowArr = data['data'];
                 let arr = ['remind'];

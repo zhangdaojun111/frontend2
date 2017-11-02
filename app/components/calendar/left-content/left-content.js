@@ -116,8 +116,9 @@ let config = {
                         data: res['cancel_fields']
                     });
                     this.data.cancelFields = res['cancel_fields'];
-                    this.el.find('.left-calendar-set').empty();
+                    this.data.LeftCalendarSet.destroySelf();
                     this.data.LeftCalendarSet = new LeftContentCalendarSet(res);
+
                     this.append(this.data.LeftCalendarSet, this.el.find('.left-calendar-set'));
                 });
             });
