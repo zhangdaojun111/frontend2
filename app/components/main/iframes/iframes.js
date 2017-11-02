@@ -218,28 +218,35 @@ let config = {
          * @param id
          */
         focusIframe: function (id) {
+
+            let that = this;
+
             if (this.data.focus) {
                 this.data.focus.tab.removeClass('focus');
                 this.data.focus.iframe.hide();
-
-                PMAPI.sendToIframe(this.data.focus.iframe.find('iframe')[0], {
-                    type: PMENUM.iframe_silent
-                })
+                this.actions.iframeHideLoading(this.data.focus.iframe);
+                // PMAPI.sendToIframe(this.data.focus.iframe.find('iframe')[0], {
+                //     type: PMENUM.iframe_silent
+                // })
             }
 
             this.data.focus = this.data.hash[id];
             let iframe = this.data.focus.iframe.find('iframe');
             let src = iframe.attr('src');
             if (!src) {
+                this.actions.iframeShowLoading(this.data.focus.iframe);
+                iframe.on('load',function () {
+                    that.actions.iframeHideLoading(that.data.focus.iframe);
+                });
                 iframe.attr('src', iframe.attr('_src'));
                 iframe.removeAttr('_src');
             }
             this.data.focus.iframe.show();
             this.data.focus.tab.addClass('focus');
 
-            PMAPI.sendToIframe(this.data.focus.iframe.find('iframe')[0], {
-                type: PMENUM.iframe_active
-            })
+            // PMAPI.sendToIframe(this.data.focus.iframe.find('iframe')[0], {
+            //     type: PMENUM.iframe_active
+            // })
         },
         setSizeToFull: function () {
             this.el.removeClass('mini');
@@ -339,7 +346,6 @@ let config = {
          * @param event
          */
         controlTabs:function (event) {
-            debugger;
             let name = event.target.textContent;
             if(name === '关闭标签'){
                 this.actions.closeFocusTab();
@@ -448,11 +454,9 @@ let config = {
                     }
                 }
                 //如果bi、calendar均未勾选，则参考后台bi、calendar自动开启设置
-                console.log(biConfig,calendarConfig);
+
                 if((biConfig.data === "10" || biConfig.data === "20") && (calendarConfig.data === "10" || calendarConfig.data === "20")){
-                    console.log('in');
                     if(window.config.sysConfig.logic_config.login_show_bi === "1"){
-                        console.log('check bi')
                         that.data.biCalendarList.push({
                             id: 'bi',
                             name: 'BI',
@@ -460,7 +464,6 @@ let config = {
                         });
                     }
                     if(window.config.sysConfig.logic_config.login_show_calendar === "1"){
-                        console.log('check calendar');
                         if((calendarConfig.data && calendarConfig.data.toString() === "10")){
                             that.data.biCalendarList.unshift({
                                 id: 'calendar',
@@ -655,6 +658,25 @@ let config = {
             setTimeout(() => {
                 start();
             }, 3000);
+        },
+        iframeShowLoading:function (root) {
+            let size = 50;
+            root.addClass('component-loading-effect');
+            $('<div class="component-loading-cover">').appendTo(root);
+            let loadingHtml = `<div class='component-loading-box'><div class ="dot1"></div><div class ="dot2"></div><div class ="dot3"></div><div class ="dot4"></div><div class ="dot5"></div></div>`;
+            this.loadingEffectBox = $(loadingHtml).appendTo(root);
+
+            this.loadingEffectBox.css({
+                "width":size,
+                "height":size,
+                marginLeft: -size/2,
+                marginTop: -size/2
+            });
+        },
+        iframeHideLoading:function (root) {
+            root.find('.component-loading-cover').remove();
+            root.find('.component-loading-box').remove();
+            root.removeClass('component-loading-effect');
         }
     },
     binds:[
@@ -764,22 +786,6 @@ let config = {
         //初始化保存视图组件
         this.saveView = new SaveView({},this.data.sort,this.actions.closeSaveViewPage);
         this.saveView.render(this.el.find('.view-save-component'));
-
-
-
-
-
-        // this.el.on('click', '.tabs .item .close', function () {
-        //     let id = $(this).attr('iframeid');
-        //     console.log(id);
-        //     that.actions.closeIframe(id);
-        //     return false;
-        // });
-
-        // this.el.on('click', '.tabs .item', function () {
-        //     let id = $(this).attr('iframeid');
-        //     that.actions.focusIframe(id);
-        // });
     },
 
     firstAfterRender: function () {
@@ -797,7 +803,6 @@ let config = {
                 this.actions.setSizeToMini();
             }
         });
-        console.log(window.config);
         // Mediator.on('socket:table_invalid', this.actions.sendMsgToIframes);
         // Mediator.on('socket:data_invalid', this.actions.sendMsgToIframes);
         // Mediator.on('socket:one_the_way_invalid', this.actions.sendMsgToIframes);
