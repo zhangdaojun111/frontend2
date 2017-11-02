@@ -1284,14 +1284,18 @@ let config = {
 			if (this.data.data[data.dfield]) {
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
-			if (data.type == 'Buildin') {
+			if (data.type == 'Buildin' || data.type=='MultiLinkage') {
 				let id = data["id"];
 				let value;
-				for (let obj of data['options']) {
-					if (obj.value == data.value) {
-						value = obj.value;
-						break;
+				if(data.type == 'Buildin'){
+					for (let obj of data['options']) {
+						if (obj.value == data.value) {
+							value = obj.value;
+							break;
+						}
 					}
+				}else{
+					value=data.value;
 				}
 				if (value && value != '') {
 					this.actions.setAboutData(id, value);
@@ -2059,7 +2063,7 @@ class BaseForm extends Component {
 		window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
 		//存父表的newData
 		window.top.frontendParentNewData[formData.data.tableId] = formData.data.data;
-		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value'] || '';
+		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
 		super($.extend(true, {}, config, newConfig), formData.data);
 		console.log('表单数据');
 		console.log(this.data);
