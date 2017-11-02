@@ -287,7 +287,6 @@ const linebar = {
         }
     ],
     series: []
-
 };
 
 // 风格箱图
