@@ -40,7 +40,7 @@ let config = {
                 }
                 // this.reload();
             }
-            if (val != "" && this.data.numArea !== "") {
+            if (val != "" && this.data.numArea) {
                 let label = this.data.label;
                 let minNum = this.data.numArea.min;
                 let maxNum = this.data.numArea.max;
@@ -115,6 +115,9 @@ let config = {
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }
+        if(this.data.value && this.data.value != this.data.originalValue){
+        	this.actions.keyup();
+        }
     },
     beforeDestory() {
         this.el.off();
@@ -123,6 +126,7 @@ let config = {
 
 class ReadonlyControl extends Component {
     constructor(data,events,newConfig){
+    	data.originalValue=data.value;
         super($.extend(true,{},config,newConfig),data,events)
     }
 }
