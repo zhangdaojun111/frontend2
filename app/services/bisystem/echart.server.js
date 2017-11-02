@@ -502,7 +502,6 @@ export class EchartsService {
         funnelOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         return funnelOption;
     }
-
     /**
      * 风格箱处理
      * @param chart = cellChart['chart']数据
