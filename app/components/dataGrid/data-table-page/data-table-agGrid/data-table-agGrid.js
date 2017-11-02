@@ -3420,6 +3420,7 @@ let config = {
         }
     },
     afterRender: function () {
+        this.showLoading();
         console.time( '渲染时间' )
         //发送表单tableId（订阅刷新数据用
         if( dgcService.needRefreshMode.indexOf( this.data.viewMode ) != -1 && !this.data.departmentDiary ){
@@ -3461,10 +3462,7 @@ let config = {
             this.actions.renderCacheData( window.config.cached_data )
             try {
                 this.data.showTabs(1);
-                let body = $('body');
-                body.find('.component-loading-cover').remove();
-                body.find('.component-loading-box').remove();
-                body.removeClass('component-loading-effect');
+                this.hideLoading();
             }catch(e){}
             console.timeEnd( '渲染时间' )
             return;
@@ -3481,7 +3479,6 @@ let config = {
             this.actions.getGridData();
             return;
         }
-        this.showLoading();
 
         if( this.data.viewMode == 'in_process' ){
             this.data.noNeedCustom = true;

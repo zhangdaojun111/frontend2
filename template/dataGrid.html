@@ -13,22 +13,13 @@
 
 </head>
 
-<body style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;" class="component-loading-effect">
+<body>
 
 <script>
     window.config = {{window_config|safe}}
 </script>
 
 <div id="DataTablePage"></div>
-<div class="component-loading-cover"></div>
-
-<div class="component-loading-box">
-    <div class ="dot1"></div>
-    <div class ="dot2"></div>
-    <div class ="dot3"></div>
-    <div class ="dot4"></div>
-    <div class ="dot5"></div>
-</div>
 
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
