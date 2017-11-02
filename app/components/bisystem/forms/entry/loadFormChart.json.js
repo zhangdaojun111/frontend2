@@ -60,8 +60,8 @@ export let componentsJson = {
         'icon':'chart-pie-icon',
         'component': FormPieComponent
     },
-    'stylize': {
-        'entry': 'stylize',
+    'stylzie': {
+        'entry': 'stylzie',
         'name': '风格箱',
         'icon':'chart-stylize-icon',
         'component': FormStylizeComponent

@@ -290,6 +290,71 @@ const linebar = {
 
 };
 
+// 风格箱图
+const stylzie = {
+    tooltip: {},
+    xAxis: {
+        type : 'value',
+        min:-5,
+        max:5,
+        data : [],
+        axisLabel: {
+            // formatter:  function (value, index) {
+            //     let texts = [];
+            //     switch (index) {
+            //         case 1:
+            //             // code
+            //             texts.push('大盘')
+            //             break;
+            //         case 3:
+            //             // code
+            //             texts.push('中盘')
+            //             break;
+            //         case 5:
+            //             // code
+            //             texts.push('小盘')
+            //             break;
+            //         default:
+            //             texts.push('')
+            //         // code
+            //     }
+            //     return texts
+            // }
+        }
+    },
+    yAxis: {
+        type : 'value',
+        min:-5,
+        max:5,
+    },
+    series: [
+        {
+            type: 'graph',
+            layout: 'none',
+            coordinateSystem: 'cartesian2d',
+            symbolSize: 10,
+            label: {
+                normal: {
+                    show: true,
+                    offset:[0, -10],
+                    formatter: function(value,index) {
+                        return  index
+                    }
+                }
+            },
+            edgeSymbol: ['circle', 'arrow'],
+            edgeSymbolSize: [4, 10],
+            data: [],
+            links: [],
+            lineStyle: {
+                normal: {
+                    color: '#2f4554'
+                }
+            }
+        }
+    ]
+
+};
 
 export const EchartsOption = {
     blue: blueColors,
@@ -313,6 +378,9 @@ export const EchartsOption = {
                 break;
             case 'linebar':
                 option = linebar;
+                break;
+            case 'stylzie':
+                option = stylzie;
                 break;
         }
         return ToolPlugin.clone(option);

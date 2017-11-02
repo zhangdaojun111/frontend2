@@ -124,7 +124,7 @@ let config = {
                 source: data.source,
                 theme: data.theme,
                 xAxis:data.xAxis,
-                yAxis:data.yAxis,
+                yAxis:[data.yAxis],
                 dateAxis: data.dateAxis
             };
 
@@ -155,7 +155,7 @@ let config = {
             this.formItems['icon'].setValue(chart['icon']);
             this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
             this.formItems['xAxis'].setValue(chart['xAxis']);
-            this.formItems['yAxis'].setValue(chart['yAxis']);
+            this.formItems['yAxis'].setValue(chart['yAxis'][0]);
             this.formItems['dateAxis'].setValue(chart['dateAxis']);
         }
     },
