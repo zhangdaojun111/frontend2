@@ -517,7 +517,7 @@ export class EchartsService {
             let item = [val,cellOption.data.yAxis[index], new Date(cellOption.data.dateAxis[index]).getDate(),cellOption.data.dateAxis[index]];
             data[index] = item;
         });
-        console.log(data);
+        data.reverse();
         let links = data.map(function (item, i) {
             return {
                 source: i,
