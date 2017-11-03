@@ -302,6 +302,7 @@ let config = {
         gridPref = this.agGrid = new agGrid({
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
+            noFooter: true,
             onRowDoubleClicked:that.actions.onRowDoubleClicked,
             onSortChanged: this.actions.onSortChanged,
             footerData:[]
@@ -347,7 +348,7 @@ let systemMessageUtil = {
         systemMessage.render(this.el);
         let sysDom = this.el.find('.system-message');
         this.el.erdsDialog({
-            width: 1200,
+            width: 1205,
             height: 580,
             modal: true,
             maxable: true,

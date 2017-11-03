@@ -10,12 +10,8 @@ import msgbox from '../../../../../../../lib/msgbox';
 let config = {
     template: template,
     data: {
-        id: 'pie',
-        cellChart: {},
-        deeps:0,
-        floor:0,
-        xAxis: [], //每一层的下穿字段
-        xOld: [], //保存历史数据x轴字段
+        id: 'stylzie',
+        cellChart: {}
     },
     actions: {
         /**

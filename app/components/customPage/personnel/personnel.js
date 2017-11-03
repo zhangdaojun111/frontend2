@@ -122,7 +122,7 @@ let config = {
             Promise.all([preferenceData, headerData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
                 let oprate = {headerName: '操作',field: 'myOperate', width: 160,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                    return '<div style="text-align:center;"><a class="ui-link" id="view" style="color:#0088ff;">查看</a> | <a class="ui-link" id="edit" style="color:#0088ff;">编辑</a> | <a class="ui-link" id="jurisdiction" style="color:#0088ff;">权限</a><div>';
+                    return '<div style="text-align:center;"><a class="ui-link" id="view">查看</a> | <a class="ui-link" id="edit">编辑</a> | <a class="ui-link" id="jurisdiction">权限</a><div>';
                 }}
                 //添加序号列
                 let number = dgcService.numberCol;
@@ -188,6 +188,7 @@ let config = {
         renderAgGrid: function () {
             let gridData = {
                 columnDefs: this.data.columnDefs,
+                noFooter: true,
                 rowData: this.data.rowData,
                 footerData: this.data.footerData,
                 fieldsData: this.data.fieldsData,
@@ -344,7 +345,7 @@ let config = {
                     this.el.find('.btn-nav').append(dom);
                     setTimeout(()=>{
                         this.el.find('.query-tips').css('display','none');
-                    },5000)
+                    },3000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -456,6 +457,19 @@ let config = {
             } )
             //floatingFilter
             this.el.find( '.float-search-btn' ).on( 'click',()=>{
+                console.log(this.data.isShowFloatingFilter)
+                if (this.data.isShowFloatingFilter && this.data.filterParam.filter.length != 0) {
+                    for( let k in this.data.searchValue ){
+                        this.data.searchValue[k] = '';
+                    }
+                    for( let k in this.data.searchOldValue ){
+                        this.data.searchOldValue[k] = '';
+                    }
+                    this.data.queryList = {};
+                    this.actions.setFloatingFilterInput();
+                    this.data.filterParam.filter = [];
+                    this.actions.getUserData();
+                }
                 let height = this.data.isShowFloatingFilter ? 0:30;
                 this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                 this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
@@ -674,7 +688,6 @@ let config = {
                             inCheck = true;
                         } else {
                             for(let item of res.rows) {
-                                debugger
                                 if (item.name == this.data.filterParam['common_filter_name']) {
                                     inCheck = false ;
                                 }
@@ -960,14 +973,8 @@ let config = {
 }
 
 class personnel extends Component {
-    // constructor(data) {
-    //     for( let d in data ){
-    //         config.data[d] = data[d];
-    //     }
-    //     super(config);
-    // }
     constructor(data,newConfig){
-        super($.extend(true,config,newConfig,{data:data||{}}));
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

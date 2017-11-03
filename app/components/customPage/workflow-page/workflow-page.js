@@ -195,6 +195,7 @@ let config = {
         renderGrid: function () {
             let gridData = {
                 columnDefs: this.data.columnDefs,
+                noFooter: true,
                 rowData: this.data.rowData,
                 footerData: this.data.footerData,
                 fieldsData: this.data.fieldsData,
@@ -301,6 +302,18 @@ let config = {
             let floatSearch = this.el.find( '.float-search-btn' );
             if( floatSearch[0] ){
                 floatSearch.on( 'click',()=>{
+                    if (this.data.isShowFloatingFilter && this.data.filterParam.filter.length != 0) {
+                        for( let k in this.data.searchValue ){
+                            this.data.searchValue[k] = '';
+                        }
+                        for( let k in this.data.searchOldValue ){
+                            this.data.searchOldValue[k] = '';
+                        }
+                        this.data.queryList = {};
+                        this.actions.setFloatingFilterInput();
+                        this.data.filterParam.filter = [];
+                        this.actions.getData();
+                    }
                     let height = this.data.isShowFloatingFilter ? 0:30;
                     this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                     this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
@@ -538,7 +551,7 @@ let config = {
                     this.el.find('.btn-nav').append(dom);
                     setTimeout(()=>{
                         this.el.find('.query-tips').css('display','none');
-                    },5000)
+                    },3000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -593,7 +606,6 @@ let config = {
                             inCheck = true;
                         } else {
                             for(let item of res.rows) {
-                                debugger
                                 if (item.name == this.data.filterParam['common_filter_name']) {
                                     inCheck = false ;
                                 }
@@ -821,16 +833,12 @@ let config = {
         this.actions.getData();
     }
 }
-
 class workflowPage extends Component {
-    // constructor(data) {
-    //     for( let d in data ){
-    //         config.data[d] = data[d];
-    //     }
-    //     super(config);
-    // }
     constructor(data,newConfig){
-        super($.extend(true,config,newConfig,{data:data||{}}));
+        for (let d in data) {
+            config.data[d] = data[d];
+        }
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

@@ -60,7 +60,7 @@ let config = {
                 this.data.columnDefs = [
                     number,dgcService.selectCol,
                     {headerName: '操作',field: 'myOperate', width: 120,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
-                        return '<div style="text-align:center;"><a class="ui-link" id="departView" style="color:#0088ff;">查看</a> | <a class="ui-link" id="departModify" style="color:#0088ff;">编辑</a><div>';
+                        return '<div style="text-align:center;"><a class="ui-link" id="departView">查看</a> | <a class="ui-link" id="departModify">编辑</a><div>';
                     }},
                     { headerName: '部门', field: 'f5',cellRenderer: 'group',suppressMenu: true, tooltipField:'f5' }
                 ]
@@ -102,6 +102,7 @@ let config = {
                 let gridData = {
                     columnDefs: this.data.columnDefs,
                     rowData: this.data.rowData,
+                    noFooter: true,
                     footerData: this.data.footerData,
                     fieldsData: this.data.fieldsData,
                     onColumnResized: this.actions.onColumnResized,
@@ -449,14 +450,8 @@ let config = {
 }
 
 class department extends Component {
-    // constructor(data) {
-    //     for( let d in data ){
-    //         config.data[d] = data[d];
-    //     }
-    //     super(config);
-    // }
     constructor(data,newConfig){
-        super($.extend(true,config,newConfig,{data:data||{}}));
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 

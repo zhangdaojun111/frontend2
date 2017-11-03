@@ -276,19 +276,19 @@ let config = {
                 rightBracketNum = 0;
             try {
                 this.data.searchInputList.forEach((item) => {
-                    if (item['cond']['keyword'] == '') {
+                    if (item['cond']['keyword'] === '') {
                         msgBox.alert('查询值不能为空！');
                         checkedPost = false;
                         foreach.break=new Error("StopIteration");
-                    } else if (item['cond']['searchByName'] == '') {
+                    } else if (item['cond']['searchByName'] === '') {
                         msgBox.alert('查询条件不能为空！');
                         checkedPost = false;
                         foreach.break=new Error("StopIteration");
                     }
-                    if (item['cond']['leftBracket'] == '(') {
+                    if (item['cond']['leftBracket'] === '(') {
                         leftBracketNum++;
                     }
-                    if (item['cond']['rightBracket'] == ')') {
+                    if (item['cond']['rightBracket'] === ')') {
                         rightBracketNum++;
                     }
                 })
@@ -305,12 +305,22 @@ let config = {
                         // this.data.saveTemporaryCommonQuery(this.data.searchInputList);
                         let searchId = '临时高级查询',searchName = '临时高级查询',appendChecked = true;
                         this.data.commonQuery.forEach((item) => {
-                            if(item.id == this.id &&
-                                JSON.parse(item.queryParams)[0]['cond']['keyword'] == this.data.searchInputList[0]['cond']['keyword'] &&
-                                JSON.parse(item.queryParams).length == this.data.searchInputList.length) {
-                                searchId = item.id;
-                                searchName = item.name;
-                                appendChecked = false;
+                            if(item.id == this.id && JSON.parse(item.queryParams).length == this.data.searchInputList.length) {
+                                for (let i = 0; i< this.data.searchInputList.length; i++) {
+                                    if( JSON.parse(item.queryParams)[i]['cond']['keyword'] == this.data.searchInputList[0]['cond']['keyword'] &&
+                                        JSON.parse(item.queryParams)[i]['cond']['operate'] == this.data.searchInputList[0]['cond']['operate'] &&
+                                        JSON.parse(item.queryParams)[i]['cond']['leftBracket'] == this.data.searchInputList[0]['cond']['leftBracket'] &&
+                                        JSON.parse(item.queryParams)[i]['cond']['rightBracket'] == this.data.searchInputList[0]['cond']['rightBracket']&&
+                                        JSON.parse(item.queryParams)[i]['cond']['searchBy'] == this.data.searchInputList[0]['cond']['searchBy']&&
+                                        JSON.parse(item.queryParams)[i]['cond']['searchByName'] == this.data.searchInputList[0]['cond']['searchByName']
+                                    ){
+                                        return false;
+                                    }else {
+                                        searchId = item.id;
+                                        searchName = item.name;
+                                        appendChecked = false;
+                                    }
+                                }
                             }
                         });
                         PMAPI.closeIframeDialog(window.config.key, {
@@ -567,11 +577,8 @@ let config = {
 
 }
 class expertSearch extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-        }
-        super(config)
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
 export default expertSearch

@@ -47,22 +47,6 @@
             cursor: pointer;
         }
     }
-    .printBtn {
-        background: #fff;
-        position: absolute;
-        right: 14px;
-        height: 25px;
-        top: 22px;
-        width: 52px;
-        line-height: 16px;
-        margin-left: 5px;
-        cursor: pointer;
-        & > i {
-            display: inline-block;
-            float: left;
-            margin-right: 5px;
-        }
-    }
     .addPrint{
         margin-top: 1px;
         margin-right: 28px;

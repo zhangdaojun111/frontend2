@@ -28,6 +28,9 @@ btn-div{
     .tit-col{
       font-size: 12px;
     }
+    .selectSpan{
+      font-size: 12px;
+    }
   }
   .wf-btn-box{
     position: absolute;
@@ -303,4 +306,22 @@ btn-div{
 }
 #addFollower{
 	cursor: pointer;
+}
+#dialog{
+  box-sizing: border-box;
+  border: 1px solid #e4e4e4;
+  border-top: 0;
+  &.ui-dialog-title {
+    color: #ffffff;
+  }
+  .follow-name-list {
+    border: 1px solid #f2dede;
+  }
+}
+.ui-dialog-titlebar {
+    //background-color: #2298f4;
+}
+.ui-dialog {
+  border: 1px solid #2298f4;
+  margin-top: 10px;
 }

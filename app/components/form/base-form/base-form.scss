@@ -7,7 +7,7 @@
     height: 100%;
     width: 100%;
     margin-bottom: 50px;//解决时间框下拉框弹出撑开form的抖动
-    overflow-x: auto;
+    //overflow-x: auto;
     @import "dateTime";
     input, textarea, select{
         font-family: '微软雅黑';
@@ -52,6 +52,7 @@
         position: relative;
         .info {
             color: #ccc;
+            cursor: default;
         }
         .inline {
             display: inline;
@@ -181,7 +182,7 @@
         vertical-align: middle;
         display: inline-block;
         content: "\271A";
-        color: #0E7AEF;
+        color: #2298f4;
         font-size: 1.5em;
         // font-weight: bold;
         margin-left: 10px;
@@ -227,7 +228,7 @@
     }
     .ui-link {
         text-decoration: underline;
-        color: #0e7aef;
+        color: #2298f4;
         font-size: 16px;
     }
     .ui-del {
@@ -283,18 +284,18 @@
 
     //tabs
     #form-paging-tabs-control{
-        width: 1200px;
+        width: 100%;
         margin: 0 auto;
-        ul[role="tablist"] {
+        .ui-tabs-nav {
             padding: 0;
             margin: 0;
             background: none;
             border: none;
-            li[role="tab"] {
+            .ui-tabs-tab {
                 display: block;
                 float: left;
                 font-size: 12px;
-                background-color: #ffffff;
+                background-color: #F2F2F2;
                 line-height: 30px;
                 position: relative;
                 top:2px;
@@ -312,14 +313,13 @@
                     cursor: pointer;
                 }
             }
-            li[role="tab"]:first-child {
-                background: #F2F2F2;
+            .ui-tabs-tab:first-child {
+                background: #ffffff;
             }
         }
 
         .ui-tabview-panels {
             border: 1px solid #ccc;
-            overflow: auto;
             padding-top: 50px;
             min-height: 430px;
         }

@@ -7,9 +7,7 @@
     bottom: 0;
     right: 0;
     overflow: hidden;
-    .ag-floating-bottom {
-        display: none!important;
-    }
+
     .tab-title {
         height: 60px;
         line-height: 60px;
@@ -49,7 +47,6 @@
                 a:hover {
                     color: #0088ff;
                 }
-
                 .select {
                     border-bottom: 2px solid #0088FF;
                     color: #0088FF;

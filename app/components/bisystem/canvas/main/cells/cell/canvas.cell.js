@@ -15,6 +15,7 @@ import {CellNineGridComponent} from './nine.grid/cell.nine.grid';
 import {CellMultiChartComponent} from './multi.chart/cell.multi.chart';
 import {CellFunnelComponent} from './funnel/cell.funnel';
 import {CellCommentComponent} from './comment/cell.comment';
+import {CellStylzieComponent} from './stylzie/cell.stylzie';
 import {CanvasCellTitleComponent} from './title/canvas.title';
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
@@ -29,7 +30,8 @@ const cellTypes = {
     'nineGrid': CellNineGridComponent,
     'funnel': CellFunnelComponent,
     'pie': CellPieComponent,
-    'comment': CellCommentComponent
+    'comment': CellCommentComponent,
+    'stylzie': CellStylzieComponent
 };
 
 
@@ -40,8 +42,8 @@ let config = {
          * 渲染cell
          */
         renderCell() {
-            let windowSize = $(window).width();
-            if (windowSize <= 1024) {
+            let windowSize = $(document).width();
+            if (windowSize && windowSize <= 960) {
                 this.data.cell.size.width = 'auto';
             };
             this.el.find('.cell').css(this.data.cell.size);
@@ -79,7 +81,6 @@ let config = {
                 });
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
-                this.cellChart = this.data.cellComponent;
             }
         },
 
