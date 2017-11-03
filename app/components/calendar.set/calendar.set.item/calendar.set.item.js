@@ -133,6 +133,8 @@ let config = {
          * 打开提醒方式设置
          */
         openSetRemind: function () {
+            console.log({emailStatus: this.data.rowSetData.email.email_status,
+                smsStatus: this.data.rowSetData.sms.sms_status,})
             PMAPI.openDialogByIframe(
                 '/iframe/calendarSetRemind/',
                 {
@@ -155,11 +157,11 @@ let config = {
                     this.data.rowSetData.email = data['email'];
                     this.data.rowSetData.sms = data['sms'];
                     let showMethod = '';
-                    if (data['sms']['sms_status'] === '1') {
+                    if (data['sms']['sms_status'] === 1) {
                         showMethod = '短信';
                         this.el.find('.set-remind-method').html(showMethod);
                     }
-                    if (data['email']['email_status'] === '1') {
+                    if (data['email']['email_status'] === 1) {
                         showMethod = showMethod + ' ' + '邮件';
                         this.el.find('.set-remind-method').html(showMethod);
                     }
@@ -253,6 +255,7 @@ let config = {
             event: 'click',
             selector: ".set-remind-method",
             callback: function () {
+                console.log(1222222222222222222222);
                 if (this.data.staus) {
                     this.actions.openSetRemind();
                 }
