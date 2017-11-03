@@ -964,6 +964,7 @@ let config = {
     },
     afterRender: function (){
         this.showLoading();
+        console.log('do save tabs')
         TabService.onOpenTab( this.data.tableId );
         this.actions.setFieldMapping();
         this.floatingFilterCom = new FloatingFilter();
