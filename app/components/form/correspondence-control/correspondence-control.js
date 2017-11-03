@@ -30,8 +30,9 @@ let config={
     afterRender(){
         let config={
             tableId:this.data.value,
-            parentTableId:CreateFormServer.data.tableId,
+            parentTableId:this.data.parent_table_id,
             parentTempId:this.data.temp_id,
+	        parentRealId:this.data.parent_real_id,
             rowId:this.data.parent_temp_id || '',
             viewMode:'viewFromCorrespondence',
             recordId:this.data.recordId || '',

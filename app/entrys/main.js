@@ -4,7 +4,6 @@
 import '../assets/scss/main.scss';
 import '../assets/scss/framework/framework-base.scss';
 import {SocketMgr} from '../lib/socket';
-import '../assets/scss/framework/framework-base.scss'
 import {IframeComponent} from '../components/main/iframes/iframes';
 import {HeaderComponent} from '../components/main/header/header';
 import {AsideComponent} from '../components/main/aside/aside';

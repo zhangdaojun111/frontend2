@@ -15,6 +15,7 @@ import {CellNineGridComponent} from './nine.grid/cell.nine.grid';
 import {CellMultiChartComponent} from './multi.chart/cell.multi.chart';
 import {CellFunnelComponent} from './funnel/cell.funnel';
 import {CellCommentComponent} from './comment/cell.comment';
+import {CellStylzieComponent} from './stylzie/cell.stylzie';
 import {CanvasCellTitleComponent} from './title/canvas.title';
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
@@ -29,7 +30,8 @@ const cellTypes = {
     'nineGrid': CellNineGridComponent,
     'funnel': CellFunnelComponent,
     'pie': CellPieComponent,
-    'comment': CellCommentComponent
+    'comment': CellCommentComponent,
+    'stylzie': CellStylzieComponent
 };
 
 

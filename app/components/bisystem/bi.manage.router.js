@@ -81,6 +81,7 @@ const BiAppRouter = Backbone.Router.extend({
     },
     routerFormDynamicComponent(type,id) {
         canvasComponent = null;
+        console.log(type);
         let comType = {
             assortment: type,
             id: id

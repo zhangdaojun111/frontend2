@@ -158,6 +158,10 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/chart_pie.png') no-repeat;
     }
+    .chart-stylize-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_stylize.png') no-repeat;
+    }
     .aside-normal-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/aside_barline.png') no-repeat;
@@ -185,6 +189,10 @@ html.bi, body.bi {
     .aside-table-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/aside_table.png') no-repeat;
+    }
+    .aside-stylzie-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_stylize.png') no-repeat;
     }
     .rich-text-icon {
         @include icon;
