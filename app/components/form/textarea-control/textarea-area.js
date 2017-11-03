@@ -26,9 +26,9 @@ let config={
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('title', this.data.value)
-            this.el.find('.ui-width').attr('disabled',true);
+            this.el.find('.ui-width').attr('readonly','readonly').css('background','#EBEBE4');
         }else{
-            this.el.find('.ui-width').attr('disabled',false);
+            this.el.find('.ui-width').removeAttr("readonly");
         }
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible');

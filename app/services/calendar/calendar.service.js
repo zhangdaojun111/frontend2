@@ -22,9 +22,13 @@ const keyFieldDictUrl = 'calendar_mgr/key_field_dict';
 
 const dragCalendarTaskUrl = 'calendar_mgr/drag_calendar';
 
+const getSelectedOptsUrl = 'calendar_mgr/get_selectedopts_data';
+
 export const CodeEnum = {
         SUCCESS: 200,
 };
+
+let fieldInfos = {};
 
 export const CalendarService = {
 
@@ -104,6 +108,13 @@ export const CalendarService = {
         });
         HTTP.flush();
         return res;
+    },
+
+    saveFieldInfos: function (data) {
+        this.fieldInfos = data;
+    },
+    getFieldInfos: function () {
+        return this.fieldInfos;
     },
 
     /**
@@ -267,6 +278,24 @@ export const CalendarService = {
      */
     getCalendarDrag: function (params) {
         let res = HTTP.get(dragCalendarTaskUrl, params).then(res => {
+            console.log(res);
+            if(res['code'] === CodeEnum.SUCCESS) {
+                return res;
+            } else {
+                MSG.showTips('获取数据失败');
+            }
+        });
+        HTTP.flush();
+        return res;
+    },
+
+    /**
+     * 打开日历提醒
+     * @param params
+     * @returns {*|void|undefined|Promise.<TResult>}
+     */
+    getSelectedOpts: function (params) {
+        let res = HTTP.get(getSelectedOptsUrl, params).then(res => {
             console.log(res);
             if(res['code'] === CodeEnum.SUCCESS) {
                 return res;

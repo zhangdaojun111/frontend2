@@ -22,7 +22,9 @@
         }
     }
 }
-
+#tree .node-disabled{
+    display: none;
+}
 .treeview {
     .list-group {
         .list-group-item {

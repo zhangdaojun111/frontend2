@@ -1,4 +1,4 @@
-<div class="clearfix">
+<div class="clearfix" style="overflow-x: hidden;">
     {{#if unvisible}}
         <a href="javascript:void(0);" style="color:#ccc;margin:2px 4px">权限受限</a>
     {{else if be_control_condition}}
@@ -10,16 +10,14 @@
             <input type="file" class="selecting-file" style="display: none;" multiple>
             <input type="button" class='upload-file' style="margin:2px" value="上传文件">
             <input type="button" class="shot-screen" style="margin:2px" value="截图上传">
+            {{#if required}}
+            <span id="requiredLogo" class="{{requiredClass}}" style="float: none; position: relative; top: -3px;"></span>
+            {{/if}}
             <div class="upload-process-queue"></div>
             <div class="ellipses" style="display: none; cursor: pointer;margin:2px 4px">......</div>
         {{/unless}}
-        <div class="thumbnail-list-anchor"></div>
-    <div>
-        {{#if required}}
-        <span id="requiredLogo" class="{{requiredClass}}" style="position: relative; top: 3px;"></span>
-        {{/if}}
-    </div>
 
+        <div class="thumbnail-list-anchor"></div>
     {{/if}}
 </div>
 

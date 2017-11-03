@@ -65,6 +65,9 @@ export default class YearControl extends Component{
         for( let i=5;i>=-10;i-- ){
             data.options.push( { "label": String(myYear + i),"value": String(myYear + i)} );
         }
+        if(data.value == ''){
+            data.value = myYear;
+        }
         data.options.unshift({"label":"请选择","value":"请选择"});
         super($.extend(true,{},config,newConfig),data,events);
     }

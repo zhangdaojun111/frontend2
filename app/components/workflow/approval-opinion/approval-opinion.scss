@@ -1,0 +1,91 @@
+.workflow-alertbox{
+    height: 100%;
+    .workflow-icon-record2{
+        width:16px;
+        height: 16px;
+        display: block;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAU0lEQVQ4y2P8//8/AyWAiYFCwAJjMHYykOSU/+UMjCgGIAsSAsiWUc8LuGzA5XS8BhDrFfp4gZBrBt4L9I9GggYwdjL8JzsMSNXMwMDAwEhpdgYAolEcoJPZbJgAAAAASUVORK5CYII=);
+    }
+    .workflow-icon-attachment {
+        width:16px;
+        height: 16px;
+        display: block;
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAANNJREFUeNpiYKAQMBKlquN/A5C0h/I2MlQwToBJMRGheT6QrAfiB0B8AYj7gWIJxBkA0QxSvACIHwJxIxAfQHINAwsRmhOhGuKhMgpAfBC/AZiaA4A4EIjXQ1UswO0F3Jr7kTQLYDcAv2aQ0wuh8vWYBhCnuR8aG4mo6QASLfOJ1OwITAcf0F0ACuEJUAUgwyYSoxk9Fi5CFTFA/fiBkGZkF3wAu6KCEaIQkmASCWlGNgCkwQAYFrB4fgANE7yaUTNTx38DqI0OSPFdiE8zVQBAgAEApyFT6NVY+EAAAAAASUVORK5CYII=);
+    }
+    .workflow-box-l{
+        height: 30px;
+        border-bottom: 1px solid #e4e4e4;
+        margin-bottom: 10px;
+        line-height: 30px;
+        font-weight: 700;
+        font-size: 14px;
+        padding:0 10px;
+    }
+    .workflow-box-l .tit{
+        display: flex;
+        align-items:center;
+    }
+    .workflow-box-r{
+        display: flex;
+        justify-content: center;
+        .approve-textarea{
+            width: 100%;
+            padding: 10px;
+        }
+    }
+    .workflow-btn{
+        text-align: right;
+        button{
+            width: 100px;
+            height: 30px;
+            font-size: 12px;
+            background: #0088ff;
+            color: #fff;
+            border: 0 none;
+            outline: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+    }
+    #comment{
+        border: 1px solid #e4e4e4;
+        height: 145px;
+        resize: none;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+    .workflow-attachment-box {
+        display: flex;
+        padding: 10px;
+        font-size: 12px;
+        height: 155px;
+        margin-bottom: 10px;
+        overflow: auto;
+        .file-count {
+            color: #1789fc;
+        }
+        .upload-file, .shot-screen{
+            width: 65px;
+            height: 24px;
+            background: inherit;
+            background-color: #fff;
+            box-sizing: border-box;
+            border: 1px solid #d7d7d7;
+            border-radius: 4px;
+            box-shadow: none;
+            cursor: pointer;
+            outline: none;
+        }
+        .attachment-queue-item .file-name {
+            strong {
+                display: inline-block;
+                width: 365px;
+                white-space:nowrap;
+                text-overflow: ellipsis;
+                overflow:hidden;
+            }
+        }
+    }
+}

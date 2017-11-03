@@ -293,7 +293,11 @@ let config = {
                     }
                 ],
                 type: 'checkbox',
-                events: {}
+                events: {
+                    onChange:function () {
+                        this.formItems['columns'].clearErrorMsg();
+                    }
+                }
             },
 
             {
