@@ -313,6 +313,7 @@ export class EchartsService {
                 endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                 rangeMode: ['value', 'value']
                 },
+
                 {
                     type: 'inside',
                     xAxisIndex: 0,
