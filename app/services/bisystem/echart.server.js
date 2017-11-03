@@ -440,6 +440,7 @@ export class EchartsService {
                         color: '#ececec'
                     }
                 },
+
                 min: Math.min.apply(null, ymin)
             });
         });
