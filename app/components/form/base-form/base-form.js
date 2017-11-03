@@ -998,9 +998,11 @@ let config = {
 				if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
 					if (res["data"][k]["-1"]) {
 						this.actions.setFormValue.bind(this)(k, res["data"][k]["-1"]);
+						this.actions.triggerSingleControl(k)
 					}
 				} else {
 					this.actions.setFormValue.bind(this)(k, res["data"][k]);
+					this.actions.triggerSingleControl(k);
 				}
 			}
 		},
@@ -1297,9 +1299,7 @@ let config = {
 				}else{
 					value=data.value;
 				}
-				if (value && value != '') {
-					this.actions.setAboutData(id, value);
-				}
+				this.actions.setAboutData(id, value);
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
@@ -1415,7 +1415,7 @@ let config = {
 				}
 				if(FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
 					//枚举类型 or 各种内置
-					v = this.getTextByOptionID(item,formValue[item]);
+					v = this.actions.getTextByOptionID(item,formValue[item]);
 				}
 				if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(type) != -1) {
 					//整数或者小数处理下去掉，解决发起工作流回显为空的bug
@@ -1458,15 +1458,23 @@ let config = {
 										return true;
 									}
 								} catch (err) {
-									console.error(err);
-									console.error('表达式计算错误');
+									// console.error(err);
+									console.error('不能执行前端表达式计算');
+									return false;
 								}
+							}else{
+								return false;
 							}
 						} catch (err) {
-							console.error(err);
-							console.error('表达式计算错误');
+							// console.error(err);
+							console.error('不能执行前端表达式计算');
+							return false;
 						}
+					}else{
+						return false;
 					}
+				}else{
+					return false;
 				}
 			}
 		},

@@ -81,7 +81,24 @@ let config = {
             }
             this.data.drag_Postion = null;
             return false;
-        }
+        },
+        /**
+         * 循环渲染数据
+         */
+        newRemindTaskItem:function(firstNum,EndNum){
+            let taskData = this.data.bodyData['data'];
+            let lastNum = EndNum - firstNum;
+            this.data.firstNum = firstNum;
+            this.data.EndNum = EndNum;
+            if(lastNum > 50){
+                lastNum = 50;
+            }
+            for(let i= 0;i < lastNum;i ++){
+                this.append(new CalendarRemindTaskItem({data:taskData[firstNum + i], type: this.data.type}), this.el.find('.task-list'));
+            }
+            this.data.firstNum += 50;
+        },
+
 
     },
     binds:[
@@ -131,14 +148,39 @@ let config = {
             this.el.find('.task-list').addClass('week-task-list');
             $('.date').remove();
         }
-
+        //滚动条滚动 动态加载过大数据
+        let that = this;
+        // this.el.find('.task-list').scroll(function() {
+        //     let divHeight = $(this).height();
+        //     let nScrollHeight = $(this)[0].scrollHeight;
+        //     let scrollTop = $(this)[0].scrollTop;
+        //     if(scrollTop + divHeight >= nScrollHeight) {
+        //         if(that.data.firstNum < that.data.EndNum){
+        //             that.actions.newRemindTaskItem(that.data.firstNum,that.data.EndNum);
+        //         }
+        //     }
+        // });
         // 给对应日历棋盘格创建提醒数据
         let taskData = this.data.bodyData['data'];
         if(taskData && taskData.length > 0) {
             this.el.find('.grid-content').css({backgroundColor: "rgba(255, 255, 255, 1)"});
-            taskData.forEach(item => {
-                this.append(new CalendarRemindTaskItem({data:item, type: this.data.type}), this.el.find('.task-list'));
-            });
+            // taskData.forEach(item => {
+            //     this.append(new CalendarRemindTaskItem({data:item, type: this.data.type}), this.el.find('.task-list'));
+            // });
+            if(taskData.length >= 50){
+                this.el.find('.task-list').scroll(function() {
+                    let divHeight = $(this).height();
+                    let nScrollHeight = $(this)[0].scrollHeight;
+                    let scrollTop = $(this)[0].scrollTop;
+                    if(scrollTop + divHeight >= nScrollHeight) {
+                        console.log(that.data.firstNum);
+                        if(that.data.firstNum < that.data.EndNum){
+                            that.actions.newRemindTaskItem(that.data.firstNum,that.data.EndNum);
+                        }
+                    }
+                });
+            }
+            this.actions.newRemindTaskItem(0,taskData.length);
         }
     }
 };
