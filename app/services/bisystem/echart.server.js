@@ -314,6 +314,7 @@ export class EchartsService {
                 endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                 rangeMode: ['value', 'value']
                 },
+
                 {
                     type: 'inside',
                     xAxisIndex: 0,
@@ -510,12 +511,10 @@ export class EchartsService {
         funnelOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         return funnelOption;
     }
-
     /**
      * 风格箱处理
      * @param chart = cellChart['chart']数据
      */
-
 
     stylzieOption(cellChart) {
         let cellOption = cellChart['chart'];
