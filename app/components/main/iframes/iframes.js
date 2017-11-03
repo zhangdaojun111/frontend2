@@ -81,7 +81,7 @@ let config = {
          * @param id
          * @param url
          * @param name
-         * @param flag
+         * @param flag  false则不向后台发送请求
          */
         openIframe: function (id, url, name, flag) {
             if(flag !== false){
