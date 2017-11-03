@@ -1,8 +1,11 @@
 .form-chart-text {
-    input {
-        width:250px;
-        margin-top:27px;
-        border:none;
-        border-bottom:solid 1px rgba(228, 228, 228, 1);
+    .form-chart-wrapper {
+        input {
+            width: 250px;
+            padding-left: 4px;
+            margin-top: 27px;
+            border: none;
+            border-bottom: solid 1px rgba(228, 228, 228, 1);
+        }
     }
 }

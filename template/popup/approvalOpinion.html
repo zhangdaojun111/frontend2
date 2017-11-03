@@ -1,0 +1,29 @@
+{% load client_version %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+
+    window.config = {{window_config|safe}};
+
+</script>
+
+<div id="approvalOpinion" style="margin: 10px"></div>
+
+{% ifequal window_type 'develop'%}
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/approvalOpinion.js"></script>
+{% else %}
+<link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}">
+<link rel="stylesheet" href=" {{ "/client/static/css/approvalOpinion.css"|version }}">
+<script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
+<script type="text/javascript" src=" {{ "/client/static/approvalOpinion.js"|version }}"></script>
+{% endifequal %}
+
+</body>
+</html>

@@ -8,6 +8,7 @@ import CalendarRemind from '../../../calendar.remind/calendar.remind';
 import {PMAPI} from '../../../../../../lib/postmsg';
 import MSG from '../../../../../../lib/msgbox';
 import Mediator from '../../../../../../lib/mediator';
+import {CalendarService} from '../../../../../../services/calendar/calendar.service';
 
 let config = {
     template: template,
@@ -57,51 +58,71 @@ let config = {
          * 打开日历提醒
          */
         openRemind: function () {
-            let tempData = this.data.remindTaskItemData.data2show[0];
-            if(tempData.length > 0) {
-                tempData.forEach(item => {
-                    if(typeof item['fieldValue'] === "string"){
-                        item['fieldValue'] = item['fieldValue'].replace(/(\n)/g, '');
-                    }
-
-                })
-            }
-            // console.log(tempData);
-            // CalendarRemind.data.remindTable = this.data.remindTaskItemData.tableName;
-            // CalendarRemind.data.remindDateProp = this.data.remindTaskItemData.fieldName;
-            // CalendarRemind.data.remindDetail = this.data.remindTaskItemData.data2show;
-            // CalendarRemind.data.remindDateTime = this.data.remindTaskItemData.time;
-            // CalendarRemind.data.remindTableId = this.data.remindTaskItemData.tableId;
-            // CalendarRemind.data.remindDate = this.data.remindTaskItemData.time.substr(0,10);
-            // CalendarRemind.data.remindTime = this.data.remindTaskItemData.time.substr(11,5);
-            // CalendarRemind.data.remindRealId = this.data.remindTaskItemData.real_id.substr(2,24);
-            // PMAPI.openDialogByComponent(CalendarRemind, {
-            //     width: '1200',
-            //     height: '640',
-            //     title: '查看',
-            //     //modal: true,
-            // }).then(data => {
-            //     console.log(data);
-            // });
-            PMAPI.openDialogByIframe(
-                '/iframe/calendarOpenRemind/',
-                {
-                    width: '1200',
-                    height: '640',
-                    title: '查看',
-                    modal: true,
-                },{
-                    remindTable: this.data.remindTaskItemData.tableName,
-                    remindDateProp: this.data.remindTaskItemData.fieldName,
-                    remindDetail: this.data.remindTaskItemData.data2show,
-                    remindDateTime: this.data.remindTaskItemData.time,
-                    remindTableId: this.data.remindTaskItemData.tableId,
-                    remindDate: this.data.remindTaskItemData.time.substr(0,10),
-                    remindTime: this.data.remindTaskItemData.time.substr(11,5),
-                    remindRealId: this.data.remindTaskItemData.real_id.substr(2,24),
-                }).then(data => {
+            console.log(this.data.remindTaskItemData);
+            let params = {
+                table_id: this.data.remindTaskItemData.tableId,
+                cs_id: this.data.remindTaskItemData.setId,
+                _id: this.data.remindTaskItemData.real_id.substr(2,24)
+            };
+            let fieldInfos = CalendarService.getFieldInfos();
+            CalendarService.getSelectedOpts(params).then(res => {
+                let remindDetail = res['data'];
+                remindDetail[this.data.remindTaskItemData['fieldId']] = this.data.remindTaskItemData['fieldValue'];
+                let remindDetailData = [];
+                for(let field in remindDetail) {
+                    let data = {};
+                    data['fieldName'] = fieldInfos[field]['dname'];
+                    data['fieldValue'] = remindDetail[field];
+                    remindDetailData.push(data);
+                }
+                PMAPI.openDialogByIframe(
+                    '/iframe/calendarOpenRemind/',
+                    {
+                        width: '1200',
+                        height: '640',
+                        title: '查看',
+                        modal: true,
+                    },{
+                        remindTable: this.data.remindTaskItemData.tableName,
+                        remindDateProp: this.data.remindTaskItemData.fieldName,
+                        remindDetail: remindDetailData,
+                        remindDateTime: this.data.remindTaskItemData.time,
+                        remindTableId: this.data.remindTaskItemData.tableId,
+                        remindDate: this.data.remindTaskItemData.time.substr(0,10),
+                        remindTime: this.data.remindTaskItemData.time.substr(11,5),
+                        remindRealId: this.data.remindTaskItemData.real_id.substr(2,24),
+                    }).then(data => {
                     console.log(data);
-            });
+                });
+            })
+            // let tempData = this.data.remindTaskItemData.data2show[0];
+            // if(tempData.length > 0) {
+            //     tempData.forEach(item => {
+            //         if(typeof item['fieldValue'] === "string"){
+            //             item['fieldValue'] = item['fieldValue'].replace(/(\n)/g, '');
+            //         }
+            //
+            //     })
+            // }
+            // PMAPI.openDialogByIframe(
+            //     '/iframe/calendarOpenRemind/',
+            //     {
+            //         width: '1200',
+            //         height: '640',
+            //         title: '查看',
+            //         modal: true,
+            //     },{
+            //         remindTable: this.data.remindTaskItemData.tableName,
+            //         remindDateProp: this.data.remindTaskItemData.fieldName,
+            //         remindDetail: this.data.remindTaskItemData.data2show,
+            //         remindDateTime: this.data.remindTaskItemData.time,
+            //         remindTableId: this.data.remindTaskItemData.tableId,
+            //         remindDate: this.data.remindTaskItemData.time.substr(0,10),
+            //         remindTime: this.data.remindTaskItemData.time.substr(11,5),
+            //         remindRealId: this.data.remindTaskItemData.real_id.substr(2,24),
+            //     }).then(data => {
+            //         console.log(data);
+            // });
         },
 
         /**
