@@ -229,6 +229,26 @@
             label.search > input{
                 font-size: 12px;
             }
+            .menu-full{
+                .name{
+                    color:#BFD8F2;
+                }
+                .ui-state-active ~p{
+                    color: #FFFFFF;
+                }
+                .childlist {
+                    display: none;
+                    .row{
+                        &:hover, &.current {
+                            background-color: $aside-top-bg;
+                        }
+
+                        .name{
+                            color: #FFFFFF;
+                        }
+                    }
+                }
+            }
         }
     }
 }

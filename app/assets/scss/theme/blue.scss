@@ -37,8 +37,49 @@ body.blue{
                         color: #fff;
                     }
                 }
+                .edit{
+                    background: url("../../../assets/images/framework/icon-blue-edit.png");
+                }
             }
+            .menu{
+                label{
+                    border-bottom: 1px solid #70a5e0;
+                }
+                .search{
+                    input{
+                        &::-webkit-input-placeholder{
+                            color:rgb(100, 157, 221);
+                        }
+                    }
+                }
 
+                .menu-full{
+                    .icon{
+                        &.lv1 {
+                            background: url("../../../assets/images/framework/icon-blue-floder.png");
+                        }
+                    }
+                    .root{
+                        .row{
+                            &:hover, &.current {
+                                background-color: #4a8ed9;
+                            }
+                        }
+                    }
+                }
+                &.mini{
+                    .root{
+                        > li > .menu-full-item {
+                            background-color: #327ed3;
+                            .row{
+                                &:hover, &.current {
+                                    background-color: #4a8ed9;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
         }
     }
