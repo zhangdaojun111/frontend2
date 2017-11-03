@@ -1,0 +1,90 @@
+body.blue{
+    #aside{
+        background-color: #327ed3;
+        .aside-wrap{
+            .s-name{
+                background-color: #2b74c6;
+                .erds-logo{
+                    color: #79abe1;
+                }
+                .text{
+                    color: #ffffff;
+                }
+            }
+            .s-uinfo{
+                background-color: #276ab4;
+                .u-name,.u-role{
+                    color: #BFD8F2 !important;
+                    span{
+                        color: #ffffff !important;
+                    }
+                }
+
+                .personal-setting{
+                    i{
+                        background-image: url("../../../assets/images/framework/icon-blue-setting.png");
+                    }
+                }
+            }
+
+            .tabs{
+                p{
+                    color: #649DDD;
+                    &:first-child {
+                        border-right: 1px solid #72a6de;
+                    }
+                    &.active {
+                        color: #fff;
+                    }
+                }
+                .edit{
+                    background: url("../../../assets/images/framework/icon-blue-edit.png");
+                }
+            }
+            .menu{
+                label{
+                    border-bottom: 1px solid #70a5e0;
+                }
+                .search{
+                    background-image: url("../../../assets/images/framework/highlight-search.png");
+                    input{
+                        &::-webkit-input-placeholder{
+                            color:rgb(100, 157, 221);
+                        }
+                    }
+                    &.highlight{
+                        border-bottom: 1px solid rgb(204,204,204);
+                        background-image: url("../../../assets/images/framework/icon-blue-search-1.png");
+                    }
+                }
+
+                .menu-full{
+                    .icon{
+                        &.lv1 {
+                            background: url("../../../assets/images/framework/icon-blue-floder.png");
+                        }
+                    }
+                    .root{
+                        .row{
+                            &:hover, &.current {
+                                background-color: #4a8ed9;
+                            }
+                        }
+                    }
+                }
+                &.mini{
+                    .root{
+                        > li > .menu-full-item {
+                            background-color: #327ed3;
+                            .row{
+                                &:hover, &.current {
+                                    background-color: #4a8ed9;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
