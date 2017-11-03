@@ -144,7 +144,7 @@ const multillist = {
     animation : false,
     legend: {
         data: [],
-        x: 'left'
+        x: 'center'
     },
     tooltip: {
         trigger: 'axis',
