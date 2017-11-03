@@ -60,7 +60,7 @@ let config = {
                 temp.addClass("label-select-all-checked");
                 this.el.find(".select-label-children").removeClass('unchecked');
                 let isAllGroupChecked = true;
-                this.el.closest().find(".label-select-all-show").each(function () {
+                this.el.parent().find(".label-select-all-show").each(function () {
                     if (!$(this).is('.label-select-all-checked')) {
                         isAllGroupChecked = false;
                     }
@@ -90,7 +90,8 @@ let config = {
                 if (isAllChecked) {
                     this.el.find(".select-head").addClass('label-select-all-checked');
                     let isAllGroupChecked = true;
-                    this.el.closest().find('.label-select-all-show').each(function () {
+                    console.log(this.el.parent().find('.select-head'));
+                    this.el.parent().find('.select-head').each(function () {
                         if (!$(this).is('.label-select-all-checked')) {
                             isAllGroupChecked = false;
                         }
@@ -255,6 +256,13 @@ let config = {
     ],
 
     afterRender: function () {
+        // Mediator.on('Calendar: showLoading', data => {
+        //     if(data === 1){
+        //         this.cancelEvents();
+        //     }else{
+        //         this.bindEvents();
+        //     }
+        // });
     },
     firstAfterRender: function () {
         this.actions.showFirst();

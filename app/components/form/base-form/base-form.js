@@ -1284,18 +1284,20 @@ let config = {
 			if (this.data.data[data.dfield]) {
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
-			if (data.type == 'Buildin') {
+			if (data.type == 'Buildin' || data.type=='MultiLinkage') {
 				let id = data["id"];
 				let value;
-				for (let obj of data['options']) {
-					if (obj.value == data.value) {
-						value = obj.value;
-						break;
+				if(data.type == 'Buildin'){
+					for (let obj of data['options']) {
+						if (obj.value == data.value) {
+							value = obj.value;
+							break;
+						}
 					}
+				}else{
+					value=data.value;
 				}
-				if (value && value != '') {
-					this.actions.setAboutData(id, value);
-				}
+				this.actions.setAboutData(id, value);
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
@@ -1411,7 +1413,7 @@ let config = {
 				}
 				if(FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
 					//枚举类型 or 各种内置
-					v = this.getTextByOptionID(item,formValue[item]);
+					v = this.actions.getTextByOptionID(item,formValue[item]);
 				}
 				if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(type) != -1) {
 					//整数或者小数处理下去掉，解决发起工作流回显为空的bug
@@ -2059,7 +2061,7 @@ class BaseForm extends Component {
 		window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
 		//存父表的newData
 		window.top.frontendParentNewData[formData.data.tableId] = formData.data.data;
-		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value'] || '';
+		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
 		super($.extend(true, {}, config, newConfig), formData.data);
 		console.log('表单数据');
 		console.log(this.data);

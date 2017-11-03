@@ -179,7 +179,7 @@ let config = {
                                 this.data.warning_msg = warning_msg;
                                 this.actions.import();
                             } else {
-                                this.uploader.deleteFileByCode( currentCode,'/upload_data/' );
+                                // this.uploader.deleteFileByCode( currentCode,'/upload_data/' );
                             }
                         } )
                     }else {
