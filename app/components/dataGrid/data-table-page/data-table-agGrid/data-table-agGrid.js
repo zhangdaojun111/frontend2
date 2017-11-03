@@ -3246,6 +3246,23 @@ let config = {
                     winTitle = '执行操作';
                     break;
                 }
+                case 'cexecute':{
+                    json = {
+                        params: params,
+                        rowId: customRowId,
+                        operation_id: row_op_id,
+                        allRowData: this.data.rowData,
+                        field: 'f23',
+                        tableId: this.data.tableId
+                    }
+                    w = 930
+                    h = 500
+                    console.log( '执行操作参数' )
+                    console.log( json )
+                    url = '/iframe/rowOperation/?operationType=excute';
+                    winTitle = '执行操作';
+                    break;
+                }
             }
             PMAPI.openDialogByIframe( url,{
                 width: w,
