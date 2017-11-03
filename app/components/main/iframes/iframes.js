@@ -218,7 +218,6 @@ let config = {
          * @param id
          */
         focusIframe: function (id) {
-
             let that = this;
 
             if (this.data.focus) {
@@ -233,13 +232,18 @@ let config = {
             this.data.focus = this.data.hash[id];
             let iframe = this.data.focus.iframe.find('iframe');
             let src = iframe.attr('src');
+            let complete = that.data.focus.iframe.attr('load') === 'complete';
             if (!src) {
                 this.actions.iframeShowLoading(this.data.focus.iframe);
                 iframe.on('load',function () {
-                    that.actions.iframeHideLoading(that.data.focus.iframe);
+                    let item = $(this).parent();
+                    item.attr('load', 'complete');
+                    that.actions.iframeHideLoading(item);
                 });
                 iframe.attr('src', iframe.attr('_src'));
                 iframe.removeAttr('_src');
+            } else if (!complete) {
+                this.actions.iframeShowLoading(this.data.focus.iframe);
             }
             this.data.focus.iframe.show();
             this.data.focus.tab.addClass('focus');
@@ -647,7 +651,10 @@ let config = {
                 iframe.removeAttr('_src');
                 iframe.on('load', function () {
                     start();
-                })
+                    let item = $(this).parent();
+                    item.attr('load', 'complete');
+                    that.actions.iframeHideLoading(item);
+                });
             }
             function start() {
                 let iframe = that.data.iframes.find('iframe[_src]:last');
