@@ -115,6 +115,7 @@ export const progressConfig = {
             this.el.find('#'+i).find('.progress-bottle').css('display','none');
             // let text = this.el.find('#'+i).find('.progress-msg').text() + ": "+msg;
             // this.el.find('#'+i).find('.progress-msg').text(text).css({'color':'red','overflow':'visible','width':'380px','margin':'auto'});
+            this.el.find('#'+i).find('.progress-msg').css({'width':'50%', 'margin':'0 auto'});
             this.el.find('#'+i).find('.cancel-upload').css('display','none');
             this.actions.closeDialogDelay();
         },
