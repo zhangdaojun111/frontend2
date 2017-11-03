@@ -196,5 +196,60 @@ export const CalendarHandleDataService = {
 
         return this.weekDataList;
     },
+
+    dateIds: {},
+    idDataDetail: {},
+    tableIdName: {},
+    fieldInfos: {},
+    getOriginalData: function (date2settings, calendarSettings, tableid2name, fieldInfos) {
+        this.dateIds = date2settings;
+        this.idDataDetail = calendarSettings;
+        this.tableIdName = tableid2name;
+        this.fieldInfos = fieldInfos;
+        for(let id of this.idDataDetail) {
+            id['selectedOptsLength'] = id['selectedOpts_data'].length;
+
+        }
+    },
+
+    getDayIds: function (dayTime) {
+        let calendarDate = [];
+        let dayIdSum = 0;
+        for( let date in this.dateIds ){
+            if( date.indexOf( dayTime ) !== -1 ){
+                for( let d of this.dateIds[date] ){
+                    let i = 0;
+                    for( let c of calendarDate ){
+                        if( c.id === d ){
+                            i++;
+                            c.count += 1;
+                        }
+                    }
+                    if( i === 0 ){
+                        calendarDate.push( { id:d,date:day.dataTime,count: 1 } );
+                    }
+                    dayIdSum += 1
+                }
+            }
+        }
+        return [calendarDate, dayIdSum];
+    },
+
+    handleDayData: function (id, date, start, end) {
+        let idData = this.idDataDetail[id];
+        let selectedOptsData = idData['selectedOpts_data'];
+        if(start > idData['selectedOptsLength']) {
+            console.log("没有更多数据");
+        }
+        if(start <= idData['selectedOptsLength'] && end > idData['selectedOptsLength']) {
+            end = idData['selectedOptsLength'];
+            console.log("已加载所有数据");
+        }
+        let selectedOptsDataRange = selectedOptsData.slice(start, end);
+        for(let i in selectedOptsDataRange) {
+            console.log(i);
+        }
+    }
 };
+
 

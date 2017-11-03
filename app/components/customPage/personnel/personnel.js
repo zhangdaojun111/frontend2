@@ -345,7 +345,7 @@ let config = {
                     this.el.find('.btn-nav').append(dom);
                     setTimeout(()=>{
                         this.el.find('.query-tips').css('display','none');
-                    },5000)
+                    },3000)
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -457,6 +457,19 @@ let config = {
             } )
             //floatingFilter
             this.el.find( '.float-search-btn' ).on( 'click',()=>{
+                console.log(this.data.isShowFloatingFilter)
+                if (this.data.isShowFloatingFilter && this.data.filterParam.filter.length != 0) {
+                    for( let k in this.data.searchValue ){
+                        this.data.searchValue[k] = '';
+                    }
+                    for( let k in this.data.searchOldValue ){
+                        this.data.searchOldValue[k] = '';
+                    }
+                    this.data.queryList = {};
+                    this.actions.setFloatingFilterInput();
+                    this.data.filterParam.filter = [];
+                    this.actions.getUserData();
+                }
                 let height = this.data.isShowFloatingFilter ? 0:30;
                 this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                 this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
@@ -675,7 +688,6 @@ let config = {
                             inCheck = true;
                         } else {
                             for(let item of res.rows) {
-                                debugger
                                 if (item.name == this.data.filterParam['common_filter_name']) {
                                     inCheck = false ;
                                 }
@@ -952,6 +964,7 @@ let config = {
     },
     afterRender: function (){
         this.showLoading();
+        console.log('do save tabs')
         TabService.onOpenTab( this.data.tableId );
         this.actions.setFieldMapping();
         this.floatingFilterCom = new FloatingFilter();

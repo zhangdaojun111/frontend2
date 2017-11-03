@@ -116,16 +116,21 @@ let config = {
          * @param type
          */
         getCalendarData: function (data,type){
+            console.log(22222);
+            Mediator.emit('Calendar: showLoading', 1);
             this.showLoading();
             CalendarService.getCalendarData(data).then( res=>{
                 if(res) {
                     this.hideLoading();
+                    console.log(1111);
+                    Mediator.emit('Calendar: showLoading', 0);
                 }
                 console.log(res);
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
                 this.data.fieldInfos = res['field_infos'];
+                CalendarService.saveFieldInfos(this.data.fieldInfos);
                 if(type === 'calendar') {
                     this.actions.monthDataTogether();
                 }else {
@@ -393,28 +398,33 @@ let config = {
         getDayData: function (day) {
             //获取当日包含的设置
             let calendarDate = [];
+            let sum = 0;
             for( let date in this.data.date2settings ){
                 if( date.indexOf( day['dataTime'] ) !== -1 ){
                     for( let d of this.data.date2settings[date] ){
                         let i = 0;
                         for( let c of calendarDate ){
                             if( c.id === d ){
-                                i++
+                                i++;
+                                c.count += 1;
                             }
                         }
                         if( i === 0 ){
-                            calendarDate.push( { id:d,date:day.dataTime } );
+                            calendarDate.push( { id:d,date:day.dataTime,count: 1 } );
                         }
+                        sum += 1
                     }
                 }
             }
-
             day['data'] = [];
             for( let set of calendarDate ){
                 let setDetail = this.data.calendarSettings[set.id];
-                // console.log(setDetail);
-                for( let select of setDetail['selectedOpts_data'] ){
-
+                let count = 0;
+                for( let select of setDetail['selectedRepresents_data'] ){
+                    count += 1;
+                    // if(count > 1000) {
+                    //     continue;
+                    // }
                     if( select[setDetail['field_id']].indexOf(day.dataTime) === -1 ){
                         continue;
                     }
@@ -428,14 +438,16 @@ let config = {
                         arrData['dfield'] = setDetail.dfield;
                         arrData['color'] = CalendarToolService.handleColorRGB( setDetail.color , 1 );
                         arrData['isDrag'] = setDetail.is_drag;
-                        arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
+                        // arrData['real_ids'] = JSON.stringify( setDetail.real_ids );
                         arrData['real_id'] = JSON.stringify( [select._id] );
                         arrData['tableName'] = this.data.tableid2name[setDetail.table_id];
                         arrData['fieldId'] = setDetail.field_id;
+                        arrData['fieldValue'] = setDetail['selectedRepresents_data'][0][setDetail.field_id] || '';
                         arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
                         arrData['type'] = 1;
                         arrData['isShow'] = this.data.searchText === '' ? true : false;
                         arrData['selectedRepresents'] = setDetail['selectedRepresents'][0] || '';
+                        arrData['selectedOpts'] = setDetail['selectedOpts'];
                         let selectFieldId = '';
                         if( setDetail['selectedEnums']&&setDetail['selectedEnums'][0]&&setDetail['selectedEnums'][0]!=='' ){
                             selectFieldId = setDetail['selectedEnums'][0];
@@ -450,48 +462,47 @@ let config = {
                         }
 
                         //循环里面每一个小的数据
-                        let data2show = [];
-                        let everyData = [];
-                        for( let key in select ){
-                            if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
-                                continue;
-                            }
-                            everyData.push( {
-                                fieldId: key,
-                                _id: select['_id'],
-                                fieldName: this.data.fieldInfos[key]['dname'] || '',
-                                fieldValue: select[key] || '',
-                            } )
-                        }
-                        for( let d of everyData ){
-                            if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
-                                arrData['isShow'] = true;
-                                break;
-                            }
-                        }
-
-                        data2show.push( everyData );
-                        arrData['data2show'] = data2show;
+                        // let data2show = [];
+                        // let everyData = [];
+                        // for( let key in select ){
+                        //     if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
+                        //         continue;
+                        //     }
+                        //     everyData.push( {
+                        //         fieldId: key,
+                        //         _id: select['_id'],
+                        //         fieldName: this.data.fieldInfos[key]['dname'] || '',
+                        //         fieldValue: select[key] || '',
+                        //     } )
+                        // }
+                        // for( let d of everyData ){
+                        //     if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
+                        //         arrData['isShow'] = true;
+                        //         break;
+                        //     }
+                        // }
+                        //
+                        // data2show.push( everyData );
+                        // arrData['data2show'] = data2show;
 
                         //循环里面每一个小的数据
                         let data3show = [];
-                        let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
+                        // let select_3 = setDetail['selectedRepresents_data'][setDetail['selectedOpts_data'].indexOf(select)];
                         let everyData_3 = [];
-                        // console.log(select_3);
-                        for( let key in select_3 ){
+                        for( let key in select ){
                             if( key === '_id' || ( !this.data.fieldInfos[key] ) ){
                                 continue;
                             }
                             everyData_3.push( {
                                 fieldId: key,
-                                _id: select_3['_id'],
+                                _id: select['_id'],
                                 fieldName: this.data.fieldInfos[key]['dname'] || '',
-                                fieldValue: select_3[key] || ''
+                                fieldValue: select[key] || ''
                             } );
                             if( selectFieldId !== '' ){
                                 everyData_3[0]['selectValue'] = '';
                                 for( let s of setDetail['selectedEnums_data'] ){
-                                    if( s._id === select_3['_id'] ){
+                                    if( s._id === select['_id'] ){
                                         let selectLabel = s[selectFieldId];
                                         for( let o of arrData['selectOption'] ){
                                             if( o.label === selectLabel ){
@@ -518,6 +529,7 @@ let config = {
 
                 }
             }
+
 
             // 工作流数据
             if(this.data.isShowWorkflowData) {
@@ -546,7 +558,6 @@ let config = {
                     this.actions.getDayData(day);
                 }
             }
-
             this.el.find('.calendar-main-content').empty();
             if(this.data.calendarContent === 'month') {
                 this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
@@ -724,6 +735,7 @@ let config = {
 
         // 获取左侧日历树中不显示数据
         Mediator.on('calendar-left:unshowData', data => {
+            console.log(11111);
             if(data['data']) {
                 this.data.isShowArr = data['data'];
                 let arr = ['remind'];

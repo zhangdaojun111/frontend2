@@ -73,8 +73,9 @@ export const systemMessageService = {
     columnDefs: [],
     getColumnDefs: function () {
         return [
-            _.defaultsDeep({headerName: '序号', width: 40}, dgcService.numberCol),
-            dgcService.selectCol,
+            _.defaultsDeep({headerName: '序号', width: 40,minWidth:40}, dgcService.numberCol),
+            _.defaultsDeep({minWidth:30}, dgcService.selectCol),
+
             // {
             //     headerCellTemplate: function (data) {
             //         return handlers.selectAll(data);
@@ -137,7 +138,7 @@ export const systemMessageService = {
                 tooltipField: 'title',
                 cellStyle: {'text-align': 'center'}
             },  {
-                width:438,
+                width:428,
                 headerName: '消息内容',
                 field: 'msg_content',
                 suppressMenu: true,

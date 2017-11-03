@@ -37,6 +37,8 @@ let config = {
                     height: '900',
                     modal: true,
                     customSize: true,
+                },{
+                    current_node: this.data.current_node
                 }).then(data => {
                 Mediator.emit('Calendar: tool', {toolMethod: 'refreshData'});
             })

@@ -130,10 +130,10 @@ let config = {
                                 data["isPreview"] = false;
                             }
                         }
-                        if(this.data.real_type == 9 || this.data.real_type == 23){
+                        if(this.data.dinput_type == 9 || this.data.dinput_type == 23){
                             let obj={
                                 list:this.data.rows,
-                                dinput_type:this.data.real_type,
+                                dinput_type:this.data.dinput_type,
                                 is_view:this.data.is_view,
                                 control_id:this.data.id
                             };
@@ -144,13 +144,13 @@ let config = {
                             }).then(res=>{
                                 this.actions._updateDeleted(res);
                             });
-                        }else if(this.data.real_type == 33){
+                        }else if(this.data.dinput_type == 33){
                             let fileId = this.data.value[0];
                             let obj={
                                 rows:this.data.rows,
-                                dinput_type:this.data.real_type,
+                                dinput_type:this.data.dinput_type,
                                 currentVideoId:fileId,
-                                videoSrc:`/download_attachment/?file_id=${fileId}&download=0&dinput_type=${this.data.real_type}`,
+                                videoSrc:`/download_attachment/?file_id=${fileId}&download=0&dinput_type=${this.data.dinput_type}`,
                                 control_id:this.data.id,
                                 is_view:this.data.is_view
                             }
@@ -191,7 +191,7 @@ let config = {
                 }
             }
             let ele = $('<div></div>');
-            let item = new AttachmentQueueItem({file: file, real_type: this.data.real_type, fileOrder:i, toolbox:toolbox},
+            let item = new AttachmentQueueItem({file: file, real_type: this.data.dinput_type, fileOrder:i, toolbox:toolbox},
                 {
                     changeFile: event => {
                         if (event.event == 'delete') {
@@ -225,6 +225,9 @@ let config = {
                             ele.attr('id',event.data.fileId);
                             this.data.queue.push(event.data);
                             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                            if(this.data.value.length > 0){
+                                this.el.find('.view-attached-list').css('cursor','pointer');
+                            }
                             this.trigger('changeValue', this.data);
                             let obj = {};
                             obj[event.data.fileId] = event.data.thumbnail;
@@ -239,9 +242,6 @@ let config = {
                                 this.data['thumbnailListComponent'] = comp;
                             }
                         }
-                            if(this.data.value.length > 0){
-                                this.el.find('.view-attached-list').css('cursor','pointer');
-                            }
                     }
                 });
             this.el.find('.upload-process-queue').prepend(ele);
@@ -289,6 +289,9 @@ let config = {
                 }
             }
             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+            if(this.data.value.length > 0){
+                this.el.find('.view-attached-list').css('cursor','pointer');
+            }
             this.trigger('changeValue',this.data);
         }
     },

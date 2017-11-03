@@ -1,15 +1,30 @@
-.ui-songrid-box {
-    height: 480px;
-    width: 100%;
-    min-width: 1000px;
-    max-height: 500px;
-    border: 1px solid #ddd;
-    overflow: auto;
-    position: relative;
-}
-.songGrid{
-    width: 100%;
-    height: 100%;
-    text-align: left;
-    position: relative
+ .component-songrid-control{
+    .ui-songrid-box {
+        height: 480px;
+        width: 100%;
+        min-width: 1000px;
+        max-height: 500px;
+        border: 1px solid #ddd;
+        overflow: auto;
+        position: relative;
+    }
+    .songGrid{
+        width: 100%;
+        height: 100%;
+        text-align: left;
+        position: relative
+    }
+    .ui-forms-a {
+        position: absolute;
+        display: inline-block;
+        width: 100px;
+        height: 20px;
+        line-height: 20px;
+        left:calc(50% - 50px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index:1;
+        color: #2298f4;
+    }
 }

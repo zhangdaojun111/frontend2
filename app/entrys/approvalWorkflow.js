@@ -26,30 +26,65 @@ serchStr.split('&').forEach(res => {
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
-let comment='';
 console.log(obj);
+console.log(window.config.key)
+PMAPI.getIframeParams(obj.key).then(res => {
+    if(res.data.current_node) {
+        console.log(res);
+        if(res.data.current_node.indexOf(window.config.name)===-1){
+            console.log('111111111111');
+            is_view = 1;
+        }
+    }
 
-ApprovalWorkflow.showDom().then(function (component) {
-    WorkFlowGrid.showGrid();
-    WorkFlowForm.showForm();
-    FormEntrys.initForm({
-        el: $('#place-form'),
-        form_id: obj.form_id,
-        record_id: obj.record_id,
-        is_view: is_view,
-        from_approve: 1,
-        from_focus: 0,
-        btnType:'none',
-        table_id: obj.table_id
+    ApprovalWorkflow.showDom().then(function (component) {
+        WorkFlowGrid.showGrid();
+        WorkFlowForm.showForm();
+        FormEntrys.initForm({
+            el: $('#place-form'),
+            form_id: obj.form_id,
+            record_id: obj.record_id,
+            is_view: is_view,
+            from_approve: 1,
+            from_focus: 0,
+            btnType:'none',
+            table_id: obj.table_id
+        });
+        Mediator.subscribe("form:formAlreadyCreate",()=>{
+            component.hideLoading();
+        });
+        // setTimeout(()=> component.hideLoading(),1000)
     });
-    Mediator.subscribe("form:formAlreadyCreate",()=>{
-        component.hideLoading();
-    });
-    // setTimeout(()=> component.hideLoading(),1000)
 });
+// is_view=obj.btnType==='view'?1:0;
+//
+// ApprovalWorkflow.showDom().then(function (component) {
+//     WorkFlowGrid.showGrid();
+//     WorkFlowForm.showForm();
+//     FormEntrys.initForm({
+//         el: $('#place-form'),
+//         form_id: obj.form_id,
+//         record_id: obj.record_id,
+//         is_view: is_view,
+//         from_approve: 1,
+//         from_focus: 0,
+//         btnType:'none',
+//         table_id: obj.table_id
+//     });
+//     Mediator.subscribe("form:formAlreadyCreate",()=>{
+//         component.hideLoading();
+//     });
+//     // setTimeout(()=> component.hideLoading(),1000)
+// });
 
 //订阅form data
 Mediator.subscribe('workFlow:record_info', (res) => {
+    let count = 0;
+    for(let comment of res.record_info.approve_tips) {
+        comment['index'] = count;
+        count += 1;
+    }
+    console.log(res.record_info.approve_tips);
     ApprovalHeader.showheader(res.record_info);
     WorkflowRecord.showRecord(res.record_info);
     let current_node_arr = res.record_info.current_node.split('、');
@@ -58,6 +93,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     console.log( current_node_arr )
     console.log( "---" )
     if(current_node_arr.indexOf(window.config.name)==-1){
+        is_view = 1;
         $('#approval-workflow').find('.for-hide').hide();
     };
     if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
@@ -75,20 +111,6 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     if(is_view){
         $('#add-home').find('#addFollower').hide();
     }
-
-    // zj
-    // (async function () {
-    //     return workflowService.getWorkflowInfo({url: '/get_all_users/'});
-    // })().then(users => {
-    //     for(let i in focus){
-    //         nameArr.push(`<span class="selectSpan">${users.rows[focus[i]].name}</span>`);
-    //     }
-    //     $('#add-home #addFollowerList').html(nameArr);
-    //     if(nameArr.indexOf(window.config.name)>-1&&window.config.name!=res.record_info.current_node){
-    //         $('#approval-workflow').find('.for-hide').hide();
-    //         $('#approval-workflow').find('#re-app').hide();
-    //     };
-    // })
 
     //审批工作流
     (async function () {
@@ -205,15 +227,32 @@ const approveWorkflow = (para) => {
             para.data = JSON.stringify(formData);
         }
     }
-    para.comment=comment;
     para.focus_users=JSON.stringify(focusArr);
     msgBox.showLoadingSelf();
-    (async function () {
-        return workflowService.approveWorkflowRecord({
-            url: '/approve_workflow_record/',
-            data: para
-        });
-    })().then(res => {
+    console.log(para);
+    // (async function () {
+    //     return workflowService.approveWorkflowRecord({
+    //         url: '/approve_workflow_record/',
+    //         data: para
+    //     });
+    // })().then(res => {
+    //     msgBox.hideLoadingSelf();
+    //     if(res.success===1){
+    //         msgBox.alert(`操作成功`);
+    //         PMAPI.sendToParent({
+    //             type: PMENUM.close_dialog,
+    //             key:key,
+    //             data:{refresh:true}
+    //         })
+    //     }else{
+    //         msgBox.alert(`失败：${res.error}`);
+    //     }
+    //
+    // })
+    workflowService.approveWorkflowRecord({
+        url: '/approve_workflow_record/',
+        data: para
+    }).then(res => {
         msgBox.hideLoadingSelf();
         if(res.success===1){
             msgBox.alert(`操作成功`);
@@ -225,37 +264,47 @@ const approveWorkflow = (para) => {
         }else{
             msgBox.alert(`失败：${res.error}`);
         }
-
     })
+
 };
-Mediator.subscribe('workflow:comment',(res)=>{
-    comment = res;
-})
+// Mediator.subscribe('workflow:comment',(res)=>{
+//     console.log(res);
+//     comment = res.comment;
+//     attachmentComment = res.attachment;
+//     console.log('111111111111');
+// })
 
 Mediator.subscribe('approval:recordPass', (data) => {
+    console.log(data);
     approveWorkflow({
         record_id: obj.record_id,
         action: 0, // 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
         node_id: null, //驳回节点id
         sigh_type: 0, //加签类型  0：前 1：后
         sigh_user_id: '',
-        sign: data[0],
-        delSign:data[1],
+        sign: data['imgInfo'][0],
+        delSign:data['imgInfo'][1],
+        comment_attachment: JSON.stringify(data['comment']['attachment']),
+        comment: data['comment']['comment'],
     });
 });
 Mediator.subscribe('approval:appRejUp', (ispass) => {
-    if (ispass) {
+    if (ispass.determine) {
         approveWorkflow({
             record_id: obj.record_id,
             action: 1,
+            comment_attachment: JSON.stringify(ispass['attachment']),
+            comment: ispass['comment'],
         });
     }
 });
 Mediator.subscribe('approval:recordRejStart', (ispass) => {
-    if (ispass) {
+    if (ispass.determine) {
         approveWorkflow({
             record_id: obj.record_id,
             action: 2,
+            comment_attachment: JSON.stringify(ispass['attachment']),
+            comment: ispass['comment'],
         });
     }
 });
@@ -265,18 +314,23 @@ Mediator.subscribe('approval:signUser', (signObj) => {
         action: 9,
         sigh_type: signObj.sigh_type,
         sigh_user_id: signObj.sigh_user_id,
+        comment: signObj.comment,
+        comment_attachment: JSON.stringify(signObj.attachment),
     });
 });
-Mediator.subscribe('approval:rejToAny', (id) => {
-    if(id.length==21){
-        id=id.slice(5);
-    }else if(id.length==19){
-        id=id.slice(3);
-    }
+Mediator.subscribe('approval:rejToAny', (res) => {
+    console.log(res);
+    // if(res.id.length === 21){
+    //     res.id = res.id.slice(5);
+    // }else if(res.id.length === 19){
+    //     res.id = res.id.slice(3);
+    // }
     approveWorkflow({
         record_id: obj.record_id,
         action: 6,
-        node_id: id,
+        node_id: res.data.rejectId,
+        comment: res.data.data.comment,
+        comment_attachment: JSON.stringify(res.data.data['attachment']),
     });
 });
 //驳回至发起人，重新发起
