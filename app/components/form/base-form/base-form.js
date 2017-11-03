@@ -1417,7 +1417,7 @@ let config = {
 				}
 				if(FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
 					//枚举类型 or 各种内置
-					v = this.getTextByOptionID(item,formValue[item]);
+					v = this.actions.getTextByOptionID(item,formValue[item]);
 				}
 				if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(type) != -1) {
 					//整数或者小数处理下去掉，解决发起工作流回显为空的bug
@@ -1460,15 +1460,23 @@ let config = {
 										return true;
 									}
 								} catch (err) {
-									console.error(err);
-									console.error('表达式计算错误');
+									// console.error(err);
+									console.error('不能执行前端表达式计算');
+									return false;
 								}
+							}else{
+								return false;
 							}
 						} catch (err) {
-							console.error(err);
-							console.error('表达式计算错误');
+							// console.error(err);
+							console.error('不能执行前端表达式计算');
+							return false;
 						}
+					}else{
+						return false;
 					}
+				}else{
+					return false;
 				}
 			}
 		},
