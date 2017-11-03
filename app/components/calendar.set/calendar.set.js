@@ -62,7 +62,7 @@ let config = {
             let res = this.data.filedHead;
             console.log(res);
             this.data.dropdown = [];
-            this.data.dropdownForRes = [{id: '', name: ''}];
+            this.data.dropdownForRes = [];
             for (let columenListIndex in res) {
                 let item = res[columenListIndex];
                 // console.log(item);
