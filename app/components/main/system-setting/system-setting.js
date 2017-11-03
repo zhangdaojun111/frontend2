@@ -181,7 +181,6 @@ let config = {
          * 根据点击li的class改变主题
          */
         changeTheme:function (target,event) {
-            console.log(event);
             let newTheme = event.currentTarget.attributes[0].value;
             $('body').attr('class',newTheme);
         }
