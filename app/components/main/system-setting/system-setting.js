@@ -183,6 +183,7 @@ let config = {
         changeTheme:function (target,event) {
             let newTheme = event.currentTarget.attributes[0].value;
             $('body').attr('class',newTheme);
+            $(target).addClass('active').siblings().removeClass('active');
         }
     },
     binds:[ 

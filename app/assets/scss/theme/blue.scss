@@ -22,7 +22,7 @@ body.blue{
 
                 .personal-setting{
                     i{
-                        background-image: url("../../../assets/images/framework/icon-blue-setting.png");
+                        background-image: url("../../images/theme/blue/icon-blue-setting.png");
                     }
                 }
             }
@@ -38,7 +38,7 @@ body.blue{
                     }
                 }
                 .edit{
-                    background: url("../../../assets/images/framework/icon-blue-edit.png");
+                    background: url("../../images/theme/blue/icon-blue-edit.png");
                 }
             }
             .menu{
@@ -54,14 +54,14 @@ body.blue{
                     }
                     &.highlight{
                         border-bottom: 1px solid rgb(204,204,204);
-                        background-image: url("../../../assets/images/framework/icon-blue-search-1.png");
+                        background-image: url("../../images/theme/blue/icon-blue-search-1.png");
                     }
                 }
 
                 .menu-full{
                     .icon{
                         &.lv1 {
-                            background: url("../../../assets/images/framework/icon-blue-floder.png");
+                            background: url("../../images/theme/blue/icon-blue-floder.png");
                         }
                     }
                     .root{
@@ -72,6 +72,8 @@ body.blue{
                         }
                     }
                 }
+
+
                 &.mini{
                     .root{
                         > li > .menu-full-item {
