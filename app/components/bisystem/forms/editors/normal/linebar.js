@@ -541,9 +541,10 @@ let config = {
             {
                 label: '',
                 name: 'marginBottomx',
-                defaultValue: '',
+                defaultValue: '10',
                 placeholder: 'x轴下边距',
                 category: 'number',
+                textTip:'x轴下边距：',
                 type: 'text',
                 events: {}
             },
@@ -574,19 +575,21 @@ let config = {
             {
                 label: '',
                 name: 'textNum',
-                defaultValue:'',
+                defaultValue:'10',
                 placeholder: 'x轴每行字数',
                 type: 'text',
                 category: 'number',
+                textTip:'x轴每行字数：',
                 events: {}
             },
             {
                 label: '',
                 name: 'marginBottom',
-                defaultValue: '',
+                defaultValue: '10',
                 placeholder: 'x轴下边距',
                 category: 'number',
                 type: 'text',
+                textTip:'x轴下边距：',
                 events: {}
             },
             {
@@ -615,6 +618,7 @@ let config = {
                 defaultValue: 10,
                 placeholder: '请输入显示多少条数据',
                 category: 'number',
+                textTip:'请输入显示多少条数据：',
                 type: 'text',
                 events: {}
             },
