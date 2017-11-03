@@ -1297,9 +1297,7 @@ let config = {
 				}else{
 					value=data.value;
 				}
-				if (value && value != '') {
-					this.actions.setAboutData(id, value);
-				}
+				this.actions.setAboutData(id, value);
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
@@ -1415,7 +1413,7 @@ let config = {
 				}
 				if(FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
 					//枚举类型 or 各种内置
-					v = this.getTextByOptionID(item,formValue[item]);
+					v = this.actions.getTextByOptionID(item,formValue[item]);
 				}
 				if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(type) != -1) {
 					//整数或者小数处理下去掉，解决发起工作流回显为空的bug
