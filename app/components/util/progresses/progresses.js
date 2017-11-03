@@ -64,7 +64,7 @@ export const progressConfig = {
             selector:'.cancel-upload',
             callback: function (event) {
                 let id = event.attributes.itemid.value;
-                this.el.find('#'+id).remove();
+                this.el.find(`#${id}`).remove();
                 PMAPI.sendToSelf({
                     type:PMENUM.send_data_to_iframe,
                     key:this.key,
@@ -100,23 +100,21 @@ export const progressConfig = {
             }
         },
         update:function({fileId:i,progress:n}) {
-            this.el.find('#'+i).find('.progress-liquid').css('width',n+'%').text(n+'%');
+            this.el.find(`#${i} .progress-liquid`).css('width',n+'%').text(n+'%');
             if(n == 100){
-                this.el.find('#'+i).find('.cancel-upload').css('display','none');
-                this.el.find('#'+i).find('.post-upload-process').css('display','inline-block');
+                this.el.find(`#${i} .cancel-upload`).css('display','none');
+                this.el.find(`#${i} .post-upload-process`).css('display','inline-block');
             }
         },
         finish:function (i) {
-            this.el.find('#'+i).find('.cancel-upload').remove();
-            this.el.find('#'+i).find('.progress-bottle').html('传输完成').css('background-color','');
+            this.el.find(`#${i} .cancel-upload`).remove();
+            this.el.find(`#${i} .progress-bottle`).html('传输完成').css('background-color','');
             this.actions.closeDialogDelay();
         },
         error:function ({msg:msg,fileId:i}) {
-            this.el.find('#'+i).find('.progress-bottle').css('display','none');
-            // let text = this.el.find('#'+i).find('.progress-msg').text() + ": "+msg;
-            // this.el.find('#'+i).find('.progress-msg').text(text).css({'color':'red','overflow':'visible','width':'380px','margin':'auto'});
-            this.el.find('#'+i).find('.progress-msg').css({'width':'50%', 'margin':'0 auto'});
-            this.el.find('#'+i).find('.cancel-upload').css('display','none');
+            this.el.find(`#${i} .progress-bottle`).css('display','none');
+            this.el.find(`#${i} .progress-msg`).css({'width':'50%', 'margin':'0 auto'});
+            this.el.find(`#${i} .cancel-upload`).css('display','none');
             this.actions.closeDialogDelay();
         },
         closeDialogDelay:function () {
