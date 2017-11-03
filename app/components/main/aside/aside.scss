@@ -10,7 +10,7 @@
                 }
             }
             .s-uinfo {
-                background-color: transparent;
+                background-color: $aside-info-bg;
                 padding: 12px 0;
                 .avatar {
                     float: none;
@@ -64,7 +64,7 @@
                 float: left;
                 height:60px;
                 line-height: 25px;
-                font-size: 16px;
+                font-size: 14px;
                 text-align: center;
                 display: flex;
                 align-items: center;
@@ -80,7 +80,7 @@
         .s-uinfo {
             padding: 13px 14px;
             margin-top: 1px;
-            background-color: $aside-top-bg;
+            background-color: $aside-info-bg;
             .avatar {
                 float: left;
                 width: 40px;
@@ -181,12 +181,12 @@
         }
 
         .tabs {
-            padding: 10px 0 10px;
+            padding: 10px 0 15px;
             position: relative;
             p {
                 float: left;
                 width: 110px;
-                line-height: 18px;
+                line-height: 25px;
                 color: #666;
                 font-size: 12px;
                 cursor: pointer;
@@ -203,7 +203,7 @@
                 height: 16px;
                 position: absolute;
                 right: 10px;
-                top: 10px;
+                top: 13px;
                 cursor: pointer;
                 background: url("../../../assets/images/framework/edit.png");
             }

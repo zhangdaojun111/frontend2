@@ -1,0 +1,45 @@
+body.blue{
+    #aside{
+        background-color: #327ed3;
+        .aside-wrap{
+            .s-name{
+                background-color: #2b74c6;
+                .erds-logo{
+                    color: #79abe1;
+                }
+                .text{
+                    color: #ffffff;
+                }
+            }
+            .s-uinfo{
+                background-color: #276ab4;
+                .u-name,.u-role{
+                    color: #BFD8F2 !important;
+                    span{
+                        color: #ffffff !important;
+                    }
+                }
+
+                .personal-setting{
+                    i{
+                        background-image: url("../../../assets/images/framework/icon-blue-setting.png");
+                    }
+                }
+            }
+
+            .tabs{
+                p{
+                    color: #649DDD;
+                    &:first-child {
+                        border-right: 1px solid #72a6de;
+                    }
+                    &.active {
+                        color: #fff;
+                    }
+                }
+            }
+
+
+        }
+    }
+}
