@@ -574,19 +574,21 @@ let config = {
             {
                 label: '',
                 name: 'textNum',
-                defaultValue:'',
+                defaultValue:'10',
                 placeholder: 'x轴每行字数',
                 type: 'text',
                 category: 'number',
+                textTip:'x轴每行字数：',
                 events: {}
             },
             {
                 label: '',
                 name: 'marginBottom',
-                defaultValue: '',
+                defaultValue: '10',
                 placeholder: 'x轴下边距',
                 category: 'number',
                 type: 'text',
+                textTip:'x轴下边距：',
                 events: {}
             },
             {
