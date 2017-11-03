@@ -998,9 +998,11 @@ let config = {
 				if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
 					if (res["data"][k]["-1"]) {
 						this.actions.setFormValue.bind(this)(k, res["data"][k]["-1"]);
+						this.actions.triggerSingleControl(k)
 					}
 				} else {
 					this.actions.setFormValue.bind(this)(k, res["data"][k]);
+					this.actions.triggerSingleControl(k);
 				}
 			}
 		},
