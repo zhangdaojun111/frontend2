@@ -20,31 +20,49 @@
         }
 
         .style-setting{
-            display: none;
+            //display: none;
             width: 460px;
             float: left;
-            .prompt{
-                display: inline-block;
-                margin-top: 25px;
-                margin-left: 30px;
-            }
-            .font-size-slider{
-                height: 40px;
-                margin-left: 30px;
-                margin-top: 20px;
-                .font-range{
-                    width: 300px;
-                    border: none;
-                    outline: none;
-                    cursor: pointer;
+            .theme-set-group{
+                ul{
+
+                    li{
+                        cursor: pointer;
+                        img{
+
+                        }
+
+                    }
                 }
             }
-            .font-example{
-                display: inline-block;
-                margin-left: 30px;
-                background-color: #f2f2f2;
-                padding: 10px;
+
+
+
+            .font-set-group{
+                .prompt{
+                    display: inline-block;
+                    margin-top: 25px;
+                    margin-left: 30px;
+                }
+                .font-size-slider{
+                    height: 40px;
+                    margin-left: 30px;
+                    margin-top: 20px;
+                    .font-range{
+                        width: 300px;
+                        border: none;
+                        outline: none;
+                        cursor: pointer;
+                    }
+                }
+                .font-example{
+                    display: inline-block;
+                    margin-left: 30px;
+                    background-color: #f2f2f2;
+                    padding: 10px;
+                }
             }
+
             .clear-storage{
                 display: block;
                 color: red;
@@ -58,7 +76,7 @@
         .rapid-setting{
             width: 460px;
             float: left;
-            //display: none;
+            display: none;
             //.sort-prompt{
             //    height: 30px;
             //    display: block;
