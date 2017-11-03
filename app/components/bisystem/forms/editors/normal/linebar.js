@@ -541,9 +541,10 @@ let config = {
             {
                 label: '',
                 name: 'marginBottomx',
-                defaultValue: '',
+                defaultValue: '10',
                 placeholder: 'x轴下边距',
                 category: 'number',
+                textTip:'x轴下边距：',
                 type: 'text',
                 events: {}
             },
@@ -617,6 +618,7 @@ let config = {
                 defaultValue: 10,
                 placeholder: '请输入显示多少条数据',
                 category: 'number',
+                textTip:'请输入显示多少条数据：',
                 type: 'text',
                 events: {}
             },
