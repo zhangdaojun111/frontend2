@@ -143,7 +143,6 @@ export class EchartsService {
         //     $(this.myChart.getDom()).siblings('.count-chart-maxText').html(x);
         //     maxXnum.push($(this.myChart.getDom()).siblings('.count-chart-maxText').width());
         // });
-
         // 如果自定义了x轴展示
         if (cellOption['echartX'] && cellOption['echartX']['textNum'] !== 0) {
             if (cellOption['echartX'].hasOwnProperty('textNum')) {
