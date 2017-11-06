@@ -84,6 +84,16 @@ let config = {
             this.trigger('onUpdate')
         },
         /**
+         * 重置y轴字段
+         */
+        resetY() {
+            Object.keys(this.data.yAxis).forEach((key,index)=>{
+                this.data.yAxis[key].destroySelf();
+                delete this.data.yAxis[key];
+            });
+            this.actions.addY();
+        },
+        /**
          * y轴设置
          */
         yMoreSetting() {
@@ -144,7 +154,7 @@ class YaXis extends Base {
         if (yAxis.length === 0) return false;
 
         Object.keys(this.data.yAxis).forEach(key => {
-            this.data.yAxis[key].destroySelf()
+            this.data.yAxis[key].destroySelf();
             delete this.data.yAxis[key];
         });
         yAxis.forEach((item,index) => {
