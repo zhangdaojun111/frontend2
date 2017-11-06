@@ -59,6 +59,12 @@ body.blue{
                 }
 
                 .menu-full{
+                    .name{
+                        color: #BFD8F2;
+                    }
+                    .ui-state-active ~p{
+                        color: #FFFFFF;
+                    }
                     .icon{
                         &.lv1 {
                             background: url("../../images/theme/blue/icon-blue-floder.png");
@@ -82,6 +88,22 @@ body.blue{
                                 &:hover, &.current {
                                     background-color: #4a8ed9;
                                 }
+                            }
+                        }
+                    }
+
+                    .menu-full{
+                        .childlist{
+                            .row{
+                                background-color: #327ed3;
+                                color: #fff;
+                                &:hover, &.current {
+                                    background-color: #fff !important;
+                                    p{
+                                        color: #327ed3 !important;
+                                    }
+                                }
+
                             }
                         }
                     }
