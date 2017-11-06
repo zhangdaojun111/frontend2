@@ -95,6 +95,8 @@ let config = {
                     this.formItems['sortColumns'].setList(data['x_field']);
                 } else { // 清空字段
                     this.formItems['xAxis'].setList([]);
+                    this.formItems['yAxis0'].actions.resetY();
+                    this.formItems['yAxis1'].actions.resetY();
                     this.formItems['yAxis0'].actions.updateY([]);
                     this.formItems['yAxis1'].actions.updateY([]);
                     this.formItems['chartGroup'].setList([]);
@@ -401,7 +403,6 @@ let config = {
                 type: 'yAxis',
                 events: {
                     onSelectY: function(value){
-                        console.log(value);
                         this.actions.updateYSelectedGroup();
                     }
                 }
