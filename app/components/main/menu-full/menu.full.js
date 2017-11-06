@@ -13,6 +13,9 @@ function searchData(menu, text) {
     let res = _.cloneDeep(menu);
     
     function search(_menu, _text, _parent) {
+        if (_parent){
+
+        }
         _menu.forEach(function(item) {
             item.parent = _parent;
             item.searchDisplay = false;
@@ -20,7 +23,16 @@ function searchData(menu, text) {
             if (reg.test(item.label) || reg.test(item.name_py)) {
                 setDisplay(item);
                 if (item.items) {
-                    search(item.items, text, item);
+                    let checked = false;
+                    item.items.forEach(function(data) {
+                        let reg = new RegExp(text, 'g');
+                        if (reg.test(data.label) || reg.test(data.name_py)) {
+                            checked = true;
+                        }
+                    })
+                    if( checked ){
+                        search(item.items, text, item);
+                    }
                 }
             } else {
                 if (item.items) {
