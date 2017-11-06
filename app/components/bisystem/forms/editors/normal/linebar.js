@@ -217,7 +217,9 @@ let config = {
                 yHorizontalColumns: data.yHorizontalColumns[0] ? {marginBottom:data.marginBottomx} : {},
                 ySelectedGroup: data.defaultY[0] ? ySelectedGroup : [],
                 limit: data.limit[0] ? data.limitNum : 0,
+                endlimit:data.limit[0] ? data.endLimitNum : 0,
             };
+            console.log(chart);
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
             } else {
@@ -295,6 +297,8 @@ let config = {
             };
             this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
             this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
+            this.formItems['endlimit'].setValue(chart['endlimit'] ? 1 : 0);
+            this.formItems['endlimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
         },
     },
     data: {
@@ -598,7 +602,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '默认展示多少条数据'
+                        value:1, name: '默认展示前多少条数据'
                     }
                 ],
                 type: 'checkbox',
@@ -606,8 +610,10 @@ let config = {
                     onChange:function(value) {
                         if (value && value[0]) {
                             this.formItems['limitNum'].el.show();
+                            this.formItems['endLimitNum'].el.show();
                         } else {
                             this.formItems['limitNum'].el.hide();
+                            this.formItems['endLimitNum'].el.hide();
                         }
                     }
                 }
@@ -616,7 +622,17 @@ let config = {
                 label: '',
                 name: 'limitNum',
                 defaultValue: 10,
-                placeholder: '请输入显示多少条数据',
+                placeholder: '请输入升序显示多少条数据',
+                category: 'number',
+                textTip:'请输入显示多少条数据：',
+                type: 'text',
+                events: {}
+            },
+            {
+                label: '',
+                name: 'endLimitNum',
+                defaultValue: 10,
+                placeholder: '请输入降序显示多少条数据',
                 category: 'number',
                 textTip:'请输入显示多少条数据：',
                 type: 'text',
