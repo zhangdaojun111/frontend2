@@ -424,10 +424,11 @@ export class EchartsService {
                 gridLeft = 10 * (maxYNum.toString().length);
             };
             mutiListOption['grid'].push({
-                left: gridLeft,
+                left: 0,
                 right: gridRight,
                 top: gridFirstTop + tableHeight * index + offset * index,
-                height: tableHeight
+                height: tableHeight,
+                containLabel: true
             })
             mutiListOption['yAxis'].push({
                 gridIndex: index,
@@ -441,10 +442,12 @@ export class EchartsService {
                     }
                 },
 
-                min: Math.min.apply(null, ymin)
+                min: Math.min.apply(null, ymin),
+                // max: Math.max.apply(null, ymax),
             });
         });
         mutiListOption['legend']['data'] = legend;
+        console.log(mutiListOption);
         return mutiListOption;
     }
     /**
