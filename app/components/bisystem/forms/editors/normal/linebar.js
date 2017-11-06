@@ -286,10 +286,10 @@ let config = {
             this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup'].map(item => item.field));
             this.formItems['yHorizontal'].setValue(chart['yHorizontal'] ? 1 : 0);
             this.formItems['yHorizontalColumns'].setValue(chart['yHorizontalColumns']['marginBottom'] ? 1 : 0);
-            this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : '');
+            this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : 10);
             this.formItems['echartX'].setValue(chart['echartX']['textNum'] ? 1 : 0);
-            this.formItems['marginBottom'].setValue(chart['echartX']['marginBottom'] ? chart['echartX']['marginBottom'] : '');
-            this.formItems['textNum'].setValue(chart['echartX']['textNum'] ? chart['echartX']['textNum'] : '');
+            this.formItems['marginBottom'].setValue(chart['echartX']['marginBottom'] ? chart['echartX']['marginBottom'] : 10);
+            this.formItems['textNum'].setValue(chart['echartX']['textNum'] ? chart['echartX']['textNum'] : 10);
             this.formItems['chartAssignment'].setValue(chart['chartAssignment'].val);
             if (chart['chartAssignment'].val == 1) {
                 this.formItems['chartGroup'].setValue(chart['chartGroup']);
@@ -297,8 +297,8 @@ let config = {
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
             this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
-            this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
-            this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
+            this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : 10);
+            this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : 10);
         },
     },
     data: {
