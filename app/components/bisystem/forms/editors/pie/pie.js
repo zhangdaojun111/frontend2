@@ -299,6 +299,7 @@ let config = {
                     }
                 }
             },
+
             {
                 label: '选择下穿x轴字段',
                 name: 'deepX',
