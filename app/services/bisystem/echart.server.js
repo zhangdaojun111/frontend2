@@ -423,6 +423,7 @@ export class EchartsService {
             if (maxYNum.toString().length > 6) {
                 gridLeft = 10 * (maxYNum.toString().length);
             };
+
             mutiListOption['grid'].push({
                 left: 0,
                 right: gridRight,
