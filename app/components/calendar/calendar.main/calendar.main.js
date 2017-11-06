@@ -95,7 +95,7 @@ let config = {
          */
         search: function( key ){
             this.data.searchText = key;
-            CalendarWorkflowData.searchWorkflow(key);
+            this.data.workflowData = CalendarWorkflowData.searchWorkflow(key);
             if( this.data.calendarContent === 'schedule' ){
                 this.actions.getCalendarData({
                     from_date: this.data.from_date,
@@ -791,7 +791,7 @@ let config = {
                 } else {
                     this.actions.getCalendarData(json);
                 }
-                this.data.workflowData = CalendarWorkflowData.getAllWorkflow();
+                this.data.workflowData = CalendarWorkflowData.searchWorkflow(data);
             }
         });
 

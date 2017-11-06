@@ -94,13 +94,11 @@ export const CalendarWorkflowData = {
             let searchResult = this.allWorkflow.filter(item => {
                 return item.name.indexOf(keyWord)>= 0;
             });
-            Mediator.emit('CalendarWorkflowData: workflowData', searchResult);
+            // Mediator.emit('CalendarWorkflowData: searchWorkflowData', searchResult);
+            return searchResult;
         } else {
-            Mediator.emit('CalendarWorkflowData: workflowData', this.allWorkflow);
+            // Mediator.emit('CalendarWorkflowData: workflowData', this.allWorkflow);
+            return this.allWorkflow;
         }
     },
-
-    getAllWorkflow: function () {
-        return this.allWorkflow;
-    }
 };
