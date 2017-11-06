@@ -256,7 +256,6 @@ let config = {
             let deepX =params.name;
             this.actions.CanvasDeep(deepX);
         });
-
     },
     firstAfterRender() {
         this.actions.echartsInit();

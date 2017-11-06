@@ -257,8 +257,8 @@ export class EchartsService {
         };
 
         if (cellOption['yHorizontal']) {
-            linebarOption['grid']['left'] =  maxXTextNum;
-            linebarOption['grid']['containLabel'] = false;
+            // linebarOption['grid']['left'] =  maxXTextNum;
+            // linebarOption['grid']['containLabel'] = false;
             let _t = linebarOption.xAxis;
             linebarOption.xAxis = linebarOption.yAxis;
             linebarOption.yAxis = _t;
@@ -323,7 +323,7 @@ export class EchartsService {
                 }
             ]
         };
-        // console.log(linebarOption);
+        console.log(linebarOption);
 
         return linebarOption;
     }
@@ -445,7 +445,6 @@ export class EchartsService {
             });
         });
         mutiListOption['legend']['data'] = legend;
-        console.log(mutiListOption);
         return mutiListOption;
     }
     /**
