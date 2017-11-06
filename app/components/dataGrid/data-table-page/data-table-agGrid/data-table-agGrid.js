@@ -222,7 +222,7 @@ let config = {
         //表单数据（子表导入用）
         formData: '',
         //是否加载cache数据
-        cacheData: false,
+        cacheData: true,
     },
     //生成的表头数据
     columnDefs: [],
@@ -329,7 +329,8 @@ let config = {
                     let headerStyleObj = {
                         right:'header-style-r',left:'header-style-l',center:''
                     }
-                    let headClass = headerStyleObj[fieldTypeService.textAline(data.data["real_type"])];
+                    // let headClass = headerStyleObj[fieldTypeService.textAline(data.data["real_type"])];
+                    let headClass = '';
 
                     if( this.data.viewMode == 'reportTable2' ){
                         headClass = '';
@@ -3416,7 +3417,6 @@ let config = {
             console.log( "cache数据" )
             console.log( data )
             console.log( window.config )
-            this.data.cacheData = true;
             //表头
             let headerRes = [data.preferences,data.column_list,data.tab_page,data.operation,data.prepare_params];
             this.actions.setHeaderData( headerRes );
@@ -3474,7 +3474,7 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
 
         //渲染cache数据
-        if( window.config.data_cached == 1 && this.data.viewMode == 'normal' ){
+        if( window.config.data_cached == 1 && this.data.viewMode == 'normal' && this.data.cacheData ){
             console.log( '加载cache数据' )
             this.actions.renderCacheData( window.config.cached_data )
             try {
@@ -3485,7 +3485,7 @@ let config = {
             return;
         }
 
-        if( this.data.viewMode == 'normal' ){
+        if( this.data.viewMode == 'normal' && this.data.cacheData ){
             let data = window.config.cached_data;
             console.log( "只加载Header的cache数据" )
             console.log( data )
