@@ -63,7 +63,10 @@ export class EchartsService {
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
         };
-        console.log(cellChart);
+        if(cellOption['yHorizontal'] === true){
+            cellOption['xAxis'].reverse();
+            cellOption['yAxis'][0].data.reverse();
+        }
 
         // 组合图采用new_name，下穿图采用name
         const nameType = (cellOption.chartAssignment && cellOption.chartAssignment.val) === 1 ? 'new_name' : 'name';

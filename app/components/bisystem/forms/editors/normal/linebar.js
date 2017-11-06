@@ -221,7 +221,6 @@ let config = {
                 limit: data.limit[0] ? data.limitNum : 0,
                 endlimit:data.limit[0] ? data.endLimitNum : 0,
             };
-            console.log(chart);
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
             } else {
@@ -299,8 +298,7 @@ let config = {
             };
             this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
             this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
-            this.formItems['endlimit'].setValue(chart['endlimit'] ? 1 : 0);
-            this.formItems['endlimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
+            this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
         },
     },
     data: {
