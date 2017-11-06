@@ -92,6 +92,7 @@ let config = {
                 delete this.data.yAxis[key];
             });
             this.actions.addY();
+
         },
         /**
          * y轴设置
