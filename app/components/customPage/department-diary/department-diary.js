@@ -197,7 +197,8 @@ let config = {
                     tableName: this.data.tableName,
                     viewMode: 'normal',
                     departmentDiary: true,
-                    getDiarySearchField: this.actions.getDiarySearchField
+                    getDiarySearchField: this.actions.getDiarySearchField,
+                    cacheData: false
                 }
                 this.dataGrid = new dataTableAgGrid(json)
                 this.append(this.dataGrid, this.el.find('.diary-grid'));
