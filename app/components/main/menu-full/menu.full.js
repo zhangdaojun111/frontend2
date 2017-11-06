@@ -19,6 +19,9 @@ function searchData(menu, text) {
             let reg = new RegExp(text, 'g');
             if (reg.test(item.label) || reg.test(item.name_py)) {
                 setDisplay(item);
+                if (item.items) {
+                    search(item.items, text, item);
+                }
             } else {
                 if (item.items) {
                     search(item.items, text, item);
