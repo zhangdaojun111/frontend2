@@ -138,11 +138,11 @@ export class EchartsService {
                     }}:{}
             });
         });
-        xAxis.forEach(x => {
-            // let maxXn = Math.max.apply(null, x.toString().length);
-            $(this.myChart.getDom()).siblings('.count-chart-maxText').html(x);
-            maxXnum.push($(this.myChart.getDom()).siblings('.count-chart-maxText').width());
-        });
+        // xAxis.forEach(x => {
+        //     // let maxXn = Math.max.apply(null, x.toString().length);
+        //     $(this.myChart.getDom()).siblings('.count-chart-maxText').html(x);
+        //     maxXnum.push($(this.myChart.getDom()).siblings('.count-chart-maxText').width());
+        // });
 
         // 如果自定义了x轴展示
         if (cellOption['echartX'] && cellOption['echartX']['textNum'] !== 0) {
@@ -257,8 +257,8 @@ export class EchartsService {
         };
 
         if (cellOption['yHorizontal']) {
-            linebarOption['grid']['left'] =  maxXTextNum;
-            linebarOption['grid']['containLabel'] = false;
+            // linebarOption['grid']['left'] =  maxXTextNum;
+            // linebarOption['grid']['containLabel'] = false;
             let _t = linebarOption.xAxis;
             linebarOption.xAxis = linebarOption.yAxis;
             linebarOption.yAxis = _t;
@@ -324,7 +324,7 @@ export class EchartsService {
                 }
             ]
         };
-        // console.log(linebarOption);
+        console.log(linebarOption);
 
         return linebarOption;
     }
@@ -446,7 +446,6 @@ export class EchartsService {
             });
         });
         mutiListOption['legend']['data'] = legend;
-        console.log(mutiListOption);
         return mutiListOption;
     }
     /**
