@@ -329,7 +329,8 @@ let config = {
                     let headerStyleObj = {
                         right:'header-style-r',left:'header-style-l',center:''
                     }
-                    let headClass = headerStyleObj[fieldTypeService.textAline(data.data["real_type"])];
+                    // let headClass = headerStyleObj[fieldTypeService.textAline(data.data["real_type"])];
+                    let headClass = '';
 
                     if( this.data.viewMode == 'reportTable2' ){
                         headClass = '';
