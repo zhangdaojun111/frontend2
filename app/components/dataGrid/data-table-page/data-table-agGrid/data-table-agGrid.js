@@ -1206,9 +1206,6 @@ let config = {
             Promise.all(post_arr).then((res)=> {
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
-                    if(refresh){
-                        this.actions.calcSelectData( 'get' );
-                    }
                     this.actions.setGridData( res );
                     if(refresh){
                         this.actions.calcSelectData( 'set' );
@@ -1456,6 +1453,7 @@ let config = {
                     this.data.correspondenceSelectedList = arr2;
                 }
             }
+            this.actions.calcSelectData( 'get' );
         },
         /**
          * 根据viewMode不同，生成不同请求数据的参数
