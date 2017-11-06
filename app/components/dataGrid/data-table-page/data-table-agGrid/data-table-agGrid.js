@@ -1206,7 +1206,13 @@ let config = {
             Promise.all(post_arr).then((res)=> {
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
+                    if(refresh){
+                        this.actions.calcSelectData( 'get' );
+                    }
                     this.actions.setGridData( res );
+                    if(refresh){
+                        this.actions.calcSelectData( 'set' );
+                    }
                     //内置相关查看原始数据获取footer
                     if( this.data.viewMode == 'source_data' ){
                         let filterIds = []
@@ -1264,7 +1270,6 @@ let config = {
                 //渲染其他组件
                 this.actions.renderAgGrid();
             }else {
-                this.actions.calcSelectData( 'get' );
             }
             let d = {
                 rowData: this.data.rowData,
