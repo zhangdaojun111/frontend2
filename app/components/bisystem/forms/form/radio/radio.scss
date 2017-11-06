@@ -1,11 +1,17 @@
 .form-chart-radio {
-    label{
-        display:inline-block;
-        padding:20px 0 0 0;
-        margin-right:20px;
+    label {
+        display: inline-block;
+        padding: 20px 0 0 0;
+        margin-right: 20px;
         cursor: pointer;
-        .custom-radio{
-            vertical-align:text-bottom;
+        .custom-radio {
+            vertical-align: text-bottom;
+        }
+        b {
+            image {
+                width: 16px;
+                height: 16px;
+            }
         }
     }
 }

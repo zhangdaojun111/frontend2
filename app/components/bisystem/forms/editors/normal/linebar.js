@@ -219,6 +219,7 @@ let config = {
                 yHorizontalColumns: data.yHorizontalColumns[0] ? {marginBottom:data.marginBottomx} : {},
                 ySelectedGroup: data.defaultY[0] ? ySelectedGroup : [],
                 limit: data.limit[0] ? data.limitNum : 0,
+                endlimit:data.limit[0] ? data.endLimitNum : 0,
             };
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
@@ -285,10 +286,10 @@ let config = {
             this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup'].map(item => item.field));
             this.formItems['yHorizontal'].setValue(chart['yHorizontal'] ? 1 : 0);
             this.formItems['yHorizontalColumns'].setValue(chart['yHorizontalColumns']['marginBottom'] ? 1 : 0);
-            this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : '');
+            this.formItems['marginBottomx'].setValue(chart['yHorizontalColumns']['marginBottom'] ? chart['yHorizontalColumns']['marginBottom'] : 10);
             this.formItems['echartX'].setValue(chart['echartX']['textNum'] ? 1 : 0);
-            this.formItems['marginBottom'].setValue(chart['echartX']['marginBottom'] ? chart['echartX']['marginBottom'] : '');
-            this.formItems['textNum'].setValue(chart['echartX']['textNum'] ? chart['echartX']['textNum'] : '');
+            this.formItems['marginBottom'].setValue(chart['echartX']['marginBottom'] ? chart['echartX']['marginBottom'] : 10);
+            this.formItems['textNum'].setValue(chart['echartX']['textNum'] ? chart['echartX']['textNum'] : 10);
             this.formItems['chartAssignment'].setValue(chart['chartAssignment'].val);
             if (chart['chartAssignment'].val == 1) {
                 this.formItems['chartGroup'].setValue(chart['chartGroup']);
@@ -296,7 +297,8 @@ let config = {
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
             this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
-            this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
+            this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : 10);
+            this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : 10);
         },
     },
     data: {
@@ -599,7 +601,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '默认展示多少条数据'
+                        value:1, name: '默认展示前多少条数据'
                     }
                 ],
                 type: 'checkbox',
@@ -607,8 +609,10 @@ let config = {
                     onChange:function(value) {
                         if (value && value[0]) {
                             this.formItems['limitNum'].el.show();
+                            this.formItems['endLimitNum'].el.show();
                         } else {
                             this.formItems['limitNum'].el.hide();
+                            this.formItems['endLimitNum'].el.hide();
                         }
                     }
                 }
@@ -617,7 +621,17 @@ let config = {
                 label: '',
                 name: 'limitNum',
                 defaultValue: 10,
-                placeholder: '请输入显示多少条数据',
+                placeholder: '请输入升序显示多少条数据',
+                category: 'number',
+                textTip:'请输入显示多少条数据：',
+                type: 'text',
+                events: {}
+            },
+            {
+                label: '',
+                name: 'endLimitNum',
+                defaultValue: 10,
+                placeholder: '请输入降序显示多少条数据',
                 category: 'number',
                 textTip:'请输入显示多少条数据：',
                 type: 'text',
