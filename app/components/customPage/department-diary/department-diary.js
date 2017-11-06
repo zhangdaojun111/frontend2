@@ -188,7 +188,7 @@ let config = {
         }
     ],
     afterRender: function (){
-        this.showLoading();
+        // this.showLoading();
         dataTableService.getCustomTableId( {table_key: 'department-daily'} ).then( res=>{
             if( res.success ){
                 this.data.tableId = res.table_id;
@@ -207,7 +207,7 @@ let config = {
                 msgBox.alert( '请联系管理员配置定指表tableId。' )
             }
             setTimeout( ()=>{
-                this.hideLoading();
+                // this.hideLoading();
             },700 )
         } )
     }
