@@ -9,6 +9,7 @@ import {HeaderComponent} from '../components/main/header/header';
 import {AsideComponent} from '../components/main/aside/aside';
 import '../assets/scss/dataGrid/dataGrid-icon.scss';
 import '../assets/scss/theme/blue.scss';
+import '../assets/scss/theme/ink-blue.scss';
 import {Storage} from "../lib/storage";
 SocketMgr.connect();
 
