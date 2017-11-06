@@ -23,6 +23,7 @@ let config = {
         calendarSort:2,     //记录日历顺序
         biStatus:0,         //记录快捷bi状态（0为不快捷打开bi）
         calendarStatus:0,   //记录快捷bi状态（0为不快捷打开日历）
+        currentTheme:'default',
     },
     actions:{
         /**
@@ -175,6 +176,13 @@ let config = {
             let temp = this.data.biSort;
             this.data.biSort = this.data.calendarSort;
             this.data.calendarSort = temp;
+        },
+        /**
+         * 根据点击li的class改变主题
+         */
+        changeTheme:function (target,event) {
+            let newTheme = event.currentTarget.attributes[0].value;
+            $('body').attr('class',newTheme);
         }
     },
     binds:[ 
@@ -211,6 +219,13 @@ let config = {
             selector:'.font-range',
             callback:function () {
                 this.actions.changeFontSize();
+            }
+        },
+        {
+            event:'click',
+            selector:'.theme-set-group ul li',
+            callback:function (target,event) {
+                this.actions.changeTheme(target,event);
             }
         }
     ],

@@ -998,9 +998,11 @@ let config = {
 				if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
 					if (res["data"][k]["-1"]) {
 						this.actions.setFormValue.bind(this)(k, res["data"][k]["-1"]);
+						this.actions.triggerSingleControl(k)
 					}
 				} else {
 					this.actions.setFormValue.bind(this)(k, res["data"][k]);
+					this.actions.triggerSingleControl(k);
 				}
 			}
 		},
@@ -1456,15 +1458,23 @@ let config = {
 										return true;
 									}
 								} catch (err) {
-									console.error(err);
-									console.error('表达式计算错误');
+									// console.error(err);
+									console.error('不能执行前端表达式计算');
+									return false;
 								}
+							}else{
+								return false;
 							}
 						} catch (err) {
-							console.error(err);
-							console.error('表达式计算错误');
+							// console.error(err);
+							console.error('不能执行前端表达式计算');
+							return false;
 						}
+					}else{
+						return false;
 					}
+				}else{
+					return false;
 				}
 			}
 		},
