@@ -11,6 +11,8 @@ import SelectStaffNoDel from '../select-staff-no-del/select-staff-no-del';
 import SelectedStaff from '../selected-staff/selected-staff';
 import SelectedStaffNoDel from '../selected-staff-no-del/selected-staff-no-del';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
+import msgBox from '../../../../lib/msgbox';
+
 let config={
     template: template,
     data:{
@@ -52,7 +54,7 @@ let config={
         });
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
-            console.log('ss');
+            msgBox.showLoadingSelf();
             let arr = [];
             let checked=this.el.find('#staffMulti .search-check-row');
             let len = checked.length;
@@ -69,6 +71,10 @@ let config={
                     }
                 }
             });
+            setTimeout(() => {
+                msgBox.hideLoadingSelf();
+            },800);
+
         });
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
             if(res){
@@ -184,6 +190,17 @@ let config={
                 data:o
             })
         });
+    },
+
+    beforeDestory: function () {
+        Mediator.removeAll('workflow:idArr');
+        Mediator.removeAll('workflow:checkDept');
+        Mediator.removeAll('workflow:checkDeptAlready');
+        Mediator.removeAll('workflow:unCheckDept');
+        Mediator.removeAll('workflow:pubCheck');
+        Mediator.removeAll('workflow:pubCheckNoDel');
+        Mediator.removeAll('workflow:pubCheckSingle');
+        Mediator.removeAll('workflow:pubUncheckSingle');
     }
 };
 class WorkflowAddFollow extends Component{
