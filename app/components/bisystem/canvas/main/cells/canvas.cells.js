@@ -59,7 +59,6 @@ let config = {
             };
 
         },
-
         /**
          * 瀑布流方式加载cell chart data 数据(移动端的处理)
          * @param option = {top：scrollbar的滚动距离}
