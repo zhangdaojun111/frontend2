@@ -1,5 +1,6 @@
 import {HTTP} from '../../lib/http';
 export const workflowService={
+    recordIds:{},
     //get_workflow_favorite
     getWorkfLowFav(params){
         return HTTP.post('get_workflow_favorite', params)

@@ -150,6 +150,7 @@ Mediator.subscribe('workflow:getGridinfo',(res)=>{
 ***submit workflow data 提交工作流
  */
 Mediator.subscribe('workflow:submit', (res)=> {
+    debugger
     if($("#workflow-form:visible").length>0){
         let formData=CreateFormServer.getFormValue(wfObj.tableid,true,true);
         if(formData.error){
@@ -164,6 +165,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
                 cache_new:JSON.stringify(formData.obj_new),
                 cache_old:JSON.stringify(formData.obj_old),
             };
+            console.log('0000000   ',postData)
             (async function () {
                 return await workflowService.createWorkflowRecord(postData);
             })().then(res=>{
@@ -238,6 +240,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
 });
 let temp_id=``;
 Mediator.subscribe('workFlow:record_info', (res) => {
+    console.log('*************',res)
 	if(res.data && res.data.temp_id &&res.data.temp_id.value){
 		temp_id=res.data.temp_id.value || '';
 	}

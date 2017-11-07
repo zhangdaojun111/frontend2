@@ -193,6 +193,8 @@ let config={
                 msgBox.alert(`${formData.errorMessage}`);
             } else {
                 msgBox.showLoadingSelf();
+                console.log('workflowService.recordIds[obj.table_id')
+                console.log(window.top.recordIds);
                 let postData = {
                     flow_id: obj.flow_id,
                     focus_users: JSON.stringify(this.data.focusArr) || [],
@@ -200,10 +202,15 @@ let config={
                     cache_new:JSON.stringify(formData),
                     cache_old:JSON.stringify(this.data.cache_old),
                     table_id:obj.table_id,
-                    parent_table_id:obj.parent_table_id,
+                    // parent_table_id:obj.parent_table_id,
+                    // parent_real_id:obj.parent_real_id,
+                    // parent_temp_id:obj.parent_temp_id,
+                    // parent_record_id:obj.parent_record_id
+                    parent_table_id:'',
                     parent_real_id:obj.parent_real_id,
-                    parent_temp_id:obj.parent_temp_id,
-                    parent_record_id:obj.parent_record_id
+                    parent_temp_id:'',
+                    // parent_record_id:obj.parent_record_id
+                    parent_record_id:window.top.recordIds[obj.table_id],
                 };
                 //半触发操作用
                 if( obj.data_from_row_id ){
