@@ -262,6 +262,7 @@ let config = {
                     }
                 }
             },
+
             {
                 label: 'x轴字段',
                 name: 'xAxis',
