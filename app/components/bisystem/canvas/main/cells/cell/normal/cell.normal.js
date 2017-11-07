@@ -14,31 +14,31 @@ let config = {
     data: {
         id: `normal`,
         cellChart: {},
-        deeps:0,
-        floor:0,
+        deeps: 0,
+        floor: 0,
         xAxis: [], //每一层的下穿字段
         xOld: [], //保存历史数据x轴字段
-        x:[],//每一层下穿字段类型
+        x: [],//每一层下穿字段类型
     },
     actions: {
         /**
          * 获取（一周 一月 半年 一年 全部）获取数据
          * @param value {startValue:x轴第一个数据,endValue:x轴第2个数据,type:'week'}
          */
-       async getChangeDateData(value) {
-           let deep_info = {};
-           deep_info[this.data.floor] = this.data['xAxis'];
-           const layouts = {
+        async getChangeDateData(value) {
+            let deep_info = {};
+            deep_info[this.data.floor] = this.data['xAxis'];
+            const layouts = {
                 chart_id: this.data.cellChart.cell.chart_id,
                 floor: this.data.floor,
                 view_id: this.data.viewId,
-                layout_id:  this.data.cellChart.cell.layout_id,
+                layout_id: this.data.cellChart.cell.layout_id,
                 xOld: this.data.xOld,
-                row_id:window.config.row_id,
+                row_id: window.config.row_id,
                 deep_info: deep_info,
-                startValue:value['startValue'],
-                endValue:value['endValue'],
-                type:value['type']
+                startValue: value['startValue'],
+                endValue: value['endValue'],
+                type: value['type']
             };
             const data = {
                 'layouts': [JSON.stringify(layouts)],
@@ -56,7 +56,8 @@ let config = {
                     cellChart['cell']['attribute'] = [];
                     cellChart['cell']['select'] = [];
                     this.actions.updateChart(cellChart);
-                };
+                }
+                ;
             }
         },
 
@@ -66,21 +67,22 @@ let config = {
         judgeDateZoom(cellChart) {
             let type = cellChart.chart.xAxis.type;
             // console.log(this.data.cellChart.chart['yHorizontal']);
-            if(!this.data.cellChart.chart['yHorizontal'] && (type==3||type==5||type==12||type==30) ){
+            if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30)) {
                 this.el.find('.echarts-cell').addClass('.date-filed');
-                this.normalRange = new NormalRangeComponent({id:this.data.id}, {
+                this.normalRange = new NormalRangeComponent({id: this.data.id}, {
                     // 通过（一周 一月 半年 一年 全部）获取数据
                     onChangeDateData: (value) => {
                         this.actions.getChangeDateData(value);
                     }
                 });
-                this.append(this.normalRange,this.el.find('.chart-normal-date-zoom'));
+                this.append(this.normalRange, this.el.find('.chart-normal-date-zoom'));
                 this.normalRange.actions.rangeChoose(type);
                 this.normalRange.actions.setDateValue(cellChart.chart.data.xAxis);
-            }else {
+            } else {
                 if (this.normalRange) {
                     this.normalRange.destroySelf();
-                };
+                }
+                ;
                 this.el.find('.echarts-cell').removeClass('.date-filed');
             }
         },
@@ -89,8 +91,8 @@ let config = {
          */
         handleOriginal() {
             let cellChart = _.cloneDeep(this.data.cellChart);
-            let [xAxis,yAxisRemoveDataIndex] = [[],[]];
-            this.data.cellChart.cell.select.forEach((item,index) => {
+            let [xAxis, yAxisRemoveDataIndex] = [[], []];
+            this.data.cellChart.cell.select.forEach((item, index) => {
                 let val = JSON.parse(item);
                 if (val.select) {
                     xAxis.push(val.name);
@@ -99,19 +101,21 @@ let config = {
                 }
             });
             let yAxis = [];
-            this.data.cellChart.cell.attribute.map((item,index) => {
+            this.data.cellChart.cell.attribute.map((item, index) => {
                 if (JSON.parse(item).selected) {
                     yAxis.push(cellChart['chart']['data']['yAxis'][index])
-                };
+                }
+                ;
             });
 
             yAxis.forEach((item) => {
                 let itemData = [];
-                item.data.forEach((val,index,arrays) => {
+                item.data.forEach((val, index, arrays) => {
                     let isRemove = yAxisRemoveDataIndex.indexOf(index);
                     if (isRemove === -1) {
                         itemData.push(val)
-                    };
+                    }
+                    ;
                 });
                 item.data = itemData;
             });
@@ -131,9 +135,10 @@ let config = {
                     chartData.cellChart.cell.select.map(item => {
                         if (!JSON.parse(item).selected) {
                             ename.push(JSON.parse(item).ename)
-                        };
+                        }
+                        ;
                     });
-                    let groups = chartData.cellChart.chart.data.yAxis.filter((item,index,items) => {
+                    let groups = chartData.cellChart.chart.data.yAxis.filter((item, index, items) => {
                         return ename.toString().indexOf(item.ename) === -1;
                     });
 
@@ -144,23 +149,27 @@ let config = {
                         let cellChart = this.actions.handleOriginal();
                         chartData = _.cloneDeep(this.data);
                         chartData.cellChart = cellChart;
-                    };
+                    }
+                    ;
                 }
-            };
+            }
+            ;
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
-            this.trigger('onUpdateChartDeepTitle',this.data);
+            this.trigger('onUpdateChartDeepTitle', this.data);
         },
 
         updateChart(data) {
             //重新渲染echarts
             const option = this.normalChart.lineBarOption(data);
-            this.normalChart.myChart.setOption(option,true);
-            if(data.chart.data.x){
-                if(!(data.chart.data.x.type==3 && data.chart.data.x.type==5 && data.chart.data.x.type==12 && data.chart.data.x.type==30)){
+            this.normalChart.myChart.setOption(option, true);
+            if (data.chart.data.x) { // 判断下穿字段是否为时间字段
+                if (data.chart.data.x.type == 3 || data.chart.data.x.type == 5 || data.chart.data.x.type == 12 || data.chart.data.x.type == 30) {
+                    this.el.find('.chart-normal-date-zoom').show();
+                } else {
                     this.el.find('.chart-normal-date-zoom').hide();
                 }
-            }else{
+            } else {
                 this.el.find('.chart-normal-date-zoom').show();
             }
         },
@@ -183,18 +192,20 @@ let config = {
          * 获取下穿数据
          * @param deepX= 下穿的x轴字段，next ？ 下穿 ： 上传
          */
-        async CanvasDeep(deepX, next=true) {
+        async CanvasDeep(deepX, next = true) {
             let deeps = this.data.deeps;
             if (next) {
                 this.data.floor++;
             } else {
-                if (this.data.floor===0) {
+                if (this.data.floor === 0) {
                     return false;
-                };
+                }
+                ;
                 this.data.floor--;
-            };
+            }
+            ;
             // 判断是否到最大下穿层数
-            if (deeps > this.data.floor-1 ) {
+            if (deeps > this.data.floor - 1) {
                 // 组装deep_info
                 let deep_info = {};
                 if (next) {
@@ -206,20 +217,22 @@ let config = {
                 } else {
                     this.data['xAxis'].pop();
                     this.data.xOld.pop();
-                };
+                }
+                ;
                 if (this.data.floor == 0) {
                     deep_info = {}
                 } else {
                     deep_info[this.data.floor] = this.data['xAxis'];
-                };
+                }
+                ;
 
                 const layouts = {
                     chart_id: this.data.cellChart.cell.chart_id,
                     floor: this.data.floor,
                     view_id: this.data.viewId,
-                    layout_id:  this.data.cellChart.cell.layout_id,
+                    layout_id: this.data.cellChart.cell.layout_id,
                     xOld: this.data.xOld,
-                    row_id:window.config.row_id,
+                    row_id: window.config.row_id,
                     deep_info: deep_info,
                 };
                 const data = {
@@ -236,16 +249,18 @@ let config = {
                         this.data.cellChart['cell']['attribute'] = [];
                         this.data.cellChart['cell']['select'] = [];
                         this.actions.updateChart(this.data.cellChart);
-                        this.trigger('onUpdateChartDeepTitle',this.data);
+                        this.trigger('onUpdateChartDeepTitle', this.data);
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
-                };
+                }
+                ;
 
             } else {
                 if (next) {
                     this.data.floor = deeps;
-                };
+                }
+                ;
                 return false;
             }
         }
@@ -263,7 +278,7 @@ let config = {
         });
         // 下穿数据
         this.normalChart.myChart.on('click', (params) => {
-            let deepX =params.name;
+            let deepX = params.name;
             this.actions.CanvasDeep(deepX);
         });
     },
@@ -272,7 +287,8 @@ let config = {
         //是否显示时间字段
         if (window.config.bi_user !== 'manager') {
             this.actions.judgeDateZoom(this.data.cellChart);
-        };
+        }
+        ;
     },
     beforeDestory() {
 
@@ -280,8 +296,8 @@ let config = {
 }
 
 export class CellNormalComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,event);
+    constructor(data, event, extendConfig) {
+        super($.extend(true, {}, config, extendConfig), data, event);
         this.actions.initNormal();
     }
 
@@ -298,7 +314,7 @@ export class CellNormalComponent extends CellBaseComponent {
 
             if (data.hideGroup.length > 0) {
                 let ename = data.hideGroup.map(item => item.ename);
-                let groups = cellChart.chart.data.yAxis.filter((item,index,items) => {
+                let groups = cellChart.chart.data.yAxis.filter((item, index, items) => {
                     return ename.toString().indexOf(item.ename) === -1;
                 });
 
@@ -318,8 +334,8 @@ export class CellNormalComponent extends CellBaseComponent {
      * @param data
      */
     async updateOriginalDeep(name) {
-       let res = await this.actions.CanvasDeep(name);
-       return Promise.resolve(this.data);
+        let res = await this.actions.CanvasDeep(name);
+        return Promise.resolve(this.data);
     }
 
     /**
@@ -332,15 +348,16 @@ export class CellNormalComponent extends CellBaseComponent {
             deep_info = {}
         } else {
             deep_info[this.data.floor] = this.data['xAxis'];
-        };
+        }
+        ;
 
         const layouts = {
             chart_id: this.data.cellChart.cell.chart_id,
             floor: this.data.floor,
             view_id: this.data.viewId,
-            layout_id:  this.data.cellChart.cell.layout_id,
+            layout_id: this.data.cellChart.cell.layout_id,
             xOld: this.data.xOld,
-            row_id:0,
+            row_id: 0,
             deep_info: deep_info,
             sort: JSON.stringify(sort)
         };
@@ -357,11 +374,12 @@ export class CellNormalComponent extends CellBaseComponent {
                 this.data.cellChart['cell']['attribute'] = [];
                 this.data.cellChart['cell']['select'] = [];
                 this.actions.updateChart(this.data.cellChart);
-                this.trigger('onUpdateChartDeepTitle',this.data);
+                this.trigger('onUpdateChartDeepTitle', this.data);
             }
         } else {
             msgbox.alert(res[0]['error']);
-        };
+        }
+        ;
         return Promise.resolve(this.data);
     }
 }
