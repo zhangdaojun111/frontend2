@@ -190,6 +190,7 @@ let config = {
             this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
             this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
             this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
+
         }
     },
     data: {
