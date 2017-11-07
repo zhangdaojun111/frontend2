@@ -21,6 +21,9 @@ export const CalendarWorkflowData = {
     // 审批完成的
     workflowFinishedData: [],
 
+    // 全部工作
+    allWorkflow: [],
+
     /**
      * 获取工作流数据
      * @param from_date
@@ -80,9 +83,22 @@ export const CalendarWorkflowData = {
                 arr = this.workflow_approve_data.concat( this.workflow_approving_data );
                 arr = arr.concat( this.workflow_focus_data );
             }catch(e){}
+            this.allWorkflow = arr;
             Mediator.emit('CalendarWorkflowData: workflowData', arr);
             return arr;
         }
+    },
 
+    searchWorkflow: function (keyWord) {
+        if(keyWord !== '') {
+            let searchResult = this.allWorkflow.filter(item => {
+                return item.name.indexOf(keyWord)>= 0;
+            });
+            // Mediator.emit('CalendarWorkflowData: searchWorkflowData', searchResult);
+            return searchResult;
+        } else {
+            // Mediator.emit('CalendarWorkflowData: workflowData', this.allWorkflow);
+            return this.allWorkflow;
+        }
     },
 };

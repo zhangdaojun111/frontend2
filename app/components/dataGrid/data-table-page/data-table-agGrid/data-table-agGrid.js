@@ -222,7 +222,7 @@ let config = {
         //表单数据（子表导入用）
         formData: '',
         //是否加载cache数据
-        cacheData: false,
+        cacheData: true,
     },
     //生成的表头数据
     columnDefs: [],
@@ -329,7 +329,8 @@ let config = {
                     let headerStyleObj = {
                         right:'header-style-r',left:'header-style-l',center:''
                     }
-                    let headClass = headerStyleObj[fieldTypeService.textAline(data.data["real_type"])];
+                    // let headClass = headerStyleObj[fieldTypeService.textAline(data.data["real_type"])];
+                    let headClass = '';
 
                     if( this.data.viewMode == 'reportTable2' ){
                         headClass = '';
@@ -1206,6 +1207,9 @@ let config = {
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
                     this.actions.setGridData( res );
+                    if(refresh){
+                        this.actions.calcSelectData( 'set' );
+                    }
                     //内置相关查看原始数据获取footer
                     if( this.data.viewMode == 'source_data' ){
                         let filterIds = []
@@ -1263,7 +1267,6 @@ let config = {
                 //渲染其他组件
                 this.actions.renderAgGrid();
             }else {
-                this.actions.calcSelectData( 'get' );
             }
             let d = {
                 rowData: this.data.rowData,
@@ -1306,8 +1309,8 @@ let config = {
                 //赋值
                 try {
                     this.agGrid.actions.setGridData(d);
-                    // this.data.showTabs(1);
-                    // this.hideLoading();
+                    this.data.showTabs(1);
+                    this.hideLoading();
                 }catch(e){}
 
             } )
@@ -1450,6 +1453,7 @@ let config = {
                     this.data.correspondenceSelectedList = arr2;
                 }
             }
+            this.actions.calcSelectData( 'get' );
         },
         /**
          * 根据viewMode不同，生成不同请求数据的参数
@@ -3246,6 +3250,23 @@ let config = {
                     winTitle = '执行操作';
                     break;
                 }
+                case 'cexecute':{
+                    json = {
+                        params: params,
+                        rowId: customRowId,
+                        operation_id: row_op_id,
+                        allRowData: this.data.rowData,
+                        field: 'f23',
+                        tableId: this.data.tableId
+                    }
+                    w = 930
+                    h = 500
+                    console.log( '执行操作参数' )
+                    console.log( json )
+                    url = '/iframe/rowOperation/?operationType=excute';
+                    winTitle = '执行操作';
+                    break;
+                }
             }
             PMAPI.openDialogByIframe( url,{
                 width: w,
@@ -3399,7 +3420,6 @@ let config = {
             console.log( "cache数据" )
             console.log( data )
             console.log( window.config )
-            this.data.cacheData = true;
             //表头
             let headerRes = [data.preferences,data.column_list,data.tab_page,data.operation,data.prepare_params];
             this.actions.setHeaderData( headerRes );
@@ -3457,7 +3477,7 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
 
         //渲染cache数据
-        if( window.config.data_cached == 1 && this.data.viewMode == 'normal' ){
+        if( window.config.data_cached == 1 && this.data.viewMode == 'normal' && this.data.cacheData ){
             console.log( '加载cache数据' )
             this.actions.renderCacheData( window.config.cached_data )
             try {
@@ -3468,7 +3488,7 @@ let config = {
             return;
         }
 
-        if( this.data.viewMode == 'normal' ){
+        if( this.data.viewMode == 'normal' && this.data.cacheData ){
             let data = window.config.cached_data;
             console.log( "只加载Header的cache数据" )
             console.log( data )

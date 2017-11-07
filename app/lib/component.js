@@ -225,12 +225,17 @@ class Component {
         //     this.loadingTarget.children().removeClass('component-filter-blur');
         //     this.loadingTarget = null;
         // });
-
-        this.loadingOverlay.remove();
-        this.loadingEffectBox.remove();
-        this.loadingTarget.removeClass('component-loading-effect');
-        this.loadingTarget.children().removeClass('component-filter-blur');
-        this.loadingTarget = null;
+        if (this.loadingOverlay) {
+            this.loadingOverlay.remove();
+        }
+        if (this.loadingEffectBox) {
+            this.loadingEffectBox.remove();
+        }
+        if (this.loadingTarget) {
+            this.loadingTarget.removeClass('component-loading-effect');
+            this.loadingTarget.children().removeClass('component-filter-blur');
+            this.loadingTarget = null;
+        }
     }
 
     disable(){

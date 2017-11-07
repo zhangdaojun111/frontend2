@@ -26,7 +26,7 @@ let config={
         this.el.find('.ui-width').css('width',this.data.width);
         if(this.data.is_view){
             this.el.find('.ui-width').attr('title', this.data.value)
-            this.el.find('.ui-width').attr('readonly','readonly').css('background','#EBEBE4');
+            this.el.find('.ui-width').attr('readonly','readonly').css({'background':'#EBEBE4','color':'#666666'});
         }else{
             this.el.find('.ui-width').removeAttr("readonly");
         }

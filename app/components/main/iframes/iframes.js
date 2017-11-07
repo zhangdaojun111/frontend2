@@ -130,9 +130,11 @@ let config = {
         /**
          * 方法同上，新增与后台同步tab信息的功能
          */
-        openIframe: function (id, url, name) {
+        openIframe: function (id, url, name,flag) {
             this.actions._openIframe(id, url, name);
-            this.actions.sendOpenRequest(id);
+            if(flag !== false){
+                this.actions.sendOpenRequest(id);
+            }
         },
         /**
          * 打开iframe时向后台发送请求，后台记录未关闭的iframe
@@ -797,7 +799,7 @@ let config = {
 
     firstAfterRender: function () {
         Mediator.on('menu:item:openiframe', (data) => {
-            this.actions.openIframe(data.id, data.url, data.name);
+            this.actions.openIframe(data.id, data.url, data.name,data.flag);
             this.actions.focusIframe(data.id);
         });
         Mediator.on('search:displayreuslt',(data) => {
