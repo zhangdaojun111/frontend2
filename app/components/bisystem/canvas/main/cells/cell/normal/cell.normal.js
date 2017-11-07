@@ -149,11 +149,16 @@ let config = {
                         let cellChart = this.actions.handleOriginal();
                         chartData = _.cloneDeep(this.data);
                         chartData.cellChart = cellChart;
-                    }
-                    ;
+                    };
                 }
-            }
-            ;
+            };
+            let cellChartData = this.data;
+            if(cellChartData['cellChart']['chart']['yHorizontal']){
+                cellChartData['cellChart']['chart']['data']['xAxis'].reverse();
+                cellChartData['cellChart']['chart']['data']['yAxis'].forEach(item => {
+                    item.data.reverse();
+                });
+            };
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle', this.data);
@@ -253,14 +258,12 @@ let config = {
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
-                }
-                ;
+                };
 
             } else {
                 if (next) {
                     this.data.floor = deeps;
-                }
-                ;
+                };
                 return false;
             }
         }
