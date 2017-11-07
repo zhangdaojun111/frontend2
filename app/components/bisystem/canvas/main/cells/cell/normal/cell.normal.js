@@ -163,6 +163,7 @@ let config = {
             }else{
                 this.el.find('.chart-normal-date-zoom').show();
             }
+
         },
         /**
          * 初始化pie图表数据
