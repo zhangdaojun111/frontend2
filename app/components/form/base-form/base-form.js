@@ -877,7 +877,7 @@ let config = {
 		},
 
 		//统计功能
-		async countFunc(dfield) {
+		async countFunc(dfield,expression) {
 			for (let key in this.data['use_fields']) {
 				let data = this.data.myUseFields[key];
 				if (this.data['use_fields'][key].indexOf(dfield) != -1) {
@@ -932,6 +932,16 @@ let config = {
 						for (let d in res["data"]) {
 							this.actions.setFormValue(d, res["data"][d]);
 						}
+                        if(res){
+                            let calcData = {
+                                val: expression['value'],
+                                effect: expression["effect"],
+                                id: expression['id']
+                            };
+                            if(!this.actions.webCalcExpression(expression)) {
+                                this.actions.calcExpression(calcData);
+                            }
+                        }
 					}
 				}
 			}
@@ -1323,7 +1333,7 @@ let config = {
 			}
 			//统计功能
 			this.actions.myUseFieldsofcountFunc();
-			this.actions.countFunc(data.dfield);
+			this.actions.countFunc(data.dfield,data);
 			//改变选择框的选项
 			if (data['linkage'] != {}) {
 				let j = 0;
@@ -1357,14 +1367,14 @@ let config = {
 				this.actions.requiredCondition(data, data['value']);
 			}
 
-			let calcData = {
-				val: data['value'],
-				effect: data["effect"],
-				id: data['id']
-			};
-			if(!this.actions.webCalcExpression(data)){
-				this.actions.calcExpression(calcData, data['value']);
-			};
+			// let calcData = {
+			// 	val: data['value'],
+			// 	effect: data["effect"],
+			// 	id: data['id']
+			// };
+			// if(!this.actions.webCalcExpression(data)){
+			// 	this.actions.calcExpression(calcData, data['value']);
+			// };
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
 			}
@@ -1751,11 +1761,6 @@ let config = {
 				this.data.viewMode = 'viewFromCorrespondence';
 			}
 			let _this = this;
-			console.log('######')
-			console.log('######')
-			console.log('######')
-			console.log('######')
-			console.log('######')
 			console.log(CreateFormServer.data.tableId);
 			PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${CreateFormServer.data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
 				width: 1400,
