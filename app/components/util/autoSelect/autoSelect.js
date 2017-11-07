@@ -326,20 +326,21 @@ let config = {
                     this.actions.showSelectBox();
                 }
             }
-        },{
-            event: 'mouseleave.visible',
-            selector: '.auto-select-component',
-            callback: function () {
-               this.actions.delayHideComp();
-            }
         },
-        {
-            event: 'mouseenter',
-            selector: '.auto-select-component',
-            callback: function () {
-               this.actions.removeHideComp();
-            }
-        },
+        // {
+        //     event: 'mouseleave.visible',
+        //     selector: '.auto-select-component',
+        //     callback: function () {
+        //        this.actions.delayHideComp();
+        //     }
+        // },
+        // {
+        //     event: 'mouseenter',
+        //     selector: '.auto-select-component',
+        //     callback: function () {
+        //        this.actions.removeHideComp();
+        //     }
+        // },
         {
             event:'mouseenter',
             selector:'li',
