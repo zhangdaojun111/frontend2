@@ -741,11 +741,11 @@ let config = {
 					}
 				}
 				this.data.data[key][obj[affectType]] = arr;
-				if (affectType == 'multi-select') {
-					this.data.data[key]['value'] = [];
-				} else {
-					this.data.data[key]['value'] = '';
-				}
+				// if (affectType == 'multi-select') {
+				// 	this.data.data[key]['value'] = [];
+				// } else {
+				// 	this.data.data[key]['value'] = '';
+				// }
 				this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
 			}
 		},
