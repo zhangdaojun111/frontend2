@@ -13,9 +13,6 @@ function searchData(menu, text) {
     let res = _.cloneDeep(menu);
     
     function search(_menu, _text, _parent) {
-        if (_parent){
-
-        }
         _menu.forEach(function(item) {
             item.parent = _parent;
             item.searchDisplay = false;
