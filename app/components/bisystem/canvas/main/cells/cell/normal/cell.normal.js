@@ -18,6 +18,7 @@ let config = {
         floor:0,
         xAxis: [], //每一层的下穿字段
         xOld: [], //保存历史数据x轴字段
+        x:[],//每一层下穿字段类型
     },
     actions: {
         /**
@@ -51,6 +52,7 @@ let config = {
                     let cellChart = _.cloneDeep(this.data.cellChart);
                     cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
                     cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
+                    cellChart['chart']['data']['x'] = res[0]['data']['data']['x'];
                     cellChart['cell']['attribute'] = [];
                     cellChart['cell']['select'] = [];
                     this.actions.updateChart(cellChart);
@@ -154,6 +156,13 @@ let config = {
             //重新渲染echarts
             const option = this.normalChart.lineBarOption(data);
             this.normalChart.myChart.setOption(option,true);
+            if(data.chart.data.x){
+                if(!(data.chart.data.x.type==3 && data.chart.data.x.type==5 && data.chart.data.x.type==12 && data.chart.data.x.type==30)){
+                    this.el.find('.chart-normal-date-zoom').hide();
+                }
+            }else{
+                this.el.find('.chart-normal-date-zoom').show();
+            }
         },
         /**
          * 初始化pie图表数据
@@ -223,6 +232,7 @@ let config = {
                     if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
                         this.data.cellChart['chart']['data']['xAxis'] = res[0]['data']['data']['xAxis'];
                         this.data.cellChart['chart']['data']['yAxis'] = res[0]['data']['data']['yAxis'];
+                        this.data.cellChart['chart']['data']['x'] = res[0]['data']['data']['x'];
                         this.data.cellChart['cell']['attribute'] = [];
                         this.data.cellChart['cell']['select'] = [];
                         this.actions.updateChart(this.data.cellChart);
