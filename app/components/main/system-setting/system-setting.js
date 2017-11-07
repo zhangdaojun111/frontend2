@@ -185,6 +185,11 @@ let config = {
             $('body').attr('class',newTheme);
             $(target).addClass('active').siblings().removeClass('active');
             window.config.sysConfig.userInfo.theme = newTheme;
+            UserInfoService.saveUserTheme(newTheme).done((res) => {
+                if(res['success'] === 0){
+                    console.log('save failed');
+                }
+            })
         },
         initThemeUl:function () {
             if(window.config.sysConfig.userInfo.hasOwnProperty('theme') && window.config.sysConfig.userInfo.theme !== ''){

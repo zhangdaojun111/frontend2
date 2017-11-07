@@ -2,6 +2,7 @@ import Component from '../../../../lib/component';
 import template from './item.html';
 import Mediator from '../../../../lib/mediator';
 import 'jquery-ui/ui/widgets/tooltip';
+import './item.scss';
 
 let config = {
     template: template,
