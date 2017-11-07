@@ -245,12 +245,14 @@ let config = {
                 events: {
                     onChange(value) {
                         if (value == 1) {
-                            this.formItems['columns'].el.show();
+                            this.formItems['limit'].el.hide();
                             this.formItems['yAxis'].el.hide();
                             this.formItems['deeps'].el.hide();
                             this.formItems['deepX'].el.hide();
+                            this.formItems['deepX'].el.hide();
                             this.formItems['deeps'].actions.clear();
                         } else {
+                            this.formItems['limit'].el.show();
                             this.formItems['columns'].el.hide();
                             this.formItems['yAxis'].el.show();
                             this.formItems['deeps'].el.show();
