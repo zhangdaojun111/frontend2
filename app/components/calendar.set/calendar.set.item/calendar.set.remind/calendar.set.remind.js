@@ -138,7 +138,7 @@ let config = {
             callback:function(){
                 this.el.find('.open-sms-remind').addClass("checked");
                 this.el.find(".close-sms-remind").removeClass("checked");
-                this.data.smsStatus = '1';
+                this.data.smsStatus = 1;
             }
         },
         {
@@ -156,7 +156,7 @@ let config = {
             callback:function(){
                 this.el.find('.open-email-remind').addClass("checked");
                 this.el.find(".close-email-remind").removeClass("checked");
-                this.data.emailStatus = '1';
+                this.data.emailStatus = 1;
             }
         },
         {
@@ -184,6 +184,10 @@ let config = {
             callback:function(){
                 this.data.smsRemindTime = this.el.find('.remind-time-sms').val();
                 this.data.emailRemindTime = this.el.find('.remind-time-email').val();
+                this.data.smsReciver = [];
+                this.data.smsCopyPeople = [];
+                this.data.emailReciver = [];
+                this.data.emailCopyPeople = [];
                 this.data.smsReceiverAutoSelect.data.choosed.forEach(item => {
                     this.data.smsReciver.push(item['id']);
                 });
@@ -211,6 +215,7 @@ let config = {
             this.data.recipients_per = params.data.recipients_per;
             this.data.sms = params.data.sms;
             this.data.email = params.data.email;
+            console.log(this.data);
             if (this.data.smsStatus === 1) {
                 this.el.find('.open-sms-remind').addClass('checked');
             } else {

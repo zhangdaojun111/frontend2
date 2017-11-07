@@ -144,7 +144,7 @@ const multillist = {
     animation : false,
     legend: {
         data: [],
-        x: 'left'
+        x: 'center'
     },
     tooltip: {
         trigger: 'axis',
@@ -287,9 +287,7 @@ const linebar = {
         }
     ],
     series: []
-
 };
-
 // 风格箱图
 const stylzie = {
     tooltip: {
@@ -297,6 +295,7 @@ const stylzie = {
             return value.data[3]
         }
     },
+
     grid: {
         left: 0,
         right: 25,

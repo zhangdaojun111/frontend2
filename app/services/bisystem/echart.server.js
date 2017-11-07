@@ -64,6 +64,11 @@ export class EchartsService {
             return defaultOption;
         };
 
+        if(cellOption['yHorizontal'] === true){
+            cellOption.data['xAxis'].reverse();
+            cellOption.data['yAxis'][0].data.reverse();
+        }
+
         // 组合图采用new_name，下穿图采用name
         const nameType = (cellOption.chartAssignment && cellOption.chartAssignment.val) === 1 ? 'new_name' : 'name';
         const [legend, series] = [[], []];
@@ -138,12 +143,11 @@ export class EchartsService {
                     }}:{}
             });
         });
-        xAxis.forEach(x => {
-            // let maxXn = Math.max.apply(null, x.toString().length);
-            $(this.myChart.getDom()).siblings('.count-chart-maxText').html(x);
-            maxXnum.push($(this.myChart.getDom()).siblings('.count-chart-maxText').width());
-        });
-
+        // xAxis.forEach(x => {
+        //     // let maxXn = Math.max.apply(null, x.toString().length);
+        //     $(this.myChart.getDom()).siblings('.count-chart-maxText').html(x);
+        //     maxXnum.push($(this.myChart.getDom()).siblings('.count-chart-maxText').width());
+        // });
         // 如果自定义了x轴展示
         if (cellOption['echartX'] && cellOption['echartX']['textNum'] !== 0) {
             if (cellOption['echartX'].hasOwnProperty('textNum')) {
@@ -257,8 +261,8 @@ export class EchartsService {
         };
 
         if (cellOption['yHorizontal']) {
-            linebarOption['grid']['left'] =  maxXTextNum;
-            linebarOption['grid']['containLabel'] = false;
+            // linebarOption['grid']['left'] =  maxXTextNum;
+            // linebarOption['grid']['containLabel'] = false;
             let _t = linebarOption.xAxis;
             linebarOption.xAxis = linebarOption.yAxis;
             linebarOption.yAxis = _t;
@@ -314,6 +318,7 @@ export class EchartsService {
                 endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                 rangeMode: ['value', 'value']
                 },
+
                 {
                     type: 'inside',
                     xAxisIndex: 0,
@@ -323,7 +328,7 @@ export class EchartsService {
                 }
             ]
         };
-        // console.log(linebarOption);
+        console.log(linebarOption);
 
         return linebarOption;
     }
@@ -363,15 +368,17 @@ export class EchartsService {
         const mutiListOption = EchartsOption.getEchartsConfigOption('multilist'); // 获取多表默认配置option
         const multilistData = cellOption['data']['multillist'][0]['xAxis']; // 多表数据
         const offset = 30; // 多表之间相隔间距
-        const gridFirstTop = 10; // grid第一个默认top
+        const gridFirstTop = 30; // grid第一个默认top
         let gridRight = 10;
         let gridLeft = 50;
         let cellHeight = cellChart['cell']['size']['height'];
         cellHeight = cellHeight - 30 - 36; // cell的高度减去60的边距，就是实际的表格的高度
         let multillist = cellOption['data']['multillist'];
+
         // tableHeight 为多表图表中每一个图表的高度
         let tableHeight = (cellHeight - Math.max(offset * (multillist.length - 1), 0) - Math.max(12 * (multillist.length - 1), 0) - gridFirstTop) / multillist.length;
         let colors = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
+        let legend = [];
         multillist.forEach((option, index, list) => {
             // mutiListOption['dataZoom'][0]['xAxisIndex'].push(index);
             // mutiListOption['dataZoom'][1]['xAxisIndex'].push(index);
@@ -391,8 +398,8 @@ export class EchartsService {
             });
             let ymin = [];
             let ymax = [];
-
             option['yAxis'].map((y, yindex) => {
+                legend.push(y['name']);
                 mutiListOption['series'].push({
                     name: y['name'],
                     type: cellOption['sources'][index]['chartType']['type'],
@@ -421,11 +428,13 @@ export class EchartsService {
             if (maxYNum.toString().length > 6) {
                 gridLeft = 10 * (maxYNum.toString().length);
             };
+
             mutiListOption['grid'].push({
-                left: gridLeft,
+                left: 0,
                 right: gridRight,
                 top: gridFirstTop + tableHeight * index + offset * index,
-                height: tableHeight
+                height: tableHeight,
+                containLabel: true
             })
             mutiListOption['yAxis'].push({
                 gridIndex: index,
@@ -438,9 +447,13 @@ export class EchartsService {
                         color: '#ececec'
                     }
                 },
-                min: Math.min.apply(null, ymin)
+
+                min: Math.min.apply(null, ymin),
+                // max: Math.max.apply(null, ymax),
             });
         });
+        mutiListOption['legend']['data'] = legend;
+        console.log(mutiListOption);
         return mutiListOption;
     }
     /**
@@ -505,12 +518,10 @@ export class EchartsService {
         funnelOption['color'] = cellOption['theme'] ? EchartsOption[cellOption['theme']] : EchartsOption['blue'];
         return funnelOption;
     }
-
     /**
      * 风格箱处理
      * @param chart = cellChart['chart']数据
      */
-
 
     stylzieOption(cellChart) {
         let cellOption = cellChart['chart'];

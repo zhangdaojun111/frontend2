@@ -50,15 +50,15 @@ class Theme extends Base {
      * @param value
      */
     setValue(value){
-        if (Array.isArray(value)&&value!==''&&value!==undefined) {
+        if (Array.isArray(value)&&value!==''&&value!==undefined && value.length > 0) {
             this.data.colors = value;
-            this.el.find('.form-theme').empty();
-            this.data.colors.forEach((val,index)=>{
-                this.el.find('.form-theme').append('<span id="'+val+'"><b style="background:'+val+'"></b></span>');
-            });
+            // this.el.find('.form-theme').empty();
+            // this.data.colors.forEach((val,index)=>{
+            //     this.el.find('.form-theme').append('<span id="'+val+'"><b style="background:'+val+'"></b></span>');
+            // });
             this.data.value = this.data.colors;
+            this.reload();
         }
-        this.data.firstDo = true;
     }
 }
 
