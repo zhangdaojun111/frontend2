@@ -1309,8 +1309,8 @@ let config = {
                 //赋值
                 try {
                     this.agGrid.actions.setGridData(d);
-                    // this.data.showTabs(1);
-                    // this.hideLoading();
+                    this.data.showTabs(1);
+                    this.hideLoading();
                 }catch(e){}
 
             } )
