@@ -650,6 +650,7 @@ let config = {
                 }
             },
             button,
+
         ],
         firstDo: false, // 用于在编辑模式下 第一次加载保留数据
     },
