@@ -746,7 +746,7 @@ let config = {
 				// } else {
 				// 	this.data.data[key]['value'] = '';
 				// }
-				this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
+				// this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
 			}
 		},
 
