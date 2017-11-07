@@ -152,6 +152,7 @@ let config = {
                     };
                 }
             };
+
             let cellChartData = this.data;
             if(cellChartData['cellChart']['chart']['yHorizontal']){
                 cellChartData['cellChart']['chart']['data']['xAxis'].reverse();
