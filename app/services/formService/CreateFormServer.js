@@ -14,8 +14,6 @@ export const CreateFormServer={
 	data: {},
 	//初始化配置数据
 	init(config = {}) {
-		console.log('初始化config');
-		console.log(config);
 		this.data = {}
 		//表名
 		this.data.tableId = config.table_id || '';
@@ -49,7 +47,6 @@ export const CreateFormServer={
 		this.data.inProcess = config.in_process || '0';//是否查询临时数据
 		this.data.data_from_row_id = config.data_from_row_id || '';//半触发操作
 		this.data.operation_id = config.operation_id || '';//半触发操作
-		console.log(config);
 	}
 	,
 	//静态数据里是否有这个key
@@ -254,8 +251,6 @@ export const CreateFormServer={
 						data['parent_real_id'] = parentRealId;
 						data['parent_table_id'] = parentTableId;
 						data['parent_temp_id'] = parentTempId;
-						console.log('这里给没给');
-						console.log(data);
 					} else if (data.type == "Datetime") {
 						// if( data.value.length == 19 ){
 						//     data.value = data.value.slice( 0,16 )
@@ -417,8 +412,6 @@ export const CreateFormServer={
 			//创建请求
 			let json = this.createPostJson();
 			res=await FormService.getFormData(json);
-			console.log('res');
-			console.log(res);
 			//将表单名称发送给工作流
 			return  res
 	},
