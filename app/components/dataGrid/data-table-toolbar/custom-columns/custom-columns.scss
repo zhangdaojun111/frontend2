@@ -162,6 +162,8 @@
                     .custom-name {
                         display: inline-block;
                         width: 93px;
+                        position: relative;
+                        top: 1.25px;
                         line-height: 22px;
                         overflow: hidden;
                         white-space: nowrap;
