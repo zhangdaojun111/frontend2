@@ -4,7 +4,11 @@
         <div class="empty-view">
             <div class="empty-view-message">
                 <img src="../../../../assets/images/framework/search-result-nothing.png" alt="">
+                {{#if editMode}}
+                <p>暂无数据，请点击左上角新建</p>
+                {{else}}
                 <p>没有可用视图，请先点击右上角的编辑创建视图</p>
+                {{/if}}
             </div>
         </div>
     {{else}}
