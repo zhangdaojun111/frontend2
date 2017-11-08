@@ -27,7 +27,8 @@ function getLoginController() {
         $companyInfo:$('.company-info'),            //公司名称显示
         $rememberPwCheck:$('.remember-pw-check'),   //记住密码
         $updateGroup:$('.update-btn'),              //显示更新信息logo
-        $versionTable:$('.version-view'),          //版本信息显示表格
+        $closeUpdateGroup:$('.shadow-box-close'),  //隐藏更新信息logo
+        $versionTable:$('#shadow-box'),          //版本信息显示表格
         $loginBtn:$('button.login-btn'),            //登录按钮
         $registerBtn:$('div.register-btn'),         //注册按钮
         $findPwBtn:$('.find-pw-group'),             //忘记密码
@@ -83,6 +84,10 @@ function getLoginController() {
             this.$updateGroup.on('click', () => {
                 this.$versionTable.toggle();
             });
+
+            this.$closeUpdateGroup.on('click', () => {
+				this.$versionTable.toggle();
+			});
 
             /**
              * 登录按钮
@@ -234,11 +239,11 @@ function getLoginController() {
                 $runStats.html(obj["run_stats"] || '-');
                 $row.append($runStats);
 
-                let $branch = $("<td class='default-hide'></td>");
+                let $branch = $("<td></td>");
                 $branch.html(obj['branch'] || '-');
                 $row.append($branch);
 
-                let $revision = $("<td class='default-hide'></td>");
+                let $revision = $("<td></td>");
                 $revision.html(obj["revision"] || '-');
                 $row.append($revision);
 
