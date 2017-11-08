@@ -86,7 +86,6 @@ let config = {
                     data: res
                 }
             });
-            console.log(res);
         });
 
         PMAPI.getIframeParams(this.data.key).then(res=>{

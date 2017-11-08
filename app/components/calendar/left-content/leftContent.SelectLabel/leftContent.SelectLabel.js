@@ -90,7 +90,6 @@ let config = {
                 if (isAllChecked) {
                     this.el.find(".select-head").addClass('label-select-all-checked');
                     let isAllGroupChecked = true;
-                    console.log(this.el.parent().find('.select-head'));
                     this.el.parent().find('.select-head').each(function () {
                         if (!$(this).is('.label-select-all-checked')) {
                             isAllGroupChecked = false;

@@ -118,7 +118,6 @@ let config={
             });
         },
         getFlows(res) {
-            console.log(this.data.obj);
             let obj = this.data.obj;
             if (obj.btnType === 'view' && this.data.is_view !== 0) {
                 $('#toEdit').show();
@@ -257,7 +256,6 @@ let config={
     afterRender(){
         let _this=this;
         _this.showLoading();
-        console.log(this.data.obj);
         this.data.key = this.data.obj.key;
 
         if (this.data.obj.btnType === 'view'||this.data.obj.btnType ==="none") {

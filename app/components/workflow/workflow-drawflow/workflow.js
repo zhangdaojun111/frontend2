@@ -166,7 +166,6 @@ let config = {
                     }
                         //如果是驳回任意节点模式
                     if (__this.rejectMode) {
-                            // console.log( $("#container2") )
                             // $("#container2").append(html);
                         $(__this.el.nativeElement.querySelector('#container2')).append(html);
                     }
@@ -298,7 +297,6 @@ let config = {
                 let can_reject = e.getAttribute("canreject");
                 let text = e.getAttribute("title");
                 this.rejectId = e.getAttribute("id");
-                console.log(typeof can_reject);
                 if (can_reject === '1') {
                     // PMAPI.openDialogByComponent(approvalOpinion,{
                     //     width: 450,
@@ -320,7 +318,6 @@ let config = {
                             title:'提示'
                         }
                     ).then(res => {
-                        console.log(res);
                         if(res.determine){
                             // this.comment = res.comment;
                             // Mediator.publish('workflow:comment',res.comment);

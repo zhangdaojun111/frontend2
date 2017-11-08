@@ -13,7 +13,7 @@ let config={
 
     },
     afterRender(){
-        console.log(this.data);
+        // console.log(this.data);
         Mediator.publish('workflow:pubCheck',this.data);
         this.el.on('click','.checkbox',function(){
             if(!$(this).hasClass('checked')){

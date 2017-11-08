@@ -18,7 +18,6 @@ let config = {
             selector: '.J_sure',
             callback: function (event) {
                 this.actions.determine();
-                console.log(this.data.fileList);
                 PMAPI.sendToParent({
                     type: '1',
                     key: window.config.key,
@@ -56,9 +55,7 @@ let config = {
             dinput_type: '9',
         };
         let changeValue = (res) => {
-            console.log(res.value);
             this.data.fileList = res.value;
-            console.log(this.data.fileList);
         };
         let attachmentControl = new AttachmentControl(json, {changeValue: changeValue});
         this.append(attachmentControl, this.el.find('.workflow-attachment-box'));
