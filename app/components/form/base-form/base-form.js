@@ -130,15 +130,15 @@ let config = {
 		},
 
 		//主动触发指定字段的所有事件
-		triggerSingleControl(key) {
+		triggerSingleControl(key,noCount) {
 			let val = this.data.data[key]["value"];
 			if (val != "" || !$.isEmptyObject(val)) {
 				if ($.isArray(val)) {
 					if (val.length != 0) {
-						this.actions.checkValue(this.data.data[key]);
+						this.actions.checkValue(this.data.data[key],noCount);
 					}
 				} else {
-					this.actions.checkValue(this.data.data[key]);
+					this.actions.checkValue(this.data.data[key],noCount);
 				}
 			}
 		},
@@ -1008,7 +1008,7 @@ let config = {
 					childComponet.data["value"] = value
 					childComponet.reload();
 				}
-				// this.actions.triggerSingleControl(dfield);
+				this.actions.triggerSingleControl(dfield,true);
 			}
 		},
 		//给相关赋值
@@ -1025,6 +1025,7 @@ let config = {
 				} else {
                     this.actions.setFormValue(k, this.actions.showAccuracy(k,res["data"][k]));
 					this.actions.triggerSingleControl(k);
+
 				}
 			}
 		},
@@ -1301,14 +1302,14 @@ let config = {
 			}
 		},
 		//触发事件检查
-		checkValue: function (data) {
+		checkValue: function (data,noCount) {
 			if (!this.data.childComponent[data.dfield]) {
 				return;
 			}
 			if (this.data.data[data.dfield]) {
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
-			if (data.type == 'Buildin' || data.type=='MultiLinkage') {
+			if (data.type == 'Buildin' || data.type=='MultiLinkage' && !noCount) {
 				let id = data["id"];
 				let value;
 				if(data.type == 'Buildin'){
@@ -1325,7 +1326,7 @@ let config = {
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
+			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1 && !noCount ) {
 				if (data.type == 'Input') {
 					if(!this.data.timer){
 						this.data.timer=setTimeout(()=>{
@@ -1340,12 +1341,14 @@ let config = {
 						},3000);
 					}
 				} else {
-					this.actions.validDefault(data, data['value']);
+					 this.actions.validDefault(data, data['value']);
 				}
 			}
 			//统计功能
 			this.actions.myUseFieldsofcountFunc();
-			this.actions.countFunc(data.dfield,data);
+			if(!noCount){
+                this.actions.countFunc(data.dfield,data);
+			}
 			//改变选择框的选项
 			if (data['linkage'] != {}) {
 				let j = 0;
