@@ -325,3 +325,8 @@ btn-div{
   border: 1px solid #2298f4;
   margin-top: 10px;
 }
+#flow-node {
+  .workflow-box .workflow-box-r{
+    overflow-x: auto;
+  }
+}
