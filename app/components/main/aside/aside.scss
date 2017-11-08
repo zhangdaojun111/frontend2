@@ -36,6 +36,22 @@
             .tabs {
                 display: none;
             }
+
+            .menu-full{
+                .childlist{
+                    .row{
+                        background-color: #333333;
+                        color: #fff;
+                        &:hover, &.current {
+                            background-color: #fff !important;
+                            p{
+                                color: #333333 !important;
+                            }
+                        }
+
+                    }
+                }
+            }
         }
     }
     .aside-wrap {
@@ -79,7 +95,7 @@
 
         .s-uinfo {
             padding: 13px 14px;
-            margin-top: 1px;
+            //margin-top: 1px;
             background-color: $aside-info-bg;
             .avatar {
                 float: left;
@@ -228,10 +244,11 @@
             }
             label.search > input{
                 font-size: 12px;
+                color: #fff;
             }
             .menu-full{
                 .name{
-                    color:#BFD8F2;
+                    color:#999999;
                 }
                 .ui-state-active ~p{
                     color: #FFFFFF;

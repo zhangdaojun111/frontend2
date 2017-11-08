@@ -118,16 +118,13 @@ let config = {
          * @param type
          */
         getCalendarData: function (data,type){
-            console.log(22222);
             Mediator.emit('Calendar: showLoading', 1);
             this.showLoading();
             CalendarService.getCalendarData(data).then( res=>{
                 if(res) {
                     this.hideLoading();
-                    console.log(1111);
                     Mediator.emit('Calendar: showLoading', 0);
                 }
-                console.log(res);
                 this.data.date2settings = res['date2csids'];
                 this.data.calendarSettings = res['id2data'];
                 this.data.tableid2name = res['tableid2name'];
@@ -516,7 +513,6 @@ let config = {
                                 }
                             }
                         }
-                        // console.log(everyData_3)
                         for( let d of everyData_3 ){
                             if( !arrData['isShow'] && this.data.searchText !== '' && ( d.fieldName.indexOf( this.data.searchText ) !== -1 || d.fieldValue.toString().indexOf( this.data.searchText ) !== -1 ) ){
                                 arrData['isShow'] = true;
@@ -690,7 +686,6 @@ let config = {
                     },{
                         cancelFields: this.data.cancel_fields,
                     }).then(data => {
-                        console.log(data);
                 });
             }
 
@@ -738,7 +733,6 @@ let config = {
 
         // 获取左侧日历树中不显示数据
         Mediator.on('calendar-left:unshowData', data => {
-            console.log(11111);
             if(data['data']) {
                 this.data.isShowArr = data['data'];
                 let arr = ['remind'];
@@ -841,7 +835,6 @@ let config = {
             data['to_date'] = this.data.to_date;
             data['cancel_fields'] = JSON.stringify(this.data.cancel_fields);
             CalendarService.getCalendarDrag(data).then(res => {
-                console.log(res);
             })
         });
 

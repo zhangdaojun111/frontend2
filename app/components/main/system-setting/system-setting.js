@@ -183,6 +183,19 @@ let config = {
         changeTheme:function (target,event) {
             let newTheme = event.currentTarget.attributes[0].value;
             $('body').attr('class',newTheme);
+            $(target).addClass('active').siblings().removeClass('active');
+            window.config.sysConfig.userInfo.theme = newTheme;
+            UserInfoService.saveUserTheme(newTheme).done((res) => {
+                if(res['success'] === 0){
+                    console.log('save failed');
+                }
+            })
+        },
+        initThemeUl:function () {
+            if(window.config.sysConfig.userInfo.hasOwnProperty('theme') && window.config.sysConfig.userInfo.theme !== ''){
+                let theme = window.config.sysConfig.userInfo.theme;
+                this.el.find(`li[data-value = ${theme}]`).addClass('active').siblings().removeClass('active');
+            }
         }
     },
     binds:[ 
@@ -230,6 +243,7 @@ let config = {
         }
     ],
     afterRender:function () {
+        this.actions.initThemeUl();
         this.actions.getItemData();
     },
     beforeDestory:function () {

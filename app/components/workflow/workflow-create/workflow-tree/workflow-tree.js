@@ -164,8 +164,6 @@ let config = {
             this.el.find('.tree-list').find('.child-back').removeClass('child-back');
             let addNode = li.filter('.xixi').not('.haha').find('.child-list').find('.xixi');
             let newNode = li.not('.haha').find('.child-item');
-            console.log(addNode);
-            console.log(newNode);
             if(addNode.length){
                 addNode.eq(0).addClass("child-back");
             }else{

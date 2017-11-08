@@ -7,7 +7,6 @@ import TreeView from  '../../components/util/tree/tree';
 import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
 
 //请求部门员工信息，加载树
-console.log('wf');
 let tree=[];
 let staff=[];
 function recursion(arr,slnds,pubInfo){
