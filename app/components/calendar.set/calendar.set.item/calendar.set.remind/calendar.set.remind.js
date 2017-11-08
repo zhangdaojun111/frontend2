@@ -47,11 +47,11 @@ let config = {
          * 保存提醒设置
          */
         checkRemindStatus:function () {
-            if( ( this.data.smsStatus === '1' && this.data.smsReciver.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailReciver.length === 0 ) ){
+            if( ( this.data.smsStatus === 1 && this.data.smsReciver.length === 0 ) || ( this.data.emailStatus === 1 && this.data.emailReciver.length === 0 ) ){
                 MSG.alert( "已开启提醒的收件人不能为空" );
                 return;
             }
-            if( ( this.data.smsStatus === '1' && this.data.smsRemindTime.length === 0 ) || ( this.data.emailStatus === '1' && this.data.emailRemindTime.length === 0 ) ){
+            if( ( this.data.smsStatus === 1 && this.data.smsRemindTime.length === 0 ) || ( this.data.emailStatus === 1 && this.data.emailRemindTime.length === 0 ) ){
                 MSG.alert( "已开启提醒的提醒时间不能为空" );
                 return;
             }
@@ -211,11 +211,9 @@ let config = {
             this.data.emailAddressList = params.data.emailAddressList;
             this.data.recipients = params.data.recipients;
             this.data.copypeople = params.data.copypeople;
-            console.log(this.data.copypeople);
             this.data.recipients_per = params.data.recipients_per;
             this.data.sms = params.data.sms;
             this.data.email = params.data.email;
-            console.log(this.data);
             if (this.data.smsStatus === 1) {
                 this.el.find('.open-sms-remind').addClass('checked');
             } else {

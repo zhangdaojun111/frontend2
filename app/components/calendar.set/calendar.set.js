@@ -60,12 +60,10 @@ let config = {
          */
         getMultiSelectDropdown: function () {
             let res = this.data.filedHead;
-            console.log(res);
             this.data.dropdown = [];
             this.data.dropdownForRes = [];
             for (let columenListIndex in res) {
                 let item = res[columenListIndex];
-                // console.log(item);
                 if (item['dinput_type'] === "3" || item['dinput_type'] === "5" || item["real_type"] === "3" || item["real_type"] === "5") {
                     this.data.rowTitle.push(item);
                 }
@@ -83,7 +81,6 @@ let config = {
                     }
                 }
             }
-            console.log(this.data.dropdownForRes);
             this.actions.getSetting(this.data.tableId);
         },
 
@@ -153,7 +150,6 @@ let config = {
                 this.actions.createSettingRow();
 
             }).catch(err => {
-                console.log('error', err);
             });
         },
 
@@ -415,7 +411,6 @@ let config = {
         UserInfoService.getAllUsersInfo().then(user => {
             this.data.copypeople = [];
             for (let data of user.rows) {
-                console.log(data.name,data.name.indexOf('离职'));
                 if(data.name.indexOf('离职') === -1){
                     this.data.copypeople.push({name: data.name, id: data.id});
                 }
