@@ -1,79 +1,93 @@
-body.blue{
+body.orange{
     #aside{
-        background-color: #327ed3;
+        background-color: #e57e17;
         .aside-wrap{
             .s-name{
-                background-color: #2b74c6;
+                background-color: #c9690a;
                 .erds-logo{
-                    color: #79abe1;
+                    color: #FFAE35;
                 }
                 .text{
-                    color: #ffffff;
+                    color: #FFECD0;
                 }
             }
             .s-uinfo{
-                background-color: #276ab4;
+                background-color: #dc730a;
                 .u-name,.u-role{
-                    color: #BFD8F2 !important;
+                    color: #FFECD0 !important;
                     span{
-                        color: #ffffff !important;
+                        color: #FFECD0 !important;
                     }
+                }
+                .startwrokflow{
+                    background-color: #ffac2f;
                 }
 
                 .personal-setting{
                     i{
-                        background-image: url("../../images/theme/blue/icon-blue-setting.png");
+                        background-image: url("../../images/theme/orange/icon-orange-setting.png");
                     }
                 }
             }
 
             .tabs{
                 p{
-                    color: #649DDD;
+                    color: #FFAE35;
                     &:first-child {
-                        border-right: 1px solid #72a6de;
+                        border-right: 1px solid #cf6c1c;
                     }
                     &.active {
-                        color: #fff;
+                        color: #FFECD0;
                     }
                 }
                 .edit{
-                    background: url("../../images/theme/blue/icon-blue-edit.png");
+                    background: url("../../images/theme/orange/icon-orange-edit.png");
                 }
             }
             .menu{
                 label{
-                    border-bottom: 1px solid #70a5e0;
+                    border-bottom: 1px solid #d16d0a;
                 }
                 .search{
-                    background-image: url("../../images/theme/blue/icon-blue-search.png");
+                    background-image: url("../../../assets/images/theme/orange/icon-orange-search.png");
                     input{
                         &::-webkit-input-placeholder{
-                            color:rgb(100, 157, 221);
+                            color:rgb(255, 174, 53);
                         }
                     }
                     &.highlight{
-                        border-bottom: 1px solid #BFD8F2;
+                        border-bottom: 1px solid rgb(255, 172, 47);
                         //background-image: url("../../images/theme/blue/icon-blue-search.png");
                     }
                 }
 
                 .menu-full{
                     .name{
-                        color: #BFD8F2;
+                        color: #FFD28E;
                     }
                     .ui-state-active ~p{
-                        color: #FFFFFF;
+                        color: #FFECD0;
                     }
                     .icon{
                         &.lv1 {
-                            background: url("../../images/theme/blue/icon-blue-floder.png");
+                            background: url("../../images/theme/orange/icon-orange-floder.png");
                         }
                     }
                     .root{
                         .row{
                             &:hover, &.current {
-                                background-color: #4a8ed9;
+                                background-color: rgba(255,145,23,1);
+                            }
+                        }
+                    }
+
+                    .childlist{
+                        .row{
+                            .name{
+                                color: #FFECD0;
+                            }
+                            &:hover, &.current {
+                                background-color: rgba(255,145,23,1) !important;
                             }
                         }
                     }
@@ -83,10 +97,10 @@ body.blue{
                 &.mini{
                     .root{
                         > li > .menu-full-item {
-                            background-color: #327ed3;
+                            background-color: #e57e17;
                             .row{
                                 &:hover, &.current {
-                                    background-color: #4a8ed9;
+                                    background-color: rgba(255,145,23,1);
                                 }
                             }
                         }
@@ -95,12 +109,12 @@ body.blue{
                     .menu-full{
                         .childlist{
                             .row{
-                                background-color: #327ed3;
+                                background-color: #e57e17;
                                 color: #fff;
                                 &:hover, &.current {
                                     background-color: #fff !important;
                                     p{
-                                        color: #327ed3 !important;
+                                        color: #e57e17 !important;
                                     }
                                 }
 

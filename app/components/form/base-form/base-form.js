@@ -1382,14 +1382,14 @@ let config = {
 				this.actions.requiredCondition(data, data['value']);
 			}
 
-			// let calcData = {
-			// 	val: data['value'],
-			// 	effect: data["effect"],
-			// 	id: data['id']
-			// };
-			// if(!this.actions.webCalcExpression(data)){
-			// 	this.actions.calcExpression(calcData, data['value']);
-			// };
+			let calcData = {
+				val: data['value'],
+				effect: data["effect"],
+				id: data['id']
+			};
+			if(!this.actions.webCalcExpression(data)){
+				this.actions.calcExpression(calcData, data['value']);
+			};
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
 			}
