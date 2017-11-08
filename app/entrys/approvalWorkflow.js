@@ -181,10 +181,6 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     });
     console.log('********')
     console.log(res.record_info);
-    if(!window.top.recordIds){
-        window.top.recordIds={};
-    }
-    window.top.recordIds[res.record_info.table_id]=res.record_info.id
     AgGrid.actions.returnBatchData = function (ids) {
         temp_ids=ids;
     };
