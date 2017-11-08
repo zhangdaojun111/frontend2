@@ -720,7 +720,7 @@ let config = {
             //合同编辑器
             else if (real_type == fieldTypeService.TEXT_COUNT_TYPE) {
                 sHtml = '<a' + bgStyle + ' class="view-contract">' + "查看" + '</a>' + '<span>' + "丨" + '</span>' + '<a class="download-contract">' + '下载' + '</a>';
-                sHtml = '<span '+ bgStyle +'><a style="color:#337ab7;" class="view-contract">查看</a>丨<a style="color:#337ab7;" class="download-contract">下载</a></span>';
+                sHtml = '<span '+ bgStyle +'><a class="view-contract">查看</a>丨<a class="download-contract">下载</a></span>';
             }
 
             //表对应关系（不显示为数字）
@@ -1716,6 +1716,8 @@ let config = {
                 groupCheck: this.data.groupCheck,
                 rowId: this.data.rowId,
                 parentRealId: this.data.parentRealId,
+                parentTempId: this.data.parentTempId,
+                parentTableId: this.data.parentTableId,
                 fieldId: this.data.fieldId,
                 tableType: this.data.tableType,
                 filterParam: filer

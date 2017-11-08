@@ -1,6 +1,6 @@
 .form-chart-pie {
     .form-group {
-        > div:nth-last-child(3),> div:nth-last-child(4){
+        .endLimitNum,.limitNum{
             .form-chart-wrapper {
                 span {
                     margin-left: 16px;

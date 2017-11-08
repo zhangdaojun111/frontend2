@@ -1,79 +1,89 @@
-body.blue{
+body.ink-blue{
     #aside{
-        background-color: #327ed3;
+        background-color: #2f4254;
         .aside-wrap{
             .s-name{
-                background-color: #2b74c6;
+                background-color: #283847;
                 .erds-logo{
-                    color: #79abe1;
+                    color: #0088ff;
                 }
                 .text{
                     color: #ffffff;
                 }
             }
             .s-uinfo{
-                background-color: #276ab4;
+                background-color: #2c3e4f;
                 .u-name,.u-role{
-                    color: #BFD8F2 !important;
+                    color: rgb(172, 191, 208) !important;
                     span{
-                        color: #ffffff !important;
+                        color: #0088FF !important;
                     }
                 }
 
                 .personal-setting{
                     i{
-                        background-image: url("../../images/theme/blue/icon-blue-setting.png");
+                        background-image: url("../../images/theme/ink-blue/icon-ink-blue-setting.png");
                     }
                 }
             }
 
             .tabs{
                 p{
-                    color: #649DDD;
+                    color: #7191AE;
                     &:first-child {
-                        border-right: 1px solid #72a6de;
+                        border-right: 1px solid #45617a;
                     }
                     &.active {
-                        color: #fff;
+                        color: #ACBFD0;
                     }
                 }
                 .edit{
-                    background: url("../../images/theme/blue/icon-blue-edit.png");
+                    background: url("../../images/theme/ink-blue/icon-ink-blue-edit.png");
                 }
             }
             .menu{
                 label{
-                    border-bottom: 1px solid #70a5e0;
+                    border-bottom: 1px solid #44617b;
                 }
                 .search{
-                    background-image: url("../../images/theme/blue/icon-blue-search.png");
+                    background-image: url("../../../assets/images/theme/ink-blue/icon-ink-blue-search.png");
                     input{
                         &::-webkit-input-placeholder{
-                            color:rgb(100, 157, 221);
+                            color:rgb(94, 131, 164);
                         }
                     }
                     &.highlight{
-                        border-bottom: 1px solid #BFD8F2;
-                        //background-image: url("../../images/theme/blue/icon-blue-search.png");
+                        border-bottom: 1px solid #ACBFD0;
+                        //background-image: url("../../images/theme/blue/icon-blue-search-1.png");
                     }
                 }
 
                 .menu-full{
                     .name{
-                        color: #BFD8F2;
+                        color: #7191AE;
                     }
                     .ui-state-active ~p{
-                        color: #FFFFFF;
+                        color: #ACBFD0;
                     }
                     .icon{
                         &.lv1 {
-                            background: url("../../images/theme/blue/icon-blue-floder.png");
+                            background: url("../../images/theme/ink-blue/icon-ink-blue-floder.png");
                         }
                     }
                     .root{
                         .row{
                             &:hover, &.current {
-                                background-color: #4a8ed9;
+                                background-color: rgba(61,86,109,1);
+                            }
+                        }
+                    }
+                    .childlist{
+                        .row{
+                            .name{
+                                color: #ACBFD0;
+                            }
+                            &:hover, &.current {
+                                background-color: rgba(61,86,109,1) !important;
                             }
                         }
                     }
@@ -83,10 +93,10 @@ body.blue{
                 &.mini{
                     .root{
                         > li > .menu-full-item {
-                            background-color: #327ed3;
+                            background-color: #2f4254;
                             .row{
                                 &:hover, &.current {
-                                    background-color: #4a8ed9;
+                                    background-color: rgba(61,86,109,1);
                                 }
                             }
                         }
@@ -95,15 +105,14 @@ body.blue{
                     .menu-full{
                         .childlist{
                             .row{
-                                background-color: #327ed3;
+                                background-color: #2f4254;
                                 color: #fff;
                                 &:hover, &.current {
                                     background-color: #fff !important;
                                     p{
-                                        color: #327ed3 !important;
+                                        color: #2f4254 !important;
                                     }
                                 }
-
                             }
                         }
                     }

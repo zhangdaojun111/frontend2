@@ -164,10 +164,6 @@ let config = {
 }
 
 class WorkFlowCreate extends Component{
-    // constructor (data){
-    //     super(config,data);
-    //     console.log(this);
-    // }
 
     constructor(data,newConfig){
         super($.extend(true,{},config,newConfig,{data:data||{}}));

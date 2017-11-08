@@ -1,5 +1,4 @@
 .form-chart-normal {
-
     .form-group {
         .form-chart-normal {
             .auto-select-component {
@@ -22,7 +21,7 @@
                 }
             }
         }
-        > div:nth-last-child(3),> div:nth-last-child(4), > div:nth-last-child(6), > div:nth-last-child(7), > div:nth-last-child(9) {
+        .marginBottomx, .textNum, .marginBottom, .limitNum, .endLimitNum {
             .form-chart-wrapper {
                 span {
                     margin-left: 16px;
@@ -34,5 +33,4 @@
             }
         }
     }
-
 }

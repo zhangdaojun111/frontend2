@@ -194,7 +194,6 @@ let config = {
          *从隐藏栏中显示日历树
          */
         showRemindType: function (data) {
-            console.log(this.data.rows);
             if (this.el.find(".label-select-all-show").length === 0) {
                 this.el.find(".checkbox_a3").addClass('label-select-all-checked');
             }

@@ -30,7 +30,6 @@ let config = {
             let time = yy+"-"+mm+"-01";
             let moment = require('moment');
             let week = moment(time,"YYYY-MM-DD").format('d');
-            console.log(week);
             let calendarTable = [];
             for(let i=0 ;i<42;i++){
                 calendarTable[i] = "";　

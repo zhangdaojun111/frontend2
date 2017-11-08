@@ -18,17 +18,12 @@ let config={
             event: 'click',
             selector: '.comment-attachment',
             callback: function (e) {
-                console.log("++++++++++++++++++++");
-                console.log("++++++++++++++++++++");
-                console.log("++++++++++++++++++++");
-                console.log(this.data.approve_tips[e.id]);
                 if(this.data.approve_tips[e.id].comment_attachment.length > 0) {
                     let params = {
                         file_ids: JSON.stringify(this.data.approve_tips[e.id].comment_attachment),
                         dinput_type: '9'
                     };
                     workflowService.getAttachmentList(params).then(res => {
-                        console.log(res);
                         if(res.success){
                             let list = res["rows"];
                             for( let data of list ){
@@ -103,21 +98,6 @@ let config={
             let J_tooltip=$("#J_tooltip");
             self.actions.tipsMousemove(pos,J_tooltip,e)
         });
-        // this.el.on('click', '.comment-attachment', () => {
-        //     console.log("++++++++++++++++++++");
-        //     console.log("++++++++++++++++++++");
-        //     console.log("++++++++++++++++++++");
-        //     console.log(this.data.approve_tips, this);
-        //     if(this.data.approve_tips.comment_attachment.length > 0) {
-        //         AttachmentList.data.list = this.data.comment_attachment;
-        //         AttachmentList.data.is_view = true;
-        //         PMAPI.openDialogByComponent(AttachmentList,{
-        //             width: 900,
-        //             height: 600,
-        //             title: '附件列表'
-        //         })
-        //     }
-        // })
     }
 
 };

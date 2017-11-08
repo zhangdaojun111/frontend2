@@ -36,7 +36,6 @@ let config = {
             em.remove();
             el.remove();
             if(el.hasClass('deloldimg')){
-                console.log();
                 let id = el.attr('data-imgid');
                 this.data.delsign.push(parseInt(id));
             }
@@ -78,7 +77,6 @@ let config = {
             for (let i=0;i<len;i++){
                 let left = imgInfo[i].viewLeft + "%";
                 let top = imgInfo[i].viewTop + "%";
-                // console.log(window.config);
                 if(imgInfo[i].user == window.config.ID&&this.data.view){
                     html += `<div class='deloldimg noprint'  data-imgid=${imgInfo[i].id} style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px ">
                             <img style="max-height:150px;width:100%" src='/download_attachment/?file_id=${imgInfo[i].file_id}&download=0'/>
