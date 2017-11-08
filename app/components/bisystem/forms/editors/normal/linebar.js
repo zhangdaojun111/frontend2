@@ -602,7 +602,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '默认展示前多少条数据'
+                        value:1, name: '默认展示多少条数据'
                     }
                 ],
                 type: 'checkbox',
@@ -622,9 +622,9 @@ let config = {
                 label: '',
                 name: 'limitNum',
                 defaultValue: 10,
-                placeholder: '请输入升序显示多少条数据',
+                placeholder: '请输入显示前多少条数据',
                 category: 'number',
-                textTip:'请输入显示多少条数据：',
+                textTip:'请输入显示前多少条数据：',
                 type: 'text',
                 events: {}
             },
@@ -632,9 +632,9 @@ let config = {
                 label: '',
                 name: 'endLimitNum',
                 defaultValue: 10,
-                placeholder: '请输入降序显示多少条数据',
+                placeholder: '请输入显示前多少条数据',
                 category: 'number',
-                textTip:'请输入显示多少条数据：',
+                textTip:'请输入显示后多少条数据：',
                 type: 'text',
                 events: {}
             },
@@ -650,6 +650,7 @@ let config = {
                 }
             },
             button,
+
         ],
         firstDo: false, // 用于在编辑模式下 第一次加载保留数据
     },
