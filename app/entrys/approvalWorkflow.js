@@ -81,14 +81,9 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         comment['index'] = count;
         count += 1;
     }
-    console.log(res.record_info.approve_tips);
     ApprovalHeader.showheader(res.record_info);
     WorkflowRecord.showRecord(res.record_info);
     let current_node_arr = res.record_info.current_node.split('、');
-    console.log( "---" )
-    console.log( res.record_info.current_node )
-    console.log( current_node_arr )
-    console.log( "---" )
     if(current_node_arr.indexOf(window.config.name)==-1){
         is_view = 1;
         $('#approval-workflow').find('.for-hide').hide();
@@ -226,7 +221,6 @@ const approveWorkflow = (para) => {
     }
     para.focus_users=JSON.stringify(focusArr);
     msgBox.showLoadingSelf();
-    console.log(para);
     // (async function () {
     //     return workflowService.approveWorkflowRecord({
     //         url: '/approve_workflow_record/',
@@ -272,7 +266,6 @@ const approveWorkflow = (para) => {
 // })
 
 Mediator.subscribe('approval:recordPass', (data) => {
-    console.log(data);
     approveWorkflow({
         record_id: obj.record_id,
         action: 0, // 0：通过 1：驳回上一级 2:驳回发起人 3：作废 4：取消 5：撤回 6：驳回任意节点 7：撤回审批 8：自动拨回到发起人 9：加签
@@ -316,7 +309,6 @@ Mediator.subscribe('approval:signUser', (signObj) => {
     });
 });
 Mediator.subscribe('approval:rejToAny', (res) => {
-    console.log(res);
     // if(res.id.length === 21){
     //     res.id = res.id.slice(5);
     // }else if(res.id.length === 19){

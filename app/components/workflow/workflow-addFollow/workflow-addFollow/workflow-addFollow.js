@@ -52,7 +52,6 @@ let config={
         });
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
-            console.log('ss');
             let arr = [];
             let checked=this.el.find('#staffMulti .search-check-row');
             let len = checked.length;

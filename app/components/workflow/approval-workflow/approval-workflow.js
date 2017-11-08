@@ -249,7 +249,6 @@ let config={
                     title:'提示'
                 }
             ).then(res => {
-                console.log(res);
                 if(res.determine){
                     // Mediator.publish('workflow:comment',res);
                     Mediator.publish("approval:recordPass",{imgInfo: this.data.imgInfo, comment: res});
@@ -301,7 +300,6 @@ let config={
                     record_id:obj.record_id
                 }
             ).then(res=>{
-                console.log(res);
                 if(!res.onlyclose){
                     // Mediator.publish('workflow:comment',res.comment);
                     Mediator.publish('approval:rejToAny',res);

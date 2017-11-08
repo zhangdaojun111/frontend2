@@ -97,7 +97,6 @@ let config = {
             this.el.find('#addFollowerList').empty();
         });
         Mediator.on('getDefaultFocusUsers', (data) => {
-            console.log(data);
             workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
                 this.data.htmlStr = [];
                 this.data.allUsersInfo = res.rows;
@@ -106,7 +105,6 @@ let config = {
                     this.data.idArr = data['updateuser2focususer'][key];
                     this.data.htmlStr = [];
                     for(let i of this.data.idArr) {
-                        console.log(i);
                         this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
                         this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];
                         this.data.htmlStr.push(`<span class="selectSpan">${this.data.allUsersInfo[i]['name']}</span>`);
