@@ -164,6 +164,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
                 cache_new:JSON.stringify(formData.obj_new),
                 cache_old:JSON.stringify(formData.obj_old),
             };
+            console.log('0000000   ',postData)
             (async function () {
                 return await workflowService.createWorkflowRecord(postData);
             })().then(res=>{
