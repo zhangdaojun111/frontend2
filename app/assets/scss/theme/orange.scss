@@ -1,89 +1,93 @@
-body.ink-blue{
+body.orange{
     #aside{
-        background-color: #2f4254;
+        background-color: #e57e17;
         .aside-wrap{
             .s-name{
-                background-color: #283847;
+                background-color: #c9690a;
                 .erds-logo{
-                    color: #0088ff;
+                    color: #FFAE35;
                 }
                 .text{
-                    color: #ffffff;
+                    color: #FFECD0;
                 }
             }
             .s-uinfo{
-                background-color: #2c3e4f;
+                background-color: #dc730a;
                 .u-name,.u-role{
-                    color: rgb(172, 191, 208) !important;
+                    color: #FFECD0 !important;
                     span{
-                        color: #0088FF !important;
+                        color: #FFECD0 !important;
                     }
+                }
+                .startwrokflow{
+                    background-color: #ffac2f;
                 }
 
                 .personal-setting{
                     i{
-                        background-image: url("../../images/theme/ink-blue/icon-ink-blue-setting.png");
+                        background-image: url("../../images/theme/orange/icon-orange-setting.png");
                     }
                 }
             }
 
             .tabs{
                 p{
-                    color: #7191AE;
+                    color: #FFAE35;
                     &:first-child {
-                        border-right: 1px solid #45617a;
+                        border-right: 1px solid #cf6c1c;
                     }
                     &.active {
-                        color: #ACBFD0;
+                        color: #FFECD0;
                     }
                 }
                 .edit{
-                    background: url("../../images/theme/ink-blue/icon-ink-blue-edit.png");
+                    background: url("../../images/theme/orange/icon-orange-edit.png");
                 }
             }
             .menu{
                 label{
-                    border-bottom: 1px solid #44617b;
+                    border-bottom: 1px solid #d16d0a;
                 }
                 .search{
-                    background-image: url("../../../assets/images/theme/ink-blue/icon-ink-blue-search.png");
+                    background-image: url("../../../assets/images/theme/orange/icon-orange-search.png");
                     input{
                         &::-webkit-input-placeholder{
-                            color:rgb(94, 131, 164);
+                            color:rgb(255, 174, 53);
                         }
                     }
                     &.highlight{
-                        border-bottom: 1px solid #ACBFD0;
-                        //background-image: url("../../images/theme/blue/icon-blue-search-1.png");
+                        border-bottom: 1px solid rgb(255, 172, 47);
+                        //background-image: url("../../images/theme/blue/icon-blue-search.png");
                     }
                 }
 
                 .menu-full{
                     .name{
-                        color: #7191AE;
+                        color: #FFD28E;
                     }
                     .ui-state-active ~p{
-                        color: #ACBFD0;
+                        color: #FFECD0;
                     }
                     .icon{
                         &.lv1 {
-                            background: url("../../images/theme/ink-blue/icon-ink-blue-floder.png");
+                            background: url("../../images/theme/orange/icon-orange-floder.png");
                         }
                     }
                     .root{
                         .row{
                             &:hover, &.current {
-                                background-color: rgba(61,86,109,1);
+                                background-color: rgba(255,145,23,1);
                             }
                         }
                     }
+
                     .childlist{
                         .row{
                             .name{
-                                color: #ACBFD0;
+                                color: #FFECD0;
                             }
                             &:hover, &.current {
-                                background-color: rgba(61,86,109,1) !important;
+                                background-color: rgba(255,145,23,1) !important;
                             }
                         }
                     }
@@ -93,10 +97,10 @@ body.ink-blue{
                 &.mini{
                     .root{
                         > li > .menu-full-item {
-                            background-color: #2f4254;
+                            background-color: #e57e17;
                             .row{
                                 &:hover, &.current {
-                                    background-color: rgba(61,86,109,1);
+                                    background-color: rgba(255,145,23,1);
                                 }
                             }
                         }
@@ -105,14 +109,15 @@ body.ink-blue{
                     .menu-full{
                         .childlist{
                             .row{
-                                background-color: #2f4254;
+                                background-color: #e57e17;
                                 color: #fff;
                                 &:hover, &.current {
                                     background-color: #fff !important;
                                     p{
-                                        color: #2f4254 !important;
+                                        color: #e57e17 !important;
                                     }
                                 }
+
                             }
                         }
                     }

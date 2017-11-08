@@ -55,6 +55,9 @@
                             &.ink-blue-square{
                                 background:linear-gradient(180deg, rgba(47, 66, 84, 1) 0%, rgba(47, 66, 84, 1) 0%, rgba(117, 149, 179, 1) 100%, rgba(117, 149, 179, 1) 100%)
                             }
+                            &.orange-square{
+                                background-color: orange;
+                            }
                             .current-theme{
                                 position: absolute;
                                 width: 16px;

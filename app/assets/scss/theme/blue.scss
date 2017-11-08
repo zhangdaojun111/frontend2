@@ -46,15 +46,15 @@ body.blue{
                     border-bottom: 1px solid #70a5e0;
                 }
                 .search{
-                    background-image: url("../../../assets/images/framework/highlight-search.png");
+                    background-image: url("../../images/theme/blue/icon-blue-search.png");
                     input{
                         &::-webkit-input-placeholder{
                             color:rgb(100, 157, 221);
                         }
                     }
                     &.highlight{
-                        border-bottom: 1px solid rgb(204,204,204);
-                        background-image: url("../../images/theme/blue/icon-blue-search-1.png");
+                        border-bottom: 1px solid #BFD8F2;
+                        //background-image: url("../../images/theme/blue/icon-blue-search.png");
                     }
                 }
 
