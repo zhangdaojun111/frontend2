@@ -187,14 +187,14 @@ let config = {
 
             let ySelectedGroup = [];
             data.ySelectedGroup.forEach(item => {
-               if (item) {
-                   for (let y of yAxis){
-                       if (item.id === y.field.id) {
-                           ySelectedGroup.push(y);
-                           break;
-                       }
-                   }
-               }
+                if (item) {
+                    for (let y of yAxis){
+                        if (item.id === y.field.id) {
+                            ySelectedGroup.push(y);
+                            break;
+                        }
+                    }
+                }
             });
             let advancedDataTemplates = this.formItems.advancedDataTemplates.getValue();
             let chart = {
@@ -231,10 +231,10 @@ let config = {
 
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
-                   let isValid = this.formItems[key].valid();
-                   if (!isValid) {
-                       pass = false;
-                   };
+                    let isValid = this.formItems[key].valid();
+                    if (!isValid) {
+                        pass = false;
+                    };
                 }
             };
 
@@ -550,6 +550,7 @@ let config = {
                 category: 'number',
                 textTip:'x轴下边距：',
                 type: 'text',
+                class: 'marginBottomx',
                 events: {}
             },
             {
@@ -584,6 +585,7 @@ let config = {
                 type: 'text',
                 category: 'number',
                 textTip:'x轴每行字数：',
+                class: 'textNum',
                 events: {}
             },
             {
@@ -593,6 +595,7 @@ let config = {
                 placeholder: 'x轴下边距',
                 category: 'number',
                 type: 'text',
+                class: 'marginBottom',
                 textTip:'x轴下边距：',
                 events: {}
             },
@@ -626,6 +629,7 @@ let config = {
                 category: 'number',
                 textTip:'请输入显示前多少条数据：',
                 type: 'text',
+                class: 'limitNum',
                 events: {}
             },
             {
@@ -636,6 +640,7 @@ let config = {
                 category: 'number',
                 textTip:'请输入显示后多少条数据：',
                 type: 'text',
+                class: 'endLimitNum',
                 events: {}
             },
             {
