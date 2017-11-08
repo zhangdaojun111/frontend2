@@ -96,7 +96,9 @@ let config={
                 });
             }
             if(this.data.flag===true){
-                this.hideLoading();
+                setTimeout(() => {
+                    this.hideLoading();
+                },800);
                 this.data.flag=false;
             }
         });
