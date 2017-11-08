@@ -9,7 +9,7 @@ import {dataTableService} from '../../../../services/dataGrid/data-table.service
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {HTTP} from "../../../../lib/http";
 import DateTimeControl from "../../../form/datetime-control/datetime-control";
-import DateControl from "../../../form/date-control/date-control";
+import DateControl from "../grid-data-control/grid-data-control";
 import TimeControl from "../../../form/time-control/time-control";
 import Mediator from "../../../../lib/mediator"
 import addQuery from '../common-query-add/common-query-add.js';
