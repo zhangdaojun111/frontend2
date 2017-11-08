@@ -718,9 +718,9 @@ let config = {
 					if (j == 0) {
 						for (let field of arr) {
 							this.data.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
-							if(this.data.childComponents.data[field]){
-								this.data.childComponents.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
-								this.data.childComponents.data[field].reload();
+							if(this.data.childComponent[field].data){
+								this.data.childComponent[field].data[obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
+								this.data.childComponent[field].reload();
 							}
 						}
 					}
@@ -745,9 +745,9 @@ let config = {
 					}
 				}
 				this.data.data[key][obj[affectType]] = arr;
-				if(this.data.childComponents.data[key]){
-					this.data.childComponents.data[key][obj[affectType]] = arr;
-					this.data.childComponents.data[key].reload();
+				if(this.data.childComponent[key]){
+					this.data.childComponent[key].data[obj[affectType]] = arr;
+					this.data.childComponent[key].reload();
 				}
 				// if (affectType == 'multi-select') {
 				// 	this.data.data[key]['value'] = [];
