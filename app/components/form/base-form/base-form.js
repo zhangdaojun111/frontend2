@@ -934,7 +934,7 @@ let config = {
 
 						// 给统计赋值
 						for (let d in res["data"]) {
-							this.actions.setFormValue(d, res["data"][d]);
+                            this.actions.setFormValue(d, this.actions.showAccuracy(d,res["data"][d]));
 						}
                         if(res){
                             let calcData = {
@@ -1015,7 +1015,7 @@ let config = {
 						this.actions.triggerSingleControl(k)
 					}
 				} else {
-					this.actions.setFormValue.bind(this)(k, res["data"][k]);
+                    this.actions.setFormValue(k, this.actions.showAccuracy(k,res["data"][k]));
 					this.actions.triggerSingleControl(k);
 				}
 			}
@@ -1492,7 +1492,19 @@ let config = {
 				}
 			}
 		},
-
+		//小数显示精度
+        showAccuracy(dfield, value) {
+            let data = this.data.data[dfield];
+            if(data){
+                value =new Number(value) ;
+                if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(data["real_type"]) != -1){
+                    let accuracy = data["accuracy"];
+                    value = value.toFixed(accuracy);
+                }
+                return value;
+            }
+            return value;
+        },
 		//添加按钮组
 		addBtn() {
 			this.el.find('.ui-btn-box').remove();
