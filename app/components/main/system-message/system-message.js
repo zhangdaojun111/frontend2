@@ -239,6 +239,8 @@ let config = {
          * @param $event
          */
         openDialog:function ($event) {
+        	console.log('查看操作');
+        	console.log($event)
             let data = $event.data;
             // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
             //     data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') || data.msg_type === '关注消息') {
@@ -247,6 +249,8 @@ let config = {
                     data.url += "&btnType=edit";
                 }else if(data.handle_status_text === '已取消'){
                     data.url += "&btnType=view";
+                }else if(data.handle_status_text === '已被通过'){
+	                data.url += "&btnType=view";
                 }
 
                 PMAPI.openDialogByIframe(data.url, {

@@ -26,16 +26,13 @@ serchStr.split('&').forEach(res => {
     obj[arr[0]] = arr[1];
 });
 is_view=obj.btnType==='view'?1:0;
-console.log(obj);
-console.log(window.config.key)
 PMAPI.getIframeParams(obj.key).then(res => {
     if(res.data.current_node) {
-        console.log(res);
         if(res.data.current_node.indexOf(window.config.name)===-1){
-            console.log('111111111111');
             is_view = 1;
         }
     }
+
 
     ApprovalWorkflow.showDom().then(function (component) {
         WorkFlowGrid.showGrid();
