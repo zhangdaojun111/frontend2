@@ -985,14 +985,6 @@ let config = {
 			} else {
 				_this.el.find('#requiredLogo').removeClass().addClass('required2');
 			}
-            if (_this.data.type == 'Buildin' && ( _this.data.value !== '' )) {
-                _this.el.find('#requiredLogo').removeClass().addClass('required2');
-                console.log(_this.data.value)
-              //  debugger
-            }else{
-				//debugger
-                console.log(_this.data.value)
-			}
 			//富文本必填性改变
 			if (_this.data.type == 'Editor' && ( _this.data.value.replace(/<.*?>/ig, "").replace(/\s/g, "") === '' )) {
 				_this.el.find('#requiredLogo').removeClass().addClass('required');
@@ -1023,10 +1015,7 @@ let config = {
 						this.actions.triggerSingleControl(k)
 					}
 				} else {
-                    this.actions.checkValue(res["data"][k])
 					this.actions.setFormValue.bind(this)(k, res["data"][k]);
-                    console.log('++++++++++++++')
-					console.log(res["data"][k])
 					this.actions.triggerSingleControl(k);
 
 				}
