@@ -31,8 +31,6 @@ import {CreateFormServer} from "../../services/formService/CreateFormServer";
 let serchStr = location.search.slice(1);
 let obj = {}, is_view = 0,cache_old;
 let action;
-console.log('++++++++++++obj++++++++++++++++++')
-console.log(obj)
 serchStr.split('&').forEach(res => {
     let arr = res.split('=');
     obj[arr[0]] = arr[1];

@@ -193,8 +193,6 @@ let config={
                 msgBox.alert(`${formData.errorMessage}`);
             } else {
                 msgBox.showLoadingSelf();
-                console.log('workflowService.recordIds[obj.table_id')
-                console.log(window.top.recordIds);
                 let postData = {
                     //flow_id: obj.flow_id,
                     flow_id: '',
@@ -211,7 +209,8 @@ let config={
                     parent_real_id:obj.parent_real_id,
                     parent_temp_id:'',
                     // parent_record_id:obj.parent_record_id
-                    parent_record_id:window.top.recordIds[obj.table_id],
+                    //parent_record_id:window.top.recordIds[obj.table_id],
+                    parent_record_id:obj.parent_record_id
                 };
                 //半触发操作用
                 if( obj.data_from_row_id ){

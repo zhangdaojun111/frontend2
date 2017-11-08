@@ -180,6 +180,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         recordId: obj.record_id,
         viewMode:"approveBatch",
         cannotopenform: cannotopenform,
+        parentRecordId:res['record_info']['id'],
     });
     console.log('********')
     console.log(res.record_info);
