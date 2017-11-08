@@ -1507,8 +1507,8 @@ let config = {
         showAccuracy(dfield, value) {
             let data = this.data.data[dfield];
             if(data){
-                value =new Number(value) ;
-                if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(data["real_type"]) != -1){
+                if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(data["real_type"]) != -1) {
+                    value = new Number(value);
                     let accuracy = data["accuracy"];
                     value = value.toFixed(accuracy);
                 }

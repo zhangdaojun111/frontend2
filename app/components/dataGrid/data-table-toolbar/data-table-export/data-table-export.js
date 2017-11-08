@@ -227,6 +227,10 @@ let exportSetting = {
                 json['fieldId'] = this.data.fieldId;
                 json['rowId'] = this.data.rowId;
                 json['tableType'] = this.data.tableType;
+            } else if(this.data.tableType == 'child') {
+                json['parent_table_id'] = this.data.parentTableId;
+                json['parent_real_id'] = this.data.parentRealId;
+                json['parent_temp_id'] = this.data.parentTempId;
             }
             let url = this.actions.returnIframeUrl( '/export/',json );
             this.el.find( '.export-btn' )[0].href = url;

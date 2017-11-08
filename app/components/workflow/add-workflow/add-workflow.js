@@ -193,15 +193,15 @@ let config={
             } else {
                 msgBox.showLoadingSelf();
                 let postData = {
-                    flow_id: obj.flow_id,
+                    flow_id: '',
                     focus_users: JSON.stringify(this.data.focusArr) || [],
                     data: JSON.stringify(formData),
                     cache_new:JSON.stringify(formData),
                     cache_old:JSON.stringify(this.data.cache_old),
                     table_id:obj.table_id,
-                    parent_table_id:obj.parent_table_id,
+                    parent_table_id:'',
                     parent_real_id:obj.parent_real_id,
-                    parent_temp_id:obj.parent_temp_id,
+                    parent_temp_id:'',
                     parent_record_id:obj.parent_record_id
                 };
                 //半触发操作用

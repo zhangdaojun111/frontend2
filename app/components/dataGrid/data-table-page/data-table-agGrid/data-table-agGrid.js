@@ -1716,6 +1716,8 @@ let config = {
                 groupCheck: this.data.groupCheck,
                 rowId: this.data.rowId,
                 parentRealId: this.data.parentRealId,
+                parentTempId: this.data.parentTempId,
+                parentTableId: this.data.parentTableId,
                 fieldId: this.data.fieldId,
                 tableType: this.data.tableType,
                 filterParam: filer

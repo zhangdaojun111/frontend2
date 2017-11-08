@@ -500,6 +500,9 @@ let config = {
                         }
                     }
                     dgcService.setPreference( res[1],this.data );
+                    if (res[1]['fieldsOrder']&&this.data.orderFields.indexOf('myOperate')==-1) {
+                        this.data.orderFields.push('myOperate')
+                    }
                     this.actions.renderGrid();
                 }
                 let obj = {

@@ -172,6 +172,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         recordId: obj.record_id,
         viewMode:"approveBatch",
         cannotopenform: cannotopenform,
+        parentRecordId:res['record_info']['id'],
     });
     AgGrid.actions.returnBatchData = function (ids) {
         temp_ids=ids;
