@@ -718,6 +718,10 @@ let config = {
 					if (j == 0) {
 						for (let field of arr) {
 							this.data.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
+							if(this.data.childComponent[field].data){
+								this.data.childComponent[field].data[obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
+								this.data.childComponent[field].reload();
+							}
 						}
 					}
 				}
@@ -741,12 +745,16 @@ let config = {
 					}
 				}
 				this.data.data[key][obj[affectType]] = arr;
-				if (affectType == 'multi-select') {
-					this.data.data[key]['value'] = [];
-				} else {
-					this.data.data[key]['value'] = '';
+				if(this.data.childComponent[key]){
+					this.data.childComponent[key].data[obj[affectType]] = arr;
+					this.data.childComponent[key].reload();
 				}
-				this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
+				// if (affectType == 'multi-select') {
+				// 	this.data.data[key]['value'] = [];
+				// } else {
+				// 	this.data.data[key]['value'] = '';
+				// }
+				// this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
 			}
 		},
 
