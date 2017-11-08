@@ -80,7 +80,6 @@ let config = {
         }
     ],
     afterRender: function() {
-        console.log(this.data.remindDetail)
         // this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
         // this.el.on('click', '.open-form', () => {
         //     PMAPI.openDialogByIframe(
@@ -99,7 +98,6 @@ let config = {
 
 class CalendarRemind extends Component {
     constructor(data, newconfig = {}) {
-        console.log(data);
         config.data.remindTable = data.remindTable;
         config.data.remindDateProp = data.remindDateProp;
         config.data.remindDetail = data.remindDetail;

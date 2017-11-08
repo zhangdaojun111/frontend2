@@ -173,7 +173,6 @@ let config = {
                     let nScrollHeight = $(this)[0].scrollHeight;
                     let scrollTop = $(this)[0].scrollTop;
                     if(scrollTop + divHeight >= nScrollHeight) {
-                        console.log(that.data.firstNum);
                         if(that.data.firstNum < that.data.EndNum){
                             that.actions.newRemindTaskItem(that.data.firstNum,that.data.EndNum);
                         }

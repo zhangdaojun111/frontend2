@@ -139,7 +139,6 @@ let config = {
             window.open('/calendar_mgr/index/');
         });
         Mediator.on('CalendarMain: remindCount', data => {
-            console.log(data);
         });
     },
     beforeDestory: function () {
