@@ -1,0 +1,220 @@
+.report-content{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    .view-report{
+        color: #2BB0F2;
+        text-decoration:none;
+    }
+    .report-header{
+        height: 60px;
+        width: 100%;
+        padding-left: 10px;
+        box-sizing: border-box;
+        border-top: 1px solid #e4e4e4;
+        border-bottom: 1px solid #e4e4e4;
+        .tips {
+            height: 60px;
+            font-size: 12px;
+            padding-left: 5px;
+            display: flex;
+            width: 100px;
+            float: left;
+            i {
+                background: url("../../../assets/images/dataGrid/tab-title.png") no-repeat;
+                width: 16px;
+                height: 16px;
+                display: block;
+                margin-right: 20px;
+                margin-top: 21px;
+            }
+            span {
+                line-height: 60px;
+            }
+        }
+        .left-tool{
+            float: left;
+            position: relative;
+            margin-top: 15px;
+            margin-left: 80px;
+            .datepick {
+                display: inline-block;
+                vertical-align: middle;
+                line-height: 30px;
+                cursor: pointer;
+            }
+            .date-week{
+                display: block;
+                position: absolute;
+                left: 140px;
+                top: 9px;
+            }
+            .date-control{
+                width: 130px;
+                margin-top: 2px;
+                display: inline-block;
+                margin-left: 10px;
+                margin-right: 35px;
+                .ui-calendar{
+                    width: 100px;
+                }
+            }
+        }
+        .report-search{
+            display: block;
+            border: 1px solid #e4e4e4;
+            height: 24px;
+            width: 200px;
+            float: left;
+            margin-top: 15px;
+            margin-left: 15px;
+            .search-box{
+                width: 175px;
+                border: none;
+                vertical-align: middle;
+                height: 24px;
+                padding: 0 4px;
+                outline: none;
+            }
+            .icon-calendar{
+                float: right;
+                margin-top: 4px;
+            }
+        }
+        .right-tool{
+            height: 60px;
+            float: right;
+            margin-right: 25px;
+            .right-tool-btn{
+                display: flex;
+                cursor: pointer;
+                line-height: 16px;
+                margin-left: 30px;
+                color: #666;
+            }
+            #open-new-window{
+                display: none;
+            }
+            #save-report{
+                display: none;
+            }
+        }
+    }
+    .report-body{
+        width: 100%;
+        height: calc(100% - 62px);
+        display: flex;
+        align-items: center;
+        .report-sidebar{
+            height: 100%;
+            border-right: 2px solid #6ed2f3;
+            display: inline-block;
+            width: 200px;
+            float: left;
+            min-width: 200px;
+            max-height: 890px;
+            flex-negative: 0;
+            flex-shrink: 0;
+            .sidebar-select {
+                border: 1px solid #DDDDDD;
+                padding: 0px;
+                margin: 5px;
+                width: 190px;
+                height: calc(100% - 20px);
+                float: left;
+                overflow: hidden;
+                .auto-select-component {
+                    width: 230px;
+                    height: calc(100% + 30px);
+                    overflow: hidden;
+                    .result {
+                        display: none;
+                    }
+                    .triangle {
+                        display: none;
+                    }
+                    .list {
+                        height: calc(100% - 30px)!important;
+                        .auto-select-ul {
+                            height: calc(100% - 60px)!important;
+                        }
+                    }
+                }
+            }
+        }
+        .report-main{
+            height: 100%;
+            display: inline-block;
+            min-width: 800px;
+            max-height: 900px;
+            overflow: auto;
+            flex-positive: 1;
+            flex-grow: 1;
+            .report-data{
+                height: calc(100% - 200px);
+                position: relative;
+            }
+            .report-remark{
+                height: 200px;
+                position: relative;
+                .work-time-tips{
+                    display: block;
+                    position: absolute;
+                    right: 10px;
+                    top: 6px;
+                    color: #FC0017;
+                    height: 15px;
+                    line-height: 15px;
+                }
+                .remark-header{
+                    height: 30px;
+                    .right-tool-btn{
+                        display: flex;
+                        cursor: pointer;
+                        line-height: 16px;
+                        margin-left: 15px;
+                        color: #666;
+                    }
+                }
+                .remark-body{
+                    height: calc(100% - 70px);
+                    background-color: #FBFBFB;
+                    position: relative;
+                    textarea{
+                        width: 90%;
+                        height: 90%;
+                        display: block;
+                        border: double;
+                        border-color: #E4E4E4;
+                        margin: auto;
+                    }
+                }
+                .save-remark{
+                    display: block;
+                    position: absolute;
+                    text-align: center;
+                    width: 91px;
+                    height: 30px;
+                    lin-height: 30px;
+                    background-color: rgba(0, 136, 255, 1);
+                    border: none;
+                    border-radius: 4px;
+                    box-shadow: none;
+                    font-family: '微软雅黑';
+                    font-weight: 400;
+                    font-style: normal;
+                    font-size: 12px;
+                    color: #FFFFFF;
+                    position: absolute;
+                    bottom: 5px;
+                    right: 50px;
+                }
+                .save-remark:hover{
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+}
