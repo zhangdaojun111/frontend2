@@ -81,12 +81,13 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
         position: absolute;
         //width: 672px;
         left: calc(85% - 350px);
-        top: calc(55% - 400px);
+        top: calc(55% - 360px);
         overflow: hidden;
         //background: url("../images/login/background.png");
         //background-repeat: no-repeat;
 
         .login-content {
+            margin-top: 40px;
             display: none;
             width: 340px;
             //margin-left: 200px;
@@ -110,7 +111,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
 
             .white-panel {
                 //background-color: #ffffff;
-                margin-top: 65px;
+                margin-top: 25px;
                 width: 340px;
                 height: 360px;
                 border-radius: 2%;
