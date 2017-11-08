@@ -207,5 +207,32 @@ export const UserInfoService = {
         console.log(body);
 
         return HTTP.postImmediately(url,body);
+    },
+    getUserTheme:function () {
+        let url= '/user_preference/';
+        let body = {
+            action:"get",
+            pre_type:9
+        };
+
+        return this.http.postImmediately({
+            url:url,
+            type:"post",
+            data:body
+        });
+    },
+    saveUserTheme:function (data) {
+        let url= '/user_preference/';
+        let body = {
+            action:"save",
+            content:data,
+            pre_type:9
+        };
+
+        return this.http.postImmediately({
+            url:url,
+            type:"post",
+            data:body
+        });
     }
 };

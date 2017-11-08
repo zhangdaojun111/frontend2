@@ -24,27 +24,63 @@
             width: 460px;
             float: left;
             .theme-set-group{
+                width: 400px;
+                margin: 0px 30px;
+                //border-top: solid 1px #e4e4e4;
+                .theme-prompt{
+                    display: block;
+                    height: 60px;
+                    line-height: 60px;
+                }
                 ul{
-                    padding: 30px 70px;
                     li{
                         cursor: pointer;
                         float: left;
-                        margin-left: 30px;
-                        img{
+                        border: solid 1px #ffffff;
+                        div{
                             width: 64px;
                             height: 64px;
                             display: block;
-                            padding: 5px;
-                            &.active{
-                                border: solid 3px #51ccff;
+                            margin: 12px;
+                            border-radius: 4px;
+                            border: none;
+                            box-shadow: none;
+                            position: relative;
+                            &.blue-square{
+                                background: linear-gradient(180deg, rgba(50, 126, 211, 1) 0%, rgba(50, 126, 211, 1) 0%, rgba(138, 182, 230, 1) 100%, rgba(138, 182, 230, 1) 100%)
+                            }
+                            &.blank-square{
+                                background:linear-gradient(180deg, rgba(56, 56, 56, 1) 0%, rgba(56, 56, 56, 1) 0%, rgba(139, 139, 139, 1) 100%, rgba(139, 139, 139, 1) 100%)
+                            }
+                            &.ink-blue-square{
+                                background:linear-gradient(180deg, rgba(47, 66, 84, 1) 0%, rgba(47, 66, 84, 1) 0%, rgba(117, 149, 179, 1) 100%, rgba(117, 149, 179, 1) 100%)
+                            }
+                            &.orange-square{
+                                background: linear-gradient(180deg, rgba(229, 126, 23, 1) 0%, rgba(229, 126, 23, 1) 0%, rgba(240, 173, 106, 1) 100%, rgba(240, 173, 106, 1) 100%);
+                            }
+                            .current-theme{
+                                position: absolute;
+                                width: 16px;
+                                height: 16px;
+                                background-image: url("../../../assets/images/theme/blue/icon-current-theme.png");
+                                background-repeat: no-repeat;
+                                top:-8px;
+                                left:56px;
+                                display: none;
                             }
                         }
                         span{
                             display: inline-block;
                             text-align: center;
-                            width: 74px;
-                            height: 24px;
-                            line-height: 24px;
+                            width: 88px;
+                            height: 30px;
+                            line-height: 30px;
+                        }
+                        &.active{
+                            border: solid 1px #e4e4e4;
+                            .current-theme{
+                                display: block;
+                            }
                         }
                     }
                 }
