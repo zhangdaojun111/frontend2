@@ -69,11 +69,11 @@ let config = {
         /**
          * 初始化图表操作
          */
-       async init() {
+        async init() {
             this.formItems['countColumn'].el.hide();
             this.formItems['pieType'].trigger('onChange', this.formItems['pieType'].data.value);
             this.formItems['limit'].trigger('onChange');
-           // 获取数据来源
+            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
                     this.formItems['source'].setList(res['data']);
@@ -83,17 +83,17 @@ let config = {
             });
 
             // 获取图标
-           ChartFormService.getChartIcon().then(res => {
-               if (res['success'] === 1) {
-                   let icons =[];
-                   icons = res['data'].map(icon => {
-                       return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
-                   });
-                   this.formItems['icon'].setList(icons)
-               } else {
-                   msgbox.alert(res['error'])
-               };
-           });
+            ChartFormService.getChartIcon().then(res => {
+                if (res['success'] === 1) {
+                    let icons =[];
+                    icons = res['data'].map(icon => {
+                        return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
+                    });
+                    this.formItems['icon'].setList(icons)
+                } else {
+                    msgbox.alert(res['error'])
+                };
+            });
 
         },
 
@@ -369,6 +369,7 @@ let config = {
                 category: 'number',
                 textTip:'请输入显示前多少条数据：',
                 type: 'text',
+                class: 'limitNum',
                 events: {}
             },
             {
@@ -379,6 +380,7 @@ let config = {
                 category: 'number',
                 textTip:'请输入显示后多少条数据：',
                 type: 'text',
+                class: 'endLimitNum',
                 events: {}
             },
             {

@@ -130,15 +130,15 @@ let config = {
 		},
 
 		//主动触发指定字段的所有事件
-		triggerSingleControl(key) {
+		triggerSingleControl(key,noCount) {
 			let val = this.data.data[key]["value"];
 			if (val != "" || !$.isEmptyObject(val)) {
 				if ($.isArray(val)) {
 					if (val.length != 0) {
-						this.actions.checkValue(this.data.data[key]);
+						this.actions.checkValue(this.data.data[key],noCount);
 					}
 				} else {
-					this.actions.checkValue(this.data.data[key]);
+					this.actions.checkValue(this.data.data[key],noCount);
 				}
 			}
 		},
@@ -718,6 +718,10 @@ let config = {
 					if (j == 0) {
 						for (let field of arr) {
 							this.data.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
+							if(this.data.childComponent[field].data){
+								this.data.childComponent[field].data[obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
+								this.data.childComponent[field].reload();
+							}
 						}
 					}
 				}
@@ -741,12 +745,16 @@ let config = {
 					}
 				}
 				this.data.data[key][obj[affectType]] = arr;
-				if (affectType == 'multi-select') {
-					this.data.data[key]['value'] = [];
-				} else {
-					this.data.data[key]['value'] = '';
+				if(this.data.childComponent[key]){
+					this.data.childComponent[key].data[obj[affectType]] = arr;
+					this.data.childComponent[key].reload();
 				}
-				this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
+				// if (affectType == 'multi-select') {
+				// 	this.data.data[key]['value'] = [];
+				// } else {
+				// 	this.data.data[key]['value'] = '';
+				// }
+				// this.data.childComponent[this.data.data[key]['dfield']].actions.changeOption(this.data.data[key]['dfield']);
 			}
 		},
 
@@ -934,7 +942,7 @@ let config = {
 
 						// 给统计赋值
 						for (let d in res["data"]) {
-							this.actions.setFormValue(d, res["data"][d]);
+                            this.actions.setFormValue(d, this.actions.showAccuracy(d,res["data"][d]));
 						}
                         if(res){
                             let calcData = {
@@ -1000,7 +1008,7 @@ let config = {
 					childComponet.data["value"] = value
 					childComponet.reload();
 				}
-				// this.actions.triggerSingleControl(dfield);
+				this.actions.triggerSingleControl(dfield,true);
 			}
 		},
 		//给相关赋值
@@ -1015,8 +1023,9 @@ let config = {
 						this.actions.triggerSingleControl(k)
 					}
 				} else {
-					this.actions.setFormValue.bind(this)(k, res["data"][k]);
+                    this.actions.setFormValue(k, this.actions.showAccuracy(k,res["data"][k]));
 					this.actions.triggerSingleControl(k);
+
 				}
 			}
 		},
@@ -1293,14 +1302,14 @@ let config = {
 			}
 		},
 		//触发事件检查
-		checkValue: function (data) {
+		checkValue: function (data,noCount) {
 			if (!this.data.childComponent[data.dfield]) {
 				return;
 			}
 			if (this.data.data[data.dfield]) {
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
-			if (data.type == 'Buildin' || data.type=='MultiLinkage') {
+			if (data.type == 'Buildin' || data.type=='MultiLinkage' && !noCount) {
 				let id = data["id"];
 				let value;
 				if(data.type == 'Buildin'){
@@ -1317,7 +1326,7 @@ let config = {
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1) {
+			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1 && !noCount ) {
 				if (data.type == 'Input') {
 					if(!this.data.timer){
 						this.data.timer=setTimeout(()=>{
@@ -1332,12 +1341,14 @@ let config = {
 						},3000);
 					}
 				} else {
-					this.actions.validDefault(data, data['value']);
+					 this.actions.validDefault(data, data['value']);
 				}
 			}
 			//统计功能
 			this.actions.myUseFieldsofcountFunc();
-			this.actions.countFunc(data.dfield,data);
+			if(!noCount){
+                this.actions.countFunc(data.dfield,data);
+			}
 			//改变选择框的选项
 			if (data['linkage'] != {}) {
 				let j = 0;
@@ -1492,7 +1503,19 @@ let config = {
 				}
 			}
 		},
-
+		//小数显示精度
+        showAccuracy(dfield, value) {
+            let data = this.data.data[dfield];
+            if(data){
+                value =new Number(value) ;
+                if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(data["real_type"]) != -1){
+                    let accuracy = data["accuracy"];
+                    value = value.toFixed(accuracy);
+                }
+                return value;
+            }
+            return value;
+        },
 		//添加按钮组
 		addBtn() {
 			this.el.find('.ui-btn-box').remove();
