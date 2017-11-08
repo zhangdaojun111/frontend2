@@ -5,6 +5,7 @@ import {chartName,theme,icon,button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
+import './pie.scss';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
 let config = {
@@ -71,6 +72,7 @@ let config = {
        async init() {
             this.formItems['countColumn'].el.hide();
             this.formItems['pieType'].trigger('onChange', this.formItems['pieType'].data.value);
+            this.formItems['limit'].trigger('onChange');
            // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
@@ -138,7 +140,9 @@ let config = {
                 pieType: data.pieType == '1' ? {name: '单条数据', value: 1} : {name: '多条数据', value: 2},
                 xAxis:data.xAxis,
                 yAxis:data.pieType == '1' ? data.columns : data.yAxis,
-                deeps: data.pieType == '1' ? [] : data.deeps
+                deeps: data.pieType == '1' ? [] : data.deeps,
+                limit: data.limit[0] ? data.limitNum : 0,
+                endlimit:data.limit[0] ? data.endLimitNum : 0,
             };
 
             let pass = true; // 判断表单是否验证通过
@@ -183,6 +187,10 @@ let config = {
                 this.formItems['yAxis'].setValue(chart['yAxis']);
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
+            this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
+            this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
+            this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
+
         }
     },
     data: {
@@ -238,12 +246,14 @@ let config = {
                 events: {
                     onChange(value) {
                         if (value == 1) {
-                            this.formItems['columns'].el.show();
+                            this.formItems['limit'].el.hide();
                             this.formItems['yAxis'].el.hide();
                             this.formItems['deeps'].el.hide();
                             this.formItems['deepX'].el.hide();
+                            this.formItems['deepX'].el.hide();
                             this.formItems['deeps'].actions.clear();
                         } else {
+                            this.formItems['limit'].el.show();
                             this.formItems['columns'].el.hide();
                             this.formItems['yAxis'].el.show();
                             this.formItems['deeps'].el.show();
@@ -252,6 +262,7 @@ let config = {
                     }
                 }
             },
+
             {
                 label: 'x轴字段',
                 name: 'xAxis',
@@ -299,6 +310,7 @@ let config = {
                     }
                 }
             },
+
             {
                 label: '选择下穿x轴字段',
                 name: 'deepX',
@@ -319,6 +331,54 @@ let config = {
                 name: 'deeps',
                 defaultValue: [],
                 type: 'deep',
+                events: {}
+            },
+            {
+                label: '更多设置',
+                name: 'defaultY',
+                defaultValue: [],
+                type: 'checkbox',
+            },
+            {
+                label: '',
+                name: 'limit',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '默认展示多少条数据'
+                    }
+                ],
+                type: 'checkbox',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['limitNum'].el.show();
+                            this.formItems['endLimitNum'].el.show();
+                        } else {
+                            this.formItems['limitNum'].el.hide();
+                            this.formItems['endLimitNum'].el.hide();
+                        }
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'limitNum',
+                defaultValue: 10,
+                placeholder: '请输入显示前多少条数据',
+                category: 'number',
+                textTip:'请输入显示前多少条数据：',
+                type: 'text',
+                events: {}
+            },
+            {
+                label: '',
+                name: 'endLimitNum',
+                defaultValue: 10,
+                placeholder: '请输入显示后多少条数据',
+                category: 'number',
+                textTip:'请输入显示后多少条数据：',
+                type: 'text',
                 events: {}
             },
             {

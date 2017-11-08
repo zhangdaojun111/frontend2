@@ -26,10 +26,6 @@ let FormEntrys = {
 	},
 	initForm(config) {
 		//初始化数据
-		console.log('1111111')
-        console.log('1111111')
-        console.log('1111111')
-        console.log(config);
 		CreateFormServer.init(config);
 		this.createForm();
 	}

@@ -76,6 +76,7 @@ let config = {
         isWorkflowDataReady: true,
 
         isShowWorkflowData: true,
+        searchKeyWord: '',
     },
     actions: {
         addOneDay: function( oldDay ){
@@ -602,7 +603,8 @@ let config = {
 
         // 订阅工作流数据
         Mediator.on('CalendarWorkflowData: workflowData', data => {
-            this.data.workflowData = data;
+            this.data.workflowData = CalendarWorkflowData.searchWorkflow(this.data.searchKeyWord);
+            // this.data.workflowData = data;
             //this.hideLoading();
             this.data.isWorkflowDataReady = true;
             this.actions.workflowMission();
@@ -649,7 +651,7 @@ let config = {
                     },'calendar');
                 } else {
                     // CalendarWorkflowData.getWorkflowData(this.data.scheduleStart, this.data.scheduleEnd);
-                    if(data['type'] !== 'closeSetting') {
+                    if(data['type'] !== 'closeSetting' && this.data.searchKeyWord === '') {
                         CalendarWorkflowData.getWorkflowData(this.data.from_date, this.data.to_date);
                     }
                     this.actions.getCalendarData({
@@ -777,6 +779,7 @@ let config = {
 
         // 日历提醒全局搜索
         Mediator.on('Calendar: globalSearch', data => {
+            this.data.searchKeyWord = data;
             if(data !== '') {
                 this.actions.search(data);
             } else {

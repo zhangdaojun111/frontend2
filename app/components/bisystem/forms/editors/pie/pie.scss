@@ -1,0 +1,15 @@
+.form-chart-pie {
+    .form-group {
+        > div:nth-last-child(3),> div:nth-last-child(4){
+            .form-chart-wrapper {
+                span {
+                    margin-left: 16px;
+                    color: #666666;
+                }
+                input {
+                    width: 200px;
+                }
+            }
+        }
+    }
+}

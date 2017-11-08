@@ -1207,6 +1207,9 @@ let config = {
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
                     this.actions.setGridData( res );
+                    if(refresh){
+                        this.actions.calcSelectData( 'set' );
+                    }
                     //内置相关查看原始数据获取footer
                     if( this.data.viewMode == 'source_data' ){
                         let filterIds = []
@@ -1264,7 +1267,6 @@ let config = {
                 //渲染其他组件
                 this.actions.renderAgGrid();
             }else {
-                this.actions.calcSelectData( 'get' );
             }
             let d = {
                 rowData: this.data.rowData,
@@ -1307,8 +1309,8 @@ let config = {
                 //赋值
                 try {
                     this.agGrid.actions.setGridData(d);
-                    // this.data.showTabs(1);
-                    // this.hideLoading();
+                    this.data.showTabs(1);
+                    this.hideLoading();
                 }catch(e){}
 
             } )
@@ -1451,6 +1453,7 @@ let config = {
                     this.data.correspondenceSelectedList = arr2;
                 }
             }
+            this.actions.calcSelectData( 'get' );
         },
         /**
          * 根据viewMode不同，生成不同请求数据的参数

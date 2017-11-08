@@ -794,7 +794,11 @@ let config = {
 		createFormValue(data, isCheck) {
 			let formValue = {};
 			for (let key in data) {
-				formValue[key] = data[key].value;
+				if(data[key].dtype == 1 && typeof data[key].value == 'string'){
+					formValue[key] = Number(data[key].value.replace(',',''));
+				}else{
+					formValue[key] = data[key].value;
+				}
 			}
 			if (isCheck) {
 				//外部调用需要验证表单
@@ -877,7 +881,7 @@ let config = {
 		},
 
 		//统计功能
-		async countFunc(dfield) {
+		async countFunc(dfield,expression) {
 			for (let key in this.data['use_fields']) {
 				let data = this.data.myUseFields[key];
 				if (this.data['use_fields'][key].indexOf(dfield) != -1) {
@@ -932,6 +936,16 @@ let config = {
 						for (let d in res["data"]) {
 							this.actions.setFormValue(d, res["data"][d]);
 						}
+                        if(res){
+                            let calcData = {
+                                val: expression['value'],
+                                effect: expression["effect"],
+                                id: expression['id']
+                            };
+                            if(!this.actions.webCalcExpression(expression)) {
+                                this.actions.calcExpression(calcData);
+                            }
+                        }
 					}
 				}
 			}
@@ -1323,7 +1337,7 @@ let config = {
 			}
 			//统计功能
 			this.actions.myUseFieldsofcountFunc();
-			this.actions.countFunc(data.dfield);
+			this.actions.countFunc(data.dfield,data);
 			//改变选择框的选项
 			if (data['linkage'] != {}) {
 				let j = 0;
@@ -1357,14 +1371,14 @@ let config = {
 				this.actions.requiredCondition(data, data['value']);
 			}
 
-			let calcData = {
-				val: data['value'],
-				effect: data["effect"],
-				id: data['id']
-			};
-			if(!this.actions.webCalcExpression(data)){
-				this.actions.calcExpression(calcData, data['value']);
-			};
+			// let calcData = {
+			// 	val: data['value'],
+			// 	effect: data["effect"],
+			// 	id: data['id']
+			// };
+			// if(!this.actions.webCalcExpression(data)){
+			// 	this.actions.calcExpression(calcData, data['value']);
+			// };
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
 			}
@@ -1751,12 +1765,6 @@ let config = {
 				this.data.viewMode = 'viewFromCorrespondence';
 			}
 			let _this = this;
-			console.log('######')
-			console.log('######')
-			console.log('######')
-			console.log('######')
-			console.log('######')
-			console.log(CreateFormServer.data.tableId);
 			PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${CreateFormServer.data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
 				width: 1400,
 				height: 800,
@@ -1946,8 +1954,6 @@ let config = {
 						break;
 					case 'Attachment':
 					case 'Picture':
-						console.log('111111111111111111111111111');
-						console.log(data[key]);
 						let attachmentControl = new AttachmentControl(data[key], actions);
 						attachmentControl.render(single);
 						this.data.childComponent[data[key].dfield] = attachmentControl;
@@ -1997,7 +2003,6 @@ let config = {
 			//改变主岗部门option
 			for (let i = 0; i < _this.value.length; i++) {
 				for (let j in _this.main_depart) {
-					console.log()
 					if (_this.main_depart[j]["value"] === _this.value[i]) {
 						arr.push(_this.main_depart[j]);
 					}
@@ -2049,8 +2054,6 @@ let config = {
 
 class BaseForm extends Component {
 	constructor(formData, newConfig) {
-		console.log('传进来的是啥');
-		console.log(formData);
 		config.template = formData.template;
 		//存父子表关系
 		if (!window.top.frontendRelation) {
@@ -2073,8 +2076,6 @@ class BaseForm extends Component {
 		window.top.frontendParentNewData[formData.data.tableId] = formData.data.data;
 		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
 		super($.extend(true, {}, config, newConfig), formData.data);
-		console.log('表单数据');
-		console.log(this.data);
 	}
 
 }
