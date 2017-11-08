@@ -199,8 +199,10 @@ let config = {
                         // for(let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]){
                         //     $('*[requiredField='+a+']').css({border:'1px solid transparent',boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px',transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out'});
                         // }
-                        for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
-                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        if(__this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                            for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                                $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                            }
                         }
                         return;
                     }
