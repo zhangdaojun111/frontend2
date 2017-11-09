@@ -198,8 +198,10 @@ let config = {
                         // for(let a of __this.requiredfieldsNodeList['frontendid2field'][value.id]){
                         //     $('*[requiredField='+a+']').css({border:'1px solid transparent',boxShadow: 'rgba(14, 122, 239, .8) 0px 0px 1px 1px',transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out'});
                         // }
-                        for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
-                            $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                        if(__this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                            for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
+                                $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
+                            }
                         }
                         return;
                     }
@@ -244,8 +246,10 @@ let config = {
 
             this.el.find('.workflow-draw-box').css({
                 'height':__this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px',
-                'width':__this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px'
+                'width':__this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px',
+                // 'border-top':'1px solid #e4e4e4'
             });
+            this.el.find('.workflow-draw-box').addClass('draw-box-border');
             this.data.containerheight = __this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px';
             this.data.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';
             // this.hideLoading();
