@@ -544,7 +544,6 @@ export class EchartsService {
         return stylzieOption;
     }
 
-
     /**
      * 获取下穿数据
      * @param data 需要发送给服务器的参数
