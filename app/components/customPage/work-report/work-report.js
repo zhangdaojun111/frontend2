@@ -78,7 +78,7 @@ let config = {
             }
         ],
         columnDefsDepartment:[
-            {headerName: '用户', width: 120,maxWidth:270,field:'user',tooltipField:'user',cellRenderer: 'group',cellStyle: {'text-align': 'left','margin-left':'10px'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
+            {headerName: '用户', width: 120,maxWidth:270,field:'user',tooltipField:'user',cellRenderer: 'group',cellStyle: {'text-align': 'left','margin-left':'5px'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
             {headerName: '备注', width: 120,maxWidth:270,field:'ps',tooltipField:'ps',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
             {headerName: '相关表名', width: 120,maxWidth:270,field:'table',tooltipField:'table',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
             {headerName: '摘要', minWidth:800, field:'content',tooltipField:'content', suppressSorting: false,suppressMenu: true,suppressResize: true,minWidth: 50},
