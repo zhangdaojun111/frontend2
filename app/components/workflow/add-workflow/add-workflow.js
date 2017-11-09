@@ -67,6 +67,10 @@ let config={
                         is_view: this.data.is_view,
                         from_focus: 0,
                         table_id: obj.table_id,
+                        //表级操作用
+                        data_from_row_id: obj.data_from_row_id,
+                        operation_id: obj.operation_id,
+                        operation_table_id: obj.operation_table_id,
                         parent_table_id: obj.parent_table_id,
                         parent_real_id: obj.parent_real_id,
                         parent_temp_id: obj.parent_temp_id,
@@ -153,6 +157,10 @@ let config={
                 from_focus: 0,
                 btnType: 'none',
                 table_id: obj.table_id,
+                //表级操作用
+                data_from_row_id: obj.data_from_row_id,
+                operation_id: obj.operation_id,
+                operation_table_id: obj.operation_table_id,
                 parent_table_id: obj.parent_table_id,
                 parent_real_id: obj.parent_real_id,
                 parent_temp_id: obj.parent_temp_id,
