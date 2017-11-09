@@ -20,7 +20,7 @@
             font-size: 12px;
             padding-left: 5px;
             display: flex;
-            width: 100px;
+            width: 120px;
             float: left;
             i {
                 background: url("../../../assets/images/dataGrid/tab-title.png") no-repeat;
@@ -117,6 +117,12 @@
             max-height: 890px;
             flex-negative: 0;
             flex-shrink: 0;
+            .sidebar-tree{
+                display: none;
+            }
+            .sidebar-users{
+                display: none;
+            }
             .sidebar-select {
                 border: 1px solid #DDDDDD;
                 padding: 0px;
@@ -214,6 +220,67 @@
                 .save-remark:hover{
                     cursor: pointer;
                 }
+            }
+        }
+    }
+}
+
+
+
+.department{
+    .report-body{
+        .report-sidebar{
+            width: 600px;
+            display: flex;
+            .sidebar-tree {
+                display: block;
+                border: 1px solid #DDDDDD;
+                padding: 0px;
+                margin: 5px;
+                width: 230px;
+                height: calc(100% - 20px);
+                overflow: hidden;
+                .treeview {
+                    height: calc(100% - 20px);
+                    .list-group {
+                        overflow: scroll;
+                        height: 100%;
+                    }
+                }
+            }
+            .sidebar-users {
+                display: block;
+                border: 1px solid #DDDDDD;
+                padding: 0px;
+                margin: 5px;
+                width: 190px;
+                height: calc(100% - 20px);
+                overflow: hidden;
+                .auto-select-component {
+                    width: 230px;
+                    height: calc(100% + 30px);
+                    overflow: hidden;
+                    .result {
+                        display: none;
+                    }
+                    .triangle {
+                        display: none;
+                    }
+                    .list {
+                        height: calc(100% - 30px)!important;
+                        .auto-select-ul {
+                            height: calc(100% - 60px)!important;
+                        }
+                    }
+                }
+            }
+        }
+        .report-main{
+            .report-data{
+                height: calc(100% - 10px);
+            }
+            .report-remark{
+                display: none;
             }
         }
     }

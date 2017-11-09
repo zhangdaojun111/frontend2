@@ -167,6 +167,10 @@ let config = {
                 let obj = {
                     rowData: this.data.rowData
                 }
+                console.log("---------------")
+                console.log("---------------")
+                console.log("---------------")
+                console.log(this.data.rowData)
                 this.agGrid.actions.setGridData( obj );
                 if( isRefresh ){
                     msgBox.showTips( '刷新成功' );

@@ -58,6 +58,15 @@ $(document).ready(function(){
         }
         com = new workReport(json);
     }
+    if( ts_name == 'department-work-report' ){
+        tableName = '部门工作日报';
+        json = {
+            tableName: '部门工作日报',
+            isNewWindow: isNewWindow,
+            department: 1,
+        }
+        com = new workReport(json);
+    }
     if( ts_name == 'department-daily' ){
         tableName = '部门日报';
         json = {
