@@ -53,6 +53,7 @@
     "bootstrap-treeview": "^1.2.0",
     "bower": "^1.8.0",
     "browser-md5-file": "^1.0.0",
+    "zrender":"3.5.1",
     "echarts": "3.7.2",
     "handlebars": "^4.0.10",
     "jquery": "^3.2.1",
