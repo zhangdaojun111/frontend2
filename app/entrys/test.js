@@ -3,4 +3,5 @@ import {starter} from '../lib/three/starter';
 
 starter.init();
 
+
 starter.animate();
