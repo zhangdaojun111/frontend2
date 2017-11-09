@@ -563,7 +563,7 @@ let config = {
                     _this.isEdit = false;
                 }
             }).on('click','.common-search-title .export', function(){
-                searchExport.export();
+                searchExport.export(_this.data.tableId,_this.el);
             }).on('click','.common-search-title .import', function(){
                 searchImport.import(window.config.key);
             })
