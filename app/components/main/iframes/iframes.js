@@ -673,6 +673,8 @@ let config = {
             }, 3000);
         },
         iframeShowLoading:function (root) {
+            console.log("------")
+            console.log(root)
             let size = 50;
             root.addClass('component-loading-effect');
             $('<div class="component-loading-cover">').appendTo(root);
@@ -687,6 +689,8 @@ let config = {
             });
         },
         iframeHideLoading:function (root) {
+            console.log('---hide---')
+            console.log(root)
             root.find('.component-loading-cover').remove();
             root.find('.component-loading-box').remove();
             root.removeClass('component-loading-effect');
