@@ -2,7 +2,6 @@
  * Created by birdyy on 2017/8/1.
  */
 import {HTTP} from '../../lib/http';
-
 export const canvasCellService = {
 
     /**
@@ -51,7 +50,7 @@ export const canvasCellService = {
      */
     async getCellChart(charts) {
         const res = await HTTP.ajaxImmediately({
-            url: '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id,
+            url: '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id + '&bi_user=' + window.config.bi_user,
             data: charts,
             method:'post',
             traditional: true
