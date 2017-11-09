@@ -105,18 +105,35 @@
     .report-body{
         width: 100%;
         height: calc(100% - 62px);
-        display: flex;
         align-items: center;
+        position: absolute;
         .report-sidebar{
+            position: absolute;
             height: 100%;
             border-right: 2px solid #6ed2f3;
             display: inline-block;
             width: 200px;
-            float: left;
-            min-width: 200px;
-            max-height: 890px;
-            flex-negative: 0;
-            flex-shrink: 0;
+            padding-right: 15px;
+            background: #F6F6F6;
+            .icon-aggrid-quxiao {
+                background: url("../../../assets/images/dataGrid/group-cancel.png") no-repeat;
+            }
+            .icon-aggrid-shouhui {
+                background: url("../../../assets/images/dataGrid/group-cancel-1.png") no-repeat;
+            }
+            .calc-sidebar{
+                position: absolute;
+                z-index: 1;
+                right: 3px;
+                width: 16px;
+                height: 25px;
+                top: 5px;
+                border: 1px solid #DDDDDD;
+                background-position: center;
+            }
+            .calc-sidebar:hover{
+                cursor: pointer;
+            }
             .sidebar-tree{
                 display: none;
             }
@@ -152,12 +169,10 @@
         }
         .report-main{
             height: 100%;
-            display: inline-block;
-            min-width: 800px;
-            max-height: 900px;
+            width: calc(100% - 220px);
+            display: block;
             overflow: auto;
-            flex-positive: 1;
-            flex-grow: 1;
+            float: right;
             .report-data{
                 height: calc(100% - 200px);
                 position: relative;
@@ -276,6 +291,7 @@
             }
         }
         .report-main{
+            width: calc(100% - 620px);
             .report-data{
                 height: calc(100% - 10px);
             }

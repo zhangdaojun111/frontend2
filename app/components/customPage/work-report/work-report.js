@@ -1,6 +1,6 @@
 /**
  * @author yangxiaochuan
- * 工作日报
+ * 工作日报&&部门工作日报
  */
 import Component from "../../../lib/component";
 import template from './work-report.html';
@@ -66,6 +66,8 @@ let config = {
         userData: [],
         departmentData: [],
         choosedDepart: [],
+        firstRender: true,
+        tabOpen: true,
         columnDefs:[
             {headerName: '相关表名', width: 120,maxWidth:270,field:'table',tooltipField:'table',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
             {headerName: '摘要', minWidth:800, field:'content',tooltipField:'content', suppressSorting: false,suppressMenu: true,minWidth: 50},
@@ -78,13 +80,13 @@ let config = {
             }
         ],
         columnDefsDepartment:[
-            {headerName: '用户', width: 120,maxWidth:270,field:'user',tooltipField:'user',cellRenderer: 'group',cellStyle: {'text-align': 'left','margin-left':'5px'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
-            {headerName: '备注', width: 120,maxWidth:270,field:'ps',tooltipField:'ps',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
-            {headerName: '相关表名', width: 120,maxWidth:270,field:'table',tooltipField:'table',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
-            {headerName: '摘要', minWidth:800, field:'content',tooltipField:'content', suppressSorting: false,suppressMenu: true,suppressResize: true,minWidth: 50},
-            {headerName: '客户', width: 120,maxWidth:270,field:'kh',tooltipField:'kh',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
-            {headerName: '工时', maxWidth:100,field:'work_time',tooltipField:'work_time',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,minWidth: 50},
-            {headerName: '操作',maxWidth:80,field:'operation',cellStyle: {'text-align': 'center'}, suppressSorting: true,suppressMenu: true,minWidth: 50,
+            {headerName: '用户', width: 120,maxWidth:270,field:'user',tooltipField:'user',cellRenderer: 'group',cellStyle: {'text-align': 'left','margin-left':'5px'},suppressSorting: false, suppressSorting: false,suppressMenu: true,minWidth: 50},
+            {headerName: '备注', width: 120,maxWidth:270,field:'ps',tooltipField:'ps',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,suppressSorting: false,minWidth: 50},
+            {headerName: '相关表名', width: 120,maxWidth:270,field:'table',tooltipField:'table',cellStyle: {'text-align': 'center'},suppressSorting: false, suppressSorting: false,suppressMenu: true,minWidth: 50},
+            {headerName: '摘要', minWidth:800, field:'content',tooltipField:'content', suppressSorting: false,suppressMenu: true,suppressSorting: false,minWidth: 50},
+            {headerName: '客户', width: 120,maxWidth:270,field:'kh',tooltipField:'kh',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,suppressSorting: false,minWidth: 50},
+            {headerName: '工时', maxWidth:100,field:'work_time',tooltipField:'work_time',cellStyle: {'text-align': 'center'}, suppressSorting: false,suppressMenu: true,suppressSorting: false,minWidth: 50},
+            {headerName: '操作',maxWidth:80,field:'operation',cellStyle: {'text-align': 'center'}, suppressSorting: true,suppressMenu: true,minWidth: 50,suppressSorting: false,
                 cellRenderer:(param)=>{
                     if(param.data.group){return'';}
                     return '<div><a href=javascript:void(0); class="view-report" title="查看">查看</a></div>'
@@ -404,7 +406,10 @@ let config = {
                     for(let u of param){
                         That.data.user_id_list.push(u.id);
                     }
-                    That.actions.getNowDate();
+                    if(!That.data.firstRender){
+                        That.actions.getTodayData();
+                    }
+                    That.data.firstRender = false;
                 }
             });
             this.userSelect.render(this.el.find('.sidebar-users'));
@@ -453,6 +458,23 @@ let config = {
             this.userSelect.data.choosed = users;
             this.userSelect.reload();
         }, 500),
+        //开关右侧tab
+        calcUserCon: function () {
+            this.showLoading();
+            this.data.tabOpen = !this.data.tabOpen;
+            let left = this.data.department?'-590px':'-190px';
+            let width = this.data.department?'calc(100% - 620px)':'calc(100% - 220px)';
+            setTimeout( ()=>{
+                this.el.find( '.report-sidebar' ).eq(0).animate( { 'left':this.data.tabOpen ? '0px' : left } );
+                this.el.find( '.calc-sidebar' )[0].className = this.data.tabOpen ? 'calc-sidebar icon-aggrid-shouhui':'calc-sidebar icon-aggrid-quxiao';
+            },this.data.tabOpen ? 0 : 0 )
+            setTimeout( ()=>{
+                this.el.find( '.report-main' )[0].style.width = this.data.tabOpen ? width:' calc(100% - 30px)';
+            },this.data.tabOpen ? 0 : 0 )
+            setTimeout(()=>{
+                this.hideLoading();
+            },400)
+        }
     },
     binds: [
         {
@@ -504,6 +526,13 @@ let config = {
             selector: '.save-remark',
             callback: function () {
                 this.actions.saveAllData();
+            }
+        },
+        {
+            event: 'click',
+            selector: '.calc-sidebar',
+            callback: function () {
+                this.actions.calcUserCon();
             }
         },
     ],
