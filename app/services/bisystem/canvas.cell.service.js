@@ -161,5 +161,19 @@ export const canvasCellService = {
         })
     },
 
+    /**
+     * 清除缓存
+     */
+    async refreshCache() {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/refresh_cache/',
+            method: 'get',
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
+
 }
 

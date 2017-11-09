@@ -33,7 +33,7 @@
     }
 }
 
-.view-header-clear-cache {
+.view-header-refresh-cache {
     position: relative;
     display: inline-block;
     right: 0;
@@ -48,6 +48,7 @@
         padding: 0;
         line-height: 0;
         margin: 22px 30px 22px 0;
+        outline: none;
         i {
             margin-right: 4px;
             vertical-align: middle;

@@ -82,10 +82,15 @@ let config = {
         },
         { //清楚缓存
             event:'click',
-            selector:'.view-clear-cache',
+            selector:'.view-refresh-cache',
             callback: function (context,event) {
-
-                // return false;
+                canvasCellService.refreshCache().then((res)=>{
+                    if (res['success'] === 1) {
+                        msgbox.alert('清除缓存成功');
+                    } else {
+                        msgbox.alert(res['error']);
+                    }
+                })
             }
         },
         {
