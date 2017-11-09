@@ -242,7 +242,9 @@ let config = {
                 iframe.on('load',function () {
                     let item = $(this).parent();
                     item.attr('load', 'complete');
-                    that.actions.iframeHideLoading(item);
+                    setTimeout(()=>{
+                        that.actions.iframeHideLoading(item);
+                    },0)
                 });
                 iframe.attr('src', iframe.attr('_src'));
                 iframe.removeAttr('_src');
