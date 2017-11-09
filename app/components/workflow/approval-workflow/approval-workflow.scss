@@ -234,7 +234,7 @@ btn-div{
       .workflow-box-r {
         padding: 10px;
         width: 100%;
-        overflow-x: auto;
+        //overflow-x: initial;
         .follow-name-list{
           border: 1px solid #f2dede;
           position: relative;
@@ -324,4 +324,9 @@ btn-div{
 .ui-dialog {
   border: 1px solid #2298f4;
   margin-top: 10px;
+}
+#flow-node {
+  .workflow-box .workflow-box-r{
+    overflow-x: auto;
+  }
 }
