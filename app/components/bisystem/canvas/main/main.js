@@ -28,12 +28,8 @@ let config = {
             selector: '.to-edit-page',
             callback: function (context, event) {
                 //编辑模式Iframe
-                let iFrameUrl = '';
-                if(this.data.isViewEmpty === true){
-                    iFrameUrl = window.location.href.replace('index/', 'manager/#views/edit');
-                }else{
-                    iFrameUrl = window.location.href.replace('index', 'manager');
-                }
+                let iFrameUrl = window.location.href.replace('index', 'manager');
+
                 PMAPI.openDialogByIframe(
                     iFrameUrl,
                     {
