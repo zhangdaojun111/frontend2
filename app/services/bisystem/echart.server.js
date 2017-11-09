@@ -480,14 +480,22 @@ export class EchartsService {
             }
             radarOption['series'][0]['data'].push(_data);
 
-            let maxnum = Math.max.apply(null, cellOption['data']['rows'][index])
+            // let maxnum = Math.max.apply(null, cellOption['data']['rows'][index])
+            // maxNumList.push(maxnum);
+
+            let tempData = cellOption['data']['rows'][index];
+            tempData = tempData.map(item=>{
+                return Math.abs(item)
+            });
+            let maxnum = Math.max(...tempData);
             maxNumList.push(maxnum);
         });
 
         cellOption['columns'].forEach(column => {
             radarOption['radar'][0]['indicator'].push({
                 text: column['name'],
-                max: Math.max.apply(null, maxNumList)
+                // max: Math.max.apply(null, maxNumList)
+                max: (Math.max(...maxNumList)/Math.cos(Math.PI/cellOption['columns'].length)+10),
             });
         });
         radarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
