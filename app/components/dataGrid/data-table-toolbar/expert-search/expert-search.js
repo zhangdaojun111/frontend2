@@ -6,6 +6,8 @@ import Component from "../../../../lib/component";
 import template from './expert-search.html';
 import expertCondition from './expert-search-condition/expert-search-condition';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
+import {searchImport} from '../expert-search-import/search-import'
+import {searchExport} from '../expert-search-export/search-export'
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {HTTP} from "../../../../lib/http";
 import DateTimeControl from "../../../form/datetime-control/datetime-control";
@@ -560,6 +562,10 @@ let config = {
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                     _this.isEdit = false;
                 }
+            }).on('click','.common-search-title .export', function(){
+                searchExport.export();
+            }).on('click','.common-search-title .import', function(){
+                searchImport.import(window.config.key);
             })
             this.hideLoading()
             this.actions.setConditionHeight()
