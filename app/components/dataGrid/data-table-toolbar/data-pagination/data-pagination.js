@@ -223,6 +223,9 @@ let config = {
         },
         //表级操作
         tableOperateFun: function (opt,opera) {
+            console.log("表级操作")
+            console.log(opt)
+            console.log(opera)
             if(opera != 0){
                 let address = JSON.parse(opera);
                 let deleteListRel = [];
@@ -267,7 +270,6 @@ let config = {
                                     msgBox.alert('发送请求失败！错误是'+res['error']);
                                 }
                             } )
-                            HTTP.flush();
                         }
                     }
                 }
