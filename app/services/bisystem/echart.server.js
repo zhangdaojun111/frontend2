@@ -2,7 +2,7 @@
  * Created by birdyy on 2017/8/1.
  * name echarts 服务渲染
  */
-import * as echarts from 'echarts';
+import * as echarts from 'echarts/dist/echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
 import {HTTP} from '../../lib/http';
