@@ -7,6 +7,7 @@ import {canvasCellService} from '../../../../services/bisystem/canvas.cell.servi
 import msgbox from '../../../../lib/msgbox';
 import {PMAPI} from "../../../../lib/postmsg";
 import Mediator from '../../../../lib/mediator';
+import {Backbone} from 'backbone';
 
 
 let config = {
@@ -27,7 +28,12 @@ let config = {
             selector: '.to-edit-page',
             callback: function (context, event) {
                 //编辑模式Iframe
-                let iFrameUrl = window.location.href.replace('index', 'manager');
+                let iFrameUrl = '';
+                if(this.data.isViewEmpty === true){
+                    iFrameUrl = window.location.href.replace('index/', 'manager/#views/edit');
+                }else{
+                    iFrameUrl = window.location.href.replace('index', 'manager');
+                }
                 PMAPI.openDialogByIframe(
                     iFrameUrl,
                     {
