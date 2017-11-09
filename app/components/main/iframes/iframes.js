@@ -225,7 +225,6 @@ let config = {
             if (this.data.focus) {
                 this.data.focus.tab.removeClass('focus');
                 this.data.focus.iframe.hide();
-                console.log("4444444444444444")
                 this.actions.iframeHideLoading(this.data.focus.iframe);
                 // PMAPI.sendToIframe(this.data.focus.iframe.find('iframe')[0], {
                 //     type: PMENUM.iframe_silent
@@ -237,7 +236,6 @@ let config = {
             let src = iframe.attr('src');
             let complete = that.data.focus.iframe.attr('load') === 'complete';
             if (!src) {
-                console.log("111111111111")
                 this.actions.iframeShowLoading(this.data.focus.iframe);
                 iframe.on('load',function () {
                     let item = $(this).parent();
@@ -249,7 +247,6 @@ let config = {
                 iframe.attr('src', iframe.attr('_src'));
                 iframe.removeAttr('_src');
             } else if (!complete) {
-                console.log("222222222222222")
                 this.actions.iframeShowLoading(this.data.focus.iframe);
             }
             this.data.focus.iframe.show();
@@ -660,7 +657,6 @@ let config = {
                     start();
                     let item = $(this).parent();
                     item.attr('load', 'complete');
-                    console.log("3333333333333")
                     that.actions.iframeHideLoading(item);
                 });
             }
@@ -675,8 +671,6 @@ let config = {
             }, 3000);
         },
         iframeShowLoading:function (root) {
-            console.log("------")
-            console.log(root)
             let size = 50;
             root.addClass('component-loading-effect');
             $('<div class="component-loading-cover">').appendTo(root);
@@ -691,8 +685,6 @@ let config = {
             });
         },
         iframeHideLoading:function (root) {
-            console.log('---hide---')
-            console.log(root)
             root.find('.component-loading-cover').remove();
             root.find('.component-loading-box').remove();
             root.removeClass('component-loading-effect');
