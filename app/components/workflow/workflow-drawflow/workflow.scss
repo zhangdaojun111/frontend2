@@ -55,7 +55,7 @@
     margin-bottom: 40px;
     .workflow-box-l {
         height: 40px;
-        border-bottom: 1px solid #e4e4e4;
+        //border-bottom: 1px solid #e4e4e4;
         line-height: 40px;
         font-weight: 700;
         font-size: 14px;
@@ -82,7 +82,7 @@
         }
     }
     .workflow-box-r {
-        padding: 10px;
+        //padding: 10px;
         width: 100%;
         //overflow-x: initial;
         box-sizing: border-box;
@@ -107,4 +107,8 @@
         }
     }
 }
-
+#approval-reject-body {
+    .draw-box-border {
+        border-top: 1px solid #e4e4e4;
+    }
+}

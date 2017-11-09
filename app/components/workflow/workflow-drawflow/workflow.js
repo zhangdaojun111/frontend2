@@ -247,8 +247,10 @@ let config = {
 
             this.el.find('.workflow-draw-box').css({
                 'height':__this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px',
-                'width':__this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px'
+                'width':__this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px',
+                // 'border-top':'1px solid #e4e4e4'
             });
+            this.el.find('.workflow-draw-box').addClass('draw-box-border');
             this.data.containerheight = __this.actions.getTheBestBottom() - __this.actions.getTheBestTop() + 100 + 'px';
             this.data.containerwidth = __this.actions.getTheBestRight() - __this.actions.getTheBestLeft() + 250 + 'px';
             // this.hideLoading();
