@@ -6,8 +6,6 @@ let uploader = new Uploader()
 export const searchImport = {
     import: function (key){
         uploader.addFile(key).then(res=> {
-            debugger
         })
     }
-
 }

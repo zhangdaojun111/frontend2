@@ -3,7 +3,6 @@
  */
 export const searchExport = {
     createUrl: function(data) {
-        debugger
         let json = {
             table_id: this.data.tableId,
         }
