@@ -192,15 +192,11 @@ let config = {
         //新窗口隐藏新窗口图标
         if(window === window.parent){
             this.el.find('.new-window').hide();
-            let url = window.location.href;
-            console.log(url);
         }else{
             let url = window.location.href;
-            console.log(url);
             this.el.find('.new-window').attr('href',url);
         }
         this.data.views = window.config.bi_views;
-
         // 渲染header视图列表
         this.data.views.forEach(viewData => {
             let menu = new CanvasHeaderMenuComponent(viewData,{
