@@ -2001,7 +2001,6 @@ let config = {
                     tableType: this.data.tableType,
                     viewMode: this.data.tableType,
                     parentTableId: this.data.parentTableId,
-
                     parentRealId: this.data.parentRealId,
                     parentTempId: this.data.parentTempId,
                     parentRecordId: this.data.parentRecordId,
