@@ -260,7 +260,7 @@ let config = {
                                 table_id:this.data.tableId,
                                 selectedRows:JSON.stringify(deleteListRel)
                             }
-                            dataTableService.tableOperationRefresh( obj ).then( res=>{
+                            HTTP.postImmediately( address['beAddress'],obj ).then( res=>{
                                 if(res['success']==1){
                                     msgBox.showTips('发送成功！');
                                 }else if(res['success']==0){
@@ -271,7 +271,6 @@ let config = {
                         }
                     }
                 }
-
             }
         },
         //失效刷新
