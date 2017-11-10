@@ -402,7 +402,7 @@ let config = {
                 displayChoosed: false,
             }, {
                 onSelect: function (param) {
-                    this.data.user_id_list = [];
+                    That.data.user_id_list = [];
                     for(let u of param){
                         That.data.user_id_list.push(u.id);
                     }
