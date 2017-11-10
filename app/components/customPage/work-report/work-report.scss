@@ -245,7 +245,7 @@
 .department{
     .report-body{
         .report-sidebar{
-            width: 600px;
+            width: 400px;
             display: flex;
             .sidebar-tree {
                 display: block;
@@ -289,9 +289,12 @@
                     }
                 }
             }
+            .sidebar-select{
+                display: none;
+            }
         }
         .report-main{
-            width: calc(100% - 620px);
+            width: calc(100% - 420px);
             .report-data{
                 height: calc(100% - 10px);
             }

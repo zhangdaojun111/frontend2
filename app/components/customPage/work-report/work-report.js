@@ -462,8 +462,8 @@ let config = {
         calcUserCon: function () {
             this.showLoading();
             this.data.tabOpen = !this.data.tabOpen;
-            let left = this.data.department?'-590px':'-190px';
-            let width = this.data.department?'calc(100% - 620px)':'calc(100% - 220px)';
+            let left = this.data.department?'-390px':'-190px';
+            let width = this.data.department?'calc(100% - 420px)':'calc(100% - 220px)';
             setTimeout( ()=>{
                 this.el.find( '.report-sidebar' ).eq(0).animate( { 'left':this.data.tabOpen ? '0px' : left } );
                 this.el.find( '.calc-sidebar' )[0].className = this.data.tabOpen ? 'calc-sidebar icon-aggrid-shouhui':'calc-sidebar icon-aggrid-quxiao';
