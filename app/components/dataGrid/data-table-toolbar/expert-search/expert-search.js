@@ -562,10 +562,17 @@ let config = {
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                     _this.isEdit = false;
                 }
-            }).on('click','.common-search-title .export', function(){
+            }).on('click','.common-search-title .export-btn', function(){
                 searchExport.export(_this.data.tableId,_this.el);
-            }).on('click','.common-search-title .import', function(){
-                searchImport.import(window.config.key);
+            }).on('click','.common-search-title .import-btn', function(){
+                let choice = 1;
+                if(_this.el.find('.common-search-title .choice-input').eq(1).hasClass('active')){
+                    choice = 0
+                }
+                searchImport.import(window.config.key,choice);
+            }).on('click','.common-search-title .choice-input', function(){
+                _this.el.find('.common-search-title .choice-input').removeClass('active');
+                $(this).addClass('active')
             })
             this.hideLoading()
             this.actions.setConditionHeight()

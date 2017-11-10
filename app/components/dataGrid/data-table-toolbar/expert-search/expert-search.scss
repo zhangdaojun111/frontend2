@@ -53,6 +53,37 @@
                    top: 3.5px;
                    background-position: right center;
                }
+                .choice {
+                    .choice-input {
+                        position: relative;
+                        top: 0px;
+                        width: 10px;
+                        height: 10px;
+                        &:before {
+                            position: absolute;
+                            width: 10px;
+                            content: ' ';
+                            height: 10px;
+                            left: 0px;
+                            top: 0px;
+                            background-color: #fff;
+                            border: 1px solid #d7d7d7;
+                            cursor: pointer;
+                        }
+                        &.active {
+                            &:after {
+                                position: absolute;
+                                width: 8px;
+                                content: ' ';
+                                height: 8px;
+                                left: 2px;
+                                top: 2px;
+                                background-color: #0088ff;
+                                cursor: pointer;
+                            }
+                        }
+                    }
+                }
             }
         }
         .common-search-list {
