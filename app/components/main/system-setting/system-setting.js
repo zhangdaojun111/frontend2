@@ -12,6 +12,7 @@ import './system-setting.scss';
 import template from './system-setting.html';
 import msgbox from "../../../lib/msgbox";
 import {UserInfoService} from "../../../services/main/userInfoService"
+import Mediator from "../../../lib/mediator";
 
 let config = {
     template:template,

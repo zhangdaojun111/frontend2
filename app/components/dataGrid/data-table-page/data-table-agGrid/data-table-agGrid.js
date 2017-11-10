@@ -33,7 +33,10 @@ import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 import ViewVideo from "../../../form/view-video/view-video";
 import fastSearch from "../../data-table-toolbar/fast-search/fast-search"
 import QuillAlert from "../../../form/quill-alert/quill-alert";
-
+import '../../../../assets/scss/theme/blue.scss';
+import '../../../../assets/scss/theme/ink-blue.scss';
+import '../../../../assets/scss/theme/orange.scss';
+import {UserInfoService} from "../../../../services/main/userInfoService"
 
 let config = {
     template: template,
@@ -3520,6 +3523,15 @@ let config = {
         this.actions.getHeaderData();
     }
 }
+
+//加载用户偏好样式
+UserInfoService.getUserTheme().done((res) => {
+	if(res.success === 1){
+		$('body').attr('class',res.data);
+	}else{
+		$('body').attr('class','blue');
+	}
+});
 
 class dataTableAgGrid extends Component {
     constructor(data,newConfig){
