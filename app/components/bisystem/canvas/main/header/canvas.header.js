@@ -86,7 +86,10 @@ let config = {
             callback: function (context,event) {
                 canvasCellService.refreshCache().then((res)=>{
                     if (res['success'] === 1) {
-                        msgbox.alert('清除缓存成功');
+                        msgbox.showTips('清除缓存成功');
+                        window.setTimeout(function() {
+                            location.reload();
+                        },1000);
                     } else {
                         msgbox.alert(res['error']);
                     }
