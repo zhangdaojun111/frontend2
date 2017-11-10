@@ -803,7 +803,7 @@ let config = {
 			let formValue = {};
 			for (let key in data) {
 				if(data[key].dtype == 1 && typeof data[key].value == 'string'){
-					formValue[key] = Number(data[key].value.replace(',',''));
+					formValue[key] = Number(data[key].value.replace(/,/g,''));
 				}else{
 					formValue[key] = data[key].value;
 				}
