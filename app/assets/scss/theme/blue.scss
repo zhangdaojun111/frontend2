@@ -43,13 +43,13 @@ body.blue{
             }
             .menu{
                 label{
-                    border-bottom: 1px solid #70a5e0;
+                    border-bottom: 1px solid #fff;
                 }
                 .search{
                     background-image: url("../../images/theme/blue/icon-blue-search.png");
                     input{
                         &::-webkit-input-placeholder{
-                            color:rgb(100, 157, 221);
+                            color:#eee;
                         }
                     }
                     &.highlight{
@@ -110,5 +110,10 @@ body.blue{
                 }
             }
         }
+    }
+    .dataGrid-commonQuery-select{
+        box-shadow: 0 0 2px 2px #327ed3!important;
+        background-color: #327ed3!important;
+        border: 1px solid #327ed3!important;
     }
 }

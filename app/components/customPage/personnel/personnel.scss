@@ -136,12 +136,17 @@
                 float: left;
                 padding-left: 15px;
                 .dataGrid-commonQuery-select {
+                    box-shadow: 0 0 2px 2px #327ed3;
+                    background-color: #327ed3;
+                    background-image:  url("../../../assets/images/dataGrid/icon_xiala_white.png");
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    border: 1px solid #327ed3;
                     cursor: pointer;
                     padding: 0 23px 0 12px;
-                    border: 1px solid #d7d7d7;
                     border-radius: 4px;
                     text-indent: 0;
-                    color: #666666;
+                    color: #fff;
                     float: left;
                     width: 115px;
                     font-size: 12px;
