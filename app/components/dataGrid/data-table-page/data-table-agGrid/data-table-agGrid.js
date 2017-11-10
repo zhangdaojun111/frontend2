@@ -1698,6 +1698,11 @@ let config = {
             if( this.data.gridTips ){
                 this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
+            //筛选滚动后搜索条件赋值
+            let That = this;
+            this.el.find('.ag-body-viewport').on('scroll',_.debounce(()=>{
+                That.actions.setFloatingFilterInput();
+            },700))
             console.timeEnd( '渲染时间' )
         },
         //触发导出
