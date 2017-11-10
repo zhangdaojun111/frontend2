@@ -569,7 +569,7 @@ let config = {
                 if(_this.el.find('.common-search-title .choice-input').eq(1).hasClass('active')){
                     choice = 0
                 }
-                searchImport.import(window.config.key,choice);
+                searchImport.import(window.config.key,_this.data.tableId,choice);
             }).on('click','.common-search-title .choice-input', function(){
                 _this.el.find('.common-search-title .choice-input').removeClass('active');
                 $(this).addClass('active')
