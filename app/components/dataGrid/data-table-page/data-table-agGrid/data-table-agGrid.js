@@ -73,7 +73,7 @@ let config = {
         //操作列
         menuType: false,
         //操作列的宽度
-        operateColWidth: 140,
+        operateColWidth: 135,
         //自定义操作
         customOperateList: [],
         //自定义行级操作
@@ -890,7 +890,7 @@ let config = {
                 }
             }
             str += '</div>';
-            this.data.operateColWidth=20*operateWord+20;
+            this.data.operateColWidth=20*operateWord+8;
             return str
         },
         //设置搜索input值，解决拖动列排序后重新渲染floatingFilter的input导致显示为空
