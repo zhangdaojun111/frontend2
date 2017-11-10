@@ -1,12 +1,15 @@
 @import "../../../assets/scss/core/base";
 .menu {
+    label{
+        border-bottom: 1px solid #70a5e0;
+    }
     .search {
         background-image: url("../../../assets/images/framework/search.png");
         background-repeat: no-repeat;
         background-position: 10px 0;
         padding-bottom: 5px;
         display: block;
-        border-bottom: 1px solid $aside-top-bg;
+        border-bottom: 1px solid #fff;
         input {
             background-color: transparent;
             text-indent: 10px;

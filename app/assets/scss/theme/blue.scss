@@ -49,7 +49,7 @@ body.blue{
                     background-image: url("../../images/theme/blue/icon-blue-search.png");
                     input{
                         &::-webkit-input-placeholder{
-                            color:#eee;
+                            color:rgb(100, 157, 221);
                         }
                     }
                     &.highlight{
