@@ -201,7 +201,7 @@ let config={
             } else {
                 msgBox.showLoadingSelf();
                 let postData = {
-                    flow_id: '',
+                    flow_id: obj.flow_id || '',
                     focus_users: JSON.stringify(this.data.focusArr) || [],
                     data: JSON.stringify(formData),
                     cache_new:JSON.stringify(formData),
