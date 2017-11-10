@@ -5,7 +5,8 @@
     </h4>
     <div class="form-theme clearfix">
         {{#each colors}}
-        <span id="{{this}}"><b {{{theme_background @this}}}></b></span>
+        <span id="{{this}}"><b {{{theme_background @this}}}></b><i class="minus-btn" id="{{this}}">-</i></span>
         {{/each}}
     </div>
+    <span class="add-color">+</span><span class="minus-color">-</span><span class="add-color-box"></span>
 </div>
