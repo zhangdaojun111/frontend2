@@ -148,6 +148,9 @@ let config = {
                 this.gridOptions.api.setColumnDefs( json.columnDefs );
             }
             if( json.rowData ){
+                for(let k in json.rowData){
+                    json.rowData[k].msg_content = json.rowData[k].msg_content.replace(/<.*?>/ig,"");
+                }
                 this.data.rowData = json.rowData;
                 this.gridOptions.api.setRowData( json.rowData );
             }
