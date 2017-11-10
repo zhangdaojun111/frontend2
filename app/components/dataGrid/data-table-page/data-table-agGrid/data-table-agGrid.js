@@ -73,7 +73,7 @@ let config = {
         //操作列
         menuType: false,
         //操作列的宽度
-        operateColWidth: 0,
+        operateColWidth: 140,
         //自定义操作
         customOperateList: [],
         //自定义行级操作
@@ -1274,6 +1274,8 @@ let config = {
             }
             //赋值
             this.agGrid.actions.setGridData(d);
+            //设置操作列宽度
+            this.agGrid.gridOptions.columnApi.setColumnWidth('myOperate',this.data.operateColWidth)
             //对应关系回显
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                 this.actions.setCorrespondenceSelect();
