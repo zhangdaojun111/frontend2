@@ -18,8 +18,8 @@ handlebars.registerHelper('theme_background', function(colors,options) {
 let config = {
     template: template,
     data: {
-        colors:['#0061FF','#FF0000','#4474F0','#F28E1B','#0042C6','#E8BD55',
-            '#00AE66','#74B33D','#52FFFF','#00C1B1','#A264E1','#C10000', '#EF46FF'],
+        colors:['#4474F0','#E8BD55','#F28E1B','#FF0000','#A264E1','#00AE66',
+            '#0061FF','#52FFFF','#EF46FF','#74B33D','#0042C6','#00C1B1', '#C10000']
     },
     actions: {
         createColor:function(){
