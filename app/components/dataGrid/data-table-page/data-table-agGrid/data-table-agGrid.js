@@ -3104,6 +3104,7 @@ let config = {
             }
             if( data.event.srcElement.className == 'gridEdit' ){
                 console.log( '编辑' )
+                let btnType = 'edit';
                 if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 || this.actions.viewOrEditPerm( 'edit' ) ){
                     btnType = 'none';
                 }
@@ -3115,7 +3116,7 @@ let config = {
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
                     temp_id: data.data.temp_id || '',
-                    btnType: 'edit',
+                    btnType: btnType,
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
