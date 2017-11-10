@@ -85,6 +85,9 @@ function getLoginController() {
                 this.$versionTable.toggle();
             });
 
+            this.$closeUpdateGroup.on('click', () => {
+                this.$versionTable.toggle();
+            });
 
             /**
              * 登录按钮
