@@ -302,7 +302,7 @@ export class EchartsService {
                 {
                 type: 'slider',
                 xAxisIndex: 0,
-                bottom:'0',
+                bottom:0,
                 height:20,
                 startValue: linebarOption['xAxis'][0]['data'][0],
                 endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
