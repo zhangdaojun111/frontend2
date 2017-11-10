@@ -259,9 +259,14 @@ let config = {
                         if(address['beAddress'].indexOf('method=get')!=-1){
                             $('<a href="'+address['beAddress']+'" ></a>')[0].click();
                         }else {
+                            let funName = '';
+                            if(address['beAddress'].indexOf('=')!=-1){
+                                funName = address['beAddress'].split()[1]
+                            }
                             let obj = {
                                 table_id:this.data.tableId,
-                                selectedRows:JSON.stringify(deleteListRel)
+                                selectedRows:JSON.stringify(deleteListRel),
+                                function_name: funName
                             }
                             HTTP.postImmediately( address['beAddress'],obj ).then( res=>{
                                 if(res['success']==1){

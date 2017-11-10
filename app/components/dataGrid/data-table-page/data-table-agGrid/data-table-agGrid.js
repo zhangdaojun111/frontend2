@@ -76,7 +76,7 @@ let config = {
         //操作列
         menuType: false,
         //操作列的宽度
-        operateColWidth: 0,
+        operateColWidth: 135,
         //自定义操作
         customOperateList: [],
         //自定义行级操作
@@ -893,7 +893,7 @@ let config = {
                 }
             }
             str += '</div>';
-            this.data.operateColWidth=20*operateWord+20;
+            this.data.operateColWidth=20*operateWord+8;
             return str
         },
         //设置搜索input值，解决拖动列排序后重新渲染floatingFilter的input导致显示为空
@@ -1277,6 +1277,8 @@ let config = {
             }
             //赋值
             this.agGrid.actions.setGridData(d);
+            //设置操作列宽度
+            this.agGrid.gridOptions.columnApi.setColumnWidth('myOperate',this.data.operateColWidth)
             //对应关系回显
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                 this.actions.setCorrespondenceSelect();
@@ -1701,6 +1703,11 @@ let config = {
             if( this.data.gridTips ){
                 this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
+            //筛选滚动后搜索条件赋值
+            let That = this;
+            this.el.find('.ag-body-viewport').on('scroll',_.debounce(()=>{
+                That.actions.setFloatingFilterInput();
+            },700))
             console.timeEnd( '渲染时间' )
         },
         //触发导出

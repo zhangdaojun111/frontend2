@@ -1623,7 +1623,7 @@ let config = {
 		//打开统计穿透
 		openCount(data) {
 			let childId = data['field_content']['count_table'];
-			let showName = `${this.data['table_name']}=>${data['field_content']['child_table_name']}`;
+			let showName = `${this.data['table_name']}->${data['field_content']['child_table_name']}`;
 			if (this.data.realId) {
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`, {
 					title: showName,

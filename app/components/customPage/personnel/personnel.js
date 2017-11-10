@@ -311,7 +311,7 @@ let config = {
         //设置搜索input值
         setFloatingFilterInput: function () {
             for( let k in this.data.searchValue ){
-                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
+                try{this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];}catch(e){}
             }
         },
         //获取数据
@@ -418,6 +418,8 @@ let config = {
             let treeView = new TreeView(this.data.department_tree,{
                 callback:(event,node) => {
                     if( node.id ){
+                        this.data.page = 1;
+                        this.data.first = 0;
                         this.data.departmentName = node.name;
                         this.actions.getUserData();
                     }
@@ -488,6 +490,11 @@ let config = {
             this.el.find( '.grid-export-btn' ).on( 'click',()=>{
                 this.actions.onExport();
             } )
+            //筛选滚动后搜索条件赋值
+            let That = this;
+            this.el.find('.ag-body-viewport').on('scroll',_.debounce(()=>{
+                That.actions.setFloatingFilterInput();
+            },700))
             //删除
             this.el.find( '.grid-del-btn' ).on( 'click',()=>{
                 let arr = [];
