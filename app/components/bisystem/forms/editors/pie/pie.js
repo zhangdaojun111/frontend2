@@ -262,7 +262,17 @@ let config = {
                     }
                 }
             },
-
+            {
+                label: '选择图形类型',
+                name: 'circular',
+                defaultValue: '1',
+                list: [
+                    {name:'环形图', value:'2'},
+                    {name:'饼图', value:'1'},
+                ],
+                type: 'select',
+                events: {}
+            },
             {
                 label: 'x轴字段',
                 name: 'xAxis',
