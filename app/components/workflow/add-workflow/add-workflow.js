@@ -212,6 +212,9 @@ let config={
                     parent_temp_id:obj.parent_temp_id,
                     parent_record_id:obj.parent_record_id
                 };
+                console.log("提交工作流表单数据")
+                console.log(obj)
+                console.log(postData)
                 //半触发操作用
                 if( obj.data_from_row_id ){
                     postData = {
