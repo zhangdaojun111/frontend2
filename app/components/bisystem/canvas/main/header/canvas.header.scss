@@ -2,7 +2,7 @@
     position: relative;
     height: 60px;
     white-space: nowrap;
-    width: calc(100% - 300px);
+    width: calc(100% - 398px);
     background: transparent;
     display: inline-block;
     overflow: hidden;
@@ -30,5 +30,28 @@
     float: right;
     input[type='file'] {
         display: none;
+    }
+}
+
+.view-header-refresh-cache {
+    position: relative;
+    display: inline-block;
+    right: 0;
+    top: 0;
+    float: right;
+    a {
+        text-decoration: none;
+        color: #666666;
+        display: inline-block;
+        position: relative;
+        float: right;
+        padding: 0;
+        line-height: 0;
+        margin: 22px 30px 22px 0;
+        outline: none;
+        i {
+            margin-right: 4px;
+            vertical-align: middle;
+        }
     }
 }
