@@ -249,7 +249,7 @@ let config = {
                     data.url += "&btnType=edit";
                 }else if(data.handle_status_text === '已取消'){
                     data.url += "&btnType=view";
-                }else if(data.handle_status_text === '已被通过' || data.handle_status_text === '已通过' || data.handle_status_text === '其他'){
+                }else if(data.handle_status_text === '已被通过' || data.handle_status_text === '已通过' || data.handle_status_text === '其他'|| data.handle_status_text === '已驳回'){
 	                data.url += "&btnType=view";
                 }
 
