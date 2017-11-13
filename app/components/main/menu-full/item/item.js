@@ -62,6 +62,9 @@ let config = {
                 if(event.currentTarget.className.indexOf('edit') > 0){
                     return;
                 }
+                if (this.data.ts_name == '' && this.data.table_id == "0") {
+                    return;
+                }
                 let key;
                 if (this.data.table_id && this.data.table_id !== '' && this.data.table_id !== "0") {
                     key = this.data.table_id;
