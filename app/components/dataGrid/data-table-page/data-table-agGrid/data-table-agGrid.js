@@ -96,6 +96,10 @@ let config = {
         //没有定制列
         noNeedCustom: false,
         postData: [],
+        //删除的数据
+        deletedIds: [],
+        //是否传tempIds
+        delTemp: false,
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
@@ -2450,7 +2454,7 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
-            if( json.is_batch == 1 || this.data.viewMode == 'EditChild' ){
+            if( this.data.delTemp ){
                 json.temp_ids = json.real_ids;
                 json['real_ids'] = JSON.stringify([]);
             }
@@ -2567,6 +2571,11 @@ let config = {
             this.data.deletedIds = [];
             let rows = this.agGrid.gridOptions.api.getSelectedRows();
             for( let r of rows ){
+                if(r.temp_id){
+                    this.data.delTemp = true;
+                    this.data.deletedIds.push( r.temp_id );
+                    continue;
+                }
                 if( r._id ){
                     this.data.deletedIds.push( r._id );
                 }
