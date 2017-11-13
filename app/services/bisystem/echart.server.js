@@ -321,6 +321,12 @@ export class EchartsService {
                 }
             ]
         };
+
+        //是否设置自定义高度top
+        if(cellOption['customTop']){
+            linebarOption['grid']['top'] = cellOption['customTop'];
+        }
+
         return linebarOption;
     }
 
@@ -447,7 +453,6 @@ export class EchartsService {
             });
         });
         mutiListOption['legend']['data'] = legend;
-        console.log(mutiListOption);
         return mutiListOption;
     }
     /**
