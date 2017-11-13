@@ -14,7 +14,7 @@
             color: #999;
             font-size: 12px;
             background-image: linear-gradient(rgba(228, 228, 228, 1) 1px, transparent 0);
-            background-color: #e4e4e4;
+            background-color: #efefef;
             background-size: 30px 30px;
             background-position: 0 29px;
             .item {
@@ -33,7 +33,7 @@
                 //padding: 0 30px 0 15px;
                 border: 1px solid rgb(199, 199, 199);
                 border-left: none;
-                background-color: #e4e4e4;
+                background-color: #efefef;
                 color: #666666;
                 &.focus {
                     background: #fff;
@@ -54,7 +54,7 @@
                 width: 50px;
                 height: 100%;
                 border-left: solid 1px #d7d7d7;
-                background-color: #e4e4e4;
+                //background-color: #efefef;
                 float: right;
                 .view-save{
                     cursor: pointer;
@@ -77,14 +77,14 @@
                     width: 260px;
                     height: auto;
                     margin-top: -1px;
-                    border: solid 1px #e4e4e4;
+                    border: solid 1px #efefef;
                 }
             }
 
             .view-popup{
                 width: 30px;
                 border: none;
-                background-color: #e4e4e4;
+                //background-color: #e4e4e4;
                 float: right;
                 color: black;
                 .popup-btn{

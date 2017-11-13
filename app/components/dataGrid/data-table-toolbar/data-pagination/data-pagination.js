@@ -223,6 +223,9 @@ let config = {
         },
         //表级操作
         tableOperateFun: function (opt,opera) {
+            console.log("表级操作")
+            console.log(opt)
+            console.log(opera)
             if(opera != 0){
                 let address = JSON.parse(opera);
                 let deleteListRel = [];
@@ -256,22 +259,25 @@ let config = {
                         if(address['beAddress'].indexOf('method=get')!=-1){
                             $('<a href="'+address['beAddress']+'" ></a>')[0].click();
                         }else {
+                            let funName = '';
+                            if(address['beAddress'].indexOf('=')!=-1){
+                                funName = address['beAddress'].split()[1]
+                            }
                             let obj = {
                                 table_id:this.data.tableId,
-                                selectedRows:JSON.stringify(deleteListRel)
+                                selectedRows:JSON.stringify(deleteListRel),
+                                function_name: funName
                             }
-                            dataTableService.tableOperationRefresh( obj ).then( res=>{
+                            HTTP.postImmediately( address['beAddress'],obj ).then( res=>{
                                 if(res['success']==1){
                                     msgBox.showTips('发送成功！');
                                 }else if(res['success']==0){
                                     msgBox.alert('发送请求失败！错误是'+res['error']);
                                 }
                             } )
-                            HTTP.flush();
                         }
                     }
                 }
-
             }
         },
         //失效刷新

@@ -33,7 +33,10 @@ import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 import ViewVideo from "../../../form/view-video/view-video";
 import fastSearch from "../../data-table-toolbar/fast-search/fast-search"
 import QuillAlert from "../../../form/quill-alert/quill-alert";
-
+import '../../../../assets/scss/theme/blue.scss';
+import '../../../../assets/scss/theme/ink-blue.scss';
+import '../../../../assets/scss/theme/orange.scss';
+import {UserInfoService} from "../../../../services/main/userInfoService"
 
 let config = {
     template: template,
@@ -73,7 +76,7 @@ let config = {
         //操作列
         menuType: false,
         //操作列的宽度
-        operateColWidth: 0,
+        operateColWidth: 135,
         //自定义操作
         customOperateList: [],
         //自定义行级操作
@@ -890,7 +893,7 @@ let config = {
                 }
             }
             str += '</div>';
-            this.data.operateColWidth=20*operateWord+20;
+            this.data.operateColWidth=20*operateWord+8;
             return str
         },
         //设置搜索input值，解决拖动列排序后重新渲染floatingFilter的input导致显示为空
@@ -1274,6 +1277,8 @@ let config = {
             }
             //赋值
             this.agGrid.actions.setGridData(d);
+            //设置操作列宽度
+            this.agGrid.gridOptions.columnApi.setColumnWidth('myOperate',this.data.operateColWidth)
             //对应关系回显
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                 this.actions.setCorrespondenceSelect();
@@ -1698,6 +1703,11 @@ let config = {
             if( this.data.gridTips ){
                 this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
+            //筛选滚动后搜索条件赋值
+            let That = this;
+            this.el.find('.ag-body-viewport').on('scroll',_.debounce(()=>{
+                That.actions.setFloatingFilterInput();
+            },700))
             console.timeEnd( '渲染时间' )
         },
         //触发导出
@@ -3101,6 +3111,7 @@ let config = {
             }
             if( data.event.srcElement.className == 'gridEdit' ){
                 console.log( '编辑' )
+                let btnType = 'edit';
                 if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 || this.actions.viewOrEditPerm( 'edit' ) ){
                     btnType = 'none';
                 }
@@ -3112,7 +3123,7 @@ let config = {
                     parent_record_id: this.data.parentRecordId,
                     real_id: data.data._id,
                     temp_id: data.data.temp_id || '',
-                    btnType: 'edit',
+                    btnType: btnType,
                     in_process: this.data.viewMode == 'in_process' ? 1 : 0,
                     is_batch: (this.data.viewMode == 'createBatch'||this.data.viewMode == 'approveBatch') ? 1 : 0,
                     form_id:this.data.formId,
@@ -3519,6 +3530,15 @@ let config = {
         this.actions.getHeaderData();
     }
 }
+
+//加载用户偏好样式
+UserInfoService.getUserTheme().done((res) => {
+	if(res.success === 1){
+		$('body').attr('class',res.data);
+	}else{
+		$('body').attr('class','blue');
+	}
+});
 
 class dataTableAgGrid extends Component {
     constructor(data,newConfig){
