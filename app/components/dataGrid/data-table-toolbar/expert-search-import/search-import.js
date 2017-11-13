@@ -5,6 +5,7 @@ import {Uploader} from '../../../../lib/uploader';
 import Component from "../../../../lib/component";
 import template from './search-import.html';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
+import msgBox from '../../../../lib/msgbox';
 import './search-import.scss';
 
 let config = {
@@ -16,13 +17,45 @@ let config = {
         choice: 1
     },
     actions: {
+        //选择文件
         upload: function(){
             this.data.uploader.addFile(this.data.key).then(res=> {
                 this.data.fileData = res;
+                this.actions.fileTip();
             });
         },
+        //改变文件提醒
+        fileTip: function () {
+            let name = '请选择文件';
+            for( let k in this.data.fileData ){
+                name = this.data.fileData[k].filename;
+            }
+            this.el.find( '.file-name' )[0].innerHTML = name;
+        },
+        //只保留最新的文件
+        saveFile:function (){
+            let num = 0;
+            for( let code in this.data.fileData ){
+                num++;
+            }
+            let newFile = {}
+            let n = 0;
+            let currentCode ='';
+            for( let code in this.data.fileData ){
+                n++;
+                if( n==num ){
+                    newFile[code] = this.data.fileData[code];
+                    currentCode = code;
+                }else {
+                    this.uploader.deleteFileByCode( code,'/upload_data/' );
+                }
+            }
+            this.data.fileData = newFile;
+        },
+        //上传文件
         import: function() {
-            if (this.el.find('.common-search-title .choice-input').eq(1).hasClass('active')) {
+            this.actions.saveFile();
+            if (this.el.find('.choice-input').eq(1).hasClass('active')) {
                 this.data.choice = 0
             }
             let json = {
@@ -41,6 +74,11 @@ let config = {
                 }
             };
             this.data.uploader.upload(url, {}, toolbox.update(), (res) => {
+                if(res.success == 1) {
+                    msgBox.showTips('导入成功')
+                } else if (res.error) {
+                    msgBox.showTips('导入失败，请重试')
+                }
                 PMAPI.closeIframeDialog(window.config.key, {
                     type: res.success
                 });
@@ -59,7 +97,11 @@ let config = {
                 _this.el.find('.choice-input').removeClass('active');
                 $(this).addClass('active');
             }).on('click','.search-import-submit-btn',function(){
-                _this.actions.import()
+                if(_this.data.fileData) {
+                    _this.actions.import();
+                } else {
+                    msgBox.alert('请选择文件')
+                }
             })
         }
     },

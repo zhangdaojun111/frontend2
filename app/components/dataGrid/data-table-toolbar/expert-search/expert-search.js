@@ -564,7 +564,11 @@ let config = {
                     _this.isEdit = false;
                 }
             }).on('click','.common-search-title .export', function(){
-                searchExport.export(_this.data.tableId,_this.el);
+                if(_this.data.commonQuery.length == 0){
+                    msgBox.alert('常用查询为空不能导出')
+                } else {
+                    searchExport.export(_this.data.tableId,_this.el);
+                }
             }).on('click','.common-search-title .import', function(){
                 let choice = 1;
                 if(_this.el.find('.common-search-title .choice-input').eq(1).hasClass('active')){
@@ -576,13 +580,12 @@ let config = {
                     choice : choice,
                 }
                 PMAPI.openDialogByIframe(`/iframe/searchImport/`,{
-                    width:400,
-                    height:450,
+                    width:500,
+                    height:400,
                     title:`常用查询导入`,
                     modal:true,
                 },{obj}).then(res=>{
                     if(res.type == 1) {
-                        msgBox.showTips('导入成功');
                         _this.actions.getExpertSearchData();
                     }
                 })
