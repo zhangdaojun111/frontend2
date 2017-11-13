@@ -3074,7 +3074,7 @@ let config = {
         },
         //在途数据无法穿透
         haveTempId: function (row) {
-            return row.temp_id ? true:false
+            return (row.temp_id == undefined ? false:true)
         },
         //查看编辑权限判断
         viewOrEditPerm: function (type) {
