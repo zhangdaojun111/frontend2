@@ -191,8 +191,6 @@ let config = {
                 this.formItems['yAxis'].setValue(chart['yAxis']);
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
-
-
             this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
             this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
             this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
@@ -252,21 +250,16 @@ let config = {
                 events: {
                     onChange(value) {
                         if (value == 1) {
+                            this.formItems['limit'].trigger('onChange');
                             this.formItems['limit'].el.hide();
-                            // this.formItems['limitNum'].el.hide();
-                            // this.formItems['endLimitNum'].el.hide();
-                            this.formItems['limit'].setValue(0);
                             this.formItems['columns'].el.show();
                             this.formItems['yAxis'].el.hide();
                             this.formItems['deeps'].el.hide();
                             this.formItems['deepX'].el.hide();
                             this.formItems['deeps'].actions.clear();
                         } else {
+                            this.formItems['limit'].trigger('onChange', [1]);
                             this.formItems['limit'].el.show();
-                            // if(this.formItems['limit'].data.value==1){
-                            //     this.formItems['limitNum'].el.show();
-                            //     this.formItems['endLimitNum'].el.show();
-                            // }
                             this.formItems['columns'].el.hide();
                             this.formItems['yAxis'].el.show();
                             this.formItems['deeps'].el.show();
@@ -388,13 +381,9 @@ let config = {
                         if (value && value[0]) {
                             this.formItems['limitNum'].el.show();
                             this.formItems['endLimitNum'].el.show();
-                            // this.formItems['limitNum'].setValue(10);
-                            // this.formItems['endLimitNum'].setValue(10);
                         } else {
                             this.formItems['limitNum'].el.hide();
                             this.formItems['endLimitNum'].el.hide();
-                            // this.formItems['limitNum'].setValue(0);
-                            // this.formItems['endLimitNum'].setValue(0);
                         }
                     }
                 }
