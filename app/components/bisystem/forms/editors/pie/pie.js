@@ -282,6 +282,7 @@ let config = {
                 list: [
                     {name:'环形图', value:'2'},
                     {name:'饼图', value:'1'},
+
                 ],
                 type: 'select',
                 events: {
