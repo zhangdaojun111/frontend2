@@ -803,7 +803,7 @@ let config = {
 			let formValue = {};
 			for (let key in data) {
 				if(data[key].dtype == 1 && typeof data[key].value == 'string'){
-					formValue[key] = Number(data[key].value.replace(',',''));
+					formValue[key] = Number(data[key].value.replace(/,/g,''));
 				}else{
 					formValue[key] = data[key].value;
 				}
@@ -1387,7 +1387,7 @@ let config = {
 				effect: data["effect"],
 				id: data['id']
 			};
-			if(!this.actions.webCalcExpression(data)){
+			if(!this.actions.webCalcExpression(data) && !noCount){
 				this.actions.calcExpression(calcData, data['value']);
 			};
 			if (data.required) {
@@ -1623,7 +1623,7 @@ let config = {
 		//打开统计穿透
 		openCount(data) {
 			let childId = data['field_content']['count_table'];
-			let showName = `${this.data['table_name']}=>${data['field_content']['child_table_name']}`;
+			let showName = `${this.data['table_name']}->${data['field_content']['child_table_name']}`;
 			if (this.data.realId) {
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`, {
 					title: showName,

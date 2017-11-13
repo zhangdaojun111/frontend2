@@ -46,6 +46,9 @@ let config = {
                         this.actions.showChildrenAtFull();
                     }
                 }
+                if (this.data.ts_name == '' && this.data.table_id == "0") {
+                    return;
+                }
                 if (this.data.url && this.data.url !== ''){
                     Mediator.emit('menu:item:openiframe', {
                         id: this.data.namespace,
@@ -57,6 +60,9 @@ let config = {
             } else {
                 //编辑模式下不再打开tab
                 if(event.currentTarget.className.indexOf('edit') > 0){
+                    return;
+                }
+                if (this.data.ts_name == '' && this.data.table_id == "0") {
                     return;
                 }
                 let key;
@@ -79,25 +85,33 @@ let config = {
             // window.clearTimeout(this.data.timer);
             if (this.childlist.length) {
                 this.childlist.show();
-                let position = $(event).position();
+                //获取文档高度
+                let documentHeight= $(document).height();
+				let position = $(event).position();
                 let screenHeight = $('body').height();
                 let parentPos = $(event).parent().css('position') == 'fixed'?($(event).parent().position()):{top:0,left:0};
                 let top = position.top + parentPos.top;
-                let left = position.left + parentPos.left + Math.ceil($(event).outerWidth());
-                if ((position.top + this.childlist.height()) > screenHeight) {
-                    this.childlist.removeClass('top').addClass('bottom');
-                    this.childlist.css({
-                        bottom:0,
-                        left:left
-                    })
+				let left = position.left + parentPos.left + Math.ceil($(event).outerWidth());
+                if(this.childlist.height() >= (documentHeight - top)){
+					this.childlist.css({
+						bottom:0,
+						left:left
+					})
                 } else {
-                    this.childlist.removeClass('bottom').addClass('top');
-                    this.childlist.css({
-                        top:top,
-                        left:left
-                    })
+					this.childlist.removeClass('bottom').addClass('top');
+					this.childlist.css({
+						top:top,
+						left:left
+					})
 
-                }
+				}
+                // if ((position.top + this.childlist.height()) > screenHeight) {
+                //     this.childlist.removeClass('top').addClass('bottom');
+                //     this.childlist.css({
+                //         bottom:0,
+                //         left:left
+                //     })
+                // }
             }
         },
         /**

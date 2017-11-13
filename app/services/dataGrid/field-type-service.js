@@ -79,7 +79,7 @@ export const fieldTypeService = {
     //不能搜索字段
     canNotSearch : function (data) {
         let arr = [this.UEDITOR,this.TEXT_COUNT_TYPE,this.URL_TYPE,this.CYCLE_RULE,this.TEXT_COUNT_TYPE,this.SECRET_TEXT,
-            this.IMAGE_TYPE,this.SECRET_TEXT,this.IMAGE_TYPE,this.EDIT_CONTROL,this.VIDEO_TYPE,this.CYCLE_RULE,this.ATTACHMENT]
+            this.IMAGE_TYPE,this.IMAGE_TYPE,this.VIDEO_TYPE,this.CYCLE_RULE,this.ATTACHMENT]
         return arr.indexOf( data ) != -1;
     },
     //返回搜索的类型
