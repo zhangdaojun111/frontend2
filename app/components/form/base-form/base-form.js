@@ -1481,6 +1481,7 @@ let config = {
 					let expressionStr = this.data.data[f]["expression"];
 					if (expressionStr !== "") {
 						expression = this.actions.replaceSymbol(expressionStr);
+
 						try {
 							if (expression.indexOf("$^$") == -1) {
 								try {
@@ -1490,34 +1491,26 @@ let config = {
 									if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
                                         this.actions.set_value_for_form(eval(expression), f);
 									//	return true;
-									}else{
-                                        // this.actions.calcExpression(calcData, data['value'])
-										//return false;
 									}
 								} catch (err) {
 									console.error('不能执行前端表达式计算1');
                                     this.actions.calcExpression(calcData, data['value'])
-                                   // return false;
 								}
 							}else{
                                 this.actions.calcExpression(calcData, data['value'])
-                             //   return false;
 							}
 						} catch (err) {
 							// console.error(err);
-							// console.error('不能执行前端表达式计算2');
+							console.error('不能执行前端表达式计算2');
                             this.actions.calcExpression(calcData, data['value'])
-                           // return false;
 						}
 					}else{
                         this.actions.calcExpression(calcData, data['value'])
 					}
 				}else{
                     this.actions.calcExpression(calcData, data['value'])
-                    //return false;
 				}
 			}
-			//return true;
 		},
 		//小数显示精度
         showAccuracy(dfield, value) {
