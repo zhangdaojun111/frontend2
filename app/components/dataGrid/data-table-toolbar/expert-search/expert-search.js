@@ -563,33 +563,29 @@ let config = {
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                     _this.isEdit = false;
                 }
-            }).on('click','.common-search-title .export-btn', function(){
+            }).on('click','.common-search-title .export', function(){
                 searchExport.export(_this.data.tableId,_this.el);
-            }).on('click','.common-search-title .import-btn', function(){
+            }).on('click','.common-search-title .import', function(){
                 let choice = 1;
                 if(_this.el.find('.common-search-title .choice-input').eq(1).hasClass('active')){
                     choice = 0
                 }
-                let json = {
-                    selectMode:'single',
-                    file_filter:'.ini'
-                }
                 let obj={
                     tableId: _this.data.tableId,
-                    key: window.config.key,
+                    parentKey: window.config.key,
                     choice : choice,
-                    uploader: new Uploader(json)
                 }
-                for( let o in obj ){
-                    searchImport.data[o] = obj[o];
-                }
-                PMAPI.openDialogByComponent(searchImport, {
-                    width: 300,
-                    height: 350,
-                    title: '常用查询导入'
-                }).then((data) => {
-
-                });
+                PMAPI.openDialogByIframe(`/iframe/searchImport/`,{
+                    width:400,
+                    height:450,
+                    title:`常用查询导入`,
+                    modal:true,
+                },{obj}).then(res=>{
+                    if(res.type == 1) {
+                        msgBox.showTips('导入成功');
+                        _this.actions.getExpertSearchData();
+                    }
+                })
                 // searchImport.import(window.config.key,_this.data.tableId,choice);
             }).on('click','.common-search-title .choice-input', function(){
                 _this.el.find('.common-search-title .choice-input').removeClass('active');
@@ -613,6 +609,7 @@ let config = {
 class expertSearch extends Component {
     constructor(data,newConfig){
         super($.extend(true,{},config,newConfig,{data:data||{}}));
+        console.log(this.data)
     }
 }
 export default expertSearch
