@@ -10,6 +10,10 @@ import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.se
 
 let config = {
     template: template,
+    data: {
+        name:'饼图',
+        type:'circular'
+    },
     actions: {
         /**
          * 加载x 和y轴数据
@@ -131,8 +135,8 @@ let config = {
                 filter: data.filter.filter,
                 filter_source: data.filter.filter_source,
                 chartType: {
-                    name: '饼图',
-                    type: 'pie'
+                    name: this.data.name,
+                    type: this.data.type,
                 },
                 icon: data.icon,
                 source: data.source,
@@ -171,7 +175,6 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
-
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
@@ -180,6 +183,7 @@ let config = {
             this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['pieType'].setValue(chart['pieType']['value']);
+            this.formItems['circular'].setValue(chart['chartType']['type']=='pie'?chart['chartType']['name']='1':chart['chartType']['name']='2');
             this.formItems['xAxis'].setValue(chart['xAxis']);
             if (chart['pieType']['value'] == 1) {
                 this.formItems['columns'].setValue(chart['yAxis']);
@@ -187,6 +191,8 @@ let config = {
                 this.formItems['yAxis'].setValue(chart['yAxis']);
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
+
+
             this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
             this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
             this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
@@ -247,13 +253,20 @@ let config = {
                     onChange(value) {
                         if (value == 1) {
                             this.formItems['limit'].el.hide();
+                            // this.formItems['limitNum'].el.hide();
+                            // this.formItems['endLimitNum'].el.hide();
+                            this.formItems['limit'].setValue(0);
+                            this.formItems['columns'].el.show();
                             this.formItems['yAxis'].el.hide();
                             this.formItems['deeps'].el.hide();
-                            this.formItems['deepX'].el.hide();
                             this.formItems['deepX'].el.hide();
                             this.formItems['deeps'].actions.clear();
                         } else {
                             this.formItems['limit'].el.show();
+                            // if(this.formItems['limit'].data.value==1){
+                            //     this.formItems['limitNum'].el.show();
+                            //     this.formItems['endLimitNum'].el.show();
+                            // }
                             this.formItems['columns'].el.hide();
                             this.formItems['yAxis'].el.show();
                             this.formItems['deeps'].el.show();
@@ -271,7 +284,17 @@ let config = {
                     {name:'饼图', value:'1'},
                 ],
                 type: 'select',
-                events: {}
+                events: {
+                    onChange(value){
+                        if(value === '2'){
+                            this.data.name = '环形图';
+                            this.data.type = 'circular';
+                        }else{
+                            this.data.name = '饼图';
+                            this.data.type = 'pie';
+                        }
+                    }
+                }
             },
             {
                 label: 'x轴字段',
@@ -364,9 +387,13 @@ let config = {
                         if (value && value[0]) {
                             this.formItems['limitNum'].el.show();
                             this.formItems['endLimitNum'].el.show();
+                            // this.formItems['limitNum'].setValue(10);
+                            // this.formItems['endLimitNum'].setValue(10);
                         } else {
                             this.formItems['limitNum'].el.hide();
                             this.formItems['endLimitNum'].el.hide();
+                            // this.formItems['limitNum'].setValue(0);
+                            // this.formItems['endLimitNum'].setValue(0);
                         }
                     }
                 }
