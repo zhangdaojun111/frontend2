@@ -6,8 +6,9 @@ import Component from "../../../../lib/component";
 import template from './expert-search.html';
 import expertCondition from './expert-search-condition/expert-search-condition';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
-import {searchImport} from '../expert-search-import/search-import'
+import searchImport from '../expert-search-import/search-import'
 import {searchExport} from '../expert-search-export/search-export'
+import {Uploader} from '../../../../lib/uploader'
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {HTTP} from "../../../../lib/http";
 import DateTimeControl from "../../../form/datetime-control/datetime-control";
@@ -569,7 +570,27 @@ let config = {
                 if(_this.el.find('.common-search-title .choice-input').eq(1).hasClass('active')){
                     choice = 0
                 }
-                searchImport.import(window.config.key,_this.data.tableId,choice);
+                let json = {
+                    selectMode:'single',
+                    file_filter:'.ini'
+                }
+                let obj={
+                    tableId: _this.data.tableId,
+                    key: window.config.key,
+                    choice : choice,
+                    uploader: new Uploader(json)
+                }
+                for( let o in obj ){
+                    searchImport.data[o] = obj[o];
+                }
+                PMAPI.openDialogByComponent(searchImport, {
+                    width: 300,
+                    height: 350,
+                    title: '常用查询导入'
+                }).then((data) => {
+
+                });
+                // searchImport.import(window.config.key,_this.data.tableId,choice);
             }).on('click','.common-search-title .choice-input', function(){
                 _this.el.find('.common-search-title .choice-input').removeClass('active');
                 $(this).addClass('active')
