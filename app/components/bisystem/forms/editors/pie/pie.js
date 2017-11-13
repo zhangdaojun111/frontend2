@@ -148,7 +148,8 @@ let config = {
                 limit: data.limit[0] ? data.limitNum : 0,
                 endlimit:data.limit[0] ? data.endLimitNum : 0,
             };
-
+            console.log("-----------------------------------");
+            console.log(data.limit);
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
@@ -191,10 +192,11 @@ let config = {
                 this.formItems['yAxis'].setValue(chart['yAxis']);
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
-            this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
-            this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
-            this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
-
+            if (chart['pieType']['value'] == 2) {
+                this.formItems['limit'].setValue(chart['limit'] || chart['endlimit']  ? 1 : 0);
+                this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
+                this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
+            };
         }
     },
     data: {
