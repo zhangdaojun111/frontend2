@@ -1477,40 +1477,40 @@ let config = {
 			for (let index in data["effect"]) {
 				let f=data["effect"][index];
 				let expression;
+				let bool = false;
+
 				if (this.data.data.hasOwnProperty(f)) {
 					let expressionStr = this.data.data[f]["expression"];
-					if (expressionStr !== "") {
+					if (expressionStr !== "" ) {
 						expression = this.actions.replaceSymbol(expressionStr);
-
 						try {
 							if (expression.indexOf("$^$") == -1) {
 								try {
-									console.log('*****');
-                                    console.log(this.data.data[f]['label']);
-                                    console.log(expressionStr);
 									if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
                                         this.actions.set_value_for_form(eval(expression), f);
-									//	return true;
 									}
 								} catch (err) {
 									console.error('不能执行前端表达式计算1');
-                                    this.actions.calcExpression(calcData, data['value'])
+                                    bool = true;
 								}
 							}else{
-                                this.actions.calcExpression(calcData, data['value'])
+                                bool = true;
 							}
 						} catch (err) {
-							// console.error(err);
 							console.error('不能执行前端表达式计算2');
-                            this.actions.calcExpression(calcData, data['value'])
+                            bool = true;
 						}
 					}else{
-                        this.actions.calcExpression(calcData, data['value'])
+                        bool = true;
 					}
 				}else{
-                    this.actions.calcExpression(calcData, data['value'])
+                    bool = true;
 				}
+                if(bool){
+                    this.actions.calcExpression(calcData, data['value'])
+                }
 			}
+
 		},
 		//小数显示精度
         showAccuracy(dfield, value) {
