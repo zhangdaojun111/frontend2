@@ -1387,7 +1387,7 @@ let config = {
 				effect: data["effect"],
 				id: data['id']
 			};
-			if(!this.actions.webCalcExpression(data)){
+			if(!this.actions.webCalcExpression(data) && !noCount){
 				this.actions.calcExpression(calcData, data['value']);
 			};
 			if (data.required) {
