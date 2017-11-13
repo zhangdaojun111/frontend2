@@ -2455,6 +2455,7 @@ let config = {
                 parent_record_id: this.data.parentRecordId
             }
             if( this.data.delTemp ){
+                console.log('删除数据发送temp_ids')
                 json.temp_ids = json.real_ids;
                 json['real_ids'] = JSON.stringify([]);
             }
@@ -2568,6 +2569,7 @@ let config = {
         },
         //返回选择数据
         retureSelectData: function () {
+            this.data.delTemp = false;
             this.data.deletedIds = [];
             let rows = this.agGrid.gridOptions.api.getSelectedRows();
             for( let r of rows ){
