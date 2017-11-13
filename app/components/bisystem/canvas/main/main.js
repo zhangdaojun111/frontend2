@@ -154,7 +154,6 @@ let config = {
             // }());
         // }
     },
-
     afterRender:function(){
         if (self.frameElement && self.frameElement.tagName == "IFRAME") {
             let w = $(self.frameElement).closest('.iframes').width();
