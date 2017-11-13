@@ -2981,6 +2981,10 @@ let config = {
             }
             // 子表
             if( fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
+                if(this.actions.haveTempId(data.data)){
+                    msgBox.showTips('无法查看穿透数据')
+                    return;
+                }
                 console.log( "子表穿透" )
                 let obj = {
                     tableId: data.colDef.field_content.child_table,
