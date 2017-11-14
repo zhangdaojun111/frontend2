@@ -625,6 +625,9 @@ let config = {
 				for (let i in need_key) {
 					fields[f][need_key[i]] = temp_field[need_key[i]];
 				}
+				if(temp_field['real_type']){
+					fields[f]['accuracy'] = temp_field['accuracy']
+				}
 			}
 			let new_data = {};
 			let old_data = this.actions.createFormValue(this.data.data);
