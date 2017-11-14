@@ -109,7 +109,7 @@ const workflowForGrid={
             btnType:'none',
             table_id: obj.table_id
         });
-        
+
         let focusArr=[];
         Mediator.subscribe('workflow:focus-users', (res)=> {
             focusArr=res;
