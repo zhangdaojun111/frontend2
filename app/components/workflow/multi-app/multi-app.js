@@ -40,8 +40,9 @@ let config={
                         })
                     })
                 }
-            })
-            
+            });
+            this.showLoading();
+
         }
     },
     binds:[
