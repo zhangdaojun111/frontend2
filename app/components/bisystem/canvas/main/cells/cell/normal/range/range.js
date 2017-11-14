@@ -93,6 +93,7 @@ let config = {
 
         //默认选中全部
         this.el.find('.normal-date-options .all-year input').prop('checked', true);
+        this.el.find('.normal-date-options .all-year').addClass('option-active');
     },
     beforeDestory() {}
 };

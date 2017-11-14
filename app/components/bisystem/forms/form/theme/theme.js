@@ -18,11 +18,68 @@ handlebars.registerHelper('theme_background', function(colors,options) {
 let config = {
     template: template,
     data: {
-        colors:['#BC80D7','#6FDCAC','#E46F72','#69E3D8','#E46F72','#8799DB','#80E9D1','#9A87E2','#7DC878','#F19181','#A6D776','#80DFA3',
-                '#D8E476','#F0A576','#8DD97B','#79CDA4','#B7A4F5','#F0C78B','#E07FE0','#EC6FAA','#7FC7E8','#E1B87B','#CDE07B','#75BEFD'],
+        colors:['#4474F0','#E8BD55','#F28E1B','#FF0000','#A264E1','#00AE66',
+            '#0061FF','#52FFFF','#EF46FF','#74B33D','#0042C6','#00C1B1', '#C10000']
     },
-    actions: {},
-    binds: [],
+    actions: {
+        createColor:function(){
+            this.el.find('.form-theme').empty();
+            this.data.colors.forEach((val,index)=>{
+                this.el.find('.form-theme').append('<span id="'+val+'"><b style="background:'+val+'"></b><i class="minus-btn" id="'+val+'">-</i></span>');
+        });
+            this.data.value = this.data.colors;
+        }
+    },
+    binds: [
+        {
+            event: 'click',
+            selector: '.add-color',
+            callback: function (context, event){
+                this.el.find('.minus-btn').css({"display":'none'})
+                this.el.find('.add-color-box').empty()
+                this.el.find('.add-color-box').append("<input type='color' class='add-color-input'>")
+                this.el.find('.add-color-box').append("<span class='save-color'>确定</span>")
+            }
+        },
+        {
+            event: 'click',
+            selector: '.save-color',
+            callback: function (context, event){
+                let length = this.el.find('.add-color-input').length
+                for (let i = 0; i< length ;i++) {
+                    let col = this.el.find('.add-color-input').eq(i).val()
+                    this.data.colors.push(col)
+                }
+                this.actions.createColor()
+            }
+        },
+        {
+            event: 'click',
+            selector: '.minus-color',
+            callback: function (context, event) {
+                this.el.find('.minus-btn').css({"display":'block'})
+                this.el.find('.add-color-box').empty()
+                this.el.find('.add-color-box').append("<span class='minus-color-save'>确定</span>")
+            }
+        },
+        {
+            event: 'click',
+            selector: '.minus-color-save',
+            callback: function (context, event) {
+                this.el.find('.minus-btn').css({"display":'none'})
+            }
+        },
+        {
+            event: 'click',
+            selector: '.minus-btn',
+            callback: function (context, event){
+                console.log(event.target.id)
+                this.data.colors.splice(this.data.colors.indexOf(event.target.id), 1)
+                this.actions.createColor();
+                this.el.find('.minus-btn').css({"display":'block'})
+            }
+        },
+    ],
     afterRender(){
         //设置初始值
         this.data.value = this.data.colors;
