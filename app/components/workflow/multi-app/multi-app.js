@@ -29,7 +29,8 @@ let config={
                         return workflowService.approveManyWorkflow(postData);
                     })().then((res)=>{
                         if(res.success===1){
-                            msgBox.alert(`操作成功：${res.error}`);
+                            // msgBox.alert(`操作成功：${res.error}`);
+                            msgBox.alert(`操作成功`);
                         }else{
                             msgBox.alert(`操作失败：${res.error}`);
                         }
@@ -41,7 +42,7 @@ let config={
                     })
                 }
             });
-            this.showLoading();
+            msgBox.showLoadingSelf();
 
         }
     },
