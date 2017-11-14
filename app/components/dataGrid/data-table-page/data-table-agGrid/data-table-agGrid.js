@@ -96,6 +96,10 @@ let config = {
         //没有定制列
         noNeedCustom: false,
         postData: [],
+        //删除的数据
+        deletedIds: [],
+        //是否传tempIds
+        delTemp: false,
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
@@ -2450,7 +2454,8 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
-            if( json.is_batch == 1 || this.data.viewMode == 'EditChild' ){
+            if( this.data.delTemp ){
+                console.log('删除数据发送temp_ids')
                 json.temp_ids = json.real_ids;
                 json['real_ids'] = JSON.stringify([]);
             }
@@ -2564,9 +2569,15 @@ let config = {
         },
         //返回选择数据
         retureSelectData: function () {
+            this.data.delTemp = false;
             this.data.deletedIds = [];
             let rows = this.agGrid.gridOptions.api.getSelectedRows();
             for( let r of rows ){
+                if(r.temp_id){
+                    this.data.delTemp = true;
+                    this.data.deletedIds.push( r.temp_id );
+                    continue;
+                }
                 if( r._id ){
                     this.data.deletedIds.push( r._id );
                 }
@@ -2893,6 +2904,10 @@ let config = {
             }
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
+                // if(this.actions.haveTempId(data.data)){
+                //     msgBox.showTips('无法查看穿透数据')
+                //     return;
+                // }
                 console.log( "内置相关穿透" )
                 if( data.colDef.is_user ){
                     PersonSetting.showUserInfo({name:data.value});
@@ -2944,6 +2959,10 @@ let config = {
             }
             //统计
             if( fieldTypeService.countTable(data.colDef.dinput_type,data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
+                // if(this.actions.haveTempId(data.data)){
+                //     msgBox.showTips('无法查看穿透数据')
+                //     return;
+                // }
                 console.log( '统计穿透' )
                 let obj = {
                     tableId: data.colDef.field_content.count_table,
@@ -2962,6 +2981,10 @@ let config = {
             }
             // 子表
             if( fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
+                // if(this.actions.haveTempId(data.data)){
+                //     msgBox.showTips('无法查看穿透数据')
+                //     return;
+                // }
                 console.log( "子表穿透" )
                 let obj = {
                     tableId: data.colDef.field_content.child_table,
@@ -3052,6 +3075,10 @@ let config = {
             if( data.colDef.headerName == "操作" ){
                 this.actions.gridHandle( data )
             }
+        },
+        //在途数据无法穿透
+        haveTempId: function (row) {
+            return (row.temp_id == undefined ? false:true)
         },
         //查看编辑权限判断
         viewOrEditPerm: function (type) {
@@ -3204,7 +3231,7 @@ let config = {
                     table_id:this.data.tableId,
                     selectedRows:JSON.stringify([$event['data']['_id']])
                 }
-                let address = 'data' + r['pyscript_addr'];
+                let address = r['pyscript_addr'];
                 dataTableService.rowOperationBackend( data,address ).then( res=>{
                     if(res.success == 1){
                         msgBox.showTips('已经向服务器发送请求');

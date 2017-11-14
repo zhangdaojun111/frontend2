@@ -27,7 +27,7 @@ $grid-bg-color: rgba(248, 248, 248, 1);
         margin: 2px;
     }
     .calendar-header {
-        height: 60px;
+        height: 50px;
         width: 100%;
         padding-left: 10px;
         position: relative;
@@ -43,7 +43,7 @@ $grid-bg-color: rgba(248, 248, 248, 1);
             display: inline-block;
             width: 40px;
             text-align: center;
-            line-height: 58px;
+            line-height: 48px;
             color: $calendar-font;
             margin-right: 15px;
             cursor: pointer;
@@ -85,7 +85,7 @@ $grid-bg-color: rgba(248, 248, 248, 1);
 
         }
         .right-tool {
-            height: 60px;
+            height: 50px;
             float: right;
             margin-right: 10px;
             .right-tool-btn {

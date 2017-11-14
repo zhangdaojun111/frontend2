@@ -1,47 +1,59 @@
 .normal-date-range {
     width: 100%;
-    height: 24px;
-    line-height: 24px;
+    height: 26px;
+    line-height: 26px;
     overflow: hidden;
-    position:relative;
+    position: relative;
+    font-size: 12px;
     .normal-date-options {
         float: left;
         label {
+            border: 1px solid #E6E8E8;
+            border-radius: 4px;
             cursor: pointer;
+            color: #A4A3A8;
+            padding: 4px 16px 4px 0;
+            box-sizing: border-box;
         }
-        >span {
+        > span {
+            color: #474343;
+            margin-right: 8px;
             font-weight: bold;
+            font-size: 14px;
         }
         .option-active {
-            font-weight: bold;
+            background-color: #018AFF;
+            border: 1px solid #018AFF;
+            color: #FFFFFF;
+        }
+        .custom-radio {
+            input[type='radio'] {
+                visibility: hidden;
+            }
         }
         .option-disabled {
-            color: #DDDDDD;
-        }
-        input[type=radio]{
-            height: 13px;
+            //cursor: not-allowed;
         }
     }
     .normal-date-time {
-        position:absolute;
-        right:0;
-        top:0;
+        float: right;
+        margin-right: 40px;
         span {
             font-weight: bold;
-            margin: 0 2px;
-            color: #333333;
+            margin: 0 4px;
+            color: #686668;
         }
         input {
             border: 1px solid #d4d4d4;;
             width: 115px;
-            padding:3px 0;
+            padding: 4px 12px;
             &::-webkit-inner-spin-button {
                 visibility: hidden;
             }
         }
-        .search-custom-btn{
+        .search-custom-btn {
             position: relative;
-            top:3px;
+            top: 3px;
         }
     }
 }
