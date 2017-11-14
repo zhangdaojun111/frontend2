@@ -194,6 +194,7 @@ let config={
          * 提交当前工作流
          */
         submitAddWorkflow() {
+            debugger
             let obj = this.data.obj;
             let formData = CreateFormServer.getFormValue(obj.table_id,true);
             if (formData.error) {
@@ -202,7 +203,7 @@ let config={
                 msgBox.showLoadingSelf();
                 let postData = {
                     flow_id: obj.flow_id || '',
-                    focus_users: JSON.stringify(this.data.focusArr) || [],
+                    //focus_users: JSON.stringify(this.data.focusArr) || [],
                     data: JSON.stringify(formData),
                     cache_new:JSON.stringify(formData),
                     cache_old:JSON.stringify(this.data.cache_old),

@@ -145,11 +145,9 @@ let config = {
                 xAxis:data.xAxis,
                 yAxis:data.pieType == '1' ? data.columns : data.yAxis,
                 deeps: data.pieType == '1' ? [] : data.deeps,
-                limit: data.limit[0] ? data.limitNum : 0,
-                endlimit:data.limit[0] ? data.endLimitNum : 0,
+                limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
+                endlimit:data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
             };
-            console.log("-----------------------------------");
-            console.log(data.limit);
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
@@ -252,6 +250,9 @@ let config = {
                 events: {
                     onChange(value) {
                         if (value == 1) {
+                            if (this.formItems['limit'].data.value.length > 0) {
+                                this.formItems['limit'].el.find('input').trigger('click');
+                            };
                             this.formItems['limit'].trigger('onChange');
                             this.formItems['limit'].el.hide();
                             this.formItems['columns'].el.show();
@@ -260,7 +261,6 @@ let config = {
                             this.formItems['deepX'].el.hide();
                             this.formItems['deeps'].actions.clear();
                         } else {
-                            this.formItems['limit'].trigger('onChange', [1]);
                             this.formItems['limit'].el.show();
                             this.formItems['columns'].el.hide();
                             this.formItems['yAxis'].el.show();
@@ -393,7 +393,7 @@ let config = {
             {
                 label: '',
                 name: 'limitNum',
-                defaultValue: 10,
+                defaultValue: 0,
                 placeholder: '请输入显示前多少条数据',
                 category: 'number',
                 textTip:'请输入显示前多少条数据：',
@@ -404,7 +404,7 @@ let config = {
             {
                 label: '',
                 name: 'endLimitNum',
-                defaultValue: 10,
+                defaultValue: 0,
                 placeholder: '请输入显示后多少条数据',
                 category: 'number',
                 textTip:'请输入显示后多少条数据：',

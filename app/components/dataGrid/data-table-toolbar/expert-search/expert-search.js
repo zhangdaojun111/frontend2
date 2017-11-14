@@ -6,6 +6,9 @@ import Component from "../../../../lib/component";
 import template from './expert-search.html';
 import expertCondition from './expert-search-condition/expert-search-condition';
 import {dataTableService} from '../../../../services/dataGrid/data-table.service';
+import searchImport from '../expert-search-import/search-import'
+import {searchExport} from '../expert-search-export/search-export'
+import {Uploader} from '../../../../lib/uploader'
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {HTTP} from "../../../../lib/http";
 import DateTimeControl from "../../../form/datetime-control/datetime-control";
@@ -560,6 +563,36 @@ let config = {
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                     _this.isEdit = false;
                 }
+            }).on('click','.export', function(){
+                if(_this.data.commonQuery.length == 0){
+                    msgBox.alert('常用查询为空不能导出')
+                } else {
+                    searchExport.export(_this.data.tableId,_this.el);
+                }
+            }).on('click','.import', function(){
+                let choice = 1;
+                if(_this.el.find('.common-search-title .choice-input').eq(1).hasClass('active')){
+                    choice = 0
+                }
+                let obj={
+                    tableId: _this.data.tableId,
+                    parentKey: window.config.key,
+                    choice : choice,
+                }
+                PMAPI.openDialogByIframe(`/iframe/searchImport/`,{
+                    width:500,
+                    height:400,
+                    title:`常用查询导入`,
+                    modal:true,
+                },{obj}).then(res=>{
+                    if(res.type == 1) {
+                        _this.actions.getExpertSearchData();
+                    }
+                })
+                // searchImport.import(window.config.key,_this.data.tableId,choice);
+            }).on('click','.common-search-title .choice-input', function(){
+                _this.el.find('.common-search-title .choice-input').removeClass('active');
+                $(this).addClass('active')
             })
             this.hideLoading()
             this.actions.setConditionHeight()
@@ -579,6 +612,7 @@ let config = {
 class expertSearch extends Component {
     constructor(data,newConfig){
         super($.extend(true,{},config,newConfig,{data:data||{}}));
+        console.log(this.data)
     }
 }
 export default expertSearch
