@@ -293,3 +293,4 @@ export class CanvasCellsComponent extends Component {
         super($.extend(true,{},config,extendConfig), {currentViewId: id});
     }
 }
+
