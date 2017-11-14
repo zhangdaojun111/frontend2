@@ -3,8 +3,8 @@ import '../../assets/scss/workflow/workflow-base.scss'
 import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
 import {workflowService} from '../../services/workflow/workflow.service';
-import TreeView from  '../../components/util/tree/tree';
 import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
+import TreeView from "../../components/util/tree/tree";
 
 //请求部门员工信息，加载树
 let tree=[];
