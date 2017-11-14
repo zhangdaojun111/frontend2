@@ -325,6 +325,7 @@ export class EchartsService {
         //是否设置自定义高度top
         if(cellOption['customTop']){
             linebarOption['grid']['top'] = cellOption['customTop'];
+            linebarOption['legend']['type'] = 'plain';
         }
 
         return linebarOption;
