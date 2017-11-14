@@ -388,10 +388,14 @@ export const CreateFormServer={
 
 	//对外部模块提供获取表单数据接口
 	//@param tableId表名 isCheck是否需要baseform执行表单数据验证
-	getFormValue(tableId, isCheck,needCache) {
+	getFormValue(tableId, isCheck,needCache,validation_required) {
+		if(validation_required==undefined){
+            validation_required = true;
+		}
 		if (!this.childForm[tableId]) {
 			return;
 		}
+        this.childForm[tableId].data.validation_required = validation_required;
 		return needCache?Object.assign({formValue:this.childForm[tableId].actions.getFormValue(isCheck)},this.childForm[tableId].actions.getCacheData()):this.childForm[tableId].actions.getFormValue(isCheck);
 	},
 

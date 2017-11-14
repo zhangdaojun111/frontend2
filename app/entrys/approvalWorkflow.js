@@ -209,7 +209,11 @@ function GetQueryString(name)
 //审批操作
 const approveWorkflow = (para) => {
     let key=GetQueryString('key');
-    let formData=CreateFormServer.getFormValue(obj.table_id,true);
+    let validation_required = true
+    if(para.sigh_type == '0'&&para.sigh_user_id!=''){
+        validation_required = false;
+    }
+    let formData=CreateFormServer.getFormValue(obj.table_id,true,false,validation_required);
         // comment=$('#comment').val();
     para.data={};
     if(agorfo){
