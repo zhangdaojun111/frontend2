@@ -2905,10 +2905,10 @@ let config = {
             }
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
-                // if(this.actions.haveTempId(data.data)){
-                //     msgBox.showTips('无法查看穿透数据')
-                //     return;
-                // }
+                if(this.actions.haveTempId(data.data)){
+                    msgBox.showTips('无法查看穿透数据')
+                    return;
+                }
                 console.log( "内置相关穿透" )
                 if( data.colDef.is_user ){
                     PersonSetting.showUserInfo({name:data.value});
@@ -2976,6 +2976,10 @@ let config = {
                     fieldId: data.colDef.id,
                     source_field_dfield: data.colDef.field_content.count_field_dfield || '',
                 }
+                if(data.data.temp_id){
+                    obj['parentTempId'] = data.data.temp_id;
+                    delete obj['parentRealId']
+                }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = data.colDef.tableName + '->' + obj.tableName;
                 this.actions.openSourceDataGrid( url,winTitle );
@@ -2997,6 +3001,10 @@ let config = {
                     parentRealId: data.data._id,
                     fieldId: data.colDef.id,
                     source_field_dfield: data.colDef.field_content.child_field_dfield || '',
+                }
+                if(data.data.temp_id){
+                    obj['parentTempId'] = data.data.temp_id;
+                    delete obj['parentRealId']
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = data.colDef.tableName + '->' + obj.tableName;
