@@ -39,7 +39,10 @@
                 margin-right: 10px;
                 font-size: 12px;
             }
-            .choice-input {
+            .choice-input label{
+                cursor: pointer;
+            }
+            .choice-input input{
                 position: relative;
                 top: 0px;
                 width: 10px;

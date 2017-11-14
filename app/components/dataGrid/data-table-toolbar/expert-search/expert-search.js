@@ -563,13 +563,13 @@ let config = {
                     _this.itemDeleteChecked = !_this.itemDeleteChecked;
                     _this.isEdit = false;
                 }
-            }).on('click','.common-search-title .export', function(){
+            }).on('click','.export', function(){
                 if(_this.data.commonQuery.length == 0){
                     msgBox.alert('常用查询为空不能导出')
                 } else {
                     searchExport.export(_this.data.tableId,_this.el);
                 }
-            }).on('click','.common-search-title .import', function(){
+            }).on('click','.import', function(){
                 let choice = 1;
                 if(_this.el.find('.common-search-title .choice-input').eq(1).hasClass('active')){
                     choice = 0

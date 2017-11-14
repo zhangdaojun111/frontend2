@@ -47,7 +47,7 @@ let config = {
                     newFile[code] = this.data.fileData[code];
                     currentCode = code;
                 }else {
-                    this.uploader.deleteFileByCode( code,'/upload_data/' );
+                    this.data.uploader.deleteFileByCode( code,'/upload_data/' );
                 }
             }
             this.data.fileData = newFile;
@@ -55,7 +55,7 @@ let config = {
         //上传文件
         import: function() {
             this.actions.saveFile();
-            if (this.el.find('.choice-input').eq(1).hasClass('active')) {
+            if (this.el.find('.choice-input').find('input').eq(1).hasClass('active')) {
                 this.data.choice = 0
             }
             let json = {
@@ -77,7 +77,7 @@ let config = {
                 if(res.success == 1) {
                     msgBox.showTips('导入成功')
                 } else if (res.error) {
-                    msgBox.showTips('导入失败，请重试')
+                    msgBox.showTips('待导入的查询条件中有字段不存在于本表，无法导入')
                 }
                 PMAPI.closeIframeDialog(window.config.key, {
                     type: res.success
@@ -94,8 +94,8 @@ let config = {
             this.el.on('click','.search-uploader-button',function() {
                 _this.actions.upload();
             }).on('click','.choice-input', function(){
-                _this.el.find('.choice-input').removeClass('active');
-                $(this).addClass('active');
+                _this.el.find('.choice-input').find('input').removeClass('active');
+                $(this).find('input').addClass('active');
             }).on('click','.search-import-submit-btn',function(){
                 if(_this.data.fileData) {
                     _this.actions.import();
