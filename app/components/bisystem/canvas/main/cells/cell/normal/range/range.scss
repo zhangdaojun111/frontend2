@@ -5,10 +5,11 @@
     overflow: hidden;
     position: relative;
     font-size: 12px;
-    //display: flex;
-    //justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
     .normal-date-options {
-        float: left;
+        //float: left;
         label {
             border: 1px solid #E6E8E8;
             border-radius: 4px;
@@ -38,8 +39,8 @@
         }
     }
     .normal-date-time {
-        float: left;
-        margin-left: 66px;
+        //float: left;
+        //margin-left: 66px;
         span {
             font-weight: bold;
             margin: 0 4px;
