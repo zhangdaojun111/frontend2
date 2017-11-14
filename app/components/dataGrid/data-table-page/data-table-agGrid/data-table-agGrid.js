@@ -888,9 +888,9 @@ let config = {
                 for (let ro of this.data.rowOperation) {
                     let selectedRows = JSON.stringify([params.data._id])
                     if (ro.frontend_addr && ro.frontend_addr == 'export_row') {
-                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.data.tableId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
+                        str += ` | <a id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.data.tableId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
                     } else if(ro.frontend_addr && ro.frontend_addr == 'export_transfer_command'){
-                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" href='/customize/guoyuan/export_transfer_command/?table_id=${ this.data.tableId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
+                        str += ` | <a id="${ ro["row_op_id"] }" href='/customize/guoyuan/export_transfer_command/?table_id=${ this.data.tableId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
                     }else {
                         str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" style="color:#337ab7;">${ ro["name"] }</a>`;
                     }
