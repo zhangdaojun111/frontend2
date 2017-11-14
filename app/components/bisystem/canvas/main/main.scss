@@ -7,14 +7,14 @@ $print-height: 1485px;
     position: relative;
     .views-header {
         width: 100%;
-        height: 60px;
+        height: 50px;
         font-size: 12px;
         background: #FFFFFF;
         border-bottom: 1px solid #e4e4e4;
         box-sizing: border-box;
         > div {
             height: 100%;
-            line-height: 60px;
+            line-height: 50px;
         }
     }
     &.manage {
@@ -23,7 +23,7 @@ $print-height: 1485px;
     .cells-container {
         position: absolute;
         width: 100%;
-        height: calc(100% - 60px);
+        height: calc(100% - 50px);
         overflow: auto;
         z-index: 90;
         &.client {
@@ -49,7 +49,7 @@ $print-height: 1485px;
     .empty-view {
         position: absolute;
         text-align: center;
-        height: calc(100% - 60px);
+        height: calc(100% - 50px);
         width: 100%;
         background: #ffffff;
         z-index: 91;

@@ -305,8 +305,10 @@ export class EchartsService {
                 {
                 type: 'slider',
                 xAxisIndex: 0,
-                bottom:'0',
+                bottom:5,
                 height:20,
+                left:0,
+                right:5,
                 startValue: linebarOption['xAxis'][0]['data'][0],
                 endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                 rangeMode: ['value', 'value']
@@ -321,6 +323,13 @@ export class EchartsService {
                 }
             ]
         };
+
+        //是否设置自定义高度top
+        if(cellOption['customTop']){
+            linebarOption['grid']['top'] = cellOption['customTop'];
+            linebarOption['legend']['type'] = 'plain';
+        }
+
         return linebarOption;
     }
 
@@ -447,7 +456,6 @@ export class EchartsService {
             });
         });
         mutiListOption['legend']['data'] = legend;
-        console.log(mutiListOption);
         return mutiListOption;
     }
     /**
