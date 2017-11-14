@@ -66,7 +66,6 @@ let config = {
          */
         judgeDateZoom(cellChart) {
             let type = cellChart.chart.xAxis.type;
-            // console.log(this.data.cellChart.chart['yHorizontal']);
             if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30)) {
                 this.el.find('.echarts-cell').addClass('date-filed');
                 this.normalRange = new NormalRangeComponent({id: this.data.id}, {

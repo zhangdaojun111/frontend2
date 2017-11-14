@@ -5,6 +5,8 @@
     overflow: hidden;
     position: relative;
     font-size: 12px;
+    //display: flex;
+    //justify-content: space-between;
     .normal-date-options {
         float: left;
         label {
@@ -36,8 +38,8 @@
         }
     }
     .normal-date-time {
-        float: right;
-        margin-right: 40px;
+        float: left;
+        margin-left: 66px;
         span {
             font-weight: bold;
             margin: 0 4px;
