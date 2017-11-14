@@ -21,6 +21,7 @@ let config={
             msgBox.confirm(`确认审批`)
             .then(res=>{
                 if(res===true){
+                    msgBox.showLoadingSelf();
                     let postData={};
                     postData.action=e;
                     postData.comment=$('#comment').val();
@@ -40,10 +41,10 @@ let config={
                             data:{refresh:true}
                         })
                     })
+                }else{
+                    msgBox.hideLoadingSelf();
                 }
             });
-            msgBox.showLoadingSelf();
-
         }
     },
     binds:[
