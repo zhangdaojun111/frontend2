@@ -49,7 +49,6 @@ let config = {
             event: 'change',
             selector: 'input',
             callback: function (context) {
-                console.log(context);
                 let checked = $(context).is(':checked');
                 this.actions.onChange(checked, context.value);
             }

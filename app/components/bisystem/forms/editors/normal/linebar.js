@@ -218,9 +218,9 @@ let config = {
                 yHorizontal: data.yHorizontal[0] ? true : false,
                 yHorizontalColumns: data.yHorizontalColumns[0] ? {marginBottom:data.marginBottomx} : {},
                 ySelectedGroup: data.defaultY[0] ? ySelectedGroup : [],
-                limit: data.limit[0] ? data.limitNum : 0,
-                endlimit: data.limit[0] ? data.endLimitNum : 0,
-                customTop: data.customTop[0] ? data.customTopNum : 0,
+                limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
+                endlimit: data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
+                customTop: data.customTop[0] && data.customTopNum ? data.customTopNum : 0,
             };
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
@@ -297,11 +297,11 @@ let config = {
             } else {
                 this.formItems['deeps'].setValue(chart['deeps']);
             };
-            this.formItems['limit'].setValue(chart['limit'] ? 1 : 0);
-            this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : 10);
-            this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : 10);
+            this.formItems['limit'].setValue(chart['limit'] || chart['endlimit'] ? 1 : 0);
+            this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : 0);
+            this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : 0);
             this.formItems['customTop'].setValue(chart['customTop'] ? 1 : 0);
-            this.formItems['customTopNum'].setValue(chart['customTop'] ? chart['customTop'] : '10');
+            this.formItems['customTopNum'].setValue(chart['customTop'] ? chart['customTop'] : 0);
         },
     },
     data: {
@@ -626,8 +626,8 @@ let config = {
             {
                 label: '',
                 name: 'limitNum',
-                defaultValue: 10,
-                placeholder: '请输入显示前多少条数据',
+                defaultValue: 0,
+                // placeholder: '',
                 category: 'number',
                 textTip:'请输入显示前多少条数据：',
                 type: 'text',
@@ -637,8 +637,8 @@ let config = {
             {
                 label: '',
                 name: 'endLimitNum',
-                defaultValue: 10,
-                placeholder: '请输入显示前多少条数据',
+                defaultValue: 0,
+                // placeholder: '',
                 category: 'number',
                 textTip:'请输入显示后多少条数据：',
                 type: 'text',
