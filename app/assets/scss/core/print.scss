@@ -74,6 +74,21 @@
     }
     .data-table-agGrid-con {
         overflow-y: hidden!important;
+        .btn-nav-con {
+           display: none;
+        }
+        .ag-bl-full-height-center {
+            padding-top: 30px;
+        }
+        .ag-body-viewport-wrapper{
+            position: absolute !important;
+        }
+        .ag-body-viewport-wrapper {
+            position: absolute !important;
+        }
+        .ag-body-viewport {
+            position: relative !important;
+        }
         .custom-columns-panel {
             display: none;
         }
