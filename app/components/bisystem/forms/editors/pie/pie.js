@@ -10,10 +10,6 @@ import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.se
 
 let config = {
     template: template,
-    data: {
-        name:'饼图',
-        type:'circular'
-    },
     actions: {
         /**
          * 加载x 和y轴数据
@@ -182,7 +178,7 @@ let config = {
             this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['pieType'].setValue(chart['pieType']['value']);
-            this.formItems['circular'].setValue(chart['chartType']['type']=='pie'?chart['chartType']['name']='1':chart['chartType']['name']='2');
+            this.formItems['circular'].setValue(chart['chartType']['type']=='pie'? 1 : 2);
             this.formItems['xAxis'].setValue(chart['xAxis']);
             if (chart['pieType']['value'] == 1) {
                 this.formItems['columns'].setValue(chart['yAxis']);
@@ -198,6 +194,8 @@ let config = {
         }
     },
     data: {
+        type: 'pie',
+        name: '饼图',
         options: [
             chartName,
             {

@@ -37,8 +37,11 @@
             font-size: 14px;
             outline: none;
             color: #dddddd;
-            i {
+            .view-back-icon {
                 vertical-align: middle;
+            }
+            .original-data-icon {
+                vertical-align: bottom;
             }
         }
     }
