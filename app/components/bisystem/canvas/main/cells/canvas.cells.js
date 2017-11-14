@@ -273,7 +273,7 @@ let config = {
     ],
 
     async afterRender() {
-        // 加载loading动画;
+        // 获取画布块布局信息
         await this.actions.getCellLayout();
 
         if (this.data) {
