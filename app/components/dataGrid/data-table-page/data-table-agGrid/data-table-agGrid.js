@@ -512,6 +512,9 @@ let config = {
         },
         //调用aggrid的API，通过表头数据来生成每个cell内容
         bodyCellRender: function (params) {
+	        if(params.value && typeof params.value =='string'){
+		        params.value=params.value.replace(/\s/g,'&nbsp;');
+	        }
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
                 let textAline = fieldTypeService.textAline( params.colDef["real_type"] )
                 let bgStyle = ' style = "display: block;height: 100%;text-align:' + textAline+';"';
@@ -780,6 +783,9 @@ let config = {
             if (params && params.colDef && params.colDef.headerName == 'Group') {
                 sHtml = sHtml = '<span' + bgStyle + '>' + params.value + '</span>';
             }
+	        if(params.value && typeof params.value =='string'){
+		        params.value=params.value.replace(/&nbsp;/g,' ');
+	        }
             return sHtml;
         },
         //重置偏好以及重置筛选功能
