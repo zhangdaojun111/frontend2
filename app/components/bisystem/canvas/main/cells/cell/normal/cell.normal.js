@@ -62,11 +62,36 @@ let config = {
         },
 
         /**
+         * 两个控件的排列方式改变
+         */
+        arrangementChange(){
+            if(this.el.find('.normal-date-range').width()<685){
+                this.el.addClass('date-zoom-wrap');
+            }else{
+                this.el.removeClass('date-zoom-wrap');
+            }
+        },
+        /**
+         * 是否是下穿数据并且是时间字段
+         */
+        deepsType(deeps){
+            if (deeps){
+                if(deeps.type == 3 || deeps.type == 5 || deeps.type == 12 || deeps.type == 30){
+                    this.el.find('.echarts-cell').addClass('date-filed');
+                    this.el.find('.chart-normal-date-zoom').show();
+                }else {
+                    this.el.find('.echarts-cell').removeClass('date-filed');
+                    this.el.find('.chart-normal-date-zoom').hide();
+                }
+            }
+        },
+        /**
          * 判断是否显示时间字段
          */
         judgeDateZoom(cellChart) {
             let type = cellChart.chart.xAxis.type;
             if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30)) {
+                // 添加日期筛选,改变cell显示高度
                 this.el.find('.echarts-cell').addClass('date-filed');
                 this.normalRange = new NormalRangeComponent({id: this.data.id}, {
                     // 通过（一周 一月 半年 一年 全部）获取数据
@@ -83,6 +108,10 @@ let config = {
                 };
                 this.el.find('.echarts-cell').removeClass('date-filed');
             }
+            // 是否是下穿数据并且是时间字段
+            this.actions.deepsType(cellChart.chart.data.x);
+            // 日期筛选图表在画布块放置横向距离时，两个控件的排列方式改为纵向左上角对齐
+            this.actions.arrangementChange();
         },
         /**
          * 当有原始数据保存的时候，优先处理原始数据
@@ -147,17 +176,20 @@ let config = {
                         let cellChart = this.actions.handleOriginal();
                         chartData = _.cloneDeep(this.data);
                         chartData.cellChart = cellChart;
-                    };
+                    }
+                    ;
                 }
-            };
+            }
+            ;
 
             let cellChartData = this.data;
-            if(cellChartData['cellChart']['chart']['yHorizontal']){
+            if (cellChartData['cellChart']['chart']['yHorizontal']) {
                 cellChartData['cellChart']['chart']['data']['xAxis'].reverse();
                 cellChartData['cellChart']['chart']['data']['yAxis'].forEach(item => {
                     item.data.reverse();
                 });
-            };
+            }
+            ;
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle', this.data);
@@ -167,15 +199,10 @@ let config = {
             //重新渲染echarts
             const option = this.normalChart.lineBarOption(data);
             this.normalChart.myChart.setOption(option, true);
-            if (data.chart.data.x) { // 判断下穿字段是否为时间字段
-                if (data.chart.data.x.type == 3 || data.chart.data.x.type == 5 || data.chart.data.x.type == 12 || data.chart.data.x.type == 30) {
-                    this.el.find('.chart-normal-date-zoom').show();
-                } else {
-                    this.el.find('.chart-normal-date-zoom').hide();
-                }
-            } else {
-                this.el.find('.chart-normal-date-zoom').show();
-            }
+            // 判断下穿字段是否为时间字段
+            this.actions.deepsType(data.chart.data.x);
+            // 日期筛选图表在画布块放置横向距离时，两个控件的排列方式改为纵向左上角对齐
+            this.actions.arrangementChange();
         },
         /**
          * 初始化pie图表数据
@@ -257,7 +284,8 @@ let config = {
                     }
                 } else {
                     msgbox.alert(res[0]['error']);
-                };
+                }
+                ;
 
             } else {
                 if (next) {
