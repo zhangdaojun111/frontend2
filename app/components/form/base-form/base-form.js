@@ -1493,14 +1493,14 @@ let config = {
                                         this.actions.set_value_for_form(eval(expression), f);
 									}
 								} catch (err) {
-									console.error('不能执行前端表达式计算1');
+									console.log('不能执行前端表达式计算');
                                     bool = true;
 								}
 							}else{
                                 bool = true;
 							}
 						} catch (err) {
-							console.error('不能执行前端表达式计算2');
+							console.log('不能执行前端表达式计算');
                             bool = true;
 						}
 					}else{
