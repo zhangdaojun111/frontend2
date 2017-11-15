@@ -886,14 +886,15 @@ let config = {
             }
             if (this.data.rowOperation) {
                 for (let ro of this.data.rowOperation) {
+                    let selectedRows = JSON.stringify([params.data._id])
                     if (ro.frontend_addr && ro.frontend_addr == 'export_row') {
-                        let selectedRows = JSON.stringify([params.data._id])
-                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.pageId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
-                        operateWord = operateWord + (ro["name"] ? ro["name"].length : 0);
-                    } else {
+                        str += ` | <a class="rowDownload" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.data.tableId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
+                    } else if(ro.frontend_addr && ro.frontend_addr == 'export_transfer_command'){
+                        str += ` | <a class="rowDownload" id="${ ro["row_op_id"] }" href='/customize/guoyuan/export_transfer_command/?table_id=${ this.data.tableId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
+                    }else {
                         str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" style="color:#337ab7;">${ ro["name"] }</a>`;
-                        operateWord = operateWord + (ro["name"] ? ro["name"].length : 0);
                     }
+                    operateWord = operateWord + (ro["name"] ? ro["name"].length : 0);
                 }
             }
             str += '</div>';
@@ -2415,6 +2416,11 @@ let config = {
                     }
                 })
             } )
+            // this.el.find('.dataGrid-commonQuery-select').click(()=>{
+            //     if(this.data.commonQueryData.length == 0) {
+            //         msgBox.alert('您还未设置任何常用查询，请在右侧【高级查询】中设置');
+            //     }
+            // })
             this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
@@ -2904,10 +2910,10 @@ let config = {
             }
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
-                // if(this.actions.haveTempId(data.data)){
-                //     msgBox.showTips('无法查看穿透数据')
-                //     return;
-                // }
+                if(this.actions.haveTempId(data.data)){
+                    msgBox.showTips('无法查看穿透数据')
+                    return;
+                }
                 console.log( "内置相关穿透" )
                 if( data.colDef.is_user ){
                     PersonSetting.showUserInfo({name:data.value});
@@ -2975,6 +2981,10 @@ let config = {
                     fieldId: data.colDef.id,
                     source_field_dfield: data.colDef.field_content.count_field_dfield || '',
                 }
+                if(data.data.temp_id){
+                    obj['parentTempId'] = data.data.temp_id;
+                    delete obj['parentRealId']
+                }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = data.colDef.tableName + '->' + obj.tableName;
                 this.actions.openSourceDataGrid( url,winTitle );
@@ -2996,6 +3006,10 @@ let config = {
                     parentRealId: data.data._id,
                     fieldId: data.colDef.id,
                     source_field_dfield: data.colDef.field_content.child_field_dfield || '',
+                }
+                if(data.data.temp_id){
+                    obj['parentTempId'] = data.data.temp_id;
+                    delete obj['parentRealId']
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = data.colDef.tableName + '->' + obj.tableName;
@@ -3089,12 +3103,15 @@ let config = {
             let test = obj[type];
             if( this.data.namespace == 'external' && ( type == 'view'||type == 'edit' ) ){
                 msgBox.alert( '该表为外部数据表,不可' + test + '。' );
+                return true
             }
             if( this.data.permission.view == 0 && type == 'view' ){
                 msgBox.alert( '没有查看权限' );
+                return true
             }
             if( this.data.permission.edit == 0 && type == 'edit' ){
                 msgBox.alert( '没有编辑权限' );
+                return true
             }
             if(this.data.cannotopenform == '1'){
                 msgBox.alert( "已完成工作的子表不能" + obj[type] );
