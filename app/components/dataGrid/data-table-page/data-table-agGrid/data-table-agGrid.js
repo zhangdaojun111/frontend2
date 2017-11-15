@@ -33,7 +33,10 @@ import {PersonSetting} from "../../../main/personal-settings/personal-settings";
 import ViewVideo from "../../../form/view-video/view-video";
 import fastSearch from "../../data-table-toolbar/fast-search/fast-search"
 import QuillAlert from "../../../form/quill-alert/quill-alert";
-
+import '../../../../assets/scss/theme/blue.scss';
+import '../../../../assets/scss/theme/ink-blue.scss';
+import '../../../../assets/scss/theme/orange.scss';
+import {UserInfoService} from "../../../../services/main/userInfoService"
 
 let config = {
     template: template,
@@ -73,7 +76,7 @@ let config = {
         //操作列
         menuType: false,
         //操作列的宽度
-        operateColWidth: 0,
+        operateColWidth: 135,
         //自定义操作
         customOperateList: [],
         //自定义行级操作
@@ -93,6 +96,10 @@ let config = {
         //没有定制列
         noNeedCustom: false,
         postData: [],
+        //删除的数据
+        deletedIds: [],
+        //是否传tempIds
+        delTemp: false,
         //定制列（列宽）
         colWidth: {},
         //定制列（固定列）
@@ -505,6 +512,9 @@ let config = {
         },
         //调用aggrid的API，通过表头数据来生成每个cell内容
         bodyCellRender: function (params) {
+	        if(params.value && typeof params.value =='string'){
+		        params.value=params.value.replace(/\s/g,'&nbsp;');
+	        }
             if (params.data && params.data.myfooter && params.data.myfooter == "合计") {
                 let textAline = fieldTypeService.textAline( params.colDef["real_type"] )
                 let bgStyle = ' style = "display: block;height: 100%;text-align:' + textAline+';"';
@@ -773,6 +783,9 @@ let config = {
             if (params && params.colDef && params.colDef.headerName == 'Group') {
                 sHtml = sHtml = '<span' + bgStyle + '>' + params.value + '</span>';
             }
+	        if(params.value && typeof params.value =='string'){
+		        params.value=params.value.replace(/&nbsp;/g,' ');
+	        }
             return sHtml;
         },
         //重置偏好以及重置筛选功能
@@ -879,18 +892,19 @@ let config = {
             }
             if (this.data.rowOperation) {
                 for (let ro of this.data.rowOperation) {
+                    let selectedRows = JSON.stringify([params.data._id])
                     if (ro.frontend_addr && ro.frontend_addr == 'export_row') {
-                        let selectedRows = JSON.stringify([params.data._id])
-                        str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.pageId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
-                        operateWord = operateWord + (ro["name"] ? ro["name"].length : 0);
-                    } else {
+                        str += ` | <a class="rowDownload" id="${ ro["row_op_id"] }" href='/data/customize/ta_excel_export/?table_id=${ this.data.tableId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
+                    } else if(ro.frontend_addr && ro.frontend_addr == 'export_transfer_command'){
+                        str += ` | <a class="rowDownload" id="${ ro["row_op_id"] }" href='/customize/guoyuan/export_transfer_command/?table_id=${ this.data.tableId }&selectedRows=${ selectedRows }'>${ ro["name"] }</a>`;
+                    }else {
                         str += ` | <a class="rowOperation" id="${ ro["row_op_id"] }" style="color:#337ab7;">${ ro["name"] }</a>`;
-                        operateWord = operateWord + (ro["name"] ? ro["name"].length : 0);
                     }
+                    operateWord = operateWord + (ro["name"] ? ro["name"].length : 0);
                 }
             }
             str += '</div>';
-            this.data.operateColWidth=20*operateWord+20;
+            this.data.operateColWidth=20*operateWord+8;
             return str
         },
         //设置搜索input值，解决拖动列排序后重新渲染floatingFilter的input导致显示为空
@@ -1274,6 +1288,8 @@ let config = {
             }
             //赋值
             this.agGrid.actions.setGridData(d);
+            //设置操作列宽度
+            this.agGrid.gridOptions.columnApi.setColumnWidth('myOperate',this.data.operateColWidth)
             //对应关系回显
             if( this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence' ){
                 this.actions.setCorrespondenceSelect();
@@ -1698,6 +1714,11 @@ let config = {
             if( this.data.gridTips ){
                 this.el.find( '.grid-tips' )[0].style.display = 'flex';
             }
+            //筛选滚动后搜索条件赋值
+            let That = this;
+            this.el.find('.ag-body-viewport').on('scroll',_.debounce(()=>{
+                That.actions.setFloatingFilterInput();
+            },700))
             console.timeEnd( '渲染时间' )
         },
         //触发导出
@@ -2401,6 +2422,11 @@ let config = {
                     }
                 })
             } )
+            // this.el.find('.dataGrid-commonQuery-select').click(()=>{
+            //     if(this.data.commonQueryData.length == 0) {
+            //         msgBox.alert('您还未设置任何常用查询，请在右侧【高级查询】中设置');
+            //     }
+            // })
             this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
@@ -2440,7 +2466,8 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
-            if( json.is_batch == 1 || this.data.viewMode == 'EditChild' ){
+            if( this.data.delTemp ){
+                console.log('删除数据发送temp_ids')
                 json.temp_ids = json.real_ids;
                 json['real_ids'] = JSON.stringify([]);
             }
@@ -2554,9 +2581,15 @@ let config = {
         },
         //返回选择数据
         retureSelectData: function () {
+            this.data.delTemp = false;
             this.data.deletedIds = [];
             let rows = this.agGrid.gridOptions.api.getSelectedRows();
             for( let r of rows ){
+                if(r.temp_id){
+                    this.data.delTemp = true;
+                    this.data.deletedIds.push( r.temp_id );
+                    continue;
+                }
                 if( r._id ){
                     this.data.deletedIds.push( r._id );
                 }
@@ -2883,6 +2916,10 @@ let config = {
             }
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
+                if(this.actions.haveTempId(data.data)){
+                    msgBox.showTips('无法查看穿透数据')
+                    return;
+                }
                 console.log( "内置相关穿透" )
                 if( data.colDef.is_user ){
                     PersonSetting.showUserInfo({name:data.value});
@@ -2934,6 +2971,10 @@ let config = {
             }
             //统计
             if( fieldTypeService.countTable(data.colDef.dinput_type,data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
+                // if(this.actions.haveTempId(data.data)){
+                //     msgBox.showTips('无法查看穿透数据')
+                //     return;
+                // }
                 console.log( '统计穿透' )
                 let obj = {
                     tableId: data.colDef.field_content.count_table,
@@ -2946,12 +2987,20 @@ let config = {
                     fieldId: data.colDef.id,
                     source_field_dfield: data.colDef.field_content.count_field_dfield || '',
                 }
+                if(data.data.temp_id){
+                    obj['parentTempId'] = data.data.temp_id;
+                    delete obj['parentRealId']
+                }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = data.colDef.tableName + '->' + obj.tableName;
                 this.actions.openSourceDataGrid( url,winTitle );
             }
             // 子表
             if( fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
+                // if(this.actions.haveTempId(data.data)){
+                //     msgBox.showTips('无法查看穿透数据')
+                //     return;
+                // }
                 console.log( "子表穿透" )
                 let obj = {
                     tableId: data.colDef.field_content.child_table,
@@ -2963,6 +3012,10 @@ let config = {
                     parentRealId: data.data._id,
                     fieldId: data.colDef.id,
                     source_field_dfield: data.colDef.field_content.child_field_dfield || '',
+                }
+                if(data.data.temp_id){
+                    obj['parentTempId'] = data.data.temp_id;
+                    delete obj['parentRealId']
                 }
                 let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                 let winTitle = data.colDef.tableName + '->' + obj.tableName;
@@ -3043,6 +3096,10 @@ let config = {
                 this.actions.gridHandle( data )
             }
         },
+        //在途数据无法穿透
+        haveTempId: function (row) {
+            return (row.temp_id == undefined ? false:true)
+        },
         //查看编辑权限判断
         viewOrEditPerm: function (type) {
             let obj = {
@@ -3052,12 +3109,15 @@ let config = {
             let test = obj[type];
             if( this.data.namespace == 'external' && ( type == 'view'||type == 'edit' ) ){
                 msgBox.alert( '该表为外部数据表,不可' + test + '。' );
+                return true
             }
             if( this.data.permission.view == 0 && type == 'view' ){
                 msgBox.alert( '没有查看权限' );
+                return true
             }
             if( this.data.permission.edit == 0 && type == 'edit' ){
                 msgBox.alert( '没有编辑权限' );
+                return true
             }
             if(this.data.cannotopenform == '1'){
                 msgBox.alert( "已完成工作的子表不能" + obj[type] );
@@ -3194,7 +3254,7 @@ let config = {
                     table_id:this.data.tableId,
                     selectedRows:JSON.stringify([$event['data']['_id']])
                 }
-                let address = 'data' + r['pyscript_addr'];
+                let address = r['pyscript_addr'];
                 dataTableService.rowOperationBackend( data,address ).then( res=>{
                     if(res.success == 1){
                         msgBox.showTips('已经向服务器发送请求');
@@ -3520,6 +3580,15 @@ let config = {
         this.actions.getHeaderData();
     }
 }
+
+//加载用户偏好样式
+UserInfoService.getUserTheme().done((res) => {
+	if(res.success === 1){
+		$('body').attr('class',res.data);
+	}else{
+		$('body').attr('class','blue');
+	}
+});
 
 class dataTableAgGrid extends Component {
     constructor(data,newConfig){

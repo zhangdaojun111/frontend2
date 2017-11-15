@@ -159,7 +159,7 @@ Mediator.subscribe('workflow:submit', (res)=> {
             $("#submitWorkflow").hide();
             let postData={
                 flow_id:wfObj.id,
-                focus_users:JSON.stringify(res)||[],
+                //focus_users:JSON.stringify(res)||[],
                 data:JSON.stringify(formData.formValue),
                 cache_new:JSON.stringify(formData.obj_new),
                 cache_old:JSON.stringify(formData.obj_old),

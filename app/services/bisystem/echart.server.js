@@ -34,6 +34,9 @@ export class EchartsService {
             case 'pie':
                 option = this.pieOption(cellChart);// 饼图处理
                 break;
+            case 'circular':
+                option = this.pieOption(cellChart);// 环形图处理
+                break;
             case 'multilist':
                 option = this.multiChartOption(cellChart); // 多表处理
                 break;
@@ -302,8 +305,10 @@ export class EchartsService {
                 {
                 type: 'slider',
                 xAxisIndex: 0,
-                bottom:0,
+                bottom:5,
                 height:20,
+                left:0,
+                right:5,
                 startValue: linebarOption['xAxis'][0]['data'][0],
                 endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                 rangeMode: ['value', 'value']
@@ -318,6 +323,13 @@ export class EchartsService {
                 }
             ]
         };
+
+        //是否设置自定义高度top
+        if(cellOption['customTop']){
+            linebarOption['grid']['top'] = cellOption['customTop'];
+            linebarOption['legend']['type'] = 'plain';
+        }
+
         return linebarOption;
     }
 
@@ -344,6 +356,9 @@ export class EchartsService {
         pieOption['series'][0].data = series;
         pieOption['series'][0].name = title;
         pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
+        if(cellChart.chart.chartType.type == 'circular'){
+            pieOption['series'][0].radius = ['50%','80%'];
+        }
         return pieOption;
     }
 
@@ -441,7 +456,6 @@ export class EchartsService {
             });
         });
         mutiListOption['legend']['data'] = legend;
-        console.log(mutiListOption);
         return mutiListOption;
     }
     /**

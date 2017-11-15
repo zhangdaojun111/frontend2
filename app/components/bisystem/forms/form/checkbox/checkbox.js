@@ -14,6 +14,7 @@ let config = {
             this.data.value = [];
             this.reload();
         },
+
         /**
          * 全选
          */

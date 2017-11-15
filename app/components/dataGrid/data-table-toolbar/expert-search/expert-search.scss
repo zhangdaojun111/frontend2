@@ -1,6 +1,7 @@
 @import "../../../../assets/scss/core/base";
 .expert-search-box {
     font-size:12px;
+    min-width: 750px;
     .common-search {
         padding: 10px 15px;
         border-bottom: 10px solid #ffffff;
@@ -18,6 +19,7 @@
             }
             .action {
                 margin-left: 10px;
+                margin-right: 10px;
                 display: inline-block;
                 .common-search-compile {
                     display: inline-block;
@@ -27,12 +29,59 @@
                     cursor: pointer;
                     .img{
                         position: relative;
-                        top:5px;
+                        top:6px;
                         display: inline-block;
                         width: 20px;
                         height: 20px;
                         background-position: right center;
                         //background: url(../../../../assets/images/dataGrid/icon_bianjimoshi.png) no-repeat scroll right center transparent;
+                    }
+                }
+            }
+            .export,.import {
+                margin-left: 10px;
+                cursor: pointer;
+                a {
+                    text-decoration: none;
+                    color: #666666;
+                }
+               .img {
+                   position: relative;
+                   display: inline-block;
+                   width: 16px;
+                   height: 16px;
+                   top: 3.5px;
+                   background-position: right center;
+               }
+                .choice {
+                    .choice-input {
+                        position: relative;
+                        top: 0px;
+                        width: 10px;
+                        height: 10px;
+                        &:before {
+                            position: absolute;
+                            width: 10px;
+                            content: ' ';
+                            height: 10px;
+                            left: 0px;
+                            top: 0px;
+                            background-color: #fff;
+                            border: 1px solid #d7d7d7;
+                            cursor: pointer;
+                        }
+                        &.active {
+                            &:after {
+                                position: absolute;
+                                width: 8px;
+                                content: ' ';
+                                height: 8px;
+                                left: 2px;
+                                top: 2px;
+                                background-color: #0088ff;
+                                cursor: pointer;
+                            }
+                        }
                     }
                 }
             }

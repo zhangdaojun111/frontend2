@@ -247,8 +247,8 @@ const linebar = {
     grid: {
         left: 0,
         right: 0,
-        bottom: 30,
-        top: 50,
+        bottom: 10,
+        top:30,
         containLabel: true
     },
     xAxis: [
