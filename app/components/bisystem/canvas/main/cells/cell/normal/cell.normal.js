@@ -109,8 +109,8 @@ let config = {
                 this.el.find('.echarts-cell').removeClass('date-filed');
             }
             // 是否是下穿数据并且是时间字段
-            this.actions.deepsType(cellChart.chart.data.x);
-            // 日期筛选图表在画布块放置横向距离时，两个控件的排列方式改为纵向左上角对齐
+            // this.actions.deepsType(cellChart.chart.data.x);
+            // 日期筛选图表在画布块放置横向距离时,两个控件的排列方式改为纵向左上角对齐
             this.actions.arrangementChange();
         },
         /**
@@ -200,7 +200,12 @@ let config = {
             const option = this.normalChart.lineBarOption(data);
             this.normalChart.myChart.setOption(option, true);
             // 判断下穿字段是否为时间字段
-            this.actions.deepsType(data.chart.data.x);
+            if(data.chart.data.x && (data.chart.data.x.type==3||data.chart.data.x.type==5||data.chart.data.x.type==12||data.chart.data.x.type==30) ){
+                this.normalRange.actions.rangeChoose(data.chart.data.x.type);
+                this.normalRange.actions.setDateValue(data.chart.data.xAxis);
+                this.normalRange.reload();
+            }
+            // this.actions.deepsType(data.chart.data.x);
             // 日期筛选图表在画布块放置横向距离时，两个控件的排列方式改为纵向左上角对齐
             this.actions.arrangementChange();
         },
