@@ -2415,11 +2415,11 @@ let config = {
                     }
                 })
             } )
-            // this.el.find('.dataGrid-commonQuery-select').click(()=>{
-            //     if(this.data.commonQueryData.length == 0) {
-            //         msgBox.alert('您还未设置任何常用查询，请在右侧【高级查询】中设置');
-            //     }
-            // })
+            this.el.find('.dataGrid-commonQuery-select').click(()=>{
+                if(this.data.commonQueryData.length == 0) {
+                    msgBox.alert('您还未设置任何常用查询，请在右侧【高级查询】中设置');
+                }
+            })
             this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
