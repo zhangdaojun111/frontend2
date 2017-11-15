@@ -11,20 +11,23 @@ let config = {
     data: {
         // css: css.replace(/(\n)/g, ''),
         fileList: [],
-        queue:'',
-
     },
     binds:[
         {
             event: 'click',
             selector: '.J_sure',
             callback: function (event) {
-                this.actions.determine();
-                let uploadingState
-                for(let k in this.data.queue) {
-                    uploadingState = this.data.queue[k]['uploadingState'];
+                let attachmentQueueItemComps = this.data.attachmentControl.data['attachmentQueueItemComps'];
+                let uploadingState;
+                for(let k in Array.of(attachmentQueueItemComps) ){
+                    for(let key in Array.of(attachmentQueueItemComps)[k]){
+                        uploadingState=Array.of(attachmentQueueItemComps)[k][key]['data']['_controlItem']['uploadingState']
+                    }
                 }
-                if(uploadingState != ''){
+                if(uploadingState && uploadingState == 'on'){
+                    msgbox.alert('上传未完成');
+                }else{
+                    this.actions.determine();
                     PMAPI.sendToParent({
                         type: '1',
                         key: window.config.key,
@@ -35,8 +38,6 @@ let config = {
                             attachment: this.data.fileList
                         }
                     })
-                }else{
-                    msgbox.alert('上传未完成');
                 }
 
             }
@@ -67,10 +68,10 @@ let config = {
         };
         let changeValue = (res) => {
             this.data.fileList = res.value;
-            this.data.queue = res.queue;
         };
         let attachmentControl = new AttachmentControl(json, {changeValue: changeValue});
         this.append(attachmentControl, this.el.find('.workflow-attachment-box'));
+        this.data.attachmentControl=attachmentControl
     },
     beforeDestory(){
         this.data.style.remove();
