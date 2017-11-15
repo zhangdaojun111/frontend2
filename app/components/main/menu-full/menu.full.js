@@ -163,7 +163,7 @@ let config = {
             selector: 'label.search input:text',
             callback: _.debounce(function(context) {
                 this.actions.search(context.value);
-            }, 10)
+            }, 200)
         },
         {
             event:'focus',
