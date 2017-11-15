@@ -157,6 +157,7 @@ let config = {
 			//给统计赋值
 			for (let d in res["data"]) {
 				this.actions.setFormValue(d, res["data"][d]);
+                this.actions.triggerSingleControl(d);
 			}
 		},
 
