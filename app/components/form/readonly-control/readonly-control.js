@@ -123,6 +123,9 @@ let config = {
 
 class ReadonlyControl extends Component {
     constructor(data,events,newConfig){
+		if(data.type == 'Textarea'){
+			data.is_textarea = 1;
+		}
     	data.originalValue=data.value;
         super($.extend(true,{},config,newConfig),data,events)
     }

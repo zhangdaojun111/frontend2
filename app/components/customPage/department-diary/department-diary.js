@@ -8,7 +8,7 @@ import './department-diary.scss';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import msgBox from '../../../lib/msgbox';
 import {HTTP} from "../../../lib/http";
-import TreeView from "../../../components/util/tree/tree";
+import TreeView from "../../util/tree/tree";
 import {AutoSelect} from '../../util/autoSelect/autoSelect';
 import dataTableAgGrid from "../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid"
 import {dataTableService} from "../../../services/dataGrid/data-table.service";

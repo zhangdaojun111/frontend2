@@ -3,6 +3,8 @@
     <p class="info">权限受限</p>
     {{else if be_control_condition}}
     <p class="info">被修改条件限制</p>
+    {{else if is_textarea}}
+    <textarea type="text" disabled="disabled" class='dynamic-form-input ui-readonly ui-width'  style="color: #666666;height: 100px;" value="{{value}}">{{value}}</textarea>
     {{else}}
     <input type="text" readonly="readonly" class='dynamic-form-input ui-readonly ui-width'  style="color: #666666;" value="{{value}}">
     <div style="float: left;min-width: 60px">

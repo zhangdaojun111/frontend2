@@ -2,7 +2,7 @@
  * Created by birdyy on 2017/8/1.
  * name echarts 服务渲染
  */
-import * as echarts from 'echarts';
+import * as echarts from 'echarts/dist/echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
 import {HTTP} from '../../lib/http';
@@ -33,6 +33,9 @@ export class EchartsService {
         switch (chartType) {
             case 'pie':
                 option = this.pieOption(cellChart);// 饼图处理
+                break;
+            case 'circular':
+                option = this.pieOption(cellChart);// 环形图处理
                 break;
             case 'multilist':
                 option = this.multiChartOption(cellChart); // 多表处理
@@ -180,7 +183,7 @@ export class EchartsService {
         //如果数据里面有柱状图，则y轴起始点从0开始
         let isZero = false;
         for(let y of yAxis){
-            if(y.type.type == 'bar'&& !cellOption['yHorizontal']&& firstMin >= 0){
+            if(y.type.type == 'bar' && firstMin >= 0){
                 isZero = true;
                 break;
             }
@@ -210,9 +213,9 @@ export class EchartsService {
                 inverse: false,
                 scale: true,
                 splitNumber: splitNumber,
-                max: secondMax,
-                min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
-                interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
+                // max: secondMax,
+                // min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
+                // interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
                 axisLabel: {
                     inside: false
                 },
@@ -240,6 +243,7 @@ export class EchartsService {
         }
         linebarOption['series'] = series;
         linebarOption['legend'].data = legend;
+
         // 默认显示y轴字段列表
         if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
             legend.map(name => {
@@ -255,19 +259,15 @@ export class EchartsService {
         };
 
         if (cellOption['yHorizontal']) {
-            // linebarOption['grid']['left'] =  maxXTextNum;
-            // linebarOption['grid']['containLabel'] = false;
             let _t = linebarOption.xAxis;
             linebarOption.xAxis = linebarOption.yAxis;
             linebarOption.yAxis = _t;
             linebarOption.series.forEach((item) => {
                 if (item['yAxisIndex'] !== undefined) {
-
                     item['xAxisIndex'] = item['yAxisIndex'];
                     delete item['yAxisIndex'];
-                }
+                };
             });
-
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['dodouble'] === 1 && cellOption['yAxis'].length === 2) {
                 yAxis.map((y, colorIndex) => {
@@ -297,7 +297,6 @@ export class EchartsService {
             }
         };
 
-
         //x轴为3日期,5日期时间,12年份,30年月类型字段时开启数据缩放
         let dateType = ['3','5','12','30'];
         if(!cellOption['yHorizontal'] && cellOption['xAxis'] && cellOption['xAxis']['type'] && dateType.indexOf(cellOption['xAxis']['type']) != -1 && window.config.bi_user !== 'manager'){
@@ -306,8 +305,10 @@ export class EchartsService {
                 {
                 type: 'slider',
                 xAxisIndex: 0,
-                bottom:'0',
+                bottom:5,
                 height:20,
+                left:0,
+                right:5,
                 startValue: linebarOption['xAxis'][0]['data'][0],
                 endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                 rangeMode: ['value', 'value']
@@ -322,7 +323,12 @@ export class EchartsService {
                 }
             ]
         };
-        console.log(linebarOption);
+
+        //是否设置自定义高度top
+        if(cellOption['customTop']){
+            linebarOption['grid']['top'] = cellOption['customTop'];
+            linebarOption['legend']['type'] = 'plain';
+        }
 
         return linebarOption;
     }
@@ -350,6 +356,9 @@ export class EchartsService {
         pieOption['series'][0].data = series;
         pieOption['series'][0].name = title;
         pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
+        if(cellChart.chart.chartType.type == 'circular'){
+            pieOption['series'][0].radius = ['50%','80%'];
+        }
         return pieOption;
     }
 
@@ -447,7 +456,6 @@ export class EchartsService {
             });
         });
         mutiListOption['legend']['data'] = legend;
-        console.log(mutiListOption);
         return mutiListOption;
     }
     /**
@@ -549,7 +557,6 @@ export class EchartsService {
         stylzieOption.series[0].data = data;
         return stylzieOption;
     }
-
 
     /**
      * 获取下穿数据

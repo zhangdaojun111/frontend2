@@ -60,6 +60,8 @@ let config = {
 		baseIdsLocalDict: {},
 		//用于比较字段插件配置的list
 		myPluginFields: [],
+		//是否验证必填
+        validation_required: true
 	},
 	binds: [{
 		event: 'click',
@@ -295,7 +297,7 @@ let config = {
 				}
 				let val = formValue[key];
 				//必填检查
-				if (data["required"]) {
+				if (data["required"]&&this.data.validation_required) {
 					if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]" || JSON.stringify(val) == "{}") {
 						error = true;
 						errArr.push(data["label"] + '是必填项!');

@@ -12,7 +12,6 @@ import '../../../assets/scss/workflow/workflow-base.scss';
 import Mediator from '../../../lib/mediator';
 // import WorkflowAddFollow from '../workflow-addFollow/workflow-addFollow/workflow-addFollow';
 import WorkFlowCreate from '../workflow-create/workflow-create';
-import TreeView from '../../util/tree/tree';
 import {
     PMAPI,
     PMENUM

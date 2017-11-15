@@ -261,7 +261,7 @@ let config = {
                         }else {
                             let funName = '';
                             if(address['beAddress'].indexOf('=')!=-1){
-                                funName = address['beAddress'].split()[1]
+                                funName = address['beAddress'].split('=')[1]
                             }
                             let obj = {
                                 table_id:this.data.tableId,

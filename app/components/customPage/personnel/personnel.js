@@ -19,7 +19,7 @@ import dataPagination from "../../dataGrid/data-table-toolbar/data-pagination/da
 import FloatingFilter from "../../dataGrid/data-table-toolbar/floating-filter/floating-filter";
 import {fieldTypeService} from "../../../services/dataGrid/field-type-service";
 import {TabService} from "../../../services/main/tabService";
-import TreeView from "../../../components/util/tree/tree";
+import TreeView from "../../util/tree/tree";
 
 let config = {
     template: template,

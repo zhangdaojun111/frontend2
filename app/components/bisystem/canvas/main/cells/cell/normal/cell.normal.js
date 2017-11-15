@@ -66,9 +66,8 @@ let config = {
          */
         judgeDateZoom(cellChart) {
             let type = cellChart.chart.xAxis.type;
-            // console.log(this.data.cellChart.chart['yHorizontal']);
             if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30)) {
-                this.el.find('.echarts-cell').addClass('.date-filed');
+                this.el.find('.echarts-cell').addClass('date-filed');
                 this.normalRange = new NormalRangeComponent({id: this.data.id}, {
                     // 通过（一周 一月 半年 一年 全部）获取数据
                     onChangeDateData: (value) => {
@@ -81,9 +80,8 @@ let config = {
             } else {
                 if (this.normalRange) {
                     this.normalRange.destroySelf();
-                }
-                ;
-                this.el.find('.echarts-cell').removeClass('.date-filed');
+                };
+                this.el.find('.echarts-cell').removeClass('date-filed');
             }
         },
         /**
@@ -287,12 +285,12 @@ let config = {
         });
     },
     firstAfterRender() {
-        this.actions.echartsInit();
-        //是否显示时间字段
+        // 是否显示时间字段
         if (window.config.bi_user !== 'manager') {
             this.actions.judgeDateZoom(this.data.cellChart);
-        }
-        ;
+        };
+
+        this.actions.echartsInit();
     },
     beforeDestory() {
 

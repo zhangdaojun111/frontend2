@@ -7,6 +7,7 @@ import {canvasCellService} from '../../../../services/bisystem/canvas.cell.servi
 import msgbox from '../../../../lib/msgbox';
 import {PMAPI} from "../../../../lib/postmsg";
 import Mediator from '../../../../lib/mediator';
+import {Backbone} from 'backbone';
 
 
 let config = {
@@ -28,6 +29,7 @@ let config = {
             callback: function (context, event) {
                 //编辑模式Iframe
                 let iFrameUrl = window.location.href.replace('index', 'manager');
+
                 PMAPI.openDialogByIframe(
                     iFrameUrl,
                     {
@@ -152,12 +154,11 @@ let config = {
             // }());
         // }
     },
-
     afterRender:function(){
         if (self.frameElement && self.frameElement.tagName == "IFRAME") {
             let w = $(self.frameElement).closest('.iframes').width();
             let h = $(self.frameElement).closest('.iframes').height();
-            $('html.bi').css({'width':w,'height':h});
+            $('html.bi').css({'height':h});
         }
         //根据判断是否单行模式加载header
         this.actions.headLoad();
