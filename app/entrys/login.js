@@ -159,7 +159,7 @@ function getLoginController() {
              * 移动下载
              */
             this.$mobileDownload.on('click',function () {
-                window.open('https://test.erdstest.com:8809/download/download.html?referrer=');
+                window.open('https://test.erdstest.com:8809/download/download.html?referrer='+document.location.host);
             });
 
             /**
