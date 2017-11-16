@@ -19,9 +19,19 @@ let config = {
             let that = this;
             //设置没有值的地区为灰色且不高亮
             this.myChart.on('mouseover', function (params) {
+                let dataIndex = params.dataIndex;
                 if(!params.value || isNaN(params.value)){
                     that.myChart.dispatchAction({
                         type: 'downplay'
+                    });
+                    that.myChart.dispatchAction({
+                        type: 'hideTip',
+                    });
+                }else{
+                    that.myChart.dispatchAction({
+                        type: 'showTip',
+                        seriesIndex: 0,
+                        dataIndex: dataIndex,
                     });
                 }
             });

@@ -396,8 +396,10 @@ const map = {
         subtext: '',
         x:'left'
     },
+
     tooltip:{
-        trigger: 'item'
+        trigger: 'item',
+        triggerOn:'none'
     },
     visualMap: {
         x: 'left',
@@ -424,7 +426,8 @@ const map = {
                     label:{show:true}
                 }
             },
-            top:"3%",//组件距离容器的距离
+            top:"1.5%",     //以纵向位置控制图片大小，使其尽量饱满
+            bottom:'1.5%'
         }
     ]
 };
