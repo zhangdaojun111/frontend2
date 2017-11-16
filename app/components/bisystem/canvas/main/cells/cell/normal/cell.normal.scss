@@ -1,7 +1,14 @@
 .date-filed {
-    height: calc(100% - 26px)!important;
+    height: calc(100% - 26px) !important;
 }
-
+.date-zoom-wrap {
+    .normal-date-range {
+        height: 56px;
+    }
+    .date-filed {
+        height: calc(100% - 56px) !important;
+    }
+}
 .count-chart-maxText {
     position: absolute;
     left: 0;

@@ -299,7 +299,8 @@ export class EchartsService {
 
         //x轴为3日期,5日期时间,12年份,30年月类型字段时开启数据缩放
         let dateType = ['3','5','12','30'];
-        if(!cellOption['yHorizontal'] && cellOption['xAxis'] && cellOption['xAxis']['type'] && dateType.indexOf(cellOption['xAxis']['type']) != -1 && window.config.bi_user !== 'manager'){
+        let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
+        if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
             linebarOption['dataZoom']=[
                 {
@@ -328,8 +329,7 @@ export class EchartsService {
         if(cellOption['customTop']){
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
-        }
-
+        };
         return linebarOption;
     }
 
