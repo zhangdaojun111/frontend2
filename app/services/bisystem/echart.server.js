@@ -547,7 +547,7 @@ export class EchartsService {
         // 如果时间是30 - 1号这种格式，需要把数据反转
         if (cellOption.data.dateAxis[0] > cellOption.data.dateAxis[cellOption.data.dateAxis.length - 1]) {
             data.reverse();
-        };
+        }
 
         let links = data.map(function (item, i) {
             return {
