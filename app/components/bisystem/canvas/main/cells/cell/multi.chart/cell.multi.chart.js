@@ -29,7 +29,7 @@ let config = {
     firstAfterRender() {
         this.actions.echartsInit()
     }
-}
+};
 
 export class CellMultiChartComponent extends CellBaseComponent {
     // constructor(cellChart) {

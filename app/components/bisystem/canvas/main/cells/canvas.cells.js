@@ -25,13 +25,13 @@ let config = {
                 if (res['success'] == 0) {
                     msgbox.alert(res['error']);
                     return false;
-                };
+                }
 
                 // 当返回成功时，通知各个cell渲染chart数据
                 cells.map((item,index) => {
                     item.setChartData(res[index]);
                 })
-            };
+            }
         },
 
         /**
@@ -51,12 +51,12 @@ let config = {
                 if (startSection && endSection && !this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
-                };
+                }
             });
             // 获取画布块的chart数据
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
-            };
+            }
 
         },
         /**
@@ -72,18 +72,18 @@ let config = {
                 if (viewAllHeight <= this.el.height() + top && !this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
-                };
+                }
 
                 if (viewAllHeight > this.el.height() + top) {
                     break;
                 } else {
                     viewAllHeight += this.data.cells[key].data.cell.size.height;
                 }
-            };
+            }
             // 获取画布块的chart数据
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
-            };
+            }
         },
 
         /**
@@ -96,7 +96,7 @@ let config = {
                 if (!this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
-                };
+                }
             });
 
             // 获取画布块的chart数据
@@ -118,7 +118,7 @@ let config = {
                     this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
                 } else {
                     this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
-                };
+                }
                 clearInterval(this.data.interval);
                 this.data.interval = null;
             }
@@ -177,7 +177,7 @@ let config = {
 
                 } finally {
 
-                };
+                }
             } else {
                 msgbox.alert(res['error'])
             }
@@ -208,7 +208,7 @@ let config = {
                     deep_info = {}
                 } else {
                     deep_info[val.deep.floor] = val.deep.xOld.map(x => x['name'])
-                };
+                }
 
                 this.data.cells[cell.componentId].data.layout = JSON.stringify({
                     chart_id: val.chart_id ? val.chart_id : 0,
@@ -247,11 +247,11 @@ let config = {
                         if (window.config.bi_views[index].name === res['data'].name) {
                             window.config.bi_views[index] = res['data'];
                             break;
-                        };
+                        }
                     }
                 } else {
                     msgbox.showTips(res['error']);
-                };
+                }
             });
         },
 
@@ -266,7 +266,7 @@ let config = {
                    this.data.interval = setInterval(() => {
                        this.actions.isScrollStop();
                    }, 500);
-               };
+               }
                this.data.curScrollTop = curScrollTop;
             }
         },
@@ -282,8 +282,8 @@ let config = {
                 this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
             } else {
                 this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
-            };
-        };
+            }
+        }
     },
     beforeDestory() {}
 };

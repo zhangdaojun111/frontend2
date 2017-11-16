@@ -223,7 +223,7 @@ const funnel = {
             data: []
         }
     ]
-}
+};
 
 // 折线柱状图
 const linebar = {
@@ -318,18 +318,18 @@ const stylzie = {
                 switch (index) {
                     case 1:
                         // code
-                        texts.push('大盘')
+                        texts.push('大盘');
                         break;
                     case 3:
                         // code
-                        texts.push('中盘')
+                        texts.push('中盘');
                         break;
                     case 5:
                         // code
-                        texts.push('小盘')
+                        texts.push('小盘');
                         break;
                     default:
-                        texts.push('')
+                        texts.push('');
                     // code
                 }
                 return texts
@@ -346,18 +346,18 @@ const stylzie = {
                 switch (index) {
                     case 1:
                         // code
-                        texts.push('价值')
+                        texts.push('价值');
                         break;
                     case 3:
                         // code
-                        texts.push('平衡')
+                        texts.push('平衡');
                         break;
                     case 5:
                         // code
-                        texts.push('成长')
+                        texts.push('成长');
                         break;
                     default:
-                        texts.push('')
+                        texts.push('');
                     // code
                 }
                 return texts
@@ -421,4 +421,4 @@ export const EchartsOption = {
         }
         return ToolPlugin.clone(option);
     }
-}
+};

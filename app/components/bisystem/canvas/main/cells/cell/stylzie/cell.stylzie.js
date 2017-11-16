@@ -30,7 +30,7 @@ let config = {
 
         this.actions.echartsInit()
     }
-}
+};
 
 export class CellStylzieComponent extends CellBaseComponent {
     // constructor(cellChart) {
