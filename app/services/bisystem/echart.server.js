@@ -618,14 +618,26 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     gaugeOption(cellChart) {
+        console.log(cellChart);
         const gaugeOption = EchartsOption.getEchartsConfigOption('gauge');
         let cellOption = cellChart['chart'];
-        console.log(cellOption);
         if (cellOption['yAxis'].length === 0 ) {
             return defaultOption;
         }
+        gaugeOption.series[0].min = cellOption['data']['range'][0];
+        gaugeOption.series[0].max = cellOption['data']['range'][1];
+        if(!cellOption['data']['range']){
+            if(cellOption['data']['yAxis']>0){
+                gaugeOption.series[0].min = 0;
+                gaugeOption.series[0].max = cellOption['data']['yAxis'];
+            }else {
+                gaugeOption.series[0].min = cellOption['data']['yAxis'];
+                gaugeOption.series[0].max = 0;
+            }
+        }
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
-        gaugeOption.series[0].data['value'] = cellOption['data']['rows'][0];
+        gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
+
         return gaugeOption;
     }
     /**
