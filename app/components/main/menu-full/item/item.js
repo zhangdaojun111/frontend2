@@ -313,7 +313,6 @@ let config = {
                 let newData = _.defaultsDeep({}, data, {
                     root: false,
                     offset: this.data.offset + 20,
-                    searchDisplay: true,
                     type: this.data.type
                 });
 
