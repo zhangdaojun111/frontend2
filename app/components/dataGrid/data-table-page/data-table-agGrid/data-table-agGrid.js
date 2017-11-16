@@ -3385,7 +3385,7 @@ let config = {
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
             //暂时刷新方法
-            let defaultMax = false;
+            let defaultMax = true;
             PMAPI.openDialogByIframe( url,{
                 width: w || 1400,
                 height: h || 800,
