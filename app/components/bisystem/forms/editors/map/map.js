@@ -28,7 +28,7 @@ let config = {
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
-                };
+                }
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']);
@@ -51,8 +51,7 @@ let config = {
                     this.formItems['yAxis'].setList(columns['y_field']);
                     this.formItems['xAxis'].setList(columns['x_field']);
                 } else { // 清空字段
-                    this.formItems['yAxis'].actions.clear();
-                    this.formItems['choosed'].actions.clear();
+                    this.formItems['yAxis'].setList([]);
                     this.formItems['xAxis'].setList([]);
                 }
             }
@@ -69,7 +68,7 @@ let config = {
                     this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
             // 获取图标
@@ -82,7 +81,7 @@ let config = {
                     this.formItems['icon'].setList(icons)
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
         },
@@ -99,12 +98,12 @@ let config = {
                 "xOld":{},
                 "row_id":0,
                 "deep_info":{}
-            }
+            };
             const data = {
                 layouts:[JSON.stringify(layout)],
                 query_type:'deep',
                 is_deep:1,
-            }
+            };
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
@@ -126,7 +125,6 @@ let config = {
                 source: data.source,
                 theme: data.theme,
             };
-            console.log(chart);
 
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
@@ -134,9 +132,9 @@ let config = {
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
-                    };
+                    }
                 }
-            };
+            }
 
             if (pass) {
                 this.save(chart);
@@ -246,8 +244,8 @@ let config = {
                 this.data.chart = res[0]['data']
             } else {
                 msgbox.alert(res[0]['error'])
-            };
-        };
+            }
+        }
 
         // 渲染图表表单字段
         this.drawForm();
@@ -255,10 +253,10 @@ let config = {
 
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
-        };
+        }
 
     },
-}
+};
 
 class MapEditor extends Base {
     constructor(data,extendConfig) {
