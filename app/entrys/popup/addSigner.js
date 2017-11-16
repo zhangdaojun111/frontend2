@@ -41,7 +41,7 @@ function recursion(arr,slnds,pubInfo){
     recur(tree);
     let treeComp3 = new TreeView(tree, {
         callback: function (event, selectedNode) {
-            msgBox.showLoadingSelf();
+           // msgBox.showLoadingSelf();
             if (event === 'select') {
                 for (let k in staff) {
                     if (k == selectedNode.id) {
@@ -57,9 +57,9 @@ function recursion(arr,slnds,pubInfo){
                     }
                 }
             }
-            setTimeout(() => {
-                msgBox.hideLoadingSelf();
-            },800);
+            // setTimeout(() => {
+            //     msgBox.hideLoadingSelf();
+            // },800);
         },
         treeType: 'MULTI_SELECT',
         isSearch: true,

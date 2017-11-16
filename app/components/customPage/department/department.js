@@ -59,7 +59,7 @@ let config = {
                 number['headerCellTemplate'] = this.actions.resetPreference();
                 this.data.columnDefs = [
                     number,dgcService.selectCol,
-                    {headerName: '操作',field: 'myOperate', width: 120,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
+                    {headerName: '操作',field: 'myOperate', width: 80,  suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
                         return '<div style="text-align:center;"><a class="ui-link" id="departView">查看</a> | <a class="ui-link" id="departModify">编辑</a><div>';
                     }},
                     { headerName: '部门', field: 'f5',cellRenderer: 'group',suppressMenu: true, tooltipField:'f5' }

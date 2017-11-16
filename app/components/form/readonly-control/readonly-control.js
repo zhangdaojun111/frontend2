@@ -27,7 +27,6 @@ let config = {
                 for (let r in reg) {
 	                let reg = eval(r);
 	                let flag = reg.test(val);
-                    console.log("flagReg：" + flag);
                     if (!flag) {
                         this.el.find("#error_tip").css("display", "inline-block");
                         regErrorMsg = reg[r];
