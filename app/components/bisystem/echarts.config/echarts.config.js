@@ -388,6 +388,55 @@ const stylzie = {
     ]
 
 };
+
+//地图
+const map = {
+    // title : {
+    //     text: '地域分布',
+    //     subtext: '',
+    //     x:'left'
+    // },
+    tooltip:{
+        trigger: 'item'
+    },
+    visualMap: {
+        x: 'left',
+        y: 'center',
+        splitList: [
+            {start: 1500},
+            {start: 900, end: 1500},
+            {start: 310, end: 1000},
+            {start: 200, end: 300},
+            {start: 10, end: 200},
+            {start: 0, end: 0, color:'white'},
+            {end: 0}
+        ],
+        text:['高','低'],
+    },
+    series : [
+        {
+            type: 'map',
+            mapType: 'china',
+            roam: false,    //是否开启鼠标缩放和平移漫游
+            itemStyle:{     //地图区域的多边形 图形样式
+                normal:{        //是图形在默认状态下的样式
+                    label:{
+                        show:true,      //是否显示标签
+                        textStyle: {
+                            color: "black"
+                        }
+                    }
+                },
+                emphasis:{              //是图形在高亮状态下的样式,比如在鼠标悬浮或者图例联动高亮时
+                    label:{show:true}
+                }
+            },
+            top:"3%",//组件距离容器的距离
+        }
+    ]
+};
+
+
 export const EchartsOption = {
     blue: blueColors,
     green: greenColors,
@@ -414,7 +463,10 @@ export const EchartsOption = {
             case 'stylzie':
                 option = stylzie;
                 break;
+            case 'map':
+                option = map;
+                break;
         }
-        return ToolPlugin.clone(option);
+        return _.cloneDeep(option);
     }
 }

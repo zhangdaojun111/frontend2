@@ -11,6 +11,7 @@ import {NineGridEditor as FormNineGridComponent} from '../editors/nine.grid/nine
 import {CommentEditor as FormCommentComponent} from '../editors/comment/comment';
 import {PieEditor as FormPieComponent} from '../editors/pie/pie';
 import {StylizeEditor as FormStylizeComponent} from '../editors/stylzie/stylize';
+import {MapEditor as FormMapComponent} from '../editors/map/map'
 
 export let componentsJson = {
     'normal': {
@@ -65,5 +66,11 @@ export let componentsJson = {
         'name': '风格箱',
         'icon':'chart-stylize-icon',
         'component': FormStylizeComponent
+    },
+    'map': {
+        'entry': 'map',
+        'name': '地图',
+        'icon':'chart-pie-icon',
+        'component': FormMapComponent
     }
 }

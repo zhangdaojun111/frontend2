@@ -2,18 +2,19 @@
  * Created by birdyy on 2017/8/1.
  * name echarts 服务渲染
  */
-import * as echarts from 'echarts/dist/echarts';
+import echarts from 'echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
 import {HTTP} from '../../lib/http';
 import {canvasCellService} from './canvas.cell.service';
+import * as chinaMap from '../../components/bisystem/utils/china';
+
 const defaultOption = {
     grid: {},
     xAxis : [],
     yAxis : [],
     series : []
 };
-
 
 export class EchartsService {
     constructor(cellChart) {
@@ -52,6 +53,9 @@ export class EchartsService {
             case 'stylzie':
                 option = this.stylzieOption(cellChart); // 风格图处理
                 break;
+            case 'map':
+                option = this.mapOption(cellChart); // 地图处理
+
         }
         return option;
     }
@@ -556,6 +560,101 @@ export class EchartsService {
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
         return stylzieOption;
+    }
+
+    /**
+     * 地图数据处理
+     * @param cellChart
+     * @returns {*}
+     */
+    mapOption(cellChart){
+        const mapOption = {
+            title : {
+                text: '地域分布',
+                subtext: '',
+                x:'left'
+            },
+            tooltip : {//提示框组件。
+                trigger: 'item'//数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+            },
+            visualMap: {//颜色的设置  dataRange
+                x: 'left',
+                y: 'center',
+                splitList: [
+                    {start: 1500},
+                    {start: 900, end: 1500},
+                    {start: 310, end: 1000},
+                    {start: 200, end: 300},
+                    {start: 10, end: 200},
+                    {start: 0, end: 5, color:'white'},
+                    {end: 0}
+                ],
+//            min: 0,
+//            max: 2500,
+//            calculable : true,//颜色呈条状
+                text:['高','低'],// 文本，默认为数值文本
+                // color: ['#E0022B', '#E09107', '#A3E00B']
+            },
+            series : [
+                {
+                    name: '订单量',
+                    type: 'map',
+                    mapType: 'china',
+                    roam: false,    //是否开启鼠标缩放和平移漫游
+                    itemStyle:{     //地图区域的多边形 图形样式
+                        normal:{        //是图形在默认状态下的样式
+                            label:{
+                                show:true,      //是否显示标签
+                                textStyle: {
+                                    color: "black"
+                                }
+                            }
+                        },
+                        emphasis:{              //是图形在高亮状态下的样式,比如在鼠标悬浮或者图例联动高亮时
+                            label:{show:true}
+                        }
+                    },
+                    top:"3%",//组件距离容器的距离
+                    data:[
+                        {name: '北京',value: 0},
+                        {name: '天津',value: 0},
+                        {name: '上海',value: 0},
+                        {name: '重庆',value: 0},
+                        {name: '河北',value: 0},
+                        {name: '河南',value: 0},
+                        {name: '云南',value: 0},
+                        {name: '辽宁',value: 0},
+                        {name: '黑龙江',value: 0},
+                        {name: '湖南',value: 0},
+                        {name: '安徽',value: 0},
+                        {name: '山东',value: 10},
+                        {name: '新疆',value: 300},
+                        {name: '江苏',value: 200},
+                        {name: '浙江',value: 350},
+                        {name: '江西',value: 0},
+                        {name: '湖北',value: 600},
+                        {name: '广西',value: 0},
+                        {name: '甘肃',value: 0},
+                        {name: '山西',value: 0},
+                        {name: '内蒙古',value: 0},
+                        {name: '陕西',value: 200},
+                        {name: '吉林',value: 0},
+                        {name: '福建',value: 0},
+                        {name: '贵州',value: 0},
+                        {name: '广东',value: 0},
+                        {name: '青海',value: 0},
+                        {name: '西藏',value: 0},
+                        {name: '四川',value: 0},
+                        {name: '宁夏',value: 0},
+                        {name: '海南',value: 0},
+                        {name: '台湾',value: 0},
+                        {name: '香港',value: 0},
+                        {name: '澳门',value: 0},
+                    ]
+                }
+            ]
+        };
+        return mapOption;
     }
 
     /**

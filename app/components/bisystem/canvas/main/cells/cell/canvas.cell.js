@@ -17,6 +17,7 @@ import {CellFunnelComponent} from './funnel/cell.funnel';
 import {CellCommentComponent} from './comment/cell.comment';
 import {CellStylzieComponent} from './stylzie/cell.stylzie';
 import {CanvasCellTitleComponent} from './title/canvas.title';
+import {CellMapComponent} from './map/cell.map'
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../lib/msgbox';
@@ -31,7 +32,8 @@ const cellTypes = {
     'funnel': CellFunnelComponent,
     'pie': CellPieComponent,
     'comment': CellCommentComponent,
-    'stylzie': CellStylzieComponent
+    'stylzie': CellStylzieComponent,
+    'map':CellMapComponent
 };
 
 
