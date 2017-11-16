@@ -329,8 +329,7 @@ export class EchartsService {
         if(cellOption['customTop']){
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
-        }
-
+        };
         return linebarOption;
     }
 
