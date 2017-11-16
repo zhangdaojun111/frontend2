@@ -5,7 +5,7 @@ import '../../assets/scss/main.scss';
 import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
 import {workflowService} from '../../services/workflow/workflow.service';
-import TreeView from  '../../components/util/tree/tree';
+import TreeView from '../../components/util/tree/tree';
 import WorkflowAddSigner from '../../components/workflow/workflow-addFollow/workflow-addSigner/workflow-addSigner';
 import '../../assets/scss/workflow/workflow-base.scss';
 import msgBox from '../../lib/msgbox';

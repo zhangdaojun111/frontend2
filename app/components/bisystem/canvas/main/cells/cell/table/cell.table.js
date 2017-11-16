@@ -27,6 +27,17 @@ export class CellTableComponent extends CellBaseComponent {
     }
 
     static init(cellChart) {
+        //格式化数据
+        let data = cellChart.chart.data.rows;
+        for (let k in data){
+            for (let n in data[k]){
+                let temp = data[k][n];
+                if(CellTableComponent.isNumber(temp)){
+                    data[k][n] = CellTableComponent.numFormat(temp);
+                }
+            }
+        }
+
         if (cellChart['chart']['single'] === 1) {
             if (cellChart['chart']['data']['rows'][0]) {
                 CellTableComponent.singleTable(cellChart);
@@ -43,7 +54,6 @@ export class CellTableComponent extends CellBaseComponent {
         let cellData = cellChart['chart'];
         const columnNum = cellData['columnNum']; // 显示多少列
         let rows = Math.ceil(cellData['columns'].length / columnNum); // 计算出显示多少行
-
         let list = []; // 组合 字段的name 和 value 成一个列表
         let columnList = []; // 获取每列字段
         let tableRows = []; // 单行表格每行的数据
@@ -77,5 +87,16 @@ export class CellTableComponent extends CellBaseComponent {
             tableRows.push(row);
         };
         cellChart.rows = tableRows;
+    }
+
+    static numFormat(num) {
+        num = parseFloat(Number(num)).toFixed(2).toString().split(".");
+        num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+        return num.join(".");
+    }
+
+    static isNumber(value) {         //验证是否为数字
+        let patrn = /^(-)?\d+(\.\d+)?$/;
+        return !(patrn.exec(value) === null || value === "");
     }
 }
