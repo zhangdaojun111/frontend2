@@ -282,7 +282,7 @@ const linebar = {
             },
             axisLabel: {
                 inside: false,
-                formatter: function(value,index) {
+                formatter: function(value,index,a) {
                     let isDecimal = _.cloneDeep(value).toString().indexOf('.');
                     return isDecimal !== -1 ? value.toFixed(2) : value;
                 }

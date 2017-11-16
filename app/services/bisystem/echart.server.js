@@ -188,14 +188,12 @@ export class EchartsService {
                 break;
             }
         };
+
         if (!isStack) {
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
         };
 
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
-        // if (firstMaxText > 30) {
-        //     linebarOption['grid']['left'] = firstMaxText;
-        // };
         if (cellOption.double !== 1) {
             linebarOption['grid']['right'] = 0;
         } else if (cellOption.double === 1) {
@@ -217,7 +215,11 @@ export class EchartsService {
                 // min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
                 // interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
                 axisLabel: {
-                    inside: false
+                    inside: false,
+                    formatter: function(value,index) {
+                        let isDecimal = _.cloneDeep(value).toString().indexOf('.');
+                        return isDecimal !== -1 ? value.toFixed(2) : value;
+                    }
                 },
                 axisLine: {},
                 splitLine: {
@@ -330,6 +332,8 @@ export class EchartsService {
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         };
+        console.log('-------------');
+        console.log(linebarOption);
         return linebarOption;
     }
 
