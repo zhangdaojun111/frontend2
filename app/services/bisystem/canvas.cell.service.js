@@ -2,7 +2,6 @@
  * Created by birdyy on 2017/8/1.
  */
 import {HTTP} from '../../lib/http';
-
 export const canvasCellService = {
 
     /**
@@ -51,7 +50,7 @@ export const canvasCellService = {
      */
     async getCellChart(charts) {
         const res = await HTTP.ajaxImmediately({
-            url: '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id,
+            url: '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id + '&bi_user=' + window.config.bi_user,
             data: charts,
             method:'post',
             traditional: true
@@ -155,6 +154,20 @@ export const canvasCellService = {
             url: '/bi/new_del_compute_field/',
             data: data,
             // contentType: "application/json; charset=utf-8",
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
+
+    /**
+     * 清除缓存
+     */
+    async refreshCache() {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/refresh_cache/',
+            method: 'get',
             traditional: true
         });
         return new Promise((resolve, reject) => {

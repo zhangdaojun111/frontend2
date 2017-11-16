@@ -60,6 +60,8 @@ let config = {
 		baseIdsLocalDict: {},
 		//用于比较字段插件配置的list
 		myPluginFields: [],
+		//是否验证必填
+        validation_required: true
 	},
 	binds: [{
 		event: 'click',
@@ -155,7 +157,7 @@ let config = {
 			//给统计赋值
 			for (let d in res["data"]) {
 				this.actions.setFormValue(d, res["data"][d]);
-				this.actions.triggerSingleControl(d);
+                this.actions.triggerSingleControl(d);
 			}
 		},
 
@@ -296,7 +298,7 @@ let config = {
 				}
 				let val = formValue[key];
 				//必填检查
-				if (data["required"]) {
+				if (data["required"]&&this.data.validation_required) {
 					if (( ( val == "" ) && ( ( val + '' ) != '0' ) ) || val == "[]" || JSON.stringify(val) == "{}") {
 						error = true;
 						errArr.push(data["label"] + '是必填项!');
@@ -626,6 +628,9 @@ let config = {
 				for (let i in need_key) {
 					fields[f][need_key[i]] = temp_field[need_key[i]];
 				}
+				if(temp_field['real_type']){
+					fields[f]['accuracy'] = temp_field['accuracy']
+				}
 			}
 			let new_data = {};
 			let old_data = this.actions.createFormValue(this.data.data);
@@ -943,6 +948,7 @@ let config = {
 						// 给统计赋值
 						for (let d in res["data"]) {
                             this.actions.setFormValue(d, this.actions.showAccuracy(d,res["data"][d]));
+                            this.actions.triggerSingleControl(d);
 						}
                         if(res){
                             let calcData = {
@@ -950,9 +956,9 @@ let config = {
                                 effect: expression["effect"],
                                 id: expression['id']
                             };
-                            if(!this.actions.webCalcExpression(expression)) {
-                                this.actions.calcExpression(calcData);
-                            }
+                            // if(!this.actions.webCalcExpression(expression)) {
+                            //     this.actions.calcExpression(calcData);
+                            // }
                         }
 					}
 				}
@@ -1025,7 +1031,6 @@ let config = {
 				} else {
                     this.actions.setFormValue(k, this.actions.showAccuracy(k,res["data"][k]));
 					this.actions.triggerSingleControl(k);
-
 				}
 			}
 		},
@@ -1387,8 +1392,10 @@ let config = {
 				effect: data["effect"],
 				id: data['id']
 			};
-			if(!this.actions.webCalcExpression(data)){
-				this.actions.calcExpression(calcData, data['value']);
+
+			if(!noCount){
+				//this.actions.calcExpression(calcData, data['value']);
+                this.actions.webCalcExpression(data)
 			};
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
@@ -1468,40 +1475,48 @@ let config = {
 		},
 
 		webCalcExpression(data) {
+            let calcData = {
+                val: data['value'],
+                effect: data["effect"],
+                id: data['id']
+            };
 			for (let index in data["effect"]) {
 				let f=data["effect"][index];
 				let expression;
+				let bool = false;
+
 				if (this.data.data.hasOwnProperty(f)) {
 					let expressionStr = this.data.data[f]["expression"];
-					if (expressionStr !== "") {
+					if (expressionStr !== "" ) {
 						expression = this.actions.replaceSymbol(expressionStr);
 						try {
 							if (expression.indexOf("$^$") == -1) {
 								try {
 									if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
-										this.actions.set_value_for_form(eval(expression), f);
-										return true;
+                                        this.actions.set_value_for_form(eval(expression), f);
 									}
 								} catch (err) {
-									// console.error(err);
-									console.error('不能执行前端表达式计算');
-									return false;
+									console.log('不能执行前端表达式计算');
+                                    bool = true;
 								}
 							}else{
-								return false;
+                                bool = true;
 							}
 						} catch (err) {
-							// console.error(err);
-							console.error('不能执行前端表达式计算');
-							return false;
+							console.log('不能执行前端表达式计算');
+                            bool = true;
 						}
 					}else{
-						return false;
+                        bool = true;
 					}
 				}else{
-					return false;
+                    bool = true;
 				}
+                if(bool){
+                    this.actions.calcExpression(calcData, data['value'])
+                }
 			}
+
 		},
 		//小数显示精度
         showAccuracy(dfield, value) {

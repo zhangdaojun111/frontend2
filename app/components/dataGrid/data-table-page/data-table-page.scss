@@ -7,6 +7,7 @@
     overflow: hidden;
     .page-tab {
         line-height: 30px;
+        height: 50px;
         background-color: #FFFFFF;
         user-select: none;
         position: absolute;
@@ -63,7 +64,7 @@
             li {
                 display: block;
                 float: left;
-                padding: 15px 0px;
+                padding: 9px 0px;
                 cursor: pointer;
                 width: 60px;
                 border-bottom: 2px solid #fff;
@@ -72,7 +73,7 @@
                     width: 15px;
                     margin-right: 15px;
                     border: none;
-                    padding: 22px 0px;
+                    padding: 16px 0px;
                     cursor: default;
                 }
                 a {
@@ -83,6 +84,7 @@
                     line-height: 30px;
                     text-decoration: none;
                     color: #666;
+                    margin-top: 2px;
                     .icon-aggrid-new{
                         margin: 0px 4px;
                     }

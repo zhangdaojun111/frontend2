@@ -46,6 +46,9 @@ let config = {
                         this.actions.showChildrenAtFull();
                     }
                 }
+                if (this.data.ts_name == '' && this.data.table_id == "0") {
+                    return;
+                }
                 if (this.data.url && this.data.url !== ''){
                     Mediator.emit('menu:item:openiframe', {
                         id: this.data.namespace,
@@ -57,6 +60,9 @@ let config = {
             } else {
                 //编辑模式下不再打开tab
                 if(event.currentTarget.className.indexOf('edit') > 0){
+                    return;
+                }
+                if (this.data.ts_name == '' && this.data.table_id == "0") {
                     return;
                 }
                 let key;

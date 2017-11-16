@@ -21,6 +21,7 @@ let config={
             msgBox.confirm(`确认审批`)
             .then(res=>{
                 if(res===true){
+                    msgBox.showLoadingSelf();
                     let postData={};
                     postData.action=e;
                     postData.comment=$('#comment').val();
@@ -29,7 +30,8 @@ let config={
                         return workflowService.approveManyWorkflow(postData);
                     })().then((res)=>{
                         if(res.success===1){
-                            msgBox.alert(`操作成功：${res.error}`);
+                            // msgBox.alert(`操作成功：${res.error}`);
+                            msgBox.alert(`操作成功`);
                         }else{
                             msgBox.alert(`操作失败：${res.error}`);
                         }
@@ -39,9 +41,10 @@ let config={
                             data:{refresh:true}
                         })
                     })
+                }else{
+                    msgBox.hideLoadingSelf();
                 }
-            })
-            
+            });
         }
     },
     binds:[
