@@ -1268,7 +1268,7 @@ let config = {
             this.data.rowData = res[0].rows || [];
             this.data.total = res[0].total != undefined ? res[0].total : this.data.total;
             //对应关系特殊处理
-            if( (this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence')&&this.data.firstRender ){
+            if( (this.data.viewMode == 'editFromCorrespondence'&&this.data.firstRender)||this.data.viewMode == 'viewFromCorrespondence' ){
                 this.actions.setCorrespondence(res[0]);
             }
             //提醒赋值
@@ -1361,6 +1361,7 @@ let config = {
             //对应关系回显的ids
             if ( res.selectedList ) {
                 this.data.correspondenceSelectedList = res.selectedList;
+                this.data.selectData = res.selectedList;
             }
             //对应关系增加的ids
             if ( res.addList ) {
@@ -1408,6 +1409,7 @@ let config = {
         //显示勾选项
         checkCorrespondence: function (setData) {
             let title = this.el.find( '.correspondence-check span' )[0].innerHTML;
+            this.actions.setCorrespondenceSelect();
             let obj = {
                 rowData: title == '仅显示勾选项'?this.data.correspondenceSelectedData : this.data.rowData
             }
@@ -1416,11 +1418,16 @@ let config = {
                     rowData: title == '仅显示勾选项'?this.data.rowData : this.data.correspondenceSelectedData
                 }
             }
+            console.log("===========================")
+            console.log("===========================")
+            console.log(this.data.correspondenceSelectedData)
+            console.log(obj)
+            console.log(this.data.correspondenceSelectedList)
             this.agGrid.actions.setGridData( obj );
             if( !setData ){
                 this.el.find( '.correspondence-check span' )[0].innerHTML = title == '仅显示勾选项'?'显示全部':'仅显示勾选项';
             }
-            this.actions.setCorrespondenceSelect();
+            this.actions.calcSelectData( 'set' );
         },
         //行选择时触发
         onRowSelected: function ($event) {
