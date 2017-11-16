@@ -80,7 +80,7 @@ let config = {
                 } else if (data.content.length === 0) {
                     this.el.find('.advanced-values .error').show();
                     return false;
-                };
+                }
                 this.trigger('onSaveAdvancedData',data);
                 return false;
             }
@@ -131,7 +131,7 @@ let config = {
             this.data.compute_model = JSON.stringify({
                 'id': this.data.advancedDataTemplates[0].id, 'name': this.data.advancedDataTemplates[0].name
             });
-        };
+        }
     },
     firstAfterRender() {},
     beforeDestory() {}

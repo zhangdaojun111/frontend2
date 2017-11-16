@@ -72,7 +72,7 @@ export class EchartsService {
         let ySelectedGroup = cellChart['chart']['ySelectedGroup'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
-        };
+        }
         // 组合图采用new_name，下穿图采用name
         const nameType = (cellOption.chartAssignment && cellOption.chartAssignment.val) === 1 ? 'new_name' : 'name';
         const [legend, series] = [[], []];
@@ -99,10 +99,10 @@ export class EchartsService {
                         if (ySelectItem.field.dfield === y.dfield) {
                             ySelectItem.field.name = y['new_name'];
                             break;
-                        };
+                        }
                     }
                 }
-            };
+            }
             // let yTextNum = [];
             // y['data'].forEach(val => {
             //     if (val) {
@@ -121,7 +121,7 @@ export class EchartsService {
                 firstMaxYnum.push(maxNumber);
                 firstMinYnum.push(minNumber);
                 // firstMaxTextYnum.push(maxYTnum);
-            };
+            }
             series.push({
                 name: y[nameType],
                 type: y['type'] && y['type']['type'],
@@ -165,21 +165,21 @@ export class EchartsService {
                         return value;
                     } else {
                         value = value.toString();
-                        let markNum = 0
+                        let markNum = 0;
                         if (cellOption['echartX']['textNum'] !== 0) {
                             markNum = Math.ceil(value.length / cellOption['echartX']['textNum']);
                         } else {
                             markNum = 0;
-                        };
+                        }
                         let val = [];
                         for (let i = 0; i < markNum; i++) {
                             val.push(value.slice(i * cellOption['echartX']['textNum'], (i + 1) * cellOption['echartX']['textNum']));
                         }
                         return val.join('\n');
-                    };
+                    }
                 };
             }
-        };
+        }
         let firstMax = Math.max.apply(null, firstMaxYnum);
         let firstMin = Math.min.apply(null, firstMinYnum);
         let secondMax = Math.max.apply(null, secondMaxYnum);
@@ -194,15 +194,12 @@ export class EchartsService {
                 isZero = true;
                 break;
             }
-        };
+        }
+
         if (!isStack) {
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
-        };
-
+        }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
-        // if (firstMaxText > 30) {
-        //     linebarOption['grid']['left'] = firstMaxText;
-        // };
         if (cellOption.double !== 1) {
             linebarOption['grid']['right'] = 0;
         } else if (cellOption.double === 1) {
@@ -213,7 +210,7 @@ export class EchartsService {
             const splitNumber = 5;
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax;
-            };
+            }
             linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
@@ -224,7 +221,11 @@ export class EchartsService {
                 // min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
                 // interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
                 axisLabel: {
-                    inside: false
+                    inside: false,
+                    formatter: function(value,index) {
+                        let isDecimal = _.cloneDeep(value).toString().indexOf('.');
+                        return isDecimal !== -1 ? value.toFixed(2) : value;
+                    }
                 },
                 axisLine: {},
                 splitLine: {
@@ -263,7 +264,7 @@ export class EchartsService {
                     }
                 }
             });
-        };
+        }
 
         if (cellOption['yHorizontal']) {
             let _t = linebarOption.xAxis;
@@ -273,7 +274,7 @@ export class EchartsService {
                 if (item['yAxisIndex'] !== undefined) {
                     item['xAxisIndex'] = item['yAxisIndex'];
                     delete item['yAxisIndex'];
-                };
+                }
             });
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['dodouble'] === 1 && cellOption['yAxis'].length === 2) {
@@ -285,7 +286,7 @@ export class EchartsService {
                     };
                 });
             }
-        };
+        }
 
         if (cellOption['yHorizontalColumns'] && cellOption['yHorizontalColumns']['marginBottom']) {
             if (cellOption['yHorizontalColumns'].hasOwnProperty('marginBottom')) {
@@ -302,11 +303,12 @@ export class EchartsService {
                     }
                 }
             }
-        };
+        }
 
         //x轴为3日期,5日期时间,12年份,30年月类型字段时开启数据缩放
         let dateType = ['3','5','12','30'];
-        if(!cellOption['yHorizontal'] && cellOption['xAxis'] && cellOption['xAxis']['type'] && dateType.indexOf(cellOption['xAxis']['type']) != -1 && window.config.bi_user !== 'manager'){
+        let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
+        if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
             linebarOption['dataZoom']=[
                 {
@@ -329,14 +331,15 @@ export class EchartsService {
                     rangeMode: ['value', 'value']
                 }
             ]
-        };
+        }
 
         //是否设置自定义高度top
         if(cellOption['customTop']){
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
-
+        console.log('-------------');
+        console.log(linebarOption);
         return linebarOption;
     }
 

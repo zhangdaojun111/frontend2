@@ -28,7 +28,7 @@ let config = {
                     this.destroySelf();
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
                 return false;
             }
         },

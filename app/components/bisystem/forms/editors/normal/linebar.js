@@ -33,7 +33,7 @@ let config = {
                             data.push(yAxis.field);
                         }
                     });
-                };
+                }
 
                 this.formItems['double'].clearErrorMsg();
                 // 当是编辑模式下,需要先渲染完y轴在执行默认展示y轴数据
@@ -46,7 +46,7 @@ let config = {
                     }
                 } else {
                     this.formItems['ySelectedGroup'].setList(data);
-                };
+                }
             }
         },
 
@@ -67,7 +67,7 @@ let config = {
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
-                };
+                }
 
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
@@ -77,7 +77,7 @@ let config = {
                 }
             } else {
                 this.actions.loadColumns(table);
-            };
+            }
 
         },
 
@@ -101,11 +101,11 @@ let config = {
                     this.formItems['yAxis1'].actions.updateY([]);
                     this.formItems['chartGroup'].setList([]);
                     this.formItems['sortColumns'].setList([]);
-                };
-            };
+                }
+            }
             if (this.formItems['deeps']) {
                 this.formItems['deeps'].actions.clear(); // 清除下穿数据
-            };
+            }
         },
 
         /**
@@ -139,7 +139,7 @@ let config = {
                     this.formItems['icon'].setList(icons)
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
         },
@@ -156,12 +156,12 @@ let config = {
                 "xOld":{},
                 "row_id":0,
                 "deep_info":{}
-            }
+            };
             const data = {
                 layouts:[JSON.stringify(layout)],
                 query_type:'deep',
                 is_deep:1,
-            }
+            };
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
@@ -182,7 +182,7 @@ let config = {
                     item['yAxisIndex'] = 1;
                     yAxis.push(item);
                 });
-            };
+            }
 
 
             let ySelectedGroup = [];
@@ -226,7 +226,7 @@ let config = {
                 chart['chartGroup'] = data.chartGroup;
             } else {
                 chart['deeps'] = data.deeps
-            };
+            }
 
             let pass = true; // 判断表单是否验证通过
 
@@ -235,15 +235,15 @@ let config = {
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
-                    };
+                    }
                 }
-            };
+            }
 
             // y轴单独验证
             let yAxispass = formValidate.validateYAxis(yAxis);
             if (!yAxispass) {
                 this.formItems['double'].showErrorMsg('y轴字段不能为空');
-            };
+            }
 
             // 当选择分组字段时验证是否为空
             let groupPass = true;
@@ -252,7 +252,7 @@ let config = {
                 if (!groupPass) {
                     this.formItems['chartAssignment'].showErrorMsg('分组字段不能为空');
                 }
-            };
+            }
             if (pass && yAxispass && groupPass) {
                 this.save(chart);
             }
@@ -281,7 +281,7 @@ let config = {
             this.formItems['double'].setValue(chart['double']);
             if (chart['double'] == 1) {
                 this.formItems['yAxis1'].setValue(yAxis1);
-            };
+            }
             this.formItems['defaultY'].setValue(chart['ySelectedGroup'] && chart['ySelectedGroup'].length > 0 ? 1 : 0);
             this.formItems['ySelectedGroup'].setList(data['yAxis'].map(y => y.field));
             this.formItems['ySelectedGroup'].setValue(chart['ySelectedGroup'].map(item => item.field));
@@ -296,7 +296,7 @@ let config = {
                 this.formItems['chartGroup'].setValue(chart['chartGroup']);
             } else {
                 this.formItems['deeps'].setValue(chart['deeps']);
-            };
+            }
             this.formItems['limit'].setValue(chart['limit'] || chart['endlimit'] ? 1 : 0);
             this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : 0);
             this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : 0);
@@ -438,7 +438,7 @@ let config = {
                             this.formItems['deeps'].actions.clear();
                         } else {
                             this.formItems['deeps'].el.show();
-                        };
+                        }
                         this.formItems['chartGroup'].autoselect.actions.clearValue();
                     }
                 }
@@ -454,7 +454,7 @@ let config = {
                         this.formItems['chartAssignment'].clearErrorMsg();
                         if (value) {
                             this.formItems['deeps'].actions.update(value);
-                        };
+                        }
                     }
                 }
             },
@@ -699,18 +699,18 @@ let config = {
                 this.data.chart = res[0]['data'];
             } else {
                 msgbox.alert(res[0]['error'])
-            };
-        };
+            }
+        }
         // 渲染图表表单字段
         this.drawForm();
         this.actions.init();
 
         if (this.data.id) {
             this.actions.fillChart(this.data.chart);
-        };
+        }
 
     }
-}
+};
 
 class LineBarEditor extends Base {
     constructor(data, event,extendConfig) {

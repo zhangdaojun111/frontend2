@@ -80,4 +80,4 @@ export let componentsJson = {
         'icon':'chart-gauge-icon',
         'component': FormGaugeComponent
     }
-}
+};

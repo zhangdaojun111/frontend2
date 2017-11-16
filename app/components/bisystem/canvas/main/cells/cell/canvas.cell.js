@@ -49,7 +49,7 @@ let config = {
             let windowSize = $(document).width();
             if (windowSize && windowSize <= 960) {
                 this.data.cell.size.width = 'auto';
-            };
+            }
             this.el.find('.cell').css(this.data.cell.size);
             this.cellTitle = new CanvasCellTitleComponent({},{
                 /**
@@ -69,7 +69,7 @@ let config = {
             if (!chart || chart['success'] !== 1) {
                 msgbox.showTips(chart['error']);
                 return false;
-            };
+            }
 
             const data = {
                 chart: chart['data'],
@@ -134,7 +134,7 @@ let config = {
         async dragChartData(chart) {
             if (this.loadData) {
                 return false;
-            };
+            }
             const res = await canvasCellService.getCellChart(chart.data);
             this.loadData = false;
             this.data['chart'] = res[0]['data'];
@@ -237,7 +237,7 @@ let config = {
             callback: function (context,event) {
                 if (this.data.cellComponent.actions.showQuill) {
                     this.data.cellComponent.actions.showQuill()
-                };
+                }
                 return false;
             }
         },
@@ -248,7 +248,7 @@ let config = {
             this.actions.cellDragandResize();
         } else {
             this.el.off('mousedown mouseup');
-        };
+        }
 
     }
 };
