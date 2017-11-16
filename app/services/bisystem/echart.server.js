@@ -55,7 +55,7 @@ export class EchartsService {
                 break;
             case 'map':
                 option = this.mapOption(cellChart); // 地图处理
-
+                break;
             case 'gauge':
                 option = this.gaugeOption(cellChart); // 仪表盘处理
                 break;
