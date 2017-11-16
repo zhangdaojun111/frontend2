@@ -66,4 +66,4 @@ export let componentsJson = {
         'icon':'chart-stylize-icon',
         'component': FormStylizeComponent
     }
-}
+};
