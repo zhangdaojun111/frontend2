@@ -5,13 +5,20 @@
 
     .title-tips {
         float: left;
-        width: calc(100% - 93px);
+        //width: calc(100% - 93px);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: 14px;
         font-weight: normal;
-        color: #333333;
+        background: url("../../../../../../../assets/images/bisystem/title_bg.png") no-repeat;
+        background-size: cover;
+        color:#5B7FDE;
+        padding: 7px 15px 6px 15px;
+        display: inline-block;
+        min-width: 120px;
+        margin-top: -9px;
+        text-align: center;
         .deep-title {
             color: #999999;
             font-size: 14px;
@@ -37,7 +44,7 @@
             font-size: 14px;
             outline: none;
             color: #dddddd;
-            .view-back-icon {
+            i {
                 vertical-align: middle;
             }
             .original-data-icon {
@@ -53,3 +60,5 @@
         color: #ddd;
     }
 }
+
+
