@@ -16,6 +16,15 @@ let config = {
         echartsInit() {
             let echartsService = new EchartsService(this.data);
             this.myChart = echartsService.myChart;
+            let that = this;
+            //设置没有值的地区为灰色且不高亮
+            this.myChart.on('mouseover', function (params) {
+                if(!params.value || isNaN(params.value)){
+                    that.myChart.dispatchAction({
+                        type: 'downplay'
+                    });
+                }
+            });
         }
     },
     afterRender() {
@@ -31,12 +40,6 @@ let config = {
 }
 
 export class CellMapComponent extends CellBaseComponent {
-    // constructor(cellChart) {
-    //     config.data.cellChart = cellChart ? cellChart : null;
-    //     super(config);
-    //     this.data.id += this.componentId
-    // }
-
     constructor(data,event,extendConfig) {
         data.cellChart = {
             cell: data.cell,

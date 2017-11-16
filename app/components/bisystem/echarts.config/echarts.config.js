@@ -391,26 +391,19 @@ const stylzie = {
 
 //地图
 const map = {
-    // title : {
-    //     text: '地域分布',
-    //     subtext: '',
-    //     x:'left'
-    // },
+    title : {
+        text: '',
+        subtext: '',
+        x:'left'
+    },
     tooltip:{
         trigger: 'item'
     },
     visualMap: {
         x: 'left',
-        y: 'center',
-        splitList: [
-            {start: 1500},
-            {start: 900, end: 1500},
-            {start: 310, end: 1000},
-            {start: 200, end: 300},
-            {start: 10, end: 200},
-            {start: 0, end: 0, color:'white'},
-            {end: 0}
-        ],
+        y: 'bottom',
+        // type:'piecewise',
+        color: ['#338CE2','#b4e2f7'],
         text:['高','低'],
     },
     series : [
