@@ -70,7 +70,7 @@ export let componentsJson = {
     'map': {
         'entry': 'map',
         'name': '地图',
-        'icon':'chart-pie-icon',
+        'icon':'chart-map-icon',
         'component': FormMapComponent
     }
 }
