@@ -65,7 +65,7 @@ export class EchartsService {
         let ySelectedGroup = cellChart['chart']['ySelectedGroup'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
-        };
+        }
         // 组合图采用new_name，下穿图采用name
         const nameType = (cellOption.chartAssignment && cellOption.chartAssignment.val) === 1 ? 'new_name' : 'name';
         const [legend, series] = [[], []];
@@ -92,10 +92,10 @@ export class EchartsService {
                         if (ySelectItem.field.dfield === y.dfield) {
                             ySelectItem.field.name = y['new_name'];
                             break;
-                        };
+                        }
                     }
                 }
-            };
+            }
             // let yTextNum = [];
             // y['data'].forEach(val => {
             //     if (val) {
@@ -114,7 +114,7 @@ export class EchartsService {
                 firstMaxYnum.push(maxNumber);
                 firstMinYnum.push(minNumber);
                 // firstMaxTextYnum.push(maxYTnum);
-            };
+            }
             series.push({
                 name: y[nameType],
                 type: y['type'] && y['type']['type'],
@@ -158,21 +158,21 @@ export class EchartsService {
                         return value;
                     } else {
                         value = value.toString();
-                        let markNum = 0
+                        let markNum = 0;
                         if (cellOption['echartX']['textNum'] !== 0) {
                             markNum = Math.ceil(value.length / cellOption['echartX']['textNum']);
                         } else {
                             markNum = 0;
-                        };
+                        }
                         let val = [];
                         for (let i = 0; i < markNum; i++) {
                             val.push(value.slice(i * cellOption['echartX']['textNum'], (i + 1) * cellOption['echartX']['textNum']));
                         }
                         return val.join('\n');
-                    };
+                    }
                 };
             }
-        };
+        }
         let firstMax = Math.max.apply(null, firstMaxYnum);
         let firstMin = Math.min.apply(null, firstMinYnum);
         let secondMax = Math.max.apply(null, secondMaxYnum);
@@ -187,11 +187,11 @@ export class EchartsService {
                 isZero = true;
                 break;
             }
-        };
+        }
 
         if (!isStack) {
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
-        };
+        }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
             linebarOption['grid']['right'] = 0;
@@ -203,7 +203,7 @@ export class EchartsService {
             const splitNumber = 5;
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax;
-            };
+            }
             linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
@@ -257,7 +257,7 @@ export class EchartsService {
                     }
                 }
             });
-        };
+        }
 
         if (cellOption['yHorizontal']) {
             let _t = linebarOption.xAxis;
@@ -267,7 +267,7 @@ export class EchartsService {
                 if (item['yAxisIndex'] !== undefined) {
                     item['xAxisIndex'] = item['yAxisIndex'];
                     delete item['yAxisIndex'];
-                };
+                }
             });
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['dodouble'] === 1 && cellOption['yAxis'].length === 2) {
@@ -279,7 +279,7 @@ export class EchartsService {
                     };
                 });
             }
-        };
+        }
 
         if (cellOption['yHorizontalColumns'] && cellOption['yHorizontalColumns']['marginBottom']) {
             if (cellOption['yHorizontalColumns'].hasOwnProperty('marginBottom')) {
@@ -296,7 +296,7 @@ export class EchartsService {
                     }
                 }
             }
-        };
+        }
 
         //x轴为3日期,5日期时间,12年份,30年月类型字段时开启数据缩放
         let dateType = ['3','5','12','30'];
@@ -324,13 +324,13 @@ export class EchartsService {
                     rangeMode: ['value', 'value']
                 }
             ]
-        };
+        }
 
         //是否设置自定义高度top
         if(cellOption['customTop']){
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
-        };
+        }
         console.log('-------------');
         console.log(linebarOption);
         return linebarOption;
@@ -344,7 +344,7 @@ export class EchartsService {
         let cellOption = cellChart['chart'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
-        };
+        }
         let [legend, series] = [[], []];
         const [xAxis, yAxis, title] = [cellOption.data['xAxis'], cellOption.data['yAxis'], cellOption.chartName['name']];
         yAxis[0]['data'].forEach((data, i) => {
@@ -353,7 +353,7 @@ export class EchartsService {
                 name: xAxis[i],
                 value: data
             });
-        })
+        });
         const pieOption = EchartsOption.getEchartsConfigOption('pie');
         pieOption['legend'].data = legend;
         pieOption['series'][0].data = series;
@@ -433,7 +433,7 @@ export class EchartsService {
             let maxYNum = Math.min.apply(null, ymax);
             if (maxYNum.toString().length > 6) {
                 gridLeft = 10 * (maxYNum.toString().length);
-            };
+            }
 
             mutiListOption['grid'].push({
                 left: 0,
@@ -441,7 +441,7 @@ export class EchartsService {
                 top: gridFirstTop + tableHeight * index + offset * index,
                 height: tableHeight,
                 containLabel: true
-            })
+            });
             mutiListOption['yAxis'].push({
                 gridIndex: index,
                 type: 'value',

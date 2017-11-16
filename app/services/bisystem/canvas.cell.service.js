@@ -174,6 +174,5 @@ export const canvasCellService = {
             resolve(res);
         })
     },
-
-}
+};
 
