@@ -222,11 +222,8 @@ let config = {
         filter: function (input,isParentFiltered,isSiblingsFiltered) {
             let isFiltered = false;
             if(input.replace(/\s/g, '')==''){
-                if (this.data.root == true) {
-                    this.el.show();
-                } else {
-                    this.el.hide();
-                }
+                this.el.show();
+                this.el.find('> .childlist').hide();
             } else {
                 if(this.data.label.indexOf(input)!=-1){
                     this.el.show();
@@ -242,9 +239,15 @@ let config = {
             this.data.listComp.forEach(childNode=>{
                 isChildFiltered = isChildFiltered || childNode.actions.isFilteredNode(input);
             });
+            let isOffspringsFiltered = false;
             this.data.listComp.forEach(childNode=>{
-                childNode.actions.filter(input,isFiltered,isChildFiltered);
-            })
+                isOffspringsFiltered = childNode.actions.filter(input,isFiltered,isChildFiltered) || isOffspringsFiltered;
+            });
+            if(isOffspringsFiltered){//如果子孙中有节点选中，则父节点也需显示
+                this.el.show();
+                this.el.find('> .childlist').show();
+            }
+            return isFiltered||isOffspringsFiltered;
         }
     },
     binds: [
