@@ -56,6 +56,9 @@ export class EchartsService {
             case 'map':
                 option = this.mapOption(cellChart); // 地图处理
 
+            case 'gauge':
+                option = this.gaugeOption(cellChart); // 仪表盘处理
+                break;
         }
         return option;
     }
@@ -345,7 +348,7 @@ export class EchartsService {
         let cellOption = cellChart['chart'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
-        };
+        }
         let [legend, series] = [[], []];
         const [xAxis, yAxis, title] = [cellOption.data['xAxis'], cellOption.data['yAxis'], cellOption.chartName['name']];
         yAxis[0]['data'].forEach((data, i) => {
@@ -354,7 +357,7 @@ export class EchartsService {
                 name: xAxis[i],
                 value: data
             });
-        })
+        });
         const pieOption = EchartsOption.getEchartsConfigOption('pie');
         pieOption['legend'].data = legend;
         pieOption['series'][0].data = series;
@@ -434,7 +437,7 @@ export class EchartsService {
             let maxYNum = Math.min.apply(null, ymax);
             if (maxYNum.toString().length > 6) {
                 gridLeft = 10 * (maxYNum.toString().length);
-            };
+            }
 
             mutiListOption['grid'].push({
                 left: 0,
@@ -442,7 +445,7 @@ export class EchartsService {
                 top: gridFirstTop + tableHeight * index + offset * index,
                 height: tableHeight,
                 containLabel: true
-            })
+            });
             mutiListOption['yAxis'].push({
                 gridIndex: index,
                 type: 'value',
@@ -548,7 +551,7 @@ export class EchartsService {
         // 如果时间是30 - 1号这种格式，需要把数据反转
         if (cellOption.data.dateAxis[0] > cellOption.data.dateAxis[cellOption.data.dateAxis.length - 1]) {
             data.reverse();
-        };
+        }
 
         let links = data.map(function (item, i) {
             return {
@@ -606,6 +609,22 @@ export class EchartsService {
         return mapOption;
     }
 
+
+    /**
+     * 仪表图
+     * @param chart = cellChart['chart']数据
+     */
+    gaugeOption(cellChart) {
+        const gaugeOption = EchartsOption.getEchartsConfigOption('gauge');
+        let cellOption = cellChart['chart'];
+        console.log(cellOption);
+        if (cellOption['yAxis'].length === 0 ) {
+            return defaultOption;
+        }
+        gaugeOption.series[0].name = cellOption['yAxis'][0].name;
+        gaugeOption.series[0].data['value'] = cellOption['data']['rows'][0];
+        return gaugeOption;
+    }
     /**
      * 获取下穿数据
      * @param data 需要发送给服务器的参数

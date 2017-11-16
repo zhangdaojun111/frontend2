@@ -12,6 +12,7 @@ import {CommentEditor as FormCommentComponent} from '../editors/comment/comment'
 import {PieEditor as FormPieComponent} from '../editors/pie/pie';
 import {StylizeEditor as FormStylizeComponent} from '../editors/stylzie/stylize';
 import {MapEditor as FormMapComponent} from '../editors/map/map'
+import {GaugeEditor as FormGaugeComponent} from '../editors/gauge/gauge';
 
 export let componentsJson = {
     'normal': {
@@ -72,5 +73,11 @@ export let componentsJson = {
         'name': '地图',
         'icon':'chart-map-icon',
         'component': FormMapComponent
+    },
+    'gauge': {
+        'entry': 'gauge',
+        'name': '仪表盘',
+        'icon':'chart-gauge-icon',
+        'component': FormGaugeComponent
     }
 }

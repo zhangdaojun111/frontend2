@@ -433,6 +433,78 @@ const map = {
 };
 
 
+
+// 仪表盘
+const gauge = {
+    animation : false,
+    tooltip: {
+        formatter: "{a} : {c}"
+    },
+    // toolbox: {
+    //     feature: {
+    //         restore: {},
+    //         saveAsImage: {}
+    //     }
+    // },
+    series : [
+        {
+            name:'业务指标',
+            type:'gauge',
+            min:0,
+            max:1,
+            radius:'100%',
+            splitNumber: 20,       // 分割段数
+            axisLine: {            // 坐标轴线
+                lineStyle: {       // 属性lineStyle控制线条样式
+                    color:[[0.3125,'#00B766'],[0.675,'#F9C10C'],[1,'#FF4C4C']],
+                    width: 10
+                }
+            },
+            axisTick: {            // 坐标轴小标记
+                splitNumber: 10,   // 每份split细分多少段
+                length :24,        // 属性length控制线长
+                lineStyle: {       // 属性lineStyle控制线条样式
+                    color: 'auto'
+                }
+            },
+            axisLabel: {           // 坐标轴文本标签
+                textStyle: {       // 其余属性默认使用全局文本样式
+                    color: '#000'
+                }
+            },
+            splitLine: {           // 分隔线
+                show: true,        // 默认显示，属性show控制显示与否
+                length :24,         // 属性length控制线长
+                lineStyle: {       // 属性lineStyle控制线条样式
+                    color: 'auto'
+                }
+            },
+            pointer : {
+                length: '75%',
+                width : 4,
+            },
+            itemStyle:{
+                normal:{
+                    color:'#000',
+                }
+            },
+            detail : {
+                formatter:'{value}',
+                offsetCenter: [0, '16%'], // x, y，单位px
+                textStyle: {       // 其余属性默认使用全局文本样
+                    fontSize: '14',
+                    fontWeight: 'bolder',
+                    color: '#000',
+                    borderWidth: '1',
+                    borderType: 'solid',
+                    borderColor: '#ccc',
+                }
+            },
+            data:{value: 0.575}
+        }
+    ]
+};
+
 export const EchartsOption = {
     blue: blueColors,
     green: greenColors,
@@ -458,6 +530,9 @@ export const EchartsOption = {
                 break;
             case 'stylzie':
                 option = stylzie;
+                break;
+            case 'gauge':
+                option = gauge;
                 break;
             case 'map':
                 option = map;
