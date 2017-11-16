@@ -56,7 +56,8 @@ let config = {
     data: {
         list: [],
         text: '',
-        type: 'full'
+        type: 'full',
+        listComp:[],
     },
     actions: {
         /**
@@ -65,12 +66,10 @@ let config = {
          */
         search: function (text) {
             this.data.text = text;
-            if (text === '') {
-                this.data.list = this.originData;
-            } else {
-                this.data.list = searchData(this.originData, text);
-            }
-            this.actions.renderMenuList();
+            this.data.listComp.forEach(comp=>{
+                comp.actions.filter(text);
+            })
+
         },
         hide: function() {
             this.el.hide();
@@ -153,6 +152,7 @@ let config = {
                     type: this.data.type
                 }));
                 this.append(component, this.$root, 'li');
+                this.data.listComp.push(component);
             });
         }
     },

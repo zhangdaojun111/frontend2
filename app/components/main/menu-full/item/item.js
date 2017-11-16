@@ -8,7 +8,8 @@ let config = {
     template: template,
     data: {
         type: 'full',
-        expandChild: false
+        expandChild: false,
+        listComp:[]
     },
 
     actions: {
@@ -214,6 +215,36 @@ let config = {
                 'padding-left': offset + 'px',
                 'padding-right': '20px'
             });
+        },
+        isFilteredNode:function (input) {
+            return (this.data.label.indexOf(input) != -1);
+        },
+        filter: function (input,isParentFiltered,isSiblingsFiltered) {
+            let isFiltered = false;
+            if(input.replace(/\s/g, '')==''){
+                if (this.data.root == true) {
+                    this.el.show();
+                } else {
+                    this.el.hide();
+                }
+            } else {
+                if(this.data.label.indexOf(input)!=-1){
+                    this.el.show();
+                    this.el.find('> .childlist').show();
+                    isFiltered = true;
+                } else if (isParentFiltered && !isSiblingsFiltered) {
+                    this.el.show();
+                } else {
+                    this.el.hide();
+                }
+            }
+            let isChildFiltered = false;
+            this.data.listComp.forEach(childNode=>{
+                isChildFiltered = isChildFiltered || childNode.actions.isFilteredNode(input);
+            });
+            this.data.listComp.forEach(childNode=>{
+                childNode.actions.filter(input,isFiltered,isChildFiltered);
+            })
         }
     },
     binds: [
@@ -277,7 +308,6 @@ let config = {
             }
             this.ownCheckbox.addClass('leaf').attr('key', this.data.key);
         }
-
         if (this.data.items) {
             this.data.items.forEach((data) => {
                 let newData = _.defaultsDeep({}, data, {
@@ -293,6 +323,7 @@ let config = {
                     }
                 });
                 this.append(component, this.childlist, 'li');
+                this.data.listComp.push(component);
             });
         }
         if (this.data.root !== true) {
