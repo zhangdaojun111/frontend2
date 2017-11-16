@@ -54,7 +54,7 @@ let config={
         });
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
-            msgBox.showLoadingSelf();
+           // msgBox.showLoadingSelf();
             let arr = [];
             let checked=this.el.find('#staffMulti .search-check-row');
             let len = checked.length;
@@ -71,9 +71,9 @@ let config={
                     }
                 }
             });
-            setTimeout(() => {
-                msgBox.hideLoadingSelf();
-            },800);
+            // setTimeout(() => {
+            //     msgBox.hideLoadingSelf();
+            // },800);
 
         });
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
