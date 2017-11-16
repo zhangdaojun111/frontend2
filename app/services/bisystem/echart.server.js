@@ -626,7 +626,7 @@ export class EchartsService {
         }
         gaugeOption.series[0].min = cellOption['data']['range'][0];
         gaugeOption.series[0].max = cellOption['data']['range'][1];
-        if(!cellOption['data']['range']){
+        if(cellOption['data']['range'][0] == 0 && cellOption['data']['range'][1] == 0){
             if(cellOption['data']['yAxis']>0){
                 gaugeOption.series[0].min = 0;
                 gaugeOption.series[0].max = cellOption['data']['yAxis'];
