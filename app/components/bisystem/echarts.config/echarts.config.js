@@ -388,6 +388,51 @@ const stylzie = {
     ]
 
 };
+
+//地图
+const map = {
+    title : {
+        text: '',
+        subtext: '',
+        x:'left'
+    },
+
+    tooltip:{
+        trigger: 'item',
+        triggerOn:'none'
+    },
+    visualMap: {
+        x: 'left',
+        y: 'bottom',
+        // type:'piecewise',
+        color: ['#338CE2','#b4e2f7'],
+        text:['高','低'],
+    },
+    series : [
+        {
+            type: 'map',
+            mapType: 'china',
+            roam: false,    //是否开启鼠标缩放和平移漫游
+            itemStyle:{     //地图区域的多边形 图形样式
+                normal:{        //是图形在默认状态下的样式
+                    label:{
+                        show:true,      //是否显示标签
+                        textStyle: {
+                            color: "black"
+                        }
+                    }
+                },
+                emphasis:{              //是图形在高亮状态下的样式,比如在鼠标悬浮或者图例联动高亮时
+                    label:{show:true}
+                }
+            },
+            top:"1.5%",     //以纵向位置控制图片大小，使其尽量饱满
+            bottom:'1.5%'
+        }
+    ]
+};
+
+
 export const EchartsOption = {
     blue: blueColors,
     green: greenColors,
@@ -414,7 +459,10 @@ export const EchartsOption = {
             case 'stylzie':
                 option = stylzie;
                 break;
+            case 'map':
+                option = map;
+                break;
         }
-        return ToolPlugin.clone(option);
+        return _.cloneDeep(option);
     }
 }

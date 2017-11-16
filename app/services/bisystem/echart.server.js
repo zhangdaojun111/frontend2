@@ -2,18 +2,19 @@
  * Created by birdyy on 2017/8/1.
  * name echarts 服务渲染
  */
-import * as echarts from 'echarts/dist/echarts';
+import echarts from 'echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
 import {HTTP} from '../../lib/http';
 import {canvasCellService} from './canvas.cell.service';
+import * as chinaMap from '../../components/bisystem/utils/china';
+
 const defaultOption = {
     grid: {},
     xAxis : [],
     yAxis : [],
     series : []
 };
-
 
 export class EchartsService {
     constructor(cellChart) {
@@ -52,6 +53,9 @@ export class EchartsService {
             case 'stylzie':
                 option = this.stylzieOption(cellChart); // 风格图处理
                 break;
+            case 'map':
+                option = this.mapOption(cellChart); // 地图处理
+
         }
         return option;
     }
@@ -556,6 +560,50 @@ export class EchartsService {
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
         return stylzieOption;
+    }
+
+    /**
+     * 地图数据处理
+     * @param cellChart
+     * @returns {*}
+     */
+    mapOption(cellChart){
+        const mapOption = EchartsOption.getEchartsConfigOption('map');
+        let data = [];
+        let cellOption = cellChart['chart'];
+        let xData = cellOption.data.xAxis;
+        let yData = cellOption.data.yAxis[0].data;
+        //数据处理
+        let yMax = cellOption.data.yAxis[0].data[0];
+        let yMin = cellOption.data.yAxis[0].data[0];
+        for( let k in xData){
+            let temp = {};
+            temp['name'] = xData[k];
+            temp['value'] = yData[k];
+            yMax = yMax > Number(yData[k]) ? yMax : Number(yData[k]);
+            yMin = yMin < Number(yData[k]) ? yMin : Number(yData[k]);
+            data.push(temp);
+        }
+        //计算分段（默认分6段）
+        let splitDis = ((yMax) - yMin)/6;
+        let splitList = [];
+        let beginDis = {min:(yMax - splitDis)};
+        let endDis = {max:(yMin + splitDis)};
+        splitList.push(beginDis);
+        for (let i=1; i<5; i++){
+            let tempDis = {};
+            tempDis.min = yMin + i*splitDis;
+            tempDis.max = yMin + (i+1)*splitDis;
+            splitList.push(tempDis);
+        }
+        splitList.push(endDis);
+
+        mapOption.series[0].data = data;
+        mapOption.series[0].name = cellOption.data.yAxis[0].name;
+        console.log(splitList);
+        mapOption.visualMap.pieces = splitList;
+
+        return mapOption;
     }
 
     /**
