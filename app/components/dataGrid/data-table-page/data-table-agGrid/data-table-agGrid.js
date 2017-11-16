@@ -1206,7 +1206,7 @@ let config = {
                 return;
             }
             if( this.data.viewMode != 'normal' ){
-                this.data.firstGetFooterData = false;
+                // this.data.firstGetFooterData = false;
             }
             let postData = this.actions.createPostData();
             let post_arr = [];
@@ -1268,7 +1268,7 @@ let config = {
             this.data.rowData = res[0].rows || [];
             this.data.total = res[0].total != undefined ? res[0].total : this.data.total;
             //对应关系特殊处理
-            if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
+            if( (this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence')&&this.data.firstRender ){
                 this.actions.setCorrespondence(res[0]);
             }
             //提醒赋值
