@@ -1,5 +1,5 @@
 /**
- * Created by birdyy on 2017/7/31.
+ * Created by zhaoyan on 2017/11/15.
  */
 import {CellBaseComponent} from '../base';
 import template from './cell.map.html';
