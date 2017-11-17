@@ -15,7 +15,7 @@ import browserMD5File from 'browser-md5-file';
 import AttachmentList from '../attachment-list/attachment-list';
 import ViewVideo from '../view-video/view-video';
 
-let preview_file = ["gif","jpg","jpeg","png","wmv","mp4","pdf"];
+let preview_file = ["gif","jpg","jpeg","png","wmv","mp4","pdf","mp3","wav"];
 
 let config = {
     template: template,
