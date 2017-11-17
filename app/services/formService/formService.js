@@ -489,7 +489,11 @@ export const FormService = {
             success: function (data) {
                 successCallback(data);
             },
+
             error: function (error) {
+                if(_.isObject(error)){
+                    return
+                }
                 msgbox.alert(error);
                 if(errorCallback){
                     errorCallback(error);

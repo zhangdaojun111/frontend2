@@ -1695,9 +1695,9 @@ let config = {
             }else {
                 this.el.find( '.pagination' )[0].style.height = '0px';
                 if( this.data.isShowSheet ){
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 100px)';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc(100% - 90px)';
                 }else {
-                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 80px )';
+                    this.el.find( '.ag-grid-con' )[0].style.height = 'calc( 100% - 70px )';
                 }
             }
             //高级查询
@@ -1919,7 +1919,7 @@ let config = {
                     $(this).siblings().removeClass('active1');
                 });
                 console.log( "有sheet" )
-                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 140px)' );
+                this.el.find( '.ag-grid-con' ).height( 'calc(100% - 130px)' );
                 this.el.find( '.SheetPage' ).show();
             }else {
                 console.log( "没有sheet" )
@@ -2022,7 +2022,6 @@ let config = {
                     tableType: this.data.tableType,
                     viewMode: this.data.tableType,
                     parentTableId: this.data.parentTableId,
-
                     parentRealId: this.data.parentRealId,
                     parentTempId: this.data.parentTempId,
                     parentRecordId: this.data.parentRecordId,
@@ -2422,11 +2421,11 @@ let config = {
                     }
                 })
             } )
-            // this.el.find('.dataGrid-commonQuery-select').click(()=>{
-            //     if(this.data.commonQueryData.length == 0) {
-            //         msgBox.alert('您还未设置任何常用查询，请在右侧【高级查询】中设置');
-            //     }
-            // })
+            this.el.find('.dataGrid-commonQuery-select').click(()=>{
+                if(this.data.commonQueryData.length == 0) {
+                    msgBox.alert('您还未设置任何常用查询，请在右侧【高级查询】中设置');
+                }
+            })
             this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
@@ -2917,7 +2916,7 @@ let config = {
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
                 if(this.actions.haveTempId(data.data)){
-                    msgBox.showTips('无法查看穿透数据')
+                    msgBox.showTips('审批中的数据不支持查看源数据。')
                     return;
                 }
                 console.log( "内置相关穿透" )

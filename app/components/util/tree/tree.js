@@ -14,27 +14,27 @@ let config = {
     binds:[{
         event:'click',
         selector:'.select-all-nodes',
-        callback:function () {
+        callback:_.debounce(function () {
             this.data.trees.forEach(treeComp=>{
                 treeComp.actions.toggleChecked(true);
             })
-        }
+        },0)
     },{
         event:'click',
         selector:'.reverse-all-nodes',
-        callback:function () {
+        callback:_.debounce(function () {
             this.data.trees.forEach(treeComp=>{
                 treeComp.actions.toggleChecked();
             })
-        }
+        },0)
     },{
         event:'click',
         selector:'.reset',
-        callback:function () {
+        callback:_.debounce(function () {
             this.data.trees.forEach(treeComp=>{
                 treeComp.actions.toggleChecked(false);
             })
-        }
+        },0)
     },{
         event: 'input',
         selector: '.search-in-tree',
