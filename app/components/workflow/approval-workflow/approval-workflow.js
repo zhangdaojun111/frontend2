@@ -408,6 +408,11 @@ let config={
         this.el.on('click','#app-pass',function () {
             __this.actions.appPass();
         });
+        Mediator.subscribe('form:voteAllready',(res)=>{
+        	if(res){
+        		__this.actions.appPass();
+	        }
+        });
         this.el.on('click','#app-rej-start',function (e) {
             e.stopPropagation();
             __this.actions.appRejStart();
