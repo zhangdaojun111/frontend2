@@ -9,8 +9,9 @@
         .switch-icon{
             width: 16px;
             height: 16px;
-            margin: 18px 0 0 18px;
-            background-image: url('../../../assets/images/framework/drag-icon.png');
+            margin: 16px 0 0 18px;
+            //background-image: url('../../../assets/images/framework/drag-icon.png');
+            background: url("../../../assets/images/dataGrid/tool.png") no-repeat;
             float: left;
         }
         .attachment-btn,.data-btn{
