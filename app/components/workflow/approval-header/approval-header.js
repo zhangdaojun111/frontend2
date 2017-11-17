@@ -69,7 +69,8 @@ let config = {
 	    Mediator.subscribe('workflow:gotWorkflowInfo',(res)=>{
 		    for(let index in res.data[0].node){
 			    let data=res.data[0].node[index];
-			    if(data.multi_handlers && data.multi_handlers.split(',').join('') == this.data.current_node.split('、').join('') && data.handler_relation=='2' && data.state == 1){
+			    // if(data.multi_handlers && data.multi_handlers.split(',').join('') == this.data.current_node.split('、').join('') && data.handler_relation=='2' && data.state == 1){
+			    if(data.state == 1&& data.handler_relation=='2' ){
 				    this.data.nodeData=data['vote_option'];
 				    this.data.submitKey=[];
 				    for(let key in this.data.nodeData){
