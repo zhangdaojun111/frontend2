@@ -1405,6 +1405,8 @@ let config = {
                     node.setSelected(true);
                 }
             });
+            this.data.selectData = this.data.correspondenceSelectedList;
+            this.actions.calcSelectData( 'set' );
         },
         //显示勾选项
         checkCorrespondence: function (setData) {
@@ -1418,11 +1420,6 @@ let config = {
                     rowData: title == '仅显示勾选项'?this.data.rowData : this.data.correspondenceSelectedData
                 }
             }
-            console.log("===========================")
-            console.log("===========================")
-            console.log(this.data.correspondenceSelectedData)
-            console.log(obj)
-            console.log(this.data.correspondenceSelectedList)
             this.agGrid.actions.setGridData( obj );
             if( !setData ){
                 this.el.find( '.correspondence-check span' )[0].innerHTML = title == '仅显示勾选项'?'显示全部':'仅显示勾选项';
