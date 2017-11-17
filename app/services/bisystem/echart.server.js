@@ -331,8 +331,6 @@ export class EchartsService {
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
-        console.log('-------------');
-        console.log(linebarOption);
         return linebarOption;
     }
 

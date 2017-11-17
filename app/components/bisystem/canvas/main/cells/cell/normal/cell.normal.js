@@ -59,7 +59,16 @@ let config = {
                 }
             }
         },
-
+        /**
+         * 两个控件的排列方式改变
+         */
+        arrangementChange(){
+            if(this.el.find('.normal-date-range').width()<685){
+                this.el.addClass('date-zoom-wrap');
+            }else{
+                this.el.removeClass('date-zoom-wrap');
+            }
+        },
         /**
          * 判断是否显示时间字段
          */
@@ -83,6 +92,8 @@ let config = {
                 this.normalRange.actions.rangeChoose(type);
                 this.normalRange.actions.setDateValue(cellChart.chart.data.xAxis);
             }
+            //两个控件的排列方式改变
+            this.actions.arrangementChange();
         },
         /**
          * 当有原始数据保存的时候，优先处理原始数据
