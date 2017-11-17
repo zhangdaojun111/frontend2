@@ -178,21 +178,20 @@ let config = {
             this.data.imgScale = 1;
             this.actions._uploadScale();
             this.actions._updateSwiftButtons(this.data.currentIndex);
-            this.el.find('.img-pre').css("max-height", $(window).height() * 0.7 + 'px');
-            this.el.find('.img-pre').css('max-width',$(window).width() * 0.8 + 'px');
+            this.el.find('.img-pre').css("max-height", $(window).height() * 0.8 + 'px');
+            this.el.find('.img-pre').css('max-width',$(window).width() * 0.9 + 'px');
             this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + "," + this.data.imgScale + ")");
             this.el.find('.img-pre').get(0).src = "/download_attachment/?file_id=" + id + "&download=0&dinput_type=" + this.data.dinput_type;
-            // $(document).on("mousewheel DOMMouseScroll", (e) => {
-            //     let delta = (e.originalEvent['wheelDelta'] && (e.originalEvent['wheelDelta'] > 0 ? 1 : -1)) ||
-            //         (e.originalEvent['detail'] && (e.originalEvent['detail'] > 0 ? -1 : 1));
-            //     if (delta > 0) {
-            //         this.data.imgScale += 0.1;
-            //         this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
-            //     } else if (delta < 0) {
-            //         this.imgScale -= 0.1;
-            //         this.el.find(".img-pre").css("transform", "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg) scale(" + this.data.imgScale + ")");
-            //     }
-            // });
+            this.el.on("wheel", '.img-pre',(e) => {
+                let delta = e.originalEvent['wheelDelta']|| -(e.originalEvent['detail']);
+                if (delta > 0) {
+                    this.data.imgScale += 0.1;
+                    this.actions._updatePreview();
+                } else if (delta < 0) {
+                    this.data.imgScale -= 0.1;
+                    this.actions._updatePreview();
+                }
+            });
             this.el.find(".save").attr('id',id);
         },
         _getCurrentIndex(id){
