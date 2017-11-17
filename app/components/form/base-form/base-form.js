@@ -2094,7 +2094,9 @@ let config = {
 						}
 					}
 				}
-				Mediator.publish('form:voteAllready',true);
+				setTimeout(()=>{
+					Mediator.publish('form:voteAllready',true)
+				},0);
 			}
 		}
 	},
