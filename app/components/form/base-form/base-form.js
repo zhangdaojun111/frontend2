@@ -1053,7 +1053,7 @@ let config = {
 		checkOhterField(data, obj_new, obj_old) {
 			let delKey = [];
 			for (let index in this.data.data) {
-				if (this.data.data[index]['is_other_field']) {
+				if (this.data.data[index]['is_other_field'] && !this.data.data[index]['is_vote']) {
 					delKey.push(this.data.data[index]['dfield']);
 				}
 			}
