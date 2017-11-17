@@ -140,7 +140,7 @@ export const dataTableService = {
     getFileExtension (filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
     },
-    preview_file : ["gif","jpg","jpeg","png","wmv","mp4"],
+    preview_file : ["gif","jpg","jpeg","png","wmv","mp4","pdf"],
     //获取定制表对应的table_id
     getCustomTableId: function ( json ) {
         return HTTP.postImmediately( '/get_custom_table_id/',json )

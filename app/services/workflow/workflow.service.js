@@ -93,5 +93,5 @@ export const workflowService={
     getFileExtension (filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);
     },
-    preview_file : ["gif","jpg","jpeg","png","wmv","mp4"],
+    preview_file : ["gif","jpg","jpeg","png","wmv","mp4","pdf"],
 }
