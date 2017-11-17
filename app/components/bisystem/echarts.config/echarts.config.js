@@ -494,9 +494,9 @@ const gauge = {
             },
             detail : {
                 formatter:'{value}',
-                offsetCenter: [0, '16%'], // x, y，单位px
+                offsetCenter: [0, '30%'], // x, y，单位px
                 textStyle: {       // 其余属性默认使用全局文本样
-                    fontSize: '14',
+                    fontSize: '12',
                     fontWeight: 'bolder',
                     color: '#000',
                     borderWidth: '1',
