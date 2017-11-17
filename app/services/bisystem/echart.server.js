@@ -2,18 +2,19 @@
  * Created by birdyy on 2017/8/1.
  * name echarts 服务渲染
  */
-import * as echarts from 'echarts/dist/echarts';
+import echarts from 'echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
 import {HTTP} from '../../lib/http';
 import {canvasCellService} from './canvas.cell.service';
+import * as chinaMap from '../../components/bisystem/utils/china';
+
 const defaultOption = {
     grid: {},
     xAxis : [],
     yAxis : [],
     series : []
 };
-
 
 export class EchartsService {
     constructor(cellChart) {
@@ -51,6 +52,12 @@ export class EchartsService {
                 break;
             case 'stylzie':
                 option = this.stylzieOption(cellChart); // 风格图处理
+                break;
+            case 'map':
+                option = this.mapOption(cellChart); // 地图处理
+                break;
+            case 'gauge':
+                option = this.gaugeOption(cellChart); // 仪表盘处理
                 break;
         }
         return option;
@@ -561,6 +568,78 @@ export class EchartsService {
         return stylzieOption;
     }
 
+    /**
+     * 地图数据处理
+     * @param cellChart
+     * @returns {*}
+     */
+    mapOption(cellChart){
+        const mapOption = EchartsOption.getEchartsConfigOption('map');
+        let data = [];
+        let cellOption = cellChart['chart'];
+        let xData = cellOption.data.xAxis;
+        let yData = cellOption.data.yAxis[0].data;
+        //数据处理
+        let yMax = cellOption.data.yAxis[0].data[0];
+        let yMin = cellOption.data.yAxis[0].data[0];
+        for( let k in xData){
+            let temp = {};
+            temp['name'] = xData[k];
+            temp['value'] = yData[k];
+            yMax = yMax > Number(yData[k]) ? yMax : Number(yData[k]);
+            yMin = yMin < Number(yData[k]) ? yMin : Number(yData[k]);
+            data.push(temp);
+        }
+        //计算分段（默认分6段）
+        let splitDis = ((yMax) - yMin)/6;
+        let splitList = [];
+        let beginDis = {min:(yMax - splitDis)};
+        let endDis = {max:(yMin + splitDis)};
+        splitList.push(beginDis);
+        for (let i=1; i<5; i++){
+            let tempDis = {};
+            tempDis.min = yMin + i*splitDis;
+            tempDis.max = yMin + (i+1)*splitDis;
+            splitList.push(tempDis);
+        }
+        splitList.push(endDis);
+
+        mapOption.series[0].data = data;
+        mapOption.series[0].name = cellOption.data.yAxis[0].name;
+        console.log(splitList);
+        mapOption.visualMap.pieces = splitList;
+
+        return mapOption;
+    }
+
+
+    /**
+     * 仪表图
+     * @param chart = cellChart['chart']数据
+     */
+    gaugeOption(cellChart) {
+        console.log(cellChart);
+        const gaugeOption = EchartsOption.getEchartsConfigOption('gauge');
+        let cellOption = cellChart['chart'];
+        if (cellOption['yAxis'].length === 0 ) {
+            return defaultOption;
+        }
+        gaugeOption.series[0].min = cellOption['data']['range'][0];
+        gaugeOption.series[0].max = cellOption['data']['range'][1];
+        if(cellOption['data']['range'][0] == 0 && cellOption['data']['range'][1] == 0){
+            if(cellOption['data']['yAxis']>0){
+                gaugeOption.series[0].min = 0;
+                gaugeOption.series[0].max = cellOption['data']['yAxis'];
+            }else {
+                gaugeOption.series[0].min = cellOption['data']['yAxis'];
+                gaugeOption.series[0].max = 0;
+            }
+        }
+        gaugeOption.series[0].name = cellOption['yAxis'][0].name;
+        gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
+
+        return gaugeOption;
+    }
     /**
      * 获取下穿数据
      * @param data 需要发送给服务器的参数
