@@ -1804,9 +1804,6 @@ let config = {
 			}
 			let _this = this;
 			let w = 1400,h = 800;
-			console.log("---------------")
-			console.log("---------------")
-			console.log(window.innerWidth)
             if(window.innerWidth<1300){
                 w = 900;
                 h = 600;
