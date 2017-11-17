@@ -1053,7 +1053,7 @@ let config = {
 		checkOhterField(data, obj_new, obj_old) {
 			let delKey = [];
 			for (let index in this.data.data) {
-				if (this.data.data[index]['is_other_field'] && !this.data.data[index]['is_vote']) {
+				if (this.data.data[index]['is_other_field'] && this.data.submitKey.indexOf(this.data.data[index]['id']) == -1) {
 					delKey.push(this.data.data[index]['dfield']);
 				}
 			}
@@ -2068,7 +2068,9 @@ let config = {
 				obj_old
 			}
 		},
-		setVoteValue(value){
+		setVoteValue(res){
+			let value=res.value;
+			this.data.submitKey=res.submitKey;
 			if(value){
 				for(let key in this.data.data){
 					if(this.data.data[key].id == value){

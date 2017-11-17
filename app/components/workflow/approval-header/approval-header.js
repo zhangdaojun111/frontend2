@@ -62,7 +62,7 @@ let config = {
 			    height:300,
 		    }).then(res=>{
 			    if(res && res.value){
-					Mediator.publish('workflow:voteconfirm',res.value);
+					Mediator.publish('workflow:voteconfirm',{value:res.value,submitKey:this.data.submitKey});
 			    }
 		    })
 	    });
@@ -71,6 +71,12 @@ let config = {
 			    let data=res.data[0].node[index];
 			    if(data.multi_handlers && data.multi_handlers.split(',').join('') == this.data.current_node.split('、').join('') && data.handler_relation=='2' && data.state == 1){
 				    this.data.nodeData=data['vote_option'];
+				    this.data.submitKey=[];
+				    for(let key in this.data.nodeData){
+				    	if(key != ''){
+				    		this.data.submitKey.push(this.data.nodeData[key]);
+					    }
+				    }
 				    this.data.nodeTip=data['vote_tip'];
 				    this.el.find('.approval-control').empty();
 				    this.el.find('.approval-control').append($('<div class="vote approval-btn approval-pass for-hide">投票</div>'));
