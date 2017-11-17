@@ -97,6 +97,20 @@ let config = {
                 this.actions._uploadScale();
             }
         }, {
+            event: 'click',
+            selector: '.rotate-anti',
+            callback: function (event) {
+                this.data.rotateNo += 90;
+                this.data.imgScale = 1;
+                this.el.find(".img-pre").css({
+                    "transform": "translate(-50%,-50%) rotate(" + this.data.rotateNo + "deg)",
+                    "top": "50%",
+                    "left": "50%"
+                });
+                this.actions._uploadScale();
+            }
+        },
+        {
             event:'click',
             selector: '.resize',
             callback:function () {
