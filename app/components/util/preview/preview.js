@@ -232,13 +232,11 @@ let config = {
     },
     afterRender:function () {
         this.data.lastPreviewableIndex = this.data.list.length - 1;
-        console.dir(this.data);
         if(this.data.currentIndex == undefined){
              this.data.currentIndex = this.actions._getCurrentIndex(this.data.id);
         } else {
             this.data.id = Object.keys(this.data.list[this.data.currentIndex])[0];
         }
-        console.log('id:'+this.data.id);
         this.actions._loadPreview(this.data.id);
     }
 }
