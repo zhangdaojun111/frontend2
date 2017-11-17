@@ -90,7 +90,7 @@ export class CellTableComponent extends CellBaseComponent {
     }
 
     static numFormat(num) {
-        num = parseFloat(Number(num)).toFixed(2).toString().split(".");
+        num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
         return num.join(".");
     }
