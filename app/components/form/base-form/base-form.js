@@ -1294,7 +1294,7 @@ let config = {
 							} else {
 								data["be_control_condition"] = (key == value) ? 0 : 1;
 							}
-							if (data["is_view"] == 0) {
+							if (data["be_control_condition"] == 0) {
 								arr.push(dfield);
 							}
 						}
