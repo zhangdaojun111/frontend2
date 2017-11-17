@@ -26,7 +26,7 @@ let config = {
             callback: function () {
                 let ele = this.el.find('.selecting-file');
                 if (this.data.dinput_type == 33) {  //视频附件
-                    ele.attr('accept', 'video/*');
+                    ele.attr('accept', 'video/*,audio/*');
                 } else if (this.data.dinput_type == 23) {  //图片附件
                     ele.attr('accept', 'image/*');
                 }
@@ -180,8 +180,8 @@ let config = {
                 return;
             }
             if (this.data.dinput_type == 33) {
-                if (!file.type.startsWith('video')) {
-                    msgBox.alert('"' + file.name + '"不是视频类型文件，支持文件类型包括：avi, asf, mpg, mpeg, mpe, wmv, mp4');
+                if (!file.type.startsWith('video') && !file.type.startsWith('audio')) {
+                    msgBox.alert('"' + file.name + '"不是视音频类型文件，支持文件类型包括：avi, asf, mpg, mpeg, mpe, wmv, mp4,mp3,wav');
                     return;
                 }
             } else if (this.data.dinput_type == 23) {
