@@ -246,7 +246,7 @@ const linebar = {
     },
     grid: {
         left: 0,
-        right: 0,
+        right: 10,
         bottom: 10,
         top:30,
         containLabel: true
@@ -265,7 +265,9 @@ const linebar = {
                     color: '#ececec'
                 }
             },
-            axisLabel : {}
+            axisLabel : {
+
+            }
         }
     ],
     yAxis: [

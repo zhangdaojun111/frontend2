@@ -194,7 +194,7 @@ export class EchartsService {
         }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
-            linebarOption['grid']['right'] = 0;
+            linebarOption['grid']['right'] = 10;
         } else if (cellOption.double === 1) {
             // 判断是否显示双y轴
             // if (secondMaxText > 30) {
