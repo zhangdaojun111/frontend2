@@ -446,9 +446,15 @@ export const contractEditorConfig = {
                 let changedValue = event.target.textContent;
                 let title = event.target.title;
                 k2v["##"+title+"##"]=changedValue;
-                this.el.find('span[title="'+title+'"]').text(changedValue);
+                let eles = this.el.find('span[title="'+title+'"]');
+                for(let i=0;i<eles.length;i++){
+                    if(eles[i] != event.target){//绕开本span，如果本span改变，则光标会挪到首位
+                        $(eles[i]).text(changedValue);
+                    }
+                }
                 this.data.local_data[this.data['current_tab']]['content']=this.el.find('.contract-template-anchor').html();
-            },200));
+                this.el.find('span[title="'+title+'"]').css('background-color','pink');
+            },500));
         },
         closeMe: function () {
             window.parent.postMessage({
