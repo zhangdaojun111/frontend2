@@ -442,13 +442,13 @@ export const contractEditorConfig = {
         },
         editContract: function (k2v) {
             this.el.find('.contract-template-anchor').find('span').attr('contenteditable', 'true');
-            this.el.find('.contract-template-anchor').find('span').on('input', event => {
+            this.el.find('.contract-template-anchor').find('span').on('input', _.debounce(event => {
                 let changedValue = event.target.textContent;
                 let title = event.target.title;
                 k2v["##"+title+"##"]=changedValue;
                 this.el.find('span[title="'+title+'"]').text(changedValue);
                 this.data.local_data[this.data['current_tab']]['content']=this.el.find('.contract-template-anchor').html();
-            })
+            },200));
         },
         closeMe: function () {
             window.parent.postMessage({
