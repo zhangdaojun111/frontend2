@@ -112,7 +112,7 @@ const pie = {
         show: true,
         orient: 'horizontal',
         left: 0,
-        bottom: 0,
+        top: 0,
         data: [],
         type: 'scroll'
     },
