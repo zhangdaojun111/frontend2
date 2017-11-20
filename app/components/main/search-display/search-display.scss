@@ -4,22 +4,24 @@
     height: 100%;
     overflow: hidden;
     .data-attachment-switch{
-        height: 60px;
+        height: 50px;
         background: #ffffff;
         .switch-icon{
             width: 16px;
             height: 16px;
-            margin: 22px 17px 22px 17px;
-            background-image: url('../../../assets/images/framework/drag-icon.png');
+            margin: 16px 0 0 18px;
+            //background-image: url('../../../assets/images/framework/drag-icon.png');
+            background: url("../../../assets/images/dataGrid/tool.png") no-repeat;
             float: left;
         }
         .attachment-btn,.data-btn{
-            line-height: 60px;
-            width: 40px;
+            line-height: 50px;
+            //width: 40px;
             cursor: pointer;
             float: left;
             text-align: center;
-            margin-left: 10px;
+           // margin-left: 10px;
+            padding: 0 20px;
         }
         .btn-active{
             color: #0088ff;
