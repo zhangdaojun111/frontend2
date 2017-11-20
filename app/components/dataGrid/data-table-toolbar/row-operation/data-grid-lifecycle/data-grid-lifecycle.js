@@ -212,6 +212,11 @@ let config = {
         },
         //选择用印边框颜色
         statusSelect: function( name ){
+            console.log('---------用印');
+            console.log(name);
+            console.log(this.data.countObject[ name ]);
+            console.log(!this.data.countObject[ name ]);
+            console.log('---------用印-------end');
             if( this.data.countObject[ name ]) {
                 if( this.data.countObject[ name ].status == "是" ){
                     return 'rgba(14, 122, 239, 1)';
@@ -270,6 +275,7 @@ let config = {
             })
             this.el.find('div.setBorderColor').each((i,e) => {
                 if(e.title.indexOf('用印') != -1){
+                    console.log(111)
                     let borderColor = this.actions.statusSelect(e.title);
                     $(e).css('borderColor',borderColor)
                 }else{
@@ -310,7 +316,7 @@ let config = {
                 this.el.find('#u78').append(`<p class="tipsP">5天（当前节点<span>${days}</span>天）</p>`)
             }
             //标题
-            $('#lifecycle-container').prepend(`<div class="cycle-title" style="text-align: center;padding: 10px 0 0 0;">${this.data.cycleTitle}</div>`)
+            $('#lifecycle-title').html(`<div class="cycle-title" style="text-align: center;padding: 30px 0 0 0;">${this.data.cycleTitle}</div>`)
         }
     },
     binds:[

@@ -6,7 +6,7 @@
   //height: 785px;
   //text-align: left;
   margin: auto;
-  transform: translate(-50px, -15px);
+  transform: translate(-50px, -50px);
 
   p{
     margin: 3px;
@@ -1548,8 +1548,8 @@
     margin-left: -36px;
   }
   .tipsP {
-    margin-left: 13px;
-    margin-top: -6px;
+    margin-left: 2px;
+    margin-top: -15px;
     width: 140px;
     position: absolute;
     z-index: 5;
@@ -1568,11 +1568,14 @@
   }
   .my-time-left {
     position: absolute;
-    left: -61px;
+    left: -70px;
     top: 2px;
     border: 1px solid #F8E389;
     background: #FFF8B6;
     padding: 1px;
     height: 18px;
+  }
+  .label{
+    color: #fff;
   }
 }

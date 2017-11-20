@@ -231,7 +231,7 @@ let config = {
         //是否加载cache数据
         cacheData: true,
         //是否配置了生命周期行级操作
-        lifecycleGrid: false,
+        lifecycleGrid: true,
         //生命周期相关参数
         cycleTitle:'',
         flow_node:[],
@@ -2853,7 +2853,10 @@ let config = {
                 this.agGrid.gridOptions.api.redrawRows();
             }
             if(this.data.lifecycleGrid){
-                this.data.cycleTitle = data.data.f9;
+                console.log('------------title')
+                console.log(data)
+                console.log(data.data)
+                this.data.cycleTitle = data.data.f5 || '生命周期';
             }
             let arr=[];
             for(let obj of data.columnApi._columnController.primaryColumns){
