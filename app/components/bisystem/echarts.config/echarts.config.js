@@ -125,7 +125,9 @@ const pie = {
             data: [],
             label: {
                 normal: {
-                    formatter: "{b} : {c} ({d}%)",
+                    formatter: "{b} : \n {c}  ({d}%)",
+                    aline:'right',
+                    padding:[10,0,0,0]
                 }
             },
             itemStyle: {
