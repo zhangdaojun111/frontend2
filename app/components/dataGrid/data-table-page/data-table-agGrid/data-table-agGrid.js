@@ -2982,10 +2982,10 @@ let config = {
             }
             //统计
             if( fieldTypeService.countTable(data.colDef.dinput_type,data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
-                if(this.actions.haveTempId(data.data)){
-                    msgBox.alert('审批中的数据不支持查看源数据。')
-                    return;
-                }
+                // if(this.actions.haveTempId(data.data)){
+                //     msgBox.alert('审批中的数据不支持查看源数据。')
+                //     return;
+                // }
                 console.log( '统计穿透' )
                 let obj = {
                     tableId: data.colDef.field_content.count_table,
@@ -3008,10 +3008,10 @@ let config = {
             }
             // 子表
             if( fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
-                if(this.actions.haveTempId(data.data)){
-                    msgBox.alert('审批中的数据不支持查看源数据。')
-                    return;
-                }
+                // if(this.actions.haveTempId(data.data)){
+                //     msgBox.alert('审批中的数据不支持查看源数据。')
+                //     return;
+                // }
                 console.log( "子表穿透" )
                 let obj = {
                     tableId: data.colDef.field_content.child_table,
