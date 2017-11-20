@@ -112,7 +112,7 @@ const pie = {
         show: true,
         orient: 'horizontal',
         left: 0,
-        top: 0,
+        bottom: 0,
         data: [],
         type: 'scroll'
     },
@@ -185,6 +185,7 @@ const radar = {
     legend: {
         x: 'right',
         bottom: 0,
+        left:0,
         orient: 'vertical',
         data: [],
         selected: {},
