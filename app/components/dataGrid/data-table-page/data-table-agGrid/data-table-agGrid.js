@@ -2925,7 +2925,7 @@ let config = {
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
                 if(this.actions.haveTempId(data.data)){
-                    msgBox.showTips('审批中的数据不支持查看源数据。')
+                    msgBox.alert('审批中的数据不支持查看源数据。')
                     return;
                 }
                 console.log( "内置相关穿透" )
@@ -2983,7 +2983,7 @@ let config = {
             //统计
             if( fieldTypeService.countTable(data.colDef.dinput_type,data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
                 if(this.actions.haveTempId(data.data)){
-                    msgBox.showTips('无法查看穿透数据')
+                    msgBox.alert('审批中的数据不支持查看源数据。')
                     return;
                 }
                 console.log( '统计穿透' )
@@ -3009,7 +3009,7 @@ let config = {
             // 子表
             if( fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
                 if(this.actions.haveTempId(data.data)){
-                    msgBox.showTips('无法查看穿透数据')
+                    msgBox.alert('审批中的数据不支持查看源数据。')
                     return;
                 }
                 console.log( "子表穿透" )
@@ -3251,10 +3251,6 @@ let config = {
         },
         //行级操作
         doRowOperation: function (r,$event) {
-            console.log("-----------")
-            console.log("-----------")
-            console.log("-----------")
-            console.log(r)
             if( r['frontend_addr'] !== ''){
                 //执行前端操作
                 this.actions.rowOperationFrontend({
