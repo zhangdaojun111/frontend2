@@ -614,7 +614,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     gaugeOption(cellChart) {
-        console.log(cellChart);
         const gaugeOption = EchartsOption.getEchartsConfigOption('gauge');
         let cellOption = cellChart['chart'];
         if (cellOption['yAxis'].length === 0 ) {
