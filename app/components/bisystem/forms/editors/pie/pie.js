@@ -73,6 +73,7 @@ let config = {
             this.formItems['countColumn'].el.hide();
             this.formItems['pieType'].trigger('onChange', this.formItems['pieType'].data.value);
             this.formItems['limit'].trigger('onChange');
+            this.formItems['circular'].trigger('onChange');
             // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
@@ -130,10 +131,7 @@ let config = {
                 countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 filter: data.filter.filter,
                 filter_source: data.filter.filter_source,
-                chartType: {
-                    name: this.data.name,
-                    type: this.data.type,
-                },
+                chartType: data.circular == '1' ? {name: '饼图', type: 'pie'} : {name: '环形图', type: 'circular'},
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -143,6 +141,7 @@ let config = {
                 deeps: data.pieType == '1' ? [] : data.deeps,
                 limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
                 endlimit:data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
+
             };
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
@@ -178,7 +177,7 @@ let config = {
             this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['pieType'].setValue(chart['pieType']['value']);
-            this.formItems['circular'].setValue(chart['chartType']['type']=='pie'? 1 : 2);
+            this.formItems['circular'].setValue(chart['chartType']['type']=='pie' ? 1 : 2);
             this.formItems['xAxis'].setValue(chart['xAxis']);
             if (chart['pieType']['value'] == 1) {
                 this.formItems['columns'].setValue(chart['yAxis']);
@@ -194,8 +193,6 @@ let config = {
         }
     },
     data: {
-        type: 'pie',
-        name: '饼图',
         options: [
             chartName,
             {
@@ -279,15 +276,7 @@ let config = {
                 ],
                 type: 'select',
                 events: {
-                    onChange(value){
-                        if(value === '2'){
-                            this.data.name = '环形图';
-                            this.data.type = 'circular';
-                        }else{
-                            this.data.name = '饼图';
-                            this.data.type = 'pie';
-                        }
-                    }
+                    onChange(value){}
                 }
             },
             {
@@ -349,7 +338,7 @@ let config = {
                         if (value) {
                             this.formItems['deeps'].actions.update(value);
                             this.formItems['deepX'].autoselect.actions.clearValue()
-                        };
+                        }
                     }
                 }
             },
