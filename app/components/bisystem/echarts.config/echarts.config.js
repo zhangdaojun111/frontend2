@@ -110,8 +110,8 @@ const pie = {
     },
     legend: {
         show: true,
-        orient: 'vertical',
-        left: 'right',
+        orient: 'horizontal',
+        left: 0,
         bottom: 0,
         data: [],
         type: 'scroll'
@@ -121,13 +121,26 @@ const pie = {
             name: '访问来源',
             type: 'pie',
             radius: '50%',
-            center: ['40%', '50%'],
+            center: ['50%', '50%'],
             data: [],
             label: {
                 normal: {
-                    formatter: "{b} : \n {c}  ({d}%)",
-                    aline:'right',
-                    padding:[10,0,0,0]
+                    // formatter: "{b} : \n {c}  ({d}%)",
+                    formatter:function (param) {
+                        let str = '';
+                        let name = param.data.name;
+                        if(name.length > 5){
+                            let str1 = name.substr(0,4);
+                            let str2 = name.substr(4);
+                            name = str1 + '\n' + str2;
+                        }
+                        str += name + ' ' + ': ';
+                        str += '\n';
+                        str += param.data.value + '\n';
+                        str += param.percent + '%';
+
+                        return str;
+                    }
                 }
             },
             itemStyle: {
@@ -248,7 +261,7 @@ const linebar = {
     },
     grid: {
         left: 0,
-        right: 10,
+        right: '2.3%',
         bottom: 10,
         top:30,
         containLabel: true
