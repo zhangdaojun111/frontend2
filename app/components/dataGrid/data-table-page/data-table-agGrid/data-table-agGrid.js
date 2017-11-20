@@ -1206,7 +1206,7 @@ let config = {
                 return;
             }
             if( this.data.viewMode != 'normal' ){
-                this.data.firstGetFooterData = false;
+                // this.data.firstGetFooterData = false;
             }
             let postData = this.actions.createPostData();
             let post_arr = [];
@@ -1268,7 +1268,7 @@ let config = {
             this.data.rowData = res[0].rows || [];
             this.data.total = res[0].total != undefined ? res[0].total : this.data.total;
             //对应关系特殊处理
-            if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
+            if( (this.data.viewMode == 'editFromCorrespondence'&&this.data.firstRender)||this.data.viewMode == 'viewFromCorrespondence' ){
                 this.actions.setCorrespondence(res[0]);
             }
             //提醒赋值
@@ -1361,6 +1361,7 @@ let config = {
             //对应关系回显的ids
             if ( res.selectedList ) {
                 this.data.correspondenceSelectedList = res.selectedList;
+                this.data.selectData = res.selectedList;
             }
             //对应关系增加的ids
             if ( res.addList ) {
@@ -1404,10 +1405,13 @@ let config = {
                     node.setSelected(true);
                 }
             });
+            this.data.selectData = this.data.correspondenceSelectedList;
+            this.actions.calcSelectData( 'set' );
         },
         //显示勾选项
         checkCorrespondence: function (setData) {
             let title = this.el.find( '.correspondence-check span' )[0].innerHTML;
+            this.actions.setCorrespondenceSelect();
             let obj = {
                 rowData: title == '仅显示勾选项'?this.data.correspondenceSelectedData : this.data.rowData
             }
@@ -1420,7 +1424,7 @@ let config = {
             if( !setData ){
                 this.el.find( '.correspondence-check span' )[0].innerHTML = title == '仅显示勾选项'?'显示全部':'仅显示勾选项';
             }
-            this.actions.setCorrespondenceSelect();
+            this.actions.calcSelectData( 'set' );
         },
         //行选择时触发
         onRowSelected: function ($event) {
@@ -3138,7 +3142,7 @@ let config = {
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
                 let btnType = 'view';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm( 'view' ) ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.view == 0 || this.actions.viewOrEditPerm( 'view' ) ){
                     btnType = 'none';
                 }
                 let obj = {
@@ -3164,7 +3168,7 @@ let config = {
             if( data.event.srcElement.className == 'gridEdit' ){
                 console.log( '编辑' )
                 let btnType = 'edit';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 || this.actions.viewOrEditPerm( 'edit' ) ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm( 'edit' ) ){
                     btnType = 'none';
                 }
                 let obj = {
@@ -3386,6 +3390,10 @@ let config = {
         },
         //打开穿透数据弹窗
         openSourceDataGrid: function ( url,title,w,h ) {
+            if(window.innerWidth<1300){
+                w = 900;
+                h = 600;
+            }
             //暂时刷新方法
             let defaultMax = false;
             PMAPI.openDialogByIframe( url,{

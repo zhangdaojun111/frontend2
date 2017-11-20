@@ -1294,7 +1294,7 @@ let config = {
 							} else {
 								data["be_control_condition"] = (key == value) ? 0 : 1;
 							}
-							if (data["is_view"] == 0) {
+							if (data["be_control_condition"] == 0) {
 								arr.push(dfield);
 							}
 						}
@@ -1803,9 +1803,14 @@ let config = {
 				this.data.viewMode = 'viewFromCorrespondence';
 			}
 			let _this = this;
+			let w = 1400,h = 800;
+            if(window.innerWidth<1300){
+                w = 900;
+                h = 600;
+            }
 			PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${data.value}&parentTableId=${CreateFormServer.data.tableId}&parentTempId=${data.temp_id}&recordId=${data.record_id}&viewMode=${this.data.viewMode}&showCorrespondenceSelect=true&correspondenceField=${data.dfield}`, {
-				width: 1400,
-				height: 800,
+				width: w,
+				height: h,
 				title: `对应关系`,
 				modal: true
 			}).then(res => {
