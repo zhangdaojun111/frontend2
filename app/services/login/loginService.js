@@ -16,53 +16,51 @@ export const LoginService = {
      * @returns {boolean}
      */
     support:function () {
-        debugger
         let browser = this.currentBrowser();
         console.log(browser);
-        // if (!browser['chrome']){
-        //     this.prompt = "暂不支持其它浏览器，为了您的正常使用请下载新版本Chrome";
-        //     this.needDownload = true;
-        // }
         let system=this.CurrentSystem().system;
         let currentSystem;
+
         for(let key in system){
             if(system[key] != false){
                 currentSystem = key;
             }
         }
-       if(browser['chrome']){
-           console.log('hhhhhhhhhhhhhhhh')
-           console.log(browser['chrome'].slice(0,2))
-           console.log(currentSystem)
-             if((browser['chrome'].slice(0,2)<57 && currentSystem== 'win') || (this.browser['chrome'].slice(0,2)<55 && currentSystem == 'mac')){
-            //if((this.currentSystem == 'win') || (this.currentSystem == 'mac')){
-                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
-                this.needDownLoad=true;
-            }
+
+        if (!browser['chrome']){
+            this.prompt = "暂不支持其它浏览器，为了您的正常使用请下载新版本Chrome";
+            this.needDownload = true;
         }
 
-        if(this.needDownLoad){
-            switch (this.currentSystem){
+       else if(browser['chrome']){
+           if((browser['chrome'].slice(0,2)<62 && currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && currentSystem == 'mac')){
+               this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+               this.needDownload=true;
+            }
+        }
+        //优先保证win和mac
+       // if(this.needDownLoad){
+            switch (currentSystem){
                 case 'win':
                     this.downLoadLink='http://sw.bos.baidu.com/sw-search-sp/software/e80aba170ee7c/ChromeStandalone_62.0.3202.94_Setup.exe';
                     break;
                 case 'mac':
-                    this.downLoadLink='https://172.30.100.180:8821/chrome/googlechrome_mac_55.0.2883.95.dmg';
+                    this.downLoadLink='http://sw.bos.baidu.com/sw-search-sp/software/286b666135022/googlechrome_mac_62.0.3202.89.dmg';
                     break;
-                case 'iphone':
-                    this.downLoadLink='https://appsto.re/cn/NVp8F.i';
-                    break;
+                // case 'iphone':
+                //     this.downLoadLink='https://appsto.re/cn/NVp8F.i';
+                //     break;
                 default :
                     this.downLoadLink='';
                     this.prompt='暂不支持windows，mac外的操作系统';
                     break;
             }
-        }
-        if(currentSystem == 'android'){
-            this.needDownLoad=true;
-            this.prompt="Android用户请下载本公司APP";
-            this.downLoadLink='https://wxtest.erdstest.com:8088/android/ERDS_2017.03.23_Android_V1.2.24.apk';
-        }
+     //   }
+        // if(currentSystem == 'android'){
+        //     this.needDownLoad=true;
+        //     this.prompt="Android用户请下载本公司APP";
+        //     this.downLoadLink='https://wxtest.erdstest.com:8088/android/ERDS_2017.03.23_Android_V1.2.24.apk';
+        // }
         return this.needDownload;
     },
     /**
