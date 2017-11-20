@@ -214,7 +214,7 @@ export class EchartsService {
                 inverse: false,
                 scale: true,
                 splitNumber: splitNumber,
-                min:-10,
+                // min:-10,
                 // max: secondMax,
                 // min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
                 // interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),

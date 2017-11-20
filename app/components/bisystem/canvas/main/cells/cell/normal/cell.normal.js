@@ -247,7 +247,9 @@ let config = {
                         this.data.cellChart['chart']['data']['x'] = res[0]['data']['data']['x'];
                         this.data.cellChart['cell']['attribute'] = [];
                         this.data.cellChart['cell']['select'] = [];
-                        this.actions.judgeDateZoom(this.data.cellChart);
+                        if (window.config.bi_user !== 'manager') {
+                            this.actions.judgeDateZoom(this.data.cellChart);
+                        }
                         this.actions.updateChart(this.data.cellChart);
                         this.trigger('onUpdateChartDeepTitle', this.data);
                     }
