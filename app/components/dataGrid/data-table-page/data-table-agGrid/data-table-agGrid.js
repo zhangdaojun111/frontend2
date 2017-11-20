@@ -2465,6 +2465,9 @@ let config = {
                 parent_real_id: this.data.parentRealId,
                 parent_record_id: this.data.parentRecordId
             }
+            if(this.data.tableType=='child'){
+            	delete json['flow_id']
+            }
             if( this.data.delTemp ){
                 console.log('删除数据发送temp_ids')
                 json.temp_ids = json.real_ids;
