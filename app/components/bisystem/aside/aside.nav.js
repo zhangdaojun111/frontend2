@@ -69,11 +69,11 @@ let config = {
                 for(let chart of window.config.charts) {
                     if (res['data'].id == chart.id) {
                         chart = res['data'];
-                    };
+                    }
                     charts.push(chart);
                 }
                 this.data.charts = window.config.charts = charts;
-            };
+            }
             this.reload();
         })
     }

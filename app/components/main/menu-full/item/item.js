@@ -46,6 +46,7 @@ let config = {
                         this.actions.showChildrenAtFull();
                     }
                 }
+                console.log(this.data);
                 if (this.data.ts_name == '' && this.data.table_id == "0") {
                     return;
                 }

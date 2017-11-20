@@ -28,7 +28,7 @@ let config = {
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
-                };
+                }
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']);
@@ -69,7 +69,7 @@ let config = {
                     this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
             // 获取图标
@@ -82,7 +82,7 @@ let config = {
                    this.formItems['icon'].setList(icons)
                } else {
                    msgbox.alert(res['error'])
-               };
+               }
            });
 
         },
@@ -99,12 +99,12 @@ let config = {
                 "xOld":{},
                 "row_id":0,
                 "deep_info":{}
-            }
+            };
             const data = {
                 layouts:[JSON.stringify(layout)],
                 query_type:'deep',
                 is_deep:1,
-            }
+            };
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
@@ -133,9 +133,9 @@ let config = {
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
-                    };
+                    }
                 }
-            };
+            }
 
             if (pass) {
                 this.save(chart);
@@ -240,9 +240,9 @@ let config = {
                                         if (column.id === item) {
                                             columns.push(column);
                                             break;
-                                        };
+                                        }
                                     }
-                                })
+                                });
                                 me.formItems['columns'].data.value = columns;
                             }
                         })
@@ -277,8 +277,8 @@ let config = {
                 this.data.chart = res[0]['data']
             } else {
                 msgbox.alert(res[0]['error'])
-            };
-        };
+            }
+        }
 
         // 渲染图表表单字段
         this.drawForm();
@@ -286,10 +286,10 @@ let config = {
 
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
-        };
+        }
 
     },
-}
+};
 
 class RadarEditor extends Base {
     constructor(data,extendConfig) {
