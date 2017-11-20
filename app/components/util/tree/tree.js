@@ -64,7 +64,6 @@ let config = {
             let data = node;
             data['options']=this.data.options;
             data['indent']=this.data.indent;
-            data['preventClick']=this.data.preventClick;
             let comp = new TreeNode(data,this.data.options.callback);
             let ele = $('<li></li>');
             this.el.find('#tree1').append(ele);

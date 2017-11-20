@@ -41,8 +41,6 @@ let config = {
             })
         },
         toggleChecked:function (check) {
-        	console.log('check check');
-        	console.log(this.data);
             if(this.data.options.treeType != 'MULTI_SELECT'){
                 return;
             }
@@ -52,8 +50,8 @@ let config = {
                 this.data.checked = !this.data.checked;
             }
             if(this.data.checked){
-                this.el.find('.node-check').removeClass('unchecked_box').addClass('checked_box');
-                this.data.options.callback('select',this.data);
+	            this.el.find('.node-check').removeClass('unchecked_box').addClass('checked_box');
+	            this.data.options.callback('select',this.data);
             } else {
                 this.el.find('.node-check').removeClass('checked_box').addClass('unchecked_box');
                 this.data.options.callback('unselect',this.data);
@@ -119,7 +117,6 @@ let config = {
                 let data=node;
                 data['options']=this.data.options;
                 data['indent']=this.data.indent+1;
-	            data['preventClick']=this.data.preventClick;
                 let com = new TreeNode(data,this.data.options.callback);
                 com.render(ele);
                 this.data.childNodes.push(com);

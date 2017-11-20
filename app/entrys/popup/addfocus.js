@@ -198,8 +198,7 @@ Mediator.subscribe('workflow:addusers', (res) => {
                 },
                 treeType:'MULTI_SELECT',
                 isSearch: true,
-                withButtons:true,
-	            preventClick:defaultFocus,
+                withButtons:true
                 });
             treeComp2.render($('#treeMulti'));
         });

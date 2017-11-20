@@ -84,7 +84,12 @@ let config = {
             this.el.find('#workflow-form').hide();
         });
         this.el.on('click', '#submitWorkflow', () => {
-            Mediator.publish('workflow:submit', this.data.user);
+        	let data=_.defaultsDeep({},this.data.user);
+        	for(let key in this.data.focusUsers){
+        		delete data[key];
+	        }
+	        return;
+            Mediator.publish('workflow:submit', data);
         });
         Mediator.subscribe('workflow:choose', (res) => {
             this.data.allowagrid = true;
@@ -99,6 +104,7 @@ let config = {
             workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
                 this.data.htmlStr = [];
                 this.data.allUsersInfo = res.rows;
+	            this.data.focusUsers={};
                 // console.log(this.data.allUsersInfo);
                 for(let key in data['updateuser2focususer']) {
                     this.data.idArr = data['updateuser2focususer'][key];
@@ -112,7 +118,6 @@ let config = {
                 this.el.find('#addFollowerList').html(this.data.htmlStr);
                 this.data.user = this.data.focusUsers;
             })
-
         });
         this.el.on('click', '#addFollower', () => {
             // this.data.user = this.data.focusUsers;
@@ -126,6 +131,7 @@ let config = {
 	            defaultFocus:this.data.focusUsers,
             }).then(res => {
                 if (!res.onlyclose) {
+	                this.data.focusUsers={};
                     this.data.htmlStr = [];
                     for (let k in res) {
                         this.data.nameArr.push(res[k]);
