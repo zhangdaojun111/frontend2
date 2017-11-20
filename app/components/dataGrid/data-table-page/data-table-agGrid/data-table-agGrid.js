@@ -2954,10 +2954,14 @@ let config = {
                     form_id:'',
                     table_id:this.data.tableId,
                     is_view:1,
-                    parent_table_id:'',
-                    parent_real_id:'',
-                    parent_temp_id:'',
+                    parent_table_id:this.data.parentTableId,
+                    parent_real_id:this.data.parentRealId,
+                    parent_temp_id:this.data.parentTempId,
                     real_id: data['data']['_id']
+                }
+                if(data['data'].temp_id){
+                    json['temp_id'] = data['data'].temp_id;
+                    delete json['real_id'];
                 }
 
                 FormService.getDynamicData( json ).then( res=>{
@@ -2968,8 +2972,7 @@ let config = {
                         parentTempId: res.data.temp_id.value,
                         tableType: '',
                         viewMode: 'viewFromCorrespondence',
-                        rowId: data.data._id,
-                        parentRealId: data.data._id
+                        rowId: data.data._id
                     }
                     let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                     let winTitle = data.colDef.tableName + '->' + obj.tableName;
