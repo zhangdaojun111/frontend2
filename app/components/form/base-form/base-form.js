@@ -64,6 +64,7 @@ let config = {
         validation_required: true,
 		vote_value:'',
 		vote_key:'',
+		submitKey:[],
 	},
 	binds: [{
 		event: 'click',
