@@ -186,7 +186,7 @@ const radar = {
         x: 'right',
         bottom: 0,
         left:0,
-        orient: 'vertical',
+        orient: 'horizontal',
         data: [],
         selected: {},
         type: 'scroll'
@@ -195,7 +195,7 @@ const radar = {
         {
             indicator: [],
             radius: '50%',
-            center: ['40%', '50%'],
+            center: ['50%', '50%'],
         },
     ],
     series: [
