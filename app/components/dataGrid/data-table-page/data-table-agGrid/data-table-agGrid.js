@@ -230,6 +230,8 @@ let config = {
         formData: '',
         //是否加载cache数据
         cacheData: true,
+        // 父表按钮类型
+        parent_btnType: '',
     },
     //生成的表头数据
     columnDefs: [],
@@ -3142,7 +3144,7 @@ let config = {
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
                 let btnType = 'view';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.view == 0 || this.actions.viewOrEditPerm( 'view' ) ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.view == 0 || this.actions.viewOrEditPerm( 'view' ) || this.data.parent_btnType == 'none' ){
                     btnType = 'none';
                 }
                 let obj = {
@@ -3369,7 +3371,7 @@ let config = {
                 form_id:this.data.formId,
                 flow_id:data.data.flow_id || '',
             };
-            if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
+            if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.view == 0 || this.data.parent_btnType == 'none' ){
                 obj.btnType = 'none';
             }
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
