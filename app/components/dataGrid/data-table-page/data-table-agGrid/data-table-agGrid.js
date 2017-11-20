@@ -3251,13 +3251,18 @@ let config = {
         },
         //行级操作
         doRowOperation: function (r,$event) {
+            console.log("-----------")
+            console.log("-----------")
+            console.log("-----------")
+            console.log(r)
             if( r['frontend_addr'] !== ''){
                 //执行前端操作
                 this.actions.rowOperationFrontend({
                     rowId:$event.data['_id'],
                     table_id:this.data.tableId,
                     frontendAddress:r['frontend_addr'],
-                    row_op_id:r['row_op_id']
+                    row_op_id:r['row_op_id'],
+                    name:r['name'],
                 });
             }else if( r['pyscript_addr'] !== '' ){
                 //执行后端操作
@@ -3289,7 +3294,7 @@ let config = {
 
             let json = {};
             let url = '/iframe/rowOperation/';
-            let winTitle = '';
+            let winTitle = data.name;
             let w = 1400,h = 800
             switch( fun ){
                 //行级操作-BI
@@ -3304,7 +3309,7 @@ let config = {
                     console.log( '行级BI参数' )
                     console.log( json )
                     url = '/iframe/rowOperation/?operationType=bi';
-                    winTitle = '行级BI';
+                    // winTitle = '行级BI';
                     break;
                 }
                 case 'sexecute':{
@@ -3321,7 +3326,7 @@ let config = {
                     console.log( '执行操作参数' )
                     console.log( json )
                     url = '/iframe/rowOperation/?operationType=excute';
-                    winTitle = '执行操作';
+                    // winTitle = '执行操作';
                     break;
                 }
                 case 'cexecute':{
@@ -3338,7 +3343,7 @@ let config = {
                     console.log( '执行操作参数' )
                     console.log( json )
                     url = '/iframe/rowOperation/?operationType=excute';
-                    winTitle = '执行操作';
+                    // winTitle = '执行操作';
                     break;
                 }
             }
