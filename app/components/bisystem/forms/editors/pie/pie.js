@@ -74,6 +74,7 @@ let config = {
             this.formItems['pieType'].trigger('onChange', this.formItems['pieType'].data.value);
             this.formItems['limit'].trigger('onChange');
             this.formItems['circular'].trigger('onChange');
+
             // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
