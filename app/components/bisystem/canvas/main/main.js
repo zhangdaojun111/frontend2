@@ -106,6 +106,7 @@ let config = {
                 onAddCell: (cell) => {
                     this.data.cells.actions.addCell(cell);
                 },
+
                 onSaveCanvas: () => {
                     this.data.cells.actions.saveCanvas();
                 },
