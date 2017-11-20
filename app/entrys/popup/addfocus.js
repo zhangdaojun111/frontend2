@@ -132,7 +132,12 @@ if(focus.length>=1&&focus[0].indexOf('key')===-1){
     });
 }
 
-Mediator.subscribe('workflow:addusers', (arr) => {
+Mediator.subscribe('workflow:addusers', (res) => {
+	let arr=res.users;
+	let defaultFocus=[];
+	for (let key in res.defaultFocus){
+		defaultFocus.push(key);
+	}
     if(!arr||arr.length<1)return;
     let dept=[],idArr=[];
     (async function () {
@@ -193,7 +198,8 @@ Mediator.subscribe('workflow:addusers', (arr) => {
                 },
                 treeType:'MULTI_SELECT',
                 isSearch: true,
-                withButtons:true
+                withButtons:true,
+	            preventClick:defaultFocus,
                 });
             treeComp2.render($('#treeMulti'));
         });

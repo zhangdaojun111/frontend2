@@ -41,7 +41,7 @@ let config={
     afterRender(){
         this.showLoading();
         PMAPI.getIframeParams(this.data.key).then((res) => {
-            Mediator.publish('workflow:addusers', res.data.users);
+            Mediator.publish('workflow:addusers', res.data);
         })
         this.el.on("input propertychange",".follower-search",()=>{
             this.action.search();

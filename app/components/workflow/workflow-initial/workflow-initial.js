@@ -122,7 +122,8 @@ let config = {
                 title: `添加关注人`,
                 modal: true
             },{
-                users:this.data.user
+                users:this.data.user,
+	            defaultFocus:this.data.focusUsers,
             }).then(res => {
                 if (!res.onlyclose) {
                     this.data.htmlStr = [];
