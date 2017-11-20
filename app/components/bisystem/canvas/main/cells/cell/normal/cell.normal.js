@@ -239,6 +239,7 @@ let config = {
                     'query_type': 'deep',
                     'is_deep': window.config.bi_user === 'manager' ? 1 : 0
                 };
+
                 const res = await this.normalChart.getDeepData(data);
                 if (res[0]['success'] === 1) {
                     if (res[0]['data']['data']['xAxis'].length > 0 && res[0]['data']['data']['yAxis'].length > 0) {
@@ -247,7 +248,9 @@ let config = {
                         this.data.cellChart['chart']['data']['x'] = res[0]['data']['data']['x'];
                         this.data.cellChart['cell']['attribute'] = [];
                         this.data.cellChart['cell']['select'] = [];
-                        this.actions.judgeDateZoom(this.data.cellChart);
+                        if (window.config.bi_user !== 'manager') {
+                            this.actions.judgeDateZoom(this.data.cellChart);
+                        }
                         this.actions.updateChart(this.data.cellChart);
                         this.trigger('onUpdateChartDeepTitle', this.data);
                     }

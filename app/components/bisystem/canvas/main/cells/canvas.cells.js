@@ -102,7 +102,7 @@ let config = {
             // 获取画布块的chart数据
             if (layouts.length > 0) {
                 await this.actions.getCellChartData(layouts,cells);
-            };
+            }
 
             return new Promise((resolve, reject) => {
                 resolve('finish');
@@ -112,7 +112,6 @@ let config = {
         isScrollStop() {
             // 判断此刻到顶部的距离是否和1秒前的距离相等
             if(this.el.scrollTop() == this.data.curScrollTop) {
-                console.log("scroll bar is stopping!");
                 let windowSize = $(window).width();
                 if (windowSize && windowSize <= 960) {
                     this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
