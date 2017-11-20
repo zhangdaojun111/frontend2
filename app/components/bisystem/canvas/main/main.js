@@ -112,9 +112,16 @@ let config = {
                 onWhenPrintCellDataFinish: async () => {
                     msgbox.showLoadingRoot();
                     const res = await this.data.cells.actions.cellsDataIsFinish();
+                    if (self.frameElement && self.frameElement.tagName == "IFRAME") {
+                        $('.bi-container').css({'width': 'auto', 'height': 'auto'});
+                    };
                     window.print();
                     msgbox.hideLoadingRoot();
-
+                    if (self.frameElement && self.frameElement.tagName == "IFRAME") {
+                        let w = $(self.frameElement).closest('.iframes').width();
+                        let h = $(self.frameElement).closest('.iframes').height();
+                        $('.bi-container').css({'width': w, 'height': h});
+                    };
                 }
             });
             this.append(header, this.el.find('.views-header'));
@@ -158,8 +165,8 @@ let config = {
         if (self.frameElement && self.frameElement.tagName == "IFRAME") {
             let w = $(self.frameElement).closest('.iframes').width();
             let h = $(self.frameElement).closest('.iframes').height();
-            $('html.bi').css({'height':h});
-        }
+            $('.bi-container').css({'width': w, 'height': h});
+        };
         //根据判断是否单行模式加载header
         this.actions.headLoad();
 
