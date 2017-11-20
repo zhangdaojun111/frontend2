@@ -3139,7 +3139,7 @@ let config = {
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
                 let btnType = 'view';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm( 'view' ) ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.view == 0 || this.actions.viewOrEditPerm( 'view' ) ){
                     btnType = 'none';
                 }
                 let obj = {
@@ -3165,7 +3165,7 @@ let config = {
             if( data.event.srcElement.className == 'gridEdit' ){
                 console.log( '编辑' )
                 let btnType = 'edit';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 || this.actions.viewOrEditPerm( 'edit' ) ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm( 'edit' ) ){
                     btnType = 'none';
                 }
                 let obj = {
