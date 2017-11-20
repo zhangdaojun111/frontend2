@@ -1,20 +1,19 @@
 /**
- * Created by birdyy on 2017/7/31.
+ * Created by birdyy on 2017/11/15.
  */
 import {CellBaseComponent} from '../base';
-import template from './cell.stylzie.html';
+import template from './cell.gauge.html';
 import {EchartsService} from '../../../../../../../services/bisystem/echart.server';
 import Mediator from '../../../../../../../lib/mediator';
 
 let config = {
     template: template,
     data: {
-        id: 'stylzie',
+        id: 'gauge',
         cellChart: {}
     },
     actions: {
         echartsInit() {
-            // let cellChart = this.data.cellChart.chart;
             let echartsService = new EchartsService(this.data);
             this.myChart = echartsService.myChart;
         }
@@ -30,14 +29,9 @@ let config = {
 
         this.actions.echartsInit()
     }
-};
+}
 
-export class CellStylzieComponent extends CellBaseComponent {
-    // constructor(cellChart) {
-    //     config.data.cellChart = cellChart ? cellChart : null;
-    //     super(config);
-    //     this.data.id += this.componentId
-    // }
+export class CellGaugeComponent extends CellBaseComponent {
 
     constructor(data,event,extendConfig) {
         data.cellChart = {

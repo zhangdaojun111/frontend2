@@ -92,7 +92,7 @@ let config = {
                 this.data.cells.render(this.el.find('.cells-container'));
 
                // this.data.headerComponents.actions.canSaveViews(this.data.currentViewId);
-            };
+            }
 
         },
         /**

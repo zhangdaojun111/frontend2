@@ -32,7 +32,7 @@ let config = {
             this.data.cellChart.cell.attribute.map((item,index) => {
                 if (JSON.parse(item).selected) {
                     yAxis.push(cellChart['chart']['data']['yAxis'][index])
-                };
+                }
             });
             yAxis.forEach((item) => {
                 let itemData = [];
@@ -55,8 +55,8 @@ let config = {
                     let cellChart = this.actions.handleOriginal();
                     chartData = _.cloneDeep(this.data);
                     chartData.cellChart = cellChart;
-                };
-            };
+                }
+            }
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.pieChart = echartsService;
             this.trigger('onUpdateChartDeepTitle',this.data);
@@ -93,9 +93,9 @@ let config = {
             } else {
                 if (this.data.floor===0) {
                     return false;
-                };
+                }
                 this.data.floor--;
-            };
+            }
             // 判断是否到最大下穿层数
             if (deeps > this.data.floor-1 ) {
                 // 组装deep_info
@@ -109,12 +109,12 @@ let config = {
                 } else {
                     this.data['xAxis'].pop();
                     this.data.xOld.pop();
-                };
+                }
                 if (this.data.floor == 0) {
                     deep_info = {}
                 } else {
                     deep_info[this.data.floor] = this.data['xAxis'];
-                };
+                }
                 const layouts = {
                     chart_id: this.data.cellChart.cell.chart_id,
                     floor: this.data.floor,
@@ -147,7 +147,7 @@ let config = {
             } else {
                 if (next) {
                     this.data.floor = deeps;
-                };
+                }
                 return false;
             }
 
@@ -173,7 +173,7 @@ let config = {
             this.actions.CanvasDeep(this.data.xAxis[this.data.floor], false);
         });
     }
-}
+};
 
 export class CellPieComponent extends CellBaseComponent {
     constructor(data,event,extendConfig) {
@@ -211,7 +211,7 @@ export class CellPieComponent extends CellBaseComponent {
             deep_info = {}
         } else {
             deep_info[this.data.floor] = this.data['xAxis'];
-        };
+        }
 
         const layouts = {
             chart_id: this.data.cellChart.cell.chart_id,
@@ -240,7 +240,7 @@ export class CellPieComponent extends CellBaseComponent {
             }
         } else {
             msgbox.alert(res[0]['error']);
-        };
+        }
         return Promise.resolve(this.data);
     }
 }

@@ -1,10 +1,11 @@
 import {Base} from '../base';
-import template from './stylize.html';
+import template from './map.html';
 
 import {chartName,theme,icon,button,countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
+import './map.scss';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 
 let config = {
@@ -41,19 +42,17 @@ let config = {
         },
 
         /**
-         * 渲染列名字段列表（x,y轴）
-         * @param data 表格列表字段（x,y轴）
+         * 渲染列名字段列表（x轴）
+         * @param columns 表格列表字段（x轴）
          */
-        async loadColumns(data) {
-            if (this.formItems['dateAxis']) {
-                if (data) {
-                    this.formItems['xAxis'].setList(data['x_field']);
-                    this.formItems['yAxis'].setList(data['y_field']);
-                    this.formItems['dateAxis'].setList(data['date_field']);
+        async loadColumns(columns) {
+            if (this.formItems['yAxis']) {
+                if (columns) {
+                    this.formItems['yAxis'].setList(columns['y_field']);
+                    this.formItems['xAxis'].setList(columns['x_field']);
                 } else { // 清空字段
-                    this.formItems['xAxis'].setList([]);
                     this.formItems['yAxis'].setList([]);
-                    this.formItems['dateAxis'].setList([]);
+                    this.formItems['xAxis'].setList([]);
                 }
             }
         },
@@ -115,17 +114,16 @@ let config = {
         async saveChart() {
             let data = this.getData();
             let chart = {
-                assortment: 'stylzie',
+                assortment: 'map',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 filter: data.filter.filter,
                 filter_source: data.filter.filter_source,
+                yAxis:data.yAxis,
+                xAxis:data.xAxis,
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
-                xAxis:data.xAxis,
-                yAxis:[data.yAxis],
-                dateAxis: data.dateAxis
             };
 
             let pass = true; // 判断表单是否验证通过
@@ -154,9 +152,8 @@ let config = {
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
             this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
+            this.formItems['yAxis'].setValue(chart['yAxis']);
             this.formItems['xAxis'].setValue(chart['xAxis']);
-            this.formItems['yAxis'].setValue(chart['yAxis'][0]);
-            this.formItems['dateAxis'].setValue(chart['dateAxis']);
         }
     },
     data: {
@@ -166,9 +163,9 @@ let config = {
                 label: '数据来源',
                 name: 'source',
                 defaultValue: '',
-                placeholder: '选择数据来源',
+                placeholder: '请选择数据来源',
                 type: 'autocomplete',
-                required: true,
+                required:true,
                 rules: [
                     {
                         errorMsg: '数据源不能为空',
@@ -201,42 +198,26 @@ let config = {
                 }
             },
             {
-                label: 'x轴字段',
+                label: '选择x轴字段',
                 name: 'xAxis',
                 defaultValue: '',
-                placeholder: '选择x轴字段',
                 required: true,
                 rules: [
                     {
-                        errorMsg: 'x轴不能为空',
+                        errorMsg: '地图名称字段不能为空',
                         type: 'required'
                     }
                 ],
                 type: 'autocomplete'
             },
             {
-                label: 'y轴字段',
+                label: '选择y轴字段',
                 name: 'yAxis',
                 defaultValue: '',
-                placeholder: '选择y轴字段',
                 required: true,
                 rules: [
                     {
-                        errorMsg: 'y轴不能为空',
-                        type: 'required'
-                    }
-                ],
-                type: 'autocomplete'
-            },
-            {
-                label: '时间轴字段',
-                name: 'dateAxis',
-                defaultValue: '',
-                placeholder: '选择时间轴字段',
-                required: true,
-                rules: [
-                    {
-                        errorMsg: '时间轴不能为空',
+                        errorMsg: '地图名称字段不能为空',
                         type: 'required'
                     }
                 ],
@@ -254,7 +235,6 @@ let config = {
                 }
             },
             button
-
         ]
     },
     async afterRender() {
@@ -275,14 +255,14 @@ let config = {
             this.actions.fillChart(this.data.chart);
         }
 
-    }
+    },
 };
 
-class StylizeEditor extends Base {
+class MapEditor extends Base {
     constructor(data,extendConfig) {
         config.data.chart_id = data.id ? data.id : null;
         super($.extend(true,{},config,extendConfig));
     }
 }
 
-export {StylizeEditor}
+export {MapEditor}

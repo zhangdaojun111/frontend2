@@ -62,4 +62,4 @@ export const ChartFormService = {
         });
         return Promise.resolve(res);
     }
-}
+};

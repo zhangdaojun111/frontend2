@@ -50,14 +50,14 @@ let config = {
                     this.data.startValue = item;
                     break;
                 }
-            };
+            }
 
             for (let item of names) {
                 if (Date.parse(item) === dateEnd) {
                     this.data.endValue = item;
                     break;
                 }
-            };
+            }
 
             this.el.find('.date-start').val(this.data.startValue);
             this.el.find('.date-end').val(this.data.endValue);
@@ -71,7 +71,7 @@ let config = {
                 if(!$(context).parent().next().is('.option-disabled')){
                     $(context).addClass('option-active');
                     $(context).siblings().removeClass('option-active');
-                };
+                }
                 this.trigger('onChangeDateData', {'startValue': this.data.startValue,'endValue':this.data.endValue,type:$(context).find('input').val()})
                 return false;
             }
@@ -86,7 +86,7 @@ let config = {
                     msgbox.alert('开始时间不能大于结束时间');
                 } else {
                     this.trigger('onChangeDateData', {'startValue': startValue,'endValue':endValue,type:'custom'})
-                };
+                }
                 return false;
             }
         }
