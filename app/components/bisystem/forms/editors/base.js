@@ -34,7 +34,7 @@ let formItemTypes = {
     'advancedCompute': AdvancedCompute,
     'textarea': Textarea,
     'search': Search
-}
+};
 
 class Base extends Component {
     constructor(config, data, event,extendConfig){
@@ -107,7 +107,7 @@ class Base extends Component {
             Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
         } else {
             msgbox.showTips(res['error'])
-        };
+        }
     }
 
     reset(chart) {

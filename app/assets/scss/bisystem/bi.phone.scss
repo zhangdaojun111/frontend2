@@ -3,7 +3,8 @@
         .views-header {
             height: 44px !important;
             -webkit-overflow-scrolling: touch;
-            overflow:scroll;
+            //overflow:scroll;
+
             > div {
                 line-height: 44px !important;
             }
@@ -22,7 +23,7 @@
                     height: 0;
                 }
             }
-            .views-header-right {
+            .views-header-right,.view-header-refresh-cache {
                 display: none;
             }
         }
@@ -57,3 +58,4 @@
         }
     }
 }
+

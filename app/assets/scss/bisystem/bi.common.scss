@@ -158,6 +158,14 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/chart_pie.png') no-repeat;
     }
+    .chart-gauge-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_gauge.png') no-repeat;
+    }
+    .chart-map-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_map.png') no-repeat;
+    }
     .chart-stylize-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/chart_stylize.png') no-repeat;
@@ -189,6 +197,14 @@ html.bi, body.bi {
     .aside-table-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/aside_table.png') no-repeat;
+    }
+    .aside-map-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_map.png') no-repeat;
+    }
+    .aside-gauge-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_gauge.png') no-repeat;
     }
     .aside-stylzie-icon {
         @include icon;

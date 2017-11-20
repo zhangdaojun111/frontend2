@@ -25,7 +25,7 @@ let config = {
                    // this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
             // 获取图标
@@ -38,7 +38,7 @@ let config = {
                    this.formItems['icon'].setList(icons)
                } else {
                    msgbox.alert(res['error'])
-               };
+               }
            });
           return Promise.all([p1,p2])
         },
@@ -55,12 +55,12 @@ let config = {
                 "xOld":{},
                 "row_id":0,
                 "deep_info":{}
-            }
+            };
             const data = {
                 layouts:[JSON.stringify(layout)],
                 query_type:'deep',
                 is_deep:1,
-            }
+            };
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
@@ -89,7 +89,7 @@ let config = {
                         pass = false;
                     };
                 }
-            };
+            }
             //发送状态给子组件
             Mediator.emit('bi:multi:chart',1);
             //判断验证是否全部通过
@@ -173,8 +173,8 @@ let config = {
                 this.data.chart = res[0]['data']
             } else {
                 msgbox.alert(res[0]['error'])
-            };
-        };
+            }
+        }
 
         // 渲染图表表单字段
         this.drawForm();

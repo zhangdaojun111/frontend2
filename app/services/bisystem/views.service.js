@@ -14,7 +14,7 @@ export const ViewsService = {
             query_mark: window.config.query_mark ? window.config.query_mark : 'normal',
             operation_id:window.config.operation_id,
             folder_id: window.config.folder_id,
-        }
+        };
         const res = await HTTP.getImmediately('/bi/set_new_view_data',Object.assign(data,params));
         return new Promise((resolve, reject) => {
                 resolve(res);

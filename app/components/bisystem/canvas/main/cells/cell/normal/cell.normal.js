@@ -56,10 +56,19 @@ let config = {
                     cellChart['cell']['attribute'] = [];
                     cellChart['cell']['select'] = [];
                     this.actions.updateChart(cellChart);
-                };
+                }
             }
         },
-
+        /**
+         * 两个控件的排列方式改变
+         */
+        arrangementChange(){
+            if(this.el.find('.normal-date-range').width()<685){
+                this.el.addClass('date-zoom-wrap');
+            }else{
+                this.el.removeClass('date-zoom-wrap');
+            }
+        },
         /**
          * 判断是否显示时间字段
          */
@@ -68,7 +77,7 @@ let config = {
                 this.normalRange.destroySelf();
                 this.normalRange = null;
                 this.el.find('.echarts-cell').removeClass('date-filed');
-            };
+            }
             let type = cellChart.chart.data['x'] ? cellChart.chart.data['x']['type'] : cellChart.chart.xAxis.type;
             if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30)) {
                 // 添加日期筛选,改变cell显示高度
@@ -82,7 +91,9 @@ let config = {
                 this.append(this.normalRange, this.el.find('.chart-normal-date-zoom'));
                 this.normalRange.actions.rangeChoose(type);
                 this.normalRange.actions.setDateValue(cellChart.chart.data.xAxis);
-            };
+            }
+            //两个控件的排列方式改变
+            this.actions.arrangementChange();
         },
         /**
          * 当有原始数据保存的时候，优先处理原始数据
@@ -103,7 +114,6 @@ let config = {
                 if (JSON.parse(item).selected) {
                     yAxis.push(cellChart['chart']['data']['yAxis'][index])
                 }
-                ;
             });
 
             yAxis.forEach((item) => {
@@ -113,7 +123,6 @@ let config = {
                     if (isRemove === -1) {
                         itemData.push(val)
                     }
-                    ;
                 });
                 item.data = itemData;
             });
@@ -133,7 +142,7 @@ let config = {
                     chartData.cellChart.cell.select.map(item => {
                         if (!JSON.parse(item).selected) {
                             ename.push(JSON.parse(item).ename)
-                        };
+                        }
                     });
                     let groups = chartData.cellChart.chart.data.yAxis.filter((item, index, items) => {
                         return ename.toString().indexOf(item.ename) === -1;
@@ -146,9 +155,9 @@ let config = {
                         let cellChart = this.actions.handleOriginal();
                         chartData = _.cloneDeep(this.data);
                         chartData.cellChart = cellChart;
-                    };
+                    }
                 }
-            };
+            }
 
             let cellChartData = this.data;
             if (cellChartData['cellChart']['chart']['yHorizontal']) {
@@ -156,7 +165,7 @@ let config = {
                 cellChartData['cellChart']['chart']['data']['yAxis'].forEach(item => {
                     item.data.reverse();
                 });
-            };
+            }
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle', this.data);
@@ -195,7 +204,7 @@ let config = {
                     return false;
                 };
                 this.data.floor--;
-            };
+            }
             // 判断是否到最大下穿层数
             if (deeps > this.data.floor - 1) {
                 // 组装deep_info
@@ -210,12 +219,11 @@ let config = {
                     this.data['xAxis'].pop();
                     this.data.xOld.pop();
                 }
-                ;
                 if (this.data.floor == 0) {
                     deep_info = {}
                 } else {
                     deep_info[this.data.floor] = this.data['xAxis'];
-                };
+                }
 
                 const layouts = {
                     chart_id: this.data.cellChart.cell.chart_id,
@@ -246,12 +254,11 @@ let config = {
                 } else {
                     msgbox.alert(res[0]['error']);
                 }
-                ;
 
             } else {
                 if (next) {
                     this.data.floor = deeps;
-                };
+                }
                 return false;
             }
         }
@@ -277,14 +284,14 @@ let config = {
         // 是否显示时间字段
         if (window.config.bi_user !== 'manager') {
             this.actions.judgeDateZoom(this.data.cellChart);
-        };
+        }
 
         this.actions.echartsInit();
     },
     beforeDestory() {
 
     }
-}
+};
 
 export class CellNormalComponent extends CellBaseComponent {
     constructor(data, event, extendConfig) {
@@ -340,7 +347,6 @@ export class CellNormalComponent extends CellBaseComponent {
         } else {
             deep_info[this.data.floor] = this.data['xAxis'];
         }
-        ;
 
         const layouts = {
             chart_id: this.data.cellChart.cell.chart_id,
@@ -370,7 +376,6 @@ export class CellNormalComponent extends CellBaseComponent {
         } else {
             msgbox.alert(res[0]['error']);
         }
-        ;
         return Promise.resolve(this.data);
     }
 }

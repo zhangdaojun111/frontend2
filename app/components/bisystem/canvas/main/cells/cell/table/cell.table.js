@@ -67,7 +67,7 @@ export class CellTableComponent extends CellBaseComponent {
         // 显示每列的数据
         for (let i = 0; i < columnNum; i++) {
             columnList.push(list.slice(i * rows * 2, (i * rows + rows) * 2));
-        };
+        }
 
         // 把每列的数据转化为行
         for (let i = 0; i < rows ; i++) {
@@ -85,12 +85,11 @@ export class CellTableComponent extends CellBaseComponent {
                 });
             });
             tableRows.push(row);
-        };
+        }
         cellChart.rows = tableRows;
     }
-
     static numFormat(num) {
-        num = parseFloat(Number(num)).toFixed(2).toString().split(".");
+        num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
         return num.join(".");
     }

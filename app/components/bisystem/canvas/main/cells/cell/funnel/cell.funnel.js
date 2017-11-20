@@ -27,7 +27,7 @@ let config = {
     firstAfterRender() {
         this.actions.echartsInit()
     }
-}
+};
 
 export class CellFunnelComponent extends BiBaseComponent {
     constructor(cellChart,extendConfig) {

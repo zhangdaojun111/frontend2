@@ -26,7 +26,7 @@ let config = {
             this.data.icon = chart['data']['icon'];
             if (this.data.icon){
                 this.el.find('.title').addClass('no-title');
-            };
+            }
             this.reload();
         },
 
@@ -42,9 +42,9 @@ let config = {
                         title += ` ${item.name}:${item.xName}`
                     } else {
                         title += ` ${item.name}:${item.xName} /`
-                    };
+                    }
                 });
-            };
+            }
             this.el.find('.deep-title').html(title ? '/ '+title : title)
         }
     },
