@@ -410,6 +410,4 @@ if( isNeedDownload === false){      //正常显示登录表单
     htmlDownload += '<span class="download-prompt">'+prompt+'</span>'+'<a class="download-link">下载链接</a>';
     $(".need-download").append(htmlDownload)
     $(".download-link").attr('href',downLoadLink)
-    console.log('*******************')
-    console.log(downLoadLink)
 }
