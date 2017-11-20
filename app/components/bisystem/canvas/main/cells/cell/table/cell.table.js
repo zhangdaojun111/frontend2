@@ -88,7 +88,6 @@ export class CellTableComponent extends CellBaseComponent {
         }
         cellChart.rows = tableRows;
     }
-
     static numFormat(num) {
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
