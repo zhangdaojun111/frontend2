@@ -45,7 +45,8 @@ let config={
             parentTempId:this.data.parent_temp_id || '',
             tableType:'child',
             viewMode:this.data.is_view==0?'EditChild':'ViewChild',
-            formData: this.data.formData
+            formData: this.data.formData,
+            parent_btnType: window.config.btnType
         }
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.songGrid'));
