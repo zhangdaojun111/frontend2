@@ -306,13 +306,11 @@ export class EchartsService {
                 }
             ]
         }
-
         //是否设置自定义高度top
         if(cellOption['customTop']){
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
-        console.log(linebarOption);
         return linebarOption;
     }
 
@@ -340,7 +338,7 @@ export class EchartsService {
         pieOption['series'][0].name = title;
         pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if(cellChart.chart.chartType.type == 'circular'){
-            pieOption['series'][0].radius = ['50%','80%'];
+            pieOption['series'][0].radius = ['50%','70%'];
         }
         return pieOption;
     }
@@ -512,7 +510,6 @@ export class EchartsService {
      * 风格箱处理
      * @param chart = cellChart['chart']数据
      */
-
     stylzieOption(cellChart) {
         let cellOption = cellChart['chart'];
         const stylzieOption = EchartsOption.getEchartsConfigOption('stylzie');

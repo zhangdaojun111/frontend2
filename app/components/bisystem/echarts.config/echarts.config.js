@@ -120,7 +120,7 @@ const pie = {
         {
             name: '访问来源',
             type: 'pie',
-            radius: '50%',
+            radius: '70%',
             center: ['50%', '50%'],
             data: [],
             label: {
@@ -194,7 +194,7 @@ const radar = {
     radar: [
         {
             indicator: [],
-            radius: '50%',
+            radius: '70%',
             center: ['50%', '50%'],
         },
     ],
@@ -470,7 +470,7 @@ const gauge = {
             type:'gauge',
             min:0,
             max:1,
-            radius:'100%',
+            radius:'70%',
             splitNumber: 20,       // 分割段数
             axisLine: {            // 坐标轴线
                 lineStyle: {       // 属性lineStyle控制线条样式
