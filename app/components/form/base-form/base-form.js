@@ -1868,8 +1868,11 @@ let config = {
 			let actions = this.actions.createActions();
 			for (let key in data) {
 				let single = this.el.find('div[data-dfield=' + data[key].dfield + ']');
-				single.css('display','inline-block');
+                single.css('display','inline-block');
 				let type = single.data('type');
+                if(type =='Textarea' || type =='Songrid'){]
+                    single.css('display','block');
+                }
 				if (data[key].required) {
 					data[key]['requiredClass'] = data[key].value == '' ? 'required' : 'required2';
 
