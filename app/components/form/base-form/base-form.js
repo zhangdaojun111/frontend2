@@ -1870,7 +1870,7 @@ let config = {
 				let single = this.el.find('div[data-dfield=' + data[key].dfield + ']');
                 single.css('display','inline-block');
 				let type = single.data('type');
-                if(type =='Textarea' || type =='Songrid'){]
+                if(type =='Textarea' || type =='Songrid'){
                     single.css('display','block');
                 }
 				if (data[key].required) {
