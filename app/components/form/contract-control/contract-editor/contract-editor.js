@@ -372,7 +372,7 @@ export const contractEditorConfig = {
             if (isLoadCache && tab['content']) {
                 $(this.el.find('.contract-tab').get(i)).text(tab['name']);
                 this.el.find('.contract-template-anchor').html(tab['content']);
-                if (this.data.mode == 'edit') {
+                if (this.data.mode == 'edit' && Object.keys(tab['elements']).length == 0) {
                     this.el.find('.edit_or_save').css('display', 'inline');
                     this.data.buttonStates[i].display.edit_or_save = 'inline';
                 }
