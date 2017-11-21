@@ -12,6 +12,8 @@ let config = {
         currentViewId: '', // 当前画布块视图id
         cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
+        carouselInterval:3,
+        operateInterval:4,
     },
     actions: {
         /**
@@ -253,6 +255,12 @@ let config = {
                 }
             });
         },
+        checkCanCarousel(){
+
+            if(this.data.carouselInterval !== 0 &&  this.data.operateInterval !== 0){
+
+            }
+        }
 
     },
     binds: [
@@ -283,7 +291,10 @@ let config = {
                 this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
             }
         }
+        //初始化轮播
+        this.actions.checkCanCarousel();
     },
+    firstAfterRender() {},
     beforeDestory() {}
 };
 

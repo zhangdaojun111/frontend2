@@ -4,9 +4,10 @@ import Mediator from '../../../../../lib/mediator';
 let css =`
 .msg{
   height: 94px;
-  padding: 20px 20px 20px 0;
+  padding: 20px 20px 0 0;
+  box-sizing:border-box;
 }
-.msg-border .inp-val{
+.carousel-time,.operate-time{
       width: 90%;
       border: none;
       outline: none;
@@ -19,7 +20,7 @@ let css =`
     margin-left:20px;
     margin-bottom:10px;
 }
-.msg-border .error-tip{
+.error-tip-1,.error-tip-2{
         color: red;
         font-size: 16px;
         margin-top: 10px;
@@ -67,30 +68,68 @@ export let config = {
     data: {
         css:css.replace(/(\n)/g, ''),
     },
-    actions: {},
-    afterRender() {
-        //添加样式
-        $(`<style>${this.data.css}</style>`).appendTo(this.el);
-        this.el.on('click','.ok',()=>{
-            this.data.carousel = this.el.find('.inp-val').val();
-            if(this.el.find('.inp-val').val() === ""){
-                this.el.find('.error-tip').show();
+    actions: {
+        saveCarousel:function () {
+            this.data.carousel = this.el.find('.carousel-time').val();
+            this.data.operate = this.el.find('.operate-time').val();
+            if(this.data.carousel === ""){
+                this.el.find('.error-tip-1').show();
                 return ;
             }
+            if(this.data.operate === ""){
+                this.el.find('.error-tip-2').show();
+                return ;
+            }
+
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key: this.key,
-                data: this.data.carousel
+                data: {'carousel':this.data.carousel,'operate':this.data.operate}
             });
-        }).on('click','.cancel',()=>{
+        },
+        cancelCarousel:function () {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key: this.key,
                 data: {}
             });
-        })
+        }
     },
-    binds:[{}],
+    afterRender() {
+        //添加样式
+        this.data.style = $(`<style>${this.data.css}</style>`).appendTo(this.el);
+    },
+    binds:[
+        {
+            event:'click',
+            selector:'.ok',
+            callback:function () {
+                this.actions.saveCarousel();
+            }
+        },
+        {
+            event:'click',
+            selector:'.cancel',
+            callback:function () {
+                this.actions.cancelCarousel();
+            }
+        },
+        {
+            event:'input',
+            selector:'.carousel-time',
+            callback:function () {
+                this.el.find('.error-tip-1').hide();
+            }
+        },
+        {
+            event:'input',
+            selector:'.operate-time',
+            callback:function () {
+                this.el.find('.error-tip-2').hide();
+            }
+        }
+    ],
     beforeDestory: function () {
+        this.data.style.remove();
     }
 };

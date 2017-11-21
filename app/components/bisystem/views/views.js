@@ -64,15 +64,14 @@ let config = {
         async setCarousel() {
             const res = await PMAPI.openDialogByComponent(carouselConfig,{
                 width: 348,
-                height: 217,
+                height: 280,
                 title: '设置轮播'
             });
-            if(res){
-                // Mediator.emit('carousel:date',res);
 
+            if(res){
+                // Mediator.emit('carousel:setting',res);
 
             }
-
         }
     },
     binds:[
@@ -147,8 +146,12 @@ let config = {
             this.append(viewItemComponent,this.el.find('.view-list'));
         });
     },
-    firstAfterRender() {},
-    beforeDestory() {}
+    firstAfterRender() {
+
+    },
+    beforeDestory() {
+
+    }
 };
 
 export class ViewsEditComponent extends Component{
