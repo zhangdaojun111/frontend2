@@ -18,6 +18,7 @@
     }
     .cell-chart {
         padding: 0 10px;
+        width: calc(100% - 20px);
         height: calc(100% - 30px);
         .echarts-cell {
             width: 100%;
