@@ -28,7 +28,7 @@ export const LoginService = {
         }
 
         if (!browser['chrome']){
-            this.prompt = "暂不支持其它浏览器，为了您的正常使用请下载新版本Chrome";
+            this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
             this.needDownload = true;
         }
 
