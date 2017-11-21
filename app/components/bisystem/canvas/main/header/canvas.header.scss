@@ -2,7 +2,7 @@
     position: relative;
     height: 50px;
     white-space: nowrap;
-    width: calc(100% - 398px);
+    width: calc(100% - 400px);
     background: transparent;
     display: inline-block;
     overflow: hidden;
@@ -34,6 +34,7 @@
 }
 
 .view-header-refresh-cache {
+    width: 100px;
     position: relative;
     display: inline-block;
     right: 0;

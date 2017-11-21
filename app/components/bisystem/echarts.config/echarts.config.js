@@ -527,6 +527,21 @@ const gauge = {
     ]
 };
 
+//消息
+const message = {
+
+};
+
+//审批
+const approval = {
+
+};
+
+//日程
+const calendar = {
+
+};
+
 export const EchartsOption = {
     blue: blueColors,
     green: greenColors,
@@ -558,6 +573,15 @@ export const EchartsOption = {
                 break;
             case 'map':
                 option = map;
+                break;
+            case 'message':
+                option = message;
+                break;
+            case 'approval':
+                option = approval;
+                break;
+            case 'calendar':
+                option = calendar;
                 break;
         }
         return _.cloneDeep(option);
