@@ -145,14 +145,13 @@ export const contractEditorConfig = {
             event: 'click',
             selector: '.save_n_close',
             callback: function () {
-                Storage.setItem(this.data.local_data,'contractCache-'+this.data.id,Storage.SECTION.FORM);
+                Storage.setItem(this.data.local_data,'contractCache-'+this.data.real_id+'-'+this.data.id,Storage.SECTION.FORM);
                 //删除local_data中的合同信息，此数据不跟随data上传
                 for (let data of this.data.local_data) {
                     delete data['content'];
                     delete data['mode'];
                 }
                 this.data.value = this.data.local_data;
-                console.dir(this.data.local_data);
                 this.actions.closeMe();
             }
         }, {
@@ -190,7 +189,7 @@ export const contractEditorConfig = {
                     this.actions.loadButtons(this.data['current_tab']);
                     this.data.local_data[this.data['current_tab']].k2v = this.data.editingK2v;
                     //将修改缓存到本地，如果需要编辑即保存，将下一行放到editContract的input事件回调中
-                    Storage.setItem(this.data.local_data,'contractCache-'+this.data.id,Storage.SECTION.FORM);
+                    Storage.setItem(this.data.local_data,'contractCache-'+this.data.real_id+'-'+this.data.id,Storage.SECTION.FORM);
                 }
             }
         }, {
@@ -275,7 +274,7 @@ export const contractEditorConfig = {
         },
         getElement: function (json) {
             //在componentDialog中使用HTTP则报找不到_http的错误
-            return $.post('/customize/rzrk/get_element/', json);
+            return HTTP.postImmediately('/customize/rzrk/get_element/', json);
         },
         addTab: function () {
             let tabEle = $('<li class="contract-tab">新建</li>');
@@ -368,11 +367,10 @@ export const contractEditorConfig = {
                 return;
             }
 
-
             if (isLoadCache && tab['content']) {
                 $(this.el.find('.contract-tab').get(i)).text(tab['name']);
                 this.el.find('.contract-template-anchor').html(tab['content']);
-                if (this.data.mode == 'edit' && Object.keys(tab['elements']).length == 0) {
+                if (this.data.mode == 'edit' && Object.keys(tab['elements']).length != 0) {
                     this.el.find('.edit_or_save').css('display', 'inline');
                     this.data.buttonStates[i].display.edit_or_save = 'inline';
                 }
@@ -393,7 +391,7 @@ export const contractEditorConfig = {
                     this.el.find('.contract-template-anchor').html(res.data.content);
                     tab['content'] = res.data.content;
                     tab['k2v'] = res.data.k2v;
-                    if (this.data.mode == 'edit') {
+                    if (this.data.mode == 'edit' && Object.keys(tab['elements']).length != 0) {
                         this.el.find('.edit_or_save').css('display', 'inline');
                         this.data.buttonStates[i].display.edit_or_save = 'inline';
                     }
@@ -423,7 +421,7 @@ export const contractEditorConfig = {
         },
         downloadTemplate: function (i, isAll) {
             let contractData = this.data.local_data[i];
-            $.post('/customize/rzrk/download_contract/', {
+            HTTP.postImmediately('/customize/rzrk/download_contract/', {
                 table_id: this.data.table_id,
                 real_id: this.data.real_id,
                 field_id: this.data.id,
@@ -485,8 +483,7 @@ export const contractEditorConfig = {
             real_id: this.data.real_id,
             field_id: this.data.id
         };
-
-        this.data.local_data = Storage.getItem('contractCache-'+this.data.id,Storage.SECTION.FORM);
+        this.data.local_data = Storage.getItem('contractCache-'+this.data.real_id+'-'+this.data.id,Storage.SECTION.FORM);
         this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value));
         this.actions.getElement(obj).then(res => {
             if (res.success) {
