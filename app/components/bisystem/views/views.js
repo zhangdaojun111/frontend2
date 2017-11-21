@@ -69,7 +69,7 @@ let config = {
             });
 
             if(res){
-                // Mediator.emit('carousel:setting',res);
+                // 获取设置存入后台
 
             }
         }

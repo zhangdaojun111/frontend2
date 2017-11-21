@@ -5,6 +5,7 @@ import template from './canvas.cells.html';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 import Mediator from '../../../../../lib/mediator';
 import msgbox from '../../../../../lib/msgbox';
+import './canvas.cells.scss';
 
 let config = {
     template: template,
@@ -12,8 +13,6 @@ let config = {
         currentViewId: '', // 当前画布块视图id
         cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
-        carouselInterval:3,
-        operateInterval:4,
     },
     actions: {
         /**
@@ -148,7 +147,7 @@ let config = {
                     delete this.data.cells[componentId];
                 },
             });
-            this.append(cell, this.el.find('.cells'));
+            this.append(cell, this.el.find('.current'));
             return cell;
         },
 
@@ -255,13 +254,32 @@ let config = {
                 }
             });
         },
-        checkCanCarousel(){
-
-            if(this.data.carouselInterval !== 0 &&  this.data.operateInterval !== 0){
-
-            }
+        /**
+         * 执行一次轮播动画，执行完后交换两个cells的身份（current/prepare）
+         */
+        async doCarouselAnimate(viewId) {
+            this.data.currentViewId = viewId;
+            //开始执行动画
+            let current = this.el.find('.current').addClass('animate-fade-out');
+            let prepare = this.el.find('.prepare').addClass('animate-fade-in');
+            //根据viewId加载数据
+            await this.actions.getCellLayout();
+            //动画执行1.5S完成,交换div身份
+            let that = this;
+            setTimeout(function () {
+                current.attr('class','prepare cells');
+                prepare.attr('class','current cells');
+                //开始渲染新current的数据,新数据渲染完后回调delayCarousel
+                if (that.data) {
+                    let windowSize = $(window).width();
+                    if (windowSize && windowSize <= 960) {
+                        that.actions.phoneWaterfallLoadingCellData({top: that.el.scrollTop()});
+                    } else {
+                        that.actions.waterfallLoadingCellData({top: that.el.scrollTop()});
+                    }
+                }
+            },1500)
         }
-
     },
     binds: [
         { //滚动距离
@@ -282,7 +300,6 @@ let config = {
     async afterRender() {
         // 获取画布块布局信息
         await this.actions.getCellLayout();
-
         if (this.data) {
             let windowSize = $(window).width();
             if (windowSize && windowSize <= 960) {
@@ -291,8 +308,6 @@ let config = {
                 this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
             }
         }
-        //初始化轮播
-        this.actions.checkCanCarousel();
     },
     firstAfterRender() {},
     beforeDestory() {}

@@ -19,6 +19,12 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
+        carouselInterval:3,
+        operateInterval:4,
+        viewArr:window.config.bi_views,  //所有bi视图
+        viewNo:0,   //记录当前视图在数组中的位置
+        timer:null, //记录即将执行的轮播动画
+        firstCanvas:true,   //第一次直接加载cells，后续通过轮播动画更换
     },
     binds: [
         // 编辑模式
@@ -46,7 +52,7 @@ let config = {
     ],
     actions: {
         /**
-         * 加载canvas
+         * 转换head的标签，加载第一个canvas
          * @param viewId
          */
         switchViewId: function (viewId) {
@@ -54,10 +60,17 @@ let config = {
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
-                this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
-                this.data.cells.render(this.el.find('.cells-container'));
+                if(this.data.firstCanvas === true){
+                    this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
+                    this.data.cells.render(this.el.find('.cells-container'));
+                    this.data.firstCanvas = false;
+                }else {
+                    //后续鼠标点击使用轮播动画切换视图,并重置timer
+                    this.data.cells.actions.doCarouselAnimate(this.data.currentViewId);
+                    window.clearTimeout(this.data.timer);
+                    this.actions.checkCanCarousel();
+                }
             }
-
         },
         /**
          * 加载头部
@@ -103,6 +116,33 @@ let config = {
             this.el.find('.component-bi-canvas-main').append("<div class='cells-container client " + this.data.editMode + "'></div>")
         },
 
+        /**
+         * 检测是否符合执行轮播条件
+         */
+        checkCanCarousel(){
+            if(this.data.carouselInterval > 0 && this.data.operateInterval > 0 && window.config.bi_user === 'client'){
+                let temp = this.data.viewNo++;
+                if(temp === this.data.viewArr.length){
+                    this.data.viewNo = 0;
+                }else{
+                    this.data.viewNo = temp;
+                }
+                this.data.currentViewId = this.data.viewArr[this.data.viewNo].id;
+                console.log(this.data.currentViewId);
+                this.actions.delayCarousel();
+            }
+        },
+        /**
+         * 轮播执行入口，调用1次，执行1次轮播
+         */
+        delayCarousel:function () {
+            let that = this;
+            //鼠标点击标签后，需要重置timer
+            this.data.tiemr = window.setTimeout(function () {
+                that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
+                that.data.cells.actions.doCarouselAnimate(that.data.currentViewId);
+            },this.data.carouselInterval * 1000)
+        },
     },
     afterRender:function(){
         if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
@@ -113,6 +153,9 @@ let config = {
 
         //根据判断是否单行模式加载header
         this.actions.headLoad();
+
+        //判断是否执行轮播
+        this.actions.checkCanCarousel();
     },
     beforeDestory:function () {}
 };
