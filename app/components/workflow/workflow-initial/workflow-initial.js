@@ -130,7 +130,6 @@ let config = {
 	            defaultFocus:this.data.focusUsers,
             }).then(res => {
                 if (!res.onlyclose) {
-	                this.data.focusUsers={};
                     this.data.htmlStr = [];
                     for (let k in res) {
                         this.data.nameArr.push(res[k]);
