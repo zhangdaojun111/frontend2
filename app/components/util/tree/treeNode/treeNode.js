@@ -96,9 +96,14 @@ let config = {
             this.data.childNodes.forEach(childNode=>{
                 isChildFiltered = isChildFiltered || childNode.actions.isFilteredNode(input);
             });
+            let isOffspringFiltered = false;
             this.data.childNodes.forEach(childNode=>{
-                childNode.actions.filterNode(input,isFiltered,isChildFiltered);
+                isOffspringFiltered = childNode.actions.filterNode(input,isFiltered,isChildFiltered)||isOffspringFiltered;
             })
+            if(isOffspringFiltered){
+                this.el.show();
+            }
+            return isFiltered || isOffspringFiltered;
         }
     },
     afterRender:function () {

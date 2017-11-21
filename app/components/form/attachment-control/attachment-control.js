@@ -59,8 +59,8 @@ let config = {
             callback: function (event) {
                 let files = event.files;
                 let fileArray = [];
-                for (let file of files) {
-                    let name = file.name;
+                for (let f = 0;f<files.length;f++) {
+                    let name = files[f].name;
                     let fileId = new Date().getTime();
                     fileArray.push({id:fileId,name:name});
                 }
