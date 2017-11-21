@@ -159,7 +159,8 @@ Mediator.subscribe('workflow:addusers', (res) => {
                 for (let item of data){
                     item.nodes=item.children;
                     for(let i in dept){
-                        if(item.text.indexOf(dept[i])!==-1){
+                        // if(item.text.indexOf(dept[i])!==-1){
+                        if(item.text== dept[i]){
                             item.state={};
                             item.state.checked=true;
                             item.state.selected=true;

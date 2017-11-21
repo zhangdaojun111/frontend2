@@ -126,7 +126,8 @@ let config = {
         } else {
             this.el.find('.icon').addClass('leaf_node');
         }
-	    if(this.data.checked){
+	    if(this.data.state && this.data.state.checked){
+		    this.data.checked=this.data.state.checked
 		    this.el.find('.node-check').removeClass('unchecked_box').addClass('checked_box');
 	    } else {
 		    this.el.find('.node-check').removeClass('checked_box').addClass('unchecked_box');
@@ -136,7 +137,6 @@ let config = {
 
 export default class TreeNode extends Component {
     constructor(data,callback){
-    	console.log('1111111');
     	console.log(data);
         data.callback = callback;
         super(config,data,callback);
