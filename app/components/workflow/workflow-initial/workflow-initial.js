@@ -107,7 +107,6 @@ let config = {
                 // console.log(this.data.allUsersInfo);
                 for(let key in data['updateuser2focususer']) {
                     this.data.idArr = data['updateuser2focususer'][key];
-                    this.data.htmlStr = [];
                     for(let i of this.data.idArr) {
                         this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
                         this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];

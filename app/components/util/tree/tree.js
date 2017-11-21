@@ -61,6 +61,10 @@ let config = {
             this.el.addClass(this.data.options.treeName);
         }
         this.data.treeNodes.forEach(node => {
+        	console.log('tree');
+        	console.log('tree');
+        	console.log('tree');
+        	console.log(node);
             let data = node;
             data['options']=this.data.options;
             data['indent']=this.data.indent;
