@@ -144,13 +144,13 @@ let config = {
             },this.data.carouselInterval * 1000)
         },
         resetViewArrayNo(id){
-            console.log(this.data.viewArr);
-            for ( let item of this.data.viewArr){
-                console.log(index,item);
-
-
-
-            }
+            // console.log(this.data.viewArr);
+            // for ( let [index,item] of this.data.viewArr){
+            //     console.log(index,item);
+            //
+            //
+            //
+            // }
         }
     },
     afterRender:function(){
