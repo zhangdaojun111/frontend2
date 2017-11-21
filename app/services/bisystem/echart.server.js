@@ -83,10 +83,7 @@ export class EchartsService {
         let firstMinYnum = [];
         let secondMaxYnum = [];
         let secondMinYnum = [];
-        let firstMaxTextYnum = [];
-        let secondMaxTextYnum = [];
         let maxXnum = [];
-        let maxYTextNum; // y轴数字toSting().length最大字数
         let isStack = false; // 判断是否堆叠
 
         yAxis.forEach((y,i) => {
@@ -217,6 +214,7 @@ export class EchartsService {
                 inverse: false,
                 scale: true,
                 splitNumber: splitNumber,
+                // min:-10,
                 // max: secondMax,
                 // min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
                 // interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),

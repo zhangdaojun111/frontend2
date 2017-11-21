@@ -230,6 +230,8 @@ let config = {
         formData: '',
         //是否加载cache数据
         cacheData: true,
+        // 父表按钮类型
+        parent_btnType: '',
     },
     //生成的表头数据
     columnDefs: [],
@@ -2967,7 +2969,7 @@ let config = {
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
                 if(this.actions.haveTempId(data.data)){
-                    msgBox.showTips('审批中的数据不支持查看源数据。')
+                    msgBox.alert('审批中的数据不支持查看源数据。')
                     return;
                 }
                 console.log( "内置相关穿透" )
@@ -2996,10 +2998,14 @@ let config = {
                     form_id:'',
                     table_id:this.data.tableId,
                     is_view:1,
-                    parent_table_id:'',
-                    parent_real_id:'',
-                    parent_temp_id:'',
+                    parent_table_id:this.data.parentTableId,
+                    parent_real_id:this.data.parentRealId,
+                    parent_temp_id:this.data.parentTempId,
                     real_id: data['data']['_id']
+                }
+                if(data['data'].temp_id){
+                    json['temp_id'] = data['data'].temp_id;
+                    delete json['real_id'];
                 }
 
                 FormService.getDynamicData( json ).then( res=>{
@@ -3010,8 +3016,7 @@ let config = {
                         parentTempId: res.data.temp_id.value,
                         tableType: '',
                         viewMode: 'viewFromCorrespondence',
-                        rowId: data.data._id,
-                        parentRealId: data.data._id
+                        rowId: data.data._id
                     }
                     let url = dgcService.returnIframeUrl( '/datagrid/source_data_grid/',obj );
                     let winTitle = data.colDef.tableName + '->' + obj.tableName;
@@ -3022,7 +3027,7 @@ let config = {
             //统计
             if( fieldTypeService.countTable(data.colDef.dinput_type,data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
                 // if(this.actions.haveTempId(data.data)){
-                //     msgBox.showTips('无法查看穿透数据')
+                //     msgBox.alert('审批中的数据不支持查看源数据。')
                 //     return;
                 // }
                 console.log( '统计穿透' )
@@ -3048,7 +3053,7 @@ let config = {
             // 子表
             if( fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount" ){
                 // if(this.actions.haveTempId(data.data)){
-                //     msgBox.showTips('无法查看穿透数据')
+                //     msgBox.alert('审批中的数据不支持查看源数据。')
                 //     return;
                 // }
                 console.log( "子表穿透" )
@@ -3186,7 +3191,7 @@ let config = {
             if( data.event.srcElement.className == 'gridView' ){
                 console.log( '查看' )
                 let btnType = 'view';
-                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.view == 0 || this.actions.viewOrEditPerm( 'view' ) ){
+                if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.view == 0 || this.actions.viewOrEditPerm( 'view' ) || this.data.parent_btnType == 'none' ){
                     btnType = 'none';
                 }
                 let obj = {
@@ -3296,7 +3301,8 @@ let config = {
                     rowId:$event.data['_id'],
                     table_id:this.data.tableId,
                     frontendAddress:r['frontend_addr'],
-                    row_op_id:r['row_op_id']
+                    row_op_id:r['row_op_id'],
+                    name:r['name'],
                 });
             }else if( r['pyscript_addr'] !== '' ){
                 //执行后端操作
@@ -3328,7 +3334,7 @@ let config = {
 
             let json = {};
             let url = '/iframe/rowOperation/';
-            let winTitle = '';
+            let winTitle = data.name;
             let w = 1400,h = 800
             switch( fun ){
                 //行级操作-BI
@@ -3343,7 +3349,7 @@ let config = {
                     console.log( '行级BI参数' )
                     console.log( json )
                     url = '/iframe/rowOperation/?operationType=bi';
-                    winTitle = '行级BI';
+                    // winTitle = '行级BI';
                     break;
                 }
                 case 'sexecute':{
@@ -3360,7 +3366,7 @@ let config = {
                     console.log( '执行操作参数' )
                     console.log( json )
                     url = '/iframe/rowOperation/?operationType=excute';
-                    winTitle = '执行操作';
+                    // winTitle = '执行操作';
                     break;
                 }
                 case 'cexecute':{
@@ -3377,7 +3383,7 @@ let config = {
                     console.log( '执行操作参数' )
                     console.log( json )
                     url = '/iframe/rowOperation/?operationType=excute';
-                    winTitle = '执行操作';
+                    // winTitle = '执行操作';
                     break;
                 }
             }
@@ -3413,7 +3419,7 @@ let config = {
                 form_id:this.data.formId,
                 flow_id:data.data.flow_id || '',
             };
-            if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.cell_edit == 0 ){
+            if( this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.view == 0 || this.data.parent_btnType == 'none' ){
                 obj.btnType = 'none';
             }
             let url = dgcService.returnIframeUrl( '/iframe/addWf/',obj );
