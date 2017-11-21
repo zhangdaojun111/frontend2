@@ -39,6 +39,7 @@ import '../../../../assets/scss/theme/orange.scss';
 import {UserInfoService} from "../../../../services/main/userInfoService"
 
 
+
 let config = {
     template: template,
     data: {
