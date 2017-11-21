@@ -13,8 +13,8 @@ let config={
 
     },
     afterRender(){
-        // console.log(this.data);
         Mediator.publish('workflow:pubCheck',this.data);
+        let _this=this;
         this.el.on('click','.checkbox',function(){
             if(!$(this).hasClass('checked')){
                 $(this).addClass('checked');
@@ -23,6 +23,9 @@ let config={
                     name:this.getAttribute('name')
                 });
             }else{
+            	if(_this.data.preventClick.indexOf(this.getAttribute('value')) != -1){
+            		return;
+	            }
                 $(this).removeClass('checked');
                 Mediator.publish('workflow:pubUncheckSingle',this.getAttribute('value'));
             }

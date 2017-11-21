@@ -50,8 +50,8 @@ let config = {
                 this.data.checked = !this.data.checked;
             }
             if(this.data.checked){
-                this.el.find('.node-check').removeClass('unchecked_box').addClass('checked_box');
-                this.data.options.callback('select',this.data);
+	            this.el.find('.node-check').removeClass('unchecked_box').addClass('checked_box');
+	            this.data.options.callback('select',this.data);
             } else {
                 this.el.find('.node-check').removeClass('checked_box').addClass('unchecked_box');
                 this.data.options.callback('unselect',this.data);
@@ -131,11 +131,18 @@ let config = {
         } else {
             this.el.find('.icon').addClass('leaf_node');
         }
+	    if(this.data.state && this.data.state.checked){
+		    this.data.checked=this.data.state.checked
+		    this.el.find('.node-check').removeClass('unchecked_box').addClass('checked_box');
+	    } else {
+		    this.el.find('.node-check').removeClass('checked_box').addClass('unchecked_box');
+	    }
     }
 }
 
 export default class TreeNode extends Component {
     constructor(data,callback){
+    	console.log(data);
         data.callback = callback;
         super(config,data,callback);
     }
