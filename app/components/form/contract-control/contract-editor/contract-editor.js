@@ -443,9 +443,15 @@ export const contractEditorConfig = {
         editContract: function (k2v) {
             this.el.find('.contract-template-anchor').find('span').attr('contenteditable', 'true');
             this.el.find('.contract-template-anchor').find('span').on('input', _.debounce(event => {
+                let changedColor = 'pink';
                 let changedValue = event.target.textContent;
                 let title = event.target.title;
                 k2v["##"+title+"##"]=changedValue;
+                if(changedValue == ''){
+                    changedValue = ' ';
+                    $(event.target).text(changedValue);
+                    changedColor = 'yellow'
+                }
                 let eles = this.el.find('span[title="'+title+'"]');
                 for(let i=0;i<eles.length;i++){
                     if(eles[i] != event.target){//绕开本span，如果本span改变，则光标会挪到首位
@@ -453,7 +459,7 @@ export const contractEditorConfig = {
                     }
                 }
                 this.data.local_data[this.data['current_tab']]['content']=this.el.find('.contract-template-anchor').html();
-                this.el.find('span[title="'+title+'"]').css('background-color','pink');
+                this.el.find('span[title="'+title+'"]').css('background-color',changedColor);
             },500));
         },
         closeMe: function () {
