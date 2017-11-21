@@ -1,6 +1,8 @@
 .cells{
     &.prepare{
-        display:none;
+        position: absolute ;
+        top: 0;
+        left: 0;
         z-index: 0;
         &.animate-fade-in{
             animation-name: cellsFadeIn;
@@ -14,8 +16,10 @@
         }
     }
     &.current{
-        display:block;
         z-index: 5;
+        position: absolute;
+        top: 0;
+        left: 0;
         &.animate-fade-out{
             animation-name: cellsFadeOut;
             animation-duration: 1.5s;

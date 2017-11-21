@@ -58,7 +58,6 @@ let config = {
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
             }
-
         },
         /**
          * 瀑布流方式加载cell chart data 数据(移动端的处理)
@@ -147,7 +146,8 @@ let config = {
                     delete this.data.cells[componentId];
                 },
             });
-            this.append(cell, this.el.find('.current'));
+            let $wrap = this.el.find('.current');
+            this.append(cell, $wrap);
             return cell;
         },
 
@@ -257,18 +257,18 @@ let config = {
         /**
          * 执行一次轮播动画，执行完后交换两个cells的身份（current/prepare）
          */
-        async doCarouselAnimate(viewId) {
+         doCarouselAnimate(viewId) {
             this.data.currentViewId = viewId;
             //开始执行动画
             let current = this.el.find('.current').addClass('animate-fade-out');
             let prepare = this.el.find('.prepare').addClass('animate-fade-in');
-            //根据viewId加载数据
-            await this.actions.getCellLayout();
             //动画执行1.5S完成,交换div身份
             let that = this;
-            setTimeout(function () {
+            setTimeout(async function () {
                 current.attr('class','prepare cells');
                 prepare.attr('class','current cells');
+                //根据viewId加载数据
+                await that.actions.getCellLayout();
                 //开始渲染新current的数据,新数据渲染完后回调delayCarousel
                 if (that.data) {
                     let windowSize = $(window).width();
@@ -278,6 +278,9 @@ let config = {
                         that.actions.waterfallLoadingCellData({top: that.el.scrollTop()});
                     }
                 }
+                //清除prepare画布上的内容
+                that.el.find('.prepare').find('div').remove('[class != "cell ui-draggable ui-draggable-handle ui-resizable"]');
+
             },1500)
         }
     },
