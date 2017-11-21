@@ -88,7 +88,6 @@ let config = {
         	for(let key in this.data.focusUsers){
         		delete data[key];
 	        }
-	        return;
             Mediator.publish('workflow:submit', data);
         });
         Mediator.subscribe('workflow:choose', (res) => {
