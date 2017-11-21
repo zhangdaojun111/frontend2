@@ -84,7 +84,11 @@ let config = {
             this.el.find('#workflow-form').hide();
         });
         this.el.on('click', '#submitWorkflow', () => {
-            Mediator.publish('workflow:submit', this.data.user);
+        	let data=_.defaultsDeep({},this.data.user);
+        	for(let key in this.data.focusUsers){
+        		delete data[key];
+	        }
+            Mediator.publish('workflow:submit', data);
         });
         Mediator.subscribe('workflow:choose', (res) => {
             this.data.allowagrid = true;
@@ -99,10 +103,10 @@ let config = {
             workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
                 this.data.htmlStr = [];
                 this.data.allUsersInfo = res.rows;
+	            this.data.focusUsers={};
                 // console.log(this.data.allUsersInfo);
                 for(let key in data['updateuser2focususer']) {
                     this.data.idArr = data['updateuser2focususer'][key];
-                    this.data.htmlStr = [];
                     for(let i of this.data.idArr) {
                         this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
                         this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];
@@ -112,7 +116,6 @@ let config = {
                 this.el.find('#addFollowerList').html(this.data.htmlStr);
                 this.data.user = this.data.focusUsers;
             })
-
         });
         this.el.on('click', '#addFollower', () => {
             // this.data.user = this.data.focusUsers;
@@ -122,7 +125,8 @@ let config = {
                 title: `添加关注人`,
                 modal: true
             },{
-                users:this.data.user
+                users:this.data.user,
+	            defaultFocus:this.data.focusUsers,
             }).then(res => {
                 if (!res.onlyclose) {
                     this.data.htmlStr = [];
