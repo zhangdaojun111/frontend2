@@ -214,6 +214,7 @@ let config = {
         statusSelect: function( name ){
             console.log('---------用印');
             console.log(name);
+            console.log(this.data.countObject);
             console.log(this.data.countObject[ name ]);
             console.log(!this.data.countObject[ name ]);
             console.log('---------用印-------end');
@@ -275,7 +276,6 @@ let config = {
             })
             this.el.find('div.setBorderColor').each((i,e) => {
                 if(e.title.indexOf('用印') != -1){
-                    console.log(111)
                     let borderColor = this.actions.statusSelect(e.title);
                     $(e).css('borderColor',borderColor)
                 }else{
@@ -409,7 +409,6 @@ let config = {
         console.log('====this is lifecycle====');
         this.showLoading()
         PMAPI.getIframeParams(window.config.key).then((res) => {
-            console.log(res);
             this.data.lifeCycleData = res.data.lifeCycleData;
             this.data.cycleTitle = res.data.cycleTitle;
             this.data.flow_node = res.data.flow_node;
