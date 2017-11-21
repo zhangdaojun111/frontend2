@@ -52,12 +52,13 @@ let config = {
     ],
     actions: {
         /**
-         * 转换head的标签，加载第一个canvas
+         * 通过鼠标点击执行视图切换
          * @param viewId
          */
         switchViewId: function (viewId) {
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
+            this.actions.resetViewArrayNo(viewId);
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 if(this.data.firstCanvas === true){
@@ -91,7 +92,7 @@ let config = {
                     msgbox.showLoadingRoot();
                     if (Array.isArray(this.data.views) && this.data.views.length > 0) {
                         const res = await this.data.cells.actions.cellsDataIsFinish();
-                    };
+                    }
                     if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
                         $('.bi-container').css({'width': 'auto', 'height': 'auto'});
                     }
@@ -121,35 +122,43 @@ let config = {
          */
         checkCanCarousel(){
             if(this.data.carouselInterval > 0 && this.data.operateInterval > 0 && window.config.bi_user === 'client'){
-                let temp = this.data.viewNo++;
+                let temp = this.data.viewNo + 1;
                 if(temp === this.data.viewArr.length){
                     this.data.viewNo = 0;
                 }else{
                     this.data.viewNo = temp;
                 }
                 this.data.currentViewId = this.data.viewArr[this.data.viewNo].id;
-                console.log(this.data.currentViewId);
-                this.actions.delayCarousel();
+                this.actions.delayCarousel(this.data.currentViewId);
             }
         },
         /**
          * 轮播执行入口，调用1次，执行1次轮播
          */
-        delayCarousel:function () {
+        delayCarousel:function (id) {
             let that = this;
             //鼠标点击标签后，需要重置timer
             this.data.tiemr = window.setTimeout(function () {
-                that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
-                that.data.cells.actions.doCarouselAnimate(that.data.currentViewId);
+                that.data.headerComponents.data.menus[id].actions.focus();
+                that.data.cells.actions.doCarouselAnimate(id);
             },this.data.carouselInterval * 1000)
         },
+        resetViewArrayNo(id){
+            console.log(this.data.viewArr);
+            for ( let item of this.data.viewArr){
+                console.log(index,item);
+
+
+
+            }
+        }
     },
     afterRender:function(){
         if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
             let w = $(self.frameElement).closest('.iframes').width();
             let h = $(self.frameElement).closest('.iframes').height();
             $('.bi-container').css({'width': w, 'height': h});
-        };
+        }
 
         //根据判断是否单行模式加载header
         this.actions.headLoad();
