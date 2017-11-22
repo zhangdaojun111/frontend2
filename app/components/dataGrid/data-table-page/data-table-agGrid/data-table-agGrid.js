@@ -1036,7 +1036,6 @@ let config = {
             }
             if(res[0].is_lifecycle == 1){
                 this.data.lifecycleGrid = true;
-                this.actions.setLifeCycleNode();
             }
             dgcService.setPreference( res[0],this.data );
             this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
@@ -1232,9 +1231,19 @@ let config = {
             }
             Promise.all(post_arr).then((res)=> {
                 if(this.data.lifecycleGrid){
-                    this.actions.getFlowNode(res[0].rows).then(resp=>{
-                        res[0].rows = resp.rows;
-                    })
+                    this.actions.setLifeCycleNode().then(json=>{
+                        if(json){
+                            this.actions.getFlowNode(res[0].rows).then(resp=>{
+                                let d = {
+                                    rowData: resp.rows,
+                                    footerData: []
+                                }
+                                //赋值
+                                this.agGrid.actions.setGridData(d);
+                            })
+                        }
+                    });
+
                 }
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout( ()=>{
@@ -1304,6 +1313,7 @@ let config = {
                     }
                 }
             }
+            return Promise.resolve(true)
         },
         //生命周期节点信息
         async getFlowNode(rowData){
@@ -1317,7 +1327,7 @@ let config = {
                 for( let j = 0 ; j < resp.rows.length ; j++ ) {
                     if( !resp.define_infos[resp.rows[j]._id] ){
                         resp.rows[ j ][ this.data.flow_node[i].dfield ] = resp.rows[ j ][ this.data.flow_node[i].dfield ] == '' ? '' : '结束';
-                    } else if( !resp.define_infos[ resp.rows[ j ]._id ][ this.flow_node[i].dfield ] ) {
+                    } else if( !resp.define_infos[ resp.rows[ j ]._id ][ this.data.flow_node[i].dfield ] ) {
                         resp.rows[ j ][ this.data.flow_node[i].dfield ] = resp.rows[ j ][ this.data.flow_node[i].dfield ] == '' ? '' : '结束';
                     }
                 }

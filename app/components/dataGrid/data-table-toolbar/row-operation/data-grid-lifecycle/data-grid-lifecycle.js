@@ -138,6 +138,7 @@ let config = {
                             }
                         }
                         this.actions.setStyles();
+                        console.log('countObject',this.data.countObject)
                         this.hideLoading();
                     }else{
                         this.actions.askForStatus(i + 1, data, cycleObj);
@@ -212,12 +213,6 @@ let config = {
         },
         //选择用印边框颜色
         statusSelect: function( name ){
-            console.log('---------用印');
-            console.log(name);
-            console.log(this.data.countObject);
-            console.log(this.data.countObject[ name ]);
-            console.log(!this.data.countObject[ name ]);
-            console.log('---------用印-------end');
             if( this.data.countObject[ name ]) {
                 if( this.data.countObject[ name ].status == "是" ){
                     return 'rgba(14, 122, 239, 1)';
@@ -252,6 +247,8 @@ let config = {
                     is_view: 1,
                     form_id: res.data.form_id,
                     flow_id: this.data.countObject[name]['flowId'] || '',
+                    record_id: this.data.countObject[name]['recordId'] || '',
+                    temp_id: this.data.countObject[name]['wf_table_id3'] || ''
                 };
                 let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
                 let title = '查看'
@@ -308,11 +305,11 @@ let config = {
             });
             //剩余天数
             if(this.actions.imgSelect('协议') == 1 ) {
-                let days = this.data.countObject['协议'].time || 5;
+                let days = this.data.countObject['协议'].time || 0;
                 this.el.find('#u76').append(`<p class="tipsP">5天（当前节点<span>${days}</span>天）</p>`)
             }
             if(this.actions.imgSelect('用印状态') == 1 ) {
-                let days = this.data.countObject['用印状态'].time || 5;
+                let days = this.data.countObject['用印状态'].time || 0;
                 this.el.find('#u78').append(`<p class="tipsP">5天（当前节点<span>${days}</span>天）</p>`)
             }
             //标题
