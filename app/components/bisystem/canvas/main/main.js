@@ -143,14 +143,17 @@ let config = {
                 that.data.cells.actions.doCarouselAnimate(id);
             },this.data.carouselInterval * 1000)
         },
+        /**
+         * 鼠标点击切换视图后，重置viewNo，保证下次轮播顺序正确
+         * @param id
+         */
         resetViewArrayNo(id){
-            // console.log(this.data.viewArr);
-            // for ( let [index,item] of this.data.viewArr){
-            //     console.log(index,item);
-            //
-            //
-            //
-            // }
+            console.log(id,this.data.viewArr);
+            for ( let k in this.data.viewArr){
+                if(this.data.viewArr[k].id = this.data.currentViewId){
+                   this.data.viewNo = k;
+                }
+            }
         }
     },
     afterRender:function(){
