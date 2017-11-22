@@ -128,16 +128,43 @@ const pie = {
                     // formatter: "{b} : \n {c}  ({d}%)",
                     formatter:function (param) {
                         let str = '';
-                        let name = param.data.name;
-                        if(name.length > 5){
-                            let str1 = name.substr(0,4);
-                            let str2 = name.substr(4);
-                            name = str1 + '\n' + str2;
+                        // let name = param.data.name;
+                        let name = 'sadssda rearaerae asdasdas dsdasd';
+                        //判断是英文名称还是中文名称，分别处理
+                        let reg = new RegExp("[\\u4E00-\\u9FFF]+","g");     //含有中文就按中文字符处理，否则按英文字符处理
+                        if(reg.test(name)){
+                            if(name.length > 8){
+                                let str1 = name.substr(0,8);
+                                let str2 = name.substr(8);
+                                name = str1 + '\n' + str2;
+                            }
+                            str += name + ' ' + ': ';
+
+                        }else{
+                            let space = 0;
+                            let flag = true;
+                            let i=1;
+                            while(flag){
+                                space = name.indexOf(' ',space + 1);
+                                if(space !== -1 && space >= 16*i){      //英文字符一行显示16个
+                                    let temp1 = name.substr(0,space);
+                                    let temp2 = name.substr(space);
+                                    name = temp1 + '\n' + temp2;
+                                    space++;
+                                    i++;
+                                }else if(space === -1){
+                                    flag = false;
+                                }
+                            }
+                            str += name + ' ' + ': ';
                         }
-                        str += name + ' ' + ': ';
                         str += '\n';
                         str += param.data.value + '\n';
                         str += param.percent + '%';
+
+
+
+
 
                         return str;
                     }
