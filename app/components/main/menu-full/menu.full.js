@@ -19,7 +19,7 @@ let config = {
         search: function (text) {
             this.data.text = text;
             this.data.listComp.forEach(comp=>{
-                comp.actions.filter(text);
+                comp.actions.filter(this.data.text);
             })
 
         },

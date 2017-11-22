@@ -218,7 +218,11 @@ let config = {
             });
         },
         isFilteredNode:function (input) {
-            return (this.data.label.indexOf(input) != -1 || this.data.name_py.indexOf(input)!=-1);
+            let inputWithoutSpace = input.replace(/\s/g, '');
+            return (this.data.label.indexOf(input) != -1
+                || this.data.label.indexOf(inputWithoutSpace) != -1
+                || this.data.name_py.indexOf(input)!=-1
+                || this.data.name_py.indexOf(inputWithoutSpace)!=-1);
         },
         filter: function (input,isParentFiltered,isSiblingsFiltered) {
             let isFiltered = false;
