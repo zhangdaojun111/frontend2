@@ -23,8 +23,7 @@ let config = {
         operateInterval:4,
         viewArr:window.config.bi_views,  //所有bi视图
         viewNo:0,   //记录当前视图在数组中的位置
-        timer:null, //记录即将执行的轮播动画
-        firstCanvas:true,   //第一次直接加载cells，后续通过轮播动画更换
+        firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
     },
     binds: [
         // 编辑模式
@@ -56,20 +55,27 @@ let config = {
          * @param viewId
          */
         switchViewId: function (viewId) {
+            let that = this;
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
             this.actions.resetViewArrayNo(viewId);
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
-                if(this.data.firstCanvas === true){
+                if(this.data.firstViews === true){
                     this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                     this.data.cells.render(this.el.find('.cells-container'));
-                    this.data.firstCanvas = false;
+                    this.data.firstViews = false;
+                    //判断是否执行轮播
+                    this.actions.checkCanCarousel();
                 }else {
                     //后续鼠标点击使用轮播动画切换视图,并重置timer
                     this.data.cells.actions.doCarouselAnimate(this.data.currentViewId);
+                    console.log('ssssssssssssssssssssssssssssssssssssss',this.data.timer);
+                    debugger;
                     window.clearTimeout(this.data.timer);
-                    this.actions.checkCanCarousel();
+                    setTimeout(function () {
+                        that.actions.checkCanCarousel();
+                    },500)
                 }
             }
         },
@@ -128,7 +134,6 @@ let config = {
                 }else{
                     this.data.viewNo = temp;
                 }
-                console.log(this.data.viewNo,this.data.viewArr[this.data.viewNo]);
                 this.data.currentViewId = this.data.viewArr[this.data.viewNo].id;
                 this.actions.delayCarousel(this.data.currentViewId);
             }
@@ -139,9 +144,12 @@ let config = {
         delayCarousel:function (id) {
             let that = this;
             //鼠标点击标签后，需要重置timer
-            this.data.tiemr = window.setTimeout(function () {
+            this.data.timer = window.setTimeout(function () {
                 that.data.headerComponents.data.menus[id].actions.focus();
                 that.data.cells.actions.doCarouselAnimate(id);
+                setTimeout(function () {
+                    that.actions.checkCanCarousel();
+                },500)
             },this.data.carouselInterval * 1000)
         },
         /**
@@ -149,10 +157,9 @@ let config = {
          * @param id
          */
         resetViewArrayNo(id){
-            console.log('do reset')
             for ( let k in this.data.viewArr){
-                if(this.data.viewArr[k].id === id){
-                    console.log(k,this.data.viewArr);
+                console.log(k,this.data.viewArr[k]['id'],id);
+                if(this.data.viewArr[k]['id'] == id){
                    this.data.viewNo = k;
                 }
             }
@@ -168,8 +175,7 @@ let config = {
         //根据判断是否单行模式加载header
         this.actions.headLoad();
 
-        //判断是否执行轮播
-        this.actions.checkCanCarousel();
+
     },
     beforeDestory:function () {}
 };

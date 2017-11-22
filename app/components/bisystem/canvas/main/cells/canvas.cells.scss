@@ -6,7 +6,7 @@
         z-index: 0;
         &.animate-fade-in{
             animation-name: cellsFadeIn;
-            animation-duration: 1.5s;
+            animation-duration: 0.5s;
             animation-fill-mode: forwards;
             animation-timing-function: ease-in-out;
         }
@@ -22,7 +22,7 @@
         left: 0;
         &.animate-fade-out{
             animation-name: cellsFadeOut;
-            animation-duration: 1.5s;
+            animation-duration: 0.5s;
             animation-fill-mode: forwards;
             animation-timing-function: ease-in-out;
         }

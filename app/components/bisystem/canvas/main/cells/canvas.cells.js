@@ -13,6 +13,7 @@ let config = {
         currentViewId: '', // 当前画布块视图id
         cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
+        firstView:true,
     },
     actions: {
         /**
@@ -128,7 +129,6 @@ let config = {
          */
         makeCell(data) {
             let cell = new CanvasCellComponent(data,{
-
                 onDrag: (componentId) => {
                     let comp = this.data.cells[componentId];
                     this.data.cellMaxZindex++;
@@ -146,7 +146,12 @@ let config = {
                     delete this.data.cells[componentId];
                 },
             });
-            let $wrap = this.el.find('.current');
+            let $wrap;
+            if(this.data.firstView === true){
+                $wrap = this.el.find('.current');
+            }else{
+                $wrap = this.el.find('.prepare');
+            }
             this.append(cell, $wrap);
             return cell;
         },
@@ -257,9 +262,19 @@ let config = {
         /**
          * 执行一次轮播动画，执行完后交换两个cells的身份（current/prepare）
          */
-         doCarouselAnimate(viewId) {
+        async doCarouselAnimate(viewId) {
+            this.data.firstView = false;
             this.data.currentViewId = viewId;
             //开始执行动画
+            await this.actions.getCellLayout();
+            if (this.data) {
+                let windowSize = $(window).width();
+                if (windowSize && windowSize <= 960) {
+                    this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
+                } else {
+                    this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+                }
+            }
             let current = this.el.find('.current').addClass('animate-fade-out');
             let prepare = this.el.find('.prepare').addClass('animate-fade-in');
             //动画执行1.5S完成,交换div身份
@@ -268,16 +283,16 @@ let config = {
                 current.attr('class','prepare cells');
                 prepare.attr('class','current cells');
                 //根据viewId加载数据
-                await that.actions.getCellLayout();
+                // await that.actions.getCellLayout();
                 //开始渲染新current的数据,新数据渲染完后回调delayCarousel
-                if (that.data) {
-                    let windowSize = $(window).width();
-                    if (windowSize && windowSize <= 960) {
-                        that.actions.phoneWaterfallLoadingCellData({top: that.el.scrollTop()});
-                    } else {
-                        that.actions.waterfallLoadingCellData({top: that.el.scrollTop()});
-                    }
-                }
+                // if (that.data) {
+                //     let windowSize = $(window).width();
+                //     if (windowSize && windowSize <= 960) {
+                //         that.actions.phoneWaterfallLoadingCellData({top: that.el.scrollTop()});
+                //     } else {
+                //         that.actions.waterfallLoadingCellData({top: that.el.scrollTop()});
+                //     }
+                // }
                 //清除prepare画布上的内容
                 that.el.find('.prepare').find('div').remove('[class != "cell ui-draggable ui-draggable-handle ui-resizable"]');
 
