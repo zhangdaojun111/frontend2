@@ -218,7 +218,7 @@ let config = {
                     xOld: val.is_deep == 0 ? {} : userMode === 'client' ? val.deep['xOld'] : {},
                     row_id: 0,
                     deep_info: deep_info,
-                    sort: val.sort
+                    sort: window.config.bi_user === 'client' ? val.sort : {}
                 });
             });
 
