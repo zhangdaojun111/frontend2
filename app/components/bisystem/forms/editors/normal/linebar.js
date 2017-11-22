@@ -63,12 +63,10 @@ let config = {
                         return {value: JSON.stringify(item), name: item.name}
                     });
                     this.formItems['countColumn'].setList(fields);
-                    this.formItems['countColumn'].el.show();//required: true,
-                    this.data.countColumn.required = false;
+                    this.formItems['countColumn'].el.show();
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
-                    this.data.countColumn.required = true;
                 }
 
                 let res = await ChartFormService.getChartField(table.id);
@@ -231,10 +229,9 @@ let config = {
             }
 
             let pass = true; // 判断表单是否验证通过
-            let that = this;
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
-                    if(that.data.countColumn.required){
+                    if(window.config.query_mark !== 'single'){
                         continue;
                     }
                     let isValid = this.formItems[key].valid();
@@ -310,9 +307,6 @@ let config = {
         },
     },
     data: {
-        countColumn:{
-            required: true
-        },
         options: [
             chartName,
             {

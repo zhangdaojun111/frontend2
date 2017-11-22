@@ -235,6 +235,9 @@ let config = {
             if(this.formItems){
                 for (let key of Object.keys(this.formItems)) {
                     if (this.formItems[key].data.rules) {
+                        if(window.config.query_mark !== 'single'){
+                            continue;
+                        }
                         let isValid = this.formItems[key].valid();
                         if (!isValid) {
                             pass = false;

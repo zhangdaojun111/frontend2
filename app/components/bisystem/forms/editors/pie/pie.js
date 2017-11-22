@@ -153,6 +153,9 @@ let config = {
                     if(key == 'yAxis' && chart.pieType.value == 1){
                         continue;
                     }
+                    if(window.config.query_mark !== 'single'){
+                        continue;
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
