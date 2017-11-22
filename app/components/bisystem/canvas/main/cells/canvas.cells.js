@@ -12,6 +12,7 @@ let config = {
         currentViewId: '', // 当前画布块视图id
         cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
+        isPdf:false,
     },
     actions: {
         /**
@@ -253,6 +254,18 @@ let config = {
                 }
             });
         },
+        loadingComplete:function () {
+            let layouts = [];
+            let cells = [];
+            Object.keys(this.data.cells).forEach(key => {
+                layouts.push(this.data.cells[key].data.layout);
+                cells.push(this.data.cells[key]);
+            });
+            // 获取画布块的chart数据
+            if (layouts.length > 0) {
+                this.actions.getCellChartData(layouts,cells);
+            }
+        }
 
     },
     binds: [
@@ -276,11 +289,15 @@ let config = {
         await this.actions.getCellLayout();
 
         if (this.data) {
-            let windowSize = $(window).width();
-            if (windowSize && windowSize <= 960) {
-                this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
-            } else {
-                this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+            if(this.data.isPdf){
+                this.actions.loadingComplete();
+            }else{
+                let windowSize = $(window).width();
+                if (windowSize && windowSize <= 960) {
+                    this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
+                } else {
+                    this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+                }
             }
         }
     },

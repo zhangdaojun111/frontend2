@@ -56,8 +56,10 @@ let config = {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                 this.data.cells.render(this.el.find('.cells-container'));
+                if(window.location.href.indexOf('pdf') !== -1){
+                    this.data.cells.data.isPdf = true;
+                }
             }
-
         },
         /**
          * 加载头部
