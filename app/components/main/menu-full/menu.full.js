@@ -96,6 +96,7 @@ let config = {
          */
         renderMenuList: function () {
             this.destroyChildren();
+            this.data.listComp = [];
             this.data.list.forEach((data) => {
                 let component = new FullMenuItem(_.defaultsDeep({}, data, {
                     root: true,
