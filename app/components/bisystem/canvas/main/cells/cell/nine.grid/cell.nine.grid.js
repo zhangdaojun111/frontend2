@@ -14,6 +14,7 @@ handlebars.registerHelper('enumerateyAxis', function(yAxis,index, options) {
 handlebars.registerHelper('enumerateLegend', function(grids,index, options) {
     let items = grids.join(',');
     let arr = items.split(',');
+    console.log(index);
     return arr[index]
 });
 
@@ -27,7 +28,9 @@ let config = {
         legend: []
     },
     actions: {},
-    afterRender() {},
+    afterRender() {
+        console.log(this.data);
+    },
     firstAfterRender() {}
 };
 
