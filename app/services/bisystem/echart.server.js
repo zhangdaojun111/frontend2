@@ -183,17 +183,16 @@ export class EchartsService {
         } else if (cellOption.double === 1) {
             const splitNumber = 5;
             if(!isStack) {
-                linebarOption['yAxis'][0]['max'] = firstMax;
+                linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
             }
-            linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
+            // linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
                 inverse: false,
-                scale: true,
                 splitNumber: splitNumber,
-                max: secondMax,
+                max: secondMax > 0 ? secondMax : 0,
                 min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
-                interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
+                // interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
                 axisLabel: {
                     inside: false,
                     formatter: function(value,index) {
@@ -311,6 +310,8 @@ export class EchartsService {
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
+        console.log('---------------');
+        console.log(linebarOption);
         return linebarOption;
     }
 

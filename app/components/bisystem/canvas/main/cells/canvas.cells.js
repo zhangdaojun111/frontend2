@@ -274,7 +274,7 @@ let config = {
     async afterRender() {
         // 获取画布块布局信息
         await this.actions.getCellLayout();
-
+        // 瀑布流加载cellchart 数据
         if (this.data) {
             let windowSize = $(window).width();
             if (windowSize && windowSize <= 960) {
