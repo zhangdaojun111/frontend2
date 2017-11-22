@@ -1938,6 +1938,9 @@ let config = {
 						this.data.childComponent[data[key].dfield] = textArea;
 						break;
 					case 'Readonly':
+						if(this.data.tempId){
+							data[key].canNotOpen=false;
+						}
 						let readonly = new Readonly(data[key], actions);
 						readonly.render(single);
 						this.data.childComponent[data[key].dfield] = readonly;
