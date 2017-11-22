@@ -86,8 +86,11 @@ export class EchartsService {
         let isStack = false; // 判断是否堆叠
 
         yAxis.forEach((y,i) => {
-           isStack = cellOption.yAxis[i] && cellOption.yAxis[i]['group'] ? true : false;
 
+           // 判断是否是堆叠情况
+           if (cellOption.yAxis[i] && cellOption.yAxis[i]['group']) {
+               isStack = true;
+           }
             legend.push(y[nameType]);
             if (nameType === 'new_name') {
                 if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
