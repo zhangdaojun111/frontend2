@@ -128,8 +128,7 @@ const pie = {
                     // formatter: "{b} : \n {c}  ({d}%)",
                     formatter:function (param) {
                         let str = '';
-                        // let name = param.data.name;
-                        let name = 'sadssda rearaerae asdasdas dsdasd';
+                        let name = param.data.name;
                         //判断是英文名称还是中文名称，分别处理
                         let reg = new RegExp("[\\u4E00-\\u9FFF]+","g");     //含有中文就按中文字符处理，否则按英文字符处理
                         if(reg.test(name)){
