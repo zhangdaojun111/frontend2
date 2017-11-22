@@ -14,7 +14,6 @@ handlebars.registerHelper('enumerateyAxis', function(yAxis,index, options) {
 handlebars.registerHelper('enumerateLegend', function(grids,index, options) {
     let items = grids.join(',');
     let arr = items.split(',');
-    console.log(index);
     return arr[index]
 });
 
@@ -22,15 +21,13 @@ handlebars.registerHelper('enumerateLegend', function(grids,index, options) {
 let config = {
     template: template,
     data: {
-        yAxis: [], // 大盘 小盘 中盘
-        xAxis: [], // 价值 核心 成长
+        yAxis: [], // 大盘 中盘 小盘
+        xAxis: [], // 成长 价值 核心
         grids: [], // 九宫图数据
         legend: []
     },
     actions: {},
-    afterRender() {
-        console.log(this.data);
-    },
+    afterRender() {},
     firstAfterRender() {}
 };
 
