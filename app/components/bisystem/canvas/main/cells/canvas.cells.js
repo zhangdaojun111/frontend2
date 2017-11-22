@@ -20,13 +20,7 @@ let config = {
          * @param cells 需要渲染的画布块数据的组件
          */
         async getCellChartData(layouts,cells) {
-            let needQuery;
-            if(window.config.bi_user !== 'client'){
-                needQuery = 0;
-            }else{
-                needQuery = 1;
-            }
-            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1, cache:needQuery});
+            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1},false);
             if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
 
                 if (res['success'] == 0) {

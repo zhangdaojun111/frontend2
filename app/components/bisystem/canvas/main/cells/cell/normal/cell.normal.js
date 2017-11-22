@@ -44,7 +44,6 @@ let config = {
                 'layouts': [JSON.stringify(layouts)],
                 'query_type': 'deep',
                 'is_deep': 1,
-                'cache':0
             };
 
             const res = await this.normalChart.getDeepData(data);
@@ -241,7 +240,6 @@ let config = {
                     'layouts': [JSON.stringify(layouts)],
                     'query_type': 'deep',
                     'is_deep': window.config.bi_user === 'manager' ? 1 : 0,
-                    'cache':0
                 };
 
                 const res = await this.normalChart.getDeepData(data);
@@ -369,7 +367,6 @@ export class CellNormalComponent extends CellBaseComponent {
             'layouts': [JSON.stringify(layouts)],
             'query_type': 'deep',
             'is_deep': window.config.bi_user === 'manager' ? 1 : 0,
-            'cache':0
         };
         const res = await this.normalChart.getDeepData(data);
         if (res[0]['success'] === 1) {

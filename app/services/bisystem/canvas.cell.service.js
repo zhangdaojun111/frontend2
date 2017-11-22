@@ -49,8 +49,15 @@ export const canvasCellService = {
     /**
      * 获取画布块图表数据
      * @param charts = [chart_id1, chart_id2, chart_id3]
+     * @param cache 判断是否查询数据库
      */
-    async getCellChart(charts) {
+    async getCellChart(charts, cache = true) {
+        let url = '/bi/get_bi_data/?&canvasType=pc&row_id='+ window.config.row_id;
+        if(cache){
+            url += '&cache=1';
+        }else{
+            url += '&cache=0';
+        }
         const res = await HTTP.ajaxImmediately({
             url: '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id + '&bi_user=' + window.config.bi_user,
             data: charts,
