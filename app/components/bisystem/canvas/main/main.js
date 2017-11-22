@@ -122,12 +122,13 @@ let config = {
          */
         checkCanCarousel(){
             if(this.data.carouselInterval > 0 && this.data.operateInterval > 0 && window.config.bi_user === 'client'){
-                let temp = this.data.viewNo + 1;
+                let temp = Number(this.data.viewNo) + 1;
                 if(temp === this.data.viewArr.length){
                     this.data.viewNo = 0;
                 }else{
                     this.data.viewNo = temp;
                 }
+                console.log(this.data.viewNo,this.data.viewArr[this.data.viewNo]);
                 this.data.currentViewId = this.data.viewArr[this.data.viewNo].id;
                 this.actions.delayCarousel(this.data.currentViewId);
             }
@@ -148,9 +149,10 @@ let config = {
          * @param id
          */
         resetViewArrayNo(id){
-            console.log(id,this.data.viewArr);
+            console.log('do reset')
             for ( let k in this.data.viewArr){
-                if(this.data.viewArr[k].id = this.data.currentViewId){
+                if(this.data.viewArr[k].id === id){
+                    console.log(k,this.data.viewArr);
                    this.data.viewNo = k;
                 }
             }
