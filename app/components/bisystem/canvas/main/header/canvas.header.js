@@ -50,6 +50,7 @@ let config = {
          * @param menuId 选中的目录id
          */
         hideBrothers(menuId){
+            console.log('do click');
             this.findAllChildren().forEach((item)=>{
                 if(item.data.id == menuId){
                     item.el.find('a').addClass('active');

@@ -19,8 +19,8 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
-        carouselInterval:5,
-        operateInterval:5,
+        carouselInterval:10,
+        operateInterval:10,
         viewArr:window.config.bi_views,  //所有bi视图
         viewNo:0,   //记录当前视图在数组中的位置
         firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
@@ -49,20 +49,20 @@ let config = {
                 return false;
             }
         },
-        {
-            event:'mouseover',
-            selector:'.cells-container',
-            callback:function () {
-                window.clearTimeout(this.data.timer);
-            }
-        },
-        {
-            event:'mouseleave',
-            selector:'.cells-container',
-            callback:function () {
-                this.actions.checkCanCarousel();
-            }
-        },
+        // {
+        //     event:'mouseover',
+        //     selector:'.cells-container',
+        //     callback:function () {
+        //         window.clearTimeout(this.data.timer);
+        //     }
+        // },
+        // {
+        //     event:'mouseleave',
+        //     selector:'.cells-container',
+        //     callback:function () {
+        //         this.actions.checkCanCarousel();
+        //     }
+        // },
         // {
         //     event:'mousemove',
         //     selector:'.cells-container',
@@ -92,6 +92,7 @@ let config = {
          * @param viewId
          */
         switchViewId: function (viewId) {
+            console.log(viewId);
             let that = this;
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
