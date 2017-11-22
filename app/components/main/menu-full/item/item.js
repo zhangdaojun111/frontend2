@@ -218,7 +218,7 @@ let config = {
             });
         },
         isFilteredNode:function (input) {
-            return (this.data.label.indexOf(input) != -1);
+            return (this.data.label.indexOf(input) != -1 || this.data.name_py.indexOf(input)!=-1);
         },
         filter: function (input,isParentFiltered,isSiblingsFiltered) {
             let isFiltered = false;
@@ -226,7 +226,7 @@ let config = {
                 this.el.show();
                 this.el.find('> .childlist').hide();
             } else {
-                if(this.data.label.indexOf(input)!=-1){
+                if(this.actions.isFilteredNode(input)){
                     this.el.show();
                     this.el.find('> .childlist').show();
                     isFiltered = true;
