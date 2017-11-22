@@ -14,6 +14,7 @@ let config = {
         cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
         firstView:true,
+        animateDuration:1000  //动画执行时间1000ms
     },
     actions: {
         /**
@@ -296,7 +297,7 @@ let config = {
                 //清除prepare画布上的内容
                 that.el.find('.prepare').find('div').remove('[class != "cell ui-draggable ui-draggable-handle ui-resizable"]');
 
-            },1500)
+            },this.data.animateDuration)
         }
     },
     binds: [

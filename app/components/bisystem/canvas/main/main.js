@@ -19,11 +19,12 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
-        carouselInterval:3,
-        operateInterval:4,
+        carouselInterval:5,
+        operateInterval:5,
         viewArr:window.config.bi_views,  //所有bi视图
         viewNo:0,   //记录当前视图在数组中的位置
         firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
+        animateTime:1000,  //动画执行时间长度（ms）
     },
     binds: [
         // 编辑模式
@@ -48,6 +49,42 @@ let config = {
                 return false;
             }
         },
+        {
+            event:'mouseover',
+            selector:'.cells-container',
+            callback:function () {
+                window.clearTimeout(this.data.timer);
+            }
+        },
+        {
+            event:'mouseleave',
+            selector:'.cells-container',
+            callback:function () {
+                this.actions.checkCanCarousel();
+            }
+        },
+        // {
+        //     event:'mousemove',
+        //     selector:'.cells-container',
+        //     callback:function () {
+        //         this.actions.resetCarousel();
+        //     }
+        // },
+        // {
+        //     event:'click',
+        //     selector:'.cells-container',
+        //     callback:function () {
+        //         this.actions.resetCarousel();
+        //     }
+        // },
+        // {
+        //     event:'mousewheel',
+        //     selector:'.cells-container',
+        //     callback:function () {
+        //         this.actions.resetCarousel();
+        //     }
+        // },
+        
     ],
     actions: {
         /**
@@ -69,13 +106,11 @@ let config = {
                     this.actions.checkCanCarousel();
                 }else {
                     //后续鼠标点击使用轮播动画切换视图,并重置timer
-                    this.data.cells.actions.doCarouselAnimate(this.data.currentViewId);
-                    console.log('ssssssssssssssssssssssssssssssssssssss',this.data.timer);
-                    debugger;
                     window.clearTimeout(this.data.timer);
+                    this.data.cells.actions.doCarouselAnimate(this.data.currentViewId);
                     setTimeout(function () {
                         that.actions.checkCanCarousel();
-                    },500)
+                    },this.data.animateTime)
                 }
             }
         },
@@ -128,28 +163,29 @@ let config = {
          */
         checkCanCarousel(){
             if(this.data.carouselInterval > 0 && this.data.operateInterval > 0 && window.config.bi_user === 'client'){
-                let temp = Number(this.data.viewNo) + 1;
-                if(temp === this.data.viewArr.length){
-                    this.data.viewNo = 0;
-                }else{
-                    this.data.viewNo = temp;
-                }
-                this.data.currentViewId = this.data.viewArr[this.data.viewNo].id;
-                this.actions.delayCarousel(this.data.currentViewId);
+                this.actions.delayCarousel();
             }
         },
         /**
          * 轮播执行入口，调用1次，执行1次轮播
          */
-        delayCarousel:function (id) {
+        delayCarousel:function () {
             let that = this;
             //鼠标点击标签后，需要重置timer
             this.data.timer = window.setTimeout(function () {
-                that.data.headerComponents.data.menus[id].actions.focus();
-                that.data.cells.actions.doCarouselAnimate(id);
+                let temp = Number(that.data.viewNo) + 1;
+                if(temp === that.data.viewArr.length){
+                    that.data.viewNo = 0;
+                }else{
+                    that.data.viewNo = temp;
+                }
+                that.data.currentViewId = that.data.viewArr[that.data.viewNo].id;
+
+                that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
+                that.data.cells.actions.doCarouselAnimate(that.data.currentViewId);
                 setTimeout(function () {
                     that.actions.checkCanCarousel();
-                },500)
+                },that.data.animateTime)
             },this.data.carouselInterval * 1000)
         },
         /**
@@ -163,6 +199,17 @@ let config = {
                    this.data.viewNo = k;
                 }
             }
+        },
+        /**
+         * 用户操作后，重置轮播
+         */
+        resetCarousel:function () {
+            let that = this;
+            window.clearTimeout(this.data.timer);
+            window.clearTimeout(this.data.timer2);
+            this.data.timer2 = window.setTimeout(function () {
+                that.actions.checkCanCarousel();
+            },that.data.operateInterval * 1000)
         }
     },
     afterRender:function(){
