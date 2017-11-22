@@ -52,14 +52,14 @@ export const canvasCellService = {
      * @param cache 判断是否查询数据库
      */
     async getCellChart(charts, cache = true) {
-        let url = '/bi/get_bi_data/?&canvasType=pc&row_id='+ window.config.row_id;
+        let url = '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id + '&bi_user=' + window.config.bi_user;
         if(cache){
             url += '&cache=1';
         }else{
             url += '&cache=0';
         }
         const res = await HTTP.ajaxImmediately({
-            url: '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id + '&bi_user=' + window.config.bi_user,
+            url: url,
             data: charts,
             method:'post',
             traditional: true
