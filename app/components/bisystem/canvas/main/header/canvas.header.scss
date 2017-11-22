@@ -2,7 +2,7 @@
     position: relative;
     height: 50px;
     white-space: nowrap;
-    width: calc(100% - 398px);
+    width: calc(100% - 400px);
     background: transparent;
     display: inline-block;
     overflow: hidden;
@@ -38,6 +38,7 @@
     display: inline-block;
     right: 0;
     top: 0;
+    width: 100px;
     float: right;
     a {
         text-decoration: none;
