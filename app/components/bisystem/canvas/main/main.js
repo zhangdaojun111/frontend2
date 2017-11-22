@@ -19,8 +19,8 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
-        carouselInterval:10,
-        operateInterval:10,
+        carouselInterval:3,
+        operateInterval:3,
         viewArr:window.config.bi_views,  //所有bi视图
         viewNo:0,   //记录当前视图在数组中的位置
         firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
@@ -92,7 +92,6 @@ let config = {
          * @param viewId
          */
         switchViewId: function (viewId) {
-            console.log(viewId);
             let that = this;
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
@@ -181,8 +180,7 @@ let config = {
                     that.data.viewNo = temp;
                 }
                 that.data.currentViewId = that.data.viewArr[that.data.viewNo].id;
-
-                that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
+                // that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
                 that.data.cells.actions.doCarouselAnimate(that.data.currentViewId);
                 setTimeout(function () {
                     that.actions.checkCanCarousel();
