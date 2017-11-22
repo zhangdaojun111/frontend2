@@ -10,6 +10,7 @@ export const canvasCellService = {
      * @returns {Promise}
      */
     async getCellLayout(data) {
+        data.query_mark = window.config.query_mark;
         const res = await HTTP.getImmediately('/bi/get_view_layout/?&canvasType=pc', data);
         return new Promise((resolve, reject) => {
             if (res['success']===1) {
@@ -26,6 +27,7 @@ export const canvasCellService = {
      * @returns {Promise}
      */
     async saveCellLayout(data) {
+        data.query_mark = window.config.query_mark;
         const res = await HTTP.ajaxImmediately({
             url: '/bi/set_view_layout/',
             data: data,

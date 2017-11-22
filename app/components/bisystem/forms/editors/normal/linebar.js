@@ -126,7 +126,7 @@ let config = {
                     this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
             // 获取图标
@@ -229,9 +229,11 @@ let config = {
             }
 
             let pass = true; // 判断表单是否验证通过
-
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
+                    if(window.config.query_mark !== 'single'){
+                        continue;
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
@@ -392,7 +394,7 @@ let config = {
                             this.formItems['yAxis1'].el.show();
                         } else {
                             this.formItems['yAxis1'].el.hide();
-                        };
+                        }
                         this.actions.updateYSelectedGroup();
                     }
                 }

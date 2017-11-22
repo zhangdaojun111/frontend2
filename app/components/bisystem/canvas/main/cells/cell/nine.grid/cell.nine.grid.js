@@ -14,6 +14,7 @@ handlebars.registerHelper('enumerateyAxis', function(yAxis,index, options) {
 handlebars.registerHelper('enumerateLegend', function(grids,index, options) {
     let items = grids.join(',');
     let arr = items.split(',');
+    console.log(index);
     return arr[index]
 });
 
@@ -27,7 +28,9 @@ let config = {
         legend: []
     },
     actions: {},
-    afterRender() {},
+    afterRender() {
+        console.log(this.data);
+    },
     firstAfterRender() {}
 };
 
@@ -57,9 +60,8 @@ export class CellNineGridComponent extends CellBaseComponent {
             types.push(val);
         });
         Object.keys(cellChart['chart']['yAxis']).sort().forEach(keys => {
-            yAxis.push(cellChart['chart']['yAxis'][keys])
+            yAxis.push(cellChart['chart']['yAxis'][keys]);
         });
-
         Object.keys(cellChart['chart']['xAxis']).sort().forEach((keys,index) => {
             xAxis.push(cellChart['chart']['xAxis'][keys]);
             yAxis.forEach((val,yAxisindex) => {

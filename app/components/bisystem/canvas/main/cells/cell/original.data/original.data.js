@@ -382,6 +382,7 @@ export class CanvasOriginalDataComponent extends Component {
      * 处理折线柱状图的原始数据
      */
     static handleLineBarOriginalData(data) {
+
         //　如果是分组　使用分组模版
         if (data.cellChart.chart.chartGroup['id']) {
             CanvasOriginalDataComponent.handleLineBarGroupOriginalData(data)

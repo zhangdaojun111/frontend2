@@ -70,7 +70,6 @@ let config = {
                 msgbox.showTips(chart['error']);
                 return false;
             }
-
             const data = {
                 chart: chart['data'],
                 cell: this.data.cell,
