@@ -1524,7 +1524,9 @@ let config = {
             if( this.data.viewMode == 'viewFromCorrespondence'||this.data.viewMode == 'editFromCorrespondence' ){
                 // json['rows'] = 99999;
                 // json['first'] = 0;
-                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                json['is_temp'] = 1;
+                delete json['rowId']
             }
             if( this.data.viewMode == 'ViewChild'||this.data.viewMode == 'EditChild'||this.data.viewMode == 'child' ){
                 json["childInfo"]= {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
