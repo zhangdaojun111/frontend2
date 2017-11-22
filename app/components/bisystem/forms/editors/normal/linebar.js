@@ -63,10 +63,12 @@ let config = {
                         return {value: JSON.stringify(item), name: item.name}
                     });
                     this.formItems['countColumn'].setList(fields);
-                    this.formItems['countColumn'].el.show();
+                    this.formItems['countColumn'].el.show();//required: true,
+                    this.data.countColumn.required = false;
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
+                    this.data.countColumn.required = true;
                 }
 
                 let res = await ChartFormService.getChartField(table.id);
@@ -126,7 +128,7 @@ let config = {
                     this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
             // 获取图标
@@ -229,9 +231,12 @@ let config = {
             }
 
             let pass = true; // 判断表单是否验证通过
-
+            let that = this;
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
+                    if(that.data.countColumn.required){
+                        continue;
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
@@ -305,6 +310,9 @@ let config = {
         },
     },
     data: {
+        countColumn:{
+            required: true
+        },
         options: [
             chartName,
             {
@@ -392,7 +400,7 @@ let config = {
                             this.formItems['yAxis1'].el.show();
                         } else {
                             this.formItems['yAxis1'].el.hide();
-                        };
+                        }
                         this.actions.updateYSelectedGroup();
                     }
                 }
