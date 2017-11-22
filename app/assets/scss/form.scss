@@ -46,3 +46,9 @@
     width: 100%;
 }
 
+.table-wrap {
+    div[data-type=Textarea] {
+        width: 100%;
+    }
+}
+
