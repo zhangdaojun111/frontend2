@@ -11,7 +11,7 @@ let config = {
     template: template,
     data: {
         id: 'stylzie',
-        cellChart: {}
+        cellChart: {},
     },
     actions: {
         /**
@@ -128,7 +128,7 @@ let config = {
                 const data = {
                     'layouts': [JSON.stringify(layouts)],
                     'query_type': 'deep',
-                    'is_deep': window.config.bi_user === 'manager' ? 1 : 0
+                    'is_deep': window.config.bi_user === 'manager' ? 1 : 0,
                 };
                 const res = await this.pieChart.getDeepData(data);
                 if (res[0]['success'] === 1) {
@@ -226,7 +226,7 @@ export class CellPieComponent extends CellBaseComponent {
         const data = {
             'layouts': [JSON.stringify(layouts)],
             'query_type': 'deep',
-            'is_deep': window.config.bi_user === 'manager' ? 1 : 0
+            'is_deep': window.config.bi_user === 'manager' ? 1 : 0,
         };
         const res = await this.pieChart.getDeepData(data);
         if (res[0]['success'] === 1) {
