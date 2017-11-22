@@ -1642,7 +1642,7 @@ let config = {
 			if (this.data.realId) {
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`, {
 					title: showName,
-					width: 1200,
+					width: 1400,
 					height: 800,
 				})
 			} else {
@@ -1868,8 +1868,11 @@ let config = {
 			let actions = this.actions.createActions();
 			for (let key in data) {
 				let single = this.el.find('div[data-dfield=' + data[key].dfield + ']');
-				single.css('display','inline-block');
+                if(single.parent().find('div').length >2){
+                    single.css('display','inline-block');
+                }
 				let type = single.data('type');
+
 				if (data[key].required) {
 					data[key]['requiredClass'] = data[key].value == '' ? 'required' : 'required2';
 

@@ -174,7 +174,10 @@ let config = {
         updateChart(data) {
             //重新渲染echarts
             const option = this.normalChart.lineBarOption(data);
+            //重新获取外层容器大小
+            this.normalChart.myChart.resize();
             this.normalChart.myChart.setOption(option, true);
+
         },
         /**
          * 初始化pie图表数据
@@ -202,7 +205,7 @@ let config = {
             } else {
                 if (this.data.floor === 0) {
                     return false;
-                };
+                }
                 this.data.floor--;
             }
             // 判断是否到最大下穿层数
