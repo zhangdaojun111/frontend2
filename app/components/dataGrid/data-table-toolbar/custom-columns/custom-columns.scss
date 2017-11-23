@@ -62,6 +62,7 @@
             line-height: 30px;
             font-size: 12px;
             margin-bottom: 5px;
+            position: absolute;
             .icon-l {
                 display: block;
                 position: absolute;
@@ -123,7 +124,7 @@
             display: inline-block;
             //vertical-align: middle;
             position: relative;
-            top: 7px;
+            top: 5px;
         }
         .custom-select-all:hover {
             cursor: pointer;
