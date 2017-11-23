@@ -1315,13 +1315,15 @@ let config = {
 		},
 		//触发事件检查
 		checkValue: function (data,noCount) {
+			let isChange=data.originVal!=data.value;
+			data.originVal=data.value;
 			if (!this.data.childComponent[data.dfield]) {
 				return;
 			}
 			if (this.data.data[data.dfield]) {
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
-			if (data.type == 'Buildin' || data.type=='MultiLinkage' && !noCount) {
+			if (data.type == 'Buildin' || data.type=='MultiLinkage' && (!noCount || isChange)) {
 				let id = data["id"];
 				let value;
 				if(data.type == 'Buildin'){
@@ -1338,7 +1340,7 @@ let config = {
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1 && !noCount ) {
+			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1 && (!noCount || isChange)) {
 				if (data.type == 'Input') {
 					if(!this.data.timer){
 						this.data.timer=setTimeout(()=>{
@@ -1358,7 +1360,7 @@ let config = {
 			}
 			//统计功能
 			this.actions.myUseFieldsofcountFunc();
-			if(!noCount){
+			if(!noCount || isChange){
                 this.actions.countFunc(data.dfield,data);
 			}
 			//改变选择框的选项
@@ -1400,7 +1402,7 @@ let config = {
 				id: data['id']
 			};
 
-			if(!noCount){
+			if(!noCount || isChange){
 				//this.actions.calcExpression(calcData, data['value']);
                 this.actions.webCalcExpression(data)
 			};
