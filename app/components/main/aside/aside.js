@@ -1,7 +1,7 @@
 import Component from '../../../lib/component';
 import template from './aside.html';
 import './aside.scss';
-import {MenuComponent} from '../menu-full/menu.full';
+import MenuComponent from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
 import {PersonSetting} from "../personal-settings/personal-settings";
 import {HTTP} from '../../../lib/http';
@@ -11,81 +11,79 @@ import {AvatarSet} from '../personal-settings/set-avatar/set-avatar';
 // import {commonuse} from '../commonuse/commonuse';
 // import {Uploader} from "../../../lib/uploader";
 
-/**
- * 预处理window.config.menu数据用于生成全部菜单
- */
-function presetMenuData(menu, leaf) {
-    let res;
-    if (leaf !== true) {
-        res = _.defaultsDeep([], menu);
-    } else {
-        res = menu;
-    }
-    res.forEach((item) => {
-        item.mid = item.folder_id;
-        if (item.items) {
-            presetMenuData(item.items, true);
-        }
-    });
-    return res;
-}
-
-/**
- * 预处理window.config.commonUse数据用于生成常用菜单
- */
-function presetCommonMenuData(menu, commonData) {
-    let menuData = _.defaultsDeep([], menu);
-    let commonKeys = commonData.data;
-    //递归设置该选项及其所有祖宗选项为常用
-    function setUsed(item) {
-        item.commonUsed = true;
-        if (item.parent) {
-            setUsed(item.parent);
-        }
-    }
-    //遍历全部菜单，为每个选项设置父节点引用，根据commonKeys将常用选项及其父节点设置常用属性为true
-    function step_one(menu, parent) {
-        menu.forEach((item) => {
-            item.parent = parent;
-            // let key = item.ts_name || item.table_id;
-            let key;
-            if (item.table_id && item.table_id !== '' && item.table_id !== "0") {
-                key = item.table_id;
-            }else{
-                key = item.ts_name || "0";
-            }
-
-            item.commonUsed = false;
-            if (commonKeys.indexOf(key) !== -1) {
-                setUsed(item);
-            }
-            if (item.items) {
-                step_one(item.items, item);
-            }
-        })
-    };
-    //遍历全部菜单，删除父节点引用，被设为常用的选项加入res，用于生成常用菜单
-    function setp_two(menu) {
-        let res = [];
-        menu.forEach((item) => {
-            delete item.parent;
-            if (item.commonUsed) {
-                res.push(item);
-            }
-            if (item.items) {
-                item.items = setp_two(item.items);
-            }
-        })
-        return res;
-    };
-    step_one(menuData);
-    return setp_two(menuData);
-}
-
 let config = {
     template: template,
     data: {},
     actions: {
+        /**
+         * 预处理window.config.menu数据用于生成全部菜单
+         */
+        presetMenuData: function(menu, leaf) {
+            let res;
+            if (leaf !== true) {
+                res = _.defaultsDeep([], menu);
+            } else {
+                res = menu;
+            }
+            res.forEach((item) => {
+                item.mid = item.folder_id;
+                if (item.items) {
+                    this.actions.presetMenuData(item.items, true);
+                }
+            });
+            return res;
+        },
+        /**
+         * 预处理window.config.commonUse数据用于生成常用菜单
+         */
+        presetCommonMenuData: function(menu, commonData) {
+            let menuData = _.defaultsDeep([], menu);
+            let commonKeys = commonData.data;
+            //递归设置该选项及其所有祖宗选项为常用
+            function setUsed(item) {
+                item.commonUsed = true;
+                if (item.parent) {
+                    setUsed(item.parent);
+                }
+            }
+            //遍历全部菜单，为每个选项设置父节点引用，根据commonKeys将常用选项及其父节点设置常用属性为true
+            function step_one(menu, parent) {
+                menu.forEach((item) => {
+                    item.parent = parent;
+                    // let key = item.ts_name || item.table_id;
+                    let key;
+                    if (item.table_id && item.table_id !== '' && item.table_id !== "0") {
+                        key = item.table_id;
+                    }else{
+                        key = item.ts_name || "0";
+                    }
+
+                    item.commonUsed = false;
+                    if (commonKeys.indexOf(key) !== -1) {
+                        setUsed(item);
+                    }
+                    if (item.items) {
+                        step_one(item.items, item);
+                    }
+                })
+            };
+            //遍历全部菜单，删除父节点引用，被设为常用的选项加入res，用于生成常用菜单
+            function setp_two(menu) {
+                let res = [];
+                menu.forEach((item) => {
+                    delete item.parent;
+                    if (item.commonUsed) {
+                        res.push(item);
+                    }
+                    if (item.items) {
+                        item.items = setp_two(item.items);
+                    }
+                })
+                return res;
+            };
+            step_one(menuData);
+            return setp_two(menuData);
+        },
         /**
          * 正常模式显示菜单
          */
@@ -113,7 +111,7 @@ let config = {
          */
         showAllMenu: function () {
             if (!this.allMenu) {
-                this.allMenu = new MenuComponent({list: presetMenuData(window.config.menu)});
+                this.allMenu = new MenuComponent({list: this.actions.presetMenuData(window.config.menu)});
                 this.allMenu.render(this.el.find('.menu.all'));
             }
             if (this.commonMenu) {
@@ -135,11 +133,11 @@ let config = {
          */
         showCommonMenu: function (reload) {
             if (!this.commonMenu) {
-                this.commonMenu = new MenuComponent({list: presetCommonMenuData(window.config.menu, window.config.commonUse)});
+                this.commonMenu = new MenuComponent({list: this.actions.presetCommonMenuData(window.config.menu, window.config.commonUse)});
                 this.commonMenu.render(this.el.find('.menu.common'));
             }
             if (reload) {
-                this.commonMenu.data.list = presetCommonMenuData(window.config.menu, window.config.commonUse);
+                this.commonMenu.data.list = this.actions.presetCommonMenuData(window.config.menu, window.config.commonUse);
                 this.commonMenu.reload();
             }
             if (this.allMenu) {
@@ -249,7 +247,6 @@ let config = {
                 pre_type: "7",
                 content: JSON.stringify(choosed)
             });
-
             window.config.commonUse.data = choosed;
             this.actions.showCommonMenu(true);
         },
@@ -378,9 +375,9 @@ let config = {
 
 class AsideComponent extends Component{
     constructor(newConfig){
-        super($.extend(true,{},config,newConfig))
+        super($.extend(true,{},config,newConfig));
     }
 }
 
-export {AsideComponent};
+export default AsideComponent;
 // export const AsideInstance = new Component(config);

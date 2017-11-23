@@ -1,7 +1,7 @@
 import Component from '../../../lib/component';
 import template from './menu.full.html';
 import './menu.full.scss';
-import {FullMenuItem} from './item/item';
+import FullMenuItem from './item/item';
 
 let config = {
     template: template,
@@ -163,4 +163,4 @@ class MenuComponent extends Component {
 }
 
 
-export {MenuComponent};
+export default MenuComponent;
