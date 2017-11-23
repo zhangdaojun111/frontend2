@@ -273,6 +273,9 @@ export const contractEditorConfig = {
             }
         },
         getElement: function (json) {
+            console.log('--------')
+            console.log(json)
+            console.log('--------')
             //在componentDialog中使用HTTP则报找不到_http的错误
             return HTTP.postImmediately('/customize/rzrk/get_element/', json);
         },
@@ -381,6 +384,7 @@ export const contractEditorConfig = {
             this.actions.getElement({
                 table_id: this.data.table_id,
                 real_id: this.data.real_id,
+                temp_id: this.data.temp_id,
                 field_id: this.data.id,
                 model_id: tab.model_id,
                 elements: JSON.stringify(tab.elements),
@@ -481,7 +485,8 @@ export const contractEditorConfig = {
         let obj = {
             table_id: this.data.table_id,
             real_id: this.data.real_id,
-            field_id: this.data.id
+            field_id: this.data.id,
+            temp_id: this.data.temp_id
         };
         this.data.local_data = Storage.getItem('contractCache-'+this.data.real_id+'-'+this.data.id,Storage.SECTION.FORM);
         this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value));
