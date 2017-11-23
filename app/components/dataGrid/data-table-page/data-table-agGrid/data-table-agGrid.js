@@ -1566,6 +1566,7 @@ let config = {
                 // json['first'] = 0;
                 // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
                 json['is_temp'] = 1;
+                json['tableType'] = 'dy';
                 delete json['rowId']
             }
             if (this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'child') {
@@ -3646,7 +3647,7 @@ let config = {
             return;
         }
 
-        if (this.data.viewMode == 'normal' && this.data.cacheData) {
+        if (this.data.viewMode == 'normal' && this.data.cacheData && window.config.cached_data) {
             let data = window.config.cached_data;
             console.log("只加载Header的cache数据");
             console.log(data);
