@@ -25,6 +25,8 @@ let config = {
         viewNo:0,   //记录当前视图在数组中的位置
         firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
         animateTime:1000,  //动画执行时间长度（ms）
+        carouselFlag:false  //轮播执行状态下为true
+
     },
     binds: [
         // 编辑模式
@@ -49,42 +51,6 @@ let config = {
                 return false;
             }
         },
-        // {
-        //     event:'mouseover',
-        //     selector:'.cells-container',
-        //     callback:function () {
-        //         window.clearTimeout(this.data.timer);
-        //     }
-        // },
-        // {
-        //     event:'mouseleave',
-        //     selector:'.cells-container',
-        //     callback:function () {
-        //         this.actions.checkCanCarousel();
-        //     }
-        // },
-        // {
-        //     event:'mousemove',
-        //     selector:'.cells-container',
-        //     callback:function () {
-        //         this.actions.resetCarousel();
-        //     }
-        // },
-        // {
-        //     event:'click',
-        //     selector:'.cells-container',
-        //     callback:function () {
-        //         this.actions.resetCarousel();
-        //     }
-        // },
-        // {
-        //     event:'mousewheel',
-        //     selector:'.cells-container',
-        //     callback:function () {
-        //         this.actions.resetCarousel();
-        //     }
-        // },
-        
     ],
     actions: {
         /**
@@ -102,15 +68,15 @@ let config = {
                     this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                     this.data.cells.render(this.el.find('.cells-container'));
                     this.data.firstViews = false;
-                    //判断是否执行轮播
-                    this.actions.checkCanCarousel();
+                    // //判断是否执行轮播
+                    // this.actions.checkCanCarousel();
                 }else {
                     //后续鼠标点击使用轮播动画切换视图,并重置timer
-                    window.clearTimeout(this.data.timer);
+                    // window.clearTimeout(this.data.timer);
                     this.data.cells.actions.doCarouselAnimate(this.data.currentViewId);
-                    setTimeout(function () {
-                        that.actions.checkCanCarousel();
-                    },this.data.animateTime)
+                    // setTimeout(function () {
+                    //     that.actions.checkCanCarousel();
+                    // },this.data.animateTime)
                 }
             }
         },
@@ -144,6 +110,10 @@ let config = {
                         let h = $(self.frameElement).closest('.iframes').height();
                         $('.bi-container').css({'width': w, 'height': h});
                     }
+                },
+                doFullScreenCarousel:() => {
+                    this.data.carouselFlag = true;
+                    this.actions.checkCanCarousel();
                 }
             });
             this.append(header, this.el.find('.views-header'));
@@ -162,7 +132,11 @@ let config = {
          * 检测是否符合执行轮播条件
          */
         checkCanCarousel(){
-            if(this.data.carouselInterval > 0 && this.data.operateInterval > 0 && window.config.bi_user === 'client'){
+            console.log(this.data.carouselFlag === true);
+            if(this.data.carouselInterval > 0 && this.data.operateInterval > 0 && window.config.bi_user === 'client' && this.data.carouselFlag === true){
+                this.actions.launchFullScreen(document.documentElement);
+                this.el.find('.views-header').hide();
+                this.actions.startListenUserOperate();
                 this.actions.delayCarousel();
             }
         },
@@ -180,7 +154,7 @@ let config = {
                     that.data.viewNo = temp;
                 }
                 that.data.currentViewId = that.data.viewArr[that.data.viewNo].id;
-                // that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
+                that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
                 that.data.cells.actions.doCarouselAnimate(that.data.currentViewId);
                 setTimeout(function () {
                     that.actions.checkCanCarousel();
@@ -209,9 +183,72 @@ let config = {
             this.data.timer2 = window.setTimeout(function () {
                 that.actions.checkCanCarousel();
             },that.data.operateInterval * 1000)
+        },
+        /**
+         * 判断各种浏览器，进入全屏模式
+         * @param element
+         */
+        launchFullScreen(element) {
+            if(element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if(element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if(element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            } else if(element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+        },
+        /**
+         * 退出全屏模式
+         */
+        exitFullScreen() {
+            if(document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if(document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if(document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+        },
+        /**
+         * 监听退出全屏模式
+         */
+        listenExistFullScreen(){
+            let Doc = $(document)[0];
+            let isFullScreen = Doc.IsFullScreen || Doc.webkitIsFullScreen || Doc.mozIsFullScreen;
+            if(!isFullScreen){
+                this.data.carouselFlag = false;
+                window.clearTimeout(this.data.timer);
+                this.actions.stopListenUserOperate();
+                this.el.find('.views-header').show();
+            }
+        },
+        /**
+         * 轮播模式下，监听用户操作
+         */
+        startListenUserOperate(){
+            let that = this;
+            this.el.on('mousemove',function () {
+                that.actions.resetCarousel();
+            }).on('click','.cells-container',function () {
+                that.actions.resetCarousel();
+            }).on('mousewheel',function () {
+                that.actions.resetCarousel();
+            });
+        },
+        /**
+         * 非全屏模式下，停止监听用户操作
+         */
+        stopListenUserOperate(){
+            this.el.off('mousemove');
+            this.el.off('click','.cells-container');
+            this.el.off('mousewheel');
         }
+
     },
     afterRender:function(){
+        let that = this;
         if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
             let w = $(self.frameElement).closest('.iframes').width();
             let h = $(self.frameElement).closest('.iframes').height();
@@ -220,6 +257,10 @@ let config = {
 
         //根据判断是否单行模式加载header
         this.actions.headLoad();
+
+        $(window).resize(function () {          //监听浏览器大小变化，判断是否停止轮播
+            that.actions.listenExistFullScreen();
+        });
 
 
     },

@@ -123,6 +123,13 @@ let config = {
                 return false;
             }
         },
+        {
+            event:'click',
+            selector:'.full-screen-carousel',
+            callback:function () {
+                this.trigger('doFullScreenCarousel');
+            }
+        }
     ],
     afterRender() {
         //新窗口隐藏新窗口图标

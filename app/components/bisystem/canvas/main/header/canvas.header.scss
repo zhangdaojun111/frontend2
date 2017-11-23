@@ -31,6 +31,13 @@
     input[type='file'] {
         display: none;
     }
+    .full-screen-carousel{
+        display: inline-block;
+        float: right;
+        width: 44px;
+        height: 16px;
+        cursor: pointer;
+    }
 }
 
 .view-header-refresh-cache {
