@@ -62,7 +62,7 @@ let config = {
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
             this.actions.resetViewArrayNo(viewId);
-            if (this.data.currentViewId) {
+            // if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 if(this.data.firstViews === true){
                     this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
@@ -70,15 +70,15 @@ let config = {
                     this.data.firstViews = false;
                     // //判断是否执行轮播
                     // this.actions.checkCanCarousel();
-                }else {
+                // }else {
                     //后续鼠标点击使用轮播动画切换视图,并重置timer
                     // window.clearTimeout(this.data.timer);
-                    this.data.cells.actions.doCarouselAnimate(this.data.currentViewId);
+                    // this.data.cells.actions.doCarouselAnimate(this.data.currentViewId);
                     // setTimeout(function () {
                     //     that.actions.checkCanCarousel();
                     // },this.data.animateTime)
                 }
-            }
+            // }
         },
         /**
          * 加载头部
