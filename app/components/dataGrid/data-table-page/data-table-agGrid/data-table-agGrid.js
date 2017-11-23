@@ -37,6 +37,7 @@ import '../../../../assets/scss/theme/blue.scss';
 import '../../../../assets/scss/theme/ink-blue.scss';
 import '../../../../assets/scss/theme/orange.scss';
 import {UserInfoService} from "../../../../services/main/userInfoService"
+import msgbox from '../../../../lib/msgbox';
 
 
 
@@ -2089,7 +2090,7 @@ let config = {
                 this.el.find('.grid-new-window')[0].href = url;
             }
             if (this.data.viewMode != 'in_process') {
-                $('.tabTitle .dataTableMiniForm').bind('click', (event) => {
+                $('.tabTitle .dataTableMiniForm').on('click', () => {
                     if(window.top.miniFormVal){
                         if( window.top.miniFormVal[this.data.tableId]){
                             let obj = {
