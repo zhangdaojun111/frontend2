@@ -1080,6 +1080,9 @@ let config = {
 		},
 		//提交表单数据
 		async onSubmit() {
+            if( window.top.miniFormVal){
+                delete window.top.miniFormVal[this.data.data['table_id']['value']];
+            }
 			let formValue = this.actions.createFormValue(this.data.data);
 			let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
 			if (error) {
@@ -2126,9 +2129,18 @@ let config = {
 		if (this.data.btnType != 'none') {
 			this.actions.addBtn();
 		}
+
+        if(window.top.miniFormVal && this.data.btnType == 'new'){
+            let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
+            for(let k in miniFormVal){
+                let val = miniFormVal[k];
+                this.actions.setFormValue(k,val)
+            }
+        }
 		Mediator.subscribe('workflow:voteconfirm',(res)=>{
 			this.actions.setVoteValue(res);
 		})
+
 		//默认表单样式
 		if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
 			this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
