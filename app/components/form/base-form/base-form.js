@@ -2130,9 +2130,9 @@ let config = {
 			this.actions.setVoteValue(res);
 		})
 		//默认表单样式
-		if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
-			this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
-		}
+        if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
+            this.el.find('table').parents('.form-print-position').css("margin-bottom","40px");
+        }
         this.el.find("#form-paging-tabs-control  .paging-tabs-tabform").on('click', function () {
             $(this).css('background','#ffffff').siblings().css('background','#F2F2F2');
         })
