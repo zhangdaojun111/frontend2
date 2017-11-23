@@ -12,6 +12,7 @@ import {Deep} from '../form/deep/deep';
 import {YaXis} from '../form/linebar.yAxis/yAxis';
 import msgbox from "../../../../lib/msgbox";
 import {ChartFormService} from '../../../../services/bisystem/chart.form.service';
+import {canvasCellService} from "../../../../services/bisystem/canvas.cell.service"
 import Mediator from '../../../../lib/mediator';
 import {router} from '../../bi.manage.router';
 import {AdvancedCompute} from '../form/advanced.compute/advanced.compute';
@@ -33,7 +34,7 @@ let formItemTypes = {
     'advancedCompute': AdvancedCompute,
     'textarea': Textarea,
     'search': Search
-}
+};
 
 class Base extends Component {
     constructor(config, data, event,extendConfig){
@@ -84,6 +85,8 @@ class Base extends Component {
             }
         });
         if (res['success'] == 1) {
+            //清除缓存
+            canvasCellService.refreshCache();
             msgbox.showTips('保存成功');
             setTimeout( ()=> {
                 this.el.find('.save-btn').each((index,val)=>{
@@ -104,7 +107,7 @@ class Base extends Component {
             Mediator.publish('bi:aside:update',{type: chart['chartName']['id'] ? 'update' :'new', data:res['data']})
         } else {
             msgbox.showTips(res['error'])
-        };
+        }
     }
 
     reset(chart) {

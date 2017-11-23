@@ -13,21 +13,21 @@
     height: 16px;
     display: block;
     margin-right: 20px;
-    margin-top: 21px;
+    margin-top: 16px;
     margin-left: 15px;
   }
   span {
-    line-height: 60px;
+    line-height: 50px;
   }
 }
   .btn-nav {
-      height: 60px;
+      height: 50px;
       width: 100%;
       .operation-btn-group {
           float: right;
           display: flex;
           margin-right: 10px;
-          height: 60px;
+          height: 50px;
           user-select: none;
           .datagrid-icon-box {
               display: flex;

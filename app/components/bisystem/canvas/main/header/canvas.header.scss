@@ -1,8 +1,8 @@
 .nav-tabs {
     position: relative;
-    height: 60px;
+    height: 50px;
     white-space: nowrap;
-    width: calc(100% - 398px);
+    width: calc(100% - 400px);
     background: transparent;
     display: inline-block;
     overflow: hidden;
@@ -38,6 +38,7 @@
     display: inline-block;
     right: 0;
     top: 0;
+    width: 100px;
     float: right;
     a {
         text-decoration: none;
@@ -47,7 +48,7 @@
         float: right;
         padding: 0;
         line-height: 0;
-        margin: 22px 30px 22px 0;
+        margin: 17px 30px 17px 0;
         outline: none;
         i {
             margin-right: 4px;

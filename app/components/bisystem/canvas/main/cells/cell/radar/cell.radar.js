@@ -50,7 +50,7 @@ let config = {
 
         this.actions.echartsInit()
     }
-}
+};
 
 export class CellRadarComponent extends CellBaseComponent {
     // constructor(cellChart) {

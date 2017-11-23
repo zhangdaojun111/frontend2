@@ -17,6 +17,8 @@ import {CellFunnelComponent} from './funnel/cell.funnel';
 import {CellCommentComponent} from './comment/cell.comment';
 import {CellStylzieComponent} from './stylzie/cell.stylzie';
 import {CanvasCellTitleComponent} from './title/canvas.title';
+import {CellGaugeComponent} from './gauge/cell.gauge';
+import {CellMapComponent} from './map/cell.map'
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../lib/msgbox';
@@ -31,7 +33,9 @@ const cellTypes = {
     'funnel': CellFunnelComponent,
     'pie': CellPieComponent,
     'comment': CellCommentComponent,
-    'stylzie': CellStylzieComponent
+    'stylzie': CellStylzieComponent,
+    'map':CellMapComponent,
+    'gauge' : CellGaugeComponent,
 };
 
 
@@ -45,7 +49,7 @@ let config = {
             let windowSize = $(document).width();
             if (windowSize && windowSize <= 960) {
                 this.data.cell.size.width = 'auto';
-            };
+            }
             this.el.find('.cell').css(this.data.cell.size);
             this.cellTitle = new CanvasCellTitleComponent({},{
                 /**
@@ -65,8 +69,7 @@ let config = {
             if (!chart || chart['success'] !== 1) {
                 msgbox.showTips(chart['error']);
                 return false;
-            };
-
+            }
             const data = {
                 chart: chart['data'],
                 cell: this.data.cell,
@@ -130,7 +133,7 @@ let config = {
         async dragChartData(chart) {
             if (this.loadData) {
                 return false;
-            };
+            }
             const res = await canvasCellService.getCellChart(chart.data);
             this.loadData = false;
             this.data['chart'] = res[0]['data'];
@@ -233,7 +236,7 @@ let config = {
             callback: function (context,event) {
                 if (this.data.cellComponent.actions.showQuill) {
                     this.data.cellComponent.actions.showQuill()
-                };
+                }
                 return false;
             }
         },
@@ -244,7 +247,7 @@ let config = {
             this.actions.cellDragandResize();
         } else {
             this.el.off('mousedown mouseup');
-        };
+        }
 
     }
 };

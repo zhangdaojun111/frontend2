@@ -1,0 +1,31 @@
+.tree-node {
+  .indent {
+    margin-left: 10px;
+    margin-right:10px;
+  }
+  .expanded_node::before {
+    content: url("../../../../assets/images/util/tree/icon_fold.png");
+    position:relative;
+    top:4px;
+  }
+  .collapsed_node::before {
+    content: url("../../../../assets/images/util/tree/icon_fold.png");
+    position: relative;
+    top:4px;
+  }
+  .leaf_node::before {
+    content: url("../../../../assets/images/util/tree/icon_leaf.png");
+    position: relative;
+    top:4px;
+  }
+  .checked_box::before {
+    content: url('../../../../assets/images/util/tree/icon_checkbox_yes.png');
+    position: relative;
+    top:4px;
+  }
+  .unchecked_box::before {
+    content: url('../../../../assets/images/util/tree/icon_checkbox_no.png');
+    position: relative;
+    top:4px;
+  }
+}

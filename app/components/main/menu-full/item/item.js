@@ -8,7 +8,8 @@ let config = {
     template: template,
     data: {
         type: 'full',
-        expandChild: false
+        expandChild: false,
+        listComp:[]
     },
 
     actions: {
@@ -46,6 +47,7 @@ let config = {
                         this.actions.showChildrenAtFull();
                     }
                 }
+                console.log(this.data);
                 if (this.data.ts_name == '' && this.data.table_id == "0") {
                     return;
                 }
@@ -214,6 +216,39 @@ let config = {
                 'padding-left': offset + 'px',
                 'padding-right': '20px'
             });
+        },
+        isFilteredNode:function (input) {
+            return (this.data.label.indexOf(input) != -1);
+        },
+        filter: function (input,isParentFiltered,isSiblingsFiltered) {
+            let isFiltered = false;
+            if(input.replace(/\s/g, '')==''){
+                this.el.show();
+                this.el.find('> .childlist').hide();
+            } else {
+                if(this.data.label.indexOf(input)!=-1){
+                    this.el.show();
+                    this.el.find('> .childlist').show();
+                    isFiltered = true;
+                } else if (isParentFiltered && !isSiblingsFiltered) {
+                    this.el.show();
+                } else {
+                    this.el.hide();
+                }
+            }
+            let isChildFiltered = false;
+            this.data.listComp.forEach(childNode=>{
+                isChildFiltered = isChildFiltered || childNode.actions.isFilteredNode(input);
+            });
+            let isOffspringsFiltered = false;
+            this.data.listComp.forEach(childNode=>{
+                isOffspringsFiltered = childNode.actions.filter(input,isFiltered,isChildFiltered) || isOffspringsFiltered;
+            });
+            if(isOffspringsFiltered){//如果子孙中有节点选中，则父节点也需显示
+                this.el.show();
+                this.el.find('> .childlist').show();
+            }
+            return isFiltered||isOffspringsFiltered;
         }
     },
     binds: [
@@ -277,13 +312,11 @@ let config = {
             }
             this.ownCheckbox.addClass('leaf').attr('key', this.data.key);
         }
-
         if (this.data.items) {
             this.data.items.forEach((data) => {
                 let newData = _.defaultsDeep({}, data, {
                     root: false,
                     offset: this.data.offset + 20,
-                    searchDisplay: true,
                     type: this.data.type
                 });
 
@@ -293,6 +326,7 @@ let config = {
                     }
                 });
                 this.append(component, this.childlist, 'li');
+                this.data.listComp.push(component);
             });
         }
         if (this.data.root !== true) {

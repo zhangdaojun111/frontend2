@@ -159,7 +159,7 @@ function getLoginController() {
              * 移动下载
              */
             this.$mobileDownload.on('click',function () {
-                window.open('https://test.erdstest.com:8809/download/download.html?referrer=');
+                window.open('https://test.erdstest.com:8809/download/download.html?referrer='+document.location.host);
             });
 
             /**
@@ -375,8 +375,8 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 let controller = getLoginController();
 controller.formInit();  //初始化表单控件
 controller.getNextUrl();       //根据url判断是否跳转页面
-// let isNeedDownload = controller.browser_check();     //暂时屏蔽
-let isNeedDownload = false;
+ let isNeedDownload = controller.browser_check();     //暂时屏蔽
+//let isNeedDownload = false;
 if( isNeedDownload === false){      //正常显示登录表单
     controller.infoInit();  //初始化最近访问用户和密码
     LoginService.getVersionInfo().done((result) => {
@@ -402,6 +402,12 @@ if( isNeedDownload === false){      //正常显示登录表单
     });
 }else{
     //显示浏览器下载提示,隐藏其余部分
+    let prompt = LoginService.prompt;
+    let downLoadLink = LoginService.downLoadLink;
     $('.login-content').hide();
     $(".need-download").show();
+    let htmlDownload = '';
+    htmlDownload += '<span class="download-prompt">'+prompt+'</span>'+'<a class="download-link">下载链接</a>';
+    $(".need-download").append(htmlDownload)
+    $(".download-link").attr('href',downLoadLink)
 }

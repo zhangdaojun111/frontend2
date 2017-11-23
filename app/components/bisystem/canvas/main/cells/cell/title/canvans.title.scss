@@ -2,19 +2,25 @@
     line-height: 15px;
     height: 15px;
     padding: 4px;
-
-    .title-tips{
+    .title-tips {
         float: left;
-        width: calc(100% - 93px);
+        //width: calc(100% - 93px);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         font-size: 14px;
         font-weight: normal;
-        color:#333333;
-        .deep-title{
-            color:#999999;
-            font-size:14px;
+        background: url("../../../../../../../assets/images/bisystem/title_bg.png") no-repeat;
+        background-size: cover;
+        color:#5B7FDE;
+        padding: 7px 15px 6px 15px;
+        display: inline-block;
+        min-width: 120px;
+        margin-top: -9px;
+        text-align: center;
+        .deep-title {
+            color: #999999;
+            font-size: 14px;
         }
         img {
             vertical-align: middle;
@@ -28,7 +34,7 @@
         position: absolute;
         right: 10px;
         @media print {
-            display:none;
+            display: none;
         }
         a {
             display: inline-block;
@@ -37,6 +43,12 @@
             font-size: 14px;
             outline: none;
             color: #dddddd;
+            i {
+                vertical-align: middle;
+            }
+            .original-data-icon {
+                vertical-align: bottom;
+            }
         }
     }
     .back-floor-btn-data {
@@ -47,3 +59,7 @@
         color: #ddd;
     }
 }
+
+
+
+

@@ -110,8 +110,8 @@ const pie = {
     },
     legend: {
         show: true,
-        orient: 'vertical',
-        left: 'right',
+        orient: 'horizontal',
+        left: 0,
         bottom: 0,
         data: [],
         type: 'scroll'
@@ -120,12 +120,27 @@ const pie = {
         {
             name: '访问来源',
             type: 'pie',
-            radius: '50%',
-            center: ['40%', '50%'],
+            radius: '70%',
+            center: ['50%', '50%'],
             data: [],
             label: {
                 normal: {
-                    formatter: "{b} : {c} ({d}%)",
+                    // formatter: "{b} : \n {c}  ({d}%)",
+                    formatter:function (param) {
+                        let str = '';
+                        let name = param.data.name;
+                        if(name.length > 5){
+                            let str1 = name.substr(0,4);
+                            let str2 = name.substr(4);
+                            name = str1 + '\n' + str2;
+                        }
+                        str += name + ' ' + ': ';
+                        str += '\n';
+                        str += param.data.value + '\n';
+                        str += param.percent + '%';
+
+                        return str;
+                    }
                 }
             },
             itemStyle: {
@@ -170,7 +185,8 @@ const radar = {
     legend: {
         x: 'right',
         bottom: 0,
-        orient: 'vertical',
+        left:0,
+        orient: 'horizontal',
         data: [],
         selected: {},
         type: 'scroll'
@@ -178,8 +194,8 @@ const radar = {
     radar: [
         {
             indicator: [],
-            radius: '50%',
-            center: ['40%', '50%'],
+            radius: '70%',
+            center: ['50%', '50%'],
         },
     ],
     series: [
@@ -223,7 +239,7 @@ const funnel = {
             data: []
         }
     ]
-}
+};
 
 // 折线柱状图
 const linebar = {
@@ -246,9 +262,9 @@ const linebar = {
     },
     grid: {
         left: 0,
-        right: 0,
-        bottom: 30,
-        top: 50,
+        right: '2.3%',
+        bottom: 10,
+        top:30,
         containLabel: true
     },
     xAxis: [
@@ -265,7 +281,9 @@ const linebar = {
                     color: '#ececec'
                 }
             },
-            axisLabel : {}
+            axisLabel : {
+
+            }
         }
     ],
     yAxis: [
@@ -314,18 +332,18 @@ const stylzie = {
                 switch (index) {
                     case 1:
                         // code
-                        texts.push('大盘')
+                        texts.push('大盘');
                         break;
                     case 3:
                         // code
-                        texts.push('中盘')
+                        texts.push('中盘');
                         break;
                     case 5:
                         // code
-                        texts.push('小盘')
+                        texts.push('小盘');
                         break;
                     default:
-                        texts.push('')
+                        texts.push('');
                     // code
                 }
                 return texts
@@ -342,18 +360,18 @@ const stylzie = {
                 switch (index) {
                     case 1:
                         // code
-                        texts.push('价值')
+                        texts.push('价值');
                         break;
                     case 3:
                         // code
-                        texts.push('平衡')
+                        texts.push('平衡');
                         break;
                     case 5:
                         // code
-                        texts.push('成长')
+                        texts.push('成长');
                         break;
                     default:
-                        texts.push('')
+                        texts.push('');
                     // code
                 }
                 return texts
@@ -388,6 +406,123 @@ const stylzie = {
     ]
 
 };
+
+//地图
+const map = {
+    title : {
+        text: '',
+        subtext: '',
+        x:'left'
+    },
+
+    tooltip:{
+        trigger: 'item',
+        triggerOn:'none'
+    },
+    visualMap: {
+        x: 'left',
+        y: 'bottom',
+        // type:'piecewise',
+        color: ['#338CE2','#b4e2f7'],
+        text:['高','低'],
+    },
+    series : [
+        {
+            type: 'map',
+            mapType: 'china',
+            roam: false,    //是否开启鼠标缩放和平移漫游
+            itemStyle:{     //地图区域的多边形 图形样式
+                normal:{        //是图形在默认状态下的样式
+                    label:{
+                        show:true,      //是否显示标签
+                        textStyle: {
+                            color: "black"
+                        }
+                    }
+                },
+                emphasis:{              //是图形在高亮状态下的样式,比如在鼠标悬浮或者图例联动高亮时
+                    label:{show:true}
+                }
+            },
+            top:"1.5%",     //以纵向位置控制图片大小，使其尽量饱满
+            bottom:'1.5%'
+        }
+    ]
+};
+
+
+
+// 仪表盘
+const gauge = {
+    animation : false,
+    tooltip: {
+        formatter: "{a} : {c}"
+    },
+    // toolbox: {
+    //     feature: {
+    //         restore: {},
+    //         saveAsImage: {}
+    //     }
+    // },
+    series : [
+        {
+            name:'业务指标',
+            type:'gauge',
+            min:0,
+            max:1,
+            radius:'70%',
+            splitNumber: 20,       // 分割段数
+            axisLine: {            // 坐标轴线
+                lineStyle: {       // 属性lineStyle控制线条样式
+                    color:[[0.3125,'#00B766'],[0.675,'#F9C10C'],[1,'#FF4C4C']],
+                    width: 10
+                }
+            },
+            axisTick: {            // 坐标轴小标记
+                splitNumber: 10,   // 每份split细分多少段
+                length :24,        // 属性length控制线长
+                lineStyle: {       // 属性lineStyle控制线条样式
+                    color: 'auto'
+                }
+            },
+            axisLabel: {           // 坐标轴文本标签
+                textStyle: {       // 其余属性默认使用全局文本样式
+                    color: '#000'
+                }
+            },
+            splitLine: {           // 分隔线
+                show: true,        // 默认显示，属性show控制显示与否
+                length :24,         // 属性length控制线长
+                lineStyle: {       // 属性lineStyle控制线条样式
+                    color: 'auto'
+                }
+            },
+            pointer : {
+                length: '75%',
+                width : 4,
+            },
+            itemStyle:{
+                normal:{
+                    color:'#000',
+                }
+            },
+            detail : {
+                formatter:'{value}',
+                offsetCenter: [0, '30%'], // x, y，单位px
+                textStyle: {       // 其余属性默认使用全局文本样
+                    fontSize: '12',
+                    fontWeight: 'bolder',
+                    color: '#000',
+                    borderWidth: '1',
+                    borderType: 'solid',
+                    borderColor: '#ccc',
+                }
+            },
+            data:{value: 0.575}
+        }
+    ]
+};
+
 export const EchartsOption = {
     blue: blueColors,
     green: greenColors,
@@ -414,7 +549,13 @@ export const EchartsOption = {
             case 'stylzie':
                 option = stylzie;
                 break;
+            case 'gauge':
+                option = gauge;
+                break;
+            case 'map':
+                option = map;
+                break;
         }
-        return ToolPlugin.clone(option);
+        return _.cloneDeep(option);
     }
-}
+};

@@ -10,10 +10,6 @@ import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.se
 
 let config = {
     template: template,
-    data: {
-        name:'饼图',
-        type:'circular'
-    },
     actions: {
         /**
          * 加载x 和y轴数据
@@ -32,7 +28,7 @@ let config = {
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
-                };
+                }
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']);
@@ -62,11 +58,11 @@ let config = {
                     this.formItems['xAxis'].setList([]);
                     this.formItems['yAxis'].setList([]);
                     this.formItems['deepX'].setList([]);
-                };
+                }
                 if (this.formItems['deeps']) {
                     // 清除所有下穿字段数据
                     this.formItems['deeps'].actions.clear();
-                };
+                }
             }
         },
 
@@ -77,13 +73,15 @@ let config = {
             this.formItems['countColumn'].el.hide();
             this.formItems['pieType'].trigger('onChange', this.formItems['pieType'].data.value);
             this.formItems['limit'].trigger('onChange');
+            this.formItems['circular'].trigger('onChange');
+
             // 获取数据来源
             ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
                     this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
             // 获取图标
@@ -96,7 +94,7 @@ let config = {
                     this.formItems['icon'].setList(icons)
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
         },
@@ -113,12 +111,12 @@ let config = {
                 "xOld":{},
                 "row_id":0,
                 "deep_info":{}
-            }
+            };
             const data = {
                 layouts:[JSON.stringify(layout)],
                 query_type:'deep',
                 is_deep:1,
-            }
+            };
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
@@ -134,10 +132,7 @@ let config = {
                 countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 filter: data.filter.filter,
                 filter_source: data.filter.filter_source,
-                chartType: {
-                    name: this.data.name,
-                    type: this.data.type,
-                },
+                chartType: data.circular == '1' ? {name: '饼图', type: 'pie'} : {name: '环形图', type: 'circular'},
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
@@ -145,11 +140,10 @@ let config = {
                 xAxis:data.xAxis,
                 yAxis:data.pieType == '1' ? data.columns : data.yAxis,
                 deeps: data.pieType == '1' ? [] : data.deeps,
-                limit: data.limit[0] ? data.limitNum : 0,
-                endlimit:data.limit[0] ? data.endLimitNum : 0,
+                limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
+                endlimit:data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
+
             };
-            console.log("-----------------------------------");
-            console.log(data.limit);
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
@@ -159,12 +153,15 @@ let config = {
                     if(key == 'yAxis' && chart.pieType.value == 1){
                         continue;
                     }
+                    if(window.config.query_mark !== 'single'){
+                        continue;
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
-                    };
+                    }
                 }
-            };
+            }
 
             if (pass) {
                 this.save(chart);
@@ -184,19 +181,19 @@ let config = {
             this.formItems['filter'].setValue({filter: chart['filter'], filter_source:chart['filter_source']});
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['pieType'].setValue(chart['pieType']['value']);
-            this.formItems['circular'].setValue(chart['chartType']['type']=='pie'?chart['chartType']['name']='1':chart['chartType']['name']='2');
+            this.formItems['circular'].setValue(chart['chartType']['type']=='pie' ? 1 : 2);
             this.formItems['xAxis'].setValue(chart['xAxis']);
             if (chart['pieType']['value'] == 1) {
                 this.formItems['columns'].setValue(chart['yAxis']);
             } else {
                 this.formItems['yAxis'].setValue(chart['yAxis']);
                 this.formItems['deeps'].setValue(chart['deeps']);
-            };
+            }
             if (chart['pieType']['value'] == 2) {
                 this.formItems['limit'].setValue(chart['limit'] || chart['endlimit']  ? 1 : 0);
                 this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
                 this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
-            };
+            }
         }
     },
     data: {
@@ -252,6 +249,9 @@ let config = {
                 events: {
                     onChange(value) {
                         if (value == 1) {
+                            if (this.formItems['limit'].data.value.length > 0) {
+                                this.formItems['limit'].el.find('input').trigger('click');
+                            }
                             this.formItems['limit'].trigger('onChange');
                             this.formItems['limit'].el.hide();
                             this.formItems['columns'].el.show();
@@ -260,7 +260,6 @@ let config = {
                             this.formItems['deepX'].el.hide();
                             this.formItems['deeps'].actions.clear();
                         } else {
-                            this.formItems['limit'].trigger('onChange', [1]);
                             this.formItems['limit'].el.show();
                             this.formItems['columns'].el.hide();
                             this.formItems['yAxis'].el.show();
@@ -281,15 +280,7 @@ let config = {
                 ],
                 type: 'select',
                 events: {
-                    onChange(value){
-                        if(value === '2'){
-                            this.data.name = '环形图';
-                            this.data.type = 'circular';
-                        }else{
-                            this.data.name = '饼图';
-                            this.data.type = 'pie';
-                        }
-                    }
+                    onChange(value){}
                 }
             },
             {
@@ -351,7 +342,7 @@ let config = {
                         if (value) {
                             this.formItems['deeps'].actions.update(value);
                             this.formItems['deepX'].autoselect.actions.clearValue()
-                        };
+                        }
                     }
                 }
             },
@@ -393,7 +384,7 @@ let config = {
             {
                 label: '',
                 name: 'limitNum',
-                defaultValue: 10,
+                defaultValue: 0,
                 placeholder: '请输入显示前多少条数据',
                 category: 'number',
                 textTip:'请输入显示前多少条数据：',
@@ -404,7 +395,7 @@ let config = {
             {
                 label: '',
                 name: 'endLimitNum',
-                defaultValue: 10,
+                defaultValue: 0,
                 placeholder: '请输入显示后多少条数据',
                 category: 'number',
                 textTip:'请输入显示后多少条数据：',
@@ -434,8 +425,8 @@ let config = {
                 this.data.chart = res[0]['data']
             } else {
                 msgbox.alert(res[0]['error'])
-            };
-        };
+            }
+        }
 
         // 渲染图表表单字段
         this.drawForm();
@@ -446,7 +437,7 @@ let config = {
         }
 
     }
-}
+};
 
 class PieEditor extends Base {
     constructor(data,extendConfig) {

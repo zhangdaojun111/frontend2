@@ -91,10 +91,15 @@ let config={
 
         setValue(){
             let values=[];
+            let titleValues = [];
+            this.el.find('.form-control').removeAttr('title');
             for(let key in this.data.childSelect.data.choosed){
                 values.push(this.data.childSelect.data.choosed[key]['id']);
+                titleValues.push(this.data.childSelect.data.choosed[key]['name']);
             }
             this.data.value=values;
+            this.el.find('.form-control').attr('title',titleValues);
+            this.el.find('.result').attr('title',titleValues);
         },
 
         //创建下拉框
@@ -186,8 +191,8 @@ let config={
         if(!this.data.is_view && this.data.can_add_item){
             this.el.find('.add-item').css('visibility','visible').addClass('icon-fl')
         }
-        if(this.data.is_view){
-            let arr = new Array();
+      //  if(this.data.is_view){
+            let arr = [];
             for(let k1 in this.data.options) {
                 for(let k2 in this.data.value) {
                     if(this.data.value[k2] == this.data.options[k1].value) {
@@ -196,7 +201,7 @@ let config={
                 }
                 this.el.find('.form-control').attr('title',arr);
             }
-        }
+       // }
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }
@@ -252,6 +257,8 @@ let config={
                     if(_this.data.isInit || !_this.data.childSelect || _this.data.childSelect.data.choosed.length == 0 ){
                         if(!_this.data.isInit){
                             _this.data.value='';
+                            _this.el.find('.form-control').attr('title','');
+                            _this.el.find('.result').attr('title','');
                             _.debounce(function(){_this.events.changeValue(_this.data)},200)();
                         }
                         return;

@@ -54,7 +54,6 @@ export const ChartFormService = {
                 query_mark: window.config.query_mark,
                 operation_id:window.config.operation_id,
                 folder_id: window.config.folder_id,
-                query_mark: window.config.query_mark === 'single' ? 'single' : 'normal',
                 chart:chart
             },
             // contentType: "application/json; charset=utf-8",
@@ -63,4 +62,4 @@ export const ChartFormService = {
         });
         return Promise.resolve(res);
     }
-}
+};
