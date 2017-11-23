@@ -61,7 +61,10 @@ let config = {
 		//用于比较字段插件配置的list
 		myPluginFields: [],
 		//是否验证必填
-        validation_required: true
+        validation_required: true,
+		vote_value:'',
+		vote_key:'',
+		submitKey:[],
 	},
 	binds: [{
 		event: 'click',
@@ -1005,7 +1008,8 @@ let config = {
 			}
 		},
 		//赋值
-		setFormValue(dfield, value) {
+		setFormValue(dfield, value,noCount) {
+			let count=noCount?false:true;
 			let data = this.data.data[dfield];
 			if (data) {
 				data["value"] = value;
@@ -1014,7 +1018,7 @@ let config = {
 					childComponet.data["value"] = value
 					childComponet.reload();
 				}
-				this.actions.triggerSingleControl(dfield,true);
+				this.actions.triggerSingleControl(dfield,count);
 			}
 		},
 		//给相关赋值
@@ -1050,7 +1054,7 @@ let config = {
 		checkOhterField(data, obj_new, obj_old) {
 			let delKey = [];
 			for (let index in this.data.data) {
-				if (this.data.data[index]['is_other_field']) {
+				if (this.data.data[index]['is_other_field'] && this.data.submitKey.indexOf(this.data.data[index]['id']) == -1) {
 					delKey.push(this.data.data[index]['dfield']);
 				}
 			}
@@ -1495,10 +1499,11 @@ let config = {
 						try {
 							if (expression.indexOf("$^$") == -1) {
 								try {
-									if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
+									// if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
                                         this.actions.set_value_for_form(eval(expression), f);
-									}
+									// }
 								} catch (err) {
+									console.log(err)
 									console.log('不能执行前端表达式计算');
                                     bool = true;
 								}
@@ -1519,7 +1524,6 @@ let config = {
                     this.actions.calcExpression(calcData, data['value'])
                 }
 			}
-
 		},
 		//小数显示精度
         showAccuracy(dfield, value) {
@@ -1941,6 +1945,9 @@ let config = {
 						this.data.childComponent[data[key].dfield] = textArea;
 						break;
 					case 'Readonly':
+						if(this.data.tempId){
+							data[key].canNotOpen=false;
+						}
 						let readonly = new Readonly(data[key], actions);
 						readonly.render(single);
 						this.data.childComponent[data[key].dfield] = readonly;
@@ -2077,6 +2084,39 @@ let config = {
 				obj_old
 			}
 		},
+		setVoteValue(res){
+			let value=res.value;
+			this.data.submitKey=res.submitKey;
+			if(value){
+				for(let key in this.data.data){
+					if(this.data.data[key].id == value){
+						let val
+						if(this.data.vote_value){
+							if( this.data.vote_value == value){
+								break;
+							}else{
+								val=this.data.data[this.data.vote_key].value-1;
+								this.actions.setFormValue(this.data.vote_key,val,true);
+								val=this.data.data[key].value+1;
+								this.actions.setFormValue(key,val,true);
+								this.data.vote_value=value;
+								this.data.vote_key=key;
+								break;
+							}
+						}else{
+							val=this.data.data[key].value+1;
+							this.actions.setFormValue(key,val,true);
+							this.data.vote_value=value;
+							this.data.vote_key=key;
+							break;
+						}
+					}
+				}
+				setTimeout(()=>{
+					Mediator.publish('form:voteAllready',true)
+				},0);
+			}
+		}
 	},
 	afterRender() {
 		this.actions.createFormControl();
@@ -2089,6 +2129,7 @@ let config = {
 		if (this.data.btnType != 'none') {
 			this.actions.addBtn();
 		}
+
         if(window.top.miniFormVal && this.data.btnType == 'new'){
             let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
             for(let k in miniFormVal){
@@ -2096,6 +2137,10 @@ let config = {
                 this.actions.setFormValue(k,val)
             }
         }
+		Mediator.subscribe('workflow:voteconfirm',(res)=>{
+			this.actions.setVoteValue(res);
+		})
+
 		//默认表单样式
 		if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
 			this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
