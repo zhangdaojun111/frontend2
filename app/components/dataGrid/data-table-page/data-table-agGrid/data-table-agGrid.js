@@ -1565,6 +1565,7 @@ let config = {
                 // json['first'] = 0;
                 // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
                 json['is_temp'] = 1;
+                json['tableType'] = 'dy';
                 delete json['rowId']
             }
             if (this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'child') {
