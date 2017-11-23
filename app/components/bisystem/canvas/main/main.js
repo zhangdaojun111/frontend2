@@ -19,7 +19,7 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
-        carouselInterval:3,
+        carouselInterval:5,
         operateInterval:3,
         viewArr:window.config.bi_views,  //所有bi视图
         viewNo:0,   //记录当前视图在数组中的位置
