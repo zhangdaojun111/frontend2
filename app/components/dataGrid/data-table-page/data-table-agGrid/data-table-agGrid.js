@@ -258,6 +258,8 @@ let config = {
         cacheData: true,
         // 父表按钮类型
         parent_btnType: '',
+        //来自表单的子表
+        form_songrid: 0,
     },
     //生成的表头数据
     columnDefs: [],
@@ -1561,7 +1563,9 @@ let config = {
             if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                 // json['rows'] = 99999;
                 // json['first'] = 0;
-                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence' ? 1 : 0;
+                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                json['is_temp'] = 1;
+                delete json['rowId']
             }
             if (this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'child') {
                 json["childInfo"] = {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
@@ -2963,11 +2967,12 @@ let config = {
                 }
             }
             //内置相关查看原始数据用
-            if (data.event.srcElement.id == 'relatedOrBuildin') {
-                if (this.actions.haveTempId(data.data)) {
-                    msgBox.alert('审批中的数据不支持查看源数据。');
+            if( data.event.srcElement.id == 'relatedOrBuildin' ){
+                if(this.actions.haveTempId(data.data)){
+                    msgBox.alert('不支持查看源数据。')
                     return;
                 }
+                console.log( "内置相关穿透" )
                 console.log("内置相关穿透");
                 if (data.colDef.is_user) {
                     PersonSetting.showUserInfo({name: data.value});
@@ -3022,10 +3027,10 @@ let config = {
             }
             //统计
             if (fieldTypeService.countTable(data.colDef.dinput_type, data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount") {
-                // if(this.actions.haveTempId(data.data)){
-                //     msgBox.alert('审批中的数据不支持查看源数据。')
-                //     return;
-                // }
+                if(this.data.form_songrid == 1){
+                    msgBox.alert('不支持查看源数据。')
+                    return;
+                }
                 console.log('统计穿透');
                 let obj = {
                     tableId: data.colDef.field_content.count_table,
@@ -3048,10 +3053,10 @@ let config = {
             }
             // 子表
             if (fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount") {
-                // if(this.actions.haveTempId(data.data)){
-                //     msgBox.alert('审批中的数据不支持查看源数据。')
-                //     return;
-                // }
+                if(this.data.form_songrid == 1){
+                    msgBox.alert('不支持查看源数据。')
+                    return;
+                }
                 console.log("子表穿透");
                 let obj = {
                     tableId: data.colDef.field_content.child_table,

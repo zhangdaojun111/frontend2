@@ -13,6 +13,7 @@ let config = {
     data: {
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
+	    canNotOpen:true,
     },
     actions: {
         keyup() {
@@ -106,7 +107,7 @@ let config = {
         this.el.find('.ui-width').attr('title', this.data.value)
         this.el.find('.ui-width').css('width', this.data.width);
         //如果是统计字段有值 显示穿透查看
-        if(this.data.dtype==10 && this.data.value){
+        if(this.data.dtype==10 && this.data.value && this.data.canNotOpen){
             this.el.find('.countView').css('visibility','visible').addClass('icon-fl');
         }
         if(this.data.history){
