@@ -172,7 +172,7 @@ export const contractEditorConfig = {
             callback: function () {
                 if (this.el.find('.edit_or_save').text() == '编辑') {
                     let butStates = this.data.buttonStates[this.data['current_tab']];
-                    butStates.edit_or_save_text = '保存';
+                    butStates.edit_or_save_text = '确定';
                     butStates.display.save_n_close = 'none';
                     butStates.display.download_all = 'none';
                     butStates.display.download_current = 'none';
