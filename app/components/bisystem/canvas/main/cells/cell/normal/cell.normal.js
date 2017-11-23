@@ -43,7 +43,7 @@ let config = {
             const data = {
                 'layouts': [JSON.stringify(layouts)],
                 'query_type': 'deep',
-                'is_deep': 1
+                'is_deep': 1,
             };
 
             const res = await this.normalChart.getDeepData(data);
@@ -134,7 +134,6 @@ let config = {
         echartsInit() {
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
-
                 // 当attribute or select　等于空时　代表全选
                 if (this.data.cellChart.chart.chartGroup.id && this.data.cellChart.cell.select.length > 0) {
                     chartData = _.cloneDeep(this.data);
@@ -240,7 +239,7 @@ let config = {
                 const data = {
                     'layouts': [JSON.stringify(layouts)],
                     'query_type': 'deep',
-                    'is_deep': window.config.bi_user === 'manager' ? 1 : 0
+                    'is_deep': window.config.bi_user === 'manager' ? 1 : 0,
                 };
 
                 const res = await this.normalChart.getDeepData(data);
@@ -367,7 +366,7 @@ export class CellNormalComponent extends CellBaseComponent {
         const data = {
             'layouts': [JSON.stringify(layouts)],
             'query_type': 'deep',
-            'is_deep': window.config.bi_user === 'manager' ? 1 : 0
+            'is_deep': window.config.bi_user === 'manager' ? 1 : 0,
         };
         const res = await this.normalChart.getDeepData(data);
         if (res[0]['success'] === 1) {

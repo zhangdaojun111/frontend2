@@ -13,6 +13,9 @@ let config = {
          */
         onChange: function (value) {
             this.data.value = value;
+            if (value) {
+                this.clearErrorMsg();
+            }
         },
 
         /**

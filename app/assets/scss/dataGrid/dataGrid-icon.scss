@@ -28,7 +28,18 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
     height: 16px;
     display: block;
 }
-
+.icon-aggrid-miniForm {
+    background: url("../../images/dataGrid/icon-aggrid-miniForm.png") no-repeat;
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+.icon-aggrid-miniForm-hover {
+    background: url("../../images/dataGrid/icon-aggrid-miniForm-hover.png") no-repeat;
+    width: 16px;
+    height: 16px;
+    display: block;
+}
 .icon-aggrid-cus {
     background: url("../../images/dataGrid/aggrid-icon.png") no-repeat;
     width: 16px;

@@ -23,7 +23,8 @@ let config={
         is_view: 0,
         action: 0,
         cache_old: {},
-        focusArr: []
+        focusArr: [],
+        noRequestFormData:[]
     },
     actions:{
         openAddFollower() {
@@ -78,6 +79,8 @@ let config={
                         btnType: obj.btnType,
                         real_id: obj.real_id,
                         temp_id: obj.temp_id,
+                        requestFormData: this.data.requestFormData||0,
+                        noRequestFormData: this.data.noRequestFormData||[],
                         isAddBuild: obj.isAddBuild,
                         id: obj.id,
                         key: obj.key,
@@ -265,6 +268,9 @@ let config={
         }
     },
     afterRender(){
+        PMAPI.getIframeParams(window.config.key).then((res) => {
+            this.data.noRequestFormData = res.data;
+        })
         let _this=this;
         _this.showLoading();
         this.data.key = this.data.obj.key;
