@@ -2918,7 +2918,7 @@ let config = {
                         value: data['value'],
                         mode: 'view'
                     };
-                    let contractConfig = _.defaultsDeep(contractEditorConfig, {data: obj});
+                    let contractConfig = _.defaultsDeep({},{data: obj},contractEditorConfig);
                     PMAPI.openDialogByComponent(contractConfig, {
                         width: 900,
                         height: 600,

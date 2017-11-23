@@ -517,12 +517,5 @@ export const contractEditorConfig = {
     },
     beforeDestroy() {
         this.data.style.remove();
-        this.data={
-            local_data: [],
-            buttonStates:[],
-            elementKeys: [],
-            editingk2v: {},
-            css: css.replace(/(\n)/g, '')
-        }
     }
 }
