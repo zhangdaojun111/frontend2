@@ -45,6 +45,7 @@ class Component {
 
     render(el) {
         if (el.length === 0) {
+            // debugger;
             console.error('component: el必须是存在于dom内的节点');
             console.dir(this);
             return;

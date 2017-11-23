@@ -84,10 +84,10 @@ let config = {
                     }
                 });
                 let cellContainer = this.el.find('.cell-chart');
-                debugger;
-                console.log(cellContainer);
+                if (cellContainer.length === 0) {
+                    debugger;
+                }
                 this.data.cellComponent.render(cellContainer);
-                debugger;
             }
         },
 
@@ -273,7 +273,7 @@ export class CanvasCellComponent extends Component {
             this.data.chart = chart['data'];
             this.actions.loadCellChart(chart);
         } catch (err) {
-            console.log(err)
+            console.log(err);
         } finally {
 
         }

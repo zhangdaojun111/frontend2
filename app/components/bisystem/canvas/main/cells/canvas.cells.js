@@ -181,11 +181,12 @@ let config = {
          */
         async getCellLayout() {
             const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
+            console.log(res);
             if (res['success'] === 1) {
                 try {
                     this.actions.loadCellChart(res['data']['data']);
                 } catch (e){
-
+                    console.log(e);
                 } finally {
 
                 }
@@ -275,7 +276,6 @@ let config = {
          */
         async prepareViewData(viewId) {
             this.data.currentViewId = viewId;
-
             await this.actions.getCellLayout();
             if (this.data) {
                 let windowSize = $(window).width();
@@ -298,10 +298,7 @@ let config = {
                 current.attr('class','prepare cells');
                 prepare.attr('class','current cells');
                 that.el.find('.prepare').find('div').remove('[class != "cell ui-draggable ui-draggable-handle ui-resizable"]');
-                setTimeout(function () {
-                    that.actions.prepareViewData(that.data.currentViewId);
-                },500);
-
+                that.actions.prepareViewData(that.data.currentViewId);
             },this.data.animateDuration)
         },
         loadSecondView(){
