@@ -1559,6 +1559,10 @@ let config = {
             //二维表
             if (this.data.viewMode == 'reportTable2') {
                 json['is_report'] = 1;
+                if(this.data.tableType == "child"){
+                    json["childInfo"] = {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
+                    delete json['rowId']
+                }
             }
             if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                 // json['rows'] = 99999;
