@@ -14,6 +14,7 @@ let config = {
         cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
         firstView:true,
+        secondViewId:'',
         animateDuration:1000  //动画执行时间1000ms
     },
     actions: {
@@ -29,14 +30,18 @@ let config = {
                     msgbox.alert(res['error']);
                     return false;
                 }
-
-                // 当返回成功时，通知各个cell渲染chart数据
                 cells.map((item,index) => {
                     item.setChartData(res[index]);
                 })
             }
         },
-
+        renderCanvas(){
+            // 当返回成功时，通知各个cell渲染chart数据
+            let that = this;
+            this.data.cells.map((item,index) => {
+                item.setChartData(that.data.resData[index]);
+            })
+        },
         /**
          * 瀑布流方式加载cell chart data 数据(pc端的处理)
          * @param option = {top：scrollbar的滚动距离}
@@ -230,6 +235,11 @@ let config = {
 
             // 获取画布块最大zindex
             this.data.cellMaxZindex = Math.max(...zIndex);
+            //第一次加载需要一次性加载两个视图，准备轮播
+            if(this.data.firstView === true){
+                this.actions.loadSecondView();
+                this.data.firstView = false;
+            }
         },
 
         /**
@@ -261,12 +271,11 @@ let config = {
             });
         },
         /**
-         * 执行一次轮播动画，执行完后交换两个cells的身份（current/prepare）
+         * 预加载下一视图至.prepare 容器
          */
-        async doCarouselAnimate(viewId) {
-            this.data.firstView = false;
+        async prepareViewData(viewId) {
             this.data.currentViewId = viewId;
-            //开始执行动画
+
             await this.actions.getCellLayout();
             if (this.data) {
                 let windowSize = $(window).width();
@@ -276,6 +285,11 @@ let config = {
                     this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
                 }
             }
+        },
+        /**
+         * 执行切换视图动画
+         */
+        doCarouselAnimate(){
             let current = this.el.find('.current').addClass('animate-fade-out');
             let prepare = this.el.find('.prepare').addClass('animate-fade-in');
             //动画执行1.5S完成,交换div身份
@@ -283,21 +297,15 @@ let config = {
             setTimeout(async function () {
                 current.attr('class','prepare cells');
                 prepare.attr('class','current cells');
-                //根据viewId加载数据
-                // await that.actions.getCellLayout();
-                //开始渲染新current的数据,新数据渲染完后回调delayCarousel
-                // if (that.data) {
-                //     let windowSize = $(window).width();
-                //     if (windowSize && windowSize <= 960) {
-                //         that.actions.phoneWaterfallLoadingCellData({top: that.el.scrollTop()});
-                //     } else {
-                //         that.actions.waterfallLoadingCellData({top: that.el.scrollTop()});
-                //     }
-                // }
-                //清除prepare画布上的内容
                 that.el.find('.prepare').find('div').remove('[class != "cell ui-draggable ui-draggable-handle ui-resizable"]');
+                setTimeout(function () {
+                    that.actions.prepareViewData(that.data.currentViewId);
+                },500);
 
             },this.data.animateDuration)
+        },
+        loadSecondView(){
+            this.actions.prepareViewData(this.data.secondViewId);
         }
     },
     binds: [

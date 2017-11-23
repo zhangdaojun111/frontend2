@@ -22,8 +22,8 @@ let config = {
         carouselInterval:5,
         operateInterval:3,
         viewArr:window.config.bi_views,  //所有bi视图
-        viewNo:0,   //记录当前视图在数组中的位置
-        firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
+        viewNo:1,   //记录当前视图在数组中的位置
+        // firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
         animateTime:1000,  //动画执行时间长度（ms）
         carouselFlag:false,  //轮播执行状态下为true
         isNewWindow:false,    //判断是否是在新窗口打开
@@ -69,13 +69,15 @@ let config = {
             let that = this;
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
-            this.actions.resetViewArrayNo(viewId);
+            // this.actions.resetViewArrayNo(viewId);
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 // if(this.data.firstViews === true){
                     this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                     this.data.cells.render(this.el.find('.cells-container'));
-                    this.data.firstViews = false;
+                    this.data.cells.data.secondViewId = this.data.viewArr[1].id;
+
+                    // this.data.firstViews = false;
                     // //判断是否执行轮播
                     // this.actions.checkCanCarousel();
                 // }else {
@@ -157,7 +159,7 @@ let config = {
         delayCarousel:function (time) {
             let interval = time;      //防止用户操作停止后等待两项时间间隔总和
             let that = this;
-            //鼠标点击标签后，需要重置timer
+            //退出轮播模式后，立即清除timer
             this.data.timer = window.setTimeout(function () {
                 let temp = Number(that.data.viewNo) + 1;
                 if(temp === that.data.viewArr.length){
@@ -166,8 +168,10 @@ let config = {
                     that.data.viewNo = temp;
                 }
                 that.data.currentViewId = that.data.viewArr[that.data.viewNo].id;
+                that.data.cells.data.currentViewId = that.data.currentViewId;
                 that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
-                that.data.cells.actions.doCarouselAnimate(that.data.currentViewId);
+                that.data.cells.actions.doCarouselAnimate();
+
                 setTimeout(function () {
                     that.actions.checkCanCarousel(that.data.carouselInterval);
                 },that.data.animateTime)

@@ -84,7 +84,10 @@ let config = {
                     }
                 });
                 let cellContainer = this.el.find('.cell-chart');
+                debugger;
+                console.log(cellContainer);
                 this.data.cellComponent.render(cellContainer);
+                debugger;
             }
         },
 

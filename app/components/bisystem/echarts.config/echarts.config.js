@@ -103,7 +103,7 @@ const greenColors = [
 
 // 饼图
 const pie = {
-    animation : true,
+    animation : false,
     tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -156,7 +156,7 @@ const pie = {
 
 // 多表
 const multillist = {
-    animation : true,
+    animation : false,
     legend: {
         data: [],
         x: 'center'
@@ -178,7 +178,7 @@ const multillist = {
 
 // 雷达
 const radar = {
-    animation : true,
+    animation : false,
     tooltip: {
         trigger: 'axis'
     },
@@ -211,7 +211,7 @@ const radar = {
 
 // 漏斗图
 const funnel = {
-    animation : true,
+    animation : false,
     tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c}%'
@@ -242,7 +242,7 @@ const funnel = {
 
 // 折线柱状图
 const linebar = {
-    animation : true,
+    animation : false,
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -457,7 +457,7 @@ const map = {
 
 // 仪表盘
 const gauge = {
-    animation : true,
+    animation : false,
     tooltip: {
         formatter: "{a} : {c}"
     },
