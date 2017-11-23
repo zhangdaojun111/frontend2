@@ -58,9 +58,6 @@ export class CellNineGridComponent extends CellBaseComponent {
         });
         Object.keys(cellChart['chart']['xAxis']).sort().forEach((keys,index) => {
             xAxis.push(cellChart['chart']['xAxis'][keys]);
-            // yAxis.forEach((val,yAxisindex) => {
-            //     legend.push(val + cellChart['chart']['xAxis'][keys]);
-            // });
         });
         Object.keys(cellChart['chart']['yAxis']).sort().forEach((keys,index) => {
             yAxis.push(cellChart['chart']['yAxis'][keys]);
