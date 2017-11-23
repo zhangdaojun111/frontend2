@@ -2914,6 +2914,7 @@ let config = {
                         table_id: this.data.tableId,
                         id: data.colDef.id,
                         real_id: data.data._id,
+                        temp_id: data.data.temp_id,
                         value: data['value'],
                         mode: 'view'
                     };
