@@ -3620,7 +3620,7 @@ let config = {
             return;
         }
 
-        if (this.data.viewMode == 'normal' && this.data.cacheData) {
+        if (this.data.viewMode == 'normal' && this.data.cacheData && window.config.cached_data) {
             let data = window.config.cached_data;
             console.log("只加载Header的cache数据");
             console.log(data);
