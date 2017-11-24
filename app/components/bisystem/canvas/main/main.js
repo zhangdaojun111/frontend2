@@ -118,7 +118,7 @@ let config = {
         checkUrl(){
             this.data.isSingle = (this.actions.getUrlParam('single') === 'true') || false;
             this.data.isPdf = window.config.pdf === true;
-            if(this.data.isSingle === true){
+            if(this.data.isSingle || this.data.isPdf ){
                 this.el.find('.views-header').hide();
             }
         }

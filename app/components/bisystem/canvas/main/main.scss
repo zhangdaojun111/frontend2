@@ -23,7 +23,8 @@ $print-height: 1485px;
     .cells-container {
         position: absolute;
         width: 100%;
-        height: calc(100% - 50px);
+        //height: calc(100% - 50px);
+        height: 100%;
         overflow: auto;
         z-index: 90;
         &.client {

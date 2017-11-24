@@ -23,9 +23,11 @@ let config = {
             let res;
             if(this.data.isPdf === true){
                 res = window.config.bi_data;
+                res['success'] = 1;
             }else {
                 res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1}, false);
             }
+
             if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
 
                 if (res['success'] == 0) {
@@ -63,7 +65,6 @@ let config = {
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
             }
-
         },
         /**
          * 瀑布流方式加载cell chart data 数据(移动端的处理)
@@ -171,14 +172,15 @@ let config = {
             this.data.cells[cellLayout.componentId] = cellLayout;
         },
 
-
         /**
          * 根据当前视图id，得到当前视图画布块布局，大小
          */
         async getCellLayout() {
-            let res;
+            let res = {};
             if(this.data.isPdf === true){
-                res = window.config.layout_data;
+                res['data'] = {};
+                res['data']['data'] = window.config.layout_data.data;
+                res['success'] = 1;
             }else{
                 res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
             }
@@ -308,7 +310,6 @@ let config = {
         // 瀑布流加载cellchart 数据
         if (this.data) {
             if(this.data.isPdf){
-                console.log('do load complete');
                 this.actions.loadingComplete();
             }else{
                 let windowSize = $(window).width();
