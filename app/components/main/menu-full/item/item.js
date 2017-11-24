@@ -47,7 +47,6 @@ let config = {
                         this.actions.showChildrenAtFull();
                     }
                 }
-                console.log(this.data);
                 if (this.data.ts_name == '' && this.data.table_id == "0") {
                     return;
                 }
@@ -354,8 +353,8 @@ let config = {
 };
 
 class FullMenuItem extends Component {
-    constructor(data, event) {
-        super(config, data, event)
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 
