@@ -605,7 +605,9 @@ export class EchartsService {
         }
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
         gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
-
+        gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
+            return value;
+        };
         return gaugeOption;
     }
     /**

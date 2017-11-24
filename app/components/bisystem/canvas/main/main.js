@@ -27,6 +27,9 @@ let config = {
             event: 'click',
             selector: '.to-edit-page',
             callback: function (context, event) {
+
+                let iFrameUrl = window.location.href.replace('index', 'manager');
+
                 PMAPI.openDialogByIframe(
                     iFrameUrl,
                     {

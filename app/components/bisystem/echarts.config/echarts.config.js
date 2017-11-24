@@ -488,7 +488,7 @@ const gauge = {
             axisLabel: {           // 坐标轴文本标签
                 textStyle: {       // 其余属性默认使用全局文本样式
                     color: '#000'
-                }
+                },
             },
             splitLine: {           // 分隔线
                 show: true,        // 默认显示，属性show控制显示与否
