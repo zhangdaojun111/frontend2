@@ -56,13 +56,15 @@ export class CellNineGridComponent extends CellBaseComponent {
             val = grids.slice(index * nineType, index * nineType + nineType);
             types.push(val);
         });
-        Object.keys(cellChart['chart']['yAxis']).sort().forEach(keys => {
-            yAxis.push(cellChart['chart']['yAxis'][keys]);
-        });
+
         Object.keys(cellChart['chart']['xAxis']).sort().forEach((keys,index) => {
             xAxis.push(cellChart['chart']['xAxis'][keys]);
-            yAxis.forEach((val,yAxisindex) => {
-                legend.push(val+ cellChart['chart']['xAxis'][keys])
+        });
+
+        Object.keys(cellChart['chart']['yAxis']).sort().forEach((keys,index) => {
+            yAxis.push(cellChart['chart']['yAxis'][keys]);
+            xAxis.forEach((val,xAxisindex) =>{
+                legend.push(cellChart['chart']['yAxis'][keys]+val);
             })
         });
         cellChart.grids = types;

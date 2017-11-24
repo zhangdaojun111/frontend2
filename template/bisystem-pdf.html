@@ -1,0 +1,28 @@
+{% load client_version %}
+<!DOCTYPE html>
+<html lang="en" class="bi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BI</title>
+</head>
+<body class="bi">
+<script>
+    window.config = {
+        'name': {{name}}
+
+        'pdf':true
+    };
+</script>
+<div id="route-outlet" class="bi-container"></div>
+</body>
+{% ifequal config.window_type 'develop'%}
+<script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
+<script type="text/javascript" src="http://localhost:8080/scripts/bi.js"></script>
+{% else %}
+<link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}" />
+<link rel="stylesheet" href=" {{ "/client/static/css/bi.css"|version }}" />
+<script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
+<script type="text/javascript" src=" {{ "/client/static/bi.js"|version }}"></script>
+{% endifequal %}
+</html>
