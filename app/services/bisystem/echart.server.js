@@ -195,7 +195,7 @@ export class EchartsService {
                 type: 'value',
                 inverse: false,
                 max: !isStack && secondMin > 0 ? secondMax > 0 ? secondMax : 0 :null,
-                min: !isStack && secondMin > 0 ? secondMin : secondMin > 0 ? 0 : null,
+                min: !isStack && secondMin > 0 ? secondMin > 0 ? 0 : secondMin : null,
                 interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
                 axisLabel: {
                     inside: false,
