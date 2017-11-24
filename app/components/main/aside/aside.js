@@ -375,7 +375,7 @@ let config = {
 
 class AsideComponent extends Component{
     constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
+        super($.extend(true,{},config,newConfig))
     }
 }
 
