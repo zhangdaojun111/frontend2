@@ -20,7 +20,6 @@ let config = {
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
         isSingle:false,
-        isPdf:false,
     },
     binds: [
         // 编辑模式
@@ -55,10 +54,6 @@ let config = {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                 this.data.cells.render(this.el.find('.cells-container'));
-
-                if(this.data.isPdf === true){
-                    this.data.cells.data.isPdf = true;
-                }
             }
         },
         /**

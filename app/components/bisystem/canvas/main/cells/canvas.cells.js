@@ -20,7 +20,12 @@ let config = {
          * @param cells 需要渲染的画布块数据的组件
          */
         async getCellChartData(layouts,cells) {
-            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1},false);
+            let res;
+            if(this.data.isPdf === true){
+                res = window.config.bi_data;
+            }else {
+                res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1}, false);
+            }
             if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
 
                 if (res['success'] == 0) {
@@ -111,16 +116,18 @@ let config = {
         },
 
         isScrollStop() {
-            // 判断此刻到顶部的距离是否和1秒前的距离相等
-            if(this.el.scrollTop() == this.data.curScrollTop) {
-                let windowSize = $(window).width();
-                if (windowSize && windowSize <= 960) {
-                    this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
-                } else {
-                    this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
+            if(!this.data.isPdf){
+                // 判断此刻到顶部的距离是否和1秒前的距离相等
+                if(this.el.scrollTop() == this.data.curScrollTop) {
+                    let windowSize = $(window).width();
+                    if (windowSize && windowSize <= 960) {
+                        this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
+                    } else {
+                        this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
+                    }
+                    clearInterval(this.data.interval);
+                    this.data.interval = null;
                 }
-                clearInterval(this.data.interval);
-                this.data.interval = null;
             }
         },
 
@@ -169,7 +176,13 @@ let config = {
          * 根据当前视图id，得到当前视图画布块布局，大小
          */
         async getCellLayout() {
-            const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
+            let res;
+            if(this.data.isPdf === true){
+                res = window.config.layout_data;
+            }else{
+                res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
+            }
+
             if (res['success'] === 1) {
                 try {
                     this.actions.loadCellChart(res['data']['data']);
@@ -200,6 +213,7 @@ let config = {
                     'currentViewId': this.data.currentViewId,
                     'cell': val
                 };
+
                 let cell = this.actions.makeCell(data);
                 this.data.cells[cell.componentId] = cell;
                 // 在客户模式下获取有没有下穿记录
@@ -265,8 +279,7 @@ let config = {
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
             }
-        }
-
+        },
     },
     binds: [
         { //滚动距离
@@ -285,11 +298,17 @@ let config = {
     ],
 
     async afterRender() {
+        if(window.config.pdf === true){
+            this.data.isPdf = true;
+        }
+
         // 获取画布块布局信息
         await this.actions.getCellLayout();
+
         // 瀑布流加载cellchart 数据
         if (this.data) {
             if(this.data.isPdf){
+                console.log('do load complete');
                 this.actions.loadingComplete();
             }else{
                 let windowSize = $(window).width();
