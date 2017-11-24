@@ -19,6 +19,8 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
+        isSingle:false,
+        isPdf:false,
     },
     binds: [
         // 编辑模式
@@ -26,9 +28,6 @@ let config = {
             event: 'click',
             selector: '.to-edit-page',
             callback: function (context, event) {
-                // 编辑模式Iframe
-                let iFrameUrl = window.location.href.replace('index', 'manager');
-
                 PMAPI.openDialogByIframe(
                     iFrameUrl,
                     {
@@ -57,7 +56,7 @@ let config = {
                 this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                 this.data.cells.render(this.el.find('.cells-container'));
 
-                if(window.location.href.indexOf('mode=pdf') !== -1){
+                if(this.data.isPdf === true){
                     this.data.cells.data.isPdf = true;
                 }
             }
@@ -105,17 +104,37 @@ let config = {
             this.data.cells.destroySelf();
             this.el.find('.component-bi-canvas-main').append("<div class='cells-container client " + this.data.editMode + "'></div>")
         },
-
+        /**
+         * 参数解析函数
+         * @param key
+         * @returns {null}
+         */
+        getUrlParam(key){
+            let reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)', 'i');
+            let r = window.location.search.substr(1).match(reg);
+            if (r !== null) {
+                return r[2];
+            }
+            return null
+        },
+        checkUrl(){
+            this.data.isSingle = (this.actions.getUrlParam('single') === 'true') || false;
+            this.data.isPdf = window.config.pdf === true;
+            if(this.data.isSingle === true){
+                this.el.find('.views-header').hide();
+            }
+        }
     },
     afterRender:function(){
         if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
             let w = $(self.frameElement).closest('.iframes').width();
             let h = $(self.frameElement).closest('.iframes').height();
             $('.bi-container').css({'width': w, 'height': h});
-        };
+        }
 
         //根据判断是否单行模式加载header
         this.actions.headLoad();
+        this.actions.checkUrl();
     },
     beforeDestory:function () {}
 };
