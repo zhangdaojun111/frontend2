@@ -1,7 +1,7 @@
 /**
  * Created by zhr
  */
-import FullMenuItemOld from '../../../../../../../app/components/main/menu-full/item/item'
+import {FullMenuItem as FullMenuItemOld} from '../../../../../../../app/components/main/menu-full/item/item'
 
 let config = {
     data: {
@@ -16,9 +16,6 @@ let config = {
             this.iconWrap.removeClass('ui-state-focus').addClass('ui-state-active');
             this.icon.removeClass('ui-icon-caret-1-e').addClass('ui-icon-caret-1-s');
             this.data.display = true;
-            // this.findBrothers().forEach((brother) => {
-            //     brother.actions.hideChildrenAtFull();
-            // });
         },
         /**
          * 设置checkbox的值
@@ -147,4 +144,4 @@ class FullMenuItem extends FullMenuItemOld {
         super(data,events,config);
     }
 }
-export default FullMenuItem;
+export {FullMenuItem};

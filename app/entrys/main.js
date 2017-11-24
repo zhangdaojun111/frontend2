@@ -6,7 +6,7 @@ import '../assets/scss/framework/framework-base.scss';
 import {SocketMgr} from '../lib/socket';
 import {IframeComponent} from '../components/main/iframes/iframes';
 import {HeaderComponent} from '../components/main/header/header';
-import AsideComponent from '../components/main/aside/aside';
+import {AsideComponent} from '../components/main/aside/aside';
 import '../assets/scss/dataGrid/dataGrid-icon.scss';
 import '../assets/scss/theme/blue.scss';
 import '../assets/scss/theme/ink-blue.scss';

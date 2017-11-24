@@ -1,7 +1,7 @@
 import Component from '../../../lib/component';
 import template from './aside.html';
 import './aside.scss';
-import MenuComponent from '../menu-full/menu.full';
+import {MenuComponent} from '../menu-full/menu.full';
 import Mediator from '../../../lib/mediator';
 import {PersonSetting} from "../personal-settings/personal-settings";
 import {HTTP} from '../../../lib/http';
@@ -379,5 +379,5 @@ class AsideComponent extends Component{
     }
 }
 
-export default AsideComponent;
+export {AsideComponent};
 // export const AsideInstance = new Component(config);

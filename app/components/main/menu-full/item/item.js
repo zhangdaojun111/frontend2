@@ -358,4 +358,4 @@ class FullMenuItem extends Component {
     }
 }
 
-export default FullMenuItem;
+export {FullMenuItem};
