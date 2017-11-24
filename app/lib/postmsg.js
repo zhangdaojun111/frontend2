@@ -120,6 +120,8 @@ window.addEventListener('message', function (event) {
                     element: element.appendTo(document.body),
                     params: params
                 };
+                let y_state = document.body.style.overflowY;
+                document.body.style.overflowY = 'hidden';
                 // element.one('load', () => {
                 //     PMAPI.sendToIframe(element[0], {
                 //         type: PMENUM.open_iframe_params,
@@ -139,6 +141,7 @@ window.addEventListener('message', function (event) {
                                 }
                             });
                         }
+                        document.body.style.overflowY = y_state;
                     }
                 }));
 
@@ -160,6 +163,7 @@ window.addEventListener('message', function (event) {
                     data: data.data
                 });
                 delete dialogHash[data.key];
+                document.body.style.overflowY = 'visible';
                 break;
             case PMENUM.recieve_data:
                 dialogWaitHash[data.key](data.data);

@@ -170,6 +170,18 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/chart_stylize.png') no-repeat;
     }
+    .chart-message-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_message.png') no-repeat;
+    }
+    .chart-approval-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_approval.png') no-repeat;
+    }
+    .chart-calendar-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/chart_calendar.png') no-repeat;
+    }
     .aside-normal-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/aside_barline.png') no-repeat;
@@ -209,6 +221,18 @@ html.bi, body.bi {
     .aside-stylzie-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/aside_stylize.png') no-repeat;
+    }
+    .aside-message-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_message.png') no-repeat;
+    }
+    .aside-approval-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_approval.png') no-repeat;
+    }
+    .aside-calendar-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/aside_calendar.png') no-repeat;
     }
     .rich-text-icon {
         @include icon;

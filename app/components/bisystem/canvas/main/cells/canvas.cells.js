@@ -12,6 +12,7 @@ let config = {
         currentViewId: '', // 当前画布块视图id
         cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
+        isPdf:false,
     },
     actions: {
         /**
@@ -19,7 +20,7 @@ let config = {
          * @param cells 需要渲染的画布块数据的组件
          */
         async getCellChartData(layouts,cells) {
-            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
+            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1},false);
             if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
 
                 if (res['success'] == 0) {
@@ -102,7 +103,7 @@ let config = {
             // 获取画布块的chart数据
             if (layouts.length > 0) {
                 await this.actions.getCellChartData(layouts,cells);
-            };
+            }
 
             return new Promise((resolve, reject) => {
                 resolve('finish');
@@ -112,7 +113,6 @@ let config = {
         isScrollStop() {
             // 判断此刻到顶部的距离是否和1秒前的距离相等
             if(this.el.scrollTop() == this.data.curScrollTop) {
-                console.log("scroll bar is stopping!");
                 let windowSize = $(window).width();
                 if (windowSize && windowSize <= 960) {
                     this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
@@ -218,7 +218,7 @@ let config = {
                     xOld: val.is_deep == 0 ? {} : userMode === 'client' ? val.deep['xOld'] : {},
                     row_id: 0,
                     deep_info: deep_info,
-                    sort: val.sort
+                    sort: window.config.bi_user === 'client' ? val.sort : {}
                 });
             });
 
@@ -254,6 +254,18 @@ let config = {
                 }
             });
         },
+        loadingComplete:function () {
+            let layouts = [];
+            let cells = [];
+            Object.keys(this.data.cells).forEach(key => {
+                layouts.push(this.data.cells[key].data.layout);
+                cells.push(this.data.cells[key]);
+            });
+            // 获取画布块的chart数据
+            if (layouts.length > 0) {
+                this.actions.getCellChartData(layouts,cells);
+            }
+        }
 
     },
     binds: [
@@ -275,13 +287,17 @@ let config = {
     async afterRender() {
         // 获取画布块布局信息
         await this.actions.getCellLayout();
-
+        // 瀑布流加载cellchart 数据
         if (this.data) {
-            let windowSize = $(window).width();
-            if (windowSize && windowSize <= 960) {
-                this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
-            } else {
-                this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+            if(this.data.isPdf){
+                this.actions.loadingComplete();
+            }else{
+                let windowSize = $(window).width();
+                if (windowSize && windowSize <= 960) {
+                    this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
+                } else {
+                    this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+                }
             }
         }
     },

@@ -84,7 +84,11 @@ let config = {
         this.actions.addClick();
         //获取在途数据
         this.actions.getInProcessNum();
-
+        this.el.find('.tabTitle .dataTableMiniForm').hover(function () {
+            $( '.dataTableMiniForm a i' ).addClass( 'icon-aggrid-miniForm-hover' ).removeClass('icon-aggrid-miniForm');
+        },function () {
+            $( '.dataTableMiniForm a i' ).addClass( 'icon-aggrid-miniForm' ).removeClass('icon-aggrid-miniForm-hover');
+        })
         //订阅数据失效
         PMAPI.subscribe(PMENUM.one_the_way_invalid, (info) => {
             let tableId = info.data.table_id;

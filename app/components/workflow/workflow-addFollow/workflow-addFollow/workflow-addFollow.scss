@@ -127,11 +127,12 @@
 
 #treeMulti,.search-main-m{
 	.buttons-in-tree{
-		position: sticky;
+		position: fixed;
+		top: 490px;
+		width: 248px;
 	}
 	.search-in-tree-hd{
-		position: sticky;
-		top: 0;
+		position:fixed;
 		background: #fff;
 		z-index: 99;
 		.txt{
@@ -141,6 +142,7 @@
 		.search-in-tree-box{
 			flex-grow: 1;
 			margin-left: 10px;
+			width: 175px;
 			input{
 				border: 1px solid #E4E4E4;
 				height: 22px;
