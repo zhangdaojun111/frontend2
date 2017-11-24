@@ -51,6 +51,12 @@ let config={
         }
     ],
     afterRender(){
+	    this.data.direction=1;
+    	if(this.data.direction){
+    		this.el.find('.df-input-label').addClass('flexItem');
+    		this.el.find('.radio-wrap').removeClass('height26');
+    		this.el.find('.direction-wrap').addClass('line');
+	    }
         if(this.data.is_view){
             this.el.find('.df-input-radio').attr('disabled',true);
         }else{
