@@ -120,7 +120,7 @@ const pie = {
         {
             name: '访问来源',
             type: 'pie',
-            radius: '70%',
+            radius: '80%',
             center: ['50%', '50%'],
             data: [],
             label: {
@@ -220,7 +220,7 @@ const radar = {
     radar: [
         {
             indicator: [],
-            radius: '70%',
+            radius: '80%',
             center: ['50%', '50%'],
         },
     ],
@@ -350,58 +350,59 @@ const stylzie = {
     xAxis: {
         type : 'value',
         min:0,
-        max:3,
+        // max:1000,
         data : [],
         axisLabel: {
-            formatter:  function (value, index) {
-                let texts = [];
-                switch (index) {
-                    case 1:
-                        // code
-                        texts.push('大盘');
-                        break;
-                    case 3:
-                        // code
-                        texts.push('中盘');
-                        break;
-                    case 5:
-                        // code
-                        texts.push('小盘');
-                        break;
-                    default:
-                        texts.push('');
-                    // code
-                }
-                return texts
-            }
+            // formatter:  function (value, index) {
+            //
+            //     let texts = [];
+            //     switch (index) {
+            //         case 1:
+            //             // code
+            //             texts.push('价值');
+            //             break;
+            //         case 3:
+            //             // code
+            //             texts.push('平衡');
+            //             break;
+            //         case 5:
+            //             // code
+            //             texts.push('成长');
+            //             break;
+            //         default:
+            //             texts.push('');
+            //         // code
+            //     }
+            //     return texts
+            // }
         }
     },
     yAxis: {
         type : 'value',
         min:0,
-        max:3,
+        // max:1000,
         axisLabel: {
-            formatter:  function (value, index) {
-                let texts = [];
-                switch (index) {
-                    case 1:
-                        // code
-                        texts.push('价值');
-                        break;
-                    case 3:
-                        // code
-                        texts.push('平衡');
-                        break;
-                    case 5:
-                        // code
-                        texts.push('成长');
-                        break;
-                    default:
-                        texts.push('');
-                    // code
-                }
-                return texts
-            }
+            // formatter:  function (value, index) {
+            //     let texts = [];
+            //     switch (index) {
+            //         case 1:
+            //             // code
+            //             texts.push('小盘');
+            //             break;
+            //         case 3:
+            //             // code
+            //             texts.push('中盘');
+            //             break;
+            //         case 5:
+            //             // code
+            //             texts.push('大盘');
+            //             break;
+            //         default:
+            //             texts.push('');
+            //         // code
+            //     }
+            //     return texts
+            // }
         }
     },
     series: [
@@ -492,11 +493,11 @@ const gauge = {
     // },
     series : [
         {
-            name:'业务指标',
+            name:'默认数据',
             type:'gauge',
             min:0,
             max:1,
-            radius:'70%',
+            radius:'80%',
             splitNumber: 20,       // 分割段数
             axisLine: {            // 坐标轴线
                 lineStyle: {       // 属性lineStyle控制线条样式
@@ -506,7 +507,7 @@ const gauge = {
             },
             axisTick: {            // 坐标轴小标记
                 splitNumber: 10,   // 每份split细分多少段
-                length :24,        // 属性length控制线长
+                length :20,        // 属性length控制线长
                 lineStyle: {       // 属性lineStyle控制线条样式
                     color: 'auto'
                 }
@@ -514,11 +515,11 @@ const gauge = {
             axisLabel: {           // 坐标轴文本标签
                 textStyle: {       // 其余属性默认使用全局文本样式
                     color: '#000'
-                }
+                },
             },
             splitLine: {           // 分隔线
                 show: true,        // 默认显示，属性show控制显示与否
-                length :24,         // 属性length控制线长
+                length :20,         // 属性length控制线长
                 lineStyle: {       // 属性lineStyle控制线条样式
                     color: 'auto'
                 }
@@ -534,7 +535,7 @@ const gauge = {
             },
             detail : {
                 formatter:'{value}',
-                offsetCenter: [0, '30%'], // x, y，单位px
+                offsetCenter: [0, 44], // x, y，单位px
                 textStyle: {       // 其余属性默认使用全局文本样
                     fontSize: '12',
                     fontWeight: 'bolder',

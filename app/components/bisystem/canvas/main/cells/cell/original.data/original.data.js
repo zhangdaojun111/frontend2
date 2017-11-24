@@ -196,7 +196,6 @@ let config = {
                     xAxis:this.data.xAxis,
                     select: data.select,
                     attribute: data.attribute,
-                    cache:0
                 };
 
                 if (this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id']) {
@@ -310,7 +309,6 @@ let config = {
                     type:sortType,
                 };
                 this.data.sort = sort;
-                this.data.cache = 0;
                 this.data.attribute = this.data.cellChart.cell.attribute; // 这个主要用于当更新数据reload时，保存现在的状态
                 this.trigger('onDeepSort', sort);
                 return false;
@@ -382,6 +380,7 @@ export class CanvasOriginalDataComponent extends Component {
      * 处理折线柱状图的原始数据
      */
     static handleLineBarOriginalData(data) {
+
         //　如果是分组　使用分组模版
         if (data.cellChart.chart.chartGroup['id']) {
             CanvasOriginalDataComponent.handleLineBarGroupOriginalData(data)

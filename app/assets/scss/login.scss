@@ -403,15 +403,20 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
         //needDownload时显示
         .need-download {
             position: fixed;
-            width: 600px;
+            width: 680px;
             height: 200px;
-            top: calc(50% - 100px);
+            top: calc(65% - 100px);
             left: calc(50% - 300px);
             display: none;
             span {
                 font-size: 20px;
                 font-weight: bold;
-                color: white;
+                color: #2298f4;
+            }
+            a {
+                color: #2298f4;
+                padding-left: 20px;
+                font-size: 20px
             }
         }
     }

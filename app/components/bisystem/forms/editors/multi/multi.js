@@ -87,7 +87,7 @@ let config = {
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
-                    };
+                    }
                 }
             }
             //发送状态给子组件
