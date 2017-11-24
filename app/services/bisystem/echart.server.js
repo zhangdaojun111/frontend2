@@ -188,6 +188,8 @@ export class EchartsService {
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
                 linebarOption['yAxis'][0]['interval'] =  linebarOption['yAxis'][0]['min'] >= 0 ? linebarOption['yAxis'][0]['max'] / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number((linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5)) : null
+            } else {
+                linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
             }
             linebarOption['yAxis'].push({
                 type: 'value',
