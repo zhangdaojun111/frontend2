@@ -324,58 +324,59 @@ const stylzie = {
     xAxis: {
         type : 'value',
         min:0,
-        max:3,
+        // max:1000,
         data : [],
         axisLabel: {
-            formatter:  function (value, index) {
-                let texts = [];
-                switch (index) {
-                    case 1:
-                        // code
-                        texts.push('大盘');
-                        break;
-                    case 3:
-                        // code
-                        texts.push('中盘');
-                        break;
-                    case 5:
-                        // code
-                        texts.push('小盘');
-                        break;
-                    default:
-                        texts.push('');
-                    // code
-                }
-                return texts
-            }
+            // formatter:  function (value, index) {
+            //
+            //     let texts = [];
+            //     switch (index) {
+            //         case 1:
+            //             // code
+            //             texts.push('价值');
+            //             break;
+            //         case 3:
+            //             // code
+            //             texts.push('平衡');
+            //             break;
+            //         case 5:
+            //             // code
+            //             texts.push('成长');
+            //             break;
+            //         default:
+            //             texts.push('');
+            //         // code
+            //     }
+            //     return texts
+            // }
         }
     },
     yAxis: {
         type : 'value',
         min:0,
-        max:3,
+        // max:1000,
         axisLabel: {
-            formatter:  function (value, index) {
-                let texts = [];
-                switch (index) {
-                    case 1:
-                        // code
-                        texts.push('价值');
-                        break;
-                    case 3:
-                        // code
-                        texts.push('平衡');
-                        break;
-                    case 5:
-                        // code
-                        texts.push('成长');
-                        break;
-                    default:
-                        texts.push('');
-                    // code
-                }
-                return texts
-            }
+            // formatter:  function (value, index) {
+            //     let texts = [];
+            //     switch (index) {
+            //         case 1:
+            //             // code
+            //             texts.push('小盘');
+            //             break;
+            //         case 3:
+            //             // code
+            //             texts.push('中盘');
+            //             break;
+            //         case 5:
+            //             // code
+            //             texts.push('大盘');
+            //             break;
+            //         default:
+            //             texts.push('');
+            //         // code
+            //     }
+            //     return texts
+            // }
         }
     },
     series: [
