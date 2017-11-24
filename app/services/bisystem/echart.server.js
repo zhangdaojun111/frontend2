@@ -186,15 +186,15 @@ export class EchartsService {
             // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
             if(!isStack) {
-                // linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
-                // linebarOption['yAxis'][0]['interval'] = linebarOption['yAxis'][0]['max'] / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number((linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5));
+                linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
+                linebarOption['yAxis'][0]['interval'] = linebarOption['yAxis'][0]['max'] / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number((linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5));
             }
             linebarOption['yAxis'].push({
                 type: 'value',
                 inverse: false,
-                // max: isStack ? null : secondMax > 0 ? secondMax : 0,
-                // min: isStack ? null :secondMin > 0 ? 0 : secondMin,
-                // interval: (secondMax - secondMin) / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number(Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5)),
+                max: isStack ? null : secondMax > 0 ? secondMax : 0,
+                min: isStack ? null :secondMin,
+                interval:isStack ? null : (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)),
                 axisLabel: {
                     inside: false,
                     formatter: function(value,index) {
