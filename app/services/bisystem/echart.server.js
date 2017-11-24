@@ -187,16 +187,17 @@ export class EchartsService {
         } else if (cellOption.double === 1) {
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
-                linebarOption['yAxis'][0]['interval'] = linebarOption['yAxis'][0]['max'] / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number((linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5));
+                linebarOption['yAxis'][0]['interval'] =  linebarOption['yAxis'][0]['min'] >= 0 ? linebarOption['yAxis'][0]['max'] / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number((linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5)) : null
             }
             linebarOption['yAxis'].push({
                 type: 'value',
                 inverse: false,
-                max: isStack ? null : secondMax > 0 ? secondMax : 0,
-                min: isStack ? null :secondMin,
-                interval:isStack ? null : (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)),
+                max: !isStack && secondMin > 0 ? secondMax > 0 ? secondMax : 0 :null,
+                min: !isStack && secondMin > 0 ? secondMin : null,
+                interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
                 axisLabel: {
                     inside: false,
+                    onZero: true,
                     formatter: function(value,index) {
                         let isDecimal = _.cloneDeep(value).toString().indexOf('.');
                         return isDecimal !== -1 ? value.toFixed(5) : value;
