@@ -52,7 +52,7 @@ let config={
     ],
     afterRender(){
 	    this.data.direction=1;
-    	if(this.data.direction){
+    	if(this.data.style && this.data.style.hs=='s'){
     		this.el.find('.df-input-label').addClass('flexItem');
     		this.el.find('.radio-wrap').removeClass('height26');
     		this.el.find('.direction-wrap').addClass('line');
