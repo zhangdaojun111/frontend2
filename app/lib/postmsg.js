@@ -163,6 +163,7 @@ window.addEventListener('message', function (event) {
                     data: data.data
                 });
                 delete dialogHash[data.key];
+                document.body.style.overflowY = 'visible';
                 break;
             case PMENUM.recieve_data:
                 dialogWaitHash[data.key](data.data);
