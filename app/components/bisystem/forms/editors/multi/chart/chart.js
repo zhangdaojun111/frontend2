@@ -235,7 +235,7 @@ let config = {
             if(this.formItems){
                 for (let key of Object.keys(this.formItems)) {
                     if (this.formItems[key].data.rules) {
-                        if(window.config.query_mark !== 'single'){
+                        if(window.config.query_mark !== 'single' && key=='countColumn'){
                             continue;
                         }
                         let isValid = this.formItems[key].valid();

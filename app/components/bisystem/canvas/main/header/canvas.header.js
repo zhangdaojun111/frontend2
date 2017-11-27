@@ -143,8 +143,6 @@ let config = {
             this.append(menu, this.el.find('.nav-tabs'));
             this.data.menus[viewData.id] = menu;
         });
-
-
     },
     firstAfterRender(){
         //修改单页模式下的url地址
