@@ -404,7 +404,7 @@ let config = {
             //自动打开的标签由系统设置的bi/日历 和 最后一次系统关闭时未关闭的标签两部分组成
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
-            let calendarConfig,biConfig;
+            let calendarConfig,biConfig,homeConfig;
 
             TabService.getOpeningTabs().then((result) => {
                 let tabs = {};
@@ -487,6 +487,22 @@ let config = {
                         }
                     }
                 }
+                //首页
+                if(result[3].succ === 1){
+                    homeConfig = result[3];
+                    if(homeConfig.data.substring(homeConfig.data.length - 1) !== "0" && homeConfig.data.substring(homeConfig.data.length - 1) !== "1"){
+                        homeConfig.data = "000";
+                    }
+                    window.config.sysConfig.logic_config.client_login_show_home = homeConfig.data.toString();
+                    if((homeConfig.data && homeConfig.data.substring(homeConfig.data.length - 1) === "1")){
+                        window.config.sysConfig.home_index = '/bi/index/?single=true#/canvas/' + homeConfig.data.substring(0,homeConfig.data.length - 1);
+                        that.data.biCalendarList.push({
+                            id: 'home',
+                            name: '首页',
+                            url: window.config.sysConfig.home_index
+                        });
+                    }
+                }
                 that.actions.autoOpenTabs();
             });
         },
@@ -494,10 +510,13 @@ let config = {
          * 根据设置准备的数据结果打开iframes
          */
         autoOpenTabs:function () {
+            console.log('auto---------------')
+            console.log(window.config)
             let menu = window.config.menu;
             this.actions.findTabInfo(menu,this.data.openingTabsList,this.data.autoOpenList);
             this.actions.sortTabs(this.data.autoOpenList,this.data.timeList);
             this.data.autoOpenList =  this.data.autoOpenList.concat(this.data.biCalendarList);
+            console.log(this.data.autoOpenList);
             //依次打开各标签
             if (this.data.autoOpenList.length) {
                 for(let k of this.data.autoOpenList){
