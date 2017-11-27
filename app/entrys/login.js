@@ -9,7 +9,13 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
-import {PasswordInput} from "../components/util/passwordInput/password-input"
+import {PasswordInput} from "../components/util/passwordInput/password-input";
+
+import {starter} from '../lib/three/starter';
+
+starter.init();
+
+starter.animate();
 
 function getLoginController() {
     let loginController = {

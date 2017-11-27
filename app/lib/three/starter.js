@@ -23,11 +23,7 @@ function getHeight() {
 starter.init = function () {
     container = document.createElement( 'div' );
     document.body.appendChild( container );
-    $(container).css({
-        position: 'fixed',
-        left: 0,
-        bottom: 0
-    });
+    $(container).addClass('wave');
     camera = new THREE.PerspectiveCamera( 75, getWidth() / getHeight(), 1, 10000 );
     camera.position.z = 1000;
     scene = new THREE.Scene();
@@ -38,7 +34,7 @@ starter.init = function () {
         fillColor: 0x023150,
         program: function ( context ) {
             context.beginPath();
-            context.arc( 0, 0, 0.5, 0, PI2, true );
+            context.arc( 0, 0, 0.4, 0, PI2, true );
             context.fill();
         }
     } );
@@ -51,7 +47,10 @@ starter.init = function () {
             scene.add( particle );
         }
     }
-    renderer = new CanvasRenderer.CanvasRenderer();
+    renderer = new CanvasRenderer.CanvasRenderer({
+        fillColor: 0xffffff,
+        alpha: true
+    });
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( getWidth(), getHeight() );
     container.appendChild( renderer.domElement );
