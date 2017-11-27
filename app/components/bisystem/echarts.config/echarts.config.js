@@ -350,59 +350,59 @@ const stylzie = {
     xAxis: {
         type : 'value',
         min:0,
-        // max:1000,
+        max:300,
         data : [],
         axisLabel: {
-            // formatter:  function (value, index) {
-            //
-            //     let texts = [];
-            //     switch (index) {
-            //         case 1:
-            //             // code
-            //             texts.push('价值');
-            //             break;
-            //         case 3:
-            //             // code
-            //             texts.push('平衡');
-            //             break;
-            //         case 5:
-            //             // code
-            //             texts.push('成长');
-            //             break;
-            //         default:
-            //             texts.push('');
-            //         // code
-            //     }
-            //     return texts
-            // }
+            formatter:  function (value, index) {
+
+                let texts = [];
+                switch (index) {
+                    case 1:
+                        // code
+                        texts.push('价值');
+                        break;
+                    case 3:
+                        // code
+                        texts.push('平衡');
+                        break;
+                    case 5:
+                        // code
+                        texts.push('成长');
+                        break;
+                    default:
+                        texts.push('');
+                    // code
+                }
+                return texts
+            }
         }
     },
     yAxis: {
         type : 'value',
         min:0,
-        // max:1000,
+        max:300,
         axisLabel: {
-            // formatter:  function (value, index) {
-            //     let texts = [];
-            //     switch (index) {
-            //         case 1:
-            //             // code
-            //             texts.push('小盘');
-            //             break;
-            //         case 3:
-            //             // code
-            //             texts.push('中盘');
-            //             break;
-            //         case 5:
-            //             // code
-            //             texts.push('大盘');
-            //             break;
-            //         default:
-            //             texts.push('');
-            //         // code
-            //     }
-            //     return texts
-            // }
+            formatter:  function (value, index) {
+                let texts = [];
+                switch (index) {
+                    case 1:
+                        // code
+                        texts.push('小盘');
+                        break;
+                    case 3:
+                        // code
+                        texts.push('中盘');
+                        break;
+                    case 5:
+                        // code
+                        texts.push('大盘');
+                        break;
+                    default:
+                        texts.push('');
+                    // code
+                }
+                return texts
+            }
         }
     },
     series: [
@@ -584,5 +584,32 @@ export const EchartsOption = {
                 break;
         }
         return _.cloneDeep(option);
+    },
+
+    // 风格箱X区间值转换
+    setStylzieX(x) {
+        let convertX;
+
+        if (x < 125 ) {
+            convertX = x * (100 / 125);
+        } else if (x >= 125 && x <= 175) {
+            convertX = (x - 125) * (100 / 50) + 100;
+        } else {
+            convertX = (x - 175) * (100 / 875) + 200;
+        }
+        return convertX;
+    },
+
+    // 风格箱Y区间值转换
+    setStylzieY(y) {
+        let convertY;
+        if (y < 100 ) {
+            convertY = y * 100 / 125;
+        } else if (y >=100 && y <= 200) {
+            convertY = (y - 100) * (100 / 100) + 100;
+        } else {
+            convertY = (y - 200) * (100 / 800) + 200;
+        }
+        return convertY;
     }
 };

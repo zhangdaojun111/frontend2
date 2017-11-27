@@ -525,7 +525,7 @@ export class EchartsService {
         const stylzieOption = EchartsOption.getEchartsConfigOption('stylzie');
         let data = _.cloneDeep(cellOption.data.xAxis).fill('');
         cellOption.data.xAxis.forEach((val,index) => {
-            let item = [val,cellOption.data.yAxis[index], new Date(cellOption.data.dateAxis[index]).getDate(),cellOption.data.dateAxis[index]];
+            let item = [EchartsOption.setStylzieX(val),EchartsOption.setStylzieY(cellOption.data.yAxis[index]), new Date(cellOption.data.dateAxis[index]).getDate(),cellOption.data.dateAxis[index]];
             data[index] = item;
         });
         // 如果时间是30 - 1号这种格式，需要把数据反转
@@ -542,6 +542,8 @@ export class EchartsService {
         links.pop();
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
+        console.log('================================');
+        console.log(data)
         return stylzieOption;
     }
 
