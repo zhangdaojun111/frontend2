@@ -56,7 +56,8 @@ export const PMENUM = {
     show_loading:'16',          //打开loading
     hide_loading:'17',          //隐藏loading
     open_preview:'18',          //打开图片浏览
-    aside_fold: '19'
+    aside_fold: '19',
+    send_event:'20'
 }
 
 /**
@@ -202,6 +203,13 @@ window.addEventListener('message', function (event) {
                 let ele = $('<div class="preview"></div>');
                 ele.appendTo(document.body);
                 preview.render(ele);
+                break;
+
+            case PMENUM.send_event:
+                if(data.data == 'click'){
+                    $(document.body).click();
+                }
+                PMAPI.sendToAllChildren(data);
                 break;
 
             default:
