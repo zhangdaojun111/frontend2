@@ -41,7 +41,11 @@ let config={
     afterRender(){
         this.showLoading();
         PMAPI.getIframeParams(this.data.key).then((res) => {
-            Mediator.publish('workflow:addusers', res.data.users);
+            Mediator.publish('workflow:addusers', res.data);
+	        this.data.preventClick=[];
+            for(let key in res.data.defaultFocus){
+	            this.data.preventClick.push(key);
+            } ;
         })
         this.el.on("input propertychange",".follower-search",()=>{
             this.action.search();
@@ -64,6 +68,7 @@ let config={
             $.each(res,(i,val)=>{
                 if(val){
                     val.id=i;
+	                val.preventClick=this.data.preventClick;
                     if(checked.length===0){
                         this.append(new SelectStaff(val), this.el.find('#staffMulti'));
                     }else if(arr.indexOf(i)===-1){
@@ -111,7 +116,7 @@ let config={
             let domDiv=this.el.find('#staffMulti').find('.flex');
             for(let i=0;i<domDiv.length;i++){
                 for(let j=0;j<userArr.length;j++){
-                    if($(domDiv[i]).data('id')===userArr[j]){
+                    if($(domDiv[i]).data('id')===userArr[j] && this.data.preventClick.indexOf($(domDiv[i]).data('id')) == -1){
                         $(domDiv[i]).parent().remove();
                     }
                 }
@@ -119,7 +124,7 @@ let config={
             let domSpan=this.el.find('#selected').find('span.removeble');
             for(let i=0;i<domSpan.length;i++){
                 for(let j=0;j<userArr.length;j++){
-                    if($(domSpan[i]).data('id')===userArr[j]){
+                    if($(domSpan[i]).data('id')===userArr[j] && this.data.preventClick.indexOf($(domSpan[i]).data('id')) == -1){
                         this.data.total--;
                         $(domSpan[i]).parent().remove();
                     }

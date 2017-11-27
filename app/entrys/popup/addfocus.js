@@ -132,7 +132,12 @@ if(focus.length>=1&&focus[0].indexOf('key')===-1){
     });
 }
 
-Mediator.subscribe('workflow:addusers', (arr) => {
+Mediator.subscribe('workflow:addusers', (res) => {
+	let arr=res.users;
+	let defaultFocus=[];
+	for (let key in res.defaultFocus){
+		defaultFocus.push(key);
+	}
     if(!arr||arr.length<1)return;
     let dept=[],idArr=[];
     (async function () {
@@ -154,7 +159,8 @@ Mediator.subscribe('workflow:addusers', (arr) => {
                 for (let item of data){
                     item.nodes=item.children;
                     for(let i in dept){
-                        if(item.text.indexOf(dept[i])!==-1){
+                        // if(item.text.indexOf(dept[i])!==-1){
+                        if(item.text== dept[i]){
                             item.state={};
                             item.state.checked=true;
                             item.state.selected=true;

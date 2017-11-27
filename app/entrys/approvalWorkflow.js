@@ -210,7 +210,8 @@ function GetQueryString(name)
 const approveWorkflow = (para) => {
     let key=GetQueryString('key');
     let validation_required = true
-    if(para.sigh_type == '0'&&para.sigh_user_id!=''){
+    let action_arr = [1,2,6,8];
+    if((para.sigh_type == '0'&&para.sigh_user_id!='') || action_arr.indexOf(para.action)!=-1){
         validation_required = false;
     }
     let formData=CreateFormServer.getFormValue(obj.table_id,true,false,validation_required);

@@ -194,7 +194,6 @@ let config={
          * 提交当前工作流
          */
         submitAddWorkflow() {
-            debugger
             let obj = this.data.obj;
             let formData = CreateFormServer.getFormValue(obj.table_id,true);
             if (formData.error) {

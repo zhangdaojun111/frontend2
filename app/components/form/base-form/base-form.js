@@ -120,7 +120,7 @@ let config = {
 						if (val || val == '') {
 							this.actions.setFormValue(songridDfield, val);
 						}
-						this.actions.triggerSingleControl(songridDfield);
+						// this.actions.triggerSingleControl(songridDfield);
 					}
 				}
 				if (window.top.idsInChildTableToParent.hasOwnProperty(this.data.tableId)) {
@@ -157,7 +157,7 @@ let config = {
 			//给统计赋值
 			for (let d in res["data"]) {
 				this.actions.setFormValue(d, res["data"][d]);
-                this.actions.triggerSingleControl(d);
+                // this.actions.triggerSingleControl(d);
 			}
 		},
 
@@ -948,7 +948,7 @@ let config = {
 						// 给统计赋值
 						for (let d in res["data"]) {
                             this.actions.setFormValue(d, this.actions.showAccuracy(d,res["data"][d]));
-                            this.actions.triggerSingleControl(d);
+                            // this.actions.triggerSingleControl(d);
 						}
                         if(res){
                             let calcData = {
@@ -1026,11 +1026,11 @@ let config = {
 				if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
 					if (res["data"][k]["-1"]) {
 						this.actions.setFormValue.bind(this)(k, res["data"][k]["-1"]);
-						this.actions.triggerSingleControl(k)
+						// this.actions.triggerSingleControl(k)
 					}
 				} else {
                     this.actions.setFormValue(k, this.actions.showAccuracy(k,res["data"][k]));
-					this.actions.triggerSingleControl(k);
+					// this.actions.triggerSingleControl(k);
 				}
 			}
 		},
@@ -1642,7 +1642,7 @@ let config = {
 			if (this.data.realId) {
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`, {
 					title: showName,
-					width: 1200,
+					width: 1400,
 					height: 800,
 				})
 			} else {
@@ -1868,7 +1868,11 @@ let config = {
 			let actions = this.actions.createActions();
 			for (let key in data) {
 				let single = this.el.find('div[data-dfield=' + data[key].dfield + ']');
+                if(single.parent().find('div').length >2){
+                    single.css('display','inline-block');
+                }
 				let type = single.data('type');
+
 				if (data[key].required) {
 					data[key]['requiredClass'] = data[key].value == '' ? 'required' : 'required2';
 

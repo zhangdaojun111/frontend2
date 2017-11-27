@@ -27,7 +27,7 @@ let config = {
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
-                };
+                }
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']['rich_field']);
@@ -125,6 +125,9 @@ let config = {
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
+                    if(window.config.query_mark !== 'single' && key=='countColumn'){
+                        continue;
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
