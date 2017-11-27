@@ -494,13 +494,15 @@ let config = {
                         homeConfig.data = "000";
                     }
                     window.config.sysConfig.logic_config.client_login_show_home = homeConfig.data.toString();
+                    window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + homeConfig.data.substring(0,homeConfig.data.length - 1);
                     if((homeConfig.data && homeConfig.data.substring(homeConfig.data.length - 1) === "1")){
-                        window.config.sysConfig.home_index = '/bi/index/?single=true#/canvas/' + homeConfig.data.substring(0,homeConfig.data.length - 1);
                         that.data.biCalendarList.push({
                             id: 'home',
                             name: '首页',
                             url: window.config.sysConfig.home_index
                         });
+                    }else{
+
                     }
                 }
                 that.actions.autoOpenTabs();
@@ -510,8 +512,6 @@ let config = {
          * 根据设置准备的数据结果打开iframes
          */
         autoOpenTabs:function () {
-            console.log('auto---------------')
-            console.log(window.config)
             let menu = window.config.menu;
             this.actions.findTabInfo(menu,this.data.openingTabsList,this.data.autoOpenList);
             this.actions.sortTabs(this.data.autoOpenList,this.data.timeList);
@@ -848,6 +848,12 @@ let config = {
                 this.actions.loadHidingIframes();
             }
         });
+
+        Mediator.subscribe('menu:homePageRefresh',(data)=>{
+            this.actions.closeIframe('home');
+            this.actions.openIframe(data.id, data.url, data.name,data.flag);
+            this.actions.focusIframe(data.id);
+        })
 
         this.actions.loadHidingIframes();
 

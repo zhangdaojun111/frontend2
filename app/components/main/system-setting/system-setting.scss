@@ -240,6 +240,7 @@
                     }
                     span {
                         vertical-align: middle;
+                        cursor: pointer;
                     }
                     .home-page-delete{
                         display: inline-block;
@@ -265,7 +266,6 @@
                 outline: none;
                 border: none;
                 cursor: pointer;
-                display: none;
             }
         }
     }

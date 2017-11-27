@@ -167,14 +167,21 @@ let config = {
          * 编辑首页
          */
         editHomePage:function(cancle){
-            if(!cancle) {
-                this.el.find('.cover').show();
-                this.el.find('.home-page-delete').show();
-                this.el.find('.home-page-save-btn').show();
-            }else{
+            this.el.find('.cover').show();
+            this.el.find('.home-page-delete').show();
+            this.el.find('.home-page-save-btn').html('保存');
+        },
+        /**
+         * 保存
+         * **/
+        editHomePageSave: function(){
+            if(this.el.find('.home-page-save-btn').html() == '关闭并刷新'){
+                this.actions.saveSetting(true);
+            }
+            if(this.el.find('.home-page-save-btn').html() == '保存') {
                 this.el.find('.cover').hide();
                 this.el.find('.home-page-delete').hide();
-                this.el.find('.home-page-save-btn').hide();
+                this.el.find('.home-page-save-btn').html('关闭并刷新');
             }
         },
         /**
@@ -208,8 +215,6 @@ let config = {
          * 选择首页
          * **/
         selectHomePage:function (e) {
-            console.log(e);
-            console.log(e.title);
             $("[name='home-page-checkbox']").not($(e)).prop("checked",false)
             $(e).prop("checked","checked");
             if(this.data.bi_view != e.title){
@@ -237,7 +242,8 @@ let config = {
             UserInfoService.saveHomePageConfig(json3).then((res)=>{
                 if(res.success === 1){
                     msgbox.showTips("设置成功")
-                    window.config.sysConfig.home_index = '/bi/index/?single=true#/canvas/' + this.data.bi_view;
+                    window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + this.data.bi_view;
+                    window.config.sysConfig.logic_config.client_login_show_home = res.data.toString();
                 }else{
                     msgbox.showTips("服务器错误")
                 }
@@ -247,8 +253,6 @@ let config = {
          * 删除首页
          * **/
         deleteHomePage:function (e) {
-            console.log(e);
-            console.log(e.title);
             ViewsService.delData({view_id:e.title}).then(res=>{
                 if(res['success']===1){
                     this.actions.getHomePageData(true);
@@ -262,9 +266,7 @@ let config = {
          * 编辑首页
          * **/
         setHomePage:function (e) {
-            console.log(e.title);
-            let iFrameUrl = window.location.href + 'bi/manager/?model=home';
-            console.log(iFrameUrl)
+            let iFrameUrl = '/bi/manager/?query_mark=home#/canvas/' + e.title;
             PMAPI.openDialogByIframe(
                 iFrameUrl,
                 {
@@ -273,15 +275,14 @@ let config = {
                     customSize: true,
 
                 }).then((data) => {
-                    //此处刷新首页tab
-                    // location.reload();
+
                 }
             );
         },
         /**
          * 保存用户快捷设置状态
          */
-        saveSetting:function () {
+        saveSetting:function (refresh) {
             this.showLoading();
             let biflag = 10;
             let calendarflag = 20;
@@ -330,8 +331,19 @@ let config = {
                     window.config.sysConfig.logic_config.client_login_show_bi = result[0].data.toString();
                     window.config.sysConfig.logic_config.client_login_show_calendar = result[1].data.toString();
                     window.config.sysConfig.logic_config.client_login_show_home = result[2].data.toString();
-                    msgbox.alert("设置保存成功");
+                    if(!refresh) {
+                        msgbox.alert("设置保存成功");
+                    }
                     SysSetting.hide();
+                    if(refresh){
+                        // _.debounce(()=>{
+                            Mediator.emit('menu:homePageRefresh',{
+                                id: 'home',
+                                name: '首页',
+                                url: window.config.sysConfig.home_index
+                            })
+                        // },200)
+                    }
                 }else{
                     msgbox.alert("设置保存失败");
                 }
@@ -430,7 +442,7 @@ let config = {
             event:'click',
             selector:'.home-page-save-btn',
             callback:function () {
-                this.actions.editHomePage(true);
+                this.actions.editHomePageSave();
             }
         },
         {
