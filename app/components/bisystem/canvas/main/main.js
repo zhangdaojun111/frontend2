@@ -66,7 +66,6 @@ let config = {
          * @param viewId
          */
         switchViewId: function (viewId) {
-            let that = this;
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
             // this.actions.resetViewArrayNo(viewId);

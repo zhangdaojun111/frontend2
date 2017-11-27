@@ -15,7 +15,9 @@ let config = {
         cellMaxZindex: 0,
         firstView:true,
         secondViewId:'',
-        animateDuration:1000  //动画执行时间1000ms
+        animateDuration:1000,  //动画执行时间1000ms
+        deleteComponentArr:[],
+        prepareDeleteComponentArr:[]
     },
     actions: {
         /**
@@ -155,8 +157,10 @@ let config = {
             let $wrap;
             if(this.data.firstView === true){
                 $wrap = this.el.find('.current');
+                this.data.deleteComponentArr.push(cell);
             }else{
                 $wrap = this.el.find('.prepare');
+                this.data.prepareDeleteComponentArr.push(cell);
             }
             this.append(cell, $wrap);
             return cell;
@@ -297,7 +301,8 @@ let config = {
             setTimeout(async function () {
                 current.attr('class','prepare cells');
                 prepare.attr('class','current cells');
-                that.el.find('.prepare').find('div').remove('[class != "cell ui-draggable ui-draggable-handle ui-resizable"]');
+                // that.el.find('.prepare').find('div').remove('[class != "cell ui-draggable ui-draggable-handle ui-resizable"]');
+                forthat.data.deleteComponentArr
                 that.actions.prepareViewData(that.data.currentViewId);
             },this.data.animateDuration)
         },
