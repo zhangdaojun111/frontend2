@@ -1,0 +1,46 @@
+<div class="report-content">
+    <div class="report-header">
+        <div class="tips"><i></i><span>{{tableName}}</span></div>
+        <div class="left-tool">
+            <span class="datepick pre-date"><i class="icon-calendar icon-calendar-date-pre"></i></span>
+            <div class="date-control"></div>
+            <span class="date-week"></span>
+            <span class="datepick next-date"><i class="icon-calendar icon-calendar-date-next"></i></span>
+        </div>
+        <div class="report-search">
+            <input class="search-box" type="text" placeholder="请输入要搜索的内容">
+            <i class="icon-calendar icon-calendar-search header-icon"></i>
+        </div>
+        <div class="right-tool flex">
+            <!--<span class="right-tool-btn" id="edit-report"><i class="icon-calendar icon-calendar-edit-report right-tool-icon"></i>编辑</span>-->
+            <!--<span class="right-tool-btn" id="save-report"><i class="icon-calendar icon-calendar-save-report right-tool-icon"></i>保存</span>-->
+            <span class="right-tool-btn" id="refresh"><i class="icon-calendar icon-calendar-refresh right-tool-icon"></i>刷新</span>
+            <!--<span class="right-tool-btn" id="new-report"><i class="icon-calendar icon-calendar-new-report right-tool-icon"></i>新增</span>-->
+            <span class="right-tool-btn" id="open-new-window"><i class="icon-calendar icon-calendar-new-window right-tool-icon"></i>新窗口</span>
+        </div>
+    </div>
+    <div class="report-body">
+        <div class="report-sidebar">
+            <div class="calc-sidebar icon-aggrid-shouhui"></div>
+            <div class="sidebar-tree"></div>
+            <div class="sidebar-users">
+                <button>全选</button>
+                <div class="wrap"></div>
+            </div>
+            <div class="sidebar-select"></div>
+        </div>
+        <div class="report-main">
+            <div class="report-data"></div>
+            <div class="report-remark">
+                <div class="remark-header flex">
+                    <span class="right-tool-btn"><i class="icon-calendar icon-calendar-remark right-tool-icon"></i>备注</span>
+                </div>
+                <!--<span class="work-time-tips">* 双击修改工时</span>-->
+                <div class="remark-body">
+                    <textarea class="remark-content"></textarea>
+                </div>
+                <button class="save-remark">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
