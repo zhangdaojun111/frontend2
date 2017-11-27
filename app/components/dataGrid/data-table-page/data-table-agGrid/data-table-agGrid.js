@@ -37,6 +37,7 @@ import '../../../../assets/scss/theme/blue.scss';
 import '../../../../assets/scss/theme/ink-blue.scss';
 import '../../../../assets/scss/theme/orange.scss';
 import {UserInfoService} from "../../../../services/main/userInfoService"
+import msgbox from '../../../../lib/msgbox';
 
 
 
@@ -1565,6 +1566,7 @@ let config = {
                 // json['first'] = 0;
                 // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
                 json['is_temp'] = 1;
+                json['tableType'] = 'dy';
                 delete json['rowId']
             }
             if (this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'child') {
@@ -2087,6 +2089,32 @@ let config = {
                     url = '/datagrid/custom_index/' + location.search + '&isNewWindow=true';
                 }
                 this.el.find('.grid-new-window')[0].href = url;
+            }
+            if (this.data.viewMode != 'in_process') {
+                $('.tabTitle .dataTableMiniForm').on('click', () => {
+                    if(window.top.miniFormVal){
+                        if( window.top.miniFormVal[this.data.tableId]){
+                            let obj = {
+                                table_id: this.data.tableId,
+                                parent_table_id: this.data.parentTableId,
+                                parent_real_id: this.data.parentRealId,
+                                parent_temp_id: this.data.parentTempId,
+                                parent_record_id: this.data.parentRecordId,
+                                btnType: 'new',
+                                form_id: this.data.formId,
+                                flow_id: this.data.flowId,
+                            };
+                            let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
+
+                            let title = '新增';
+                            this.actions.openSelfIframe(url, title);
+                        }else{
+                            msgbox.alert('本表中没有未提交的表单');
+                        }
+                    }else{
+                        msgbox.alert('本表中没有未提交的表单');
+                    }
+                })
             }
             //新增数据
             if (this.el.find('.new-form-btn')[0]) {
@@ -3620,7 +3648,7 @@ let config = {
             return;
         }
 
-        if (this.data.viewMode == 'normal' && this.data.cacheData) {
+        if (this.data.viewMode == 'normal' && this.data.cacheData && window.config.cached_data) {
             let data = window.config.cached_data;
             console.log("只加载Header的cache数据");
             console.log(data);

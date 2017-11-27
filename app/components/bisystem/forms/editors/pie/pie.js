@@ -153,7 +153,7 @@ let config = {
                     if(key == 'yAxis' && chart.pieType.value == 1){
                         continue;
                     }
-                    if(window.config.query_mark !== 'single'){
+                    if(window.config.query_mark !== 'single' && key=='countColumn'){
                         continue;
                     }
                     let isValid = this.formItems[key].valid();

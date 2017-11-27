@@ -176,28 +176,30 @@ export class EchartsService {
                 break;
             }
         }
-
+        const splitNumber = 5;// y轴分成几段
         if (!isStack) {
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
         }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
             linebarOption['grid']['right'] = '2.3%';
+            // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
-            const splitNumber = 5;
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
+                linebarOption['yAxis'][0]['interval'] =  linebarOption['yAxis'][0]['min'] >= 0 ? linebarOption['yAxis'][0]['max'] / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number((linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5)) : null
+            } else {
+                linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
             }
-            // linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
             linebarOption['yAxis'].push({
                 type: 'value',
                 inverse: false,
-                splitNumber: splitNumber,
-                max: secondMax > 0 ? secondMax : 0,
-                min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
-                // interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
+                max: !isStack && secondMin > 0 ? secondMax > 0 ? secondMax : 0 :null,
+                min: !isStack && secondMin > 0 ? secondMin > 0 ? 0 : secondMin : null,
+                interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
                 axisLabel: {
                     inside: false,
+                    onZero: true,
                     formatter: function(value,index) {
                         let isDecimal = _.cloneDeep(value).toString().indexOf('.');
                         return isDecimal !== -1 ? value.toFixed(5) : value;
@@ -286,6 +288,11 @@ export class EchartsService {
         let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
         if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
+            linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
+            if (cellOption.double === 1) {
+                linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
+            };
+
             linebarOption['dataZoom']=[
                 {
                 type: 'slider',
@@ -298,7 +305,6 @@ export class EchartsService {
                 endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                 rangeMode: ['value', 'value']
                 },
-
                 {
                     type: 'inside',
                     xAxisIndex: 0,
@@ -313,7 +319,7 @@ export class EchartsService {
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
-        console.log('---------------');
+        console.log('-----------------');
         console.log(linebarOption);
         return linebarOption;
     }
@@ -519,7 +525,7 @@ export class EchartsService {
         const stylzieOption = EchartsOption.getEchartsConfigOption('stylzie');
         let data = _.cloneDeep(cellOption.data.xAxis).fill('');
         cellOption.data.xAxis.forEach((val,index) => {
-            let item = [val,cellOption.data.yAxis[index], new Date(cellOption.data.dateAxis[index]).getDate(),cellOption.data.dateAxis[index]];
+            let item = [EchartsOption.setStylzieX(val),EchartsOption.setStylzieY(cellOption.data.yAxis[index]), new Date(cellOption.data.dateAxis[index]).getDate(),cellOption.data.dateAxis[index]];
             data[index] = item;
         });
         // 如果时间是30 - 1号这种格式，需要把数据反转
@@ -536,6 +542,8 @@ export class EchartsService {
         links.pop();
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
+        console.log('================================');
+        console.log(data)
         return stylzieOption;
     }
 
@@ -605,7 +613,9 @@ export class EchartsService {
         }
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
         gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
-
+        gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
+            return value;
+        };
         return gaugeOption;
     }
     /**
