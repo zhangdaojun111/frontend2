@@ -4,7 +4,7 @@
  * @author julianwa / https://github.com/julianwa
  */
 
-import * as THREE from "THREE";
+import * as THREE from "three";
 
 let Projector = {};
 Projector.RenderableObject = function () {
