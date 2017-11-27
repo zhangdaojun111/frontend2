@@ -28,7 +28,7 @@ let config = {
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
-                };
+                }
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']['x_field']);
@@ -73,7 +73,7 @@ let config = {
                     this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
 
@@ -87,7 +87,7 @@ let config = {
                    this.formItems['icon'].setList(icons)
                } else {
                    msgbox.alert(res['error'])
-               };
+               }
            });
 
         },
@@ -104,12 +104,12 @@ let config = {
                 "xOld":{},
                 "row_id":0,
                 "deep_info":{}
-            }
+            };
             const data = {
                 layouts:[JSON.stringify(layout)],
                 query_type:'deep',
                 is_deep:1,
-            }
+            };
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
@@ -139,12 +139,15 @@ let config = {
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
+                    if(window.config.query_mark !== 'single' && key=='countColumn'){
+                        continue;
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
-                    };
+                    }
                 }
-            };
+            }
 
             if(pass) {
                 this.save(chart);
@@ -243,9 +246,9 @@ let config = {
                                         if (column.id === item) {
                                             columns.push(column);
                                             break;
-                                        };
+                                        }
                                     }
-                                })
+                                });
                                 me.formItems['columns'].data.value = columns;
                                 me.formItems['table_single'].actions.setColumns(columns, me.formItems['columnNum'].getValue());
                             }
@@ -317,7 +320,7 @@ let config = {
                             this.formItems['columnNum'].el.hide();
                             this.formItems['countNum'].el.show();
                             this.formItems['table_single'].el.hide();
-                        };
+                        }
                     }
                 }
             },
@@ -372,17 +375,17 @@ let config = {
                 this.data.chart = res[0]['data']
             } else {
                 msgbox.alert(res[0]['error'])
-            };
-        };
+            }
+        }
 
         // 渲染图表表单字段
         this.drawForm();
         this.actions.init();
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
-        };
+        }
     }
-}
+};
 
 class TableEditor extends Base {
     constructor(data,extendConfig) {

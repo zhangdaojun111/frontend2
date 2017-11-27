@@ -32,7 +32,6 @@ let config = {
             // endDate = endDate || this.data.scheduleEnd;
             startDate = startDate? startDate:this.data.scheduleStart;
             endDate = endDate? endDate:this.data.scheduleEnd;
-            console.log(startDate, endDate);
             if( startDate === '' || endDate === '' ){
                 alert( '时间不能为空。' );
                 return;

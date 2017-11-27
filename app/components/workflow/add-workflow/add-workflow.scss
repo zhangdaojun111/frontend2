@@ -7,6 +7,11 @@
     div,span,a{
         box-sizing: border-box;
     }
+    .group-panel,.custom-columns-panel {
+        div{
+            box-sizing: content-box!important;
+        }
+    }
     #app-workflow{
         .workflow,#flow-node{
             margin-bottom: 30px;

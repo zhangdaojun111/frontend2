@@ -2,12 +2,14 @@ import Component from '../../../../lib/component';
 import template from './item.html';
 import Mediator from '../../../../lib/mediator';
 import 'jquery-ui/ui/widgets/tooltip';
+import './item.scss';
 
 let config = {
     template: template,
     data: {
         type: 'full',
-        expandChild: false
+        expandChild: false,
+        listComp:[]
     },
 
     actions: {
@@ -45,6 +47,9 @@ let config = {
                         this.actions.showChildrenAtFull();
                     }
                 }
+                if (this.data.ts_name == '' && this.data.table_id == "0") {
+                    return;
+                }
                 if (this.data.url && this.data.url !== ''){
                     Mediator.emit('menu:item:openiframe', {
                         id: this.data.namespace,
@@ -56,6 +61,9 @@ let config = {
             } else {
                 //编辑模式下不再打开tab
                 if(event.currentTarget.className.indexOf('edit') > 0){
+                    return;
+                }
+                if (this.data.ts_name == '' && this.data.table_id == "0") {
                     return;
                 }
                 let key;
@@ -78,25 +86,33 @@ let config = {
             // window.clearTimeout(this.data.timer);
             if (this.childlist.length) {
                 this.childlist.show();
-                let position = $(event).position();
+                //获取文档高度
+                let documentHeight= $(document).height();
+				let position = $(event).position();
                 let screenHeight = $('body').height();
                 let parentPos = $(event).parent().css('position') == 'fixed'?($(event).parent().position()):{top:0,left:0};
                 let top = position.top + parentPos.top;
-                let left = position.left + parentPos.left + Math.ceil($(event).outerWidth());
-                if ((position.top + this.childlist.height()) > screenHeight) {
-                    this.childlist.removeClass('top').addClass('bottom');
-                    this.childlist.css({
-                        bottom:0,
-                        left:left
-                    })
+				let left = position.left + parentPos.left + Math.ceil($(event).outerWidth());
+                if(this.childlist.height() >= (documentHeight - top)){
+					this.childlist.css({
+						bottom:0,
+						left:left
+					})
                 } else {
-                    this.childlist.removeClass('bottom').addClass('top');
-                    this.childlist.css({
-                        top:top,
-                        left:left
-                    })
+					this.childlist.removeClass('bottom').addClass('top');
+					this.childlist.css({
+						top:top,
+						left:left
+					})
 
-                }
+				}
+                // if ((position.top + this.childlist.height()) > screenHeight) {
+                //     this.childlist.removeClass('top').addClass('bottom');
+                //     this.childlist.css({
+                //         bottom:0,
+                //         left:left
+                //     })
+                // }
             }
         },
         /**
@@ -199,6 +215,43 @@ let config = {
                 'padding-left': offset + 'px',
                 'padding-right': '20px'
             });
+        },
+        isFilteredNode:function (input) {
+            let inputWithoutSpace = input.replace(/\s/g, '');
+            return (this.data.label.indexOf(input) != -1
+                || this.data.label.indexOf(inputWithoutSpace) != -1
+                || this.data.name_py.indexOf(input)!=-1
+                || this.data.name_py.indexOf(inputWithoutSpace)!=-1);
+        },
+        filter: function (input,isParentFiltered,isSiblingsFiltered) {
+            let isFiltered = false;
+            if(input.replace(/\s/g, '')==''){
+                this.el.show();
+                this.el.find('> .childlist').hide();
+            } else {
+                if(this.actions.isFilteredNode(input)){
+                    this.el.show();
+                    this.el.find('> .childlist').show();
+                    isFiltered = true;
+                } else if (isParentFiltered && !isSiblingsFiltered) {
+                    this.el.show();
+                } else {
+                    this.el.hide();
+                }
+            }
+            let isChildFiltered = false;
+            this.data.listComp.forEach(childNode=>{
+                isChildFiltered = isChildFiltered || childNode.actions.isFilteredNode(input);
+            });
+            let isOffspringsFiltered = false;
+            this.data.listComp.forEach(childNode=>{
+                isOffspringsFiltered = childNode.actions.filter(input,isFiltered,isChildFiltered) || isOffspringsFiltered;
+            });
+            if(isOffspringsFiltered){//如果子孙中有节点选中，则父节点也需显示
+                this.el.show();
+                this.el.find('> .childlist').show();
+            }
+            return isFiltered||isOffspringsFiltered;
         }
     },
     binds: [
@@ -262,13 +315,11 @@ let config = {
             }
             this.ownCheckbox.addClass('leaf').attr('key', this.data.key);
         }
-
         if (this.data.items) {
             this.data.items.forEach((data) => {
                 let newData = _.defaultsDeep({}, data, {
                     root: false,
                     offset: this.data.offset + 20,
-                    searchDisplay: true,
                     type: this.data.type
                 });
 
@@ -278,6 +329,7 @@ let config = {
                     }
                 });
                 this.append(component, this.childlist, 'li');
+                this.data.listComp.push(component);
             });
         }
         if (this.data.root !== true) {
@@ -301,8 +353,8 @@ let config = {
 };
 
 class FullMenuItem extends Component {
-    constructor(data, event) {
-        super(config, data, event)
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 

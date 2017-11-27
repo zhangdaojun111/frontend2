@@ -44,6 +44,8 @@ export const CreateFormServer={
 		this.data.buildId = config.id || '';//快捷添加的key
 		this.data.btnType = config.btnType || 'new';//按钮
 		this.data.viewMode = config.viewMode || '0';//aggrid权限
+        this.data.requestFormData = config.requestFormData=='1'?1:0;//不请求表单数据
+        this.data.noRequestFormData = config.noRequestFormData||[];//不请求表单数据时候的表单数据
 		this.data.inProcess = config.in_process || '0';//是否查询临时数据
 		this.data.data_from_row_id = config.data_from_row_id || '';//半触发操作
 		this.data.operation_id = config.operation_id || '';//半触发操作
@@ -388,10 +390,14 @@ export const CreateFormServer={
 
 	//对外部模块提供获取表单数据接口
 	//@param tableId表名 isCheck是否需要baseform执行表单数据验证
-	getFormValue(tableId, isCheck,needCache) {
+	getFormValue(tableId, isCheck,needCache,validation_required) {
+		if(validation_required==undefined){
+            validation_required = true;
+		}
 		if (!this.childForm[tableId]) {
 			return;
 		}
+        this.childForm[tableId].data.validation_required = validation_required;
 		return needCache?Object.assign({formValue:this.childForm[tableId].actions.getFormValue(isCheck)},this.childForm[tableId].actions.getCacheData()):this.childForm[tableId].actions.getFormValue(isCheck);
 	},
 
@@ -404,14 +410,20 @@ export const CreateFormServer={
 
 	async getData(){
 			let res;
-			if (!this.data.formId) {
-				//获取表单的form_id
-				res = await  FormService.getPrepareParmas({table_id: this.data.tableId});
-				this.findFormIdAndFlowId(res);
+			if(this.data.requestFormData!=1){
+				if (!this.data.formId) {
+					//获取表单的form_id
+					res = await  FormService.getPrepareParmas({table_id: this.data.tableId});
+					this.findFormIdAndFlowId(res);
+				}
+				//创建请求
+				let json = this.createPostJson();
+				res=await FormService.getFormData(json);
+				//将表单名称发送给工作流
+			}else {
+				console.log("不请求表单数据。")
+				res = this.data.noRequestFormData;
 			}
-			//创建请求
-			let json = this.createPostJson();
-			res=await FormService.getFormData(json);
 			//将表单名称发送给工作流
 			return  res
 	},
@@ -452,5 +464,6 @@ export const CreateFormServer={
 		//给工作流传表单初始数据
 		let valueChange = this.getFormValue(this.data.tableId, false)
 		Mediator.publish('workFlow:formValueChange', valueChange);
+        Mediator.publish('form:formTableId' , this.data);
 	}
 }

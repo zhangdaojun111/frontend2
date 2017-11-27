@@ -43,7 +43,7 @@ const BiAppRouter = Backbone.Router.extend({
             let canSaveView = window.config.bi_views.filter(item => item.id == canvasComponent.data.currentViewId);
             if (canSaveView[0] && canSaveView[0].self == 1) {
                 canvasComponent.data.headerComponents.trigger('onSaveCanvas');
-            };
+            }
         }
     },
 
@@ -62,7 +62,7 @@ const BiAppRouter = Backbone.Router.extend({
         } else {
             canvasComponent = new CanvasMain();
             canvasComponent.render($('#route-outlet'));
-        };
+        }
         canvasComponent.actions.switchViewId(id);
     },
     routerViewsEditComponent() {
@@ -93,7 +93,7 @@ const BiAppRouter = Backbone.Router.extend({
             let component = new componentsJson[type]['component'](comType);
             component.render($('#route-outlet'));
             formComponent[type] = component;
-        };
+        }
     }
 });
 

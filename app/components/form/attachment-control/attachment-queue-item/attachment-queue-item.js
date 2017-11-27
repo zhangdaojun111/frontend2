@@ -76,7 +76,9 @@ let config = {
                 let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
                 if(this.data.file.type.indexOf('image') != -1) {
                     PMAPI.openPreview({list:[{file_id:fileId}],id:fileId});
-                } else if (this.data.file.type == 'video/mp4') {
+                } else if (this.data.file.type == 'video/mp4'
+                    || this.data.file.type == 'audio/mp3'
+                    || this.data.file.type == 'audio/wav') {
                     ViewVideo.data.rows = [{file_id:fileId,file_name:this.data._controlItem.file.name}];
                     ViewVideo.data.dinput_type = this.data.real_type;
                     ViewVideo.data.currentVideoId = fileId;
@@ -126,7 +128,10 @@ let config = {
 
                 if(this.data.real_type == 9 || this.data.real_type == 33){
                     this.el.find('.preview').css('display','inline');
-                    if(this.data.file.type.indexOf('image') == -1 && this.data.file.type != 'video/mp4'){
+                    if(this.data.file.type.indexOf('image') == -1
+                        && this.data.file.type != 'video/mp4'
+                        && this.data.file.type != 'audio/mp3'
+                        && this.data.file.type != 'audio/wav'){
                         this.el.find('.preview').css({'color':'grey','cursor':'auto'});
                     }
                 }

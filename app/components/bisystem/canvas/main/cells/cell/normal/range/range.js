@@ -9,7 +9,9 @@ import msgbox from '../../../../../../../../lib/msgbox';
 
 let config = {
     template: template,
-    data: {},
+    data: {
+        show:true
+    },
     actions: {
         /**
          * 根据type==3/5/12/30 判断可选范围
@@ -48,7 +50,7 @@ let config = {
                     this.data.startValue = item;
                     break;
                 }
-            };
+            }
 
             for (let item of names) {
                 if (Date.parse(item) === dateEnd) {
@@ -56,20 +58,21 @@ let config = {
                     break;
                 }
             }
+
             this.el.find('.date-start').val(this.data.startValue);
             this.el.find('.date-end').val(this.data.endValue);
         }
     },
     binds:[
         {   //选中状态(1周 1月 半年 1年 全部)
-            event:'change',
-            selector:'.normal-date-options input',
+            event:'click',
+            selector:'.normal-date-options label',
             callback:function (context,event) {
                 if(!$(context).parent().next().is('.option-disabled')){
-                    $(context).parents('label').addClass('option-active');
-                    $(context).parents('label').siblings().removeClass('option-active');
+                    $(context).addClass('option-active');
+                    $(context).siblings().removeClass('option-active');
                 }
-                this.trigger('onChangeDateData', {'startValue': this.data.startValue,'endValue':this.data.endValue,type:$(context).val()})
+                this.trigger('onChangeDateData', {'startValue': this.data.startValue,'endValue':this.data.endValue,type:$(context).find('input').val()})
                 return false;
             }
         },
@@ -83,7 +86,7 @@ let config = {
                     msgbox.alert('开始时间不能大于结束时间');
                 } else {
                     this.trigger('onChangeDateData', {'startValue': startValue,'endValue':endValue,type:'custom'})
-                };
+                }
                 return false;
             }
         }
@@ -93,6 +96,7 @@ let config = {
 
         //默认选中全部
         this.el.find('.normal-date-options .all-year input').prop('checked', true);
+        this.el.find('.normal-date-options .all-year').addClass('option-active');
     },
     beforeDestory() {}
 };

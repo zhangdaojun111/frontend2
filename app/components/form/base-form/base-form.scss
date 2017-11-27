@@ -53,6 +53,8 @@
         .info {
             color: #ccc;
             cursor: default;
+            height:30px;
+            line-height:30px;
         }
         .inline {
             display: inline;
@@ -154,7 +156,6 @@
         padding-right: 10px;
         background: #FFF5F5 url(../../../assets/images/form/error-msg.png) no-repeat;
         white-space: normal;
-        z-index: 999;
         width: 300px;
         .ui-error-arrow {
             position: absolute;

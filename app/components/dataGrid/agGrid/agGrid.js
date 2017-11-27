@@ -57,6 +57,10 @@ let config = {
         },
         setRowStyle:function (param) {
         },
+        isExternalFilterPresent:function () {
+        },
+        doesExternalFilterPass:function ($event) {
+        },
         rowDataChanged:function ($event) {
         },
         onCellValueChanged:function ($event) {
@@ -92,6 +96,9 @@ let config = {
                 //双击查看
                 onCellClicked: this.data.onCellClicked,
                 onCellValueChanged: this.data.onCellValueChanged,
+                //外部搜索
+                isExternalFilterPresent: this.data.isExternalFilterPresent,
+                doesExternalFilterPass: this.data.doesExternalFilterPass,
                 //行双击
                 onRowDoubleClicked: this.data.onRowDoubleClicked,
                 //单元格双击
@@ -148,6 +155,11 @@ let config = {
                 this.gridOptions.api.setColumnDefs( json.columnDefs );
             }
             if( json.rowData ){
+                for(let k in json.rowData){
+                    if( json.rowData[k].msg_content){
+                        json.rowData[k].msg_content = json.rowData[k].msg_content.toString().replace(/<.*?>/ig,"");
+                    }
+                }
                 this.data.rowData = json.rowData;
                 this.gridOptions.api.setRowData( json.rowData );
             }

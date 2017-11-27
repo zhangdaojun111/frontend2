@@ -24,7 +24,14 @@ let countColumn = {
     defaultValue: {},
     type: 'radio',
     list:[],
-    events: {}
+    events: {},
+    required: true,
+    rules:[
+        {
+            errorMsg: '统计字段不能为空',
+            type: 'required',
+        }
+    ],
 };
 
 let theme = {

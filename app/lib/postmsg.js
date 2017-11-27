@@ -56,7 +56,8 @@ export const PMENUM = {
     show_loading:'16',          //打开loading
     hide_loading:'17',          //隐藏loading
     open_preview:'18',          //打开图片浏览
-    aside_fold: '19'
+    aside_fold: '19',
+    send_event:'20'
 }
 
 /**
@@ -120,6 +121,8 @@ window.addEventListener('message', function (event) {
                     element: element.appendTo(document.body),
                     params: params
                 };
+                let y_state = document.body.style.overflowY;
+                document.body.style.overflowY = 'hidden';
                 // element.one('load', () => {
                 //     PMAPI.sendToIframe(element[0], {
                 //         type: PMENUM.open_iframe_params,
@@ -139,6 +142,7 @@ window.addEventListener('message', function (event) {
                                 }
                             });
                         }
+                        document.body.style.overflowY = y_state;
                     }
                 }));
 
@@ -160,6 +164,7 @@ window.addEventListener('message', function (event) {
                     data: data.data
                 });
                 delete dialogHash[data.key];
+                document.body.style.overflowY = 'visible';
                 break;
             case PMENUM.recieve_data:
                 dialogWaitHash[data.key](data.data);
@@ -198,6 +203,13 @@ window.addEventListener('message', function (event) {
                 let ele = $('<div class="preview"></div>');
                 ele.appendTo(document.body);
                 preview.render(ele);
+                break;
+
+            case PMENUM.send_event:
+                if(data.data == 'click'){
+                    $(document.body).click();
+                }
+                PMAPI.sendToAllChildren(data);
                 break;
 
             default:

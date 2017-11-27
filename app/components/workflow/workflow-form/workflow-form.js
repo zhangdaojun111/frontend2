@@ -13,13 +13,17 @@ import Attachment from '../../form/attachment-list/attachment-list';
 import {FormService} from "../../../services/formService/formService";
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import SettingPrint from '../../form/setting-print/setting-print';
+import {CreateFormServer} from "../../../services/formService/CreateFormServer";
 
 let config = {
     template: template,
     data:{
         attachment:[], //表单附件
         isshowprintbtn: false, //是否显示打印附件按钮
-        isshowfjbtn: false
+        isshowfjbtn: false,
+        miniFormVal:'',
+        tableId:'',
+        btnType:'',
     },
     actions: {
         showImgDel(e){
@@ -36,7 +40,6 @@ let config = {
             em.remove();
             el.remove();
             if(el.hasClass('deloldimg')){
-                console.log();
                 let id = el.attr('data-imgid');
                 this.data.delsign.push(parseInt(id));
             }
@@ -78,7 +81,6 @@ let config = {
             for (let i=0;i<len;i++){
                 let left = imgInfo[i].viewLeft + "%";
                 let top = imgInfo[i].viewTop + "%";
-                // console.log(window.config);
                 if(imgInfo[i].user == window.config.ID&&this.data.view){
                     html += `<div class='deloldimg noprint'  data-imgid=${imgInfo[i].id} style="left:${left};top:${top};height:${imgInfo[i].height}px;width:${imgInfo[i].width}px ">
                             <img style="max-height:150px;width:100%" src='/download_attachment/?file_id=${imgInfo[i].file_id}&download=0'/>
@@ -172,7 +174,21 @@ let config = {
 
                 modal: true
             })
-        }
+        },
+        //表单最小化
+        miniForm() {
+            this.data.miniFormVal = CreateFormServer.getFormValue(this.data.tableId, false)
+            if (!window.top.miniFormVal) {
+                window.top.miniFormVal = {};
+            }
+            window.top.miniFormVal[this.data.tableId] = this.data.miniFormVal;
+            window.top.miniFormValTableId = this.data.tableId;
+            PMAPI.sendToRealParent({
+                type: PMENUM.close_dialog,
+                key: this.data.key,
+                data: 'success',
+            });
+        },
     },
     binds:[
         {
@@ -185,6 +201,15 @@ let config = {
     ],
     afterRender: function() {
         // this.showLoading();
+        Mediator.subscribe('form:formTableId' , (msg)=>{
+            this.data.tableId = msg.tableId;
+            this.data.btnType = msg.btnType;
+            if(this.data.btnType == 'new'){
+                this.el.find('.miniFormBtn').show();
+            }else{
+                this.el.find('.miniFormBtn').hide();
+            }
+        });
         let serchStr = location.search.slice(1),obj={};
         serchStr.split('&').forEach(res => {
             let arr = res.split('=');
@@ -222,7 +247,10 @@ let config = {
         });
         this.el.on('click','#printBtn', () => {
             this.actions.printSetting();
-        })
+        });
+        this.el.on('click','#miniFormBtn', () => {
+            this.actions.miniForm();
+        });
         Mediator.subscribe('workFlow:record_info',(res)=>{
             if(res.attachment.length){
                 this.data.attachment = res.attachment;

@@ -9,6 +9,7 @@ import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import {SaveView} from "./new-save-view/new-save-view";
 import {TabService} from "../../../services/main/tabService";
 // import {IframesManager} from "../../../lib/iframes-manager";
+import msgbox from '../../../lib/msgbox';
 
 // let IframeOnClick = {
 //     resolution: 200,
@@ -240,7 +241,9 @@ let config = {
                 iframe.on('load',function () {
                     let item = $(this).parent();
                     item.attr('load', 'complete');
-                    that.actions.iframeHideLoading(item);
+                    setTimeout(()=>{
+                        that.actions.iframeHideLoading(item);
+                    },0)
                 });
                 iframe.attr('src', iframe.attr('_src'));
                 iframe.removeAttr('_src');
@@ -695,15 +698,29 @@ let config = {
             callback:function (target) {
                 let id = $(target).attr('iframeid');
                 this.actions.focusIframe(id);
+                window.top.miniFormValTableId = id ;
             }
         },
         {
             event:'click',
             selector:'.tabs .item .close',
             callback:function (target) {
-                let id = $(target).attr('iframeid');
-                this.actions.closeIframe(id);
-                return false;
+                let bool = false;
+                if(window.top.miniFormVal){
+                    if(Object.keys(window.top.miniFormVal).indexOf($(target).attr('iframeid')) != -1 && window.top.miniFormVal[$(target).attr('iframeid')] !=''){
+                        msgbox.alert('本表中有未提交的表单，请先完成提交或关闭表单');
+                    }else{
+                        delete window.top.miniFormVal[$(target).attr('iframeid')];
+                        bool = true;
+                    }
+                }else{
+                    bool = true;
+                }
+                if(bool){
+                    let id = $(target).attr('iframeid');
+                    this.actions.closeIframe(id);
+                    return false;
+                }
             },
         },
         // {

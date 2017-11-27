@@ -21,8 +21,8 @@ handlebars.registerHelper('enumerateLegend', function(grids,index, options) {
 let config = {
     template: template,
     data: {
-        yAxis: [], // 大盘 小盘 中盘
-        xAxis: [], // 价值 核心 成长
+        yAxis: [], // 大盘 中盘 小盘
+        xAxis: [], // 成长 价值 核心
         grids: [], // 九宫图数据
         legend: []
     },
@@ -56,14 +56,15 @@ export class CellNineGridComponent extends CellBaseComponent {
             val = grids.slice(index * nineType, index * nineType + nineType);
             types.push(val);
         });
-        Object.keys(cellChart['chart']['yAxis']).sort().forEach(keys => {
-            yAxis.push(cellChart['chart']['yAxis'][keys])
-        });
 
         Object.keys(cellChart['chart']['xAxis']).sort().forEach((keys,index) => {
             xAxis.push(cellChart['chart']['xAxis'][keys]);
-            yAxis.forEach((val,yAxisindex) => {
-                legend.push(val+ cellChart['chart']['xAxis'][keys])
+        });
+
+        Object.keys(cellChart['chart']['yAxis']).sort().forEach((keys,index) => {
+            yAxis.push(cellChart['chart']['yAxis'][keys]);
+            xAxis.forEach((val,xAxisindex) =>{
+                legend.push(cellChart['chart']['yAxis'][keys]+val);
             })
         });
         cellChart.grids = types;

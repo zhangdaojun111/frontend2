@@ -23,7 +23,7 @@ let config = {
                     this.formItems['source'].setList(res['data']);
                 } else {
                     msgbox.alert(res['error'])
-                };
+                }
             });
 
             // 获取图标
@@ -36,7 +36,7 @@ let config = {
                    this.formItems['icon'].setList(icons)
                } else {
                    msgbox.alert(res['error'])
-               };
+               }
            });
 
         },
@@ -53,12 +53,12 @@ let config = {
                 "xOld":{},
                 "row_id":0,
                 "deep_info":{}
-            }
+            };
             const data = {
                 layouts:[JSON.stringify(layout)],
                 query_type:'deep',
                 is_deep:1,
-            }
+            };
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
         },
@@ -72,7 +72,7 @@ let config = {
             for(let i = 1; i<=data.type;i++) {
                 xAxis['x'+i] = data['x'+i];
                 yAxis['y'+i] = data['y'+i];
-            };
+            }
             let chart = {
                 assortment: 'nineGrid',
                 chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
@@ -88,12 +88,15 @@ let config = {
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
+                    if(window.config.query_mark !== 'single' && key=='countColumn'){
+                        continue;
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
-                    };
+                    }
                 }
-            };
+            }
             if (pass) {
                 this.save(chart);
             }
@@ -113,7 +116,7 @@ let config = {
             for(let i = 1; i<=chart.type;i++) {
                 this.formItems['x'+i].setValue(chart['xAxis']['x'+i]);
                 this.formItems['y'+i].setValue(chart['yAxis']['y'+i]);
-            };
+            }
         }
     },
     data: {
@@ -146,8 +149,8 @@ let config = {
                             } else {
                                 this.formItems['countColumn'].actions.clear();
                                 this.formItems['countColumn'].el.hide();
-                            };
-                        };
+                            }
+                        }
                     }
                 }
             },
@@ -277,8 +280,8 @@ let config = {
                 this.data.chart = res[0]['data']
             } else {
                 msgbox.alert(res[0]['error'])
-            };
-        };
+            }
+        }
 
         // 渲染图表表单字段
         this.drawForm();
@@ -289,7 +292,7 @@ let config = {
         }
 
     }
-}
+};
 
 class NineGridEditor extends Base {
     constructor(data,extendConfig) {

@@ -3,11 +3,10 @@ import '../../assets/scss/workflow/workflow-base.scss'
 import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
 import {workflowService} from '../../services/workflow/workflow.service';
-import TreeView from  '../../components/util/tree/tree';
 import WorkflowAddFollow from '../../components/workflow/workflow-addFollow/workflow-addFollow/workflow-addFollow';
+import TreeView from "../../components/util/tree/tree";
 
 //请求部门员工信息，加载树
-console.log('wf');
 let tree=[];
 let staff=[];
 function recursion(arr,slnds,pubInfo){
@@ -133,7 +132,12 @@ if(focus.length>=1&&focus[0].indexOf('key')===-1){
     });
 }
 
-Mediator.subscribe('workflow:addusers', (arr) => {
+Mediator.subscribe('workflow:addusers', (res) => {
+	let arr=res.users;
+	let defaultFocus=[];
+	for (let key in res.defaultFocus){
+		defaultFocus.push(key);
+	}
     if(!arr||arr.length<1)return;
     let dept=[],idArr=[];
     (async function () {
@@ -155,7 +159,8 @@ Mediator.subscribe('workflow:addusers', (arr) => {
                 for (let item of data){
                     item.nodes=item.children;
                     for(let i in dept){
-                        if(item.text.indexOf(dept[i])!==-1){
+                        // if(item.text.indexOf(dept[i])!==-1){
+                        if(item.text== dept[i]){
                             item.state={};
                             item.state.checked=true;
                             item.state.selected=true;

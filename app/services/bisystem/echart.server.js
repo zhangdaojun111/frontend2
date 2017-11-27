@@ -2,18 +2,19 @@
  * Created by birdyy on 2017/8/1.
  * name echarts 服务渲染
  */
-import * as echarts from 'echarts';
+import echarts from 'echarts';
 import {EchartsOption} from '../../components/bisystem/echarts.config/echarts.config';
 import {ToolPlugin} from "../../components/bisystem/utils/tool.plugin";
 import {HTTP} from '../../lib/http';
 import {canvasCellService} from './canvas.cell.service';
+import * as chinaMap from '../../components/bisystem/utils/china';
+
 const defaultOption = {
     grid: {},
     xAxis : [],
     yAxis : [],
     series : []
 };
-
 
 export class EchartsService {
     constructor(cellChart) {
@@ -34,6 +35,9 @@ export class EchartsService {
             case 'pie':
                 option = this.pieOption(cellChart);// 饼图处理
                 break;
+            case 'circular':
+                option = this.pieOption(cellChart);// 环形图处理
+                break;
             case 'multilist':
                 option = this.multiChartOption(cellChart); // 多表处理
                 break;
@@ -49,6 +53,12 @@ export class EchartsService {
             case 'stylzie':
                 option = this.stylzieOption(cellChart); // 风格图处理
                 break;
+            case 'map':
+                option = this.mapOption(cellChart); // 地图处理
+                break;
+            case 'gauge':
+                option = this.gaugeOption(cellChart); // 仪表盘处理
+                break;
         }
         return option;
     }
@@ -62,7 +72,7 @@ export class EchartsService {
         let ySelectedGroup = cellChart['chart']['ySelectedGroup'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
-        };
+        }
         // 组合图采用new_name，下穿图采用name
         const nameType = (cellOption.chartAssignment && cellOption.chartAssignment.val) === 1 ? 'new_name' : 'name';
         const [legend, series] = [[], []];
@@ -73,15 +83,14 @@ export class EchartsService {
         let firstMinYnum = [];
         let secondMaxYnum = [];
         let secondMinYnum = [];
-        let firstMaxTextYnum = [];
-        let secondMaxTextYnum = [];
-        let maxXnum = [];
-        let maxYTextNum; // y轴数字toSting().length最大字数
         let isStack = false; // 判断是否堆叠
 
         yAxis.forEach((y,i) => {
-           isStack = cellOption.yAxis[i] && cellOption.yAxis[i]['group'] ? true : false;
 
+           // 判断是否是堆叠情况
+           if (cellOption.yAxis[i] && cellOption.yAxis[i]['group']) {
+               isStack = true;
+           }
             legend.push(y[nameType]);
             if (nameType === 'new_name') {
                 if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
@@ -89,29 +98,19 @@ export class EchartsService {
                         if (ySelectItem.field.dfield === y.dfield) {
                             ySelectItem.field.name = y['new_name'];
                             break;
-                        };
+                        }
                     }
                 }
-            };
-            // let yTextNum = [];
-            // y['data'].forEach(val => {
-            //     if (val) {
-            //         $(this.myChart.getDom()).siblings('.count-chart-maxText').html(val.toString());
-            //         yTextNum.push($(this.myChart.getDom()).siblings('.count-chart-maxText').width());
-            //     }
-            // });
-            // let maxYTnum = Math.max.apply(null, yTextNum);
+            }
             let maxNumber = Math.max.apply(null, y['data']);
             let minNumber = Math.min.apply(null, y['data']);
             if (y['yAxisIndex'] === 1) {
                 secondMaxYnum.push(maxNumber);
                 secondMinYnum.push(minNumber);
-                // secondMaxTextYnum.push(maxYTnum);
             } else {
                 firstMaxYnum.push(maxNumber);
                 firstMinYnum.push(minNumber);
-                // firstMaxTextYnum.push(maxYTnum);
-            };
+            }
             series.push({
                 name: y[nameType],
                 type: y['type'] && y['type']['type'],
@@ -137,11 +136,6 @@ export class EchartsService {
                     }}:{}
             });
         });
-        // xAxis.forEach(x => {
-        //     // let maxXn = Math.max.apply(null, x.toString().length);
-        //     $(this.myChart.getDom()).siblings('.count-chart-maxText').html(x);
-        //     maxXnum.push($(this.myChart.getDom()).siblings('.count-chart-maxText').width());
-        // });
         // 如果自定义了x轴展示
         if (cellOption['echartX'] && cellOption['echartX']['textNum'] !== 0) {
             if (cellOption['echartX'].hasOwnProperty('textNum')) {
@@ -155,66 +149,61 @@ export class EchartsService {
                         return value;
                     } else {
                         value = value.toString();
-                        let markNum = 0
+                        let markNum = 0;
                         if (cellOption['echartX']['textNum'] !== 0) {
                             markNum = Math.ceil(value.length / cellOption['echartX']['textNum']);
                         } else {
                             markNum = 0;
-                        };
+                        }
                         let val = [];
                         for (let i = 0; i < markNum; i++) {
                             val.push(value.slice(i * cellOption['echartX']['textNum'], (i + 1) * cellOption['echartX']['textNum']));
                         }
                         return val.join('\n');
-                    };
+                    }
                 };
             }
-        };
+        }
         let firstMax = Math.max.apply(null, firstMaxYnum);
         let firstMin = Math.min.apply(null, firstMinYnum);
         let secondMax = Math.max.apply(null, secondMaxYnum);
         let secondMin = Math.min.apply(null, secondMinYnum);
-        // let firstMaxText = Math.max.apply(null, firstMaxTextYnum);
-        // let secondMaxText = Math.max.apply(null, secondMaxTextYnum);
-        let maxXTextNum = Math.max.apply(null, maxXnum);
         //如果数据里面有柱状图，则y轴起始点从0开始
         let isZero = false;
         for(let y of yAxis){
-            if(y.type.type == 'bar'&& !cellOption['yHorizontal']&& firstMin >= 0){
+            if(y.type.type == 'bar' && firstMin >= 0){
                 isZero = true;
                 break;
             }
-        };
+        }
+        const splitNumber = 5;// y轴分成几段
         if (!isStack) {
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
-        };
-
+        }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
-        // if (firstMaxText > 30) {
-        //     linebarOption['grid']['left'] = firstMaxText;
-        // };
         if (cellOption.double !== 1) {
-            linebarOption['grid']['right'] = 0;
+            linebarOption['grid']['right'] = '2.3%';
+            // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
-            // 判断是否显示双y轴
-            // if (secondMaxText > 30) {
-            //     linebarOption['grid']['right'] = secondMaxText;
-            // };
-            const splitNumber = 5;
             if(!isStack) {
-                linebarOption['yAxis'][0]['max'] = firstMax;
-            };
-            linebarOption['yAxis'][0]['interval'] = Math.abs( (firstMax-firstMin) / splitNumber);
+                linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
+                linebarOption['yAxis'][0]['interval'] =  linebarOption['yAxis'][0]['min'] >= 0 ? linebarOption['yAxis'][0]['max'] / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number((linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5)) : null
+            } else {
+                linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
+            }
             linebarOption['yAxis'].push({
                 type: 'value',
                 inverse: false,
-                scale: true,
-                splitNumber: splitNumber,
-                max: secondMax,
-                min: secondMin > linebarOption['yAxis'][0]['min'] ? linebarOption['yAxis'][0]['min'] : secondMin,
-                interval: Math.abs( (secondMax - secondMin) / splitNumber) === 0 ? 0.2 : Math.abs( (secondMax - secondMin) / splitNumber),
+                max: !isStack && secondMin > 0 ? secondMax > 0 ? secondMax : 0 :null,
+                min: !isStack && secondMin > 0 ? secondMin > 0 ? 0 : secondMin : null,
+                interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
                 axisLabel: {
-                    inside: false
+                    inside: false,
+                    onZero: true,
+                    formatter: function(value,index) {
+                        let isDecimal = _.cloneDeep(value).toString().indexOf('.');
+                        return isDecimal !== -1 ? value.toFixed(5) : value;
+                    }
                 },
                 axisLine: {},
                 splitLine: {
@@ -240,6 +229,7 @@ export class EchartsService {
         }
         linebarOption['series'] = series;
         linebarOption['legend'].data = legend;
+
         // 默认显示y轴字段列表
         if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
             legend.map(name => {
@@ -252,22 +242,18 @@ export class EchartsService {
                     }
                 }
             });
-        };
+        }
 
         if (cellOption['yHorizontal']) {
-            // linebarOption['grid']['left'] =  maxXTextNum;
-            // linebarOption['grid']['containLabel'] = false;
             let _t = linebarOption.xAxis;
             linebarOption.xAxis = linebarOption.yAxis;
             linebarOption.yAxis = _t;
             linebarOption.series.forEach((item) => {
                 if (item['yAxisIndex'] !== undefined) {
-
                     item['xAxisIndex'] = item['yAxisIndex'];
                     delete item['yAxisIndex'];
                 }
             });
-
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['dodouble'] === 1 && cellOption['yAxis'].length === 2) {
                 yAxis.map((y, colorIndex) => {
@@ -278,7 +264,7 @@ export class EchartsService {
                     };
                 });
             }
-        };
+        }
 
         if (cellOption['yHorizontalColumns'] && cellOption['yHorizontalColumns']['marginBottom']) {
             if (cellOption['yHorizontalColumns'].hasOwnProperty('marginBottom')) {
@@ -295,24 +281,30 @@ export class EchartsService {
                     }
                 }
             }
-        };
-
+        }
 
         //x轴为3日期,5日期时间,12年份,30年月类型字段时开启数据缩放
         let dateType = ['3','5','12','30'];
-        if(!cellOption['yHorizontal'] && cellOption['xAxis'] && cellOption['xAxis']['type'] && dateType.indexOf(cellOption['xAxis']['type']) != -1 && window.config.bi_user !== 'manager'){
+        let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
+        if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
+            linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
+            if (cellOption.double === 1) {
+                linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
+            };
+
             linebarOption['dataZoom']=[
                 {
                 type: 'slider',
                 xAxisIndex: 0,
-                bottom:'0',
+                bottom:5,
                 height:20,
+                left:0,
+                right:5,
                 startValue: linebarOption['xAxis'][0]['data'][0],
                 endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
                 rangeMode: ['value', 'value']
                 },
-
                 {
                     type: 'inside',
                     xAxisIndex: 0,
@@ -321,9 +313,14 @@ export class EchartsService {
                     rangeMode: ['value', 'value']
                 }
             ]
-        };
+        }
+        //是否设置自定义高度top
+        if(cellOption['customTop']){
+            linebarOption['grid']['top'] = cellOption['customTop'];
+            linebarOption['legend']['type'] = 'plain';
+        }
+        console.log('-----------------');
         console.log(linebarOption);
-
         return linebarOption;
     }
 
@@ -335,7 +332,7 @@ export class EchartsService {
         let cellOption = cellChart['chart'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
-        };
+        }
         let [legend, series] = [[], []];
         const [xAxis, yAxis, title] = [cellOption.data['xAxis'], cellOption.data['yAxis'], cellOption.chartName['name']];
         yAxis[0]['data'].forEach((data, i) => {
@@ -344,12 +341,15 @@ export class EchartsService {
                 name: xAxis[i],
                 value: data
             });
-        })
+        });
         const pieOption = EchartsOption.getEchartsConfigOption('pie');
         pieOption['legend'].data = legend;
         pieOption['series'][0].data = series;
         pieOption['series'][0].name = title;
         pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
+        if(cellChart.chart.chartType.type == 'circular'){
+            pieOption['series'][0].radius = ['50%','70%'];
+        }
         return pieOption;
     }
 
@@ -374,8 +374,6 @@ export class EchartsService {
         let colors = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         let legend = [];
         multillist.forEach((option, index, list) => {
-            // mutiListOption['dataZoom'][0]['xAxisIndex'].push(index);
-            // mutiListOption['dataZoom'][1]['xAxisIndex'].push(index);
             mutiListOption['xAxis'].push({
                 splitLine: {
                     show: true,
@@ -421,7 +419,7 @@ export class EchartsService {
             let maxYNum = Math.min.apply(null, ymax);
             if (maxYNum.toString().length > 6) {
                 gridLeft = 10 * (maxYNum.toString().length);
-            };
+            }
 
             mutiListOption['grid'].push({
                 left: 0,
@@ -429,7 +427,7 @@ export class EchartsService {
                 top: gridFirstTop + tableHeight * index + offset * index,
                 height: tableHeight,
                 containLabel: true
-            })
+            });
             mutiListOption['yAxis'].push({
                 gridIndex: index,
                 type: 'value',
@@ -443,11 +441,9 @@ export class EchartsService {
                 },
 
                 min: Math.min.apply(null, ymin),
-                // max: Math.max.apply(null, ymax),
             });
         });
         mutiListOption['legend']['data'] = legend;
-        console.log(mutiListOption);
         return mutiListOption;
     }
     /**
@@ -480,14 +476,22 @@ export class EchartsService {
             }
             radarOption['series'][0]['data'].push(_data);
 
-            let maxnum = Math.max.apply(null, cellOption['data']['rows'][index])
+            // let maxnum = Math.max.apply(null, cellOption['data']['rows'][index])
+            // maxNumList.push(maxnum);
+
+            let tempData = cellOption['data']['rows'][index];
+            tempData = tempData.map(item=>{
+                return Math.abs(item)
+            });
+            let maxnum = Math.max(...tempData);
             maxNumList.push(maxnum);
         });
 
         cellOption['columns'].forEach(column => {
             radarOption['radar'][0]['indicator'].push({
                 text: column['name'],
-                max: Math.max.apply(null, maxNumList)
+                // max: Math.max.apply(null, maxNumList)
+                max: (Math.max(...maxNumList)/Math.cos(Math.PI/cellOption['columns'].length)+10),
             });
         });
         radarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
@@ -516,19 +520,18 @@ export class EchartsService {
      * 风格箱处理
      * @param chart = cellChart['chart']数据
      */
-
     stylzieOption(cellChart) {
         let cellOption = cellChart['chart'];
         const stylzieOption = EchartsOption.getEchartsConfigOption('stylzie');
         let data = _.cloneDeep(cellOption.data.xAxis).fill('');
         cellOption.data.xAxis.forEach((val,index) => {
-            let item = [val,cellOption.data.yAxis[index], new Date(cellOption.data.dateAxis[index]).getDate(),cellOption.data.dateAxis[index]];
+            let item = [EchartsOption.setStylzieX(val),EchartsOption.setStylzieY(cellOption.data.yAxis[index]), new Date(cellOption.data.dateAxis[index]).getDate(),cellOption.data.dateAxis[index]];
             data[index] = item;
         });
         // 如果时间是30 - 1号这种格式，需要把数据反转
         if (cellOption.data.dateAxis[0] > cellOption.data.dateAxis[cellOption.data.dateAxis.length - 1]) {
             data.reverse();
-        };
+        }
 
         let links = data.map(function (item, i) {
             return {
@@ -539,10 +542,82 @@ export class EchartsService {
         links.pop();
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
+        console.log('================================');
+        console.log(data)
         return stylzieOption;
     }
 
+    /**
+     * 地图数据处理
+     * @param cellChart
+     * @returns {*}
+     */
+    mapOption(cellChart){
+        const mapOption = EchartsOption.getEchartsConfigOption('map');
+        let data = [];
+        let cellOption = cellChart['chart'];
+        let xData = cellOption.data.xAxis;
+        let yData = cellOption.data.yAxis[0].data;
+        //数据处理
+        let yMax = cellOption.data.yAxis[0].data[0];
+        let yMin = cellOption.data.yAxis[0].data[0];
+        for( let k in xData){
+            let temp = {};
+            temp['name'] = xData[k];
+            temp['value'] = yData[k];
+            yMax = yMax > Number(yData[k]) ? yMax : Number(yData[k]);
+            yMin = yMin < Number(yData[k]) ? yMin : Number(yData[k]);
+            data.push(temp);
+        }
+        //计算分段（默认分6段）
+        let splitDis = ((yMax) - yMin)/6;
+        let splitList = [];
+        let beginDis = {min:(yMax - splitDis)};
+        let endDis = {max:(yMin + splitDis)};
+        splitList.push(beginDis);
+        for (let i=1; i<5; i++){
+            let tempDis = {};
+            tempDis.min = yMin + i*splitDis;
+            tempDis.max = yMin + (i+1)*splitDis;
+            splitList.push(tempDis);
+        }
+        splitList.push(endDis);
 
+        mapOption.series[0].data = data;
+        mapOption.series[0].name = cellOption.data.yAxis[0].name;
+        mapOption.visualMap.pieces = splitList;
+        return mapOption;
+    }
+
+
+    /**
+     * 仪表图
+     * @param chart = cellChart['chart']数据
+     */
+    gaugeOption(cellChart) {
+        const gaugeOption = EchartsOption.getEchartsConfigOption('gauge');
+        let cellOption = cellChart['chart'];
+        if (cellOption['yAxis'].length === 0 ) {
+            return defaultOption;
+        }
+        gaugeOption.series[0].min = cellOption['data']['range'][0];
+        gaugeOption.series[0].max = cellOption['data']['range'][1];
+        if(cellOption['data']['range'][0] == 0 && cellOption['data']['range'][1] == 0){
+            if(cellOption['data']['yAxis']>0){
+                gaugeOption.series[0].min = 0;
+                gaugeOption.series[0].max = cellOption['data']['yAxis'];
+            }else {
+                gaugeOption.series[0].min = cellOption['data']['yAxis'];
+                gaugeOption.series[0].max = 0;
+            }
+        }
+        gaugeOption.series[0].name = cellOption['yAxis'][0].name;
+        gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
+        gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
+            return value;
+        };
+        return gaugeOption;
+    }
     /**
      * 获取下穿数据
      * @param data 需要发送给服务器的参数

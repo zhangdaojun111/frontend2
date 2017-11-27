@@ -2,7 +2,6 @@
  * Created by birdyy on 2017/8/1.
  */
 import {HTTP} from '../../lib/http';
-
 export const canvasCellService = {
 
     /**
@@ -11,6 +10,7 @@ export const canvasCellService = {
      * @returns {Promise}
      */
     async getCellLayout(data) {
+        data.query_mark = window.config.query_mark;
         const res = await HTTP.getImmediately('/bi/get_view_layout/?&canvasType=pc', data);
         return new Promise((resolve, reject) => {
             if (res['success']===1) {
@@ -27,6 +27,7 @@ export const canvasCellService = {
      * @returns {Promise}
      */
     async saveCellLayout(data) {
+        data.query_mark = window.config.query_mark;
         const res = await HTTP.ajaxImmediately({
             url: '/bi/set_view_layout/',
             data: data,
@@ -48,10 +49,17 @@ export const canvasCellService = {
     /**
      * 获取画布块图表数据
      * @param charts = [chart_id1, chart_id2, chart_id3]
+     * @param cache 判断是否查询数据库
      */
-    async getCellChart(charts) {
+    async getCellChart(charts, cache = true) {
+        let url = '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id + '&bi_user=' + window.config.bi_user;
+        if(cache){
+            url += '&cache=1';
+        }else{
+            url += '&cache=0';
+        }
         const res = await HTTP.ajaxImmediately({
-            url: '/bi/get_bi_data/?&canvasType=pc&row_id=' + window.config.row_id,
+            url: url,
             data: charts,
             method:'post',
             traditional: true
@@ -162,5 +170,18 @@ export const canvasCellService = {
         })
     },
 
-}
+    /**
+     * 清除缓存
+     */
+    async refreshCache() {
+        const res = await HTTP.ajaxImmediately({
+            url: '/bi/refresh_cache/',
+            method: 'get',
+            traditional: true
+        });
+        return new Promise((resolve, reject) => {
+            resolve(res);
+        })
+    },
+};
 

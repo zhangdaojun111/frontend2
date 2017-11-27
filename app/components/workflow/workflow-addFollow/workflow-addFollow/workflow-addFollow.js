@@ -11,6 +11,8 @@ import SelectStaffNoDel from '../select-staff-no-del/select-staff-no-del';
 import SelectedStaff from '../selected-staff/selected-staff';
 import SelectedStaffNoDel from '../selected-staff-no-del/selected-staff-no-del';
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
+import msgBox from '../../../../lib/msgbox';
+
 let config={
     template: template,
     data:{
@@ -39,7 +41,11 @@ let config={
     afterRender(){
         this.showLoading();
         PMAPI.getIframeParams(this.data.key).then((res) => {
-            Mediator.publish('workflow:addusers', res.data.users);
+            Mediator.publish('workflow:addusers', res.data);
+	        this.data.preventClick=[];
+            for(let key in res.data.defaultFocus){
+	            this.data.preventClick.push(key);
+            } ;
         })
         this.el.on("input propertychange",".follower-search",()=>{
             this.action.search();
@@ -52,7 +58,7 @@ let config={
         });
         //部门选择
         Mediator.subscribe('workflow:checkDept', (res)=> {
-            console.log('ss');
+           // msgBox.showLoadingSelf();
             let arr = [];
             let checked=this.el.find('#staffMulti .search-check-row');
             let len = checked.length;
@@ -62,6 +68,7 @@ let config={
             $.each(res,(i,val)=>{
                 if(val){
                     val.id=i;
+	                val.preventClick=this.data.preventClick;
                     if(checked.length===0){
                         this.append(new SelectStaff(val), this.el.find('#staffMulti'));
                     }else if(arr.indexOf(i)===-1){
@@ -69,6 +76,10 @@ let config={
                     }
                 }
             });
+            // setTimeout(() => {
+            //     msgBox.hideLoadingSelf();
+            // },800);
+
         });
         Mediator.subscribe('workflow:checkDeptAlready', (res)=> {
             if(res){
@@ -90,7 +101,9 @@ let config={
                 });
             }
             if(this.data.flag===true){
-                this.hideLoading();
+                setTimeout(() => {
+                    this.hideLoading();
+                },800);
                 this.data.flag=false;
             }
         });
@@ -103,7 +116,7 @@ let config={
             let domDiv=this.el.find('#staffMulti').find('.flex');
             for(let i=0;i<domDiv.length;i++){
                 for(let j=0;j<userArr.length;j++){
-                    if($(domDiv[i]).data('id')===userArr[j]){
+                    if($(domDiv[i]).data('id')===userArr[j] && this.data.preventClick.indexOf($(domDiv[i]).data('id')) == -1){
                         $(domDiv[i]).parent().remove();
                     }
                 }
@@ -111,7 +124,7 @@ let config={
             let domSpan=this.el.find('#selected').find('span.removeble');
             for(let i=0;i<domSpan.length;i++){
                 for(let j=0;j<userArr.length;j++){
-                    if($(domSpan[i]).data('id')===userArr[j]){
+                    if($(domSpan[i]).data('id')===userArr[j] && this.data.preventClick.indexOf($(domSpan[i]).data('id')) == -1){
                         this.data.total--;
                         $(domSpan[i]).parent().remove();
                     }
@@ -184,6 +197,17 @@ let config={
                 data:o
             })
         });
+    },
+
+    beforeDestory: function () {
+        Mediator.removeAll('workflow:idArr');
+        Mediator.removeAll('workflow:checkDept');
+        Mediator.removeAll('workflow:checkDeptAlready');
+        Mediator.removeAll('workflow:unCheckDept');
+        Mediator.removeAll('workflow:pubCheck');
+        Mediator.removeAll('workflow:pubCheckNoDel');
+        Mediator.removeAll('workflow:pubCheckSingle');
+        Mediator.removeAll('workflow:pubUncheckSingle');
     }
 };
 class WorkflowAddFollow extends Component{

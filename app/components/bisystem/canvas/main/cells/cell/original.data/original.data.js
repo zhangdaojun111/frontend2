@@ -82,12 +82,12 @@ let config = {
         updateOriginal(data) {
             if (this.data.sort) {
                 data.cellChart.cell.sort = JSON.stringify(this.data.sort)
-            };
+            }
             let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
             Object.assign(this.data, originalData);
             if (this.data.attribute) {
                 this.data.cellChart.cell.attribute = this.data.attribute;
-            };
+            }
             this.reload();
         },
 
@@ -126,10 +126,10 @@ let config = {
             } else {
                 if (!isEditMode) {
                     this.data.originalAdvancedSetting.actions.reset();
-                };
+                }
                 this.el.find('.origin-data .form').show();
                 this.el.find('.origin-data .advanced-list').hide();
-            };
+            }
         },
         /**
          *高级计算item 实例化
@@ -153,7 +153,7 @@ let config = {
                 });
                 this.append(comp, this.el.find('.advanced-list table tbody'), 'tr');
                 this.data.originalAdvancedItems[itemData['itemId']] = comp;
-            };
+            }
         },
         /**
          * 获取高级计算保存的item
@@ -167,7 +167,7 @@ let config = {
                         })
                     } else {
                         msgbox.alert(res['error'])
-                    };
+                    }
                 });
             }
         }
@@ -195,7 +195,7 @@ let config = {
                     chart_id: this.data.cellChart.cell.chart_id,
                     xAxis:this.data.xAxis,
                     select: data.select,
-                    attribute: data.attribute
+                    attribute: data.attribute,
                 };
 
                 if (this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id']) {
@@ -207,15 +207,15 @@ let config = {
                     if (data.isEmptyY || data.isEmptyX) {
                         msgbox.alert('至少选择一条x轴和y轴数据');
                         return false;
-                    };
-                };
+                    }
+                }
 
                 canvasCellService.saveOriginalData(originalData).then(res => {
                     if (res['success'] !== 1) {
                         msgbox.showTips(res['error']);
                     } else {
                         this.trigger('onUpdateOriginal', this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id'] ? {hideGroup:this.data.hideGroup,originalData: originalData}: originalData);
-                    };
+                    }
                     this.destroySelf();
                 });
             }
@@ -277,10 +277,10 @@ let config = {
                             selectAll = false;
                             break;
                         }
-                    };
+                    }
                     if (selectAll) {
                         $('.selectAllX input').prop('checked', true);
-                    };
+                    }
                 }
             }
         },
@@ -292,7 +292,7 @@ let config = {
                 this.data.cellChart.cell.attribute.forEach((item, itemIndex) => {
                     if (index != itemIndex) {
                         item.sort = '';
-                    };
+                    }
                 });
                 let sortType = this.data.cellChart.cell.attribute[index].sort;
                 if (sortType === 'desc') {
@@ -301,12 +301,12 @@ let config = {
                     sortType = '';
                 } else {
                     sortType = 'desc';
-                };
+                }
                 this.data.cellChart.cell.attribute[index].sort = sortType;
                 let field = this.data.cellChart.chart.assortment === 'pie'? this.data.cellChart.chart.yAxis : this.data.cellChart.chart.yAxis[index].field;
                 let sort = {
                     field:field,
-                    type:sortType
+                    type:sortType,
                 };
                 this.data.sort = sort;
                 this.data.attribute = this.data.cellChart.cell.attribute; // 这个主要用于当更新数据reload时，保存现在的状态
@@ -371,20 +371,21 @@ export class CanvasOriginalDataComponent extends Component {
                     item.sort = sort.type;
                 } else {
                     item.sort = '';
-                };
+                }
             });
-        };
+        }
         return data;
     }
     /**
      * 处理折线柱状图的原始数据
      */
     static handleLineBarOriginalData(data) {
+
         //　如果是分组　使用分组模版
         if (data.cellChart.chart.chartGroup['id']) {
             CanvasOriginalDataComponent.handleLineBarGroupOriginalData(data)
             return false;
-        };
+        }
         // 如果select有数据就用select的数据 select = xAxis
         if (data.cellChart.cell.select.length  === 0) {
             data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
@@ -395,10 +396,10 @@ export class CanvasOriginalDataComponent extends Component {
                 let value = JSON.parse(item);
                 if (!value.select) {
                     data.selectAllX = false;
-                };
+                }
                 return value;
             });
-        };
+        }
         // 如果attribute有数据就用attribute的数据 attribute = yAxis
         if (data.cellChart.cell.attribute.length === 0) {
             data.cellChart.cell.attribute = data.cellChart.chart.yAxis.map(item => {
@@ -410,7 +411,7 @@ export class CanvasOriginalDataComponent extends Component {
                 return {'selected':JSON.parse(selected).selected, 'name': item.field.name}
             });
             data.cellChart.cell.attribute = attribute;
-        };
+        }
     }
 
     /**
@@ -427,7 +428,7 @@ export class CanvasOriginalDataComponent extends Component {
             data.cellChart.chart.data.yAxis.forEach(y => {
                 if (y.ename === item.ename) {
                     item['yAxis'].push(y)
-                };
+                }
             })
         });
 
@@ -437,10 +438,10 @@ export class CanvasOriginalDataComponent extends Component {
                 groups[index].select = JSON.parse(item).selected;
                 if (!JSON.parse(item).selected) {
                     data.selectAllX = false;
-                };
+                }
             })
 
-        };
+        }
 
         data.cellChart.cell.select = groups;
         // 如果attribute有数据就用attribute的数据 attribute = yAxis
@@ -464,15 +465,15 @@ export class CanvasOriginalDataComponent extends Component {
                 let value = JSON.parse(item);
                 if (!value.select) {
                     data.selectAllX = false;
-                };
+                }
                 return value;
             });
-        };
+        }
         //如果attribute有数据就用attribute的数据 attribute = yAxis
         data.cellChart.cell.attribute = [{'selected': true, 'name': data.cellChart.chart.pieType.value === 1 ? data.cellChart.chart.xAxis.name : data.cellChart.chart.yAxis.name}];
         if (data.cellChart.chart.pieType.value === 1) {
             data.showSortArrow = false;
             data.canSortDeep = '';// 判断点击原始数据是否可以排序
-        };
+        }
     }
 }

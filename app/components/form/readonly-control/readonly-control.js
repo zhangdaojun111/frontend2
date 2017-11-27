@@ -13,6 +13,7 @@ let config = {
     data: {
         error_msg: ' error-msg',
         ui_error_arrow: 'ui-error-arrow',
+	    canNotOpen:true,
     },
     actions: {
         keyup() {
@@ -27,7 +28,6 @@ let config = {
                 for (let r in reg) {
 	                let reg = eval(r);
 	                let flag = reg.test(val);
-                    console.log("flagReg：" + flag);
                     if (!flag) {
                         this.el.find("#error_tip").css("display", "inline-block");
                         regErrorMsg = reg[r];
@@ -107,7 +107,7 @@ let config = {
         this.el.find('.ui-width').attr('title', this.data.value)
         this.el.find('.ui-width').css('width', this.data.width);
         //如果是统计字段有值 显示穿透查看
-        if(this.data.dtype==10 && this.data.value){
+        if(this.data.dtype==10 && this.data.value && this.data.canNotOpen){
             this.el.find('.countView').css('visibility','visible').addClass('icon-fl');
         }
         if(this.data.history){
@@ -124,6 +124,9 @@ let config = {
 
 class ReadonlyControl extends Component {
     constructor(data,events,newConfig){
+		if(data.type == 'Textarea'){
+			data.is_textarea = 1;
+		}
     	data.originalValue=data.value;
         super($.extend(true,{},config,newConfig),data,events)
     }

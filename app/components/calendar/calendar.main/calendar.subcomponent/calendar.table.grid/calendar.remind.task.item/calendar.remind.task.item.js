@@ -58,7 +58,6 @@ let config = {
          * 打开日历提醒
          */
         openRemind: function () {
-            console.log(this.data.remindTaskItemData);
             let params = {
                 table_id: this.data.remindTaskItemData.tableId,
                 cs_id: this.data.remindTaskItemData.setId,
@@ -92,7 +91,6 @@ let config = {
                         remindTime: this.data.remindTaskItemData.time.substr(11,5),
                         remindRealId: this.data.remindTaskItemData.real_id.substr(2,24),
                     }).then(data => {
-                    console.log(data);
                 });
             })
             // let tempData = this.data.remindTaskItemData.data2show[0];
@@ -130,10 +128,8 @@ let config = {
          * 打开工作流
          */
         openWorkflow: function () {
-            console.log(111);
             this.el.find('.task-show-text').html(this.data.remindTaskItemData['data']['name']);
             this.el.on('click', '.task-show-text', () => {
-                console.log(this.data.remindTaskItemData);
                 PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data.remindTaskItemData['data']['id']}&form_id=${this.data.remindTaskItemData['data']['form_id']}&table_id=${this.data.remindTaskItemData['data']['table_id']}&flow_id=${this.data.remindTaskItemData['data']['flow_id']}`,{
                     width: '100%',
                     height: '900',
@@ -216,7 +212,6 @@ let config = {
             }
         }
         if(this.data.remindTaskItemData['type'] === 1) {
-            // console.log(this.data.remindTaskItemData);
             if(this.data.remindTaskItemData['data3show'][0] && this.data.remindTaskItemData['data3show'][0][0]) {
                 for(let i of this.data.remindTaskItemData['data3show'][0]) {
                     if(i['fieldId'] === this.data.remindTaskItemData['selectedRepresents']) {
@@ -229,7 +224,6 @@ let config = {
                 this.actions.openRemind();
             });
         } else if(this.data.remindTaskItemData['type'] === 2){
-            console.log(this.data.remindTaskItemData);
         } else if(this.data.remindTaskItemData['type'] === 3 || this.data.remindTaskItemData['type'] === 4) {
             // 工作流数据
             this.actions.openWorkflow();

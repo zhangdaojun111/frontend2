@@ -13,10 +13,21 @@
 
 <body>
 <div class="login-main-window">
+    <div class="login-header">
+        <div class="header-content">
+            <p class="company-name">
+                <span class="en-name">ERDS</span>
+                <span class="cn-name">企业管理平台</span>
+            </p>
+            <p class="header-button">
+                <a class="update-btn">更新信息</a>
+                <a class="mobile-download-btn">移动下载</a>
+            </p>
+        </div>
+    </div>
     <!--登录界面标题-->
     <div class="bg-div">
         <div class="login-content">
-            <h1 class="company-info"></h1>
             <!--<div class="login-version-title">v1.1.0.0</div>-->
             <!--无需下载，显示表单和版本-->
             <div class="white-panel login-container">
@@ -25,22 +36,31 @@
                 <div class="panel-header">
                     <span class="panel-title">用户登录</span>
                 </div>
+    
+                <h1 class="company-info"></h1>
                 <form class="login-form" onsubmit="return false">
                     <!--登录用户名和密码-->
                     <div class="form-group">
-                        <i class="form-user-logo"></i>
-                        <input type="text" class="form-control" placeholder="" name="username" autocomplete="off">
+                        <!--<i class="form-user-logo"></i>-->
+                        <input type="text" class="form-control" placeholder="输入平台账号" name="username" autocomplete="off">
                     </div>
                     <div class="ps-group">
-                        <i class="form-pw-logo"></i>
+                        <!--<i class="form-pw-logo"></i>-->
                         <!--<input type="password" id="myPassword" class="form-control" placeholder="" name="password">-->
                         <div class="password-component"></div>
                     </div>
-                    <div class="remember-pw-group">
-                        <input type="checkbox" class="remember-pw-check" id="remember-pw">
-                        <label class="remember-ps-prompt" for="remember-pw" >记住密码</label>
+                    <div class="pw-group-btu">
+                        <div class="remember-pw-group">
+                            <input type="checkbox" class="remember-pw-check" id="remember-pw">
+                            <label class="remember-ps-prompt" for="remember-pw" >记住密码</label>
+                        </div>
+                        <div class="find-pw-group">
+                            <i class="find-pw-logo"></i>
+                            <label class="find-pw-label">忘记密码</label>
+                        </div>
+                        <div style="clear: both"></div>
                     </div>
-
+    
                     <div class="warn-info"></div>
                     <!--更新信息、登录-->
                     <div class="panel-bottom clearfix">
@@ -48,12 +68,10 @@
                         <!--<i class="update-logo"></i>-->
                         <!--<label class="check-update-info">更新信息</label>-->
                         <!--</div>-->
-                        <div class="find-pw-group">
-                            <i class="find-pw-logo"></i>
-                            <label class="find-pw-label">忘记密码</label>
-                        </div>
+                        
                         <button type="button" class="btn btn-primary login-btn">登录</button>
                     </div>
+    
                 </form>
             </div>
 
@@ -75,34 +93,47 @@
             </div>
             <!--反面面板结束-->
 
-            <div class="operator-group clearfix">
-                <div class="register-btn">注册</div>
-                <div class="update-btn">更新信息</div>
-                <div class="mobile-download-btn">移动下载</div>
-            </div>
-            <div class="version-view">
-                <table class="version-table">
-                    <tr>
-                        <th>module</th>
-                        <th>code_time</th>
-                        <th>update_time</th>
-                        <th>run</th>
-                        <th class="default-hide">branch</th>
-                        <th class="default-hide">revision</th>
-                        <th class="default-hide">message</th>
-                    </tr>
-                </table>
-                <button type="button" class="self-service-update">自助更新</button>
-            </div>
+            <!--<div class="operator-group clearfix">-->
+                <!--<div class="register-btn">注册</div>-->
+                <!--<div class="update-btn">更新信息</div>-->
+                <!--<div class="mobile-download-btn">移动下载</div>-->
+            <!--</div>-->
             <!--<div class="non-implement">-->
             <!--<div class="update-service">自助更新</div>-->
             <!--<div class="mobile-download">移动下载</div>-->
             <!--</div>-->
         </div>
         <div class="need-download">
-            <span class="download-prompt">暂不支持其它浏览器，为了您的正常使用请下载新版本Chrome</span>
+            <!--<span class="download-prompt"></span>-->
+            <!--<a class="download-link"></a>-->
         </div>
     </div>
+    
+    <div id="shadow-box">
+        <div class="shadow"></div>
+        <div class="version-view">
+            <div class="header">
+                更新信息
+                <!--<img src="../app/assets/images/framework/close.png"/>-->
+                <span class="shadow-box-close">X</span>
+            </div>
+            <div class="version-table-box">
+                <table class="version-table">
+                    <tr>
+                        <th>module</th>
+                        <th>code_time</th>
+                        <th>update_time</th>
+                        <th>run</th>
+                        <th>branch</th>
+                        <th>revision</th>
+                        <th class="default-hide">message</th>
+                    </tr>
+                </table>
+                <button type="button" class="self-service-update">自助更新</button>
+            </div>
+        </div>
+    </div>
+    
 </div>
 
 {% ifequal window_type 'develop'%}

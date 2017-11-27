@@ -22,7 +22,7 @@ body.blue{
 
                 .personal-setting{
                     i{
-                        background-image: url("../../../assets/images/framework/icon-blue-setting.png");
+                        background-image: url("../../images/theme/blue/icon-blue-setting.png");
                     }
                 }
             }
@@ -38,30 +38,36 @@ body.blue{
                     }
                 }
                 .edit{
-                    background: url("../../../assets/images/framework/icon-blue-edit.png");
+                    background: url("../../images/theme/blue/icon-blue-edit.png");
                 }
             }
             .menu{
                 label{
-                    border-bottom: 1px solid #70a5e0;
+                    border-bottom: 1px solid #fff;
                 }
                 .search{
-                    background-image: url("../../../assets/images/framework/highlight-search.png");
+                    background-image: url("../../images/theme/blue/icon-blue-search.png");
                     input{
                         &::-webkit-input-placeholder{
                             color:rgb(100, 157, 221);
                         }
                     }
                     &.highlight{
-                        border-bottom: 1px solid rgb(204,204,204);
-                        background-image: url("../../../assets/images/framework/icon-blue-search-1.png");
+                        border-bottom: 1px solid #BFD8F2;
+                        //background-image: url("../../images/theme/blue/icon-blue-search.png");
                     }
                 }
 
                 .menu-full{
+                    .name{
+                        color: #BFD8F2;
+                    }
+                    .ui-state-active ~p{
+                        color: #FFFFFF;
+                    }
                     .icon{
                         &.lv1 {
-                            background: url("../../../assets/images/framework/icon-blue-floder.png");
+                            background: url("../../images/theme/blue/icon-blue-floder.png");
                         }
                     }
                     .root{
@@ -72,6 +78,8 @@ body.blue{
                         }
                     }
                 }
+
+
                 &.mini{
                     .root{
                         > li > .menu-full-item {
@@ -83,8 +91,29 @@ body.blue{
                             }
                         }
                     }
+
+                    .menu-full{
+                        .childlist{
+                            .row{
+                                background-color: #327ed3;
+                                color: #fff;
+                                &:hover, &.current {
+                                    background-color: #fff !important;
+                                    p{
+                                        color: #327ed3 !important;
+                                    }
+                                }
+
+                            }
+                        }
+                    }
                 }
             }
         }
+    }
+    .dataGrid-commonQuery-select{
+        //box-shadow: 0 0 2px 2px #327ed3!important;
+        background-color: #327ed3!important;
+        border: 1px solid #327ed3!important;
     }
 }

@@ -27,7 +27,8 @@ function getLoginController() {
         $companyInfo:$('.company-info'),            //公司名称显示
         $rememberPwCheck:$('.remember-pw-check'),   //记住密码
         $updateGroup:$('.update-btn'),              //显示更新信息logo
-        $versionTable:$('.version-view'),          //版本信息显示表格
+        $closeUpdateGroup:$('.shadow-box-close'),  //隐藏更新信息logo
+        $versionTable:$('#shadow-box'),          //版本信息显示表格
         $loginBtn:$('button.login-btn'),            //登录按钮
         $registerBtn:$('div.register-btn'),         //注册按钮
         $findPwBtn:$('.find-pw-group'),             //忘记密码
@@ -81,6 +82,10 @@ function getLoginController() {
              * 展示或关闭版本信息
              */
             this.$updateGroup.on('click', () => {
+                this.$versionTable.toggle();
+            });
+
+            this.$closeUpdateGroup.on('click', () => {
                 this.$versionTable.toggle();
             });
 
@@ -154,7 +159,7 @@ function getLoginController() {
              * 移动下载
              */
             this.$mobileDownload.on('click',function () {
-                window.open('https://test.erdstest.com:8809/download/download.html?referrer=');
+                window.open('https://test.erdstest.com:8809/download/download.html?referrer='+document.location.host);
             });
 
             /**
@@ -234,11 +239,11 @@ function getLoginController() {
                 $runStats.html(obj["run_stats"] || '-');
                 $row.append($runStats);
 
-                let $branch = $("<td class='default-hide'></td>");
+                let $branch = $("<td></td>");
                 $branch.html(obj['branch'] || '-');
                 $row.append($branch);
 
-                let $revision = $("<td class='default-hide'></td>");
+                let $revision = $("<td></td>");
                 $revision.html(obj["revision"] || '-');
                 $row.append($revision);
 
@@ -370,8 +375,8 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 let controller = getLoginController();
 controller.formInit();  //初始化表单控件
 controller.getNextUrl();       //根据url判断是否跳转页面
-// let isNeedDownload = controller.browser_check();     //暂时屏蔽
-let isNeedDownload = false;
+ let isNeedDownload = controller.browser_check();     //暂时屏蔽
+//let isNeedDownload = false;
 if( isNeedDownload === false){      //正常显示登录表单
     controller.infoInit();  //初始化最近访问用户和密码
     LoginService.getVersionInfo().done((result) => {
@@ -397,6 +402,12 @@ if( isNeedDownload === false){      //正常显示登录表单
     });
 }else{
     //显示浏览器下载提示,隐藏其余部分
+    let prompt = LoginService.prompt;
+    let downLoadLink = LoginService.downLoadLink;
     $('.login-content').hide();
     $(".need-download").show();
+    let htmlDownload = '';
+    htmlDownload += '<span class="download-prompt">'+prompt+'</span>'+'<a class="download-link">下载链接</a>';
+    $(".need-download").append(htmlDownload)
+    $(".download-link").attr('href',downLoadLink)
 }

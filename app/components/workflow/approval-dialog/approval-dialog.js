@@ -74,11 +74,11 @@ let config = {
         //     })
         // });
         Mediator.subscribe('approvalRejToAny: data', (res) => {
-            if(res.rejectId.length === 21){
-                res.rejectId = res.rejectId.slice(5);
-            }else if(res.rejectId.length === 19){
-                res.rejectId = res.rejectId.slice(3);
-            }
+            // if(res.rejectId.length === 21){
+            //     res.rejectId = res.rejectId.slice(5);
+            // }else if(res.rejectId.length === 19){
+            //     res.rejectId = res.rejectId.slice(3);
+            // }
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:this.data.key,
@@ -86,7 +86,6 @@ let config = {
                     data: res
                 }
             });
-            console.log(res);
         });
 
         PMAPI.getIframeParams(this.data.key).then(res=>{

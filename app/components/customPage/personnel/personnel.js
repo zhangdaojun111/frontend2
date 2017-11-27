@@ -19,7 +19,7 @@ import dataPagination from "../../dataGrid/data-table-toolbar/data-pagination/da
 import FloatingFilter from "../../dataGrid/data-table-toolbar/floating-filter/floating-filter";
 import {fieldTypeService} from "../../../services/dataGrid/field-type-service";
 import {TabService} from "../../../services/main/tabService";
-import TreeView from "../../../components/util/tree/tree";
+import TreeView from "../../util/tree/tree";
 
 let config = {
     template: template,
@@ -121,7 +121,7 @@ let config = {
 
             Promise.all([preferenceData, headerData]).then((res)=> {
                 dgcService.setPreference( res[0],this.data );
-                let oprate = {headerName: '操作',field: 'myOperate', width: 160,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
+                let oprate = {headerName: '操作',field: 'myOperate', width: 120,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
                     return '<div style="text-align:center;"><a class="ui-link" id="view">查看</a> | <a class="ui-link" id="edit">编辑</a> | <a class="ui-link" id="jurisdiction">权限</a><div>';
                 }}
                 //添加序号列
@@ -311,7 +311,7 @@ let config = {
         //设置搜索input值
         setFloatingFilterInput: function () {
             for( let k in this.data.searchValue ){
-                this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];
+                try{this.el.find( '.filter-input-'+k )[0].value = this.data.searchValue[k];}catch(e){}
             }
         },
         //获取数据
@@ -418,6 +418,8 @@ let config = {
             let treeView = new TreeView(this.data.department_tree,{
                 callback:(event,node) => {
                     if( node.id ){
+                        this.data.page = 1;
+                        this.data.first = 0;
                         this.data.departmentName = node.name;
                         this.actions.getUserData();
                     }
@@ -488,6 +490,11 @@ let config = {
             this.el.find( '.grid-export-btn' ).on( 'click',()=>{
                 this.actions.onExport();
             } )
+            //筛选滚动后搜索条件赋值
+            let That = this;
+            this.el.find('.ag-body-viewport').on('scroll',_.debounce(()=>{
+                That.actions.setFloatingFilterInput();
+            },700))
             //删除
             this.el.find( '.grid-del-btn' ).on( 'click',()=>{
                 let arr = [];

@@ -5,9 +5,11 @@ import '../../assets/scss/main.scss';
 import {HTTP} from '../../lib/http';
 import Mediator from '../../lib/mediator';
 import {workflowService} from '../../services/workflow/workflow.service';
-import TreeView from  '../../components/util/tree/tree';
+import TreeView from '../../components/util/tree/tree';
 import WorkflowAddSigner from '../../components/workflow/workflow-addFollow/workflow-addSigner/workflow-addSigner';
 import '../../assets/scss/workflow/workflow-base.scss';
+import msgBox from '../../lib/msgbox';
+
 //请求部门员工信息，加载树
 let tree=[];
 let staff=[];
@@ -39,6 +41,7 @@ function recursion(arr,slnds,pubInfo){
     recur(tree);
     let treeComp3 = new TreeView(tree, {
         callback: function (event, selectedNode) {
+           // msgBox.showLoadingSelf();
             if (event === 'select') {
                 for (let k in staff) {
                     if (k == selectedNode.id) {
@@ -54,6 +57,9 @@ function recursion(arr,slnds,pubInfo){
                     }
                 }
             }
+            // setTimeout(() => {
+            //     msgBox.hideLoadingSelf();
+            // },800);
         },
         treeType: 'MULTI_SELECT',
         isSearch: true,

@@ -13,7 +13,6 @@ import AddWf from '../../components/workflow/add-workflow/add-workflow';
 import FormEntrys from '../form';
 import msgBox from '../../lib/msgbox';
 import WorkFlow from '../../components/workflow/workflow-drawflow/workflow';
-import TreeView from '../../components/util/tree/tree';
 import jsplumb from 'jsplumb';
 import {PMAPI, PMENUM} from '../../lib/postmsg';
 import {CreateFormServer} from "../../services/formService/CreateFormServer";

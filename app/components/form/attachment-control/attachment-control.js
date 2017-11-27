@@ -15,7 +15,7 @@ import browserMD5File from 'browser-md5-file';
 import AttachmentList from '../attachment-list/attachment-list';
 import ViewVideo from '../view-video/view-video';
 
-let preview_file = ["gif","jpg","jpeg","png","wmv","mp4"];
+let preview_file = ["gif","jpg","jpeg","png","wmv","mp4","pdf","mp3","wav"];
 
 let config = {
     template: template,
@@ -26,7 +26,7 @@ let config = {
             callback: function () {
                 let ele = this.el.find('.selecting-file');
                 if (this.data.dinput_type == 33) {  //视频附件
-                    ele.attr('accept', 'video/*');
+                    ele.attr('accept', 'video/*,audio/*');
                 } else if (this.data.dinput_type == 23) {  //图片附件
                     ele.attr('accept', 'image/*');
                 }
@@ -59,8 +59,8 @@ let config = {
             callback: function (event) {
                 let files = event.files;
                 let fileArray = [];
-                for (let file of files) {
-                    let name = file.name;
+                for (let f = 0;f<files.length;f++) {
+                    let name = files[f].name;
                     let fileId = new Date().getTime();
                     fileArray.push({id:fileId,name:name});
                 }
@@ -180,8 +180,8 @@ let config = {
                 return;
             }
             if (this.data.dinput_type == 33) {
-                if (!file.type.startsWith('video')) {
-                    msgBox.alert('"' + file.name + '"不是视频类型文件，支持文件类型包括：avi, asf, mpg, mpeg, mpe, wmv, mp4');
+                if (!file.type.startsWith('video') && !file.type.startsWith('audio')) {
+                    msgBox.alert('"' + file.name + '"不是视音频类型文件，支持文件类型包括：avi, asf, mpg, mpeg, mpe, wmv, mp4,mp3,wav');
                     return;
                 }
             } else if (this.data.dinput_type == 23) {

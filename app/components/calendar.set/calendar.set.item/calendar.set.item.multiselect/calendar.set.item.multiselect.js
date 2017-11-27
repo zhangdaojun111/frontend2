@@ -27,7 +27,6 @@ let config = {
         },
     },
     afterRender: function () {
-        console.log(this.data.data_list);
         let that = this;
         that.el.on("click",".head-select",function(){
             event.stopPropagation();

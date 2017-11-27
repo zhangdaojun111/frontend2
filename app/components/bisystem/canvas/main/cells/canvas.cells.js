@@ -12,6 +12,7 @@ let config = {
         currentViewId: '', // 当前画布块视图id
         cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
+        isPdf:false,
     },
     actions: {
         /**
@@ -19,19 +20,26 @@ let config = {
          * @param cells 需要渲染的画布块数据的组件
          */
         async getCellChartData(layouts,cells) {
-            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1});
+            let res;
+            if(this.data.isPdf === true){
+                res = window.config.bi_data;
+                res['success'] = 1;
+            }else {
+                res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1}, false);
+            }
+
             if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
 
                 if (res['success'] == 0) {
                     msgbox.alert(res['error']);
                     return false;
-                };
+                }
 
                 // 当返回成功时，通知各个cell渲染chart数据
                 cells.map((item,index) => {
                     item.setChartData(res[index]);
                 })
-            };
+            }
         },
 
         /**
@@ -51,13 +59,12 @@ let config = {
                 if (startSection && endSection && !this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
-                };
+                }
             });
             // 获取画布块的chart数据
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
-            };
-
+            }
         },
         /**
          * 瀑布流方式加载cell chart data 数据(移动端的处理)
@@ -72,18 +79,18 @@ let config = {
                 if (viewAllHeight <= this.el.height() + top && !this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
-                };
+                }
 
                 if (viewAllHeight > this.el.height() + top) {
                     break;
                 } else {
                     viewAllHeight += this.data.cells[key].data.cell.size.height;
                 }
-            };
+            }
             // 获取画布块的chart数据
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
-            };
+            }
         },
 
         /**
@@ -96,13 +103,13 @@ let config = {
                 if (!this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
-                };
+                }
             });
 
             // 获取画布块的chart数据
             if (layouts.length > 0) {
                 await this.actions.getCellChartData(layouts,cells);
-            };
+            }
 
             return new Promise((resolve, reject) => {
                 resolve('finish');
@@ -110,17 +117,18 @@ let config = {
         },
 
         isScrollStop() {
-            // 判断此刻到顶部的距离是否和1秒前的距离相等
-            if(this.el.scrollTop() == this.data.curScrollTop) {
-                console.log("scroll bar is stopping!");
-                let windowSize = $(window).width();
-                if (windowSize && windowSize <= 960) {
-                    this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
-                } else {
-                    this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
-                };
-                clearInterval(this.data.interval);
-                this.data.interval = null;
+            if(!this.data.isPdf){
+                // 判断此刻到顶部的距离是否和1秒前的距离相等
+                if(this.el.scrollTop() == this.data.curScrollTop) {
+                    let windowSize = $(window).width();
+                    if (windowSize && windowSize <= 960) {
+                        this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
+                    } else {
+                        this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
+                    }
+                    clearInterval(this.data.interval);
+                    this.data.interval = null;
+                }
             }
         },
 
@@ -164,12 +172,19 @@ let config = {
             this.data.cells[cellLayout.componentId] = cellLayout;
         },
 
-
         /**
          * 根据当前视图id，得到当前视图画布块布局，大小
          */
         async getCellLayout() {
-            const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
+            let res = {};
+            if(this.data.isPdf === true){
+                res['data'] = {};
+                res['data']['data'] = window.config.layout_data.data;
+                res['success'] = 1;
+            }else{
+                res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
+            }
+
             if (res['success'] === 1) {
                 try {
                     this.actions.loadCellChart(res['data']['data']);
@@ -177,7 +192,7 @@ let config = {
 
                 } finally {
 
-                };
+                }
             } else {
                 msgbox.alert(res['error'])
             }
@@ -200,6 +215,7 @@ let config = {
                     'currentViewId': this.data.currentViewId,
                     'cell': val
                 };
+
                 let cell = this.actions.makeCell(data);
                 this.data.cells[cell.componentId] = cell;
                 // 在客户模式下获取有没有下穿记录
@@ -208,7 +224,7 @@ let config = {
                     deep_info = {}
                 } else {
                     deep_info[val.deep.floor] = val.deep.xOld.map(x => x['name'])
-                };
+                }
 
                 this.data.cells[cell.componentId].data.layout = JSON.stringify({
                     chart_id: val.chart_id ? val.chart_id : 0,
@@ -218,7 +234,7 @@ let config = {
                     xOld: val.is_deep == 0 ? {} : userMode === 'client' ? val.deep['xOld'] : {},
                     row_id: 0,
                     deep_info: deep_info,
-                    sort: val.sort
+                    sort: window.config.bi_user === 'client' ? val.sort : {}
                 });
             });
 
@@ -247,14 +263,25 @@ let config = {
                         if (window.config.bi_views[index].name === res['data'].name) {
                             window.config.bi_views[index] = res['data'];
                             break;
-                        };
+                        }
                     }
                 } else {
                     msgbox.showTips(res['error']);
-                };
+                }
             });
         },
-
+        loadingComplete:function () {
+            let layouts = [];
+            let cells = [];
+            Object.keys(this.data.cells).forEach(key => {
+                layouts.push(this.data.cells[key].data.layout);
+                cells.push(this.data.cells[key]);
+            });
+            // 获取画布块的chart数据
+            if (layouts.length > 0) {
+                this.actions.getCellChartData(layouts,cells);
+            }
+        },
     },
     binds: [
         { //滚动距离
@@ -266,24 +293,33 @@ let config = {
                    this.data.interval = setInterval(() => {
                        this.actions.isScrollStop();
                    }, 500);
-               };
+               }
                this.data.curScrollTop = curScrollTop;
             }
         },
     ],
 
     async afterRender() {
-        // 加载loading动画;
+        if(window.config.pdf === true){
+            this.data.isPdf = true;
+        }
+
+        // 获取画布块布局信息
         await this.actions.getCellLayout();
 
+        // 瀑布流加载cellchart 数据
         if (this.data) {
-            let windowSize = $(window).width();
-            if (windowSize && windowSize <= 960) {
-                this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
-            } else {
-                this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
-            };
-        };
+            if(this.data.isPdf){
+                this.actions.loadingComplete();
+            }else{
+                let windowSize = $(window).width();
+                if (windowSize && windowSize <= 960) {
+                    this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
+                } else {
+                    this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+                }
+            }
+        }
     },
     beforeDestory() {}
 };
@@ -293,3 +329,4 @@ export class CanvasCellsComponent extends Component {
         super($.extend(true,{},config,extendConfig), {currentViewId: id});
     }
 }
+

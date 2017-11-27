@@ -31,7 +31,7 @@ let config = {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
                     this.el.find('.form-chart-multi-chart').removeClass('countColumn-width');
-                };
+                }
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
                     this.actions.loadColumns(res['data']);
@@ -55,13 +55,13 @@ let config = {
                     // 编辑模式下第一次不清空y轴字段列表
                     if (!this.data.firstDo) {
                         this.formItems['columns'].actions.clear();
-                    };
+                    }
                     this.data.firstDo = false;
                 } else { // 清空字段
                     this.formItems['xAxis'].setList([]);
                     this.formItems['yAxis'].setList([]);
                     this.formItems['columns'].actions.clear();
-                };
+                }
 
             }
         },
@@ -235,6 +235,9 @@ let config = {
             if(this.formItems){
                 for (let key of Object.keys(this.formItems)) {
                     if (this.formItems[key].data.rules) {
+                        if(window.config.query_mark !== 'single' && key=='countColumn'){
+                            continue;
+                        }
                         let isValid = this.formItems[key].valid();
                         if (!isValid) {
                             pass = false;
@@ -269,7 +272,7 @@ class ChartEditor extends Base {
             sources: data.source,
             xAxis: data.xAxis,
             yAxis: data.columns
-        }
+        };
         return chart;
     }
 
