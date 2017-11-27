@@ -68,13 +68,13 @@ let config = {
         switchViewId: function (viewId) {
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
-            // this.actions.resetViewArrayNo(viewId);
+            this.actions.resetViewArrayNo(viewId);
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 // if(this.data.firstViews === true){
                     this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                     this.data.cells.render(this.el.find('.cells-container'));
-                    this.data.cells.data.secondViewId = this.data.viewArr[1].id;
+                    this.data.cells.data.secondViewId = this.data.viewArr[2].id;
 
                     // this.data.firstViews = false;
                     // //判断是否执行轮播
@@ -182,10 +182,14 @@ let config = {
          */
         resetViewArrayNo(id){
             for ( let k in this.data.viewArr){
-                console.log(k,this.data.viewArr[k]['id'],id);
                 if(this.data.viewArr[k]['id'] == id){
                    this.data.viewNo = k;
                 }
+            }
+            if(this.data.viewArr.length = this.data.viewNo + 1){
+                this.data.secondViewId = this.data.viewArr[0].id;
+            }else{
+                this.data.secondViewId = this.data.viewArr[this.data.viewNo + 1].id;
             }
         },
         /**

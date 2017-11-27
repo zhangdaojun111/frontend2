@@ -53,6 +53,7 @@ let config = {
             let layouts = [];
             let cells = [];
             let cellsHeight = this.el.height();
+
             Object.keys(this.data.cells).forEach(key => {
                 let cellSizeTop = this.data.cells[key].data.cell.size.top;
                 let cellSizeHeight = this.data.cells[key].data.cell.size.height;
@@ -158,9 +159,11 @@ let config = {
             if(this.data.firstView === true){
                 $wrap = this.el.find('.current');
                 this.data.deleteComponentArr.push(cell);
+                console.log(this.data.deleteComponentArr);
             }else{
                 $wrap = this.el.find('.prepare');
                 this.data.prepareDeleteComponentArr.push(cell);
+                console.log(this.data.prepareDeleteComponentArr);
             }
             this.append(cell, $wrap);
             return cell;
@@ -301,8 +304,14 @@ let config = {
             setTimeout(async function () {
                 current.attr('class','prepare cells');
                 prepare.attr('class','current cells');
-                // that.el.find('.prepare').find('div').remove('[class != "cell ui-draggable ui-draggable-handle ui-resizable"]');
-                forthat.data.deleteComponentArr
+                // 销毁淡出的组件
+                for( let comp of that.data.deleteComponentArr){
+                    delete that.data.cells[comp.componentId];
+                    comp.destroySelf();
+                }
+                that.data.deleteComponentArr.length = 0;
+                that.data.deleteComponentArr = _.cloneDeep(that.data.prepareDeleteComponentArr);
+                that.data.prepareDeleteComponentArr.length = 0;
                 that.actions.prepareViewData(that.data.currentViewId);
             },this.data.animateDuration)
         },
