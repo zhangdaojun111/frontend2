@@ -199,6 +199,7 @@ let config={
         submitAddWorkflow() {
             let obj = this.data.obj;
             let formData = CreateFormServer.getFormValue(obj.table_id,true);
+            debugger
             if (formData.error) {
                 msgBox.alert(`${formData.errorMessage}`);
             } else {
