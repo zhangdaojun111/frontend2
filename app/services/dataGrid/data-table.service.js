@@ -145,4 +145,4 @@ export const dataTableService = {
     getCustomTableId: function ( json ) {
         return HTTP.postImmediately( '/get_custom_table_id/',json )
     }
-}
+};

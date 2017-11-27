@@ -50,11 +50,11 @@ const workflowForGrid={
             let current_node_arr = res.record_info.current_node.split('、');
             if(current_node_arr.indexOf(window.config.name)==-1){
                 $('#approval-workflow').find('.for-hide').hide();
-            };
+            }
             if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
                 $('#approval-workflow').find('.for-hide').hide();
                 $('#approval-workflow').find('#re-app').show();
-            };
+            }
             //审批工作流
             (async function () {
                 return workflowService.getWorkflowInfo({
@@ -84,7 +84,7 @@ const workflowForGrid={
                     if(nameArr.indexOf(window.config.name)>-1&&current_node_arr.indexOf(window.config.name)==-1){
                         $('#approval-workflow').find('.for-hide').hide();
                         $('#approval-workflow').find('#re-app').hide();
-                    };
+                    }
                 });
             });
             

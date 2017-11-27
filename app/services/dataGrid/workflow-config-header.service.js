@@ -92,7 +92,7 @@ export const wchService = {
                 "2":{color:"#FF0000",title:"非常紧急"},
                 "3":{color:"#FF9900",title:"紧急"},
                 "4":{color:"#00CC00",title:"一般"}
-            }
+            };
             let data = params.data;
             let color = data.emergency_degree ? obj[data.emergency_degree]["color"] : "";
             let title = data.emergency_degree ? obj[data.emergency_degree]["title"] : "";
@@ -118,4 +118,4 @@ export const wchService = {
             return '<div style="text-align:center;"></span><a href=javascript:void(0); class="ui-link" data-type="focusWorkflow">查看</a></div>';
         }}
     ]
-}
+};
