@@ -238,7 +238,7 @@ let config = {
                     this.data.cellChart.cell.attribute[index].selected = true;
                 } else {
                     this.data.cellChart.cell.attribute[index].selected = false;
-                };
+                }
                 return false;
             }
         },
@@ -361,8 +361,7 @@ export class CanvasOriginalDataComponent extends Component {
             CanvasOriginalDataComponent.handleLineBarOriginalData(data)
         } else {
             CanvasOriginalDataComponent.handlePieOriginalData(data)
-        };
-
+        }
         // 判断排序情况
         if (typeof data.cell.sort === 'string') {
             let sort = JSON.parse(data.cell.sort);
@@ -383,7 +382,7 @@ export class CanvasOriginalDataComponent extends Component {
 
         //　如果是分组　使用分组模版
         if (data.cellChart.chart.chartGroup['id']) {
-            CanvasOriginalDataComponent.handleLineBarGroupOriginalData(data)
+            CanvasOriginalDataComponent.handleLineBarGroupOriginalData(data);
             return false;
         }
         // 如果select有数据就用select的数据 select = xAxis

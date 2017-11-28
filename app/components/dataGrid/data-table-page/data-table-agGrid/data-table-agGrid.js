@@ -3072,10 +3072,10 @@ let config = {
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
                 if(this.actions.haveTempId(data.data)){
-                    msgBox.alert('不支持查看源数据。')
+                    msgBox.alert('不支持查看源数据。');
                     return;
                 }
-                console.log( "内置相关穿透" )
+                console.log( "内置相关穿透" );
                 console.log("内置相关穿透");
                 if (data.colDef.is_user) {
                     PersonSetting.showUserInfo({name: data.value});
@@ -3131,7 +3131,7 @@ let config = {
             //统计
             if (fieldTypeService.countTable(data.colDef.dinput_type, data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount") {
                 if(this.data.form_songrid == 1){
-                    msgBox.alert('不支持查看源数据。')
+                    msgBox.alert('不支持查看源数据。');
                     return;
                 }
                 console.log('统计穿透');
@@ -3157,7 +3157,7 @@ let config = {
             // 子表
             if (fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount") {
                 if(this.data.form_songrid == 1){
-                    msgBox.alert('不支持查看源数据。')
+                    msgBox.alert('不支持查看源数据。');
                     return;
                 }
                 console.log("子表穿透");

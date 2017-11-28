@@ -38,7 +38,7 @@ let config = {
             for( let code in this.data.fileData ){
                 num++;
             }
-            let newFile = {}
+            let newFile = {};
             let n = 0;
             let currentCode ='';
             for( let code in this.data.fileData ){
@@ -62,7 +62,7 @@ let config = {
                 file: 'upload_file',
                 table_id: this.data.tableId,
                 override: this.data.choice
-            }
+            };
             this.data.uploader.appendData(json);
             let url = `/import_queryparams/?table_id=${this.data.tableId}&override=${this.data.choice}`;
             let toolbox = {
@@ -88,7 +88,7 @@ let config = {
             let obj = {
                 selectMode:'single',
                 file_filter:'.ini'
-            }
+            };
             let _this = this;
             this.data.uploader = new Uploader(obj);
             this.el.on('click','.search-uploader-button',function() {

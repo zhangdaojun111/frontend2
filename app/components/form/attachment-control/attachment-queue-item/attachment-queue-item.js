@@ -241,7 +241,7 @@ let config = {
         this.data.timestamp =  new Date().getTime();
         this.actions.startUploadFile();
     }
-}
+};
 
 export default class AttachmentQueueItem extends Component{
     constructor(data,event,newConfig){

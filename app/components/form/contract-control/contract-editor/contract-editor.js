@@ -495,7 +495,7 @@ export const contractEditorConfig = {
                 }
                 this.actions._loadTemplateByIndex(0,true,true);
             }
-        })
+        });
 
         //加载tab
         let tabsEle = this.el.find('.contract-tabs');
@@ -513,4 +513,4 @@ export const contractEditorConfig = {
     beforeDestroy() {
         this.data.style.remove();
     }
-}
+};

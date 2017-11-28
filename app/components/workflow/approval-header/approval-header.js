@@ -85,13 +85,13 @@ let config = {
 				}
 			}
 			this.el.find('.approval-control').show();
-		})
+		});
 		Mediator.publish('workflow:loaded', 1);
 	},
 	beforeDestory: function(){
 
 	}
-}
+};
 
 class ApprovalHeader extends Component{
 	// constructor (data){

@@ -78,7 +78,7 @@ let config={
             let val = [];
             for( let k in this.data.originalList ){
                 for( let v of this.data.sMuiltValue ){
-                    let arr = [this.data.sDropValue,v]
+                    let arr = [this.data.sDropValue,v];
                     if( this.data.originalList[k].toString() == arr.toString() ){
                         val.push( k );
                     }
@@ -233,7 +233,7 @@ let config={
                     }
                     this.data.options2 = this.data.selectType == "1" ? this.actions.createArr( this.data.selectType == '1' && this.data.is_view == '1' && num > 0 ) : this.data['options'];
                 }else{
-                    this.data.isViewOptions=[]
+                    this.data.isViewOptions=[];
                     for(let v of this.data["options"]){
                         if(this.data["value"].indexOf(v.value) != -1){
                             this.data.isViewOptions.push({'label':v.label,'value':v.value})
@@ -278,7 +278,7 @@ let config={
                 this.data.originalList = {};
                 for( let o of this.data['options'] ){
                     let str = o.label;
-                    let arr = str.split('_')
+                    let arr = str.split('_');
                     this.data.originalList[o.value] = arr;
                 }
                 this.data.sDropOption = [{label:'',value:''}];
@@ -291,7 +291,7 @@ let config={
                     this.data.sDropValue = r[0];
                     for( let v of this.data.value ){
                         let arr = this.data.originalList[v];
-                        this.data.sMuiltOption.push({label:arr[1],value:arr[1]})
+                        this.data.sMuiltOption.push({label:arr[1],value:arr[1]});
                         this.data.sMuiltValue.push( arr[1] );
                     }
                     this.actions.creteSelect(true);
@@ -306,7 +306,7 @@ let config={
     beforeDestory:function(){
         this.el.off();
     }
-}
+};
 export default class MultiSelectControl extends Component{
     constructor(data,events,newConfig){
         super($.extend(true,{},config,newConfig),data,events)

@@ -89,7 +89,7 @@ let config = {
                             wf_name : this.data.tree.data[i].children[j].label,
                             wf_table_id : this.data.tree.data[i].children[j].table_id
                         };
-                    };
+                    }
                 }
             }
             this.el.find('.J_workflow-content').children().remove();
@@ -149,11 +149,11 @@ let config = {
             this.actions.init();
             this.el.find("#workflow-box").hide();
             $("#workflow-content").show();
-        })
+        });
         //订阅 select list click
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0],'#drawflow');
-        })
+        });
         Mediator.subscribe("workflow:contentClose",(msg)=>{
             this.actions.contentClose();
         })
@@ -161,7 +161,7 @@ let config = {
     beforeDestory: function(){
        
     }
-}
+};
 
 class WorkFlowCreate extends Component{
 
