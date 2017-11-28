@@ -38,11 +38,18 @@ serchStr.split('&').forEach(res => {
 AddWf.showDom(obj).then(function (component) {
     WorkFlowForm.showForm();
     let isshow = true;
+
     Mediator.subscribe("form:formAlreadyCreate",()=>{
         if(isshow){
             component.hideLoading();
             isshow = false;
         }
+        if(obj.tableType == 'child' || obj.btnType != 'new' || obj.calendar){
+            $('#miniFormBtn').hide();
+        }else{
+            $('#miniFormBtn').show();
+        }
+
     });
     // setTimeout(()=>component.hideLoading(),1000)
 });
