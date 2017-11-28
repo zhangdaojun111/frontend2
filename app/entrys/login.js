@@ -13,9 +13,7 @@ import {PasswordInput} from "../components/util/passwordInput/password-input";
 
 import {starter} from '../lib/three/starter';
 
-starter.init();
 
-starter.animate();
 
 function getLoginController() {
     let loginController = {
@@ -417,3 +415,7 @@ if( isNeedDownload === false){      //正常显示登录表单
     $(".need-download").append(htmlDownload);
     $(".download-link").attr('href',downLoadLink)
 }
+
+
+starter.init();
+starter.animate();
