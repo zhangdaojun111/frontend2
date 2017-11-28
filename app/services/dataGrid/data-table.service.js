@@ -144,5 +144,9 @@ export const dataTableService = {
     //获取定制表对应的table_id
     getCustomTableId: function ( json ) {
         return HTTP.postImmediately( '/get_custom_table_id/',json )
+    },
+    //获取生命周期节点数据
+    getFlowNodeInfo: function (json) {
+        return HTTP.postImmediately( '/get_in_process_flow_node/',json )
     }
 }
