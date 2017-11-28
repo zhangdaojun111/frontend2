@@ -3021,6 +3021,7 @@ let config = {
                         value: data['value'],
                         mode: 'view'
                     };
+                    //_.defaultsDeep不会替换原对象中已有key的value
                     let contractConfig = _.defaultsDeep({},{data: obj},contractEditorConfig);
                     PMAPI.openDialogByComponent(contractConfig, {
                         width: 900,

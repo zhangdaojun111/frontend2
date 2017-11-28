@@ -273,9 +273,6 @@ export const contractEditorConfig = {
             }
         },
         getElement: function (json) {
-            console.log('--------')
-            console.log(json)
-            console.log('--------')
             //在componentDialog中使用HTTP则报找不到_http的错误
             return HTTP.postImmediately('/customize/rzrk/get_element/', json);
         },
