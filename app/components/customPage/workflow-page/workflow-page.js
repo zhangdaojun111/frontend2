@@ -718,6 +718,18 @@ let config = {
                     obj['btnType'] = 'view';
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
+                }else if(type === 'urge'){
+                    let json = {
+                        record_id: $event["data"]["id"]
+                    };
+                    workflowService.urge( json )
+                        .then(res => {
+                            if( res.success ){
+                                msgBox.showTips( '操作成功' );
+                            }else {
+                                msgBox.alert( '操作失败：' + res.error );
+                            }
+                        })
                 }
             }
             if( this.data.pageType == 5 ){
