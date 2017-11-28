@@ -13,6 +13,7 @@ import '../assets/scss/theme/ink-blue.scss';
 import '../assets/scss/theme/orange.scss';
 import {Storage} from "../lib/storage";
 import {UserInfoService} from "../services/main/userInfoService"
+import {PMENUM,PMAPI} from "../lib/postmsg";
 SocketMgr.connect();
 
 let AsideInstance = new AsideComponent();
@@ -31,6 +32,13 @@ IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
 AsideInstance.render($('#aside'));
 Storage.clearAll();
+const clickEvent = ()=>{
+  PMAPI.sendToAllChildren({
+      type:PMENUM.send_event,
+      data:'click'
+  });
+};
+document.addEventListener('click',clickEvent);
 
 let body = $('body');
 //加载用户偏好样式
