@@ -486,8 +486,8 @@ export const contractEditorConfig = {
             temp_id: this.data.temp_id
         };
         // this.data.local_data = Storage.getItem('contractCache-'+this.data.real_id+'-'+this.data.id,Storage.SECTION.FORM);
-        this.data.local_data = '';
-        this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value));
+        // this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value));
+        this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
         this.actions.getElement(obj).then(res => {
             if (res.success) {
                 this.actions._loadDataSource(res.data.elements);
