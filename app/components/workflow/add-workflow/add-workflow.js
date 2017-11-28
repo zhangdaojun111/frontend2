@@ -24,7 +24,14 @@ let config={
         action: 0,
         cache_old: {},
         focusArr: [],
-        noRequestFormData:[]
+        noRequestFormData:[],
+        user: [],
+        nameArr: [], //关注人姓名
+        idArr: [], //关注人id
+        htmlStr: [], // 关注人添加的html代码
+        allUsersInfo: {},
+        focusUsersId: [],
+        focusUsers: {},
     },
     actions:{
         openAddFollower() {
@@ -304,6 +311,24 @@ let config={
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
+        });
+        Mediator.on('getDefaultFocusUsers', (data) => {
+            workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
+            this.data.htmlStr = [];
+            this.data.allUsersInfo = res.rows;
+            this.data.focusUsers={};
+            // console.log(this.data.allUsersInfo);
+            for(let key in data['updateuser2focususer']) {
+                this.data.idArr = data['updateuser2focususer'][key];
+                for(let i of this.data.idArr) {
+                    this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
+                    this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];
+                    this.data.htmlStr.push(`<span class="selectSpan">${this.data.allUsersInfo[i]['name']}</span>`);
+                }
+            }
+            this.el.find('#addFollowerList').html(this.data.htmlStr);
+            this.data.user = this.data.focusUsers;
+        })
         });
 
         this.el.find('#subAddworkflow').on('click',()=>{
