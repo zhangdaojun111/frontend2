@@ -159,11 +159,9 @@ let config = {
             if(this.data.firstView === true){
                 $wrap = this.el.find('.current');
                 this.data.deleteComponentArr.push(cell);
-                console.log(this.data.deleteComponentArr);
             }else{
                 $wrap = this.el.find('.prepare');
                 this.data.prepareDeleteComponentArr.push(cell);
-                console.log(this.data.prepareDeleteComponentArr);
             }
             this.append(cell, $wrap);
             return cell;
@@ -188,7 +186,6 @@ let config = {
          */
         async getCellLayout() {
             const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
-            console.log(res);
             if (res['success'] === 1) {
                 try {
                     this.actions.loadCellChart(res['data']['data']);

@@ -15,6 +15,7 @@ let config = {
     data: {
         views: window.config.bi_views,
         currentViewId: '',
+        nextViewId:'',
         headerComponents: {},
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
@@ -22,7 +23,7 @@ let config = {
         carouselInterval:5,
         operateInterval:3,
         viewArr:window.config.bi_views,  //所有bi视图
-        viewNo:1,   //记录当前视图在数组中的位置
+        nextViewNo:1,   //记录当前视图在数组中的位置
         // firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
         animateTime:1000,  //动画执行时间长度（ms）
         carouselFlag:false,  //轮播执行状态下为true
@@ -68,13 +69,12 @@ let config = {
         switchViewId: function (viewId) {
             // 如果router没有传viewId 则默认用bi_views第一个
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
-            this.actions.resetViewArrayNo(viewId);
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 // if(this.data.firstViews === true){
                     this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
                     this.data.cells.render(this.el.find('.cells-container'));
-                    this.data.cells.data.secondViewId = this.data.viewArr[2].id;
+                    this.actions.resetViewArrayNo(viewId);
 
                     // this.data.firstViews = false;
                     // //判断是否执行轮播
@@ -142,7 +142,6 @@ let config = {
          */
         checkCanCarousel(time){
             if(this.data.carouselInterval > 0 && this.data.operateInterval > 0 && window.config.bi_user === 'client' && this.data.carouselFlag === true){
-                console.log(this.data.isNewWindow);
                 if(this.data.isNewWindow){
                     this.actions.launchFullScreen(document.documentElement);
                 }
@@ -160,14 +159,15 @@ let config = {
             let that = this;
             //退出轮播模式后，立即清除timer
             this.data.timer = window.setTimeout(function () {
-                let temp = Number(that.data.viewNo) + 1;
+                that.data.currentViewId = that.data.nextViewId;
+                let temp = Number(that.data.nextViewNo) + 1;
                 if(temp === that.data.viewArr.length){
-                    that.data.viewNo = 0;
+                    that.data.nextViewNo = 0;
                 }else{
-                    that.data.viewNo = temp;
+                    that.data.nextViewNo = temp;
                 }
-                that.data.currentViewId = that.data.viewArr[that.data.viewNo].id;
-                that.data.cells.data.currentViewId = that.data.currentViewId;
+                that.data.nextViewId = that.data.viewArr[that.data.nextViewNo].id;
+                that.data.cells.data.currentViewId = that.data.nextViewId;
                 that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
                 that.data.cells.actions.doCarouselAnimate();
 
@@ -177,20 +177,26 @@ let config = {
             },interval * 1000)
         },
         /**
-         * 鼠标点击切换视图后，重置viewNo，保证下次轮播顺序正确
+         * 鼠标点击切换视图后，重置nextViewNo，保证下次轮播顺序正确
          * @param id
          */
         resetViewArrayNo(id){
             for ( let k in this.data.viewArr){
                 if(this.data.viewArr[k]['id'] == id){
-                   this.data.viewNo = k;
+                   this.data.nextViewNo = k;
                 }
             }
-            if(this.data.viewArr.length = this.data.viewNo + 1){
-                this.data.secondViewId = this.data.viewArr[0].id;
+            let no = Number(this.data.nextViewNo) + 1;
+            if(this.data.viewArr.length === no){
+                this.data.cells.data.secondViewId = this.data.viewArr[0].id;
             }else{
-                this.data.secondViewId = this.data.viewArr[this.data.viewNo + 1].id;
+                this.data.cells.data.secondViewId = this.data.viewArr[no].id;
             }
+            this.data.nextViewNo = no;
+            this.data.nextViewId  = this.data.viewArr[no].id;
+            // console.log('current',this.data.currentViewId);
+            // console.log('second',this.data.cells.data.secondViewId);
+            // console.log('next',this.data.nextViewId)
         },
         /**
          * 用户操作后，重置轮播
