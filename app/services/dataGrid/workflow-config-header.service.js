@@ -39,12 +39,14 @@ export const wchService = {
     ],
     headerFor2: [
         { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
-        { headerName: '操作', width: 120,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
+        { headerName: '操作', width: 150,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
             let data = param["data"];
             let html = '<div style="text-align:center;">' +
                 '<a href=javascript:void(0); class="ui-link" data-type="view">查看</a>' +
                 '<span> | </span>' +
-                '<a href=javascript:void(0); class="ui-link" data-type="cancel">取消</a> ';
+                '<a href=javascript:void(0); class="ui-link" data-type="cancel">取消</a> ' +
+                '<span> | </span>' +
+                '<a href=javascript:void(0); class="ui-link" data-type="urge">催办</a> ';
             if(data["record_status"] == 0 && data["edit_status"] == 0){
                 html += '<span> | </span><a href=javascript:void(0); class="ui-link" data-type="withdraw">撤回</a>';
             }else if(data["edit_status"] == 1){

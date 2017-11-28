@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  *@author yudeping
  *表单主要逻辑
  */
@@ -526,7 +526,7 @@ let config = {
 					if (FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(data["real_type"]) != -1) {
 						let reg = /^((-?\d+.?\d*)[Ee]{1}([+-]?\d+))$/;
 						if (reg.test(data.value)) {
-							data.value = data.value + "(不支持科学计数法！无法保存！)";
+							data.value = data.value + "(不支持科学计数法！无法保存！)"
 							this.actions.setFormValue(f, data.value);
 							return;
 						}
@@ -541,7 +541,7 @@ let config = {
 					if (FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(data["real_type"]) != -1) {
 						let reg = /^((-?\d+.?\d*)[Ee]{1}([+-]?\d+))$/;
 						if (reg.test(data.value)) {
-							data.value = data.value + "(不支持科学计数法！无法保存！)";
+							data.value = data.value + "(不支持科学计数法！无法保存！)"
 							this.actions.setFormValue(f, data.value);
 							return;
 						}
@@ -549,7 +549,7 @@ let config = {
 						else if (data["real_type"] == fieldTypeService.FLOAT_TYPE) {
 							if (result >= 100000000000) {
 								if (data.value.indexOf("(") == -1) {
-									data.value = data.value + "(小数不能超过12位！无法保存！)";
+									data.value = data.value + "(小数不能超过12位！无法保存！)"
 									this.actions.setFormValue(f, data.value);
 								}
 								return;
@@ -627,7 +627,7 @@ let config = {
 					continue
 				}
 				let temp_field = this.data.data[f];
-				fields[f] = {};
+				fields[f] = {}
 				for (let i in need_key) {
 					fields[f][need_key[i]] = temp_field[need_key[i]];
 				}
@@ -909,7 +909,7 @@ let config = {
 					}
 					if (this.data['use_fields'][key].sort().toString() == data.sort().toString()) {
 						let formValue = this.actions.createFormValue(this.data.data);
-						let res = await FormService.getCountData({data: JSON.stringify(formValue)});
+						let res = await FormService.getCountData({data: JSON.stringify(formValue)})
 
 						// if(res.hasOwnProperty('verify')){
 						//     if(res.verify == 1){
@@ -1015,7 +1015,7 @@ let config = {
 				data["value"] = value;
 				let childComponet = this.data.childComponent[dfield];
 				if (childComponet) {
-					childComponet.data["value"] = value;
+					childComponet.data["value"] = value
 					childComponet.reload();
 				}
 				this.actions.triggerSingleControl(dfield,count);
@@ -1404,9 +1404,9 @@ let config = {
 
 			if(!noCount || isChange){
 				//this.actions.calcExpression(calcData, data['value']);
-                this.actions.webCalcExpression(data)
-            }
-            if (data.required) {
+                this.actions.webCalcExpression(data,FormService)
+			};
+			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
 			}
 			if (this.data["frontend_cal_parent_2_child"]) {
@@ -1422,7 +1422,7 @@ let config = {
 			for(let item of items) {
 				item = item.replace("@", "").replace("@", "");
 				let v = formValue[item];
-				let num = formValue[item];
+				let num = formValue[item]
 				let flag = false;
 				if( typeof(num) == 'string' ){
 					flag = true;
@@ -1461,7 +1461,7 @@ let config = {
 				if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(type) != -1) {
 					//整数或者小数处理下去掉，解决发起工作流回显为空的bug
 					try{
-						v = v.replace(/,/g,"");
+						v = v.replace(/,/g,"")
 						//整数或者小数
 						v = v === ""  ? 0 : v;
 					}catch(e){
@@ -1483,7 +1483,7 @@ let config = {
 			return data;
 		},
 
-		webCalcExpression(data) {
+		webCalcExpression(data,FormService) {
             let calcData = {
                 val: data['value'],
                 effect: data["effect"],
@@ -1502,10 +1502,11 @@ let config = {
 							if (expression.indexOf("$^$") == -1) {
 								try {
 									// if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
+                                    expression = expression.replace(/this/,'FormService')
                                         this.actions.set_value_for_form(eval(expression), f);
 									// }
 								} catch (err) {
-									console.log(err);
+									console.log(err)
 									console.log('不能执行前端表达式计算');
                                     bool = true;
 								}
@@ -1532,7 +1533,7 @@ let config = {
             let data = this.data.data[dfield];
             if(data){
                 if(FIELD_TYPE_MAPPING.NUMBER_TYPE.indexOf(data["real_type"]) != -1) {
-                    value = Number(value);
+                    value = new Number(value);
                     let accuracy = data["accuracy"];
                     value = value.toFixed(accuracy);
                 }
@@ -1618,7 +1619,7 @@ let config = {
 				emitDataIfInline: (data) => {
 					this.actions.emitDataIfInline(data);
 				}
-			};
+			}
 			return actions;
 		},
 		//内联子表刷新事件
@@ -1753,7 +1754,7 @@ let config = {
 		},
 		//打开打印页眉设置弹窗 现由工作流负责此功能，以防万一先放着
 		async printSetting() {
-			let res = await FormService.getPrintSetting();
+			let res = await FormService.getPrintSetting()
 			// if(res.succ == 1){
 			if (res.data && res.data.length && res.data.length != 0) {
 				SettingPrint.data['printTitles'] = res['data'];
@@ -2092,7 +2093,7 @@ let config = {
 			if(value){
 				for(let key in this.data.data){
 					if(this.data.data[key].id == value){
-						let val;
+						let val
 						if(this.data.vote_value){
 							if( this.data.vote_value == value){
 								break;
@@ -2133,7 +2134,7 @@ let config = {
 		}
 
         if(window.top.miniFormVal && this.data.btnType == 'new'){
-            let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']];
+            let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
             for(let k in miniFormVal){
                 let val = miniFormVal[k];
                 this.actions.setFormValue(k,val)
@@ -2141,7 +2142,7 @@ let config = {
         }
 		Mediator.subscribe('workflow:voteconfirm',(res)=>{
 			this.actions.setVoteValue(res);
-		});
+		})
 
 		//默认表单样式
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
@@ -2154,7 +2155,7 @@ let config = {
 	beforeDestory() {
 		this.el.off();
 	}
-};
+}
 
 class BaseForm extends Component {
 	constructor(formData, newConfig) {

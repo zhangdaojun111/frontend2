@@ -155,11 +155,15 @@ Mediator.subscribe('workflow:submit', (res)=> {
         if(formData.error){
             msgBox.alert(`${formData.errorMessage}`);
         }else{
+            let f_user = [];
+            for(let k in res){
+                f_user.push(k)
+            }
             msgBox.showLoadingSelf();
             $("#submitWorkflow").hide();
             let postData={
                 flow_id:wfObj.id,
-                focus_users:JSON.stringify(res)||[],
+                focus_users:JSON.stringify(f_user),
                 data:JSON.stringify(formData.formValue),
                 cache_new:JSON.stringify(formData.obj_new),
                 cache_old:JSON.stringify(formData.obj_old),

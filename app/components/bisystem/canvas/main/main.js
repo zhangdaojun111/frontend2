@@ -120,6 +120,7 @@ let config = {
             this.data.isPdf = window.config.pdf === true;
             if(this.data.isSingle || this.data.isPdf ){
                 this.el.find('.views-header').hide();
+                this.el.find('.cells-container').addClass('hide-head');
             }
         }
     },

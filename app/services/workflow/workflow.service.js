@@ -76,6 +76,9 @@ export const workflowService={
     approve(params){
         return HTTP.postImmediately('/approve_workflow_record/',params)
     },
+    urge(params){
+        return HTTP.postImmediately('/workflow_urge/',params)
+    },
     getRecordInfo(params){
         return HTTP.postImmediately('/get_form_dynamic_data/',params)
     },
