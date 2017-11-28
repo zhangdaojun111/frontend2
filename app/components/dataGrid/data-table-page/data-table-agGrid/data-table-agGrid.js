@@ -37,6 +37,7 @@ import '../../../../assets/scss/theme/blue.scss';
 import '../../../../assets/scss/theme/ink-blue.scss';
 import '../../../../assets/scss/theme/orange.scss';
 import {UserInfoService} from "../../../../services/main/userInfoService"
+import msgbox from '../../../../lib/msgbox';
 
 
 
@@ -256,6 +257,13 @@ let config = {
         formData: '',
         //是否加载cache数据
         cacheData: true,
+        //是否配置了生命周期行级操作
+        lifecycleGrid: false,
+        //生命周期相关参数
+        cycleTitle:'',
+        flow_node:[],
+        define_real:[],
+        define_infos:[],
         // 父表按钮类型
         parent_btnType: '',
         //来自表单的子表
@@ -439,7 +447,7 @@ let config = {
                         suppressResize: false,
                         suppressMovable: false,
                         cellRenderer: (params) => {
-                            return this.actions.bodyCellRender(params);
+                            return this.actions.bodyCellRender(params,FormService);
                         }
                     };
                     // 图片可见单元格属性修改
@@ -541,7 +549,7 @@ let config = {
             editCol['cellEditorParams'] = {values: radioParams};
         },
         //调用aggrid的API，通过表头数据来生成每个cell内容
-        bodyCellRender: function (params) {
+        bodyCellRender: function (params,FormService) {
             if (params.value && typeof params.value == 'string') {
                 params.value = params.value.replace(/\s/g, '&nbsp;');
             }
@@ -690,7 +698,7 @@ let config = {
                         exp = exp.replace(i, is_number ? row_data[f] : "'" + row_data[f] + "'");
                     }
                 }
-                exp = exp.replace("#", "this.functionLib.");
+                exp = exp.replace("#", "FormService.");
                 while (exp.indexOf("#") != -1) {
                     exp = exp.replace("#", "this.");
                 }
@@ -1058,7 +1066,10 @@ let config = {
                 this.data.firstReportTable = false;
                 return;
             }
-            dgcService.setPreference(res[0], this.data);
+            if(res[0].is_lifecycle == 1){
+                this.data.lifecycleGrid = true;
+            }
+            dgcService.setPreference( res[0],this.data );
             this.data.myGroup = (res[0]['group'] != undefined) ? JSON.parse(res[0]['group'].group) : [];
             this.data.fieldsData = res[1].rows || [];
             this.agGrid.data.fieldsData = this.data.fieldsData;
@@ -1249,14 +1260,29 @@ let config = {
             }
             let postData = this.actions.createPostData();
             let post_arr = [];
-            let body = dataTableService.getTableData(postData);
-            let remindData = dataTableService.getReminRemindsInfo({table_id: this.data.tableId});
-            post_arr = [body, remindData];
-            if (!this.data.firstGetFooterData && this.data.viewMode != 'source_data') {
-                let footer = dataTableService.getFooterData(postData);
-                post_arr.push(footer)
+            let body = dataTableService.getTableData( postData );
+            let remindData = dataTableService.getReminRemindsInfo({table_id:this.data.tableId});
+            post_arr = [body,remindData]
+            if( !this.data.firstGetFooterData && this.data.viewMode != 'source_data' ){
+                let footer = dataTableService.getFooterData( postData );
+                post_arr.push( footer )
             }
             Promise.all(post_arr).then((res) => {
+                if(this.data.lifecycleGrid){
+                    this.actions.setLifeCycleNode().then(json=>{
+                        if(json){
+                            this.actions.getFlowNode(res[0].rows).then(resp=>{
+                                let d = {
+                                    rowData: resp.rows,
+                                    footerData: []
+                                }
+                                //赋值
+                                this.agGrid.actions.setGridData(d);
+                            })
+                        }
+                    });
+
+                }
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout(() => {
                     this.actions.setGridData(res);
@@ -1302,6 +1328,53 @@ let config = {
                 }
             });
             HTTP.flush();
+        },
+        //生命周期相关参数
+        async setLifeCycleNode(){
+            let json = {
+                formId:'',
+                table_id: this.data.tableId,
+                is_view:0,
+                parent_table_id: this.data.parentTableId || '',
+                parent_real_id: this.data.parentRealId || '',
+                parent_temp_id: this.data.parentTempId || '',
+            };
+            let res = await FormService.getStaticDataImmediately( json );
+            let myData = res.data;
+            for (let i = 0; i < myData.length; i++) {
+                if (myData[i].field_content) {
+                    if (myData[i].field_content.show_flow_node) {
+                        this.data.flow_node.push({
+                            dfield: myData[i].dfield,
+                            limit: myData[i].field_content.limit,
+                            count_table: myData[i].field_content.count_table
+                        });
+                    }
+                }
+            }
+            return Promise.resolve(true)
+        },
+        //生命周期节点信息
+        async getFlowNode(rowData){
+            let myJson = {
+                table_id : this.data.tableId,
+                rows: JSON.stringify(rowData),
+                specical_count_field_infos : JSON.stringify(this.data.flow_node)
+            };
+            let resp = await dataTableService.getFlowNodeInfo(myJson);
+            for( let i = 0 ; i < this.data.flow_node.length ; i++){
+                for( let j = 0 ; j < resp.rows.length ; j++ ) {
+                    if( !resp.define_infos[resp.rows[j]._id] ){
+                        resp.rows[ j ][ this.data.flow_node[i].dfield ] = resp.rows[ j ][ this.data.flow_node[i].dfield ] == '' ? '' : '结束';
+                    } else if( !resp.define_infos[ resp.rows[ j ]._id ][ this.data.flow_node[i].dfield ] ) {
+                        resp.rows[ j ][ this.data.flow_node[i].dfield ] = resp.rows[ j ][ this.data.flow_node[i].dfield ] == '' ? '' : '结束';
+                    }
+                }
+            }
+            this.data.rows = resp.rows;
+            this.data.define_real = resp.rows;
+            this.data.define_infos = resp.define_infos;
+            return Promise.resolve(resp);
         },
         //设置grid数据
         setGridData: function (res) {
@@ -1565,6 +1638,7 @@ let config = {
                 // json['first'] = 0;
                 // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
                 json['is_temp'] = 1;
+                json['tableType'] = 'dy';
                 delete json['rowId']
             }
             if (this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild' || this.data.viewMode == 'child') {
@@ -2087,6 +2161,32 @@ let config = {
                     url = '/datagrid/custom_index/' + location.search + '&isNewWindow=true';
                 }
                 this.el.find('.grid-new-window')[0].href = url;
+            }
+            if (this.data.viewMode != 'in_process') {
+                $('.tabTitle .dataTableMiniForm').on('click', () => {
+                    if(window.top.miniFormVal){
+                        if( window.top.miniFormVal[this.data.tableId]){
+                            let obj = {
+                                table_id: this.data.tableId,
+                                parent_table_id: this.data.parentTableId,
+                                parent_real_id: this.data.parentRealId,
+                                parent_temp_id: this.data.parentTempId,
+                                parent_record_id: this.data.parentRecordId,
+                                btnType: 'new',
+                                form_id: this.data.formId,
+                                flow_id: this.data.flowId,
+                            };
+                            let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
+
+                            let title = '新增';
+                            this.actions.openSelfIframe(url, title);
+                        }else{
+                            msgbox.alert('本表中没有未提交的表单');
+                        }
+                    }else{
+                        msgbox.alert('本表中没有未提交的表单');
+                    }
+                })
             }
             //新增数据
             if (this.el.find('.new-form-btn')[0]) {
@@ -2836,7 +2936,10 @@ let config = {
             if ((groupValue || Object.is(groupValue, '') || Object.is(groupValue, 0)) && data.colDef.field == 'group') {
                 this.agGrid.gridOptions.api.redrawRows();
             }
-            let arr = [];
+            if(this.data.lifecycleGrid){
+                this.data.cycleTitle = data.data.f5 || '生命周期';
+            }
+            let arr=[];
             for (let obj of data.columnApi._columnController.primaryColumns) {
                 if (obj['colDef']['count_table_id']) {
                     arr.push(obj);
@@ -3387,6 +3490,24 @@ let config = {
                     // winTitle = '执行操作';
                     break;
                 }
+                case 'lifecycle':{
+                    if(!this.data.lifecycleGrid){
+                        msgBox.alert("尚未配置生命周期");
+                        return;
+                    }
+                    json = {
+                        lifeCycleData: data,
+                        cycleTitle: this.data.cycleTitle,
+                        flow_node: this.data.flow_node,
+                        define_infos: this.data.define_infos,
+                        define_real: this.data.define_real,
+                    }
+                    w = 1400;
+                    h = 800;
+                    url = '/iframe/rowOperation/?operationType=lifeCycle';
+                    winTitle = '产品进度条';
+                    break;
+                }
             }
             PMAPI.openDialogByIframe(url, {
                 width: w,
@@ -3619,7 +3740,7 @@ let config = {
             return;
         }
 
-        if (this.data.viewMode == 'normal' && this.data.cacheData) {
+        if (this.data.viewMode == 'normal' && this.data.cacheData && window.config.cached_data) {
             let data = window.config.cached_data;
             console.log("只加载Header的cache数据");
             console.log(data);

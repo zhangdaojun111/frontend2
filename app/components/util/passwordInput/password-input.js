@@ -161,7 +161,7 @@ let config = {
         sendPawToParent:function () {
             console.log('do send');
             let password = this.el.find('.set-password-input').val();
-            this.setValue(password);
+	        this.setValue && this.setValue(password);
         }
     },
     binds:[
