@@ -194,7 +194,7 @@ let config = {
         },
         initThemeUl:function () {
             if(window.config.sysConfig.userInfo.hasOwnProperty('theme') && window.config.sysConfig.userInfo.theme !== ''){
-                let theme = window.config.sysConfig.userInfo.theme;
+                let theme = window.config.sysConfig.userInfo.theme || 'blue';
                 this.el.find(`li[data-value = ${theme}]`).addClass('active').siblings().removeClass('active');
             }
         }
