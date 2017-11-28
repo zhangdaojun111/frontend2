@@ -496,7 +496,7 @@ export const contractEditorConfig = {
                     this.data.local_data = [];
                     this.actions.addTab();
                 }
-                this.actions._loadTemplateByIndex(0,false,false);
+                this.actions._loadTemplateByIndex(0,true,true);
             }
         })
 
