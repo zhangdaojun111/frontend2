@@ -1052,6 +1052,9 @@ let config = {
 
 		//移除其它字段隐藏的字段信息
 		checkOhterField(data, obj_new, obj_old) {
+            if(this.data['show_other_fields']){
+                return;
+            }
 			let delKey = [];
 			for (let index in this.data.data) {
 				if (this.data.data[index]['is_other_field'] && this.data.submitKey.indexOf(this.data.data[index]['id']) == -1) {
