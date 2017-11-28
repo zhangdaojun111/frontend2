@@ -379,8 +379,8 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 let controller = getLoginController();
 controller.formInit();  //初始化表单控件
 controller.getNextUrl();       //根据url判断是否跳转页面
- //let isNeedDownload = controller.browser_check();     //暂时屏蔽
-let isNeedDownload = false;
+ let isNeedDownload = controller.browser_check();     //暂时屏蔽
+//let isNeedDownload = false;
 if( isNeedDownload === false){      //正常显示登录表单
     controller.infoInit();  //初始化最近访问用户和密码
     LoginService.getVersionInfo().done((result) => {
@@ -412,6 +412,17 @@ if( isNeedDownload === false){      //正常显示登录表单
     $(".need-download").show();
     let htmlDownload = '';
     htmlDownload += '<span class="download-prompt">'+prompt+'</span>'+'<a class="download-link">下载链接</a>';
+
+    if(LoginService.currentSystem == 'win'){
+        htmlDownload +=
+        '<div class="install-introduce">'+
+            '<p>Windows版安装更新说明：</p>'+
+            '<p>1.点击下载链接，下载最新版chrome浏览器。</p>'+
+            '<p> 2.点击下载完成的安装包，按步骤安装。</p>'+
+            '<p>3.在控制面板中选择【程序与功能】，手动将电脑中低版本的chrome卸载。</p>'+
+            '<p>4.成功登陆ERDS系统。</p>'
+        '</div>'
+    }
     $(".need-download").append(htmlDownload);
     $(".download-link").attr('href',downLoadLink)
 }
