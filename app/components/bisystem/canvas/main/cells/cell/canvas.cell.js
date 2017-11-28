@@ -96,6 +96,8 @@ let config = {
                 containment: '.cells-container',
                 grid: [10, 10],
                 stop: (event, ui) => {
+                    this.el.find('.move-with-keyboard').prop('checked', false);
+                    this.actions.removeKeyboardListener();
                     this.data.cell.size.left = ui.position.left;
                     this.data.cell.size.top = ui.position.top;
                     this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
@@ -158,15 +160,19 @@ let config = {
             switch (key){
                 case 'ArrowDown':
                     top +=offSet;
+                    event.preventDefault();
                     break;
                 case 'ArrowUp':
                     top = (top<offSet)? 0 : top - offSet;
+                    event.preventDefault();
                     break;
                 case 'ArrowLeft':
                     left = (left<offSet)? 0 :left - offSet;
+                    event.preventDefault();
                     break;
                 case 'ArrowRight':
                     left += offSet;
+                    event.preventDefault();
                     break;
             }
             this.el.find('.cell').css({'left':left+'px','top':top+'px'});
