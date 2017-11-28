@@ -365,6 +365,7 @@ export class EchartsService {
         //是否设置自定义图表半径
         if(Object.keys(cellOption['customPie'])[0]){
             pieOption['legend']['type'] = 'plain';
+
             pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
             pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
         }
