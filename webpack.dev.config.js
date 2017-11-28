@@ -19,6 +19,8 @@ var APP_PATH = path.resolve(ROOT_PATH, 'app');
 var customType = argv.env && argv.env.path;
 var customEntrys = {};
 
+console.log(require.resolve('three'));
+
 try {
     console.info("loading custom entrys config");
     customEntrys = require(`./custom/${customType}/entrys.config.js`);
@@ -120,4 +122,4 @@ module.exports = {
             "window.jQuery": "jquery"
         })
     ]
-}
+};

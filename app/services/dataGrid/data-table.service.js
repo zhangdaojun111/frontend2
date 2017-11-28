@@ -149,4 +149,4 @@ export const dataTableService = {
     getFlowNodeInfo: function (json) {
         return HTTP.postImmediately( '/get_in_process_flow_node/',json )
     }
-}
+};

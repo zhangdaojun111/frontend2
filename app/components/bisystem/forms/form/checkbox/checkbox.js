@@ -21,7 +21,7 @@ let config = {
         selectAll() {
             let list = [];
             this.data.list.map(checkbox => {
-                list.push(JSON.parse(checkbox.value))
+                list.push(JSON.parse(checkbox.value));
                 this.el.find('input').prop('checked', true);
             });
             this.data.value = list;
@@ -40,7 +40,7 @@ let config = {
                 _.remove(this.data.value, (item) => {
                     return item.id === value.id
                 });
-            };
+            }
             this.trigger('onChange', this.data.value);
         }
 
@@ -84,9 +84,9 @@ class Checkbox extends Base {
             if (value) {
                 this.data.value.push(value);
                 this.el.find(`input`).prop("checked",true);
-            };
+            }
             this.trigger('onChange', this.data.value);// 作为单选的时候触发
-        };
+        }
     }
 
     /**
@@ -96,7 +96,7 @@ class Checkbox extends Base {
     setList(list) {
         let data = list.map(val => {
             return {value: JSON.stringify(val), name: val['name']}
-        })
+        });
         this.data.list = data;
         this.data.value = this.data.firstDo ? this.data.value : [];
         this.reload();
@@ -104,8 +104,8 @@ class Checkbox extends Base {
             this.setValue(this.data.value);
             if (this.data.list.length > 0) {
                 this.data.firstDo = false;
-            };
-        };
+            }
+        }
         this.trigger('onChange', this.data.value);
     }
 

@@ -3,7 +3,7 @@
  */
 import Component from "../../../../../lib/component";
 import template from './calendar.table.grid.html';
-import './calendar.table.grid.scss';;
+import './calendar.table.grid.scss';
 import 'jquery-ui/ui/widgets/droppable';
 import 'jquery-ui/ui/widgets/sortable';
 import CalendarRemindTaskItem from './calendar.remind.task.item/calendar.remind.task.item';

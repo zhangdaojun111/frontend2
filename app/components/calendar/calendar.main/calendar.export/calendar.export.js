@@ -23,7 +23,7 @@ let config = {
             }
             if( this.data.fromDate > this.data.toDate ){
                 alert( '起始时间不能大于结束时间。' );
-                return;
+
             }
             else {
                 this.el.find('.export-btn').attr('disabled', false);

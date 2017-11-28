@@ -71,7 +71,7 @@ let config = {
             this.data.trees.push(comp);
         });
     }
-}
+};
 
 export default class TreeView extends Component {
     constructor(treeNode,options){
@@ -79,7 +79,7 @@ export default class TreeView extends Component {
             treeNodes:treeNode,
             options:options,
             indent:0
-        }
+        };
         super(config,data,options.callback);
     }
 }

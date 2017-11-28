@@ -219,4 +219,4 @@ Mediator.subscribe('workflow:changeToEdit',(res)=>{
     // $("#add-wf").find('#print').removeClass('addPrint');
     is_view = 0;
     CreateFormServer.changeToEdit(res);
-})
+});

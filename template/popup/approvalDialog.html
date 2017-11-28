@@ -9,7 +9,12 @@
 
 <script>
 
-    window.config = {{window_config|safe}};
+
+    window.config = {;
+    {
+        window_config | safe
+    }
+    }
 
 </script>
 
@@ -22,7 +27,7 @@
 <link rel="stylesheet" href=" {{ "/client/static/css/vendors.css"|version }}">
 <link rel="stylesheet" href=" {{ "/client/static/css/approvalDialog.css"|version }}">
 <script type="text/javascript" src=" {{ "/client/static/vendors.js"|version }}"></script>
-<script type="text/javascript" src=" {{ "/client/static/approvalDialog.js"|version }}"></script>
+<script; type="text/javascript"; src=" {{ "/client/static/approvalDialog.js;"|version }}"></script>
 {% endifequal %}
 
 </body>

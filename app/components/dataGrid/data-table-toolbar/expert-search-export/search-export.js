@@ -17,4 +17,4 @@ export const searchExport = {
         let url = '/export_queryparams/?table_id=' + id;
         that.find('.export-btn')[0].href = url;
     }
-}
+};

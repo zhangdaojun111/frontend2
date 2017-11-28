@@ -70,7 +70,7 @@ export const fieldTypeService = {
         return data == this.EDIT_CONTROL
     },
     noToolTips: function (data) {//dataGrid中没有toolTips
-        let arr = [this.IMAGE_TYPE,this.UEDITOR,this.TEXT_COUNT_TYPE,this.SECRET_TEXT,this.IMAGE_TYPE]
+        let arr = [this.IMAGE_TYPE,this.UEDITOR,this.TEXT_COUNT_TYPE,this.SECRET_TEXT,this.IMAGE_TYPE];
         return arr.indexOf( data ) != -1
     },
     intOrFloat: function (data) {//整数||小数
@@ -79,7 +79,7 @@ export const fieldTypeService = {
     //不能搜索字段
     canNotSearch : function (data) {
         let arr = [this.UEDITOR,this.TEXT_COUNT_TYPE,this.URL_TYPE,this.CYCLE_RULE,this.TEXT_COUNT_TYPE,this.SECRET_TEXT,
-            this.IMAGE_TYPE,this.IMAGE_TYPE,this.VIDEO_TYPE,this.CYCLE_RULE,this.ATTACHMENT]
+            this.IMAGE_TYPE,this.IMAGE_TYPE,this.VIDEO_TYPE,this.CYCLE_RULE,this.ATTACHMENT];
         return arr.indexOf( data ) != -1;
     },
     //返回搜索的类型
@@ -116,8 +116,8 @@ export const fieldTypeService = {
     },
     //字段对其位置
     textAline: function ( data ) {
-        let right = ['10','11','16','26']
-        let center = ['2','3','4','5','9','12','23','30','33','34','35']
+        let right = ['10','11','16','26'];
+        let center = ['2','3','4','5','9','12','23','30','33','34','35'];
         if( right.indexOf( data )!=-1 ){
             return 'right';
         }
@@ -126,7 +126,7 @@ export const fieldTypeService = {
         }
         return 'left';
     }
-}
+};
 export let FIELD_TYPE_MAPPING = {
     TEXT_TYPE: [fieldTypeService.TEXT, fieldTypeService.TEXTAREA, fieldTypeService.UEDITOR, fieldTypeService.DATE, fieldTypeService.TIME, fieldTypeService.DATETIME, fieldTypeService.YEAR, fieldTypeService.INCREMENT_NUMBER, fieldTypeService.SECRET_TEXT, fieldTypeService.CYCLE_RULE],
     NUMBER_TYPE: [fieldTypeService.FLOAT_TYPE,fieldTypeService.INT_TYPE,fieldTypeService.DECIMAL_TYPE],
@@ -144,4 +144,4 @@ export let FIELD_TYPE_MAPPING = {
     MULTI_CHOICE_BUILD_IN: [fieldTypeService.MULTI_SELECT],
     TABLE_COUNT_TYPE: [fieldTypeService.TABLE_COUNT],
     EDIT_CONTROL_TYPE:[fieldTypeService.EDIT_CONTROL]
-}
+};

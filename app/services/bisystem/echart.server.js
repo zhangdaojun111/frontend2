@@ -319,8 +319,19 @@ export class EchartsService {
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
-        console.log('-----------------');
-        console.log(linebarOption);
+
+
+        //最后一条数据必显示
+        // if(cellOption.data.xAxis){
+        //     linebarOption['xAxis'][0]['axisLabel']['interval'] = (index,value)=>{
+        //         let xAxisLen = cellOption.data.xAxis.length-1;
+        //         if(index === 0 || index === xAxisLen){
+        //             return true
+        //         }else if(0<index<xAxisLen && index%19 === 0){
+        //             return true
+        //         }
+        //     }
+        // }
         return linebarOption;
     }
 
@@ -329,6 +340,7 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     pieOption(cellChart) {
+        console.log(cellChart);
         let cellOption = cellChart['chart'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
@@ -349,6 +361,13 @@ export class EchartsService {
         pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if(cellChart.chart.chartType.type == 'circular'){
             pieOption['series'][0].radius = ['50%','70%'];
+        }
+        //是否设置自定义图表半径
+        if(Object.keys(cellOption['customPie'])[0]){
+            pieOption['legend']['type'] = 'plain';
+
+            pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
+            pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
         }
         return pieOption;
     }
@@ -600,8 +619,8 @@ export class EchartsService {
         if (cellOption['yAxis'].length === 0 ) {
             return defaultOption;
         }
-        gaugeOption.series[0].min = cellOption['data']['range'][0];
-        gaugeOption.series[0].max = cellOption['data']['range'][1];
+        gaugeOption.series[0].min = Math.min(...cellOption['data']['range']);
+        gaugeOption.series[0].max = Math.max(...cellOption['data']['range']);
         if(cellOption['data']['range'][0] == 0 && cellOption['data']['range'][1] == 0){
             if(cellOption['data']['yAxis']>0){
                 gaugeOption.series[0].min = 0;
@@ -614,7 +633,10 @@ export class EchartsService {
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
         gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
         gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
-            return value;
+            return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+        };
+        gaugeOption.series[0]['detail']['formatter'] = function(value){
+            return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
         };
         return gaugeOption;
     }

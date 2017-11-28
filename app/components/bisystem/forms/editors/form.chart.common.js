@@ -25,13 +25,14 @@ let countColumn = {
     type: 'radio',
     list:[],
     events: {},
-    required: true,
-    rules:[
-        {
-            errorMsg: '统计字段不能为空',
-            type: 'required',
-        }
-    ],
+    class: 'countColumn',
+    // required: true,
+    // rules:[
+    //     {
+    //         errorMsg: '统计字段不能为空',
+    //         type: 'required',
+    //     }
+    // ],
 };
 
 let theme = {
