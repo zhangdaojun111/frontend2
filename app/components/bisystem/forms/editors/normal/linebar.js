@@ -63,8 +63,8 @@ let config = {
                         return {value: JSON.stringify(item), name: item.name}
                     });
                     this.formItems['countColumn'].setList(fields);
-                    // this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                     this.formItems['countColumn'].el.show();
+                    // this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
@@ -253,6 +253,7 @@ let config = {
                     this.formItems['chartAssignment'].showErrorMsg('分组字段不能为空');
                 }
             }
+
             if (pass && yAxispass && groupPass) {
                 this.save(chart);
             }
@@ -627,7 +628,6 @@ let config = {
                 label: '',
                 name: 'limitNum',
                 defaultValue: 0,
-                // placeholder: '',
                 category: 'number',
                 textTip:'请输入显示前多少条数据：',
                 type: 'text',
@@ -638,7 +638,6 @@ let config = {
                 label: '',
                 name: 'endLimitNum',
                 defaultValue: 0,
-                // placeholder: '',
                 category: 'number',
                 textTip:'请输入显示后多少条数据：',
                 type: 'text',
@@ -669,7 +668,6 @@ let config = {
                 label: '',
                 name: 'customTopNum',
                 defaultValue: '10',
-                // placeholder: '',
                 category: 'number',
                 textTip:'请输入图表top高度：',
                 type: 'text',

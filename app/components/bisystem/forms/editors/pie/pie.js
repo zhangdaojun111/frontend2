@@ -143,7 +143,7 @@ let config = {
                 deeps: data.pieType == '1' ? [] : data.deeps,
                 limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
                 endlimit: data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
-                customPie: data.customPie[0] ? {radius:data.customRadius,centerX:data.customCenterX,centerY:data.customCenterY} : {} ,
+                customPie: data.customPie[0] ? {radius:data.customRadius,centerX:'50%',centerY:'50%'} : {} ,
             };
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
@@ -174,7 +174,6 @@ let config = {
          * @param chart = this.data.chart
          */
         fillChart(chart) {
-            console.log(chart);
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['source'].setValue(chart['source']);
             this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
@@ -197,9 +196,9 @@ let config = {
                 this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
             }
             this.formItems['customPie'].setValue(Object.keys(chart['customPie'])[0] ? 1 : 0);
-            this.formItems['customRadius'].setValue(chart['customPie'] ? chart['customPie']['radius'] : 0);
-            this.formItems['customCenterX'].setValue(chart['customPie'] ? chart['customPie']['centerX'] : 0);
-            this.formItems['customCenterY'].setValue(chart['customPie'] ? chart['customPie']['centerY'] : 0);
+            this.formItems['customRadius'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['radius'] : '80%');
+            // this.formItems['customCenterX'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['centerX'] : '50%');
+            // this.formItems['customCenterY'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['centerY'] : '50%');
         }
     },
     data: {
@@ -379,12 +378,12 @@ let config = {
                     onChange:function(value) {
                         if (value && value[0]) {
                             this.formItems['customRadius'].el.show();
-                            this.formItems['customCenterX'].el.show();
-                            this.formItems['customCenterY'].el.show();
+                            // this.formItems['customCenterX'].el.show();
+                            // this.formItems['customCenterY'].el.show();
                         } else {
                             this.formItems['customRadius'].el.hide();
-                            this.formItems['customCenterX'].el.hide();
-                            this.formItems['customCenterY'].el.hide();
+                            // this.formItems['customCenterX'].el.hide();
+                            // this.formItems['customCenterY'].el.hide();
                         }
                     }
                 }
@@ -399,26 +398,26 @@ let config = {
                 class: 'customRadius',
                 events: {}
             },
-            {
-                label: '',
-                name: 'customCenterX',
-                defaultValue: '50%',
-                category: 'text',
-                textTip:'请输入横坐标（单位可为像素或百分比）：',
-                type: 'text',
-                class: 'customCenterX',
-                events: {}
-            },
-            {
-                label: '',
-                name: 'customCenterY',
-                defaultValue: '50%',
-                category: 'text',
-                textTip:'请输入纵坐标（单位可为像素或百分比）：',
-                type: 'text',
-                class: 'customCenterY',
-                events: {}
-            },
+            // {
+            //     label: '',
+            //     name: 'customCenterX',
+            //     defaultValue: '50%',
+            //     category: 'text',
+            //     textTip:'请输入横坐标（单位可为像素或百分比）：',
+            //     type: 'text',
+            //     class: 'customCenterX',
+            //     events: {}
+            // },
+            // {
+            //     label: '',
+            //     name: 'customCenterY',
+            //     defaultValue: '50%',
+            //     category: 'text',
+            //     textTip:'请输入纵坐标（单位可为像素或百分比）：',
+            //     type: 'text',
+            //     class: 'customCenterY',
+            //     events: {}
+            // },
             {
                 label: '',
                 name: 'limit',
