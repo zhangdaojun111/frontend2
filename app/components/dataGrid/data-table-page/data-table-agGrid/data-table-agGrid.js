@@ -447,7 +447,7 @@ let config = {
                         suppressResize: false,
                         suppressMovable: false,
                         cellRenderer: (params) => {
-                            return this.actions.bodyCellRender(params);
+                            return this.actions.bodyCellRender(params,FormService);
                         }
                     };
                     // 图片可见单元格属性修改
@@ -549,7 +549,7 @@ let config = {
             editCol['cellEditorParams'] = {values: radioParams};
         },
         //调用aggrid的API，通过表头数据来生成每个cell内容
-        bodyCellRender: function (params) {
+        bodyCellRender: function (params,FormService) {
             if (params.value && typeof params.value == 'string') {
                 params.value = params.value.replace(/\s/g, '&nbsp;');
             }
@@ -698,7 +698,7 @@ let config = {
                         exp = exp.replace(i, is_number ? row_data[f] : "'" + row_data[f] + "'");
                     }
                 }
-                exp = exp.replace("#", "this.functionLib.");
+                exp = exp.replace("#", "FormService.");
                 while (exp.indexOf("#") != -1) {
                     exp = exp.replace("#", "this.");
                 }
