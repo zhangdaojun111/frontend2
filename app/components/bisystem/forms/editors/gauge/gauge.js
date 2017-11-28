@@ -233,9 +233,8 @@ let config = {
                 this.data.chart = res[0]['data']
             } else {
                 msgbox.alert(res[0]['error'])
-            };
-        };
-
+            }
+        }
         // 渲染图表表单字段
         this.drawForm();
         this.actions.init();
@@ -245,7 +244,7 @@ let config = {
         }
 
     }
-}
+};
 
 class GaugeEditor extends Base {
     constructor(data,extendConfig) {

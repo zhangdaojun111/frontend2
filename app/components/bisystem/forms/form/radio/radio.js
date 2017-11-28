@@ -53,7 +53,7 @@ class Radio extends Base {
         if (value) {
             this.data.value = value;
             this.el.find(`input[value='${this.data.value}']`).attr("checked",true);
-        };
+        }
         this.data.firstDo = true;
     }
 
@@ -77,7 +77,7 @@ class Radio extends Base {
         if (this.data.firstDo) {
             this.setValue(this.data.value);
             this.data.firstDo = false;
-        };
+        }
     }
 
 }

@@ -18,7 +18,7 @@ import WorkFlowForm from '../workflow-form/workflow-form';
 import WorkFlowGrid from '../workflow-grid/workflow-grid';
 import followerDialog from '../approval-workflow/followerDialog/followerDialog';
 
-let serchStr = location.search.slice(1),nameArr=[],obj = {},focus=[],is_view,tree=[],staff=[];;
+let serchStr = location.search.slice(1), nameArr = [], obj = {}, focus = [], is_view, tree = [], staff = [];
 serchStr.split('&').forEach(res => {
 	let arr = res.split('=');
 	obj[arr[0]] = arr[1];
@@ -389,7 +389,7 @@ let config={
 
 		this.el.on('click','.workflow-main',()=>{
 			this.el.find('.preview-node').hide();
-		})
+		});
 
 		this.el.on('click','.gz',()=>{
 			let signature = $(".signature");

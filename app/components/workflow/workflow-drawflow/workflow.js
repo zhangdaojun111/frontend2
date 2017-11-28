@@ -143,7 +143,7 @@ let config = {
                             eventname: event_name,//event_name,
                             originaltitle: myTitle,
                             originaltext: attachment + text
-                    }).css(css).html(attachment + text)//.css(__this[style]);
+                    }).css(css).html(attachment + text);//.css(__this[style]);
                         //如果有加签
                     if (is_add_handler == 1) {
                             let addHandlerInfo = "";
@@ -203,7 +203,7 @@ let config = {
                                 $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
                             }
                         }
-                        return;
+
                     }
                 }
                 else if (is_add_handler == 1) {
@@ -224,7 +224,7 @@ let config = {
                         for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
                             $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
                         }
-                        return;
+
                     }
                 }
             });
@@ -237,7 +237,7 @@ let config = {
                         for (let b of __this.requiredfieldsNodeList['frontendid2fieldid'][value.id]) {
                             $('span[data-id=' + b + ']').css({ color: 'rgb(14,122,239)' });
                         }
-                        return;
+
                     }
                 });
             }
@@ -553,7 +553,7 @@ let config = {
     beforeDestory: function(){
 
     }
-}
+};
 
 
 class WF extends Component {

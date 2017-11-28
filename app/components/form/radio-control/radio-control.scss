@@ -1,64 +1,64 @@
-.radio-wrap{
-  line-height: 30px;
-  position: relative;
-  top: -3px;
-  display: flex;
-}
-.height26{
-  height:26px;
-}
-.df-input-radio-status{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 7px;
-  height: 7px;
-  background: #2298f4;
-  transform: translate(-50%,-50%);
-  border-radius: 50%;
-  /*opacity:0;*/
-}
-.df-input-radio {
-  width: 16px;
-  height: 16px;
-  /*-webkit-appearance: none;*/
-  vertical-align: middle;
-  margin: 0;
-  margin-right: 2px;
-  outline:none;
-  opacity: 0;
-  cursor: pointer;
-}
-input:focus{
-  outline:none;
-}
-.df-input-radio:checked {
-  width: 16px;
-  height: 16px;
-  /*-webkit-appearance: none;*/
-  vertical-align: middle;
-  margin: 0;
-  margin-right: 2px;
-  outline:none;
-}
+.component-radio-control {
+  .radio-wrap {
+    line-height: 30px;
+    position: relative;
+    top: -3px;
+    display: flex;
+  }
+  .height26 {
+    height: 26px;
+  }
+  .df-input-radio-status {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    background: #2298f4;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    /*opacity:0;*/
+  }
+  .df-input-radio {
+    width: 16px;
+    height: 16px;
+    /*-webkit-appearance: none;*/
+    vertical-align: middle;
+    margin: 0;
+    margin-right: 2px;
+    outline: none;
+    opacity: 0;
+    cursor: pointer;
+  }
+  input:focus {
+    outline: none;
+  }
+  .df-input-radio:checked {
+    width: 16px;
+    height: 16px;
+    /*-webkit-appearance: none;*/
+    vertical-align: middle;
+    margin: 0;
+    margin-right: 2px;
+    outline: none;
+  }
 
-.df-input-label {
-  margin-right: 10px;
- // line-height: 30px;
-  font-weight:normal;
-  position: relative;
-}
-.df-input-radio:disabled{
-  /*-webkit-appearance: radio;*/
-  width: 16px;
-  height: 16px;
-  margin-right: 7px;
-  display: inline-block;
-  cursor: default;
-}
+  .df-input-label {
+    margin-right: 10px;
+    // line-height: 30px;
+    font-weight: normal;
+    position: relative;
+  }
+  .df-input-radio:disabled {
+    /*-webkit-appearance: radio;*/
+    width: 16px;
+    height: 16px;
+    margin-right: 7px;
+    display: inline-block;
+    cursor: default;
+  }
 
-
-.df-input-radio-wrapper {
+  .df-input-radio-wrapper {
     width: 14px;
     height: 14px;
     position: absolute;
@@ -67,14 +67,15 @@ input:focus{
     top: 2px;
     left: 0;
     /*z-index:-1;*/
-}
+  }
 
-.line{
-  display: flex;
-  flex-wrap: wrap;
-  width: auto;
-}
+  .line {
+    display: flex;
+    flex-wrap: wrap;
+    width: auto;
+  }
 
-.flexItem{
-  flex: 0 0 100%;
+  .flexItem {
+    flex: 0 0 100%;
+  }
 }

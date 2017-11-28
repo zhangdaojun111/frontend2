@@ -89,14 +89,14 @@ let config = {
         },
         //添加canNotClick
         addCanNotClick: function (name) {
-            let e = this.el.find( '.'+name )[0]
+            let e = this.el.find( '.'+name )[0];
             if( e.className.indexOf( ' canNotClick' ) == -1 ){
                 e.className += ' canNotClick';
             }
         },
         //去掉canNotClick
         removeCanNotClick: function (name) {
-            let e = this.el.find( '.'+name )[0]
+            let e = this.el.find( '.'+name )[0];
             if( e.className.indexOf( 'canNotClick' ) != -1 ){
                 e.className = name;
             }
@@ -181,7 +181,7 @@ let config = {
             } )
         },
         onPaginationChanged: function (invalid) {
-            this.el.find( '.ui-icon-refresh' ).eq(0).addClass( 'refresh-rotate' )
+            this.el.find( '.ui-icon-refresh' ).eq(0).addClass( 'refresh-rotate' );
             if( !invalid ){
                 this.el.find( '.data-invalid' )[0].innerHTML = '';
             }
@@ -223,9 +223,9 @@ let config = {
         },
         //表级操作
         tableOperateFun: function (opt,opera) {
-            console.log("表级操作")
-            console.log(opt)
-            console.log(opera)
+            console.log("表级操作");
+            console.log(opt);
+            console.log(opera);
             if(opera != 0){
                 let address = JSON.parse(opera);
                 let deleteListRel = [];
@@ -267,7 +267,7 @@ let config = {
                                 table_id:this.data.tableId,
                                 selectedRows:JSON.stringify(deleteListRel),
                                 function_name: funName
-                            }
+                            };
                             HTTP.postImmediately( address['beAddress'],obj ).then( res=>{
                                 if(res['success']==1){
                                     msgBox.showTips('发送成功！');
@@ -302,7 +302,7 @@ let config = {
                 this.data.onRefresh = true;
                 setTimeout( ()=>{
                     this.actions.invalidTips();
-                },500 )
+                },500 );
                 setTimeout( ()=>{
                     this.data.onRefresh = false;
                 },500 )

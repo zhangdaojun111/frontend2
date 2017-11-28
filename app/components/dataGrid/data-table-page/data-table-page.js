@@ -18,7 +18,7 @@ let config = {
     actions: {
         //获取在途数据
         getInProcessNum: function () {
-            let inProcess = dataTableService.getInProcessNum( {table_id: this.data.tableId} )
+            let inProcess = dataTableService.getInProcessNum( {table_id: this.data.tableId} );
             let arr = [inProcess];
             // if( !this.data.firatShowHelp ){
             //     let help = dataTableService.getHelpData( {is_form:1,table_id:this.data.tableId,type:0} )
@@ -35,7 +35,7 @@ let config = {
                 //     }
                 // }
                 // this.data.firatShowHelp = true;
-            })
+            });
             HTTP.flush();
         },
         //添加点击事件
@@ -45,7 +45,7 @@ let config = {
                 this.el.find('.dataTableInTransit').removeClass('active');
                 this.el.find( '.page-group .dataTableAgGrid' )[0].style.display = 'block';
                 this.el.find( '.page-group .dataTableInTransit' )[0].style.display = 'none';
-            } )
+            } );
             this.el.find( '.tabTitle .dataTableInTransit' ).on( 'click',()=>{
                 this.el.find( '.dataTableAgGrid' ).removeClass( 'active' );
                 this.el.find('.dataTableInTransit').addClass('active');
@@ -88,7 +88,7 @@ let config = {
             $( '.dataTableMiniForm a i' ).addClass( 'icon-aggrid-miniForm-hover' ).removeClass('icon-aggrid-miniForm');
         },function () {
             $( '.dataTableMiniForm a i' ).addClass( 'icon-aggrid-miniForm' ).removeClass('icon-aggrid-miniForm-hover');
-        })
+        });
         //订阅数据失效
         PMAPI.subscribe(PMENUM.one_the_way_invalid, (info) => {
             let tableId = info.data.table_id;
@@ -103,7 +103,7 @@ let config = {
                     },200 )
                 }
             }
-        })
+        });
         //是否显示帮助
         let help = window.config.sysConfig.logic_config.use_help || '0';
         if( help == 1 ){

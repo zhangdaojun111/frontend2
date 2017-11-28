@@ -112,10 +112,10 @@ let config = {
             let obj1 = {
                 actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
                 table_id: this.data.tableId
-            }
+            };
             let obj2 = {
                 table_id: this.data.tableId
-            }
+            };
             let preferenceData = dataTableService.getPreferences(obj1);
             let headerData = dataTableService.getColumnList(obj2);
 
@@ -123,7 +123,7 @@ let config = {
                 dgcService.setPreference( res[0],this.data );
                 let oprate = {headerName: '操作',field: 'myOperate', width: 120,suppressFilter: true,suppressSorting: true,suppressResize: true,suppressMenu: true, cellRenderer: (param)=>{
                     return '<div style="text-align:center;"><a class="ui-link" id="view">查看</a> | <a class="ui-link" id="edit">编辑</a> | <a class="ui-link" id="jurisdiction">权限</a><div>';
-                }}
+                }};
                 //添加序号列
                 let number = dgcService.numberCol;
                 number['headerCellTemplate'] = this.actions.resetPreference();
@@ -146,7 +146,7 @@ let config = {
                         datetime: 160,
                         time: 90,
                         date: 110
-                    }
+                    };
                     let obj = {
                         headerName: col.name,
                         field: col["field"],
@@ -168,7 +168,7 @@ let config = {
                         suppressFilter: false,
                         floatingFilterComponent: this.floatingFilterCom.actions.createFilter(filterType, col["field"], this.data.searchValue, this.data.searchOldValue),
                         floatingFilterComponentParams: {suppressFilterButton: true},
-                    }
+                    };
                     this.data.columnDefs.push( obj );
                 }
                 let need = dgcService.createNeedFields( res[1].rows );
@@ -181,7 +181,7 @@ let config = {
                 //定制列需要字段数据
                 this.data.customColumnsFields = need.custom;
                 this.actions.renderAgGrid();
-            })
+            });
             HTTP.flush();
         },
         //渲染agGrid
@@ -199,7 +199,7 @@ let config = {
                 onCellClicked: this.actions.onCellClicked,
                 onRowDoubleClicked: this.actions.onRowDoubleClicked,
                 onRowSelected: this.actions.onRowSelected
-            }
+            };
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('#data-agGrid'));
             //渲染定制列
@@ -214,7 +214,7 @@ let config = {
                     agGrid: this.agGrid,
                     close: this.actions.calcCustomColumn,
                     setFloatingFilterInput: this.actions.setFloatingFilterInput
-                }
+                };
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
 
@@ -222,16 +222,16 @@ let config = {
                 this.el.find( '.ag-body' ).on( 'click',()=>{
                     setTimeout( ()=>{
                         this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
-                    },400 )
+                    },400 );
                     this.data.isShowCustomPanel = false;
                     this.actions.changeAgGridWidth(true);
-                } )
+                } );
 
                 let paginationData = {
                     total: this.data.total,
                     rows: this.data.rows,
                     tableId: this.data.tableId
-                }
+                };
                 this.pagination = new dataPagination(paginationData);
                 this.pagination.actions.paginationChanged = this.actions.refreshData;
                 this.append(this.pagination, this.el.find('.pagination'));
@@ -244,7 +244,7 @@ let config = {
             let newFilter = [];
             for( let f of filter ){
                 if( this.data.specialFilter[f.cond.searchBy] ){
-                    let obj = this.data.specialFilter[f.cond.searchBy]
+                    let obj = this.data.specialFilter[f.cond.searchBy];
                     let keyword = f.cond.keyword;
                     for( let k in obj ){
                         if( k.indexOf( keyword )!=-1 ){
@@ -278,11 +278,11 @@ let config = {
                         this.actions.getUserData();
                     }
                 } )
-            } )
-            ediv.appendChild( eHeader )
+            } );
+            ediv.appendChild( eHeader );
             eHeader.innerHTML = "初";
             eHeader.className = "table-init-logo";
-            eHeader.title = '初始化偏好'
+            eHeader.title = '初始化偏好';
             eHeader.addEventListener('click', () => {
                 msgBox.confirm( '确定初始化偏好？' ).then( r=>{
                     if( r ){
@@ -305,7 +305,7 @@ let config = {
                     }
                 } )
             });
-            ediv.appendChild( eImg )
+            ediv.appendChild( eImg );
             return ediv;
         },
         //设置搜索input值
@@ -321,7 +321,7 @@ let config = {
                 filter: [],
                 rows: this.data.rows,
                 page: this.data.page
-            }
+            };
             this.actions.setEspecialFilter(this.data.filterParam.filter);
             this.actions.setEspecialFilter(this.data.filterParam.expertFilter);
             if( this.data.filterParam.filter && this.data.filterParam.filter.length != 0 ){
@@ -345,7 +345,7 @@ let config = {
                     this.el.find('.btn-nav').append(dom);
                     setTimeout(()=>{
                         this.el.find('.query-tips').css('display','none');
-                    },3000)
+                    },3000);
                     this.el.find('.query-tips-delete').on('click', ()=> {
                         this.el.find('.query-tips').css('display','none');
                     })
@@ -390,7 +390,7 @@ let config = {
                 this.actions.sortWay();
                 let obj = {
                     rowData: this.data.rowData
-                }
+                };
                 this.agGrid.actions.setGridData( obj );
                 let currentPage = parseInt( Number( this.data.first )/Number( this.data.rows ) );
                 this.pagination.actions.setPagination( this.data.total,this.data.page );
@@ -402,7 +402,7 @@ let config = {
                 if(refresh){
                     msgBox.showTips( '数据刷新成功。' )
                 }
-            } )
+            } );
             HTTP.flush();
         },
         //刷新数据
@@ -450,16 +450,16 @@ let config = {
             this.el.find( '.show-all-btn' ).on( 'click',()=>{
                 this.data.departmentName = '';
                 this.actions.getUserData();
-            } )
+            } );
             //显示离职
             this.el.find( '.show-leave-btn' ).on( 'click',()=>{
                 this.data.isShowLeave = !this.data.isShowLeave;
                 this.el.find( '.show-leave-btn span' )[0].innerHTML = this.data.isShowLeave?'显示离职':'隐藏离职';
                 this.actions.getUserData();
-            } )
+            } );
             //floatingFilter
             this.el.find( '.float-search-btn' ).on( 'click',()=>{
-                console.log(this.data.isShowFloatingFilter)
+                console.log(this.data.isShowFloatingFilter);
                 if (this.data.isShowFloatingFilter && this.data.filterParam.filter.length != 0) {
                     for( let k in this.data.searchValue ){
                         this.data.searchValue[k] = '';
@@ -475,26 +475,26 @@ let config = {
                 let height = this.data.isShowFloatingFilter ? 0:30;
                 this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
                 this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
-            } )
+            } );
             //导入数据
             this.el.find('.grid-import-btn').on( 'click',()=>{
                 let json = {
                     tableId: this.data.tableId,
                     isSuperUser: window.config.is_superuser || 0
-                }
+                };
                 let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                 let winTitle = '导入数据';
                 this.actions.openSourceDataGrid( url,winTitle,600,800 );
-            } )
+            } );
             //导出数据
             this.el.find( '.grid-export-btn' ).on( 'click',()=>{
                 this.actions.onExport();
-            } )
+            } );
             //筛选滚动后搜索条件赋值
             let That = this;
             this.el.find('.ag-body-viewport').on('scroll',_.debounce(()=>{
                 That.actions.setFloatingFilterInput();
-            },700))
+            },700));
             //删除
             this.el.find( '.grid-del-btn' ).on( 'click',()=>{
                 let arr = [];
@@ -505,7 +505,7 @@ let config = {
                     }
                 }
                 if( arr.length == 0 ){
-                    msgBox.alert( '请选择数据' )
+                    msgBox.alert( '请选择数据' );
                     return;
                 }
                 msgBox.confirm( '确定删除？' ).then( res=>{
@@ -513,29 +513,29 @@ let config = {
                         let json = {
                             table_id:this.data.tableId,
                             real_ids:JSON.stringify( arr )
-                        }
+                        };
                         dataTableService.delTableData( json ).then( res=>{
                             if( res.success ){
-                                msgBox.showTips( '删除成功' )
+                                msgBox.showTips( '删除成功' );
                                 this.actions.setInvalid()
                             }else {
                                 msgBox.alert( res.error )
                             }
-                        } )
+                        } );
                         HTTP.flush();
                     }
                 } )
-            } )
+            } );
             //新增
             this.el.find( '.new-form-btn' ).on( 'click',()=>{
                 let obj = {
                     table_id: this.data.tableId,
                     btnType: 'new',
                     is_view: 0
-                }
+                };
                 let url = dgcService.returnIframeUrl( '/form/index/',obj );
                 this.actions.openSelfIframe( url,'新增' )
-            } )
+            } );
             //高级查询
             if( this.el.find( '.expert-search-btn' )[0] ){
                 this.actions.renderExpertSearch();
@@ -559,7 +559,7 @@ let config = {
                 }
                 this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
                 this.data.isAutoWidth = !this.data.isAutoWidth;
-            } )
+            } );
             //新窗口显示隐藏
             if( this.data.isNewWindow ){
                 this.el.find( '.grid-new-window' )[0].style.display = 'none';
@@ -579,7 +579,7 @@ let config = {
             let obj = {
                 tableId: this.data.tableId,
                 filterParam: filer
-            }
+            };
             for( let o in obj ){
                 exportSetting.data[o] = obj[o];
             }
@@ -592,7 +592,7 @@ let config = {
                 this.el.find('.btn-nav').append(dom);
                 setTimeout(()=>{
                     this.el.find('.exports-tips').css('display','none');
-                },3000)
+                },3000);
                 this.el.find('.exports-tips-delete').on('click', ()=> {
                     this.el.find('.exports-tips').css('display','none');
                 })
@@ -600,7 +600,7 @@ let config = {
         },
         //渲染高级查询
         renderExpertSearch: function () {
-            let _this = this
+            let _this = this;
             this.el.find( '.dataGrid-commonQuery' )[0].style.display = 'block';
             this.el.find( '.expert-search-btn' ).on( 'click',()=>{
                 let d = {
@@ -611,7 +611,7 @@ let config = {
                     // getExpertSearchData:this.actions.getExpertSearchData,
                     // postExpertSearch:this.actions.postExpertSearch,
                     // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
-                }
+                };
                 PMAPI.openDialogByIframe(`/iframe/expertSearch/`,{
                     width:950,
                     height:600,
@@ -627,7 +627,7 @@ let config = {
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
                     }
                     if(res.appendChecked) {
-                        this.data.temporaryCommonQuery = res.value
+                        this.data.temporaryCommonQuery = res.value;
                         this.actions.appendQuerySelect()
                     }
                     if(res.saveCommonQuery || res.deleteCommonQuery) {
@@ -644,7 +644,7 @@ let config = {
                     //     return false
                     // }
                 })
-            } )
+            } );
             _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
                 if($(this).val() == '常用查询') {
                     _this.actions.postExpertSearch([],'');
@@ -659,18 +659,18 @@ let config = {
                         }
                     })
                 }
-            })
+            });
             this.actions.getExpertSearchData();
         },
         //设置常用查询选项值
         appendQuerySelect: function() {
-            let length = this.el.find('.dataGrid-commonQuery-select option').length
+            let length = this.el.find('.dataGrid-commonQuery-select option').length;
             for (let i = 0; i< length ;i++) {
                 if(this.el.find('.dataGrid-commonQuery-select option').eq(i).val() == '临时高级查询'){
                     this.el.find('.dataGrid-commonQuery-select option').eq(i).remove()
                 }
             }
-            this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`)
+            this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`);
             this.el.find('.dataGrid-commonQuery-select').val('临时高级查询');
 
         },
@@ -679,7 +679,7 @@ let config = {
             let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
                 this.el.find('.dataGrid-commonQuery-option').remove();
-                this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>`)
+                this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>`);
                 if(res.rows.length != 0){
                     res.rows.forEach((row) => {
                         this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
@@ -754,7 +754,7 @@ let config = {
             if( this.data.isShowCustomPanel ){
                 num+=200;
             }
-            let grid = this.el.find( '#data-agGrid' )
+            let grid = this.el.find( '#data-agGrid' );
             if( close ){
                 grid.width( 'calc(100% - ' + num + 'px)' );
             }else {
@@ -862,7 +862,7 @@ let config = {
                 btnType: 'view',
                 real_id: $event.data._id,
                 is_view: 1
-            }
+            };
             let url = dgcService.returnIframeUrl( '/form/index/',obj );
             this.actions.openSelfIframe( url,'查看' )
         },
@@ -872,12 +872,12 @@ let config = {
                 action:'get'
             };
             dataTableService.getPermData(obj).then( res=>{
-                let selectAry = []
+                let selectAry = [];
                 res.options.forEach((item)=>{
                     selectAry.push({
                         id:item.value,
                         name:item.label
-                    })
+                    });
                     for(let i = 0; i < res.data.length; i++){
                         if(item.value == res.data[i]){
                             this.data.userPerm.value.push({
@@ -886,15 +886,15 @@ let config = {
                             });
                         }
                     }
-                })
+                });
                 this.data.userPerm.options = res.options || [];
                 let json = {
                     userPerm: this.data.userPerm,
                     selectAry: selectAry,
                     choosed: this.data.userPerm.value
-                }
+                };
                 this.actions.onOpendIframe(json)
-            })
+            });
             HTTP.flush();
         },
         setPermData: function(list){
@@ -903,12 +903,12 @@ let config = {
                 user_id: this.data.userPerm.id,
                 action: 'save',
                 perms: JSON.stringify(list)
-            }
+            };
             dataTableService.getPermData(obj).then( res=>{
                 if(res.succ == 0){
                     msgBox.alert('保存成功')
                 }
-            })
+            });
             HTTP.flush();
         },
         onOpendIframe: function(obj){
@@ -931,7 +931,7 @@ let config = {
                         btnType: 'edit',
                         real_id: $event.data._id,
                         is_view: 0
-                    }
+                    };
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSelfIframe( url,'编辑' )
                 }
@@ -941,7 +941,7 @@ let config = {
                         btnType: 'view',
                         real_id: $event.data._id,
                         is_view: 1
-                    }
+                    };
                     let u = dgcService.returnIframeUrl( '/form/index/',json );
                     this.actions.openSelfIframe( u,'查看' )
                 }
@@ -971,14 +971,14 @@ let config = {
     },
     afterRender: function (){
         this.showLoading();
-        console.log('do save tabs')
+        console.log('do save tabs');
         TabService.onOpenTab( this.data.tableId );
         this.actions.setFieldMapping();
         this.floatingFilterCom = new FloatingFilter();
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
     }
-}
+};
 
 class personnel extends Component {
     constructor(data,newConfig){

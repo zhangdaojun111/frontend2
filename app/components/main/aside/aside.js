@@ -66,7 +66,7 @@ let config = {
                         step_one(item.items, item);
                     }
                 })
-            };
+            }
             //遍历全部菜单，删除父节点引用，被设为常用的选项加入res，用于生成常用菜单
             function setp_two(menu) {
                 let res = [];
@@ -78,9 +78,9 @@ let config = {
                     if (item.items) {
                         item.items = setp_two(item.items);
                     }
-                })
+                });
                 return res;
-            };
+            }
             step_one(menuData);
             return setp_two(menuData);
         },

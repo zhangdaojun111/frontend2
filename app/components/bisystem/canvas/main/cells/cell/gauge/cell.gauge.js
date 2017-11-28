@@ -29,7 +29,7 @@ let config = {
 
         this.actions.echartsInit()
     }
-}
+};
 
 export class CellGaugeComponent extends CellBaseComponent {
 
