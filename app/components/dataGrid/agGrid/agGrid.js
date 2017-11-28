@@ -57,6 +57,10 @@ let config = {
         },
         setRowStyle:function (param) {
         },
+        isExternalFilterPresent:function () {
+        },
+        doesExternalFilterPass:function ($event) {
+        },
         rowDataChanged:function ($event) {
         },
         onCellValueChanged:function ($event) {
@@ -92,6 +96,9 @@ let config = {
                 //双击查看
                 onCellClicked: this.data.onCellClicked,
                 onCellValueChanged: this.data.onCellValueChanged,
+                //外部搜索
+                isExternalFilterPresent: this.data.isExternalFilterPresent,
+                doesExternalFilterPass: this.data.doesExternalFilterPass,
                 //行双击
                 onRowDoubleClicked: this.data.onRowDoubleClicked,
                 //单元格双击
@@ -131,7 +138,7 @@ let config = {
                 getRowStyle: (param)=>{
                     return this.data.setRowStyle( param )
                 }
-            }
+            };
             //是否需要footer
             if( !this.data.noFooter ){
                 this.gridOptions['pinnedBottomRowData'] = this.data.footerData;
@@ -181,7 +188,7 @@ let config = {
         this.actions.createGridOptions();
         this.actions.createAgGrid();
     }
-}
+};
 
 class agGrid extends Component {
     constructor(data,newConfig){

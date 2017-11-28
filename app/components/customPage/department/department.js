@@ -50,7 +50,7 @@ let config = {
             let obj = {
                 actions: JSON.stringify(['ignoreFields', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
                 table_id: this.data.tableId
-            }
+            };
             let preferenceData = dataTableService.getPreferences( obj );
             let columnData = dataTableService.getColumnList( {table_id: this.data.tableId} );
             Promise.all([preferenceData,columnData]).then((res)=> {
@@ -63,10 +63,10 @@ let config = {
                         return '<div style="text-align:center;"><a class="ui-link" id="departView">查看</a> | <a class="ui-link" id="departModify">编辑</a><div>';
                     }},
                     { headerName: '部门', field: 'f5',cellRenderer: 'group',suppressMenu: true, tooltipField:'f5' }
-                ]
+                ];
                 this.data.customColumnsFields = [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false},
                     {name:'选择',field:'mySelectAll',canhide:false,candrag:false,canFix:false},
-                    {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
+                    {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}];
                 this.data.fieldsData = res[1].rows;
                 for( let col of res[1].rows ){
                     if( col.field == '_id' ){
@@ -90,13 +90,13 @@ let config = {
                         suppressResize: false,
                         suppressMovable: false,
                         suppressFilter: true
-                    }
+                    };
                     let c = {
                         canhide:true,candrag:true,canFix:true
                     };
                     c['name'] = col.name;
                     c['field'] = col.field;
-                    this.data.customColumnsFields.push(c)
+                    this.data.customColumnsFields.push(c);
                     this.data.columnDefs.push( obj );
                 }
                 let gridData = {
@@ -110,10 +110,10 @@ let config = {
                     onDragStopped: this.actions.onDragStopped,
                     onCellClicked: this.actions.onCellClicked,
                     onRowDoubleClicked: this.actions.onRowDoubleClicked
-                }
+                };
                 this.agGrid = new agGrid(gridData);
                 this.append(this.agGrid , this.el.find('#data-agGrid'));
-                dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] )
+                dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] );
                 let custom = {
                     gridoptions: this.agGrid.gridOptions,
                     fields: this.data.customColumnsFields,
@@ -121,7 +121,7 @@ let config = {
                     tableId: this.data.tableId,
                     agGrid: this.agGrid,
                     close: this.actions.calcCustomColumn,
-                }
+                };
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
                 this.actions.getDepartmentData(false);
@@ -132,10 +132,10 @@ let config = {
         resetPreference: function () {
             let ediv = document.createElement('div');
             let eHeader = document.createElement('span');
-            ediv.appendChild( eHeader )
+            ediv.appendChild( eHeader );
             eHeader.innerHTML = "初";
             eHeader.className = "table-init-logo";
-            eHeader.title = '初始化偏好'
+            eHeader.title = '初始化偏好';
             eHeader.addEventListener('click', () => {
                 msgBox.confirm( '确定初始化偏好？' ).then( r=>{
                     if( r ){
@@ -149,7 +149,7 @@ let config = {
                                 dgcService.setPreference( res,this.data );
                                 //创建表头
                                 this.agGrid.gridOptions.api.setColumnDefs( this.data.columnDefs );
-                                dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] )
+                                dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] );
                                 this.customColumnsCom.actions.makeSameSate();
                             } );
                             HTTP.flush();
@@ -166,7 +166,7 @@ let config = {
                 this.data.rowData = res.department_tree;
                 let obj = {
                     rowData: this.data.rowData
-                }
+                };
                 this.agGrid.actions.setGridData( obj );
                 if( isRefresh ){
                     msgBox.showTips( '刷新成功' );
@@ -177,7 +177,7 @@ let config = {
                     this.hideLoading();
                     this.data.firstSetData = false;
                 }
-            } )
+            } );
             HTTP.flush();
         },
         //按钮点击事件
@@ -189,7 +189,7 @@ let config = {
                         table_id: this.data.tableId,
                         btnType: 'new',
                         is_view: 0
-                    }
+                    };
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSelfIframe( url,'新增' )
                 } )
@@ -211,7 +211,7 @@ let config = {
             this.el.find( '.departmentSratch' ).on( 'input',_.debounce( ()=>{
                 That.agGrid.gridOptions.api.setQuickFilter( That.el.find( '.departmentSratch' )[0].value );
                 That.agGrid.actions.refreshView();
-            },1000 ) )
+            },1000 ) );
             //导出
             if( this.el.find( '.grid-export-btn' )[0] ){
                 this.el.find( '.grid-export-btn' ).on( 'click',()=>{
@@ -219,7 +219,7 @@ let config = {
                         tableId: this.data.tableId,
                         groupCheck: false,
                         hideOptions: ['isFilter']
-                    }
+                    };
                     for( let o in obj ){
                         exportSetting.data[o] = obj[o];
                     }
@@ -232,7 +232,7 @@ let config = {
                         this.el.find('.btn-nav').append(dom);
                         setTimeout(()=>{
                             this.el.find('.exports-tips').css('display','none');
-                        },3000)
+                        },3000);
                         this.el.find('.exports-tips-delete').on('click', ()=> {
                             this.el.find('.exports-tips').css('display','none');
                         })
@@ -245,7 +245,7 @@ let config = {
                     let json = {
                         tableId: this.data.tableId,
                         isSuperUser: window.config.is_superuser || 0
-                    }
+                    };
                     let url = dgcService.returnIframeUrl( '/iframe/dataImport/',json );
                     let winTitle = '导入数据';
                     this.actions.openSourceDataGrid( url,winTitle,600,800 );
@@ -283,10 +283,10 @@ let config = {
             this.el.find( '.ag-body' ).on( 'click',()=>{
                 setTimeout( ()=>{
                     this.el.find( '.custom-columns-panel' ).eq(0).animate( { 'right':'-200px' } );
-                },400 )
+                },400 );
                 this.data.isShowCustomPanel = false;
                 this.actions.changeAgGridWidth(true);
-            } )
+            } );
             //新窗口显示隐藏
             if( this.data.isNewWindow ){
                 this.el.find( '.grid-new-window' )[0].style.display = 'none';
@@ -312,7 +312,7 @@ let config = {
             if( this.data.isShowCustomPanel ){
                 num+=200;
             }
-            let grid = this.el.find( '#data-agGrid' )
+            let grid = this.el.find( '#data-agGrid' );
             if( close ){
                 grid.width( 'calc(100% - ' + num + 'px)' );
             }else {
@@ -365,7 +365,7 @@ let config = {
                 btnType: 'view',
                 real_id: $event.data._id,
                 is_view: 1
-            }
+            };
             let url = dgcService.returnIframeUrl( '/form/index/',obj );
             this.actions.openSelfIframe( url,'查看' )
         },
@@ -380,7 +380,7 @@ let config = {
                         btnType: 'edit',
                         real_id: $event.data._id,
                         is_view: 0
-                    }
+                    };
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSelfIframe( url,'编辑' )
                 }
@@ -390,7 +390,7 @@ let config = {
                         btnType: 'view',
                         real_id: $event.data._id,
                         is_view: 1
-                    }
+                    };
                     let url = dgcService.returnIframeUrl( '/form/index/',obj );
                     this.actions.openSelfIframe( url,'查看' )
                 }
@@ -406,7 +406,7 @@ let config = {
                 }
             }
             if( arr.length == 0 ){
-                msgBox.alert( '请选择数据' )
+                msgBox.alert( '请选择数据' );
                 return;
             }
             msgBox.confirm( '确定删除？' ).then( res=>{
@@ -415,7 +415,7 @@ let config = {
                         table_id:this.data.tableId,
                         real_ids:JSON.stringify( arr ),
                         is_batch: 0
-                    }
+                    };
                     dataTableService.delTableData( json ).then( res=>{
                         if( res.success ){
                             msgBox.showTips( '删除成功' )
@@ -447,7 +447,7 @@ let config = {
             }
         })
     }
-}
+};
 
 class department extends Component {
     constructor(data,newConfig){

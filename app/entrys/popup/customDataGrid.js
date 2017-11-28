@@ -2,6 +2,7 @@ import workflowPage from '../../components/customPage/workflow-page/workflow-pag
 import myWorkflow from '../../components/customPage/my-workflow/my-workflow.js'
 import myOperation from '../../components/customPage/my-operation/my-operation.js'
 import department from '../../components/customPage/department/department'
+import workReport from '../../components/customPage/work-report/work-report'
 import personnel from '../../components/customPage/personnel/personnel'
 import departmentDiary from '../../components/customPage/department-diary/department-diary'
 $(document).ready(function(){
@@ -15,14 +16,14 @@ $(document).ready(function(){
         json = {
             tableId: ts_name,
             isNewWindow: isNewWindow
-        }
+        };
         com = new workflowPage(json);
     }
     if( ts_name == 'my-workflow' ){
         json = {
             tableId: ts_name,
             isNewWindow: isNewWindow
-        }
+        };
         com = new myWorkflow(json);
     }
     if( ts_name == 'my-operations'){
@@ -30,7 +31,7 @@ $(document).ready(function(){
         json = {
             tableId: ts_name,
             isNewWindow: isNewWindow
-        }
+        };
         com = new myOperation(json);
     }
     if( ts_name == 'department-information' ){
@@ -38,7 +39,7 @@ $(document).ready(function(){
         json = {
             tableId: window.config.table_id,
             isNewWindow: isNewWindow
-        }
+        };
         com = new department(json);
     }
     if( ts_name == 'personal-information' ){
@@ -46,16 +47,33 @@ $(document).ready(function(){
         json = {
             tableId: window.config.table_id,
             isNewWindow: isNewWindow
-        }
+        };
         com = new personnel(json);
+    }
+    if( ts_name == 'work-report' ){
+        tableName = '工作日报';
+        json = {
+            tableName: '工作日报',
+            isNewWindow: isNewWindow
+        };
+        com = new workReport(json);
+    }
+    if( ts_name == 'department-work-report' ){
+        tableName = '部门工作日报';
+        json = {
+            tableName: '部门工作日报',
+            isNewWindow: isNewWindow,
+            department: 1,
+        };
+        com = new workReport(json);
     }
     if( ts_name == 'department-daily' ){
         tableName = '部门日报';
         json = {
             tableName: '部门日报',
             isNewWindow: isNewWindow
-        }
+        };
         com = new departmentDiary(json);
     }
     com.render($('#customDataGrid'));
-})
+});

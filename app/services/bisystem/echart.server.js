@@ -291,7 +291,7 @@ export class EchartsService {
             linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
             if (cellOption.double === 1) {
                 linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
-            }
+            };
 
             linebarOption['dataZoom']=[
                 {

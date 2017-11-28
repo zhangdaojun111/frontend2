@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  *@author yudeping
  *表单主要逻辑
  */
@@ -61,7 +61,10 @@ let config = {
 		//用于比较字段插件配置的list
 		myPluginFields: [],
 		//是否验证必填
-        validation_required: true
+        validation_required: true,
+		vote_value:'',
+		vote_key:'',
+		submitKey:[],
 	},
 	binds: [{
 		event: 'click',
@@ -1005,7 +1008,8 @@ let config = {
 			}
 		},
 		//赋值
-		setFormValue(dfield, value) {
+		setFormValue(dfield, value,noCount) {
+			let count=noCount?false:true;
 			let data = this.data.data[dfield];
 			if (data) {
 				data["value"] = value;
@@ -1014,7 +1018,7 @@ let config = {
 					childComponet.data["value"] = value
 					childComponet.reload();
 				}
-				this.actions.triggerSingleControl(dfield,true);
+				this.actions.triggerSingleControl(dfield,count);
 			}
 		},
 		//给相关赋值
@@ -1050,7 +1054,7 @@ let config = {
 		checkOhterField(data, obj_new, obj_old) {
 			let delKey = [];
 			for (let index in this.data.data) {
-				if (this.data.data[index]['is_other_field']) {
+				if (this.data.data[index]['is_other_field'] && this.data.submitKey.indexOf(this.data.data[index]['id']) == -1) {
 					delKey.push(this.data.data[index]['dfield']);
 				}
 			}
@@ -1076,6 +1080,9 @@ let config = {
 		},
 		//提交表单数据
 		async onSubmit() {
+            if( window.top.miniFormVal){
+                delete window.top.miniFormVal[this.data.data['table_id']['value']];
+            }
 			let formValue = this.actions.createFormValue(this.data.data);
 			let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
 			if (error) {
@@ -1308,13 +1315,15 @@ let config = {
 		},
 		//触发事件检查
 		checkValue: function (data,noCount) {
+			let isChange=data.originVal!=data.value;
+			data.originVal=data.value;
 			if (!this.data.childComponent[data.dfield]) {
 				return;
 			}
 			if (this.data.data[data.dfield]) {
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
-			if (data.type == 'Buildin' || data.type=='MultiLinkage' && !noCount) {
+			if (data.type == 'Buildin' || data.type=='MultiLinkage' && (!noCount || isChange)) {
 				let id = data["id"];
 				let value;
 				if(data.type == 'Buildin'){
@@ -1331,7 +1340,7 @@ let config = {
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1 && !noCount ) {
+			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1 && (!noCount || isChange)) {
 				if (data.type == 'Input') {
 					if(!this.data.timer){
 						this.data.timer=setTimeout(()=>{
@@ -1351,7 +1360,7 @@ let config = {
 			}
 			//统计功能
 			this.actions.myUseFieldsofcountFunc();
-			if(!noCount){
+			if(!noCount || isChange){
                 this.actions.countFunc(data.dfield,data);
 			}
 			//改变选择框的选项
@@ -1393,9 +1402,9 @@ let config = {
 				id: data['id']
 			};
 
-			if(!noCount){
+			if(!noCount || isChange){
 				//this.actions.calcExpression(calcData, data['value']);
-                this.actions.webCalcExpression(data)
+                this.actions.webCalcExpression(data,FormService)
 			};
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
@@ -1474,7 +1483,7 @@ let config = {
 			return data;
 		},
 
-		webCalcExpression(data) {
+		webCalcExpression(data,FormService) {
             let calcData = {
                 val: data['value'],
                 effect: data["effect"],
@@ -1492,10 +1501,12 @@ let config = {
 						try {
 							if (expression.indexOf("$^$") == -1) {
 								try {
-									if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
+									// if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
+                                    expression = expression.replace(/this/,'FormService')
                                         this.actions.set_value_for_form(eval(expression), f);
-									}
+									// }
 								} catch (err) {
+									console.log(err)
 									console.log('不能执行前端表达式计算');
                                     bool = true;
 								}
@@ -1516,7 +1527,6 @@ let config = {
                     this.actions.calcExpression(calcData, data['value'])
                 }
 			}
-
 		},
 		//小数显示精度
         showAccuracy(dfield, value) {
@@ -1938,6 +1948,9 @@ let config = {
 						this.data.childComponent[data[key].dfield] = textArea;
 						break;
 					case 'Readonly':
+						if(this.data.tempId){
+							data[key].canNotOpen=false;
+						}
 						let readonly = new Readonly(data[key], actions);
 						readonly.render(single);
 						this.data.childComponent[data[key].dfield] = readonly;
@@ -2023,6 +2036,7 @@ let config = {
 					case 'editControl':
 						data[key]['real_id'] = data['real_id']['value'];
 						data[key]['table_id'] = data['table_id']['value'];
+						data[key]['temp_id'] = data['temp_id']['value'];
 						let contractControl = new ContractControl(data[key], actions);
 						contractControl.render(single);
 						this.data.childComponent[data[key].dfield] = contractControl;
@@ -2074,6 +2088,39 @@ let config = {
 				obj_old
 			}
 		},
+		setVoteValue(res){
+			let value=res.value;
+			this.data.submitKey=res.submitKey;
+			if(value){
+				for(let key in this.data.data){
+					if(this.data.data[key].id == value){
+						let val
+						if(this.data.vote_value){
+							if( this.data.vote_value == value){
+								break;
+							}else{
+								val=this.data.data[this.data.vote_key].value-1;
+								this.actions.setFormValue(this.data.vote_key,val,true);
+								val=this.data.data[key].value+1;
+								this.actions.setFormValue(key,val,true);
+								this.data.vote_value=value;
+								this.data.vote_key=key;
+								break;
+							}
+						}else{
+							val=this.data.data[key].value+1;
+							this.actions.setFormValue(key,val,true);
+							this.data.vote_value=value;
+							this.data.vote_key=key;
+							break;
+						}
+					}
+				}
+				setTimeout(()=>{
+					Mediator.publish('form:voteAllready',true)
+				},0);
+			}
+		}
 	},
 	afterRender() {
 		this.actions.createFormControl();
@@ -2086,10 +2133,22 @@ let config = {
 		if (this.data.btnType != 'none') {
 			this.actions.addBtn();
 		}
+
+        if(window.top.miniFormVal && this.data.btnType == 'new'){
+            let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
+            for(let k in miniFormVal){
+                let val = miniFormVal[k];
+                this.actions.setFormValue(k,val)
+            }
+        }
+		Mediator.subscribe('workflow:voteconfirm',(res)=>{
+			this.actions.setVoteValue(res);
+		})
+
 		//默认表单样式
-		if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
-			this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
-		}
+        if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
+            this.el.find('table').parents('.form-print-position').css("margin-bottom","40px");
+        }
         this.el.find("#form-paging-tabs-control  .paging-tabs-tabform").on('click', function () {
             $(this).css('background','#ffffff').siblings().css('background','#F2F2F2');
         })

@@ -56,8 +56,9 @@ export const PMENUM = {
     show_loading:'16',          //打开loading
     hide_loading:'17',          //隐藏loading
     open_preview:'18',          //打开图片浏览
-    aside_fold: '19'
-}
+    aside_fold: '19',
+    send_event:'20'
+};
 
 /**
  * 本系统所有postmessage的消息体规范如下
@@ -163,6 +164,7 @@ window.addEventListener('message', function (event) {
                     data: data.data
                 });
                 delete dialogHash[data.key];
+                document.body.style.overflowY = 'visible';
                 break;
             case PMENUM.recieve_data:
                 dialogWaitHash[data.key](data.data);
@@ -201,6 +203,13 @@ window.addEventListener('message', function (event) {
                 let ele = $('<div class="preview"></div>');
                 ele.appendTo(document.body);
                 preview.render(ele);
+                break;
+
+            case PMENUM.send_event:
+                if(data.data == 'click'){
+                    $(document.body).click();
+                }
+                PMAPI.sendToAllChildren(data);
                 break;
 
             default:
@@ -339,7 +348,7 @@ export const PMAPI = {
      * @returns {PMAPI}
      */
     sendToSelf: function (msg) {
-        window.postMessage(msg, location.origin)
+        window.postMessage(msg, location.origin);
         return this;
     },
 
@@ -360,7 +369,7 @@ export const PMAPI = {
         } else {
             frame = target;
         }
-        PMAPI.sendToIframe(frame, msg)
+        PMAPI.sendToIframe(frame, msg);
         return this;
     },
 
@@ -488,7 +497,7 @@ export const PMAPI = {
             let str = String(componentConfig);
             let source = PMAPI._removeAllComments(str.substring(str.indexOf('{') + 1, str.lastIndexOf('}')));
             //str.substring(str.indexOf('function ')+9,str.indexOf('('))
-            let func = `{"Function":"${key}", "Arguments":"${str.substring(str.indexOf('(') + 1, str.indexOf(')'))}", "Source": "${source.replace(/\n/g, '').replace(/\"/g, '\\\"')}"}`
+            let func = `{"Function":"${key}", "Arguments":"${str.substring(str.indexOf('(') + 1, str.indexOf(')'))}", "Source": "${source.replace(/\n/g, '').replace(/\"/g, '\\\"')}"}`;
             return func;
         } else if (Array.isArray(componentConfig)) {
             if (componentConfig[0] === undefined) {
@@ -568,5 +577,5 @@ export const PMAPI = {
         });
     }
 
-}
+};
 

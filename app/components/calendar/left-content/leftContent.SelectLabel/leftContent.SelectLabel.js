@@ -266,7 +266,7 @@ let config = {
     firstAfterRender: function () {
         this.actions.showFirst();
     },
-}
+};
 
 class LeftContentSelect extends Component {
     constructor(data, cancel_fields, hide_item_table, rows, event,newConfig) {

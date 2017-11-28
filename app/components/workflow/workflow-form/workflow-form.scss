@@ -71,6 +71,19 @@
             margin-right: 5px;
         }
     }
+    .miniFormBtn{
+        height: 16px;
+        width: 100px;
+        line-height: 16px;
+        cursor: pointer;
+        //display: none;
+        margin-right: 3px;
+        & > i{
+            display: inline-block;
+            float: left;
+            margin-right: 5px;
+        }
+    }
     .place-form {
         position: relative;
         padding: 20px 10px;
