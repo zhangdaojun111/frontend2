@@ -129,7 +129,7 @@ let config = {
             this.el.find('#save-report')[0].style.display = this.data.editType?'flex':'none';
             let obj = {
                 columnDefs: this.data.editType?this.data.columnDefsEdit:this.data.columnDefs
-            }
+            };
             this.agGrid.actions.setGridData(obj);
         },
         //获取当天的数据
@@ -137,7 +137,7 @@ let config = {
             this.showLoading();
             let json = {
                 date:this.data.selectDate
-            }
+            };
             if(this.data.department){
                 json['user_id_list'] = JSON.stringify(this.data.user_id_list)
             }
@@ -165,7 +165,7 @@ let config = {
         //渲染左侧列表
         renderTreeView: function () {
             let d = this.data.tableDict;
-            let selectData = []
+            let selectData = [];
             this.data.selectFilter = [];
             for(let k in d){
                 selectData.push({name:k,id:d[k]});
@@ -180,7 +180,7 @@ let config = {
             this.data.rowData = [];
             if(!this.data.department){
                 for(let k in this.data.tableDataDict){
-                    let arr = this.data.tableDataDict[k]
+                    let arr = this.data.tableDataDict[k];
                     for(let a of arr){
                         let obj = a;
                         obj['table'] = k;
@@ -197,13 +197,13 @@ let config = {
                 }
             }else {
                 for(let name in this.data.ps){
-                    let dct = {}
+                    let dct = {};
                     dct['group'] = name;
                     dct['user'] = name;
                     dct['ps'] = this.data.ps[name];
                     let child = [];
                     for(let k in this.data.tableDataDict){
-                        let arr = this.data.tableDataDict[k]
+                        let arr = this.data.tableDataDict[k];
                         for(let a of arr){
                             let obj = a;
                             obj['table'] = k;
@@ -222,7 +222,7 @@ let config = {
             this.el.find('.remark-content')[0].value = this.data.ps || '';
             let json = {
                 rowData: this.data.rowData
-            }
+            };
             this.agGrid.actions.setGridData(json);
         },
         renderReport: function () {
@@ -241,7 +241,7 @@ let config = {
                 // onRowDoubleClicked: this.actions.onRowDoubleClicked,
                 isExternalFilterPresent: this.actions.isExternalFilterPresent,
                 doesExternalFilterPass: this.actions.doesExternalFilterPass
-            }
+            };
             this.agGrid = new agGrid(gridData);
             this.append(this.agGrid , this.el.find('.report-data'));
             this.agGrid.gridOptions.api.sizeColumnsToFit();
@@ -285,8 +285,8 @@ let config = {
                     }
                     for(let s of d.dynamic_data){
                         if(s.data.real_id.value == rowId){
-                            arr.push(s)
-                            continue
+                            arr.push(s);
+
                         }
                     }
                 }
@@ -348,7 +348,7 @@ let config = {
                     let obj = {
                         data: JSON.stringify(data),
                         ps: this.el.find('.remark-content')[0].value
-                    }
+                    };
                     HTTP.postImmediately({
                         url:'/save_daily/',
                         type:"post",
@@ -370,7 +370,7 @@ let config = {
         getDepartmentData: function () {
             HTTP.getImmediately('/get_department_tree/', {type: 'ribao'}).then((res) => {
                 this.data.userData = res.data.department2user;
-                this.data.departmentData = formatTreeData(res.data.department_tree)
+                this.data.departmentData = formatTreeData(res.data.department_tree);
                 this.actions.initTree();
                 this.actions.initChoosedUsers();
             });
@@ -467,10 +467,10 @@ let config = {
             setTimeout( ()=>{
                 this.el.find( '.report-sidebar' ).eq(0).animate( { 'left':this.data.tabOpen ? '0px' : left } );
                 this.el.find( '.calc-sidebar' )[0].className = this.data.tabOpen ? 'calc-sidebar icon-aggrid-shouhui':'calc-sidebar icon-aggrid-quxiao';
-            },this.data.tabOpen ? 0 : 0 )
+            },this.data.tabOpen ? 0 : 0 );
             setTimeout( ()=>{
                 this.el.find( '.report-main' )[0].style.width = this.data.tabOpen ? width:' calc(100% - 30px)';
-            },this.data.tabOpen ? 0 : 0 )
+            },this.data.tabOpen ? 0 : 0 );
             setTimeout(()=>{
                 this.hideLoading();
             },400)
@@ -553,7 +553,7 @@ let config = {
             That.agGrid.gridOptions.api.setQuickFilter($event.target.value)
         },1000))
     }
-}
+};
 
 class workReport extends Component {
     constructor(data,newConfig){

@@ -9,7 +9,11 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
-import {PasswordInput} from "../components/util/passwordInput/password-input"
+import {PasswordInput} from "../components/util/passwordInput/password-input";
+
+import {starter} from '../lib/three/starter';
+
+
 
 function getLoginController() {
     let loginController = {
@@ -408,6 +412,10 @@ if( isNeedDownload === false){      //正常显示登录表单
     $(".need-download").show();
     let htmlDownload = '';
     htmlDownload += '<span class="download-prompt">'+prompt+'</span>'+'<a class="download-link">下载链接</a>';
-    $(".need-download").append(htmlDownload)
+    $(".need-download").append(htmlDownload);
     $(".download-link").attr('href',downLoadLink)
 }
+
+
+starter.init();
+starter.animate();
