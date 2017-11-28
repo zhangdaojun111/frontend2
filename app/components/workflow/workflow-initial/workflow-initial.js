@@ -84,6 +84,7 @@ let config = {
             this.el.find('#workflow-form').hide();
         });
         this.el.on('click', '#submitWorkflow', () => {
+            Mediator.publish('workflow:autoSaveOpen', 0);
         	let data=_.defaultsDeep({},this.data.user);
         	for(let key in this.data.focusUsers){
         		delete data[key];

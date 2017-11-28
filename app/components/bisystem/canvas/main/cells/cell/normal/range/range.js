@@ -72,7 +72,7 @@ let config = {
                     $(context).addClass('option-active');
                     $(context).siblings().removeClass('option-active');
                 }
-                this.trigger('onChangeDateData', {'startValue': this.data.startValue,'endValue':this.data.endValue,type:$(context).find('input').val()})
+                this.trigger('onChangeDateData', {'startValue': this.data.startValue,'endValue':this.data.endValue,type:$(context).find('input').val()});
                 return false;
             }
         },

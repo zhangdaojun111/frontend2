@@ -138,7 +138,7 @@ let config = {
                 getRowStyle: (param)=>{
                     return this.data.setRowStyle( param )
                 }
-            }
+            };
             //是否需要footer
             if( !this.data.noFooter ){
                 this.gridOptions['pinnedBottomRowData'] = this.data.footerData;
@@ -188,7 +188,7 @@ let config = {
         this.actions.createGridOptions();
         this.actions.createAgGrid();
     }
-}
+};
 
 class agGrid extends Component {
     constructor(data,newConfig){

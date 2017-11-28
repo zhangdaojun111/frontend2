@@ -45,11 +45,11 @@ let config={
 	        this.data.preventClick=[];
             for(let key in res.data.defaultFocus){
 	            this.data.preventClick.push(key);
-            } ;
-        })
+            }
+        });
         this.el.on("input propertychange",".follower-search",()=>{
             this.action.search();
-        })
+        });
         const _this=this;
         this.check = {};
         this.el.find('#staffMulti').html('');
