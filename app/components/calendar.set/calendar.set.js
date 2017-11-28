@@ -346,7 +346,7 @@ let config = {
                         if (data['type'] && data['type'] === 'email') {
                             this.data.recipients.push({name: data.dname, id: data.id})
                         } else {
-                            this.data.recipients.push({name: data.dname, id: data.id})
+                            this.data.recipients.push({name: data.dname, id: data.id});
                             this.data.recipients_per.push({name: data.dname, id: data.id})
                         }
                     }

@@ -126,7 +126,7 @@ let config = {
          * @method 自定义页眉
          */
         async printSetting(){
-            let res = await FormService.getPrintSetting()
+            let res = await FormService.getPrintSetting();
             // if(res.succ == 1){
             SettingPrint.data['key'] = this.data.key;
             if (res.data && res.data.length && res.data.length != 0) {
@@ -177,7 +177,7 @@ let config = {
         },
         //表单最小化
         miniForm() {
-            this.data.miniFormVal = CreateFormServer.getFormValue(this.data.tableId, false)
+            this.data.miniFormVal = CreateFormServer.getFormValue(this.data.tableId, false);
             if (!window.top.miniFormVal) {
                 window.top.miniFormVal = {};
             }
@@ -230,7 +230,7 @@ let config = {
         this.el.on("mouseleave",'.imgseal',function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","none");
-        })
+        });
         this.el.on("mouseenter",".deloldimg",function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","block");
@@ -238,10 +238,10 @@ let config = {
         this.el.on("mouseleave",'.deloldimg',function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","none");
-        })
+        });
         this.el.on("click",'.J_del',(e)=>{
             this.actions.delimg(e);
-        })
+        });
         this.el.on('click','#newfj',()=>{
             this.actions.newfj();
         });
@@ -267,7 +267,7 @@ let config = {
                    this.actions.trans();
                }
             }
-        })
+        });
         Mediator.subscribe('workflow:getImgInfo',(e)=>{
             this.actions.addImg(e);
         });
@@ -296,7 +296,7 @@ let config = {
             // this.hideLoading();
         });
     }
-}
+};
 
 class WorkFlowForm extends Component {
     // constructor(data){

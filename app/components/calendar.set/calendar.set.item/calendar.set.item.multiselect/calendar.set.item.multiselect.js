@@ -64,7 +64,7 @@ let config = {
                 $(this).parent().next(".search-data").find("input").removeClass("checkbox_all_checked");
             } else{
                 $(this).prev("input").addClass("checkbox_all_checked");
-                $(this).parent().next(".search-data").find("input").addClass("checkbox_all_checked")
+                $(this).parent().next(".search-data").find("input").addClass("checkbox_all_checked");
                 $(this).parent().next(".search-data").find(".content-item").each(function(){
                     all_content_value.push($(this).html());
                 });

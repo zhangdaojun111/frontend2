@@ -5,4 +5,4 @@ import searchImport from '../../components/dataGrid/data-table-toolbar/expert-se
 $(document).ready(function(){
     let epSearchImport = new searchImport();
     epSearchImport.render($('#searchImport'));
-})
+});
