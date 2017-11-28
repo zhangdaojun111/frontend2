@@ -2036,6 +2036,7 @@ let config = {
 					case 'editControl':
 						data[key]['real_id'] = data['real_id']['value'];
 						data[key]['table_id'] = data['table_id']['value'];
+						data[key]['temp_id'] = data['temp_id']['value'];
 						let contractControl = new ContractControl(data[key], actions);
 						contractControl.render(single);
 						this.data.childComponent[data[key].dfield] = contractControl;

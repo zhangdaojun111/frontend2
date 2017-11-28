@@ -3017,10 +3017,12 @@ let config = {
                         table_id: this.data.tableId,
                         id: data.colDef.id,
                         real_id: data.data._id,
+                        temp_id: data.data.temp_id,
                         value: data['value'],
                         mode: 'view'
                     };
-                    let contractConfig = _.defaultsDeep(contractEditorConfig, {data: obj});
+                    //_.defaultsDeep不会替换原对象中已有key的value
+                    let contractConfig = _.defaultsDeep({},{data: obj},contractEditorConfig);
                     PMAPI.openDialogByComponent(contractConfig, {
                         width: 900,
                         height: 600,
