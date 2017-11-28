@@ -25,6 +25,7 @@ let config = {
                     });
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
+                    this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
@@ -76,13 +77,12 @@ let config = {
             this.formItems['circular'].trigger('onChange');
             this.formItems['customPie'].trigger('onChange');
             // 获取数据来源
-            ChartFormService.getChartSource().then(res => {
-                if (res['success'] === 1) {
-                    this.formItems['source'].setList(res['data']);
-                } else {
-                    msgbox.alert(res['error'])
-                }
-            });
+            const res = await ChartFormService.getChartSource();
+            if (res['success'] === 1) {
+                this.formItems['source'].setList(res['data']);
+            } else {
+                msgbox.alert(res['error'])
+            }
 
             // 获取图标
             ChartFormService.getChartIcon().then(res => {
@@ -152,9 +152,6 @@ let config = {
                         continue;
                     }
                     if(key == 'yAxis' && chart.pieType.value == 1){
-                        continue;
-                    }
-                    if(window.config.query_mark !== 'single' && key=='countColumn'){
                         continue;
                     }
                     let isValid = this.formItems[key].valid();
@@ -489,7 +486,7 @@ let config = {
 
         // 渲染图表表单字段
         this.drawForm();
-        this.actions.init();
+        await this.actions.init();
 
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);

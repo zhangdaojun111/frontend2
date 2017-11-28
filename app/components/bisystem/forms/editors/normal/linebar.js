@@ -64,7 +64,7 @@ let config = {
                     });
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
-                    // this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
+                    this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
@@ -122,13 +122,12 @@ let config = {
             this.formItems['limit'].trigger('onChange');
             this.formItems['customTop'].trigger('onChange');
             // 获取数据来源
-            ChartFormService.getChartSource().then(res => {
-                if (res['success'] === 1) {
-                    this.formItems['source'].setList(res['data']);
-                } else {
-                    msgbox.alert(res['error'])
-                }
-            });
+            const res = await ChartFormService.getChartSource();
+            if (res['success'] === 1) {
+                this.formItems['source'].setList(res['data']);
+            } else {
+                msgbox.alert(res['error'])
+            }
 
             // 获取图标
             ChartFormService.getChartIcon().then(res => {
@@ -701,7 +700,7 @@ let config = {
         }
         // 渲染图表表单字段
         this.drawForm();
-        this.actions.init();
+        await this.actions.init();
 
         if (this.data.id) {
             this.actions.fillChart(this.data.chart);

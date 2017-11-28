@@ -27,6 +27,7 @@ let config = {
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
                     this.el.find('.form-chart-multi-chart').addClass('countColumn-width');
+                    this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
@@ -241,9 +242,6 @@ let config = {
             if(this.formItems){
                 for (let key of Object.keys(this.formItems)) {
                     if (this.formItems[key].data.rules) {
-                        if(window.config.query_mark !== 'single' && key=='countColumn'){
-                            continue;
-                        }
                         let isValid = this.formItems[key].valid();
                         if (!isValid) {
                             pass = false;
