@@ -63,6 +63,7 @@ let config = {
                         return {value: JSON.stringify(item), name: item.name}
                     });
                     this.formItems['countColumn'].setList(fields);
+                    // this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                     this.formItems['countColumn'].el.show();
                 } else {
                     this.formItems['countColumn'].actions.clear();
@@ -231,9 +232,6 @@ let config = {
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
-                    if(window.config.query_mark !== 'single' && key=='countColumn'){
-                        continue;
-                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;

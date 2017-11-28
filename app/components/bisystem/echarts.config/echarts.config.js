@@ -307,9 +307,7 @@ const linebar = {
                     color: '#ececec'
                 }
             },
-            axisLabel : {
-
-            }
+            axisLabel : {}
         }
     ],
     yAxis: [

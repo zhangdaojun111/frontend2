@@ -25,7 +25,7 @@ let countColumn = {
     type: 'radio',
     list:[],
     events: {},
-    required: true,
+    // required: true,
     rules:[
         {
             errorMsg: '统计字段不能为空',
