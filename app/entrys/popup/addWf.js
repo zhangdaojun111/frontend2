@@ -44,10 +44,10 @@ AddWf.showDom(obj).then(function (component) {
             component.hideLoading();
             isshow = false;
         }
-        if(obj.tableType == 'child' || obj.btnType != 'new' || obj.calendar){
-            $('#miniFormBtn').hide();
+        if(obj.tableType !== 'child' && obj.btnType === 'new' && !obj.calendar){
+          $('#miniFormBtn').show();
         }else{
-            $('#miniFormBtn').show();
+           $('#miniFormBtn').hide();
         }
 
     });
