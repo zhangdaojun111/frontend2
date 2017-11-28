@@ -34,7 +34,7 @@ starter.init = function () {
         fillColor: 0x023150,
         program: function ( context ) {
             context.beginPath();
-            context.arc( 0, 0, 0.4, 0, PI2, true );
+            context.arc( 0, 0, 0.5, 0, PI2, true );
             context.fill();
         }
     } );
@@ -72,27 +72,27 @@ function onDocumentMouseMove( event ) {
     mouseX = event.clientX - windowHalfX;
     mouseY = -400;
 }
-function onDocumentTouchStart( event ) {
-    if ( event.touches.length === 1 ) {
-        event.preventDefault();
-        mouseX = event.touches[ 0 ].pageX - windowHalfX;
-        mouseY = event.touches[ 0 ].pageY - windowHalfY;
-    }
-}
-function onDocumentTouchMove( event ) {
-    if ( event.touches.length === 1 ) {
-        event.preventDefault();
-        mouseX = event.touches[ 0 ].pageX - windowHalfX;
-        mouseY = event.touches[ 0 ].pageY - windowHalfY;
-    }
-}
+// function onDocumentTouchStart( event ) {
+//     if ( event.touches.length === 1 ) {
+//         event.preventDefault();
+//         mouseX = event.touches[ 0 ].pageX - windowHalfX;
+//         mouseY = event.touches[ 0 ].pageY - windowHalfY;
+//     }
+// }
+// function onDocumentTouchMove( event ) {
+//     if ( event.touches.length === 1 ) {
+//         event.preventDefault();
+//         mouseX = event.touches[ 0 ].pageX - windowHalfX;
+//         mouseY = event.touches[ 0 ].pageY - windowHalfY;
+//     }
+// }
 
 starter.animate = function () {
     requestAnimationFrame( starter.animate );
     starter.render();
 };
 starter.render = function () {
-    camera.position.x += ( mouseX - camera.position.x ) * .01;
+    camera.position.x += ( mouseX - camera.position.x ) * .02;
     camera.position.y += ( - mouseY - camera.position.y ) * .05;
     camera.lookAt( scene.position );
     var i = 0;
