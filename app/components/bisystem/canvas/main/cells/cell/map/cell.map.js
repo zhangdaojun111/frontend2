@@ -47,7 +47,7 @@ let config = {
     firstAfterRender() {
         this.actions.echartsInit()
     }
-}
+};
 
 export class CellMapComponent extends CellBaseComponent {
     constructor(data,event,extendConfig) {

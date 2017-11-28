@@ -239,7 +239,7 @@ let config = {
         }
         this.actions._loadPreview(this.data.id);
     }
-}
+};
 
 export default class Preview extends Component {
     constructor(data) {

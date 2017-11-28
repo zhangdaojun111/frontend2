@@ -78,7 +78,7 @@ let config = {
                     msgbox.showLoadingRoot();
                     if (Array.isArray(this.data.views) && this.data.views.length > 0) {
                         const res = await this.data.cells.actions.cellsDataIsFinish();
-                    };
+                    }
                     if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
                         $('.bi-container').css({'width': 'auto', 'height': 'auto'});
                     }
@@ -120,6 +120,7 @@ let config = {
             this.data.isPdf = window.config.pdf === true;
             if(this.data.isSingle || this.data.isPdf ){
                 this.el.find('.views-header').hide();
+                this.el.find('.cells-container').addClass('hide-head');
             }
         }
     },

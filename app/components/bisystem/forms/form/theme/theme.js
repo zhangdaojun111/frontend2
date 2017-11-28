@@ -35,9 +35,9 @@ let config = {
             event: 'click',
             selector: '.add-color',
             callback: function (context, event){
-                this.el.find('.minus-btn').css({"display":'none'})
-                this.el.find('.add-color-box').empty()
-                this.el.find('.add-color-box').append("<input type='color' class='add-color-input'>")
+                this.el.find('.minus-btn').css({"display":'none'});
+                this.el.find('.add-color-box').empty();
+                this.el.find('.add-color-box').append("<input type='color' class='add-color-input'>");
                 this.el.find('.add-color-box').append("<span class='save-color'>确定</span>")
             }
         },
@@ -45,9 +45,9 @@ let config = {
             event: 'click',
             selector: '.save-color',
             callback: function (context, event){
-                let length = this.el.find('.add-color-input').length
+                let length = this.el.find('.add-color-input').length;
                 for (let i = 0; i< length ;i++) {
-                    let col = this.el.find('.add-color-input').eq(i).val()
+                    let col = this.el.find('.add-color-input').eq(i).val();
                     this.data.colors.push(col)
                 }
                 this.actions.createColor()
@@ -57,8 +57,8 @@ let config = {
             event: 'click',
             selector: '.minus-color',
             callback: function (context, event) {
-                this.el.find('.minus-btn').css({"display":'block'})
-                this.el.find('.add-color-box').empty()
+                this.el.find('.minus-btn').css({"display":'block'});
+                this.el.find('.add-color-box').empty();
                 this.el.find('.add-color-box').append("<span class='minus-color-save'>确定</span>")
             }
         },
@@ -73,8 +73,8 @@ let config = {
             event: 'click',
             selector: '.minus-btn',
             callback: function (context, event){
-                console.log(event.target.id)
-                this.data.colors.splice(this.data.colors.indexOf(event.target.id), 1)
+                console.log(event.target.id);
+                this.data.colors.splice(this.data.colors.indexOf(event.target.id), 1);
                 this.actions.createColor();
                 this.el.find('.minus-btn').css({"display":'block'})
             }

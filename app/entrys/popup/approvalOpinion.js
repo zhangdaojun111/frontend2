@@ -5,7 +5,8 @@ import 'jquery-ui/ui/widgets/button.js';
 import 'jquery-ui/ui/widgets/dialog.js';
 
 import approvalOpinion from '../../components/workflow/approval-opinion/approval-opinion';
+$(document).ready(function(){
+    let approvalOpinionComponent = new approvalOpinion();
 
-let approvalOpinionComponent = new approvalOpinion();
-
-approvalOpinionComponent.render($('#approvalOpinion'));
+    approvalOpinionComponent.render($('#approvalOpinion'));
+});

@@ -19,7 +19,7 @@ let config = {
         search: function (text) {
             this.data.text = text;
             this.data.listComp.forEach(comp=>{
-                comp.actions.filter(text);
+                comp.actions.filter(this.data.text);
             })
 
         },
@@ -96,6 +96,7 @@ let config = {
          */
         renderMenuList: function () {
             this.destroyChildren();
+            this.data.listComp = [];
             this.data.list.forEach((data) => {
                 let component = new FullMenuItem(_.defaultsDeep({}, data, {
                     root: true,
@@ -156,8 +157,8 @@ let config = {
 };
 
 class MenuComponent extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig), data);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 

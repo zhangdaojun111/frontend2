@@ -47,7 +47,6 @@ let config = {
                         this.actions.showChildrenAtFull();
                     }
                 }
-                console.log(this.data);
                 if (this.data.ts_name == '' && this.data.table_id == "0") {
                     return;
                 }
@@ -218,7 +217,11 @@ let config = {
             });
         },
         isFilteredNode:function (input) {
-            return (this.data.label.indexOf(input) != -1);
+            let inputWithoutSpace = input.replace(/\s/g, '');
+            return (this.data.label.indexOf(input) != -1
+                || this.data.label.indexOf(inputWithoutSpace) != -1
+                || this.data.name_py.indexOf(input)!=-1
+                || this.data.name_py.indexOf(inputWithoutSpace)!=-1);
         },
         filter: function (input,isParentFiltered,isSiblingsFiltered) {
             let isFiltered = false;
@@ -226,7 +229,7 @@ let config = {
                 this.el.show();
                 this.el.find('> .childlist').hide();
             } else {
-                if(this.data.label.indexOf(input)!=-1){
+                if(this.actions.isFilteredNode(input)){
                     this.el.show();
                     this.el.find('> .childlist').show();
                     isFiltered = true;
@@ -350,8 +353,8 @@ let config = {
 };
 
 class FullMenuItem extends Component {
-    constructor(data, event) {
-        super(config, data, event)
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 

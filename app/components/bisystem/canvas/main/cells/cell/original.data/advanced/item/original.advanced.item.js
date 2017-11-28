@@ -23,7 +23,7 @@ let config = {
             event:'click',
             selector:'.remove-item-btn',
             callback: async function () {
-                let res = await canvasCellService.removeAdvancedItemData({'chart_id':this.data.chart.chartName.id,id:this.data.itemId})
+                let res = await canvasCellService.removeAdvancedItemData({'chart_id':this.data.chart.chartName.id,id:this.data.itemId});
                 if (res['success'] === 1) {
                     this.destroySelf();
                 } else {
