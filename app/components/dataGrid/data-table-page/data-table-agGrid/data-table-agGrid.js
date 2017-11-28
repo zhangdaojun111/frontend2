@@ -858,6 +858,12 @@ let config = {
                     msgBox.confirm('确定初始化偏好？').then(r => {
                         if (r) {
                             dataTableService.delPreference({table_id: this.data.tableId}).then(res => {
+                                if (this.data.frontendSort) {
+                                    this.agGrid.actions.refreshView();
+                                } else {
+                                    this.data.sortParam = {sortOrder: '', sortField: '', sort_real_type: ''}
+                                }
+                                this.actions.getGridData();
                                 msgBox.showTips('操作成功');
                                 let obj = {
                                     actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
