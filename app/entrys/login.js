@@ -34,7 +34,7 @@ function getLoginController() {
         $closeUpdateGroup:$('.shadow-box-close'),  //隐藏更新信息logo
         $versionTable:$('#shadow-box'),          //版本信息显示表格
         $loginBtn:$('button.login-btn'),            //登录按钮
-        $registerBtn:$('div.register-btn'),         //注册按钮
+        $registerBtn:$('.register-btn'),         //注册按钮
         $findPwBtn:$('.find-pw-group'),             //忘记密码
         $closeIcon:$('.close-icon'),                //找回密码面板关闭按钮
         $usernameInput:$('input[name=username]'),   //用户名输入框
