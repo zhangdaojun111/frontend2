@@ -365,7 +365,6 @@ export class EchartsService {
         //是否设置自定义图表半径
         if(Object.keys(cellOption['customPie'])[0]){
             pieOption['legend']['type'] = 'plain';
-
             pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
             pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
         }
@@ -632,12 +631,15 @@ export class EchartsService {
         }
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
         gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
-        gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
-            return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
-        };
-        gaugeOption.series[0]['detail']['formatter'] = function(value){
-            return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
-        };
+
+        if(cellOption['yAxis'][0]['real_accuracy']){
+            gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
+                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+            };
+            gaugeOption.series[0]['detail']['formatter'] = function(value){
+                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+            };
+        }
         return gaugeOption;
     }
     /**
