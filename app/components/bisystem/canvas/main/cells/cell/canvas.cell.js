@@ -96,8 +96,7 @@ let config = {
                 containment: '.cells-container',
                 grid: [10, 10],
                 stop: (event, ui) => {
-                    this.el.find('.move-with-keyboard').prop('checked', false);
-                    this.actions.removeKeyboardListener();
+                    this.actions.cancelSelect();
                     this.data.cell.size.left = ui.position.left;
                     this.data.cell.size.top = ui.position.top;
                     this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
@@ -146,11 +145,36 @@ let config = {
             this.actions.loadCellChart(res[0]);
         },
 
+        cancelSelect() {
+            this.el.find('.move-with-keyboard').prop('checked', false);
+            this.actions.removeKeyboardListener();
+        },
+
+        select(){
+            if(this.el.find('.move-with-keyboard').prop('checked')){
+                return
+            }
+            this.el.find('.move-with-keyboard').prop('checked', true);
+            this.actions.addKeyboardListener();
+        },
+
+        toggleSelect(){
+            let checked = this.el.find('.move-with-keyboard').prop('checked');
+            if(checked){
+                this.actions.removeKeyboardListener();
+            } else {
+                this.actions.addKeyboardListener();
+            }
+            this.el.find('.move-with-keyboard').prop('checked', !checked);
+        },
+
         addKeyboardListener() {
-            this.el.on('keydown','.cell',this.actions.keyEvent);
+            // this.el.on('keydown','.cell',this.actions.keyEvent);
+            document.addEventListener('keydown',this.actions.keyEvent);
         },
         removeKeyboardListener() {
-            this.el.off('keydown','.cell',this.actions.keyEvent);
+            // this.el.off('keydown','.cell',this.actions.keyEvent);
+            document.removeEventListener('keydown',this.actions.keyEvent);
         },
         keyEvent(event){
             let key = event.key;
