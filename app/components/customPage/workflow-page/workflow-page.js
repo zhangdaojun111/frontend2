@@ -74,6 +74,8 @@ let config = {
         frontendSort: false,
         //第一次设置数据
         firstSetData: true,
+        //催办id
+        urge_record_id:'',
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
@@ -719,17 +721,8 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }else if(type === 'urge'){
-                    let json = {
-                        record_id: $event["data"]["id"]
-                    };
-                    workflowService.urge( json )
-                        .then(res => {
-                            if( res.success ){
-                                msgBox.showTips( '操作成功' );
-                            }else {
-                                msgBox.alert( '操作失败：' + res.error );
-                            }
-                        })
+                    this.actions.calcUrge(true);
+                    this.data.urge_record_id = $event["data"]["id"];
                 }
             }
             if( this.data.pageType == 5 ){
@@ -745,6 +738,34 @@ let config = {
                 let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                 this.actions.openSourceDataGrid( url,winTitle );
             }
+        },
+        //打开关闭催办
+        calcUrge: function (show) {
+            if(show){
+                this.el.find('.urge-con').show();
+                this.el.find('.urge').show();
+            }else {
+                this.el.find('.urge-info').val('');
+                this.data.urge_record_id = '';
+                this.el.find('.urge-con').hide();
+                this.el.find('.urge').hide();
+            }
+        },
+        //保存催办
+        saveUrge: function () {
+            let json = {
+                record_id: this.data.urge_record_id,
+                info: this.el.find('.urge-info').val()
+            };
+            workflowService.urge( json )
+                .then(res => {
+                    if( res.success ){
+                        msgBox.showTips( '操作成功' );
+                    }else {
+                        msgBox.alert( '操作失败：' + res.error );
+                    }
+                })
+            this.actions.calcUrge(false);
         },
         //设置失效
         setInvalid: function () {
@@ -839,6 +860,22 @@ let config = {
             this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
         },
     },
+    binds: [
+        {
+            event: 'click',
+            selector: '.cancel-urge',
+            callback: function (context) {
+                this.actions.calcUrge(false);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.submit-urge',
+            callback: function (context) {
+                this.actions.saveUrge(false);
+            }
+        },
+    ],
     afterRender: function (){
         this.showLoading();
         this.el.find( '.headerTips' ).eq(0).find( 'span' ).eq(0).html( this.data.tableId2Name[this.data.tableId] );
