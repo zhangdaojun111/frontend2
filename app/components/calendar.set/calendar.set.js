@@ -350,6 +350,7 @@ let config = {
                             this.data.recipients_per.push({name: data.dname, id: data.id})
                         }
                     }
+                    this.actions.getMultiSelectDropdown();
                 });
 
             });
