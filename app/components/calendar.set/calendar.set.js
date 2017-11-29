@@ -338,7 +338,7 @@ let config = {
                             })
                         }
                     }
-                    this.actions.getMultiSelectDropdown();
+                    // this.actions.getMultiSelectDropdown();
                 });
                 CalendarSetService.getCalendarPeople(tableId).then(res => {
                     this.data.recipients = [];
