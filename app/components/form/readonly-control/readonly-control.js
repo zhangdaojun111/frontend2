@@ -40,8 +40,14 @@ let config = {
                 // this.reload();
             }
             if (val != "" && this.data.numArea) {
-                let minNum = this.data.numArea.min;
-                let maxNum = this.data.numArea.max;
+                let minNum = this.data["numArea"]["min"] || '';
+                let maxNum = this.data["numArea"]["max"] || '';
+                if(this.data["numArea"]["min"].toString()=='0'){
+                    minNum = '0';
+                }
+                if(this.data["numArea"]["max"].toString()=='0'){
+                    maxNum = '0';
+                }
                 let errorInfo = this.data.numArea.error;
 
                 if (minNum !== "" && maxNum === "") {
