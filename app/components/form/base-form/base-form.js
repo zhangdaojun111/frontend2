@@ -2132,6 +2132,7 @@ let config = {
 		}
 	},
 	afterRender() {
+
 		this.actions.createFormControl();
 		if (this.data.is_view == 1) {
 			this.actions.checkCustomTable();
@@ -2142,14 +2143,14 @@ let config = {
 		if (this.data.btnType != 'none') {
 			this.actions.addBtn();
 		}
-
-        if(window.top.miniFormVal && this.data.btnType == 'new'){
+        if(window.top.miniFormVal){
             let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
             for(let k in miniFormVal){
                 let val = miniFormVal[k];
                 this.actions.setFormValue(k,val)
             }
         }
+
 		Mediator.subscribe('workflow:voteconfirm',(res)=>{
 			this.actions.setVoteValue(res);
 		})

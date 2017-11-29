@@ -1328,6 +1328,11 @@ let config = {
                 }, time);
                 if (refresh) {
                     msgBox.showTips('数据刷新成功。')
+                    if(window.top.miniFormVal && window.top.miniFormVal[this.data.tableId]){
+                        $('.dataTableMiniForm').css('display','block')
+                    }else{
+                        $('.dataTableMiniForm').css('display','none')
+                    }
                 }
                 if (this.data.groupCheck) {
                     msgBox.hideLoadingSelf();
@@ -2205,6 +2210,7 @@ let config = {
                         btnType: 'new',
                         form_id: this.data.formId,
                         flow_id: this.data.flowId,
+                        tableType:this.data.tableType
                     };
                     let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
 
@@ -3740,6 +3746,10 @@ let config = {
     },
     afterRender: function () {
         this.showLoading();
+        window.top.hideMiniForm?'':(window.top.hideMiniForm={});
+        window.top.hideMiniForm[this.data.tableId]=()=>{
+            $('.dataTableMiniForm').hide();
+        }
         console.time('渲染时间');
         //发送表单tableId（订阅刷新数据用
         if (dgcService.needRefreshMode.indexOf(this.data.viewMode) != -1 && !this.data.departmentDiary) {
@@ -3818,6 +3828,10 @@ let config = {
             $('.ui-dialog').width('calc(100% - 3px)');
         });
         this.actions.getHeaderData();
+    },
+    beforeDestory(){
+        window.top.hideMiniForm[this.data.tableId]=null;
+        delete window.top.hideMiniForm[this.data.tableId];
     }
 };
 
