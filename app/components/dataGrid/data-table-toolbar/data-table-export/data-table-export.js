@@ -221,7 +221,7 @@ let exportSetting = {
                 filter: JSON.stringify( this.data.filterParam ),
                 is_group: this.data.groupCheck?1:0,
                 attachment: this.data.attachment
-            }
+            };
             if( this.data.tableType == 'count' ){
                 json['parent_real_id'] = this.data.parentRealId;
                 json['fieldId'] = this.data.fieldId;
@@ -270,7 +270,7 @@ let exportSetting = {
                     type: 'export'
                 }
             } )
-        } )
+        } );
         this.data['isFilter'] = true;
         this.data['custom'] = true;
         this.data['attachment'] = false;
@@ -280,9 +280,9 @@ let exportSetting = {
                 isFilter: 0,
                 custom: 1,
                 attachment: 2
-            }
+            };
             this.data[h] = false;
-            let a = this.el.find( '#'+h )
+            let a = this.el.find( '#'+h );
             a[0].checked = false;
             a[0].disabled = true;
             a[0].className += ' disableClick';

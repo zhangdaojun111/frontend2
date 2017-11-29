@@ -48,7 +48,7 @@ let config={
             formData: this.data.formData,
             parent_btnType: window.config.btnType,
             form_songrid: 1,
-        }
+        };
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.songGrid'));
         Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
@@ -68,7 +68,7 @@ let config={
     beforeDestory(){
         this.el.off();
     }
-}
+};
 export default class Songrid extends Component{
     constructor(data,events,newConfig){
         super($.extend(true,{},config,newConfig),data,events)

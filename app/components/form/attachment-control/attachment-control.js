@@ -153,7 +153,7 @@ let config = {
                                 videoSrc:`/download_attachment/?file_id=${fileId}&download=0&dinput_type=${this.data.dinput_type}`,
                                 control_id:this.data.id,
                                 is_view:this.data.is_view
-                            }
+                            };
                             PMAPI.openDialogByComponent(_.defaultsDeep({},{data:obj},ViewVideo), {
                                 width: 780,
                                 height: 500,

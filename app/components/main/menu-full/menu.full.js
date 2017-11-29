@@ -157,8 +157,8 @@ let config = {
 };
 
 class MenuComponent extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig), data);
+    constructor(data,events,newConfig){
+        super($.extend(true,{},config,newConfig),data,events)
     }
 }
 

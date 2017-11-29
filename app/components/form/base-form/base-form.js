@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  *@author yudeping
  *表单主要逻辑
  */
@@ -343,6 +343,12 @@ let config = {
 					let label = data["label"];
 					let minNum = data["numArea"]["min"] || '';
 					let maxNum = data["numArea"]["max"] || '';
+					if(data["numArea"]["min"].toString()=='0'){
+                        minNum = '0';
+					}
+					if(data["numArea"]["max"].toString()=='0'){
+                        maxNum = '0';
+					}
 					let errorInfo = data["numArea"]["error"];
 					if (minNum !== "" && maxNum === "") {
 						if (val < minNum) {
@@ -954,11 +960,11 @@ let config = {
                             // this.actions.triggerSingleControl(d);
 						}
                         if(res){
-                            let calcData = {
-                                val: expression['value'],
-                                effect: expression["effect"],
-                                id: expression['id']
-                            };
+                            // let calcData = {
+                            //     val: expression['value'],
+                            //     effect: expression["effect"],
+                            //     id: expression['id']
+                            // };
                             // if(!this.actions.webCalcExpression(expression)) {
                             //     this.actions.calcExpression(calcData);
                             // }
@@ -1052,6 +1058,9 @@ let config = {
 
 		//移除其它字段隐藏的字段信息
 		checkOhterField(data, obj_new, obj_old) {
+            if(this.data['show_other_fields']){
+                return;
+            }
 			let delKey = [];
 			for (let index in this.data.data) {
 				if (this.data.data[index]['is_other_field'] && this.data.submitKey.indexOf(this.data.data[index]['id']) == -1) {
@@ -1404,7 +1413,7 @@ let config = {
 
 			if(!noCount || isChange){
 				//this.actions.calcExpression(calcData, data['value']);
-                this.actions.webCalcExpression(data)
+                this.actions.webCalcExpression(data,FormService)
 			};
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
@@ -1483,7 +1492,7 @@ let config = {
 			return data;
 		},
 
-		webCalcExpression(data) {
+		webCalcExpression(data,FormService) {
             let calcData = {
                 val: data['value'],
                 effect: data["effect"],
@@ -1502,6 +1511,7 @@ let config = {
 							if (expression.indexOf("$^$") == -1) {
 								try {
 									// if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
+                                    expression = expression.replace(/this/,'FormService')
                                         this.actions.set_value_for_form(eval(expression), f);
 									// }
 								} catch (err) {
@@ -2035,6 +2045,7 @@ let config = {
 					case 'editControl':
 						data[key]['real_id'] = data['real_id']['value'];
 						data[key]['table_id'] = data['table_id']['value'];
+						data[key]['temp_id'] = data['temp_id']['value'];
 						let contractControl = new ContractControl(data[key], actions);
 						contractControl.render(single);
 						this.data.childComponent[data[key].dfield] = contractControl;

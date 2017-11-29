@@ -121,6 +121,21 @@ let config = {
             //开始监听键盘
             this.actions.startListenKeyboard();
             this.actions.startListenMouseMove();
+            this.actions.listenOutsideToHideList();
+        },
+        /**
+         * 监听外部区域，当有点时，下啦区域藏起
+         */
+        listenOutsideToHideList:function () {
+            document.addEventListener('click',this.actions.outsideClickListener);
+        },
+        outsideClickListener:function(event) {
+            if($(event.target).closest(this.el).length == 0 && this.listWrap.is(':visible')){
+                this.actions.hideSelectBox();
+            }
+        },
+        removeClickListener:function() {
+            document.removeEventListener('click',this.actions.outsideClickListener);
         },
         /**
          * 重置并隐藏下拉框
@@ -132,6 +147,7 @@ let config = {
                 this.data.isSelectBoxDisplayed = false;
                 this.actions.stopListenKeyboard();
                 this.el.find('.result').blur();
+                this.actions.removeClickListener();
             }
         },
         /**

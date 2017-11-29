@@ -125,7 +125,7 @@ let config = {
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
-                    if(window.config.query_mark !== 'single'){
+                    if(window.config.query_mark !== 'single' && key=='countColumn'){
                         continue;
                     }
                     let isValid = this.formItems[key].valid();
@@ -233,9 +233,8 @@ let config = {
                 this.data.chart = res[0]['data']
             } else {
                 msgbox.alert(res[0]['error'])
-            };
-        };
-
+            }
+        }
         // 渲染图表表单字段
         this.drawForm();
         this.actions.init();
@@ -245,7 +244,7 @@ let config = {
         }
 
     }
-}
+};
 
 class GaugeEditor extends Base {
     constructor(data,extendConfig) {

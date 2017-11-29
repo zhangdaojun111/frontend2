@@ -26,6 +26,9 @@ $print-height: 1485px;
         height: calc(100% - 50px);
         overflow: auto;
         z-index: 90;
+        &.hide-head{
+            height:100%;
+        }
         &.client {
             background: #F5F5F5;
             .cells {
