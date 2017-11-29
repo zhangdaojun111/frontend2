@@ -292,7 +292,7 @@ export class EchartsService {
             linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
             if (cellOption.double === 1) {
                 linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
-            };
+            }
 
             linebarOption['dataZoom']=[
                 {
@@ -324,17 +324,16 @@ export class EchartsService {
         //最后一条数据必显示
         if(cellOption.data.xAxis){
             linebarOption['xAxis'][0]['axisLabel']['interval'] = (index,value)=> {
-                let tagNum = Math.floor((cellChart.cell.size['width'] - 140) / 80) + 1;
+                let tagNum = Math.floor((cellChart.cell.size['width'] - 140) / 90) + 1;
                 let interval;
                 if(tagNum > 2){
-                    interval = Math.floor((cellOption.data.xAxis.length - 2) / (tagNum - 2));
+                    interval = Math.floor((cellOption.data.xAxis.length) / (tagNum - 1));
                 }
                 if (index === 0 || index === cellOption.data.xAxis.length - 1) {
                     return true;
+                } else {
+                    return ((index % interval === 0) && (index / interval < tagNum));
                 }
-                // else {
-                //     return ((index - 1) % interval) === 0;
-                // }
             }
         }
         return linebarOption;
