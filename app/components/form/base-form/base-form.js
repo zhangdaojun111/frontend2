@@ -137,7 +137,7 @@ let config = {
 		//主动触发指定字段的所有事件
 		triggerSingleControl(key,noCount) {
 			let val = this.data.data[key]["value"];
-			if (val != "" || !$.isEmptyObject(val)) {
+			if (val.toString() != "" || !$.isEmptyObject(val)) {
 				if ($.isArray(val)) {
 					if (val.length != 0) {
 						this.actions.checkValue(this.data.data[key],noCount);
