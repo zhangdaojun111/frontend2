@@ -148,6 +148,8 @@ export const systemMessageService = {
                 cellRenderer: (param)=>{
                     if(param.data.wf_urgency_level == 2){
                         return '<div style="color: #FC0017;">'+ param.value +'</div>'
+                    }else if(param.data.wf_urgency_level == 1){
+                        return '<div style="color: yellow;">'+ param.value +'</div>'
                     }else {
                         return '<div>'+ param.value +'</div>'
                     }
