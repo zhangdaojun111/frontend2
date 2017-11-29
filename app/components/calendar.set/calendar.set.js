@@ -338,19 +338,19 @@ let config = {
                             })
                         }
                     }
-                    // this.actions.getMultiSelectDropdown();
-                });
-                CalendarSetService.getCalendarPeople(tableId).then(res => {
-                    this.data.recipients = [];
-                    for (let data of res['rows']) {
-                        if (data['type'] && data['type'] === 'email') {
-                            this.data.recipients.push({name: data.dname, id: data.id})
-                        } else {
-                            this.data.recipients.push({name: data.dname, id: data.id});
-                            this.data.recipients_per.push({name: data.dname, id: data.id})
+                    CalendarSetService.getCalendarPeople(tableId).then(res => {
+                        this.data.recipients = [];
+                        for (let data of res['rows']) {
+                            if (data['type'] && data['type'] === 'email') {
+                                this.data.recipients.push({name: data.dname, id: data.id})
+                            } else {
+                                this.data.recipients.push({name: data.dname, id: data.id});
+                                this.data.recipients_per.push({name: data.dname, id: data.id})
+                            }
                         }
-                    }
-                    this.actions.getMultiSelectDropdown();
+                        this.actions.getMultiSelectDropdown();
+                    });
+                    // this.actions.getMultiSelectDropdown();
                 });
 
             });
