@@ -323,16 +323,21 @@ export class EchartsService {
 
         //最后一条数据必显示
         if(cellOption.data.xAxis){
+            console.log(cellOption.data.xAxis);
             linebarOption['xAxis'][0]['axisLabel']['interval'] = (index,value)=> {
                 let tagNum = Math.floor((cellChart.cell.size['width'] - 140) / 90) + 1;
+                // console.log(tagNum);
                 let interval;
                 if(tagNum > 2){
                     interval = Math.floor((cellOption.data.xAxis.length) / (tagNum - 1));
                 }
+                console.log(tagNum,interval);
                 if (index === 0 || index === cellOption.data.xAxis.length - 1) {
                     return true;
                 } else {
-                    return ((index % interval === 0) && (index / interval < tagNum));
+                    let res = (index % (interval + 1) === 0) && (index / (interval + 1) < (tagNum - 1));
+                    console.log(index, res);
+                    return res;
                 }
             }
         }
