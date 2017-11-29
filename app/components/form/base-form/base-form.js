@@ -343,6 +343,12 @@ let config = {
 					let label = data["label"];
 					let minNum = data["numArea"]["min"] || '';
 					let maxNum = data["numArea"]["max"] || '';
+					if(data["numArea"]["min"].toString()=='0'){
+                        minNum = '0';
+					}
+					if(data["numArea"]["max"].toString()=='0'){
+                        maxNum = '0';
+					}
 					let errorInfo = data["numArea"]["error"];
 					if (minNum !== "" && maxNum === "") {
 						if (val < minNum) {
@@ -954,11 +960,11 @@ let config = {
                             // this.actions.triggerSingleControl(d);
 						}
                         if(res){
-                            let calcData = {
-                                val: expression['value'],
-                                effect: expression["effect"],
-                                id: expression['id']
-                            };
+                            // let calcData = {
+                            //     val: expression['value'],
+                            //     effect: expression["effect"],
+                            //     id: expression['id']
+                            // };
                             // if(!this.actions.webCalcExpression(expression)) {
                             //     this.actions.calcExpression(calcData);
                             // }
