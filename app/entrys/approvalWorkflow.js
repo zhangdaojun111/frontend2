@@ -226,6 +226,7 @@ const approveWorkflow = (para) => {
         }
     }
     para.focus_users=JSON.stringify(focusArr);
+    // para['parent_record_id'] = window.config.parent_record_id || ''
     msgBox.showLoadingSelf();
     // (async function () {
     //     return workflowService.approveWorkflowRecord({
