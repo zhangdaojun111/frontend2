@@ -119,9 +119,9 @@ let config = {
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }
-        if(this.data.value && this.data.value != this.data.originalValue){
+        // if(this.data.value && this.data.value != this.data.originalValue){
         	this.actions.keyup();
-        }
+        // }
     },
     beforeDestory() {
         this.el.off();
