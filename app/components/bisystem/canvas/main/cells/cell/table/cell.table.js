@@ -5,90 +5,79 @@
 import {CellBaseComponent} from '../base';
 import template from './cell.table.html';
 import "./cell.table.scss";
+import handlebars from 'handlebars';
+import {PMAPI} from '../../../../../../../lib/postmsg';
 
+handlebars.registerHelper('ifLast', function (index,row, options) {
+    let lastIndex = row[0].length - 1 ;
+    if(index == lastIndex){
+        return options.inverse(this);
+    } else {
+        return options.fn(this);
+    }
+
+});
 let config = {
     template: template,
     data: {
         rows: [],
         chart: {},
     },
-    actions: {
-
-        //打开局部的弹窗
-        openSelfIframe: function (url, title, w, h) {
-            w = window.screen.width * 0.8;
-            h = window.screen.height * 0.6;
-            PMAPI.openDialogToSelfByIframe(url, {
-                width: w || 1400,
-                height: h || 800,
-                title: title,
-                modal: true,
-                defaultMax: true,
-                // customSize: true
-            }).then((data) => {
-                if (data == 'success' || data.refresh) {
-                    this.actions.timeDelayRefresh();
-                }
-            })
+    binds: [
+        {   // 查看 编辑 历史
+            event:'click',
+            selector:'.table-operate a',
+            callback:function (context,event) {
+                alert('hello world');
+                this.actions.gridHandle('table-view', {});
+            }
         },
-
-        //操作列点击事件
-        gridHandle: function (data) {
-            console.log("操作");
-            console.log(data);
-            console.log(this.data.namespace);
-            if (data.event.srcElement.className == 'gridView') {
-                console.log('查看');
-                let btnType = 'view';
-                if (this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm('view') || this.data.parent_btnType == 'none') {
-                    btnType = 'none';
-                }
+    ],
+    actions: {
+//操作列点击事件
+        gridHandle: function (type,data) {
+            if (type == 'table-view') {
                 let obj = {
-                    table_id: this.data.tableId,
-                    parent_table_id: this.data.parentTableId,
-                    parent_real_id: this.data.parentRealId,
-                    parent_temp_id: this.data.parentTempId,
-                    parent_record_id: this.data.parentRecordId,
-                    real_id: data.data._id,
-                    temp_id: data.data.temp_id || '',
-                    record_id: data.data.record_id || '',
-                    btnType: btnType,
+                    table_id: '1726_ZzWyRMCsyf6sePNmWeUijB',
+                    parent_table_id:'',
+                    parent_real_id: '',
+                    parent_temp_id: '',
+                    parent_record_id: '',
+                    real_id: '5a167416d8e9e4e6aa454eaa',
+                    temp_id: '',
+                    record_id: '',
+                    btnType: 'view',
                     is_view: 1,
-                    in_process: this.data.viewMode == 'in_process' ? 1 : 0,
-                    is_batch: (this.data.viewMode == 'createBatch' || this.data.viewMode == 'approveBatch') ? 1 : 0,
-                    form_id: this.data.formId,
-                    flow_id: data.data.flow_id || '',
+                    in_process: 0,
+                    is_batch: 0,
+                    form_id: '',
+                    flow_id: '',
                 };
-                let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
+                let url = this.actions.returnIframeUrl('/iframe/addWf/', obj);
                 let title = '查看';
                 this.actions.openSelfIframe(url, title);
             }
-            if (data.event.srcElement.className == 'gridEdit') {
-                console.log('编辑');
-                let btnType = 'edit';
-                if (this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm('edit')) {
-                    btnType = 'none';
-                }
+            if (type == 'edit') {
+                let btnType = 'table-edit';
                 let obj = {
-                    table_id: this.data.tableId,
-                    parent_table_id: this.data.parentTableId,
-                    parent_real_id: this.data.parentRealId,
-                    parent_temp_id: this.data.parentTempId,
-                    parent_record_id: this.data.parentRecordId,
-                    real_id: data.data._id,
-                    temp_id: data.data.temp_id || '',
-                    btnType: btnType,
-                    in_process: this.data.viewMode == 'in_process' ? 1 : 0,
-                    is_batch: (this.data.viewMode == 'createBatch' || this.data.viewMode == 'approveBatch') ? 1 : 0,
+                    table_id: '1726_ZzWyRMCsyf6sePNmWeUijB',
+                    parent_table_id: '',
+                    parent_real_id: '',
+                    parent_temp_id: '',
+                    parent_record_id: '',
+                    real_id: '5a167416d8e9e4e6aa454eaa',
+                    temp_id: '',
+                    btnType: 'view',
+                    in_process: 0,
+                    is_batch: 0,
                     form_id: this.data.formId,
                     flow_id: data.data.flow_id || '',
                 };
-                let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
+                let url = this.actions.returnIframeUrl('/iframe/addWf/', obj);
                 let title = '编辑';
                 this.actions.openSelfIframe(url, title);
             }
-            if (data.event.srcElement.className == 'gridHistory') {
-                console.log('历史');
+            if (type == 'table-history') {
                 let obj = {
                     table_id: this.data.tableId,
                     real_id: data.data._id
@@ -122,9 +111,38 @@ let config = {
             //         }
             //     }
             // }
-        }
+        },
+        //返回数据url
+        returnIframeUrl( u,obj ){
+            let str = '?';
+            for( let o in obj ){
+                str += (o + '=' + obj[o] + '&');
+            }
+            str = str.substring( 0,str.length - 1 );
+            return u + str;
+        },
+
+        //打开局部的弹窗
+        openSelfIframe: function (url, title, w, h) {
+            w = window.screen.width * 0.8;
+            h = window.screen.height * 0.6;
+            PMAPI.openDialogToSelfByIframe(url, {
+                width: w || 1400,
+                height: h || 800,
+                title: title,
+                modal: true,
+                defaultMax: true,
+                // customSize: true
+            }).then((data) => {
+                if (data == 'success' || data.refresh) {
+                    this.actions.timeDelayRefresh();
+                }
+            })
+        },
+
     },
-    afterRender() {}
+    afterRender() {
+    }
 };
 export class CellTableComponent extends CellBaseComponent {
     // constructor(cellChart) {
