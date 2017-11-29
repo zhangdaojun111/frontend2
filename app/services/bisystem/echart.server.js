@@ -326,16 +326,21 @@ export class EchartsService {
             console.log(cellOption.data.xAxis);
             linebarOption['xAxis'][0]['axisLabel']['interval'] = (index,value)=> {
                 let tagNum = Math.floor((cellChart.cell.size['width'] - 140) / 90) + 1;
-                // console.log(tagNum);
-                let interval;
+                console.log(tagNum);
+                let interval = 1;
                 if(tagNum > 2){
-                    interval = Math.floor((cellOption.data.xAxis.length) / (tagNum - 1));
+                    interval = Math.max(Math.cell((cellOption.data.xAxis.length) / (tagNum - 1)),1);
                 }
-                console.log(tagNum,interval);
+                console.log(interval);
+                tagNum = Math.floor(cellOption.data.xAxis.length / interval) + 1;
+                if(tagNum % 2 === 0){
+                    tagNum += 1;
+                }
+
                 if (index === 0 || index === cellOption.data.xAxis.length - 1) {
                     return true;
                 } else {
-                    let res = (index % (interval + 1) === 0) && (index / (interval + 1) < (tagNum - 1));
+                    let res = (index % interval === 0) && (index / interval < (tagNum - 1));
                     console.log(index, res);
                     return res;
                 }
