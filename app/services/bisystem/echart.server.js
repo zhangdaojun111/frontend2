@@ -68,6 +68,7 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     lineBarOption(cellChart) {
+        console.log(cellChart);
         let cellOption = cellChart['chart'];
         let ySelectedGroup = cellChart['chart']['ySelectedGroup'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
@@ -320,18 +321,22 @@ export class EchartsService {
             linebarOption['legend']['type'] = 'plain';
         }
 
-
         //最后一条数据必显示
-        // if(cellOption.data.xAxis){
-        //     linebarOption['xAxis'][0]['axisLabel']['interval'] = (index,value)=>{
-        //         let xAxisLen = cellOption.data.xAxis.length-1;
-        //         if(index === 0 || index === xAxisLen){
-        //             return true
-        //         }else if(0<index<xAxisLen && index%19 === 0){
-        //             return true
-        //         }
-        //     }
-        // }
+        if(cellOption.data.xAxis){
+            linebarOption['xAxis'][0]['axisLabel']['interval'] = (index,value)=> {
+                let tagNum = Math.floor((cellChart.cell.size['width'] - 140) / 80) + 1;
+                let interval;
+                if(tagNum > 2){
+                    interval = Math.floor((cellOption.data.xAxis.length - 2) / (tagNum - 2));
+                }
+                if (index === 0 || index === cellOption.data.xAxis.length - 1) {
+                    return true;
+                }
+                // else {
+                //     return ((index - 1) % interval) === 0;
+                // }
+            }
+        }
         return linebarOption;
     }
 
