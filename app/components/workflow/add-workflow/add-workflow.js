@@ -197,6 +197,9 @@ let config={
          * 提交当前工作流
          */
         submitAddWorkflow() {
+            if( window.top.miniFormVal){
+                delete window.top.miniFormVal[this.data.obj.table_id];
+            }
             let obj = this.data.obj;
             let formData = CreateFormServer.getFormValue(obj.table_id,true);
             if (formData.error) {
