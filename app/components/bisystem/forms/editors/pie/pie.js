@@ -156,7 +156,8 @@ let config = {
                     //判断只能为数字（最多两位小数）或者百分数
                     if(key == 'customRadius'){
                         let val = this.formItems['customRadius'].el.find('input')[0].value;
-                        let reg = /(^((?!0)\d+(.\d{1,2})?)$)|(^-?(\d+\.?\d+?)%$)/;
+                        let reg = /(^((?!0)\d+(.\d{1,2})?)$)|(^\d+\.?\d{1,2}%$)/;
+                        console.log(reg.test(val));
                         if(reg.test(val)){
                             this.formItems['customRadius'].clearErrorMsg();
                             continue;
@@ -391,6 +392,7 @@ let config = {
                             // this.formItems['customCenterY'].el.show();
                         } else {
                             this.formItems['customRadius'].el.hide();
+                            this.formItems['customRadius'].setValue('80%');
                             // this.formItems['customCenterX'].el.hide();
                             // this.formItems['customCenterY'].el.hide();
                         }
