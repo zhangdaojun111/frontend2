@@ -9,8 +9,9 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
-import {PasswordInput} from "../components/util/passwordInput/password-input";
 
+import {PasswordInput} from "../components/util/passwordInput/password-input";
+import {verify} from'../lib/verify';
 import {starter} from '../lib/three/starter';
 
 
@@ -26,7 +27,7 @@ function getLoginController() {
         isOpposite:false,       //记录页面状态
         versionBtnOpen:1,       //是否可以查看更新信息
         registerBtnOpen:1,      //是否可以使用注册功能
-
+        verifyCode:null,        //验证码组件
         $loginMainTitle:$('.login-main-title'),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
         $rememberPwCheck:$('.remember-pw-check'),   //记住密码
@@ -34,10 +35,11 @@ function getLoginController() {
         $closeUpdateGroup:$('.shadow-box-close'),  //隐藏更新信息logo
         $versionTable:$('#shadow-box'),          //版本信息显示表格
         $loginBtn:$('button.login-btn'),            //登录按钮
-        $registerBtn:$('div.register-btn'),         //注册按钮
+        $registerBtn:$('a.register-btn'),          //注册按钮
         $findPwBtn:$('.find-pw-group'),             //忘记密码
         $closeIcon:$('.close-icon'),                //找回密码面板关闭按钮
         $usernameInput:$('input[name=username]'),   //用户名输入框
+        $verifyInput:$('input[name=verify]'),   //用户名输入框
         // $passwordInput:$('input[name=password]'),   //密码输入框
         $whitePanel:$('.white-panel'),              //正面面板
         $oppositePanel:$('.opposite-panel'),        //反面面板
@@ -61,6 +63,8 @@ function getLoginController() {
             this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
             this.passwordInputComp.render($wrap);
             $('.login-content').show();
+
+            this.verifyCode = new verify('verify-container');
             //系统名称改变
             this.$loginMainTitle.on('change', () => {
                 this.systemName = this.$loginMainTitle.val();
@@ -99,7 +103,7 @@ function getLoginController() {
             this.$loginBtn.on('click', _.debounce(() => {
                 // console.log(this.username_value,this.password_value,);
                 // this.password_value = this.passwordInputComp.data.password_value;
-                this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
+                this.userLogin(this.username_value,this.password_value,this.$verifyInput.val());   //根据用户名和密码登录
             },300));
 
             /**
@@ -173,7 +177,7 @@ function getLoginController() {
                 if(event.keyCode === 13){
                     console.log('abc');
                     if(this.isOpposite === false){
-                        this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
+                        this.userLogin(this.username_value,this.password_value,this.$verifyInput.val());   //根据用户名和密码登录
                     }else{
                         this.$submitFindPw.click();
                     }
@@ -319,9 +323,14 @@ function getLoginController() {
         /**
          * 用户登录
          */
-        userLogin:function (username,password) {
+        userLogin:function (username,password,verify) {
             if(password === ''){
                 $(".warn-info").html('密码不能为空');
+                return;
+            }
+            let res = this.verifyCode.validate(verify)
+            if(!res) {
+                $(".warn-info").html('验证码错误');
                 return;
             }
             let data = {

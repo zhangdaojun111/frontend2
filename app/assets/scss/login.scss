@@ -86,7 +86,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                 font-size: 14px;
                 color: #666666;
                 margin-right: 80px;
-                .update-btn{
+                .update-btn,.register-btn{
                     margin-right: 40px;
                 }
 
@@ -107,7 +107,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
         margin-left: -600px;
         .login-content {
             width: 340px;
-            height: 350px;
+            height: 380px;
             position: absolute;
             right: 0;
             top: 150px;
@@ -131,7 +131,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
             .white-panel {
                 //background-color: #ffffff;
                 width: 340px;
-                height: 350px;
+                height: 380px;
                 border-radius: 5px;
                 background: rgba(242, 242, 242, 1);
 
@@ -177,7 +177,24 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                             background-repeat: no-repeat;
                         }
                     }
-
+                    .verify-group {
+                        position: relative;
+                        height: 40px;
+                        margin-left: 20px;
+                        margin-bottom: 0px!important;
+                        margin-top: 30px;
+                        .verify-control {
+                            width: 105px;
+                            position: relative;
+                            top: -15px;
+                        }
+                        #verify-container{
+                            display: inline-block;
+                            height: 40px;
+                            margin-left: 20px;
+                            width: 160px;
+                        }
+                    }
                     .ps-group {
                         height: 40px;
                         width: 100%;
@@ -213,7 +230,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                             }
                         }
                     }
-                    .form-group,.ps-group {
+                    .form-group,.ps-group,.verify-group {
                         margin-bottom: 20px;
                         input {
                             margin: 0!important;
