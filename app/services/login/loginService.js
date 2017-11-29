@@ -11,6 +11,7 @@ export const LoginService = {
     userName:'',
     downLoadLink:'',
     prompt:'',
+    currentSystem:'',
     /**
      * 检查当前浏览器是否为chrome
      * @returns {boolean}
@@ -19,11 +20,11 @@ export const LoginService = {
         let browser = this.currentBrowser();
         console.log(browser);
         let system=this.CurrentSystem().system;
-        let currentSystem;
+        // let currentSystem;
 
         for(let key in system){
             if(system[key] != false){
-                currentSystem = key;
+                this.currentSystem = key;
             }
         }
 
@@ -33,14 +34,14 @@ export const LoginService = {
         }
 
        else if(browser['chrome']){
-           if((browser['chrome'].slice(0,2)<62 && currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && currentSystem == 'mac')){
+           if((browser['chrome'].slice(0,2)<62 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                this.needDownload=true;
             }
         }
         //优先保证win和mac
        // if(this.needDownLoad){
-            switch (currentSystem){
+            switch (this.currentSystem){
                 case 'win':
                     this.downLoadLink='http://sw.bos.baidu.com/sw-search-sp/software/e80aba170ee7c/ChromeStandalone_62.0.3202.94_Setup.exe';
                     break;
