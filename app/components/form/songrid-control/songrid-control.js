@@ -49,6 +49,9 @@ let config={
             parent_btnType: window.config.btnType,
             form_songrid: 1,
         };
+        if(window.location.href.indexOf('btnType=view' !=-1)){
+            config['parent_btnType'] = 'none';
+        }
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.songGrid'));
         Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
