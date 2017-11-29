@@ -3132,7 +3132,7 @@ let config = {
             }
             //统计
             if (fieldTypeService.countTable(data.colDef.dinput_type, data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount") {
-                if(this.data.form_songrid == 1){
+                if(this.data.form_songrid == 1&&this.data.viewMode=='in_process'){
                     msgBox.alert('不支持查看源数据。');
                     return;
                 }
