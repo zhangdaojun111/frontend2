@@ -858,6 +858,12 @@ let config = {
                     msgBox.confirm('确定初始化偏好？').then(r => {
                         if (r) {
                             dataTableService.delPreference({table_id: this.data.tableId}).then(res => {
+                                // if (this.data.frontendSort) {
+                                //     this.agGrid.actions.refreshView();
+                                // } else {
+                                //     this.data.sortParam = {sortOrder: '', sortField: '', sort_real_type: ''}
+                                // }
+                                // this.actions.getGridData();
                                 msgBox.showTips('操作成功');
                                 let obj = {
                                     actions: JSON.stringify(['ignoreFields', 'group', 'fieldsOrder', 'pageSize', 'colWidth', 'pinned']),
@@ -871,7 +877,7 @@ let config = {
                                     //创建表头
                                     this.columnDefs = this.actions.createHeaderColumnDefs();
                                     this.agGrid.gridOptions.api.setColumnDefs(this.columnDefs);
-                                    dgcService.calcColumnState(this.data, this.agGrid, ["group", 'number', "mySelectAll"]);
+                                    dgcService.calcColumnState(this.data, this.agGrid, ["group", 'number', "mySelectAll"],this.columnDefs);
                                     this.customColumnsCom.actions.makeSameSate();
                                 });
                                 HTTP.flush();
@@ -1322,6 +1328,11 @@ let config = {
                 }, time);
                 if (refresh) {
                     msgBox.showTips('数据刷新成功。')
+                    if(window.top.miniFormVal && window.top.miniFormVal[this.data.tableId]){
+                        $('.dataTableMiniForm').css('display','block')
+                    }else{
+                        $('.dataTableMiniForm').css('display','none')
+                    }
                 }
                 if (this.data.groupCheck) {
                     msgBox.hideLoadingSelf();
@@ -2199,6 +2210,7 @@ let config = {
                         btnType: 'new',
                         form_id: this.data.formId,
                         flow_id: this.data.flowId,
+                        tableType:this.data.tableType
                     };
                     let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
 
@@ -3729,10 +3741,15 @@ let config = {
                 this.actions.firstFooterCommonFilterId(data.advanced_query);
                 this.actions.createPostData();
             }
-        }
+        },
+
     },
     afterRender: function () {
         this.showLoading();
+        window.top.hideMiniForm?'':(window.top.hideMiniForm={});
+        window.top.hideMiniForm[this.data.tableId]=()=>{
+            $('.dataTableMiniForm').hide();
+        }
         console.time('渲染时间');
         //发送表单tableId（订阅刷新数据用
         if (dgcService.needRefreshMode.indexOf(this.data.viewMode) != -1 && !this.data.departmentDiary) {
@@ -3811,6 +3828,10 @@ let config = {
             $('.ui-dialog').width('calc(100% - 3px)');
         });
         this.actions.getHeaderData();
+    },
+    beforeDestory(){
+        window.top.hideMiniForm[this.data.tableId]=null;
+        delete window.top.hideMiniForm[this.data.tableId];
     }
 };
 
