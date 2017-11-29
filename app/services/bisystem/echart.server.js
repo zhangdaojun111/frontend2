@@ -340,7 +340,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     pieOption(cellChart) {
-        console.log(cellChart);
         let cellOption = cellChart['chart'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
@@ -360,13 +359,17 @@ export class EchartsService {
         pieOption['series'][0].name = title;
         pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if(cellChart.chart.chartType.type == 'circular'){
-            pieOption['series'][0].radius = ['50%','70%'];
+            pieOption['series'][0].radius = ['50%','80%'];
         }
         //是否设置自定义图表半径
         if(Object.keys(cellOption['customPie'])[0]){
             pieOption['legend']['type'] = 'plain';
-            pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
             pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
+            if(cellChart.chart.chartType.type == 'pie'){
+                pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
+            }else{
+                pieOption['series'][0]['radius'] = isNaN(cellOption['customPie']['radius'])?[(parseInt(cellOption['customPie']['radius'])-20)+'%',cellOption['customPie']['radius']]:[cellOption['customPie']['radius']-20+'',cellOption['customPie']['radius']];
+            }
         }
         return pieOption;
     }
