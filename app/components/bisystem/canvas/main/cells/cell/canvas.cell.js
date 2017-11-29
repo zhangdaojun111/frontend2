@@ -164,6 +164,7 @@ let config = {
             }
         },
         // 拖拽end画布mouseup触发
+
         // {
         //     event: 'mouseup',
         //     selector: '.cell',

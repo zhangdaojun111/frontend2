@@ -39,6 +39,10 @@ $font-color: #e4e4e4;
             tr {
                 td:last-child {
                     border-right: none;
+                    a {
+                        color:#2298f4;
+                        text-decoration:none;
+                    }
                 }
             }
         }
