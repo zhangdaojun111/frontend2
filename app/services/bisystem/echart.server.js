@@ -328,11 +328,11 @@ export class EchartsService {
                     return true;
                 }
                 let tagNum = Math.floor((cellChart.cell.size['width'] - 140) / 90) + 1;
-                console.log(tagNum);
+
                 if(tagNum > 2){
-                    let interval = Math.max(Math.floor((cellOption.data.xAxis.length) / (tagNum - 1)),1);
+                    let interval = Math.max(Math.ceil((cellOption.data.xAxis.length) / (tagNum - 1)),1);
                     console.log(interval);
-                    return (index % interval === 0) && (cellOption.data.xAxis.length - index > interval);
+                    return (index % interval === 0) && (cellOption.data.xAxis.length - index > interval * 0.7);
                 }
             }
         }
