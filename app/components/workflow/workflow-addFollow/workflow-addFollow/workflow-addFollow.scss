@@ -40,7 +40,7 @@
 		position: relative;
 		height: 100%;
 		border: 1px solid #eee;
-		.flexItem{
+		.flexItem-1{
 			flex-grow: 1;
 			flex-shrink: 0;
 			width: 33.33%;
@@ -194,6 +194,9 @@
 		}
 	}
 
+}
+.addConter #staffMulti{
+  padding-top:30px;
 }
 .addConter #staffMulti{
 	>div:nth-child(1n){

@@ -131,33 +131,60 @@
             //    }
             //}
             .dataGrid-commonQuery {
-                //display: none;
-                margin-top: 3px;
+                display: none;
                 float: left;
                 padding-left: 15px;
                 .dataGrid-commonQuery-select {
                     //box-shadow: 0 0 2px 2px #327ed3;
+                    position: relative;
                     background-color: #333;
                     background-image:  url("../../../assets/images/dataGrid/icon_xiala_white.png");
                     background-repeat: no-repeat;
                     background-position: center;
                     border: 1px solid #333;
-                    cursor: pointer;
                     padding: 0 23px 0 12px;
+                    cursor: pointer;
                     border-radius: 4px;
                     text-indent: 0;
                     color: #fff;
                     float: left;
                     width: 115px;
+                    box-sizing: border-box;
                     font-size: 12px;
                     height: 25px;
+                    line-height: 25px;
                     display: inline-block;
                     outline: none;
-                    box-shadow: none;
+                    //box-shadow: none;
                     appearance: none;
                     -moz-appearance: none;
                     -webkit-appearance: none;
                     background-position: 90px;
+
+                    .dataGrid-commonQuery-ul {
+                        display: none;
+                        z-index: 9;
+                        position: absolute;
+                        height: auto;
+                        width: 115px;
+                        background: #333;
+                        top: 24px;
+                        left: -1px;
+                        border: 1px solid #333;
+                        box-sizing: border-box;
+                        li{
+                            padding-left: 12px;
+                            box-sizing: border-box;
+                        }
+                        .active {
+                            background: #fff!important;
+                            color:#333!important;
+                        }
+                        .remove{
+                            background: transparent;
+                            color:#fff;
+                        }
+                    }
                 }
             }
             .dataGrid-btn-group {

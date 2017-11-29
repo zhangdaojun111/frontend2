@@ -90,11 +90,11 @@ let config = {
         getExpertSearchData: function () {
             let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
-                this.data.commonQuery = res.rows
+                this.data.commonQuery = res.rows;
                 this.el.find('.common-search-item').remove();
                 this.data.commonQuery.forEach((item)=> {
                     this.el.find('.common-search-list').append(`<li class="common-search-item" fieldId="${item.id}">${item.name}<span class="item-delete icon-expert-error-msg"></span></li>`);
-                })
+                });
                 if(this.data.commonQuery.length != 0){
                     this.el.find('.common-search-compile').css('display','block');
                 }
@@ -109,7 +109,7 @@ let config = {
                 let obj = {
                     cond: {},
                     relation:'$and'
-                }
+                };
                 // if(this.data.searchInputAry[i].inputBoxTitle == 'number') {
                 //     obj['cond']['keyword'] = parseInt(this.data.searchInputAry[i].inputValue);
                 // } else {
@@ -158,7 +158,7 @@ let config = {
                 obj['cond']['searchBy'] = this.el.find('.result').eq(i).attr('name');
                 obj['cond']['searchByName'] = this.el.find('.result').eq(i).val();
                 obj['cond']['searchByNew'] = this.el.find('.result').eq(i).attr('name');
-                obj['relation'] = this.el.find('.condition-search-select.radio').eq(i).val()
+                obj['relation'] = this.el.find('.condition-search-select.radio').eq(i).val();
                 this.data.searchInputList.push(obj);
             }
             this.actions.checkedSubmitData(name)
@@ -177,7 +177,7 @@ let config = {
             }
             for(let j = 0;j<searchData.length;j++) {
                 let html = this.actions.checkedRelationType(searchData[j]['cond']['searchByName']);
-                this.actions.checkedInputType(searchData[j]['cond']['searchByName'],searchData[j]['cond']['keyword'],j,html,searchData[j]['cond']['operate'])
+                this.actions.checkedInputType(searchData[j]['cond']['searchByName'],searchData[j]['cond']['keyword'],j,html,searchData[j]['cond']['operate']);
                 if(searchData[j]['cond']['leftBracket'] == '(') {
                     this.el.find('.condition-search-choice.left-choice').eq(j).addClass('active')
                 } else {
@@ -209,7 +209,7 @@ let config = {
                         case "person": htmlStr = config.optionHtmlFour; break;
                     }
                 }
-            })
+            });
             return htmlStr;
         },
         //加载不同查询条件的输入框类型
@@ -222,7 +222,7 @@ let config = {
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateTimeControl = new DateTimeControl({value: value},{changeValue:function(data){}});
                             dateTimeControl.render(this.el.find('.condition-search-value').eq(index));
-                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).html(html);
                             this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                         case "date":
@@ -230,7 +230,7 @@ let config = {
                             this.el.find('.condition-search-input').eq(index).remove();
                             let dateControl = new DateControl({value: value},{changeValue:function(data){}});
                             dateControl.render(this.el.find('.condition-search-value').eq(index));
-                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).html(html);
                             this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                         case "time":
@@ -238,13 +238,13 @@ let config = {
                             this.el.find('.condition-search-input').eq(index).remove();
                             let timeControl = new TimeControl({value: value},{changeValue:function(data){}});
                             timeControl.render(this.el.find('.condition-search-value').eq(index));
-                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).html(html);
                             this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                         case "text":
                             let str = /\^\(\(\?!/;
                             this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="text">`);
-                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).html(html);
                             if(str.test(value)){
                                 let length = value.length - 5;
                                 let newValue = value.substring(5,length);
@@ -259,13 +259,13 @@ let config = {
                             this.el.find('.result').eq(index).attr('search-type','number');
                             this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="number">`);
                             this.el.find('.condition-search-input').eq(index).val(value);
-                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).html(html);
                             this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                         case "person":
                             this.el.find('.condition-search-value').eq(index).html(`<input class="condition-search-input" type="text">`);
                             this.el.find('.condition-search-value').eq(index).find('.condition-search-input').val(value);
-                            this.el.find('.condition-search-select.relation').eq(index).html(html)
+                            this.el.find('.condition-search-select.relation').eq(index).html(html);
                             this.el.find('.condition-search-select.relation').eq(index).val(relation);
                             break;
                     }
@@ -407,8 +407,8 @@ let config = {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
                     // this.actions.renderQueryItem(this.data.searchInputList)
-                    this.data.saveCommonQuery = true
-                    this.data.addNameAry.push(name)
+                    this.data.saveCommonQuery = true;
+                    this.data.addNameAry.push(name);
                     this.actions.getExpertSearchData();
                     // this.data.commonQuery.push({
                     //     id:1000+this.data.num,
@@ -435,7 +435,7 @@ let config = {
                 if(res.succ == 0) {
                     msgBox.alert(res.error)
                 } else if(res.succ == 1) {
-                    this.actions.removeQueryItem(id)
+                    this.actions.removeQueryItem(id);
                     for(let i = 0; i <this.data.commonQuery.length; i++) {
                         if (this.data.commonQuery[i].id == id){
                             this.data.commonQuery.splice(i,1);
@@ -578,7 +578,7 @@ let config = {
                     tableId: _this.data.tableId,
                     parentKey: window.config.key,
                     choice : choice,
-                }
+                };
                 PMAPI.openDialogByIframe(`/iframe/searchImport/`,{
                     width:500,
                     height:400,
@@ -593,13 +593,13 @@ let config = {
             }).on('click','.common-search-title .choice-input', function(){
                 _this.el.find('.common-search-title .choice-input').removeClass('active');
                 $(this).addClass('active')
-            })
-            this.hideLoading()
+            });
+            this.hideLoading();
             this.actions.setConditionHeight()
         }
     },
     afterRender: function() {
-        this.showLoading()
+        this.showLoading();
         PMAPI.getIframeParams(window.config.key).then((res) => {
             for (let item in res.data.d) {
                 this.data[item] = res.data.d[item]
@@ -608,7 +608,7 @@ let config = {
         })
     }
 
-}
+};
 class expertSearch extends Component {
     constructor(data,newConfig){
         super($.extend(true,{},config,newConfig,{data:data||{}}));

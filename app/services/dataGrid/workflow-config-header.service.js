@@ -39,12 +39,14 @@ export const wchService = {
     ],
     headerFor2: [
         { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
-        { headerName: '操作', width: 120,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
+        { headerName: '操作', width: 150,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
             let data = param["data"];
             let html = '<div style="text-align:center;">' +
                 '<a href=javascript:void(0); class="ui-link" data-type="view">查看</a>' +
                 '<span> | </span>' +
-                '<a href=javascript:void(0); class="ui-link" data-type="cancel">取消</a> ';
+                '<a href=javascript:void(0); class="ui-link" data-type="cancel">取消</a> ' +
+                '<span> | </span>' +
+                '<a href=javascript:void(0); class="ui-link" data-type="urge">催办</a> ';
             if(data["record_status"] == 0 && data["edit_status"] == 0){
                 html += '<span> | </span><a href=javascript:void(0); class="ui-link" data-type="withdraw">撤回</a>';
             }else if(data["edit_status"] == 1){
@@ -92,7 +94,7 @@ export const wchService = {
                 "2":{color:"#FF0000",title:"非常紧急"},
                 "3":{color:"#FF9900",title:"紧急"},
                 "4":{color:"#00CC00",title:"一般"}
-            }
+            };
             let data = params.data;
             let color = data.emergency_degree ? obj[data.emergency_degree]["color"] : "";
             let title = data.emergency_degree ? obj[data.emergency_degree]["title"] : "";
@@ -118,4 +120,4 @@ export const wchService = {
             return '<div style="text-align:center;"></span><a href=javascript:void(0); class="ui-link" data-type="focusWorkflow">查看</a></div>';
         }}
     ]
-}
+};

@@ -291,8 +291,7 @@ export class EchartsService {
             linebarOption['yAxis'][0]['min'] = firstMin >= 0 && isZero ? 0 : firstMin;
             if (cellOption.double === 1) {
                 linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
-            };
-
+            }
             linebarOption['dataZoom']=[
                 {
                 type: 'slider',
@@ -411,8 +410,8 @@ export class EchartsService {
                         }
                     }
                 });
-                let max = Math.max.apply(null, y['data'])
-                let min = Math.min.apply(null, y['data'])
+                let max = Math.max.apply(null, y['data']);
+                let min = Math.min.apply(null, y['data']);
                 ymin.push(min);
                 ymax.push(max);
             });
@@ -543,7 +542,7 @@ export class EchartsService {
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
         console.log('================================');
-        console.log(data)
+        console.log(data);
         return stylzieOption;
     }
 

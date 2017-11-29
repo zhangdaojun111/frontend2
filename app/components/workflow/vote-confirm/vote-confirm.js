@@ -74,7 +74,7 @@ let VoteConfirm = {
 		value:''
 	},
 	afterRender() {
-		this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"))
+		this.data.style = $("<style></style>").text(this.data.css).appendTo($("head"));
 		let _this=this;
 		for(let key in this.data.nodeData){
 			if(key == ''){
@@ -85,7 +85,7 @@ let VoteConfirm = {
 		}
 		this.el.find('.radio').bind('click',function(){
 			_this.data.value=$(this).find('input').val();
-		})
+		});
 		this.el.find('.confirm').bind('click',()=>{
 			if(this.data.value){
 				PMAPI.sendToParent({
@@ -98,7 +98,7 @@ let VoteConfirm = {
 			}else{
 				alert('请投票');
 			}
-		})
+		});
 		this.el.find('.cancel').bind('click',()=>{
 			PMAPI.sendToParent({
 				type: PMENUM.close_dialog,
@@ -108,5 +108,5 @@ let VoteConfirm = {
 	},
 	beforeDestory() {
 	}
-}
+};
 export default VoteConfirm

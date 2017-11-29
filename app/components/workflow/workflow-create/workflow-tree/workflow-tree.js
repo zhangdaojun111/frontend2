@@ -107,7 +107,7 @@ let config = {
                 }
             }
             this.data.treeArr.forEach((el,index)=> {
-                let obj = new Array();
+                let obj = [];
                 el.children.forEach((al,num)=>{
                     obj.push(al.label);
                     arr[index] = obj; 
@@ -116,12 +116,12 @@ let config = {
             });
 
             this.data.treeArr.forEach((el,index)=>{
-                let obj = new Array();
+                let obj = [];
                 el.children.forEach((al,num)=>{
                     obj.push(al.name_py);
                     str[index] = obj; 
                 })
-            })
+            });
 
             for(let i in arr){
                 c=i;
@@ -195,7 +195,7 @@ let config = {
                 let node = nodelist.eq(that.data.actNum);
                 let nodeup = nodelist.eq(that.data.actNum-1);
                 selectContent.scrollTop(contentTop+30);
-                node.addClass('child-back')
+                node.addClass('child-back');
                 nodeup.removeClass('child-back');
             }else if(keyNum == 13){
                 nodelist.eq(that.data.actNum).find('.J_child-item').click();
@@ -248,18 +248,18 @@ let config = {
        });
        this.el.on('keydown','.J_tree',function(event){
            that.actions.changeHelder(event,that);
-       })
+       });
        this.el.on('click','.J_child-item',(e)=>{
             this.actions.clickChild(e);
-       })
+       });
         this.el.on("click",'.J_search',(e)=>{
             e.stopPropagation();
-        })
+        });
        this.el.bind("input propertychange",'.J_search',(event)=>{
             this.actions.changeTree();
        })
     }
-}
+};
 
 class WorkFlowTree extends Component {
     // constructor(data){

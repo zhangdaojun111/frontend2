@@ -63,6 +63,33 @@ let config = {
 
     },
     binds: [
+        {
+            event:'click',
+            selector:'.views-btn-group .select-all',
+            callback: function () {
+                this.trigger('selectAllCanvas');
+                return false;
+
+            }
+        },
+        {
+            event:'click',
+            selector:'.views-btn-group .cancel-select',
+            callback: function () {
+                this.trigger('cancelSelectCanvas');
+                return false;
+
+            }
+        },
+        {
+            event:'click',
+            selector:'.views-btn-group .reverse-select',
+            callback: function () {
+                this.trigger('reverseSelectCanvas');
+                return false;
+
+            }
+        },
         { //保存画布块
             event: 'click',
             selector: '.views-btn-group .view-save-btn',

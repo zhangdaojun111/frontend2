@@ -9,7 +9,11 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
-import {PasswordInput} from "../components/util/passwordInput/password-input"
+import {PasswordInput} from "../components/util/passwordInput/password-input";
+
+import {starter} from '../lib/three/starter';
+
+
 
 function getLoginController() {
     let loginController = {
@@ -408,6 +412,21 @@ if( isNeedDownload === false){      //正常显示登录表单
     $(".need-download").show();
     let htmlDownload = '';
     htmlDownload += '<span class="download-prompt">'+prompt+'</span>'+'<a class="download-link">下载链接</a>';
-    $(".need-download").append(htmlDownload)
+
+    if(LoginService.currentSystem == 'win'){
+        htmlDownload +=
+        '<div class="install-introduce">'+
+            '<p>Windows版安装更新说明：</p>'+
+            '<p>1.点击下载链接，下载最新版chrome浏览器。</p>'+
+            '<p> 2.点击下载完成的安装包，按步骤安装。</p>'+
+            '<p>3.在控制面板中选择【程序与功能】，手动将电脑中低版本的chrome卸载。</p>'+
+            '<p>4.成功登陆ERDS系统。</p>'
+        '</div>'
+    }
+    $(".need-download").append(htmlDownload);
     $(".download-link").attr('href',downLoadLink)
 }
+
+
+starter.init();
+starter.animate();

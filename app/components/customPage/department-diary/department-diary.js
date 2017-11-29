@@ -64,7 +64,7 @@ let config = {
         getDepartmentData: function () {
             HTTP.getImmediately('/get_department_tree/', {type: 'ribao'}).then((res) => {
                 this.data.userData = res.data.department2user;
-                this.data.departmentData = formatTreeData(res.data.department_tree)
+                this.data.departmentData = formatTreeData(res.data.department_tree);
                 this.actions.initTree();
                 this.actions.initChoosedUsers();
             });
@@ -147,7 +147,7 @@ let config = {
         }, 500),
         //获取部门提报搜索field
         getDiarySearchField: function (d) {
-            console.log( '填写人字段：' + d )
+            console.log( '填写人字段：' + d );
             this.data.searchField = d;
         },
         //设置搜索参数
@@ -161,8 +161,8 @@ let config = {
             for( let u of users ){
                 filter.push(u.name)
             }
-            let obj = {}
-            obj[That.data.searchField] = {'$in':filter}
+            let obj = {};
+            obj[That.data.searchField] = {'$in':filter};
             That.dataGrid.data.departmentFilter = obj;
             That.dataGrid.actions.getGridData( true );
         },1000 ),
@@ -172,7 +172,7 @@ let config = {
             setTimeout( ()=>{
                 this.el.find( '.diary-user' ).eq(0).animate( { 'left':this.data.tabOpen ? '0px' : '-470px' } );
                 this.el.find( '.calc-user' )[0].className = this.data.tabOpen ? 'calc-user icon-aggrid-shouhui':'calc-user icon-aggrid-quxiao';
-            },this.data.tabOpen ? 0 : 200 )
+            },this.data.tabOpen ? 0 : 200 );
             setTimeout( ()=>{
                 this.el.find( '.diary-grid' )[0].style.width = this.data.tabOpen ? 'calc(100% - 500px)':' calc(100% - 30px)';
             },this.data.tabOpen ? 200 : 0 )
@@ -199,8 +199,8 @@ let config = {
                     departmentDiary: true,
                     getDiarySearchField: this.actions.getDiarySearchField,
                     cacheData: false
-                }
-                this.dataGrid = new dataTableAgGrid(json)
+                };
+                this.dataGrid = new dataTableAgGrid(json);
                 this.append(this.dataGrid, this.el.find('.diary-grid'));
                 this.actions.getDepartmentData();
             }else {
@@ -211,7 +211,7 @@ let config = {
             },700 )
         } )
     }
-}
+};
 class departmentDiary extends Component {
     constructor(data,newConfig){
         super($.extend(true,{},config,newConfig,{data:data||{}}));

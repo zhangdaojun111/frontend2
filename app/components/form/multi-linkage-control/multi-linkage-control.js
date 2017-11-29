@@ -40,6 +40,7 @@ let config={
 
         //改变值
         changeValue(data,index){
+        	let _this=this;
             for (let i=0;i<this.data.index;i++){
                 let d={};
                 if(this.data.hasChoose.has(i)){
