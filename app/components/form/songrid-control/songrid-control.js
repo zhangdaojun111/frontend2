@@ -40,8 +40,9 @@ let config={
             tableId:this.data.value,
             parentTableId:this.data.parent_table_id,
             rowId:this.data.parent_temp_id || '',
-            recordId:this.data.parent_record_id || '',
+            recordId:this.data.recordId || '',
             parentRealId:this.data.parent_real_id || '',
+            parentRecordId:this.data.parent_record_id || '',
             parentTempId:this.data.parent_temp_id || '',
             tableType:'child',
             viewMode:this.data.is_view==0?'EditChild':'ViewChild',
@@ -49,6 +50,9 @@ let config={
             parent_btnType: window.config.btnType,
             form_songrid: 1,
         };
+        if(window.location.href.indexOf('btnType=view' !=-1)){
+            config['parent_btnType'] = 'none';
+        }
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.songGrid'));
         Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
