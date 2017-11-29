@@ -63,7 +63,9 @@ let config={
                 }else {
                     this.el.find('#requiredLogo').removeClass().addClass('required2');
                 }
-                this.events.emitDataIfInline(this.data);
+                setTimeout(()=>{
+                    this.events.emitDataIfInline(this.data);
+                },500)
             }
         })
 
