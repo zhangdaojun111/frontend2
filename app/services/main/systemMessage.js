@@ -144,16 +144,7 @@ export const systemMessageService = {
                 suppressMenu: true,
                 tooltipField: 'msg_content',
                 suppressSorting:true,
-                cellStyle: {'text-align': 'center'},
-                cellRenderer: (param)=>{
-                    if(param.data.wf_urgency_level == 2){
-                        return '<div style="color: #FC0017;">'+ param.value +'</div>'
-                    }else if(param.data.wf_urgency_level == 1){
-                        return '<div style="color: yellow;">'+ param.value +'</div>'
-                    }else {
-                        return '<div>'+ param.value +'</div>'
-                    }
-                }
+                cellStyle: {'text-align': 'center'}
             }, {
                 width:160,
                 headerName: '发布时间',
