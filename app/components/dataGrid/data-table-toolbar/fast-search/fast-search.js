@@ -4,6 +4,9 @@
 
 import Component from "../../../../lib/component";
 import template from './fast-search.html';
+import DateTimeControl from "../../../form/datetime-control/datetime-control";
+import DateControl from "../grid-data-control/grid-data-control";
+import TimeControl from "../../../form/time-control/time-control";
 import msgBox from '../../../../lib/msgbox';
 import './fast-search.scss';
 let config = {
@@ -48,12 +51,24 @@ let config = {
                 },
                 relation:'$and'
             }
-            if(this.el.find('.fast-search-box-input').attr('title') == 'number') {
-                obj['cond']['keyword'] = parseInt(this.el.find('.fast-search-input').val());
+            if(this.el.find('.fast-search-box-input').attr('search-type') == 'number') {
+                obj['cond']['keyword'] = Number(this.el.find('.fast-search-input').val());
+                obj['cond']['operate'] = this.el.find('.fast-search-select.relation').val()
+            } else if(this.el.find('.fast-search-box-input').attr('search-type') == 'date') {
+                obj['cond']['keyword'] = $.trim(this.el.find('.fast-search-input').val());
+                obj['cond']['operate'] = this.el.find('.fast-search-select.relation').val()
             } else {
-                obj['cond']['keyword'] = this.el.find('.fast-search-input').val();
+                if(this.el.find('.fast-search-select.relation').val() == 'nor') {
+                    let keyword = this.el.find('.fast-search-input').val();
+                    obj['cond']['operate'] = '$regex';
+                    obj['cond']['keyword'] = `^((?!${keyword}).)*$`;
+                }
+                else {
+                    obj['cond']['keyword'] = this.el.find('.fast-search-input').val();
+                    obj['cond']['operate'] = obj['cond']['operate'] = this.el.find('.fast-search-select.relation').val();
+                }
             }
-            obj['cond']['operate'] = this.el.find('.fast-search-select.relation').val()
+
             obj['cond']['searchBy'] = this.el.find('.fast-search-box-input').attr('name');
             obj['cond']['searchByName'] = this.el.find('.fast-search-box-input').val();
             obj['cond']['searchByNew'] = this.el.find('.fast-search-box-input').attr('name');
@@ -72,28 +87,51 @@ let config = {
                 this.data.fastSearchData(this.data.searchInputList);
             }
         },
-        setInputObject: function(object,nextObject) {
-            this.inputObject = object;
-            this.inputNextObject = nextObject;
-        },
+        // setInputObject: function(object,nextObject) {
+        //     this.inputObject = object;
+        //     this.inputNextObject = nextObject;
+        // },
         setInputValue: function(value,name,type) {
             this.el.find('.fast-search-box-input').val(value);
             this.el.find('.fast-search-box-input').attr('name',name);
-            this.el.find('.fast-search-box-input').attr('title',type);
+            this.el.find('.fast-search-box-input').attr('search-type',type);
         },
         setInputType: function(type) {
-            let inputType;
             switch (type) {
-                case "datetime": inputType = 'datetime-local'; break;
-                case "text": inputType = 'text'; break;
-                case "number": inputType = 'number'; break;
-                case "person": inputType = 'text'; break;
+                case "datetime":
+                    // inputType = 'datetime-local'; break;
+                    this.el.find('.fast-search-input').remove();
+                    let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    dateTimeControl.render(this.el.find('.fast-search-value'));
+                    break;
+                case "date":
+                    // inputType = 'datetime-local'; break;
+                    this.el.find('.fast-search-input').remove();
+                    let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    dateControl.render(this.el.find('.fast-search-value'));
+                    break;
+                case "time":
+                    // inputType = 'datetime-local'; break;
+                    this.el.find('.fast-search-input').remove();
+                    let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    timeControl.render(this.el.find('.fast-search-value'));
+                    break;
+                case "text":
+                    this.el.find('.fast-search-value').html(`<input class="fast-search-input" type="text">`);
+                    break;
+                case "number":
+                    this.el.find('.fast-search-value').html(`<input class="fast-search-input" type="number">`);
+                    // inputType = 'number';
+                    break;
+                case "person":
+                    this.el.find('.fast-search-value').html(`<input class="fast-search-input" type="text">`)
+                    // inputType = 'text';
+                    break;
             }
-            this.el.find('.fast-search-input').attr("type",inputType);
-            this.el.find('.fast-search-input').attr("title",type);
         },
         setSelectValue: function(type) {
             let optionHtmlOne = `<option value="$regex">包含</option>
+                                <option value="nor">不包含</option>
                                 <option value="exact">等于</option>
                                 <option value="$ne">不等于</option>`,
                 optionHtmlTwo = `<option value="$regex">包含</option>
