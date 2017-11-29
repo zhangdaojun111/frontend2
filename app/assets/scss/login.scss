@@ -185,6 +185,14 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                         margin-top: 30px;
                         .verify-control {
                             width: 105px;
+                            position: relative;
+                            top: -15px;
+                        }
+                        #verify-container{
+                            display: inline-block;
+                            height: 40px;
+                            margin-left: 20px;
+                            width: 160px;
                         }
                     }
                     .ps-group {
