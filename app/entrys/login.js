@@ -403,10 +403,10 @@ function resetBackground(result) {
     let backgroundSrc = result.client_login_params && result.client_login_params.back_ground.login_back_ground;
     let coverSrc = result.client_login_params && result.client_login_params.back_ground.login_cover_on;
     if (backgroundSrc) {
-        $('.wave-bg').css('background-image', backgroundSrc);
+        $('.wave-bg').css('background-image', `url(${backgroundSrc})`);
     }
     if (coverSrc) {
-        $('.login-main-window').css('background-image', coverSrc);
+        $('.login-main-window').css('background-image', `url(${coverSrc})`);
     }
 }
 
