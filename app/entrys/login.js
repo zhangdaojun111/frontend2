@@ -357,6 +357,7 @@ function getLoginController() {
                     $(window).attr('location',that.nextUrl);
                 }else if(result.success === 0){
                     $(".warn-info").html(result['error']).show();
+                    $('.verify-group').show();
                 }
             }).fail((err) => {
                 console.log("登录失败",err.statusText);
@@ -409,7 +410,6 @@ function resetLoginBoxInfo(result) {
             height: "40",
         }
         controller.verifyCode = new verify(obj);
-        $('.verify-group').show();
     }
     controller.versionInfo = result;
     controller.sysNameInit();   //初始化公司名称
