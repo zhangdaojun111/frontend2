@@ -19,16 +19,20 @@
         position: relative;
         .choose-department-tree {
             padding: 15px;
-            padding-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #E4E4E4;
+            height: calc(100% - 60px);
+            .search-in-tree-box{
+                width: 200px;
+            }
+            #tree1{
+                overflow: scroll;
+                height: calc(100% - 89px);
+            }
             .list-group-item {
                 cursor: pointer;
                 padding: 5px 5px 5px 5px;
             }
-            padding-top: 30px;
-            border-top: 1px solid #E4E4E4;
-            height: calc(100% - 60px);
-            //overflow: visible;
-            overflow-y: auto;
         }
         .tips {
             height: 50px;

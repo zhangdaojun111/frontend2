@@ -150,6 +150,7 @@ let config = {
 
 		//给子表统计赋值
 		async setCountData() {
+    		MSG.showLoadingSelf();
 			let res = await FormService.getCountData({
 				//传给后台当前表单所有控件的值
 				data: JSON.stringify(this.actions.createFormValue(this.data.data)),
@@ -162,6 +163,7 @@ let config = {
 				this.actions.setFormValue(d, res["data"][d]);
                 // this.actions.triggerSingleControl(d);
 			}
+    		MSG.hideLoadingSelf();
 		},
 
 		//给外部提供formValue格式数据
@@ -433,6 +435,7 @@ let config = {
 					base_field_2_value: JSON.stringify(this.data.baseIdsLocalDict),
 					temp_id: this.data.data.temp_id["value"]
 				};
+                MSG.showLoadingSelf();
 				let res = await FormService.getDefaultValue(json);
 				for (let key in res["data"]) {
 					//排除例外字段
@@ -475,6 +478,7 @@ let config = {
 						}
 					}
 				}
+                MSG.hideLoadingSelf();
 			}
 		},
 
