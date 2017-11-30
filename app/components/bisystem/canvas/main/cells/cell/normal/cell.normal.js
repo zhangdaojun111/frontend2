@@ -274,7 +274,6 @@ let config = {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             this.normalChart.myChart.resize();
         });
-
         // 返回下穿数据(上一层)
         Mediator.subscribe(`bi:deep${this.componentId}:cell`, (data) => {
             this.actions.CanvasDeep(this.data.xAxis[this.data.floor], false);
