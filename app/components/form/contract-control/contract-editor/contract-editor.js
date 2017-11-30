@@ -145,6 +145,7 @@ export const contractEditorConfig = {
             event: 'click',
             selector: '.save_n_close',
             callback: function () {
+                Storage.init(this.data.iframe_key);
                 Storage.setItem(this.data.local_data,'contractCache-'+this.data.real_id+'-'+this.data.id+'-'+this.data.temp_id+'-'+this.data.field_id,Storage.SECTION.FORM);
                 //删除local_data中的合同信息，此数据不跟随data上传
                 for (let data of this.data.local_data) {
@@ -189,6 +190,7 @@ export const contractEditorConfig = {
                     this.actions.loadButtons(this.data['current_tab']);
                     this.data.local_data[this.data['current_tab']].k2v = this.data.editingK2v;
                     //将修改缓存到本地，如果需要编辑即保存，将下一行放到editContract的input事件回调中
+                    Storage.init(this.data.iframe_key);
                     Storage.setItem(this.data.local_data,'contractCache-'+this.data.real_id+'-'+this.data.id+'-'+this.data.temp_id+'-'+this.data.field_id,Storage.SECTION.FORM);
                 }
             }
@@ -211,7 +213,7 @@ export const contractEditorConfig = {
                 if (currentIndex == -1) {
                     this.actions.addTab();
                 } else {
-                    this.actions._loadTemplateByIndex(currentIndex,true,true);
+                    this.actions._loadTemplateByIndex(currentIndex,true,false);
                 }
             }
         }
@@ -485,6 +487,7 @@ export const contractEditorConfig = {
             field_id: this.data.id,
             temp_id: this.data.temp_id
         };
+        Storage.init(this.data.iframe_key);
         this.data.local_data = Storage.getItem('contractCache-'+this.data.real_id+'-'+this.data.id+'-'+this.data.temp_id+'-'+this.data.field_id,Storage.SECTION.FORM);
         this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value));
         // this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
@@ -496,7 +499,7 @@ export const contractEditorConfig = {
                     this.data.local_data = [];
                     this.actions.addTab();
                 }
-                this.actions._loadTemplateByIndex(0,true,true);
+                this.actions._loadTemplateByIndex(0,true,false);
             }
         });
 
@@ -508,7 +511,7 @@ export const contractEditorConfig = {
             this.actions.initButtonStates(i);
             this.actions.loadButtons(0);
             tabEle.on('click', ()=>{
-                this.actions.loadTab(i,true,true);
+                this.actions.loadTab(i,true,false);
             })
         }
 
