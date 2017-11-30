@@ -107,6 +107,7 @@
         padding-left: 15px;
         .dataGrid-commonQuery-select {
             //box-shadow: 0 0 2px 2px #327ed3;
+            position: relative;
             background-color: #333;
             background-image:  url("../../../../assets/images/dataGrid/icon_xiala_white.png");
             background-repeat: no-repeat;
@@ -119,8 +120,10 @@
             color: #fff;
             float: left;
             width: 115px;
+            box-sizing: border-box;
             font-size: 12px;
             height: 25px;
+            line-height: 25px;
             display: inline-block;
             outline: none;
             //box-shadow: none;
@@ -128,6 +131,31 @@
             -moz-appearance: none;
             -webkit-appearance: none;
             background-position: 90px;
+
+            .dataGrid-commonQuery-ul {
+                display: none;
+                z-index: 9;
+                position: absolute;
+                height: auto;
+                width: 115px;
+                background: #333;
+                top: 24px;
+                left: -1px;
+                border: 1px solid #333;
+                box-sizing: border-box;
+                li{
+                    padding-left: 12px;
+                    box-sizing: border-box;
+                }
+                .active {
+                    background: #fff!important;
+                    color:#333!important;
+                }
+                .remove{
+                    background: transparent;
+                    color:#fff;
+                }
+            }
         }
     }
     .dataGrid-btn-group {

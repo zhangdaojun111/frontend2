@@ -9,8 +9,9 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import {LoginService} from '../services/login/loginService';
 import {md5} from '../services/login/md5';
 import msgBox from '../lib/msgbox';
-import {PasswordInput} from "../components/util/passwordInput/password-input";
 
+import {PasswordInput} from "../components/util/passwordInput/password-input";
+import {verify} from'../lib/verify';
 import {starter} from '../lib/three/starter';
 
 
@@ -26,7 +27,7 @@ function getLoginController() {
         isOpposite:false,       //记录页面状态
         versionBtnOpen:1,       //是否可以查看更新信息
         registerBtnOpen:1,      //是否可以使用注册功能
-
+        verifyCode:null,        //验证码组件
         $loginMainTitle:$('.login-main-title'),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
         $rememberPwCheck:$('.remember-pw-check'),   //记住密码
@@ -34,10 +35,11 @@ function getLoginController() {
         $closeUpdateGroup:$('.shadow-box-close'),  //隐藏更新信息logo
         $versionTable:$('#shadow-box'),          //版本信息显示表格
         $loginBtn:$('button.login-btn'),            //登录按钮
-        $registerBtn:$('div.register-btn'),         //注册按钮
+        $registerBtn:$('a.register-btn'),          //注册按钮
         $findPwBtn:$('.find-pw-group'),             //忘记密码
         $closeIcon:$('.close-icon'),                //找回密码面板关闭按钮
         $usernameInput:$('input[name=username]'),   //用户名输入框
+        $verifyInput:$('input[name=verify]'),   //用户名输入框
         // $passwordInput:$('input[name=password]'),   //密码输入框
         $whitePanel:$('.white-panel'),              //正面面板
         $oppositePanel:$('.opposite-panel'),        //反面面板
@@ -61,6 +63,8 @@ function getLoginController() {
             this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
             this.passwordInputComp.render($wrap);
             $('.login-content').show();
+
+            this.verifyCode = new verify('verify-container');
             //系统名称改变
             this.$loginMainTitle.on('change', () => {
                 this.systemName = this.$loginMainTitle.val();
@@ -99,7 +103,7 @@ function getLoginController() {
             this.$loginBtn.on('click', _.debounce(() => {
                 // console.log(this.username_value,this.password_value,);
                 // this.password_value = this.passwordInputComp.data.password_value;
-                this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
+                this.userLogin(this.username_value,this.password_value,this.$verifyInput.val());   //根据用户名和密码登录
             },300));
 
             /**
@@ -173,12 +177,12 @@ function getLoginController() {
                 if(event.keyCode === 13){
                     console.log('abc');
                     if(this.isOpposite === false){
-                        this.userLogin(this.username_value,this.password_value);   //根据用户名和密码登录
+                        this.userLogin(this.username_value,this.password_value,this.$verifyInput.val());   //根据用户名和密码登录
                     }else{
                         this.$submitFindPw.click();
                     }
                 }
-            },300))
+            },300));
         },
 
         /**
@@ -319,9 +323,14 @@ function getLoginController() {
         /**
          * 用户登录
          */
-        userLogin:function (username,password) {
+        userLogin:function (username,password,verify) {
             if(password === ''){
                 $(".warn-info").html('密码不能为空');
+                return;
+            }
+            let res = this.verifyCode.validate(verify)
+            if(!res) {
+                $(".warn-info").html('验证码错误');
                 return;
             }
             let data = {
@@ -380,30 +389,52 @@ let controller = getLoginController();
 controller.formInit();  //初始化表单控件
 controller.getNextUrl();       //根据url判断是否跳转页面
  let isNeedDownload = controller.browser_check();     //暂时屏蔽
-//let isNeedDownload = false;
+
+function resetLoginBoxInfo(result) {
+    if(result.use_register && result.use_register.toString() === "1"){
+        $('.register-btn').show();
+    }
+    if(result.sap_login_system_version && result.sap_login_system_version.toString() === "1"){
+        $('.update-btn').show();
+    }
+    if(result.show_publish_link && result.show_publish_link.toString() === "1"){
+        $('.self-service-update').show();
+    }
+    controller.versionInfo = result;
+    controller.sysNameInit();   //初始化公司名称
+    controller.versionInit();   //初始化版本table
+}
+
+function resetBackground(result) {
+    console.log(result);
+    let backgroundSrc = result.client_login_params && result.client_login_params.back_ground.login_back_ground;
+    let coverSrc = result.client_login_params && result.client_login_params.back_ground.login_cover_on;
+    if (backgroundSrc) {
+        $('.wave-bg').css('background-image', `url(${backgroundSrc})`);
+    }
+    if (coverSrc) {
+        $('.login-main-window').css('background-image', `url(${coverSrc})`);
+    }
+}
+
 if( isNeedDownload === false){      //正常显示登录表单
     controller.infoInit();  //初始化最近访问用户和密码
-    LoginService.getVersionInfo().done((result) => {
-        if(result.success === 1){
-            if(result.use_register && result.use_register.toString() === "0"){
-                $('.register-btn').hide();
+    let result = window.config && window.config.revision_info;
+    if (result) {
+        resetLoginBoxInfo(result);
+        resetBackground(result);
+    } else {
+        LoginService.getVersionInfo().done((result) => {
+            if(result.success === 1){
+                resetLoginBoxInfo(result);
+                resetBackground(result);
+            }else{
+                console.log("版本数据获取失败");
             }
-            if(result.sap_login_system_version && result.sap_login_system_version.toString() === "0"){
-                $('.update-btn').hide();
-            }
-            if(result.show_publish_link && result.show_publish_link.toString() === "0"){
-                $('.self-service-update').hide();
-            }
-
-            controller.versionInfo = result;
-            controller.sysNameInit();   //初始化公司名称
-            controller.versionInit();   //初始化版本table
-        }else{
-            console.log("版本数据获取失败");
-        }
-    }).fail((err) => {
-        console.log("get version info fail", err.statusText);
-    });
+        }).fail((err) => {
+            console.log("get version info fail", err.statusText);
+        });
+    }
 }else{
     //显示浏览器下载提示,隐藏其余部分
     let prompt = LoginService.prompt;
@@ -427,6 +458,8 @@ if( isNeedDownload === false){      //正常显示登录表单
     $(".download-link").attr('href',downLoadLink)
 }
 
-
-starter.init();
-starter.animate();
+// 延时处理动画，会阻塞dom操作
+window.setTimeout(function () {
+    starter.init();
+    starter.animate();
+}, 500);
