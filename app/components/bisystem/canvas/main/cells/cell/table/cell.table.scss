@@ -43,6 +43,9 @@ $font-color: #e4e4e4;
                         color:#2298f4;
                         text-decoration:none;
                     }
+                    &.table-operate {
+                        white-space: nowrap;
+                    }
                 }
             }
         }
