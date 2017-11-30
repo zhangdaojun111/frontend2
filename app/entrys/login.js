@@ -64,7 +64,7 @@ function getLoginController() {
             this.passwordInputComp.render($wrap);
             $('.login-content').show();
 
-            this.verifyCode = new verify('verify-container');
+
             //系统名称改变
             this.$loginMainTitle.on('change', () => {
                 this.systemName = this.$loginMainTitle.val();
@@ -328,10 +328,12 @@ function getLoginController() {
                 $(".warn-info").html('密码不能为空');
                 return;
             }
-            let res = this.verifyCode.validate(verify)
-            if(!res) {
-                $(".warn-info").html('验证码错误');
-                return;
+            if(verify != '') {
+                let res = this.verifyCode.validate(verify)
+                if(!res) {
+                    $(".warn-info").html('验证码错误');
+                    return;
+                }
             }
             let data = {
                 username:username,
@@ -403,7 +405,10 @@ if( isNeedDownload === false){      //正常显示登录表单
             if(result.show_publish_link && result.show_publish_link.toString() === "0"){
                 $('.self-service-update').hide();
             }
-
+            if(result.verify_code && result.verify_code.toString() === '1') {
+                $('.verify-group').show()
+                controller.verifyCode = new verify('verify-container');
+            }
             controller.versionInfo = result;
             controller.sysNameInit();   //初始化公司名称
             controller.versionInit();   //初始化版本table
