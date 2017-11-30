@@ -36,7 +36,7 @@ let config = {
                 title:title
             }).then(res=>{
                 if(res.onlyclose){
-                    Storage.init((new URL(document.URL)).searchParams.get('key'));
+                    Storage.init(window.config.key);
                     let obj = Storage.getItem('contractCache-'+this.data.id,Storage.SECTION.FORM);
                     if(obj == undefined){
                         return;
