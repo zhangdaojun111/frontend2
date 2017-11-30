@@ -161,6 +161,7 @@ let config = {
         HTTP.flush();
     }
 };
+
 export class CellTableComponent extends CellBaseComponent {
     // constructor(cellChart) {
     //     config.data.chart = cellChart['chart'] ? cellChart['chart'] : null;
