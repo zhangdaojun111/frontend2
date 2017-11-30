@@ -43,12 +43,11 @@ let config = {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
                 }
-
                 let res = await ChartFormService.getChartField(table.id);
                 if (res['success'] === 1){
-                    this.actions.loadColumns(res['data']);
+                    this.actions.loadColumns(res['data']['x_field']);
                 } else {
-                    msgbox.alert(res['error']);
+                    msgbox.alert(res['error'])
                 }
             } else {
                 this.actions.loadColumns(table);
@@ -113,7 +112,47 @@ let config = {
             this.formItems['countNum'].setValue(chart['countNum']);
             this.formItems['single'].setValue(chart['single']);
             this.formItems['columnNum'].setValue(chart['columnNum']);
-        }
+        },
+        /**
+         * 保存图表数据
+         */
+        async saveChart() {
+            let data = this.getData();
+            let chart = {
+                assortment: 'table',
+                chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
+                countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
+                columns:data.columns,
+                icon: data.icon || '',
+                source: data.source || '',
+                theme: data.theme || '',
+                filter: data.filter.filter || '',
+                filter_source: data.filter.filter_source || '',
+                countNum: data.countNum || '',
+                single:data.single[0] ? data.single[0]: 0,
+                singleColumnWidthList:[],
+                sort: data.sort || '',
+                sortColumns:data.sortColumns ? [data.sortColumns] : [],
+                alignment:data.alignment,
+                columnNum:data.columnNum
+            };
+            let pass = true; // 判断表单是否验证通过
+            for (let key of Object.keys(this.formItems)) {
+                if (this.formItems[key].data.rules) {
+                    if(window.config.query_mark !== 'single' && key=='countColumn'){
+                        continue;
+                    }
+                    let isValid = this.formItems[key].valid();
+                    if (!isValid) {
+                        pass = false;
+                    }
+                }
+            }
+
+            if(pass) {
+                this.save(chart);
+            }
+        },
     },
     data: {
         options: [
@@ -203,6 +242,28 @@ let config = {
                 type: 'choosed'
             },
             {
+                label: '需要显示多少列',
+                name: 'columnNum',
+                defaultValue: '1',
+                placeholder: '请输入默认显示单行为多少列',
+                type: 'text',
+                rules: [
+                    {
+                        errorMsg: '显示多少列数必须是大于0的整数',
+                        type: 'positiveInteger'
+                    }
+                ],
+                category: 'number',
+                events: {
+                    onChange: _.debounce(function(value) {
+                        let columnNum = parseInt(value);
+                        if (columnNum !== NaN) {
+                            this.formItems['table_single'].actions.setColumns(this.formItems['choosed'].data.list, columnNum);
+                        }
+                    },100)
+                }
+            },
+            {
                 label: '默认排序',
                 name: 'sort',
                 defaultValue: '-1',
@@ -218,6 +279,38 @@ let config = {
                 defaultValue: '',
                 type: 'autocomplete',
                 placeholder: '选择排序字段（非必选）'
+            },
+            {
+                label: '',
+                name: 'table_single',
+                defaultValue: '',
+                type: 'table_single',
+                events: {}
+            },
+            {
+                label: '',
+                name: 'single',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '是否显示为单行'
+                    }
+                ],
+                type: 'checkbox',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['columnNum'].el.show();
+                            this.formItems['countNum'].el.hide();
+                            this.formItems['table_single'].el.show();
+
+                        } else {
+                            this.formItems['columnNum'].el.hide();
+                            this.formItems['countNum'].el.show();
+                            this.formItems['table_single'].el.hide();
+                        }
+                    }
+                }
             },
             {
                 label: '',
