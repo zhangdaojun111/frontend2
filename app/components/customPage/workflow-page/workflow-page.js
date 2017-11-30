@@ -253,7 +253,7 @@ let config = {
             if (param.data.wf_urgency_level == 2) {
                 return {background: '#FFB5C5'};
             } else if (param.data.wf_urgency_level == 1) {
-                return {background: '#FFB5C5'};
+                return {background: '#FCF5A5'};
             }
         },
         //返回选择数据
