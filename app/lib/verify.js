@@ -23,8 +23,8 @@ class verify {
         this.options = { //默认options参数值
             id: "", //容器Id
             canvasId: "verifyCanvas", //canvas的ID
-            width: "100", //默认canvas宽度
-            height: "30", //默认canvas高度
+            width: "160", //默认canvas宽度
+            height: "40", //默认canvas高度
             type: "blend", //图形验证码默认类型blend:数字字母混合类型、number:纯数字、letter:纯字母
             code: ""
         }
@@ -48,8 +48,8 @@ class verify {
     _init() {
         let con = document.getElementById(this.options.id);
         let canvas = document.createElement("canvas");
-        this.options.width = con.offsetWidth > 0 ? con.offsetWidth : "100";
-        this.options.height = con.offsetHeight > 0 ? con.offsetHeight : "30";
+        this.options.width = con.offsetWidth > 0 ? con.offsetWidth : "160";
+        this.options.height = con.offsetHeight > 0 ? con.offsetHeight : "40";
         canvas.id = this.options.canvasId;
         canvas.width = this.options.width;
         canvas.height = this.options.height;
