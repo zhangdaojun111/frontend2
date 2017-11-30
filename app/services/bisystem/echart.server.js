@@ -323,26 +323,8 @@ export class EchartsService {
 
         //最后一条数据必显示
         if(cellOption.data.xAxis){
-            linebarOption['xAxis'][0]['axisLabel']['interval'] = (index,value)=> {
-                if (index === 0 || index === cellOption.data.xAxis.length - 1) {
-                    console.log(index,true);
-                    return true;
-                }
-                let tagNum = Math.floor((cellChart.cell.size['width'] - 140) / 90) + 1;
-
-                if(tagNum > 2){
-                    let interval = cellOption.data.xAxis.length / (tagNum - 1);
-                    if(interval <= 1){
-                        interval = 1;
-                    }else{
-                        interval = Math.max(Math.floor(interval),2);
-                    }
-                    if(index % interval === 0){
-                        console.log(index,cellOption.data.xAxis.length - index,interval * 0.7,cellOption.data.xAxis.length - index > interval * 0.7);
-                    }
-                    return (index % interval === 0) && (cellOption.data.xAxis.length - index - 1 > interval * 0.7);
-                }
-            }
+            linebarOption['xAxis'][0]['axisLabel']['showMaxLabel'] = true;
+            linebarOption['xAxis'][0]['axisLabel']['showMinLabel'] = true;
         }
         return linebarOption;
     }
