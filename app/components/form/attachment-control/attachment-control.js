@@ -107,7 +107,17 @@ let config = {
                     return;
                 }
                 //初始化清空一下缓存
-                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                //支持低版本的chrome
+                if((new URL(document.URL)).searchParams!=undefined){
+                    Storage.init((new URL(document.URL)).searchParams.get('key'));
+                } else {
+                    let params = (new URL(document.URL)).search.split("&");
+                    params.forEach((param)=>{
+                        if(param.indexOf('key')!=-1){
+                            Storage.init(param.replace('key=',''));
+                        }
+                    })
+                }
                 Storage.deleteItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
                 FormService.getAttachment({
                     file_ids:JSON.stringify(this.data.value),

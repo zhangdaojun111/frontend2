@@ -87,9 +87,17 @@ let ViewVideo = {
                     video.pause();
                 }
                 deletedFiles.push(fileId);
-                Storage.init((new URL(document.URL)).searchParams.get('key'));
+                if((new URL(document.URL)).searchParams!=undefined){
+                    Storage.init((new URL(document.URL)).searchParams.get('key'));
+                } else {
+                    let params = (new URL(document.URL)).search.split("&");
+                    params.forEach((param)=>{
+                        if(param.indexOf('key')!=-1){
+                            Storage.init(param.replace('key=',''));
+                        }
+                    })
+                }
                 Storage.setItem(deletedFiles,'deletedItem-'+this.data.control_id,Storage.SECTION.FORM);
-
             }
         }
     ],
