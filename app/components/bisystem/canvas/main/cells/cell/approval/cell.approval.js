@@ -48,8 +48,8 @@ let config = {
                 flow_id: data["flow_id"],
                 table_id: data["table_id"]
             };
-            let winTitle = '查看工作';
-            obj['btnType'] = 'view';
+            let winTitle = '审批工作';
+            obj['btnType'] = 'edit';
             let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
             this.actions.openSourceDataGrid( url,winTitle );
         },
