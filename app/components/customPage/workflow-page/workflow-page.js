@@ -251,9 +251,9 @@ let config = {
         //渲染颜色
         setRowStyle: function (param) {
             if (param.data.wf_urgency_level == 2) {
-                return {background: '#FFB5C5'};
-            } else if (param.data.wf_urgency_level == 1) {
                 return {background: '#FCF5A5'};
+            } else if (param.data.wf_urgency_level == 1) {
+                return {background: '#FFB5C5'};
             }
         },
         //返回选择数据
@@ -788,7 +788,7 @@ let config = {
                 }
                 let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                 this.actions.openSourceDataGrid( url,winTitle );
-                if($event.data.wf_urgency_level == 2){
+                if($event.data.wf_urgency_level == 1){
                     msgbox.alert('催办消息：' + ($event.data.urge_info||''));
                 }
             }

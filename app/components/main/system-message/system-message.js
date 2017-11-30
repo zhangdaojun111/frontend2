@@ -221,9 +221,9 @@ let config = {
         //渲染颜色
         setRowStyle: function (param) {
             if (param.data.wf_urgency_level == 2) {
-                return {background: '#FFB5C5'};
-            } else if (param.data.wf_urgency_level == 1) {
                 return {background: '#FCF5A5'};
+            } else if (param.data.wf_urgency_level == 1) {
+                return {background: '#FFB5C5'};
             }
         },
         /**
@@ -290,7 +290,7 @@ let config = {
                 }
                 this.actions._postReadData(JSON.stringify([data.id]));
             }
-            if($event.data.wf_urgency_level == 2){
+            if($event.data.wf_urgency_level == 1){
                 msgbox.alert('催办消息：' + ($event.data.urge_info||''));
             }
         },
