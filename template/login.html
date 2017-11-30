@@ -9,6 +9,11 @@
     <!--{% else %}-->
     <!--<link rel="stylesheet" href=" {{ "/client/static/css/login.css"|version }}">-->
     <!--{% endifequal %}-->
+
+    <script>
+        window.config = {{window_config|safe}}
+    </script>
+
 </head>
 
 <body>
@@ -23,6 +28,7 @@
                 <span class="cn-name">企业管理平台</span>
             </p>
             <p class="header-button">
+                <a class="register-btn">注册</a>
                 <a class="update-btn">更新信息</a>
                 <a class="mobile-download-btn">移动下载</a>
             </p>
@@ -39,7 +45,7 @@
                 <div class="panel-header">
                     <span class="panel-title">用户登录</span>
                 </div>
-    
+
                 <h1 class="company-info"></h1>
                 <form class="login-form" onsubmit="return false">
                     <!--登录用户名和密码-->
@@ -52,6 +58,10 @@
                         <!--<input type="password" id="myPassword" class="form-control" placeholder="" name="password">-->
                         <div class="password-component"></div>
                     </div>
+                    <div class="verify-group">
+                        <input type="text" class="verify-control" placeholder="输入验证码"name="verify" autocomplete="off">
+                        <span id="verify-container"></span>
+                    </div>
                     <div class="pw-group-btu">
                         <div class="remember-pw-group">
                             <input type="checkbox" class="remember-pw-check" id="remember-pw">
@@ -63,7 +73,7 @@
                         </div>
                         <div style="clear: both"></div>
                     </div>
-    
+
                     <div class="warn-info"></div>
                     <!--更新信息、登录-->
                     <div class="panel-bottom clearfix">
@@ -71,13 +81,12 @@
                         <!--<i class="update-logo"></i>-->
                         <!--<label class="check-update-info">更新信息</label>-->
                         <!--</div>-->
-                        
+
                         <button type="button" class="btn btn-primary login-btn">登录</button>
                     </div>
-    
+
                 </form>
             </div>
-
             <!--反面面板，两面板互斥展示-->
             <div class="opposite-panel">
                 <div class="op-header">

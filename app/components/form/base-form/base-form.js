@@ -1327,7 +1327,7 @@ let config = {
 			}
 		},
 		//触发事件检查
-		checkValue: function (data,noCount) {
+		checkValue:async function (data,noCount) {
 			let isChange=data.originVal!=data.value;
 			data.originVal=data.value;
 			if (!this.data.childComponent[data.dfield]) {
@@ -1349,7 +1349,7 @@ let config = {
 				}else{
 					value=data.value;
 				}
-				this.actions.setAboutData(id, value);
+				await this.actions.setAboutData(id, value);
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
@@ -1374,7 +1374,7 @@ let config = {
 			//统计功能
 			this.actions.myUseFieldsofcountFunc();
 			if(!noCount || isChange){
-                this.actions.countFunc(data.dfield,data);
+                await this.actions.countFunc(data.dfield,data);
 			}
 			//改变选择框的选项
 			if (data['linkage'] != {}) {
@@ -1417,7 +1417,7 @@ let config = {
 
 			if(!noCount || isChange){
 				//this.actions.calcExpression(calcData, data['value']);
-                this.actions.webCalcExpression(data,FormService)
+                await this.actions.webCalcExpression(data,FormService)
 			};
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
@@ -2136,6 +2136,7 @@ let config = {
 		}
 	},
 	afterRender() {
+
 		this.actions.createFormControl();
 		if (this.data.is_view == 1) {
 			this.actions.checkCustomTable();
@@ -2146,14 +2147,14 @@ let config = {
 		if (this.data.btnType != 'none') {
 			this.actions.addBtn();
 		}
-
-        if(window.top.miniFormVal && this.data.btnType == 'new'){
+        if(window.top.miniFormVal){
             let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
             for(let k in miniFormVal){
                 let val = miniFormVal[k];
                 this.actions.setFormValue(k,val)
             }
         }
+
 		Mediator.subscribe('workflow:voteconfirm',(res)=>{
 			this.actions.setVoteValue(res);
 		})

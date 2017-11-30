@@ -32,6 +32,12 @@
         display: none;
     }
 }
+.select-all,.cancel-select,.reverse-select {
+    font: 12px/1.5 "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
+    cursor:pointer;
+    margin: 15px;
+    color:#666666;
+}
 
 .view-header-refresh-cache {
     position: relative;

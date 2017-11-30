@@ -203,16 +203,30 @@ let config={
         /**
          * 提交当前工作流
          */
+
         submitAddWorkflow() {
+            if( window.top.miniFormVal){
+                delete window.top.miniFormVal[this.data.obj.table_id];
+            }
             let obj = this.data.obj;
             let formData = CreateFormServer.getFormValue(obj.table_id,true);
+
+
             if (formData.error) {
                 msgBox.alert(`${formData.errorMessage}`);
             } else {
+                let data=_.defaultsDeep({},this.data.user);
+                for(let key in this.data.focusUsers){
+                    delete data[key];
+                }
+                let f_user = [];
+                for(let k in data){
+                    f_user.push(k)
+                }
                 msgBox.showLoadingSelf();
                 let postData = {
                     flow_id: obj.flow_id || '',
-                    focus_users: JSON.stringify(this.data.focusArr),
+                    focus_users: JSON.stringify(f_user),
                     data: JSON.stringify(formData),
                     cache_new:JSON.stringify(formData),
                     cache_old:JSON.stringify(this.data.cache_old),
