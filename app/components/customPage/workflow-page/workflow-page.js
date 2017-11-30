@@ -202,6 +202,7 @@ let config = {
                 footerData: this.data.footerData,
                 fieldsData: this.data.fieldsData,
                 floatingFilter: true,
+                setRowStyle: this.actions.setRowStyle,
                 onColumnResized: this.actions.onColumnResized,
                 onSortChanged: this.actions.onSortChanged,
                 onDragStopped: this.actions.onDragStopped,
@@ -246,6 +247,14 @@ let config = {
                 this.data.isShowCustomPanel = false;
                 this.actions.changeAgGridWidth(true);
             } )
+        },
+        //渲染颜色
+        setRowStyle: function (param) {
+            if (param.data.wf_urgency_level == 2) {
+                return {background: '#FFB5C5'};
+            } else if (param.data.wf_urgency_level == 1) {
+                return {background: '#FFB5C5'};
+            }
         },
         //返回选择数据
         retureSelectData: function () {
