@@ -175,6 +175,24 @@ let config = {
             this.data.cells[cellLayout.componentId] = cellLayout;
         },
 
+        selectAllCells(){
+            Object.keys(this.data.cells).forEach((key)=>{
+                this.data.cells[key].actions.select();
+            })
+        },
+
+        cancelSelectCells(){
+            Object.keys(this.data.cells).forEach((key)=>{
+                this.data.cells[key].actions.cancelSelect();
+            })
+        },
+
+        reverseSelectCells(){
+            Object.keys(this.data.cells).forEach((key)=>{
+                this.data.cells[key].actions.toggleSelect();
+            })
+        },
+
         /**
          * 根据当前视图id，得到当前视图画布块布局，大小
          */

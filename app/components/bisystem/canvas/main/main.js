@@ -70,6 +70,15 @@ let config = {
             //
             // }
             let header = new CanvasHeaderComponent({}, {
+                selectAllCanvas:()=>{
+                    this.data.cells.actions.selectAllCells();
+                },
+                cancelSelectCanvas:()=>{
+                    this.data.cells.actions.cancelSelectCells();
+                },
+                reverseSelectCanvas:()=>{
+                    this.data.cells.actions.reverseSelectCells();
+                },
                 onAddCell: (cell) => {
                     this.data.cells.actions.addCell(cell);
                 },

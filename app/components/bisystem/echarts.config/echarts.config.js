@@ -160,11 +160,6 @@ const pie = {
                         str += '\n';
                         str += param.data.value + '\n';
                         str += param.percent + '%';
-
-
-
-
-
                         return str;
                     }
                 }
@@ -307,7 +302,8 @@ const linebar = {
                     color: '#ececec'
                 }
             },
-            axisLabel : {}
+            axisLabel : {
+            },
         }
     ],
     yAxis: [

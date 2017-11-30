@@ -288,7 +288,7 @@ export class EchartsService {
         let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
         if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
-            linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
+            linebarOption['yAxis'][0]['min'] = firstMin >= 0 && isZero ? 0 : firstMin;
             if (cellOption.double === 1) {
                 linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
             }
