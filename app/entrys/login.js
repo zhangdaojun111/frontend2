@@ -182,7 +182,7 @@ function getLoginController() {
                         this.$submitFindPw.click();
                     }
                 }
-            },300))
+            },300));
         },
 
         /**
@@ -389,18 +389,16 @@ let controller = getLoginController();
 controller.formInit();  //初始化表单控件
 controller.getNextUrl();       //根据url判断是否跳转页面
  let isNeedDownload = controller.browser_check();     //暂时屏蔽
-//let isNeedDownload = false;
-
 
 function resetLoginBoxInfo(result) {
-    if(result.use_register && result.use_register.toString() === "0"){
-        $('.register-btn').hide();
+    if(result.use_register && result.use_register.toString() === "1"){
+        $('.register-btn').show();
     }
-    if(result.sap_login_system_version && result.sap_login_system_version.toString() === "0"){
-        $('.update-btn').hide();
+    if(result.sap_login_system_version && result.sap_login_system_version.toString() === "1"){
+        $('.update-btn').show();
     }
-    if(result.show_publish_link && result.show_publish_link.toString() === "0"){
-        $('.self-service-update').hide();
+    if(result.show_publish_link && result.show_publish_link.toString() === "1"){
+        $('.self-service-update').show();
     }
     controller.versionInfo = result;
     controller.sysNameInit();   //初始化公司名称
@@ -460,6 +458,8 @@ if( isNeedDownload === false){      //正常显示登录表单
     $(".download-link").attr('href',downLoadLink)
 }
 
-
-starter.init();
-starter.animate();
+// 延时处理动画，会阻塞dom操作
+window.setTimeout(function () {
+    starter.init();
+    starter.animate();
+}, 500);
