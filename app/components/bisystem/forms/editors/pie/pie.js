@@ -157,7 +157,6 @@ let config = {
                     if(key == 'customRadius'){
                         let val = this.formItems['customRadius'].el.find('input')[0].value;
                         let reg = /(^((?!0)\d+(.\d{1,2})?)$)|(^\d+\.?\d{1,2}%$)/;
-                        console.log(reg.test(val));
                         if(reg.test(val)){
                             this.formItems['customRadius'].clearErrorMsg();
                             continue;

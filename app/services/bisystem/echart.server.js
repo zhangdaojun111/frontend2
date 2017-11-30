@@ -291,7 +291,7 @@ export class EchartsService {
             linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
             if (cellOption.double === 1) {
                 linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
-            };
+            }
 
             linebarOption['dataZoom']=[
                 {
@@ -320,18 +320,6 @@ export class EchartsService {
             linebarOption['legend']['type'] = 'plain';
         }
 
-
-        //最后一条数据必显示
-        // if(cellOption.data.xAxis){
-        //     linebarOption['xAxis'][0]['axisLabel']['interval'] = (index,value)=>{
-        //         let xAxisLen = cellOption.data.xAxis.length-1;
-        //         if(index === 0 || index === xAxisLen){
-        //             return true
-        //         }else if(0<index<xAxisLen && index%19 === 0){
-        //             return true
-        //         }
-        //     }
-        // }
         return linebarOption;
     }
 
@@ -368,7 +356,7 @@ export class EchartsService {
             if(cellChart.chart.chartType.type == 'pie'){
                 pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
             }else{
-                pieOption['series'][0]['radius'] = isNaN(cellOption['customPie']['radius'])?[(parseInt(cellOption['customPie']['radius'])-20)+'%',cellOption['customPie']['radius']]:[cellOption['customPie']['radius']-20+'',cellOption['customPie']['radius']];
+                pieOption['series'][0]['radius'] = isNaN(cellOption['customPie']['radius'])?[(parseFloat(cellOption['customPie']['radius'])-20)+'%',cellOption['customPie']['radius']]:[cellOption['customPie']['radius']-20+'',cellOption['customPie']['radius']];
             }
         }
         return pieOption;
@@ -563,8 +551,6 @@ export class EchartsService {
         links.pop();
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
-        console.log('================================');
-        console.log(data)
         return stylzieOption;
     }
 
