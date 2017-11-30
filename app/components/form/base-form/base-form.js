@@ -137,8 +137,6 @@ let config = {
 		//主动触发指定字段的所有事件
 		triggerSingleControl(key,noCount) {
 			let val = this.data.data[key]["value"];
-			console.log("-------triggerSingleControl--------")
-			console.log(val)
 			if (val.toString() != "" || !$.isEmptyObject(val)) {
 				if ($.isArray(val)) {
 					if (val.length != 0) {
@@ -152,6 +150,7 @@ let config = {
 
 		//给子表统计赋值
 		async setCountData() {
+    		MSG.showLoadingSelf();
 			let res = await FormService.getCountData({
 				//传给后台当前表单所有控件的值
 				data: JSON.stringify(this.actions.createFormValue(this.data.data)),
@@ -164,6 +163,7 @@ let config = {
 				this.actions.setFormValue(d, res["data"][d]);
                 // this.actions.triggerSingleControl(d);
 			}
+    		MSG.hideLoadingSelf();
 		},
 
 		//给外部提供formValue格式数据
@@ -435,17 +435,12 @@ let config = {
 					base_field_2_value: JSON.stringify(this.data.baseIdsLocalDict),
 					temp_id: this.data.data.temp_id["value"]
 				};
+                MSG.showLoadingSelf();
 				let res = await FormService.getDefaultValue(json);
-				console.log("---------getDefaultValue---------")
-				console.log(res)
-				console.log(this.data.data)
-				console.log(this.data.exclude_fields)
 				for (let key in res["data"]) {
 					//排除例外字段
 					if (this.data.exclude_fields.indexOf(key) == -1) {
 						if (this.data.data.hasOwnProperty(key)) {
-							console.log("=============")
-							console.log(key)
 							let data = this.data.data[key];
 							let tableId = this.data.tableId;
 							let type = data["type"];
@@ -483,6 +478,7 @@ let config = {
 						}
 					}
 				}
+                MSG.hideLoadingSelf();
 			}
 		},
 
@@ -1025,8 +1021,6 @@ let config = {
 		setFormValue(dfield, value,noCount) {
 			let count=noCount?false:true;
 			let data = this.data.data[dfield];
-			console.log("------setFormValue-------")
-			console.log(data)
 			if (data) {
 				data["value"] = value;
 				let childComponet = this.data.childComponent[dfield];
