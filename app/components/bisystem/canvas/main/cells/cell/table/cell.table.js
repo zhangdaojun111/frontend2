@@ -139,9 +139,9 @@ let config = {
                 defaultMax: true,
                 // customSize: true
             }).then((data) => {
-                if (data == 'success' || data.refresh) {
-                    this.actions.timeDelayRefresh();
-                }
+                if (title === '编辑') {
+                    window.location.reload()
+                };
             })
         },
 
