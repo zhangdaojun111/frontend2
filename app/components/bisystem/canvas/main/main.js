@@ -8,6 +8,7 @@ import msgbox from '../../../../lib/msgbox';
 import {PMAPI} from "../../../../lib/postmsg";
 import Mediator from '../../../../lib/mediator';
 import {Backbone} from 'backbone';
+import {ViewsService} from '../../../../services/bisystem/views.service';
 
 
 let config = {
@@ -36,7 +37,8 @@ let config = {
                         title: '编辑模式',
                         modal: true,
                         customSize: true,
-
+                        maxable:true,
+                        defaultMax: false,
                     }).then((data) => {
                         location.reload();
                     }
@@ -56,6 +58,7 @@ let config = {
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
+                this.data.cells.actions.postHtmlCode = this.actions.postHtmlCode;
                 this.data.cells.render(this.el.find('.cells-container'));
             }
         },
@@ -124,14 +127,42 @@ let config = {
             }
             return null
         },
+        /**
+         * 通过url判断单页模式以及pdf页面
+         */
         checkUrl(){
             this.data.isSingle = (this.actions.getUrlParam('single') === 'true') || false;
             this.data.isPdf = window.config.pdf === true;
+            if(this.data.isPdf){
+                this.data.pdfViewId = this.actions.getUrlParam('view_id');
+            }
             if(this.data.isSingle || this.data.isPdf ){
                 this.el.find('.views-header').hide();
                 this.el.find('.cells-container').addClass('hide-head');
             }
-        }
+        },
+        /**
+         * 获取当前页面的html代码,去除样式部分
+         */
+        postHtmlCode(){
+            let html = document.documentElement.outerHTML;
+            let newHead = `
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BI</title>
+</head>`;
+            //替换head间的内容
+            html = html.replace(/<head>([\s\S]*?)<\/head>/,newHead);
+
+            let data = {
+                bi_str:html,
+                view_id:this.data.pdfViewId
+            };
+            ViewsService.postPdfHtml(data).done((res) => {
+                console.log(res);
+            });
+        },
     },
     afterRender:function(){
         if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {

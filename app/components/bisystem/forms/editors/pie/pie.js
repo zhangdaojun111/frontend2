@@ -25,6 +25,7 @@ let config = {
                     });
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
+                    this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
@@ -74,15 +75,14 @@ let config = {
             this.formItems['pieType'].trigger('onChange', this.formItems['pieType'].data.value);
             this.formItems['limit'].trigger('onChange');
             this.formItems['circular'].trigger('onChange');
-
+            this.formItems['customPie'].trigger('onChange');
             // 获取数据来源
-            ChartFormService.getChartSource().then(res => {
-                if (res['success'] === 1) {
-                    this.formItems['source'].setList(res['data']);
-                } else {
-                    msgbox.alert(res['error'])
-                }
-            });
+            const res = await ChartFormService.getChartSource();
+            if (res['success'] === 1) {
+                this.formItems['source'].setList(res['data']);
+            } else {
+                msgbox.alert(res['error'])
+            }
 
             // 获取图标
             ChartFormService.getChartIcon().then(res => {
@@ -128,7 +128,7 @@ let config = {
             let data = this.getData();
             let chart = {
                 assortment: 'pie',
-                chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
+                chartName: {id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
                 filter: data.filter.filter,
                 filter_source: data.filter.filter_source,
@@ -137,12 +137,12 @@ let config = {
                 source: data.source,
                 theme: data.theme,
                 pieType: data.pieType == '1' ? {name: '单条数据', value: 1} : {name: '多条数据', value: 2},
-                xAxis:data.xAxis,
-                yAxis:data.pieType == '1' ? data.columns : data.yAxis,
+                xAxis: data.xAxis,
+                yAxis: data.pieType == '1' ? data.columns : data.yAxis,
                 deeps: data.pieType == '1' ? [] : data.deeps,
                 limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
-                endlimit:data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
-
+                endlimit: data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
+                customPie: data.customPie[0] ? {radius:data.customRadius,centerX:'50%',centerY:'50%'} : {} ,
             };
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
@@ -153,8 +153,17 @@ let config = {
                     if(key == 'yAxis' && chart.pieType.value == 1){
                         continue;
                     }
-                    if(window.config.query_mark !== 'single' && key=='countColumn'){
-                        continue;
+                    //判断只能为数字（最多两位小数）或者百分数
+                    if(key == 'customRadius'){
+                        let val = this.formItems['customRadius'].el.find('input')[0].value;
+                        let reg = /(^((?!0)\d+(.\d{1,2})?)$)|(^\d+\.?\d{1,2}%$)/;
+                        if(reg.test(val)){
+                            this.formItems['customRadius'].clearErrorMsg();
+                            continue;
+                        }else{
+                            this.formItems['customRadius'].showErrorMsg('请输入正确的格式');
+                            pass = false;
+                        }
                     }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
@@ -194,6 +203,10 @@ let config = {
                 this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
                 this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
             }
+            this.formItems['customPie'].setValue(chart['customPie'].hasOwnProperty('radius') ? 1 : 0);
+            this.formItems['customRadius'].setValue(chart['customPie'].hasOwnProperty('radius') ? chart['customPie']['radius'] : '80%');
+            // this.formItems['customCenterX'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['centerX'] : '50%');
+            // this.formItems['customCenterY'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['centerY'] : '50%');
         }
     },
     data: {
@@ -361,6 +374,69 @@ let config = {
             },
             {
                 label: '',
+                name: 'customPie',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '自定义设置图表'
+                    }
+                ],
+                type: 'checkbox',
+                class: 'customPie',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['customRadius'].el.show();
+                            // this.formItems['customCenterX'].el.show();
+                            // this.formItems['customCenterY'].el.show();
+                        } else {
+                            this.formItems['customRadius'].el.hide();
+                            this.formItems['customRadius'].setValue('80%');
+                            // this.formItems['customCenterX'].el.hide();
+                            // this.formItems['customCenterY'].el.hide();
+                        }
+                    }
+                }
+            },
+            {
+                label: '自定义设置图表',
+                name: 'customRadius',
+                defaultValue: '80%',
+                category: 'text',
+                textTip:'请输入图表半径（单位可为像素或百分比）：',
+                type: 'text',
+                class: 'customRadius',
+                required: true,
+                rules:[
+                    {
+                        errorMsg: '请输入正确的格式',
+                        type: 'required',
+                    }
+                ],
+                events: {}
+            },
+            // {
+            //     label: '',
+            //     name: 'customCenterX',
+            //     defaultValue: '50%',
+            //     category: 'text',
+            //     textTip:'请输入横坐标（单位可为像素或百分比）：',
+            //     type: 'text',
+            //     class: 'customCenterX',
+            //     events: {}
+            // },
+            // {
+            //     label: '',
+            //     name: 'customCenterY',
+            //     defaultValue: '50%',
+            //     category: 'text',
+            //     textTip:'请输入纵坐标（单位可为像素或百分比）：',
+            //     type: 'text',
+            //     class: 'customCenterY',
+            //     events: {}
+            // },
+            {
+                label: '',
                 name: 'limit',
                 defaultValue: [],
                 list: [
@@ -430,7 +506,7 @@ let config = {
 
         // 渲染图表表单字段
         this.drawForm();
-        this.actions.init();
+        await this.actions.init();
 
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);

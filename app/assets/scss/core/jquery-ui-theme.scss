@@ -81,6 +81,9 @@
     &.ui-dialog-maximize{
         height: 100%!important;
         background-color: #f2f2f2;
+        iframe{
+            height: calc(100% - 30px) !important;
+        }
     }
 }
 

@@ -25,6 +25,7 @@ let config = {
                     });
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
+                    this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
@@ -67,14 +68,13 @@ let config = {
        async init() {
            this.formItems['countColumn'].el.hide();
            this.formItems['single'].trigger('onChange');
-           // 获取数据来源
-            ChartFormService.getChartSource().then(res => {
-                if (res['success'] === 1) {
-                    this.formItems['source'].setList(res['data']);
-                } else {
-                    msgbox.alert(res['error'])
-                }
-            });
+            // 获取数据来源
+            const res = await ChartFormService.getChartSource();
+            if (res['success'] === 1) {
+                this.formItems['source'].setList(res['data']);
+            } else {
+                msgbox.alert(res['error'])
+            }
 
 
             // 获取图标
@@ -139,9 +139,6 @@ let config = {
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
-                    if(window.config.query_mark !== 'single' && key=='countColumn' || !chart['single'] && key=='columnNum'){
-                        continue;
-                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
