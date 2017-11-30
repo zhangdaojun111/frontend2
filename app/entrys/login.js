@@ -27,7 +27,7 @@ function getLoginController() {
         isOpposite:false,       //记录页面状态
         versionBtnOpen:1,       //是否可以查看更新信息
         registerBtnOpen:1,      //是否可以使用注册功能
-        verifyShow:1,           //是否显示验证码
+        verifyShow:0,           //是否显示验证码
         verifyCode:null,        //验证码组件
         $loginMainTitle:$('.login-main-title'),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
