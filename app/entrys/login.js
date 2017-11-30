@@ -27,6 +27,7 @@ function getLoginController() {
         isOpposite:false,       //记录页面状态
         versionBtnOpen:1,       //是否可以查看更新信息
         registerBtnOpen:1,      //是否可以使用注册功能
+        verifyShow:0,           //是否显示验证码
         verifyCode:null,        //验证码组件
         $loginMainTitle:$('.login-main-title'),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
@@ -64,7 +65,7 @@ function getLoginController() {
             this.passwordInputComp.render($wrap);
             $('.login-content').show();
 
-            this.verifyCode = new verify('verify-container');
+
             //系统名称改变
             this.$loginMainTitle.on('change', () => {
                 this.systemName = this.$loginMainTitle.val();
@@ -328,10 +329,12 @@ function getLoginController() {
                 $(".warn-info").html('密码不能为空');
                 return;
             }
-            let res = this.verifyCode.validate(verify)
-            if(!res) {
-                $(".warn-info").html('验证码错误');
-                return;
+            if(verify != '') {
+                let res = this.verifyCode.validate(verify)
+                if(!res) {
+                    $(".warn-info").html('验证码错误');
+                    return;
+                }
             }
             let data = {
                 username:username,
@@ -355,6 +358,10 @@ function getLoginController() {
                     $(window).attr('location',that.nextUrl);
                 }else if(result.success === 0){
                     $(".warn-info").html(result['error']).show();
+                    if(that.verifyShow == 1) {
+                        $('.verify-group').show();
+                        that.verifyCode.refresh();
+                    }
                 }
             }).fail((err) => {
                 console.log("登录失败",err.statusText);
@@ -399,6 +406,15 @@ function resetLoginBoxInfo(result) {
     }
     if(result.show_publish_link && result.show_publish_link.toString() === "1"){
         $('.self-service-update').show();
+    }
+    if(result.verify_code && result.verify_code.toString() === "1") {
+        let obj = {
+            id: 'verify-container',
+            width: "160",
+            height: "40",
+        }
+        controller.verifyCode = new verify(obj);
+        controller.verifyShow = 1;
     }
     controller.versionInfo = result;
     controller.sysNameInit();   //初始化公司名称

@@ -107,7 +107,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
         margin-left: -600px;
         .login-content {
             width: 340px;
-            height: 380px;
+            //height: 380px;
             position: absolute;
             right: 0;
             top: 150px;
@@ -131,8 +131,9 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
             .white-panel {
                 //background-color: #ffffff;
                 width: 340px;
-                height: 380px;
+                //height: 380px;
                 border-radius: 5px;
+                overflow: hidden;
                 background: rgba(242, 242, 242, 1);
 
                 .panel-header{
@@ -178,6 +179,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                         }
                     }
                     .verify-group {
+                        display: none;
                         position: relative;
                         height: 40px;
                         margin-left: 20px;
@@ -316,6 +318,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                     }
                     .panel-bottom {
                         height: 54px;
+                        margin-bottom: 20px;
                         //border-top: solid 1px rgba(212, 212, 212, 0.24);
 
                         button {
