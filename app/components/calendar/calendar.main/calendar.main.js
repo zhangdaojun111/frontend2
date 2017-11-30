@@ -441,7 +441,7 @@ let config = {
                         arrData['real_id'] = JSON.stringify( [select._id] );
                         arrData['tableName'] = this.data.tableid2name[setDetail.table_id];
                         arrData['fieldId'] = setDetail.field_id;
-                        arrData['fieldValue'] = setDetail['selectedRepresents_data'][0][setDetail.field_id] || '';
+                        arrData['fieldValue'] = select[setDetail.field_id] || '';
                         arrData['fieldName'] = this.data.fieldInfos[setDetail.field_id]['dname'];
                         arrData['type'] = 1;
                         arrData['isShow'] = this.data.searchText === '' ? true : false;

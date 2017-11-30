@@ -1,6 +1,6 @@
 .form-chart-pie {
     .form-group {
-        .endLimitNum,.limitNum{
+        .endLimitNum, .limitNum {
             .form-chart-wrapper {
                 span {
                     margin-left: 16px;
@@ -8,6 +8,19 @@
                 }
                 input {
                     width: 200px;
+                }
+            }
+        }
+        .customRadius {
+            position: relative;
+            .form-label {
+                position: absolute;
+                padding: 0;
+                border: none;
+                top: -30px;
+                left: 130px;
+                i, span {
+                    display: none;
                 }
             }
         }

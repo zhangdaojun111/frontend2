@@ -1,10 +1,11 @@
-<div class="form-control">
-    <div class="radio-wrap">
+<div class="form-control component-radio-control">
+    <div class="radio-wrap height26">
     {{#if unvisible}}
         <a href="javascript:void(0);" class="info">权限受限</a>
     {{else if be_control_condition}}
         <a href="javascript:void(0);" class="info">被修改条件限制</a>
     {{else}}
+        <div class="direction-wrap">
         {{#group}}
             <label class="df-input-label">
                 <div class="df-input-radio-wrapper noprint" style="display: inline">
@@ -15,6 +16,7 @@
                 <input class="df-input-radio print" type="radio"  value="{{value}}" readonly>{{ label }}
             </label>
         {{/group}}
+        </div>
         <div style="display: inline-block;   position: relative;  top: 7px; min-width: 110px;">
             {{#if required}}
             <span id="requiredLogo" class="{{requiredClass}}" ></span>

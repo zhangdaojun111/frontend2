@@ -42,4 +42,4 @@ module.exports = {
     findPassword: path.resolve(APP_PATH, 'entrys/findPassword.js'),
     approvalOpinion: path.resolve(APP_PATH, 'entrys/popup/approvalOpinion.js'),
     followerDialog: path.resolve(APP_PATH, 'entrys/popup/followerDialog.js'),
-}
+};

@@ -24,7 +24,14 @@ let config={
         action: 0,
         cache_old: {},
         focusArr: [],
-        noRequestFormData:[]
+        noRequestFormData:[],
+        user: [],
+        nameArr: [], //关注人姓名
+        idArr: [], //关注人id
+        htmlStr: [], // 关注人添加的html代码
+        allUsersInfo: {},
+        focusUsersId: [],
+        focusUsers: {},
     },
     actions:{
         openAddFollower() {
@@ -196,16 +203,30 @@ let config={
         /**
          * 提交当前工作流
          */
+
         submitAddWorkflow() {
+            if( window.top.miniFormVal){
+                delete window.top.miniFormVal[this.data.obj.table_id];
+            }
             let obj = this.data.obj;
             let formData = CreateFormServer.getFormValue(obj.table_id,true);
+
+
             if (formData.error) {
                 msgBox.alert(`${formData.errorMessage}`);
             } else {
+                let data=_.defaultsDeep({},this.data.user);
+                for(let key in this.data.focusUsers){
+                    delete data[key];
+                }
+                let f_user = [];
+                for(let k in data){
+                    f_user.push(k)
+                }
                 msgBox.showLoadingSelf();
                 let postData = {
                     flow_id: obj.flow_id || '',
-                    //focus_users: JSON.stringify(this.data.focusArr) || [],
+                    focus_users: JSON.stringify(f_user),
                     data: JSON.stringify(formData),
                     cache_new:JSON.stringify(formData),
                     cache_old:JSON.stringify(this.data.cache_old),
@@ -215,9 +236,9 @@ let config={
                     parent_temp_id:obj.parent_temp_id,
                     parent_record_id:obj.parent_record_id
                 };
-                console.log("提交工作流表单数据")
-                console.log(obj)
-                console.log(postData)
+                console.log("提交工作流表单数据");
+                console.log(obj);
+                console.log(postData);
                 //半触发操作用
                 if( obj.data_from_row_id ){
                     postData = {
@@ -270,7 +291,7 @@ let config={
     afterRender(){
         PMAPI.getIframeParams(window.config.key).then((res) => {
             this.data.noRequestFormData = res.data;
-        })
+        });
         let _this=this;
         _this.showLoading();
         this.data.key = this.data.obj.key;
@@ -304,6 +325,24 @@ let config={
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
+        });
+        Mediator.on('getDefaultFocusUsers', (data) => {
+            workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
+            this.data.htmlStr = [];
+            this.data.allUsersInfo = res.rows;
+            this.data.focusUsers={};
+            // console.log(this.data.allUsersInfo);
+            for(let key in data['updateuser2focususer']) {
+                this.data.idArr = data['updateuser2focususer'][key];
+                for(let i of this.data.idArr) {
+                    this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
+                    this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];
+                    this.data.htmlStr.push(`<span class="selectSpan">${this.data.allUsersInfo[i]['name']}</span>`);
+                }
+            }
+            this.el.find('#addFollowerList').html(this.data.htmlStr);
+            this.data.user = this.data.focusUsers;
+        })
         });
 
         this.el.find('#subAddworkflow').on('click',()=>{

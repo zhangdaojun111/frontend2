@@ -19,14 +19,21 @@ let config = {
        async init() {
 
            // 获取数据来源
-          let p1 =  ChartFormService.getChartSource().then(res => {
-                if (res['success'] === 1) {
-                    this.data.source = res['data'];
-                   // this.formItems['source'].setList(res['data']);
-                } else {
-                    msgbox.alert(res['error'])
-                }
-            });
+          // let p1 =  ChartFormService.getChartSource().then(res => {
+          //       if (res['success'] === 1) {
+          //           this.data.source = res['data'];
+          //          // this.formItems['source'].setList(res['data']);
+          //       } else {
+          //           msgbox.alert(res['error'])
+          //       }
+          //   });
+            const p1 = await ChartFormService.getChartSource();
+            if (p1['success'] === 1) {
+                this.data.source = p1['data'];
+                // this.formItems['source'].setList(res['data']);
+            } else {
+                msgbox.alert(p1['error'])
+            }
 
             // 获取图标
           let p2 = ChartFormService.getChartIcon().then(res => {
@@ -84,13 +91,10 @@ let config = {
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
-                    if(window.config.query_mark !== 'single'){
-                        continue;
-                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
-                    };
+                    }
                 }
             }
             //发送状态给子组件

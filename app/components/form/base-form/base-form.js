@@ -1,4 +1,4 @@
-﻿/**
+﻿﻿/**
  *@author yudeping
  *表单主要逻辑
  */
@@ -137,7 +137,7 @@ let config = {
 		//主动触发指定字段的所有事件
 		triggerSingleControl(key,noCount) {
 			let val = this.data.data[key]["value"];
-			if (val != "" || !$.isEmptyObject(val)) {
+			if (val.toString() != "" || !$.isEmptyObject(val)) {
 				if ($.isArray(val)) {
 					if (val.length != 0) {
 						this.actions.checkValue(this.data.data[key],noCount);
@@ -150,6 +150,7 @@ let config = {
 
 		//给子表统计赋值
 		async setCountData() {
+    		MSG.showLoadingSelf();
 			let res = await FormService.getCountData({
 				//传给后台当前表单所有控件的值
 				data: JSON.stringify(this.actions.createFormValue(this.data.data)),
@@ -159,9 +160,10 @@ let config = {
 			});
 			//给统计赋值
 			for (let d in res["data"]) {
-				this.actions.setFormValue(d, res["data"][d]);
+                this.actions.setFormValue(d, this.actions.showAccuracy(d,res["data"][d]));
                 // this.actions.triggerSingleControl(d);
 			}
+    		MSG.hideLoadingSelf();
 		},
 
 		//给外部提供formValue格式数据
@@ -343,6 +345,12 @@ let config = {
 					let label = data["label"];
 					let minNum = data["numArea"]["min"] || '';
 					let maxNum = data["numArea"]["max"] || '';
+					if(data["numArea"]["min"].toString()=='0'){
+                        minNum = '0';
+					}
+					if(data["numArea"]["max"].toString()=='0'){
+                        maxNum = '0';
+					}
 					let errorInfo = data["numArea"]["error"];
 					if (minNum !== "" && maxNum === "") {
 						if (val < minNum) {
@@ -427,6 +435,7 @@ let config = {
 					base_field_2_value: JSON.stringify(this.data.baseIdsLocalDict),
 					temp_id: this.data.data.temp_id["value"]
 				};
+                MSG.showLoadingSelf();
 				let res = await FormService.getDefaultValue(json);
 				for (let key in res["data"]) {
 					//排除例外字段
@@ -469,6 +478,7 @@ let config = {
 						}
 					}
 				}
+                MSG.hideLoadingSelf();
 			}
 		},
 
@@ -954,11 +964,11 @@ let config = {
                             // this.actions.triggerSingleControl(d);
 						}
                         if(res){
-                            let calcData = {
-                                val: expression['value'],
-                                effect: expression["effect"],
-                                id: expression['id']
-                            };
+                            // let calcData = {
+                            //     val: expression['value'],
+                            //     effect: expression["effect"],
+                            //     id: expression['id']
+                            // };
                             // if(!this.actions.webCalcExpression(expression)) {
                             //     this.actions.calcExpression(calcData);
                             // }
@@ -1007,6 +1017,16 @@ let config = {
 				_this.el.find('#requiredLogo').removeClass().addClass('required');
 			}
 		},
+		setRadioCheck(data){
+			for (let obj of data.group) {
+				obj['name'] = data.dfield;
+				if (obj.value == data.value) {
+					obj['checked'] = true;
+				} else {
+					obj['checked'] = false;
+				}
+			}
+		},
 		//赋值
 		setFormValue(dfield, value,noCount) {
 			let count=noCount?false:true;
@@ -1014,8 +1034,14 @@ let config = {
 			if (data) {
 				data["value"] = value;
 				let childComponet = this.data.childComponent[dfield];
+				if(data.type=='Radio'){
+					this.actions.setRadioCheck(data);
+				}
 				if (childComponet) {
 					childComponet.data["value"] = value
+					if(data.type=='Radio'){
+						this.actions.setRadioCheck(childComponet.data);
+					}
 					childComponet.reload();
 				}
 				this.actions.triggerSingleControl(dfield,count);
@@ -1052,6 +1078,9 @@ let config = {
 
 		//移除其它字段隐藏的字段信息
 		checkOhterField(data, obj_new, obj_old) {
+            if(this.data['show_other_fields']){
+                return;
+            }
 			let delKey = [];
 			for (let index in this.data.data) {
 				if (this.data.data[index]['is_other_field'] && this.data.submitKey.indexOf(this.data.data[index]['id']) == -1) {
@@ -1080,6 +1109,9 @@ let config = {
 		},
 		//提交表单数据
 		async onSubmit() {
+            if( window.top.miniFormVal){
+                delete window.top.miniFormVal[this.data.data['table_id']['value']];
+            }
 			let formValue = this.actions.createFormValue(this.data.data);
 			let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
 			if (error) {
@@ -1311,14 +1343,16 @@ let config = {
 			}
 		},
 		//触发事件检查
-		checkValue: function (data,noCount) {
+		checkValue:async function (data,noCount) {
+			let isChange=data.originVal!=data.value;
+			data.originVal=data.value;
 			if (!this.data.childComponent[data.dfield]) {
 				return;
 			}
 			if (this.data.data[data.dfield]) {
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
-			if (data.type == 'Buildin' || data.type=='MultiLinkage' && !noCount) {
+			if (data.type == 'Buildin' || data.type=='MultiLinkage' && (!noCount || isChange)) {
 				let id = data["id"];
 				let value;
 				if(data.type == 'Buildin'){
@@ -1331,11 +1365,11 @@ let config = {
 				}else{
 					value=data.value;
 				}
-				this.actions.setAboutData(id, value);
+				await this.actions.setAboutData(id, value);
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
-			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1 && !noCount ) {
+			if (this.data.flowId != "" && this.data['base_fields'].indexOf(data["dfield"]) != -1 && (!noCount || isChange)) {
 				if (data.type == 'Input') {
 					if(!this.data.timer){
 						this.data.timer=setTimeout(()=>{
@@ -1355,8 +1389,8 @@ let config = {
 			}
 			//统计功能
 			this.actions.myUseFieldsofcountFunc();
-			if(!noCount){
-                this.actions.countFunc(data.dfield,data);
+			if(!noCount || isChange){
+                await this.actions.countFunc(data.dfield,data);
 			}
 			//改变选择框的选项
 			if (data['linkage'] != {}) {
@@ -1397,9 +1431,9 @@ let config = {
 				id: data['id']
 			};
 
-			if(!noCount){
+			if(!noCount || isChange){
 				//this.actions.calcExpression(calcData, data['value']);
-                this.actions.webCalcExpression(data)
+                await this.actions.webCalcExpression(data,FormService)
 			};
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
@@ -1478,7 +1512,7 @@ let config = {
 			return data;
 		},
 
-		webCalcExpression(data) {
+		webCalcExpression(data,FormService) {
             let calcData = {
                 val: data['value'],
                 effect: data["effect"],
@@ -1497,6 +1531,7 @@ let config = {
 							if (expression.indexOf("$^$") == -1) {
 								try {
 									// if (this.data.data[expressionStr.split("@")[1]]["is_view"] != 1) {
+                                    expression = expression.replace(/this/,'FormService')
                                         this.actions.set_value_for_form(eval(expression), f);
 									// }
 								} catch (err) {
@@ -1919,14 +1954,7 @@ let config = {
 						this.data.childComponent[data[key].dfield] = songrid;
 						break;
 					case 'Radio':
-						for (let obj of data[key].group) {
-							obj['name'] = data[key].dfield;
-							if (obj.value == data[key].value) {
-								obj['checked'] = true;
-							} else {
-								obj['checked'] = false;
-							}
-						}
+						this.actions.setRadioCheck(data[key]);
 						let radio = new Radio(data[key], actions);
 						radio.render(single);
 						this.data.childComponent[data[key].dfield] = radio;
@@ -2030,6 +2058,8 @@ let config = {
 					case 'editControl':
 						data[key]['real_id'] = data['real_id']['value'];
 						data[key]['table_id'] = data['table_id']['value'];
+						data[key]['temp_id'] = data['temp_id']['value'];
+						data[key]['iframe_key'] = window.config.key;
 						let contractControl = new ContractControl(data[key], actions);
 						contractControl.render(single);
 						this.data.childComponent[data[key].dfield] = contractControl;
@@ -2116,6 +2146,7 @@ let config = {
 		}
 	},
 	afterRender() {
+
 		this.actions.createFormControl();
 		if (this.data.is_view == 1) {
 			this.actions.checkCustomTable();
@@ -2126,13 +2157,22 @@ let config = {
 		if (this.data.btnType != 'none') {
 			this.actions.addBtn();
 		}
+        if(window.top.miniFormVal){
+            let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
+            for(let k in miniFormVal){
+                let val = miniFormVal[k];
+                this.actions.setFormValue(k,val)
+            }
+        }
+
 		Mediator.subscribe('workflow:voteconfirm',(res)=>{
 			this.actions.setVoteValue(res);
 		})
+
 		//默认表单样式
-		if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department') || this.el.find('table').hasClass('form-default')) {
-			this.el.find('table').parents('.detail-form').css("background", "#F2F2F2");
-		}
+        if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
+            this.el.find('table').parents('.form-print-position').css("margin-bottom","40px");
+        }
         this.el.find("#form-paging-tabs-control  .paging-tabs-tabform").on('click', function () {
             $(this).css('background','#ffffff').siblings().css('background','#F2F2F2');
         })

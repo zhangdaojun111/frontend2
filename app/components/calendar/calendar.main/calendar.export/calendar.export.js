@@ -23,7 +23,7 @@ let config = {
             }
             if( this.data.fromDate > this.data.toDate ){
                 alert( '起始时间不能大于结束时间。' );
-                return;
+
             }
             else {
                 this.el.find('.export-btn').attr('disabled', false);
@@ -51,8 +51,8 @@ let config = {
             _this.actions.getExportDate();
         };
 
-        this.append(new DateControl({value: '',isCalendar: true},{changeValue: changeStartValue}), this.el.find('.start-date'));
-        this.append(new DateControl({value: '',isCalendar: true},{changeValue: changeEndValue}), this.el.find('.end-date'));
+        this.append(new DateControl({value: '',isCalendar: true, timeType: 'all'},{changeValue: changeStartValue}), this.el.find('.start-date'));
+        this.append(new DateControl({value: '',isCalendar: true, timeType: 'all'},{changeValue: changeEndValue}), this.el.find('.end-date'));
     },
 };
 class CalendarExport extends Component {

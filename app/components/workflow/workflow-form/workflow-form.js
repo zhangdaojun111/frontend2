@@ -13,13 +13,16 @@ import Attachment from '../../form/attachment-list/attachment-list';
 import {FormService} from "../../../services/formService/formService";
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import SettingPrint from '../../form/setting-print/setting-print';
+import {CreateFormServer} from "../../../services/formService/CreateFormServer";
 
 let config = {
     template: template,
     data:{
         attachment:[], //表单附件
         isshowprintbtn: false, //是否显示打印附件按钮
-        isshowfjbtn: false
+        isshowfjbtn: false,
+        miniFormVal:'',
+        tableId:'',
     },
     actions: {
         showImgDel(e){
@@ -122,7 +125,7 @@ let config = {
          * @method 自定义页眉
          */
         async printSetting(){
-            let res = await FormService.getPrintSetting()
+            let res = await FormService.getPrintSetting();
             // if(res.succ == 1){
             SettingPrint.data['key'] = this.data.key;
             if (res.data && res.data.length && res.data.length != 0) {
@@ -170,7 +173,21 @@ let config = {
 
                 modal: true
             })
-        }
+        },
+        //表单最小化
+        miniForm() {
+            this.data.miniFormVal = CreateFormServer.getFormValue(this.data.tableId, false);
+            if (!window.top.miniFormVal) {
+                window.top.miniFormVal = {};
+            }
+            window.top.miniFormVal[this.data.tableId] = this.data.miniFormVal;
+            window.top.miniFormValTableId = this.data.tableId;
+            PMAPI.sendToRealParent({
+                type: PMENUM.close_dialog,
+                key: this.data.key,
+                data: 'success',
+            });
+        },
     },
     binds:[
         {
@@ -183,6 +200,9 @@ let config = {
     ],
     afterRender: function() {
         // this.showLoading();
+        Mediator.subscribe('form:formTableId' , (msg)=>{
+            this.data.tableId = msg.tableId;
+        });
         let serchStr = location.search.slice(1),obj={};
         serchStr.split('&').forEach(res => {
             let arr = res.split('=');
@@ -203,7 +223,7 @@ let config = {
         this.el.on("mouseleave",'.imgseal',function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","none");
-        })
+        });
         this.el.on("mouseenter",".deloldimg",function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","block");
@@ -211,16 +231,19 @@ let config = {
         this.el.on("mouseleave",'.deloldimg',function(e){
             let ev = $(this).find('.J_del');
             ev.css("display","none");
-        })
+        });
         this.el.on("click",'.J_del',(e)=>{
             this.actions.delimg(e);
-        })
+        });
         this.el.on('click','#newfj',()=>{
             this.actions.newfj();
         });
         this.el.on('click','#printBtn', () => {
             this.actions.printSetting();
-        })
+        });
+        this.el.on('click','#miniFormBtn', () => {
+            this.actions.miniForm();
+        });
         Mediator.subscribe('workFlow:record_info',(res)=>{
             if(res.attachment.length){
                 this.data.attachment = res.attachment;
@@ -237,7 +260,7 @@ let config = {
                    this.actions.trans();
                }
             }
-        })
+        });
         Mediator.subscribe('workflow:getImgInfo',(e)=>{
             this.actions.addImg(e);
         });
@@ -266,7 +289,7 @@ let config = {
             // this.hideLoading();
         });
     }
-}
+};
 
 class WorkFlowForm extends Component {
     // constructor(data){

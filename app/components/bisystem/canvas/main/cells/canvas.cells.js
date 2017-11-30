@@ -20,7 +20,14 @@ let config = {
          * @param cells 需要渲染的画布块数据的组件
          */
         async getCellChartData(layouts,cells) {
-            const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1},false);
+            let res;
+            if(this.data.isPdf === true){
+                res = window.config.bi_data;
+                res['success'] = 1;
+            }else {
+                res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1}, false);
+            }
+
             if (this.data) { // 当快速切换视图的时候 有可能数据返回 但不需要渲染
 
                 if (res['success'] == 0) {
@@ -58,7 +65,6 @@ let config = {
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
             }
-
         },
         /**
          * 瀑布流方式加载cell chart data 数据(移动端的处理)
@@ -111,23 +117,25 @@ let config = {
         },
 
         isScrollStop() {
-            // 判断此刻到顶部的距离是否和1秒前的距离相等
-            if(this.el.scrollTop() == this.data.curScrollTop) {
-                let windowSize = $(window).width();
-                if (windowSize && windowSize <= 960) {
-                    this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
-                } else {
-                    this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
+            if(!this.data.isPdf){
+                // 判断此刻到顶部的距离是否和1秒前的距离相等
+                if(this.el.scrollTop() == this.data.curScrollTop) {
+                    let windowSize = $(window).width();
+                    if (windowSize && windowSize <= 960) {
+                        this.actions.phoneWaterfallLoadingCellData({top: this.data.curScrollTop});
+                    } else {
+                        this.actions.waterfallLoadingCellData({top: this.data.curScrollTop});
+                    }
+                    clearInterval(this.data.interval);
+                    this.data.interval = null;
                 }
-                clearInterval(this.data.interval);
-                this.data.interval = null;
             }
         },
 
         /**
          * 实例化画布块，并返回实例化的对象
          */
-        makeCell(data) {
+        makeCell(data,flag) {
             let cell = new CanvasCellComponent(data,{
 
                 onDrag: (componentId) => {
@@ -148,6 +156,9 @@ let config = {
                 },
             });
             this.append(cell, this.el.find('.cells'));
+            if(flag === true){
+                // this.actions.postHtmlCode();
+            }
             return cell;
         },
 
@@ -164,12 +175,37 @@ let config = {
             this.data.cells[cellLayout.componentId] = cellLayout;
         },
 
+        selectAllCells(){
+            Object.keys(this.data.cells).forEach((key)=>{
+                this.data.cells[key].actions.select();
+            })
+        },
+
+        cancelSelectCells(){
+            Object.keys(this.data.cells).forEach((key)=>{
+                this.data.cells[key].actions.cancelSelect();
+            })
+        },
+
+        reverseSelectCells(){
+            Object.keys(this.data.cells).forEach((key)=>{
+                this.data.cells[key].actions.toggleSelect();
+            })
+        },
 
         /**
          * 根据当前视图id，得到当前视图画布块布局，大小
          */
         async getCellLayout() {
-            const res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
+            let res = {};
+            if(this.data.isPdf === true){
+                res['data'] = {};
+                res['data']['data'] = window.config.layout_data.data;
+                res['success'] = 1;
+            }else{
+                res = await canvasCellService.getCellLayout({view_id: this.data.currentViewId});
+            }
+
             if (res['success'] === 1) {
                 try {
                     this.actions.loadCellChart(res['data']['data']);
@@ -190,7 +226,7 @@ let config = {
             let zIndex = [];  // 获取每个画布块的zIndex(用来获取最大)
             let layouts = []; // 需要请求服务器画布块的chart数据
             let userMode = window.config.bi_user === 'manager' ? 'manager' : 'client'; // 判断是客户端还是编辑模式
-
+            let layoutLen = Object.keys(layoutsData).length;
             // 通过cells渲染画布块
             layoutsData.map((val, index) => {
                 zIndex.push(val.size.zIndex);
@@ -200,7 +236,11 @@ let config = {
                     'currentViewId': this.data.currentViewId,
                     'cell': val
                 };
-                let cell = this.actions.makeCell(data);
+                let isLast;
+                if(this.data.isPdf === true && index === layoutLen - 1 ){
+                    isLast = true;
+                }
+                let cell = this.actions.makeCell(data,isLast);
                 this.data.cells[cell.componentId] = cell;
                 // 在客户模式下获取有没有下穿记录
                 let deep_info = {};
@@ -265,8 +305,7 @@ let config = {
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
             }
-        }
-
+        },
     },
     binds: [
         { //滚动距离
@@ -285,8 +324,13 @@ let config = {
     ],
 
     async afterRender() {
+        if(window.config.pdf === true){
+            this.data.isPdf = true;
+        }
+
         // 获取画布块布局信息
         await this.actions.getCellLayout();
+
         // 瀑布流加载cellchart 数据
         if (this.data) {
             if(this.data.isPdf){

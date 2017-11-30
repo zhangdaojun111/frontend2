@@ -27,6 +27,7 @@ let config = {
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
                     this.el.find('.form-chart-multi-chart').addClass('countColumn-width');
+                    this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
@@ -114,6 +115,7 @@ let config = {
                 type: 'autocomplete',
                 placeholder: '选择数据来源',
                 required: true,
+                class:'multi-source',
                 rules: [
                     {
                         errorMsg:'数据源不能为空',
@@ -132,6 +134,7 @@ let config = {
                 name: 'chartType',
                 defaultValue: 'line',
                 type: 'select',
+                class:'multi-chartType',
                 list: [
                     {value: 'line', name: '折线图'},
                     {value: 'bar', name: '柱状图'}
@@ -146,6 +149,7 @@ let config = {
                 type: 'autocomplete',
                 placeholder: '选择X轴字段',
                 required: true,
+                class:'multi-xAxis',
                 rules: [
                     {
                         errorMsg:'请选择X轴字段',
@@ -161,6 +165,7 @@ let config = {
                 type: 'autocomplete',
                 placeholder: '选择Y轴字段',
                 required: true,
+                class:'multi-yAxis',
                 // rules: [
                 //     {
                 //         errorMsg:'请选择Y轴字段',
@@ -183,6 +188,7 @@ let config = {
                 list:[],
                 type: 'checkbox',
                 required: false,
+                class:'multi-columns',
                 rules: [
                     {
                         errorMsg:'请选择Y轴字段',
@@ -203,6 +209,7 @@ let config = {
                 name: 'filter',
                 defaultValue: {},
                 type: 'search',
+                class:'multi-filter',
                 events: {
                     onShowAdvancedSearchDialog() {
                         let data = {
@@ -235,9 +242,6 @@ let config = {
             if(this.formItems){
                 for (let key of Object.keys(this.formItems)) {
                     if (this.formItems[key].data.rules) {
-                        if(window.config.query_mark !== 'single'){
-                            continue;
-                        }
                         let isValid = this.formItems[key].valid();
                         if (!isValid) {
                             pass = false;

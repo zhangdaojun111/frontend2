@@ -62,7 +62,7 @@ let config = {
         },
         toggleSelected:function () {
             if(this.data.options.treeType != 'SINGLE_SELECT'){
-                return;
+
             }
             
         },
@@ -99,7 +99,7 @@ let config = {
             let isOffspringFiltered = false;
             this.data.childNodes.forEach(childNode=>{
                 isOffspringFiltered = childNode.actions.filterNode(input,isFiltered,isChildFiltered)||isOffspringFiltered;
-            })
+            });
             if(isOffspringFiltered){
                 this.el.show();
             }
@@ -125,20 +125,20 @@ let config = {
                 let com = new TreeNode(data,this.data.options.callback);
                 com.render(ele);
                 this.data.childNodes.push(com);
-            })
+            });
             this.el.after(childTree);
             this.el.find('.icon').addClass('expanded_node');
         } else {
             this.el.find('.icon').addClass('leaf_node');
         }
 	    if(this.data.state && this.data.state.checked){
-		    this.data.checked=this.data.state.checked
+		    this.data.checked=this.data.state.checked;
 		    this.el.find('.node-check').removeClass('unchecked_box').addClass('checked_box');
 	    } else {
 		    this.el.find('.node-check').removeClass('checked_box').addClass('unchecked_box');
 	    }
     }
-}
+};
 
 export default class TreeNode extends Component {
     constructor(data,callback){

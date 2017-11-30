@@ -87,19 +87,19 @@ Mediator.subscribe('workFlow:record_info', (res) => {
     if(current_node_arr.indexOf(window.config.name)==-1){
         is_view = 1;
         $('#approval-workflow').find('.for-hide').hide();
-    };
+    }
     if(res.record_info.status==="已驳回到发起人"&&res.record_info.start_handler===window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
         if(!is_view){
             $('#approval-workflow').find('#re-app').show();
         }
-    };
+    }
     if(res.record_info.status==="已撤回"&&res.record_info.start_handler===window.config.name){
         $('#approval-workflow').find('.for-hide').hide();
         if(!is_view){
             $('#approval-workflow').find('#re-app').show();
         }
-    };
+    }
     if(is_view){
         $('#add-home').find('#addFollower').hide();
     }
@@ -134,7 +134,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
             if(nameArr.indexOf(window.config.name)>-1&&current_node_arr.indexOf(window.config.name)==-1){
                 $('#approval-workflow').find('.for-hide').hide();
                 $('#approval-workflow').find('#re-app').hide();
-            };
+            }
         }).then()
     });
     
@@ -178,7 +178,7 @@ Mediator.subscribe('workFlow:record_info', (res) => {
         temp_ids=ids;
     };
     AgGrid.render($("#J-aggrid"));
-})
+});
 
 
 Mediator.subscribe("workflow:loaded",(e)=>{
@@ -197,7 +197,7 @@ Mediator.subscribe("workflow:loaded",(e)=>{
 let focusArr=[];
 Mediator.subscribe('workflow:focus-users', (res)=> {
     focusArr=res;
-})
+});
 
 function GetQueryString(name)
 {
@@ -209,7 +209,7 @@ function GetQueryString(name)
 //审批操作
 const approveWorkflow = (para) => {
     let key=GetQueryString('key');
-    let validation_required = true
+    let validation_required = true;
     let action_arr = [1,2,6,8];
     if((para.sigh_type == '0'&&para.sigh_user_id!='') || action_arr.indexOf(para.action)!=-1){
         validation_required = false;
@@ -226,6 +226,7 @@ const approveWorkflow = (para) => {
         }
     }
     para.focus_users=JSON.stringify(focusArr);
+    // para['parent_record_id'] = window.config.parent_record_id || ''
     msgBox.showLoadingSelf();
     // (async function () {
     //     return workflowService.approveWorkflowRecord({
@@ -252,14 +253,16 @@ const approveWorkflow = (para) => {
     }).then(res => {
         msgBox.hideLoadingSelf();
         if(res.success===1){
-            msgBox.alert(`操作成功`);
+	        msgBox.showTips('操作成功。');
+            // msgBox.alert(`操作成功`);
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:key,
                 data:{refresh:true}
             })
         }else{
-            msgBox.alert(`失败：${res.error}`);
+	        msgBox.showTips('操作失败。');
+            // msgBox.alert(`失败：${res.error}`);
         }
     })
 
@@ -382,7 +385,7 @@ Mediator.subscribe("workflow:getStamp", (msg) => {
     })().then(res => {
         Mediator.publish("workflow:changeImg", res);
     });
-})
+});
 //删除图片
 Mediator.subscribe("workflow:delImg", (msg) => {
     (async function () {

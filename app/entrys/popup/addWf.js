@@ -38,11 +38,18 @@ serchStr.split('&').forEach(res => {
 AddWf.showDom(obj).then(function (component) {
     WorkFlowForm.showForm();
     let isshow = true;
+
     Mediator.subscribe("form:formAlreadyCreate",()=>{
         if(isshow){
             component.hideLoading();
             isshow = false;
         }
+        if(obj.tableType !== 'child' && obj.btnType === 'new' && !obj.calendar){
+          $('#miniFormBtn').show();
+        }else{
+           $('#miniFormBtn').hide();
+        }
+
     });
     // setTimeout(()=>component.hideLoading(),1000)
 });
@@ -219,4 +226,4 @@ Mediator.subscribe('workflow:changeToEdit',(res)=>{
     // $("#add-wf").find('#print').removeClass('addPrint');
     is_view = 0;
     CreateFormServer.changeToEdit(res);
-})
+});

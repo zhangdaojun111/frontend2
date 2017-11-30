@@ -14,7 +14,7 @@ export const CreateFormServer={
 	data: {},
 	//初始化配置数据
 	init(config = {}) {
-		this.data = {}
+		this.data = {};
 		//表名
 		this.data.tableId = config.table_id || '';
 		//父表真实字段
@@ -102,7 +102,7 @@ export const CreateFormServer={
 				reload_draft_data: this.data.reloadDraftData,
 				from_workflow: this.data.fromWorkFlow,
 				table_id: this.data.tableId
-			}
+			};
 			this.data.isloadWorkflow = true;
 		} else if (this.data.fromApprove && this.data.realId == '') {//审批流程
 			json = {
@@ -112,7 +112,7 @@ export const CreateFormServer={
 				from_approve: this.data.fromApprove,
 				from_focus: this.data.fromFocus || 0,
 				table_id: this.data.tableId
-			}
+			};
 			this.data.isloadWorkflow = true;
 		}
 		else {
@@ -130,7 +130,7 @@ export const CreateFormServer={
 		}
 		//如果有tempId优先传tempId
 		if( this.data.tempId ){
-			json['temp_id'] = this.data.tempId
+			json['temp_id'] = this.data.tempId;
 			json['real_id'] = ''
 		}
 		if( this.data.data_from_row_id ){
@@ -161,7 +161,7 @@ export const CreateFormServer={
 					parent_table_id: this.data.parentTableId || "",
 					parent_real_id: this.data.parentRealId || "",
 					parent_temp_id: this.data.parentTempId || ""
-				}
+				};
 				this.data.isloadCustomTableForm = true;
 			} else {
 				//默认表单数据
@@ -219,7 +219,7 @@ export const CreateFormServer={
 		}
 		staticData.data = data;
 		//将外部模块的值赋值给baseForm
-		_.defaultsDeep(staticData, this.data)
+		_.defaultsDeep(staticData, this.data);
 		staticData.tableId = staticData['table_id'] || this.data.tableId;
 		return staticData;
 
@@ -347,7 +347,7 @@ export const CreateFormServer={
 				}
 			} else {
 				try {
-					console.log('加载默认表单')
+					console.log('加载默认表单');
 					html = CreateForm.formDefaultVersion(res[0].data);
 				} catch (e) {
 					console.error(`加载系统自带的默认表单失败`);
@@ -356,7 +356,7 @@ export const CreateFormServer={
 			}
 		} else {
 			try {
-				console.log('加载默认表单')
+				console.log('加载默认表单');
 				html = CreateForm.formDefaultVersion(res[0].data);
 			} catch (e) {
 				console.error(`加载系统自带的默认表单失败`);
@@ -421,7 +421,7 @@ export const CreateFormServer={
 				res=await FormService.getFormData(json);
 				//将表单名称发送给工作流
 			}else {
-				console.log("不请求表单数据。")
+				console.log("不请求表单数据。");
 				res = this.data.noRequestFormData;
 			}
 			//将表单名称发送给工作流
@@ -462,7 +462,8 @@ export const CreateFormServer={
 		Mediator.publish('form:formAlreadyCreate'+this.tableId, 'success');
 		console.timeEnd('form创建时间');
 		//给工作流传表单初始数据
-		let valueChange = this.getFormValue(this.data.tableId, false)
+		let valueChange = this.getFormValue(this.data.tableId, false);
 		Mediator.publish('workFlow:formValueChange', valueChange);
+        Mediator.publish('form:formTableId' , this.data);
 	}
-}
+};

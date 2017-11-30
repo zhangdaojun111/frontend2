@@ -1,4 +1,5 @@
 import 'jquery-ui/ui/widgets/dialog';
+import {PMAPI,PMENUM} from './postmsg';
 
 $.widget("custom.erdsDialog", $.ui.dialog, {
     options: {
@@ -90,6 +91,17 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
                     } else {
                         this._maximizeWindow();
                     }
+                }
+            });
+            this._on('.ui-dialog-titlebar-close', {
+                click: function (event) {
+                    event.preventDefault();
+
+                    if(window.top.miniFormVal){
+                        window.top.hideMiniForm[window.top.miniFormValTableId]();
+                        delete window.top.miniFormVal[window.top.miniFormValTableId ];
+                    }
+
                 }
             });
         }
