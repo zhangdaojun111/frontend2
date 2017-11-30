@@ -290,6 +290,9 @@ let config = {
                 }
                 this.actions._postReadData(JSON.stringify([data.id]));
             }
+            if($event.data.wf_urgency_level == 2){
+                msgbox.alert('催办消息：' + ($event.data.urge_info||''));
+            }
         },
         /**
          * 根据用户偏好初始化分页工具

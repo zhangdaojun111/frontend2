@@ -788,6 +788,9 @@ let config = {
                 }
                 let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                 this.actions.openSourceDataGrid( url,winTitle );
+                if($event.data.wf_urgency_level == 2){
+                    msgbox.alert('催办消息：' + ($event.data.urge_info||''));
+                }
             }
         },
         //打开关闭催办
