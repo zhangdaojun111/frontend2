@@ -7,6 +7,7 @@ import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 import './linebar.scss';
 import {formChartValidateService as formValidate} from '../../../../../services/bisystem/bi.chart.validate.service';
+let z = 0;
 let config = {
     template: template,
     actions: {
@@ -63,6 +64,8 @@ let config = {
                         return {value: JSON.stringify(item), name: item.name}
                     });
                     this.formItems['countColumn'].setList(fields);
+                    this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
+                    console.log('1111111111111111111111111111111111');
                     this.formItems['countColumn'].el.show();
                 } else {
                     this.formItems['countColumn'].actions.clear();
@@ -121,7 +124,7 @@ let config = {
             this.formItems['limit'].trigger('onChange');
             this.formItems['customTop'].trigger('onChange');
             // 获取数据来源
-            ChartFormService.getChartSource().then(res => {
+            await ChartFormService.getChartSource().then(res => {
                 if (res['success'] === 1) {
                     this.formItems['source'].setList(res['data']);
                 } else {
@@ -130,7 +133,7 @@ let config = {
             });
 
             // 获取图标
-            ChartFormService.getChartIcon().then(res => {
+            await ChartFormService.getChartIcon().then(res => {
                 if (res['success'] === 1) {
                     let icons =[];
                     icons = res['data'].map(icon => {
