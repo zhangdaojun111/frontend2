@@ -182,7 +182,7 @@ function getLoginController() {
                         this.$submitFindPw.click();
                     }
                 }
-            },300))
+            },300));
         },
 
         /**
@@ -391,33 +391,48 @@ let controller = getLoginController();
 controller.formInit();  //初始化表单控件
 controller.getNextUrl();       //根据url判断是否跳转页面
  let isNeedDownload = controller.browser_check();     //暂时屏蔽
-//let isNeedDownload = false;
+
+function resetLoginBoxInfo(result) {
+    if(result.use_register && result.use_register.toString() === "1"){
+        $('.register-btn').show();
+    }
+    if(result.sap_login_system_version && result.sap_login_system_version.toString() === "1"){
+        $('.update-btn').show();
+    }
+    if(result.show_publish_link && result.show_publish_link.toString() === "1"){
+        $('.self-service-update').show();
+    }
+    controller.versionInfo = result;
+    controller.sysNameInit();   //初始化公司名称
+    controller.versionInit();   //初始化版本table
+}
+
+function resetBackground(result) {
+    console.log(result);
+    let backgroundSrc = result.client_login_params && result.client_login_params.back_ground.login_back_ground;
+    let coverSrc = result.client_login_params && result.client_login_params.back_ground.login_cover_on;
+    if (backgroundSrc) {
+        $('.wave-bg').css('background-image', `url(${backgroundSrc})`);
+    }
+    if (coverSrc) {
+        $('.login-main-window').css('background-image', `url(${coverSrc})`);
+    }
+}
+
 if( isNeedDownload === false){      //正常显示登录表单
     controller.infoInit();  //初始化最近访问用户和密码
-    LoginService.getVersionInfo().done((result) => {
-        if(result.success === 1){
-            if(result.use_register && result.use_register.toString() === "0"){
-                $('.register-btn').hide();
+    let result = window.config && window.config.revision_info;
+    if (result) {
+        resetLoginBoxInfo(result);
+        resetBackground(result);
+    } else {
+        LoginService.getVersionInfo().done((result) => {
+            if(result.success === 1){
+                resetLoginBoxInfo(result);
+                resetBackground(result);
+            }else{
+                console.log("版本数据获取失败");
             }
-            if(result.sap_login_system_version && result.sap_login_system_version.toString() === "0"){
-                $('.update-btn').hide();
-            }
-            if(result.show_publish_link && result.show_publish_link.toString() === "0"){
-                $('.self-service-update').hide();
-            }
-            if(result.verify_code && result.verify_code.toString() === '1') {
-                $('.verify-group').show()
-                controller.verifyCode = new verify('verify-container');
-            }
-            controller.versionInfo = result;
-            controller.sysNameInit();   //初始化公司名称
-            controller.versionInit();   //初始化版本table
-        }else{
-            console.log("版本数据获取失败");
-        }
-    }).fail((err) => {
-        console.log("get version info fail", err.statusText);
-    });
 }else{
     //显示浏览器下载提示,隐藏其余部分
     let prompt = LoginService.prompt;
@@ -441,6 +456,8 @@ if( isNeedDownload === false){      //正常显示登录表单
     $(".download-link").attr('href',downLoadLink)
 }
 
-
-starter.init();
-starter.animate();
+// 延时处理动画，会阻塞dom操作
+window.setTimeout(function () {
+    starter.init();
+    starter.animate();
+}, 500);

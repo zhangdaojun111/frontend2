@@ -137,7 +137,7 @@ let config = {
 		//主动触发指定字段的所有事件
 		triggerSingleControl(key,noCount) {
 			let val = this.data.data[key]["value"];
-			if (val != "" || !$.isEmptyObject(val)) {
+			if (val.toString() != "" || !$.isEmptyObject(val)) {
 				if ($.isArray(val)) {
 					if (val.length != 0) {
 						this.actions.checkValue(this.data.data[key],noCount);
@@ -150,6 +150,7 @@ let config = {
 
 		//给子表统计赋值
 		async setCountData() {
+    		MSG.showLoadingSelf();
 			let res = await FormService.getCountData({
 				//传给后台当前表单所有控件的值
 				data: JSON.stringify(this.actions.createFormValue(this.data.data)),
@@ -162,6 +163,7 @@ let config = {
 				this.actions.setFormValue(d, res["data"][d]);
                 // this.actions.triggerSingleControl(d);
 			}
+    		MSG.hideLoadingSelf();
 		},
 
 		//给外部提供formValue格式数据
@@ -433,6 +435,7 @@ let config = {
 					base_field_2_value: JSON.stringify(this.data.baseIdsLocalDict),
 					temp_id: this.data.data.temp_id["value"]
 				};
+                MSG.showLoadingSelf();
 				let res = await FormService.getDefaultValue(json);
 				for (let key in res["data"]) {
 					//排除例外字段
@@ -475,6 +478,7 @@ let config = {
 						}
 					}
 				}
+                MSG.hideLoadingSelf();
 			}
 		},
 
@@ -1323,7 +1327,7 @@ let config = {
 			}
 		},
 		//触发事件检查
-		checkValue: function (data,noCount) {
+		checkValue:async function (data,noCount) {
 			let isChange=data.originVal!=data.value;
 			data.originVal=data.value;
 			if (!this.data.childComponent[data.dfield]) {
@@ -1345,7 +1349,7 @@ let config = {
 				}else{
 					value=data.value;
 				}
-				this.actions.setAboutData(id, value);
+				await this.actions.setAboutData(id, value);
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
@@ -1370,7 +1374,7 @@ let config = {
 			//统计功能
 			this.actions.myUseFieldsofcountFunc();
 			if(!noCount || isChange){
-                this.actions.countFunc(data.dfield,data);
+                await this.actions.countFunc(data.dfield,data);
 			}
 			//改变选择框的选项
 			if (data['linkage'] != {}) {
@@ -1413,7 +1417,7 @@ let config = {
 
 			if(!noCount || isChange){
 				//this.actions.calcExpression(calcData, data['value']);
-                this.actions.webCalcExpression(data,FormService)
+                await this.actions.webCalcExpression(data,FormService)
 			};
 			if (data.required) {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
@@ -2132,6 +2136,7 @@ let config = {
 		}
 	},
 	afterRender() {
+
 		this.actions.createFormControl();
 		if (this.data.is_view == 1) {
 			this.actions.checkCustomTable();
@@ -2142,14 +2147,14 @@ let config = {
 		if (this.data.btnType != 'none') {
 			this.actions.addBtn();
 		}
-
-        if(window.top.miniFormVal && this.data.btnType == 'new'){
+        if(window.top.miniFormVal){
             let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
             for(let k in miniFormVal){
                 let val = miniFormVal[k];
                 this.actions.setFormValue(k,val)
             }
         }
+
 		Mediator.subscribe('workflow:voteconfirm',(res)=>{
 			this.actions.setVoteValue(res);
 		})
