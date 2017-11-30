@@ -402,6 +402,15 @@ function resetLoginBoxInfo(result) {
     if(result.show_publish_link && result.show_publish_link.toString() === "1"){
         $('.self-service-update').show();
     }
+    if(result.verify_code && result.verify_code.toString() === "1") {
+        let obj = {
+            id: 'verify-container',
+            width: "160",
+            height: "40",
+        }
+        controller.verifyCode = new verify(obj);
+        $('.verify-group').show();
+    }
     controller.versionInfo = result;
     controller.sysNameInit();   //初始化公司名称
     controller.versionInit();   //初始化版本table
@@ -433,6 +442,10 @@ if( isNeedDownload === false){      //正常显示登录表单
             }else{
                 console.log("版本数据获取失败");
             }
+        }).fail((err) => {
+            console.log("get version info fail", err.statusText);
+        });
+    }
 }else{
     //显示浏览器下载提示,隐藏其余部分
     let prompt = LoginService.prompt;
