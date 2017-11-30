@@ -1017,6 +1017,16 @@ let config = {
 				_this.el.find('#requiredLogo').removeClass().addClass('required');
 			}
 		},
+		setRadioCheck(data){
+			for (let obj of data.group) {
+				obj['name'] = data.dfield;
+				if (obj.value == data.value) {
+					obj['checked'] = true;
+				} else {
+					obj['checked'] = false;
+				}
+			}
+		},
 		//赋值
 		setFormValue(dfield, value,noCount) {
 			let count=noCount?false:true;
@@ -1024,8 +1034,14 @@ let config = {
 			if (data) {
 				data["value"] = value;
 				let childComponet = this.data.childComponent[dfield];
+				if(data.type=='Radio'){
+					this.actions.setRadioCheck(data);
+				}
 				if (childComponet) {
 					childComponet.data["value"] = value
+					if(data.type=='Radio'){
+						this.actions.setRadioCheck(childComponet.data);
+					}
 					childComponet.reload();
 				}
 				this.actions.triggerSingleControl(dfield,count);
@@ -1938,14 +1954,7 @@ let config = {
 						this.data.childComponent[data[key].dfield] = songrid;
 						break;
 					case 'Radio':
-						for (let obj of data[key].group) {
-							obj['name'] = data[key].dfield;
-							if (obj.value == data[key].value) {
-								obj['checked'] = true;
-							} else {
-								obj['checked'] = false;
-							}
-						}
+						this.actions.setRadioCheck(data[key]);
 						let radio = new Radio(data[key], actions);
 						radio.render(single);
 						this.data.childComponent[data[key].dfield] = radio;
