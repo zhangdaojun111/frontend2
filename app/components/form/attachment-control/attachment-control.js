@@ -25,9 +25,9 @@ let config = {
             selector: '.upload-file',
             callback: function () {
                 let ele = this.el.find('.selecting-file');
-                if (this.data.dinput_type == 33) {  //视频附件
+                if (this.data.real_type == 33) {  //视频附件
                     ele.attr('accept', 'video/*,audio/*');
-                } else if (this.data.dinput_type == 23) {  //图片附件
+                } else if (this.data.real_type == 23) {  //图片附件
                     ele.attr('accept', 'image/*');
                 }
                 ele.click();
@@ -130,10 +130,10 @@ let config = {
                                 data["isPreview"] = false;
                             }
                         }
-                        if(this.data.dinput_type == 9 || this.data.dinput_type == 23){
+                        if(this.data.real_type == 9 || this.data.real_type == 23){
                             let obj={
                                 list:this.data.rows,
-                                dinput_type:this.data.dinput_type,
+                                dinput_type:this.data.real_type,
                                 is_view:this.data.is_view,
                                 control_id:this.data.id
                             };
@@ -144,11 +144,11 @@ let config = {
                             }).then(res=>{
                                 this.actions._updateDeleted(res);
                             });
-                        }else if(this.data.dinput_type == 33){
+                        }else if(this.data.real_type == 33){
                             let fileId = this.data.value[0];
                             let obj={
                                 rows:this.data.rows,
-                                dinput_type:this.data.dinput_type,
+                                dinput_type:this.data.real_type,
                                 currentVideoId:fileId,
                                 videoSrc:`/download_attachment/?file_id=${fileId}&download=0&dinput_type=${this.data.dinput_type}`,
                                 control_id:this.data.id,
@@ -179,19 +179,19 @@ let config = {
                 msgBox.alert(file.name + ' 文件过大，无法上传，请确保上传文件大小小于100MB');
                 return;
             }
-            if (this.data.dinput_type == 33) {
+            if (this.data.real_type == 33) {
                 if (!file.type.startsWith('video') && !file.type.startsWith('audio')) {
                     msgBox.alert('"' + file.name + '"不是视音频类型文件，支持文件类型包括：avi, asf, mpg, mpeg, mpe, wmv, mp4,mp3,wav');
                     return;
                 }
-            } else if (this.data.dinput_type == 23) {
+            } else if (this.data.real_type == 23) {
                 if (!file.type.startsWith('image')) {
                     msgBox.alert('"' + file.name + '"不是图片类型文件，支持文件类型包括：bmp, jpg, png, tiff, gif, exif, svg, pcd, dxf, ufo');
                     return;
                 }
             }
             let ele = $('<div></div>');
-            let item = new AttachmentQueueItem({file: file, real_type: this.data.dinput_type, fileOrder:i, toolbox:toolbox},
+            let item = new AttachmentQueueItem({file: file, real_type: this.data.real_type, fileOrder:i, toolbox:toolbox},
                 {
                     changeFile: event => {
                         if (event.event == 'delete') {
@@ -236,8 +236,8 @@ let config = {
                             }
                             if (this.data['thumbnailListComponent']) {
                                 this.data['thumbnailListComponent'].actions.addItem(obj);
-                            } else if(this.data.dinput_type == 23) {
-                                let comp = new ThumbnailList([obj],this.data.dinput_type);
+                            } else if(this.data.real_type == 23) {
+                                let comp = new ThumbnailList([obj],this.data.real_type);
                                 comp.render(this.el.find('.thumbnail-list-anchor'));
                                 this.data['thumbnailListComponent'] = comp;
                             }
@@ -284,7 +284,7 @@ let config = {
              for(let file of deletedFiles){
                 this.data.value.splice(this.data.value.indexOf(file),1);
                 this.el.find('#'+file).remove();
-                if(this.data.dinput_type == 23){
+                if(this.data.real_type == 23){
                     this.actions._deleteItemFromThumbnailList(file);
                 }
             }
@@ -296,10 +296,14 @@ let config = {
         }
     },
     afterRender: function () {
-        if (this.data.dinput_type == 33) {
+        if(this.data.read_only){
+            this.el.find('.file-btns').hide();
+            this.data.is_view = 1;
+        }
+        if (this.data.real_type == 33) {
             this.el.find('.shot-screen').css('display', 'none');
             this.el.find('.upload-file').val('上传视频');
-        } else if (this.data.dinput_type == 23) {
+        } else if (this.data.real_type == 23) {
             this.el.find('.upload-file').val('上传图片');
             if(this.data.value.length != 0){
                 FormService.getThumbnails({
@@ -310,7 +314,7 @@ let config = {
                         return;
                     }
                     if (res.rows.length != 0) {
-                        let comp = new ThumbnailList(res.rows,this.data.dinput_type);
+                        let comp = new ThumbnailList(res.rows,this.data.real_type);
                         comp.render(this.el.find('.thumbnail-list-anchor'));
                         this.data['thumbnailListComponent'] = comp;
                     }

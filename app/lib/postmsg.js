@@ -307,6 +307,11 @@ export const PMAPI = {
         return this;
     },
 
+    sendToRootParent: function (data) {
+        this.getRoot().postMessage(data, location.origin);
+        return this;
+    },
+
     /**
      * 将消息发送给调用的父组件,新框架如果是在非主框架上打开的话，关闭应该采用此方法
      * @param data
@@ -440,7 +445,7 @@ export const PMAPI = {
         return new Promise(function (resolve) {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
-            PMAPI.sendToParent({
+            PMAPI.sendToRootParent({
                 type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),
