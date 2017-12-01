@@ -68,7 +68,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     lineBarOption(cellChart) {
-        console.log(cellChart);
         let cellOption = cellChart['chart'];
         let ySelectedGroup = cellChart['chart']['ySelectedGroup'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
@@ -183,7 +182,7 @@ export class EchartsService {
         }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
-            linebarOption['grid']['right'] = '2.3%';
+            linebarOption['grid']['right'] = 20;
             // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
             if(!isStack) {
