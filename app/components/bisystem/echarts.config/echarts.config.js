@@ -288,7 +288,7 @@ const linebar = {
     },
     grid: {
         left: 0,
-        right: '3%',
+        right: 15,
         bottom: 10,
         top:30,
         containLabel: true

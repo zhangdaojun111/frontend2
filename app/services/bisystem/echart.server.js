@@ -182,8 +182,7 @@ export class EchartsService {
         }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
-            linebarOption['grid']['right'] = 20;
-            // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
+            linebarOption['grid']['right'] = Math.max(1/cellChart.cell.size.width * 10000,15);
         } else if (cellOption.double === 1) {
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
