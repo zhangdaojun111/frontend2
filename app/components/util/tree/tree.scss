@@ -14,7 +14,7 @@
     cursor:pointer;
     white-space: nowrap;
     text-overflow: ellipsis;
-    display: inline-block;
+    //display: inline-block;
   }
   li:hover {
     background-color: #E9E9E9;
@@ -22,7 +22,7 @@
 }
 .buttons-in-tree{
   position: fixed;
-  bottom: 55px;
+  bottom: 50px;
   height: 30px;
   width: 208px;
   border-top:1px solid #E4E4E4;
@@ -35,6 +35,7 @@
     background: none;
     margin: 0 10px;
     font-size: 12px;
+    cursor: pointer;
   }
 }
 .treeBtn{

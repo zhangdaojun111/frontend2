@@ -73,6 +73,16 @@ export const ViewsService = {
                 resolve(res);
         })
     },
-
-
+    postPdfHtml(data){
+        return HTTP.ajaxImmediately({
+            url:'/bi/download_pdf/',
+            data: {
+                bi_str:data.bi_str,
+                view_id:data.view_id,
+                pdf_name:'',
+            },
+            method:'post',
+            traditional: true
+        });
+    },
 };

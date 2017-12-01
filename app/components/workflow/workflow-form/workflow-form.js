@@ -23,7 +23,6 @@ let config = {
         isshowfjbtn: false,
         miniFormVal:'',
         tableId:'',
-        btnType:'',
     },
     actions: {
         showImgDel(e){
@@ -203,12 +202,6 @@ let config = {
         // this.showLoading();
         Mediator.subscribe('form:formTableId' , (msg)=>{
             this.data.tableId = msg.tableId;
-            this.data.btnType = msg.btnType;
-            if(this.data.btnType == 'new'){
-                this.el.find('.miniFormBtn').show();
-            }else{
-                this.el.find('.miniFormBtn').hide();
-            }
         });
         let serchStr = location.search.slice(1),obj={};
         serchStr.split('&').forEach(res => {

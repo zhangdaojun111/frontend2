@@ -288,10 +288,11 @@ export class EchartsService {
         let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
         if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
-            linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
+            linebarOption['yAxis'][0]['min'] = firstMin >= 0 && isZero ? 0 : firstMin;
             if (cellOption.double === 1) {
                 linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
             }
+
             linebarOption['dataZoom']=[
                 {
                 type: 'slider',
@@ -318,8 +319,7 @@ export class EchartsService {
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
-        console.log('-----------------');
-        console.log(linebarOption);
+
         return linebarOption;
     }
 
@@ -347,7 +347,17 @@ export class EchartsService {
         pieOption['series'][0].name = title;
         pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if(cellChart.chart.chartType.type == 'circular'){
-            pieOption['series'][0].radius = ['50%','70%'];
+            pieOption['series'][0].radius = ['50%','80%'];
+        }
+        //是否设置自定义图表半径
+        if(cellOption['customPie'].hasOwnProperty('radius')){
+            pieOption['legend']['type'] = 'plain';
+            pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
+            if(cellChart.chart.chartType.type == 'pie'){
+                pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
+            }else{
+                pieOption['series'][0]['radius'] = isNaN(cellOption['customPie']['radius'])?[(parseFloat(cellOption['customPie']['radius'])-20)+'%',cellOption['customPie']['radius']]:[cellOption['customPie']['radius']-20+'',cellOption['customPie']['radius']];
+            }
         }
         return pieOption;
     }
@@ -410,8 +420,8 @@ export class EchartsService {
                         }
                     }
                 });
-                let max = Math.max.apply(null, y['data']);
-                let min = Math.min.apply(null, y['data']);
+                let max = Math.max.apply(null, y['data'])
+                let min = Math.min.apply(null, y['data'])
                 ymin.push(min);
                 ymax.push(max);
             });
@@ -541,8 +551,6 @@ export class EchartsService {
         links.pop();
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
-        console.log('================================');
-        console.log(data);
         return stylzieOption;
     }
 
@@ -599,8 +607,8 @@ export class EchartsService {
         if (cellOption['yAxis'].length === 0 ) {
             return defaultOption;
         }
-        gaugeOption.series[0].min = cellOption['data']['range'][0];
-        gaugeOption.series[0].max = cellOption['data']['range'][1];
+        gaugeOption.series[0].min = Math.min(...cellOption['data']['range']);
+        gaugeOption.series[0].max = Math.max(...cellOption['data']['range']);
         if(cellOption['data']['range'][0] == 0 && cellOption['data']['range'][1] == 0){
             if(cellOption['data']['yAxis']>0){
                 gaugeOption.series[0].min = 0;
@@ -612,9 +620,15 @@ export class EchartsService {
         }
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
         gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
-        gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
-            return value;
-        };
+
+        if(cellOption['yAxis'][0]['real_accuracy']){
+            gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
+                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+            };
+            gaugeOption.series[0]['detail']['formatter'] = function(value){
+                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+            };
+        }
         return gaugeOption;
     }
     /**

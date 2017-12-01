@@ -172,10 +172,12 @@ window.addEventListener('message', function (event) {
                 break;
 
             case PMENUM.get_param_from_root:
-                PMAPI.sendToIframe(dialogHash[data.key].element[0], {
-                    type: PMENUM.send_param_to_iframe,
-                    data: dialogHash[data.key].params
-                });
+                try{
+                    PMAPI.sendToIframe(dialogHash[data.key].element[0], {
+                        type: PMENUM.send_param_to_iframe,
+                        data: dialogHash[data.key].params
+                    });
+                }catch(e){console.log('get param from root error',e)}
                 break;
 
             case PMENUM.show_tips:
@@ -302,7 +304,12 @@ export const PMAPI = {
      * @param data
      */
     sendToParent: function (data) {
-        this.getRoot().postMessage(data, location.origin);
+        if(window.parent == this.getRoot()){
+            this.getRoot().postMessage(data, location.origin);
+        }else {
+            window.parent.postMessage(data, location.origin);
+            this.getRoot().postMessage(data, location.origin);
+        }
         return this;
     },
 

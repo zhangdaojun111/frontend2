@@ -226,6 +226,7 @@ const approveWorkflow = (para) => {
         }
     }
     para.focus_users=JSON.stringify(focusArr);
+    // para['parent_record_id'] = window.config.parent_record_id || ''
     msgBox.showLoadingSelf();
     // (async function () {
     //     return workflowService.approveWorkflowRecord({
@@ -252,14 +253,16 @@ const approveWorkflow = (para) => {
     }).then(res => {
         msgBox.hideLoadingSelf();
         if(res.success===1){
-            msgBox.alert(`操作成功`);
+	        msgBox.showTips('操作成功。');
+            // msgBox.alert(`操作成功`);
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key:key,
                 data:{refresh:true}
             })
         }else{
-            msgBox.alert(`失败：${res.error}`);
+	        msgBox.showTips('操作失败。');
+            // msgBox.alert(`失败：${res.error}`);
         }
     })
 
