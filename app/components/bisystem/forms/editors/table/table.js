@@ -377,8 +377,7 @@ let config = {
 
         // 渲染图表表单字段
         this.drawForm();
-        await this.actions.init();
-
+        this.actions.init();
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
         }

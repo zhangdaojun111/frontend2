@@ -182,9 +182,8 @@ export class EchartsService {
         }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
-            // linebarOption['grid']['right'] = Math.max(1/cellChart.cell.size.width * 10000,15);
-            // linebarOption['grid']['left'] = Math.max(1/cellChart.cell.size.width * 5000,15);
-            linebarOption['grid']['containLabel'] = true;
+            linebarOption['grid']['right'] = '2.3%';
+            // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
             if(!isStack) {
                 linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
@@ -289,7 +288,7 @@ export class EchartsService {
         let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
         if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
-            linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
+            linebarOption['yAxis'][0]['min'] = firstMin >= 0 && isZero ? 0 : firstMin;
             if (cellOption.double === 1) {
                 linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
             }
@@ -334,7 +333,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     pieOption(cellChart) {
-        console.log(cellChart);
         let cellOption = cellChart['chart'];
         if (cellOption.data['xAxis'].length === 0 || cellOption.data['yAxis'].length === 0 ) {
             return defaultOption;
@@ -354,14 +352,17 @@ export class EchartsService {
         pieOption['series'][0].name = title;
         pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if(cellChart.chart.chartType.type == 'circular'){
-            pieOption['series'][0].radius = ['50%','70%'];
+            pieOption['series'][0].radius = ['50%','80%'];
         }
         //是否设置自定义图表半径
-        if(Object.keys(cellOption['customPie'])[0]){
+        if(cellOption['customPie'].hasOwnProperty('radius')){
             pieOption['legend']['type'] = 'plain';
-
-            pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
             pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
+            if(cellChart.chart.chartType.type == 'pie'){
+                pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
+            }else{
+                pieOption['series'][0]['radius'] = isNaN(cellOption['customPie']['radius'])?[(parseFloat(cellOption['customPie']['radius'])-20)+'%',cellOption['customPie']['radius']]:[cellOption['customPie']['radius']-20+'',cellOption['customPie']['radius']];
+            }
         }
         return pieOption;
     }
@@ -555,8 +556,6 @@ export class EchartsService {
         links.pop();
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
-        console.log('================================');
-        console.log(data)
         return stylzieOption;
     }
 
@@ -626,12 +625,15 @@ export class EchartsService {
         }
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
         gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
-        gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
-            return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
-        };
-        gaugeOption.series[0]['detail']['formatter'] = function(value){
-            return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
-        };
+
+        if(cellOption['yAxis'][0]['real_accuracy']){
+            gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
+                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+            };
+            gaugeOption.series[0]['detail']['formatter'] = function(value){
+                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+            };
+        }
         return gaugeOption;
     }
     /**

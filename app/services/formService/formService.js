@@ -566,5 +566,13 @@ export const FormService = {
         }
         data.multiSelect = multi ? true : false;
         return data;
-    }
+    },
+
+	//统一接口
+	getAllCountData(json) {
+		let res = HTTP.post('get_data_for_form', json);
+		HTTP.flush();
+		return res;
+	},
+
 };

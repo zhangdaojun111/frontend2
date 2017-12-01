@@ -126,7 +126,6 @@ let config = {
          */
         async saveChart() {
             let data = this.getData();
-            console.log(data);
             let chart = {
                 assortment: 'pie',
                 chartName: {id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
@@ -153,6 +152,18 @@ let config = {
                     }
                     if(key == 'yAxis' && chart.pieType.value == 1){
                         continue;
+                    }
+                    //判断只能为数字（最多两位小数）或者百分数
+                    if(key == 'customRadius'){
+                        let val = this.formItems['customRadius'].el.find('input')[0].value;
+                        let reg = /(^((?!0)\d+(.\d{1,2})?)$)|(^\d+\.?\d{1,2}%$)/;
+                        if(reg.test(val)){
+                            this.formItems['customRadius'].clearErrorMsg();
+                            continue;
+                        }else{
+                            this.formItems['customRadius'].showErrorMsg('请输入正确的格式');
+                            pass = false;
+                        }
                     }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
@@ -192,8 +203,8 @@ let config = {
                 this.formItems['limitNum'].setValue(chart['limit'] ? chart['limit'] : '');
                 this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : '');
             }
-            this.formItems['customPie'].setValue(Object.keys(chart['customPie'])[0] ? 1 : 0);
-            this.formItems['customRadius'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['radius'] : '80%');
+            this.formItems['customPie'].setValue(chart['customPie'].hasOwnProperty('radius') ? 1 : 0);
+            this.formItems['customRadius'].setValue(chart['customPie'].hasOwnProperty('radius') ? chart['customPie']['radius'] : '80%');
             // this.formItems['customCenterX'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['centerX'] : '50%');
             // this.formItems['customCenterY'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['centerY'] : '50%');
         }
@@ -371,6 +382,7 @@ let config = {
                     }
                 ],
                 type: 'checkbox',
+                class: 'customPie',
                 events: {
                     onChange:function(value) {
                         if (value && value[0]) {
@@ -379,6 +391,7 @@ let config = {
                             // this.formItems['customCenterY'].el.show();
                         } else {
                             this.formItems['customRadius'].el.hide();
+                            this.formItems['customRadius'].setValue('80%');
                             // this.formItems['customCenterX'].el.hide();
                             // this.formItems['customCenterY'].el.hide();
                         }
@@ -386,13 +399,20 @@ let config = {
                 }
             },
             {
-                label: '',
+                label: '自定义设置图表',
                 name: 'customRadius',
                 defaultValue: '80%',
                 category: 'text',
                 textTip:'请输入图表半径（单位可为像素或百分比）：',
                 type: 'text',
                 class: 'customRadius',
+                required: true,
+                rules:[
+                    {
+                        errorMsg: '请输入正确的格式',
+                        type: 'required',
+                    }
+                ],
                 events: {}
             },
             // {

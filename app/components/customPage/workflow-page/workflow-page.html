@@ -3,9 +3,15 @@
     <div class="btn-nav flex flex-end">
         <div class="headerTips"><i></i><span></span></div>
         <div class="dataGrid-commonQuery">
-            <select class="dataGrid-commonQuery-select icon-aggrid-select" title="选择常用查询">
-                <option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>
-            </select>
+            <div class="dataGrid-commonQuery-select icon-aggrid-select">
+                <span>常用查询</span>
+                <ul class="dataGrid-commonQuery-ul">
+                    <li class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</li>
+                </ul>
+            </div>
+            <!--<select class="dataGrid-commonQuery-select icon-aggrid-select" title="选择常用查询">-->
+            <!--<option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>-->
+            <!--</select>-->
         </div>
         <div class="workflowGrid-btn-group">
             <a class="float-search-btn" href="javascript:;" title="筛选"><i class="icon-aggrid icon-aggrid-filter"></i><span>筛选</span></a>
@@ -24,5 +30,18 @@
     </div>
     <!--分页-->
     <div class="pagination">
+    </div>
+    <div class="urge-con">
+    </div>
+    <div class="urge">
+        <div class="urge-title">催办</div>
+        <div class="urge-text">
+            <p>请设置催办内容</p>
+            <textarea class="urge-info"></textarea>
+        </div>
+        <div class="btn-group">
+            <button class="submit-urge">确定</button>
+            <button class="cancel-urge">取消</button>
+        </div>
     </div>
 </div>

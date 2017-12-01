@@ -231,6 +231,9 @@ let config = {
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
+                    if(window.config.query_mark !== 'single' && key=='countColumn'){
+                        continue;
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
@@ -252,7 +255,6 @@ let config = {
                     this.formItems['chartAssignment'].showErrorMsg('分组字段不能为空');
                 }
             }
-
             if (pass && yAxispass && groupPass) {
                 this.save(chart);
             }
@@ -627,6 +629,7 @@ let config = {
                 label: '',
                 name: 'limitNum',
                 defaultValue: 0,
+                // placeholder: '',
                 category: 'number',
                 textTip:'请输入显示前多少条数据：',
                 type: 'text',
@@ -637,6 +640,7 @@ let config = {
                 label: '',
                 name: 'endLimitNum',
                 defaultValue: 0,
+                // placeholder: '',
                 category: 'number',
                 textTip:'请输入显示后多少条数据：',
                 type: 'text',
@@ -667,6 +671,7 @@ let config = {
                 label: '',
                 name: 'customTopNum',
                 defaultValue: '10',
+                // placeholder: '',
                 category: 'number',
                 textTip:'请输入图表top高度：',
                 type: 'text',
@@ -700,7 +705,7 @@ let config = {
         }
         // 渲染图表表单字段
         this.drawForm();
-        await this.actions.init();
+        this.actions.init();
 
         if (this.data.id) {
             this.actions.fillChart(this.data.chart);

@@ -5,16 +5,163 @@
 import {CellBaseComponent} from '../base';
 import template from './cell.table.html';
 import "./cell.table.scss";
+import handlebars from 'handlebars';
+import {PMAPI} from '../../../../../../../lib/postmsg';
+import {HTTP} from "../../../../../../../lib/http";
 
+handlebars.registerHelper('ifLast', function (index,row, options) {
+    let lastIndex = row[0].length - 1 ;
+    if(index == lastIndex){
+        return options.inverse(this);
+    } else {
+        return options.fn(this);
+    }
+
+});
 let config = {
     template: template,
     data: {
         rows: [],
         chart: {},
     },
-    actions: {},
-    afterRender() {}
+    binds: [
+        {   // 查看 编辑 历史
+            event:'click',
+            selector:'.table-operate a',
+            callback:function (context,event) {
+                let data = {
+                    table_id: this.data.chart.table_id,
+                    real_id:this.data.chart.data.rows[$(context).attr('data-index')][this.data.chart.data.rows[0].length - 1]
+                };
+                this.actions.gridHandle($(context).attr('class'), data);
+            }
+        },
+    ],
+    actions: {
+        //操作列点击事件
+        gridHandle: function (type,data) {
+                if (type == 'table-view') {
+                    let obj = {
+                        table_id: data.table_id,
+                        parent_table_id:'',
+                        parent_real_id: '',
+                        parent_temp_id: '',
+                        parent_record_id: '',
+                        real_id: data.real_id,
+                        temp_id: '',
+                        record_id: '',
+                        btnType: 'view',
+                        is_view: 1,
+                        in_process: 0,
+                        is_batch: 0,
+                        form_id: this.data.formId,
+                        flow_id: this.data.flowId,
+                    };
+                    let url = this.actions.returnIframeUrl('/iframe/addWf/', obj);
+                    let title = '查看';
+                    this.actions.openSelfIframe(url, title);
+                }
+                if (type == 'table-edit') {
+                    let btnType = 'table-edit';
+                    let obj = {
+                        table_id: data.table_id,
+                        parent_table_id: '',
+                        parent_real_id: '',
+                        parent_temp_id: '',
+                        parent_record_id: '',
+                        real_id: data.real_id,
+                        temp_id: '',
+                        btnType: 'edit',
+                        in_process: 0,
+                        is_batch: 0,
+                        form_id: this.data.formId,
+                        flow_id: this.data.flowId,
+                    };
+                    let url = this.actions.returnIframeUrl('/iframe/addWf/', obj);
+                    let title = '编辑';
+                    this.actions.openSelfIframe(url, title);
+                }
+                if (type == 'table-history') {
+                    let obj = {
+                        table_id: data.table_id,
+                        real_id: data.real_id
+                    };
+                    PMAPI.openDialogByIframe(`/iframe/historyApprove/`, {
+                        width: 1000,
+                        height: 600,
+                        title: `历史`,
+                        modal: true
+                    }, {obj}).then(res => {
+
+                    })
+                }
+                // //半触发操作
+                // if (data.event.srcElement.className == 'customOperate') {
+                //     let id = data["event"]["target"]["id"];
+                //     for (let d of this.data.customOperateList) {
+                //         if (d["id"] == id) {
+                //             this.actions.customOperate(d, data);
+                //         }
+                //     }
+                // }
+                // //行级操作
+                // if (data.event.srcElement.className == 'rowOperation') {
+                //     let id = data["event"]["target"]["id"];
+                //     for (let ro of this.data.rowOperation) {
+                //         if (ro['row_op_id'] == id) {
+                //             //在这里处理脚本
+                //             //如果前端地址不为空，处理前端页面
+                //             this.actions.doRowOperation(ro, data);
+                //         }
+                //     }
+                // }
+
+        },
+        //返回数据url
+        returnIframeUrl( u,obj ){
+            let str = '?';
+            for( let o in obj ){
+                str += (o + '=' + obj[o] + '&');
+            }
+            str = str.substring( 0,str.length - 1 );
+            return u + str;
+        },
+
+        //打开局部的弹窗
+        openSelfIframe: function (url, title, w, h) {
+            w = window.screen.width * 0.8;
+            h = window.screen.height * 0.6;
+            PMAPI.openDialogToSelfByIframe(url, {
+                width: w || 1400,
+                height: h || 800,
+                title: title,
+                modal: true,
+                defaultMax: true,
+                // customSize: true
+            }).then((data) => {
+                if (title === '编辑') {
+                    window.location.reload()
+                };
+            })
+        },
+
+        //获取表的表单工作流参数
+        getPrepareParmas: function ( data ) {
+            return HTTP.post('prepare_params',data )
+        },
+
+    },
+    afterRender() {
+        // 向agid服务器获取数据 flow_id，form_id
+        let prepareParmas = this.actions.getPrepareParmas({table_id: this.data.chart.table_id});
+        Promise.all([prepareParmas]).then(res => {
+            this.data.flowId = res[0]['data']['flow_data'][0] && res[0]['data']['flow_data'][0]['flow_id'] || '';
+            this.data.formId = res[0]['data']['form_id'];
+        });
+        HTTP.flush();
+    }
 };
+
 export class CellTableComponent extends CellBaseComponent {
     // constructor(cellChart) {
     //     config.data.chart = cellChart['chart'] ? cellChart['chart'] : null;
