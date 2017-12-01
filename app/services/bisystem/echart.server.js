@@ -237,7 +237,6 @@ export class EchartsService {
                         },
                     });
                 }
-
             } else {
                 linebarOption['yAxis'][0]['max'] = isStack ? null : firstMax;
                 linebarOption['yAxis'][0]['min'] = isStack ? null : 0;
