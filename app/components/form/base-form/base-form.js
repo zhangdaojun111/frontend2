@@ -1915,7 +1915,7 @@ let config = {
 							data[key].canNotOpen=false;
 						}
 						if(data[key].real_type == 9 || data[key].real_type == 23 || data[key].real_type == 33){
-							data[key]['is_view']=1;
+							data[key]['read_only']=1;
                             let attachmentControl = new AttachmentControl(data[key], actions);
                             attachmentControl.render(single);
                             this.data.childComponent[data[key].dfield] = attachmentControl;

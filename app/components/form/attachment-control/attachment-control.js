@@ -296,6 +296,10 @@ let config = {
         }
     },
     afterRender: function () {
+        if(this.data.read_only){
+            this.el.find('.file-btns').hide();
+            this.data.is_view = 1;
+        }
         if (this.data.real_type == 33) {
             this.el.find('.shot-screen').css('display', 'none');
             this.el.find('.upload-file').val('上传视频');
