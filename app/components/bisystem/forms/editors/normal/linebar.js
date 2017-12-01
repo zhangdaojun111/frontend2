@@ -121,6 +121,7 @@ let config = {
             this.formItems['defaultY'].trigger('onChange');
             this.formItems['limit'].trigger('onChange');
             this.formItems['customTop'].trigger('onChange');
+            this.formItems['customTextStyle'].trigger('onChange');
             // 获取数据来源
             const res = await ChartFormService.getChartSource();
             if (res['success'] === 1) {
@@ -221,6 +222,7 @@ let config = {
                 limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
                 endlimit: data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
                 customTop: data.customTop[0] && data.customTopNum ? data.customTopNum : 0,
+                customFontFamily: data.customTextStyle[0] ? data.customFontFamily : 'sans-serif',
             };
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
@@ -304,6 +306,8 @@ let config = {
             this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : 0);
             this.formItems['customTop'].setValue(chart['customTop'] ? 1 : 0);
             this.formItems['customTopNum'].setValue(chart['customTop'] ? chart['customTop'] : 0);
+            this.formItems['customTextStyle'].setValue(chart['customFontFamily'] ? 1 : 0);
+            this.formItems['customFontFamily'].setValue(chart['customFontFamily'] ? chart['customFontFamily'] : 'sans-serif');
         },
     },
     data: {
@@ -677,6 +681,48 @@ let config = {
                 type: 'text',
                 class: 'customTopNum',
                 events: {}
+            },
+            {
+                label: '',
+                name: 'customTextStyle',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '自定义文字的字体系列'
+                    }
+                ],
+                type: 'checkbox',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['customFontFamily'].el.show();
+                            } else {
+                            this.formItems['customFontFamily'].el.hide();
+                        }
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'customFontFamily',
+                class: 'customFontFamily',
+                defaultValue: 'sans-serif',
+                list: [
+                    {'value': 'sans-serif', 'name': 'sans-serif'},
+                    {'value': 'serif', 'name': 'serif'},
+                    {'value': 'monospace', 'name': 'monospace'},
+                    {'value': 'Courier New', 'name': 'Courier New'},
+                    {'value': 'Arial', 'name': 'Arial'},
+                    {'value': '微软雅黑', 'name': '微软雅黑'},
+                    {'value': '黑体', 'name': '黑体'},
+                    {'value': '仿宋', 'name': '仿宋'},
+                ],
+                type: 'select',
+                events:{
+                    onChange: function(value) {
+
+                    }
+                }
             },
             {
                 label: '',

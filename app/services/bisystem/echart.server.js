@@ -319,6 +319,12 @@ export class EchartsService {
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
+        //自定义文字的字体系列
+        if(cellOption['customFontFamily']){
+            linebarOption['textStyle']['fontFamily'] = cellOption['customFontFamily'];
+        }else{
+            linebarOption['textStyle']['fontFamily'] = '微软雅黑';
+        }
 
         return linebarOption;
     }
