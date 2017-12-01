@@ -1,0 +1,35 @@
+<div class="header-wrap">
+    <div class="global-search"></div>
+    <!--<div class="setting clearfix">-->
+        <!--<a class="icon"></a>-->
+        <!--<div class="slide">-->
+            <!--<ul>-->
+                <!--<li class="online-num">在线人数(<span></span>)</li>-->
+                <!--<li class="system-setting">系统设置</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<a class="icon setting" title="系统设置"></a>-->
+    <a class="icon online-num" title="在线人数"></a>
+
+    <!--{{#if otherLoginVisible}}-->
+    <!--<a class="icon other-login" title="他人登录"></a>-->
+    <!--{{/if}}-->
+    <!--<a class="icon message" title="消息提醒"></a>-->
+    {{#if postMessageVisible}}
+    <a class="icon message-push" title="消息推送"></a>
+    {{/if}}
+    <!--{{#if calendarVisible}}-->
+    <!--<a class="icon calendar" title="日历"></a>-->
+    <!--{{/if}}-->
+    <!--{{#if imVisible}}-->
+    <!--<a class="icon im" title="IM"></a>-->
+    <!--{{/if}}-->
+    {{#if biVisible}}
+    <a class="icon bi" title="BI"></a>
+    {{/if}}
+    {{#if homeVisible}}
+    <!--<a class="icon home" title="首页"></a>-->
+    {{/if}}
+    <a class="fold" title="折叠菜单栏"></a>
+</div>
