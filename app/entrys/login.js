@@ -423,8 +423,8 @@ function resetLoginBoxInfo(result) {
 
 function resetBackground(result) {
     console.log(result);
-    let backgroundSrc = result.client_login_params && result.client_login_params.back_ground.login_back_ground;
-    let coverSrc = result.client_login_params && result.client_login_params.back_ground.login_cover_on;
+    let backgroundSrc = result.client_login_params && result.client_login_params.back_ground && result.client_login_params.back_ground.login_back_ground;
+    let coverSrc = result.client_login_params && result.client_login_params.back_ground && result.client_login_params.back_ground.login_cover_on;
     if (backgroundSrc) {
         $('.wave-bg').css('background-image', `url(${backgroundSrc})`);
     }
