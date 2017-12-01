@@ -40,8 +40,8 @@ $font-color: #e4e4e4;
                 td:last-child {
                     border-right: none;
                     a {
-                        color:#2298f4;
-                        text-decoration:none;
+                        color: #2298f4;
+                        text-decoration: none;
                     }
                     &.table-operate {
                         white-space: nowrap;
@@ -76,12 +76,19 @@ $font-color: #e4e4e4;
         td:nth-child(even) {
             background-color: #FAFAFA;
         }
+    }
+}
 
+//操作界面
+.editInterface {
+    .edit-operate,
+    .table-operate {
+        display: none;
     }
 }
 
 @media print {
     .bi-table {
-        overflow: hidden!important;
+        overflow: hidden !important;
     }
 }
