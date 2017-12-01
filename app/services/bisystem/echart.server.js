@@ -239,7 +239,8 @@ export class EchartsService {
                 }
 
             } else {
-                linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
+                linebarOption['yAxis'][0]['max'] = isStack ? null : firstMax;
+                linebarOption['yAxis'][0]['min'] = isStack ? null : 0;
                 linebarOption['yAxis'].push({
                     type: 'value',
                     inverse: false,
@@ -396,7 +397,7 @@ export class EchartsService {
             pieOption['series'][0].radius = ['50%','80%'];
         }
         //是否设置自定义图表半径
-        if(cellOption['customPie'].hasOwnProperty('radius')){
+        if(cellOption['customPie'] && cellOption['customPie'].hasOwnProperty('radius')){
             pieOption['legend']['type'] = 'plain';
             pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
             if(cellChart.chart.chartType.type == 'pie'){
