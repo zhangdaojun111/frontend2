@@ -161,9 +161,9 @@ let config = {
         HTTP.flush();
         //操作界面 控制
         if(this.data.chart.editInterface==='1'){
-            this.el.find('.bi-table').removeClass('editInterface');
-        }else{
             this.el.find('.bi-table').addClass('editInterface');
+        }else{
+            this.el.find('.bi-table').removeClass('editInterface');
         }
     }
 };

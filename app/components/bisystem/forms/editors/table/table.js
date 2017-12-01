@@ -293,10 +293,10 @@ let config = {
             {
                 label: '是否显示操作界面',
                 name: 'editInterface',
-                defaultValue: '0',
+                defaultValue: '1',
                 list: [
-                    {'value': '0', 'name': '隐藏'},
-                    {'value': '1', 'name': '显示'},
+                    {'value': '1', 'name': '隐藏'},
+                    {'value': '2', 'name': '显示'},
                 ],
                 type: 'radio'
             },
