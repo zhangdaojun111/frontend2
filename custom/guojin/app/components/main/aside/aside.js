@@ -15,7 +15,20 @@ let config = {
 
     },
     afterRender: function () {
-
+        if (window.config && window.config.menu) {
+            this.allBtn = this.el.find('.tabs p.all');
+            this.commonBtn = this.el.find('.tabs p.common');
+            this.actions.initAvatar();
+            if (window.config.isCommon === "0" || window.config.commonUse.data.length === 0) {
+                this.actions.showAllMenu();
+            } else {
+                this.actions.showCommonMenu();
+            }
+        }
+        //此处检查用户是否开启代理，并做提醒
+        this.actions.checkAgent();
+        //检测系统名称名字长度，长于8则修改ERDS logo的padding
+        this.actions.checkSysName();
     },
     firstAfterRender: function() {
         Mediator.on('tool-bar: workbench', () => {

@@ -4,7 +4,7 @@
 import Component from '../../../../../../app/lib/component';
 import template from './tool-bar.html';
 import './tool-bar.scss';
-// import '../../../assets/scss/guojin/icon-guojin-toolbar.scss';
+import '../../../assets/scss/guojin/icon-guojin-toolbar.scss';
 import 'jquery-ui/ui/widgets/tooltip';
 import Mediator from '../../../../../../app/lib/mediator';
 import {systemMessageUtil} from '../../../../../../app/components/main/system-message/system-message';

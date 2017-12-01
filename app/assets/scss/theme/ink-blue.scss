@@ -1,4 +1,12 @@
 body.ink-blue{
+    #tool-bar {
+        background-color: #2f4254;
+        .icon {
+            &.active {
+                background-color: #333333;
+            }
+        }
+    }
     #aside{
         background-color: #2f4254;
         .aside-wrap{
