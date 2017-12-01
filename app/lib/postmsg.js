@@ -57,7 +57,8 @@ export const PMENUM = {
     hide_loading:'17',          //隐藏loading
     open_preview:'18',          //打开图片浏览
     aside_fold: '19',
-    send_event:'20'
+    send_event:'20',
+    open_iframe_by_id:'21',     //bi点击title打开数据源tab
 };
 
 /**
