@@ -25,11 +25,10 @@ let defaultConfig = {
 
 class Component {
     constructor(config, data, events) {
-        $.extend(true, this, defaultConfig, config, {data: data || {}, events: events || {}});
+        $.extend(true, this, defaultConfig, config, {data: data||{}, events: events||{}})
         let that = this;
-
         function scan(obj) {
-            for (let name in obj) {
+            for(let name in obj) {
                 let item = obj[name];
                 if (_.isFunction(item)) {
                     obj[name] = item.bind(that);
@@ -38,11 +37,10 @@ class Component {
                 }
             }
         }
-
         scan(this);
         this.subComponents = [];
         this.componentId = componentId++;
-        count++;
+        count ++;
     }
 
     render(el) {
@@ -189,7 +187,7 @@ class Component {
         return res;
     }
 
-    showLoading(dom) {
+    showLoading(dom){
         if (this.loadingTarget) {
             return;
         }
@@ -211,14 +209,14 @@ class Component {
         this.loadingEffectBox = $(loadingHtml).appendTo(this.loadingTarget);
 
         this.loadingEffectBox.css({
-            "width": size,
-            "height": size,
-            marginLeft: -size / 2,
-            marginTop: -size / 2
+            "width":size,
+            "height":size,
+            marginLeft: -size/2,
+            marginTop: -size/2
         });
     }
 
-    hideLoading() {
+    hideLoading(){
         // this.loadingOverlay.fadeOut();
         // this.loadingEffectBox.fadeOut(() => {
         //     this.loadingOverlay.remove();
@@ -240,12 +238,12 @@ class Component {
         }
     }
 
-    disable() {
+    disable(){
         this.el.addClass('relative');
         this.disableEffectBox = $('<div class="component-disable-cover">').appendTo(this.el);
     }
 
-    enable() {
+    enable(){
         this.disableEffectBox.remove();
         this.el.removeClass('relative');
     }
