@@ -1,0 +1,27 @@
+@import "../../../../../../app/assets/scss/core/base";
+.aside-tool {
+    height: 100%;
+    .icon {
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        padding: ($toolbar-width - 32px)/2;
+        background-position: center;
+        background-repeat: no-repeat;
+        float: right;
+
+        &.unread {
+            position: relative;
+            &:after {
+                content: ' ';
+                position: absolute;
+                right: -4px;
+                top: -2px;
+                width: 8px;
+                height: 8px;
+                background-color: red;
+                border-radius: 4px;
+            }
+        }
+    }
+}

@@ -1,4 +1,4 @@
-@import "core/base";
+@import "../../../../../app/assets/scss/core/base";
 
 html.main, html.main body {
     width: 100%;
@@ -8,26 +8,25 @@ html.main, html.main body {
     background-color: $main-bg;
     position: relative;
 }
-#tool-bar {
-    background-color: $aside-top-bg;
-    .icon {
-        &.active {
-            background-color: $aside-bg;
-        }
-    }
-}
+
 #header {
     position: absolute;
-    left: $aside-width;
+    left: $aside-width+$toolbar-width;
     right: 0;
     top: 0;
     height: $header-height;
     background-color: $header-bg;
 }
 
+#tool-bar {
+    position: absolute;
+    width: $toolbar-width;
+    height: 100%;
+}
+
 #aside {
     position: absolute;
-    left: 0;
+    left: $toolbar-width;
     top: 0;
     width: $aside-width;
     bottom: 0;
@@ -40,26 +39,10 @@ html.main, html.main body {
     right: 0;
     top: $header-height;
     bottom: 0;
-    left: $aside-width;
+    left: $aside-width+$toolbar-width;
     iframe {
         width: 100%;
         height: 100%;
     }
-}
-
-#footer {
-    position: absolute;
-    background-color: $footer-bg;
-    width: 100%;
-    left: 0;
-    bottom: 0;
-    height: $footer-height;
-}
-
-.bg_close {
-    background-image: url("../images/framework/close.png");
-}
-.pointer {
-    cursor: pointer;
 }
 
