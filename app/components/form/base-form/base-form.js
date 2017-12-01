@@ -291,6 +291,9 @@ let config = {
 				if (this.data.idsOfSonDataByParent.indexOf(key) != -1) {
 					continue;
 				}
+				if(data.be_control_condition){
+					continue;
+				}
 				let type = data["type"];
 				if (type == 'Songrid') {
 					continue;
