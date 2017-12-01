@@ -287,7 +287,7 @@ const linebar = {
         type: 'scroll'
     },
     grid: {
-        left: 0,
+        left: 10,
         right: 15,
         bottom: 10,
         top:30,
