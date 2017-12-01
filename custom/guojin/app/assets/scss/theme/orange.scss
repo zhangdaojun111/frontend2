@@ -1,0 +1,10 @@
+body.orange{
+    #tool-bar {
+        background-color: #c9690a;
+        .icon {
+            &.active {
+                background-color: #e67e18;
+            }
+        }
+    }
+}

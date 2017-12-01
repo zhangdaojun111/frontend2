@@ -1,12 +1,5 @@
+@import "../../../../custom/guojin/app/assets/scss/theme/blue.scss";
 body.blue{
-    #tool-bar {
-        background-color: #327ed3;
-        .icon {
-            &.active {
-                background-color: #2769B4;
-            }
-        }
-    }
     #aside{
         background-color: #327ed3;
         .aside-wrap{

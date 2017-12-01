@@ -8,14 +8,6 @@ html.main, html.main body {
     background-color: $main-bg;
     position: relative;
 }
-#tool-bar {
-    background-color: $aside-top-bg;
-    .icon {
-        &.active {
-            background-color: $aside-bg;
-        }
-    }
-}
 #header {
     position: absolute;
     left: $aside-width;

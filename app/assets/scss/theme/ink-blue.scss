@@ -1,12 +1,5 @@
+@import "../../../../custom/guojin/app/assets/scss/theme/ink-blue.scss";
 body.ink-blue{
-    #tool-bar {
-        background-color: #283847;
-        .icon {
-            &.active {
-                background-color: #2f4254;
-            }
-        }
-    }
     #aside{
         background-color: #2f4254;
         .aside-wrap{
