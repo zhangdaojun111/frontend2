@@ -706,7 +706,7 @@ let config = {
 
 		//改变选择框的选项
 		changeOptions() {
-			for (let key in this.data.data) {
+			for(let key in this.data.data){
 				let data = this.data.data[key];
 				let obj = FormService.selectObj;
 				let affectType = data['type'];
@@ -720,7 +720,11 @@ let config = {
 						this.data.optionsToItem[key].push(o);
 					}
 				}
-				if (data['linkage'] != {}) {
+			}
+			for (let key in this.data.data) {
+				let data = this.data.data[key];
+				let obj = {'Select':'options','Radio':'group','MultiSelect':'options','Readonly':'options'};
+				if (!_.isEmpty(data['linkage'])) {
 					let j = 0;
 					let arr = [];
 					for (let value in data['linkage']) {
@@ -735,7 +739,7 @@ let config = {
 					}
 					if (j == 0) {
 						for (let field of arr) {
-							this.data.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
+							this.data.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem;
 							if(this.data.childComponent[field].data){
 								this.data.childComponent[field].data[obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
 								this.data.childComponent[field].reload();
@@ -748,7 +752,7 @@ let config = {
 
 		//改变选择框的选项
 		changeOptionOfSelect(data, l) {
-			let obj = {'select': 'options', 'radio': 'group', 'multi-select': 'options'};
+			let obj = {'Select': 'options', 'Radio': 'group', 'MultiSelect': 'options'};
 			let linkage = l;
 			// let field = data['dfield'];
 			let type = data['type'];
@@ -1393,7 +1397,7 @@ let config = {
                 await this.actions.countFunc(data.dfield,data);
 			}
 			//改变选择框的选项
-			if (data['linkage'] != {}) {
+			if (!_.isEmpty(data['linkage'])) {
 				let j = 0;
 				let arr = [];
 				for (let value in data['linkage']) {
@@ -1409,7 +1413,8 @@ let config = {
 				if (j == 0) {
 					let obj = FormService.selectObj;
 					for (let field of arr) {
-						this.data.data[field][obj[this.data[field]['type']]] = this.data.optionsToItem[field];
+						this.data.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
+						this.data.childComponent[field] && (this.data.childComponent[field].data[obj[this.data.data[field]['type']]]=this.data.optionsToItem[field]) && this.data.childComponent[field].reload();
 					}
 				}
 			}
@@ -1535,7 +1540,6 @@ let config = {
                                         this.actions.set_value_for_form(eval(expression), f);
 									// }
 								} catch (err) {
-									console.log(err)
 									console.log('不能执行前端表达式计算');
                                     bool = true;
 								}
