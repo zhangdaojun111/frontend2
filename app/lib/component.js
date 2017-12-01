@@ -248,6 +248,25 @@ class Component {
         this.el.removeClass('relative');
     }
 
+    /**
+     * binds由于是数组，无法像对象一想去覆盖，所以专门写个方法去合并数组
+     * @param newBinds
+     * @param array2
+     */
+    static mergeBinds(newBinds, oldBinds){
+        if (newBinds && newBinds.length) {
+            if (oldBinds && oldBinds.length) {
+                return _.unionWith(newBinds, oldBinds, (p1, p2) => {
+                    return p1.event === p2.event && p1.selector === p2.selector;
+                });
+            } else {
+                return newBinds;
+            }
+        } else {
+            return oldBinds;
+        }
+    }
+
 }
 
 export default Component;
