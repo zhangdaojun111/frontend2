@@ -685,10 +685,31 @@ let config = {
                 marginTop: -size/2
             });
         },
+        /**
+         * 隐藏iframeloading
+         * @param root
+         */
         iframeHideLoading:function (root) {
             root.find('.component-loading-cover').remove();
             root.find('.component-loading-box').remove();
             root.removeClass('component-loading-effect');
+        },
+        /**
+         * 通过id打开iframe
+         * @param id id以数组方式传入
+         */
+        openIframeById:function (id) {
+            console.log(id);
+            let res = [];
+            let menu  = window.config.menu;
+            this.actions.findTabInfo(menu,id,res);
+
+            if (res.length) {
+                for(let k of res){
+                    this.actions.openIframe(k.id,k.url,k.name,false);
+                }
+                this.actions.focusIframe(res[res.length - 1].id);
+            }
         }
     },
     binds:[
@@ -843,6 +864,10 @@ let config = {
                 this.actions.focusIframe(data[data.length - 1].id);
                 this.actions.loadHidingIframes();
             }
+        });
+
+        PMAPI.subscribe(PMENUM.open_iframe_by_id,(data) => {
+            this.actions.openIframeById(data.id);
         });
 
         this.actions.loadHidingIframes();
