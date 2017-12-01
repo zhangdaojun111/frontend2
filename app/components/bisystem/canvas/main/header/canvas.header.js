@@ -182,11 +182,15 @@ let config = {
 };
 export class CanvasHeaderComponent extends Component {
     constructor(data, events,extendConfig) {
-        let binds = Component.mergeBinds(extendConfig.binds, config.binds);
-        let _extendConfig = $.extend(true, {}, extendConfig);
         let _config = $.extend(true, {}, config);
-        delete _config.binds;
-        _extendConfig.binds = binds;
-        super($.extend(true,{},config,extendConfig), data, events);
+        if (extendConfig) {
+            let binds = Component.mergeBinds(extendConfig.binds, config.binds);
+            let _extendConfig = $.extend(true, {}, extendConfig);
+            delete _config.binds;
+            _extendConfig.binds = binds;
+            super($.extend(true,{},_config,_extendConfig), data, events);
+        } else {
+            super(_config, data, events);
+        }
     }
 }
