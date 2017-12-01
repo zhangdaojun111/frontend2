@@ -356,7 +356,7 @@ export class EchartsService {
             pieOption['series'][0].radius = ['50%','80%'];
         }
         //是否设置自定义图表半径
-        if(cellOption['customPie'].hasOwnProperty('radius')){
+        if(cellOption['customPie'] && cellOption['customPie'].hasOwnProperty('radius')){
             pieOption['legend']['type'] = 'plain';
             pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
             if(cellChart.chart.chartType.type == 'pie'){
