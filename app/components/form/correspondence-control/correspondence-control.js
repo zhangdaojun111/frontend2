@@ -4,7 +4,7 @@
  */
 
 import Component from '../../../lib/component'
-import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
+import DataTableAgGrid from '../../../../custom/guojin/app/components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import './correspondence-control.scss';
 import template from './correspondence-control.html';
 import {CreateFormServer} from "../../../services/formService/CreateFormServer";
