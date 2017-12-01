@@ -86,7 +86,6 @@ export class EchartsService {
         let isStack = false; // 判断是否堆叠
 
         yAxis.forEach((y,i) => {
-
            // 判断是否是堆叠情况
            if (cellOption.yAxis[i] && cellOption.yAxis[i]['group']) {
                isStack = true;
@@ -185,35 +184,87 @@ export class EchartsService {
             linebarOption['grid']['right'] = 15;
             // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
-            if(!isStack) {
-                linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
-                linebarOption['yAxis'][0]['interval'] =  linebarOption['yAxis'][0]['min'] >= 0 ? linebarOption['yAxis'][0]['max'] / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number((linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5)) : null
+            // 双y轴 如果有一个y轴小于0
+            if (firstMin < 0 || secondMin < 0) {
+                if (isStack) {
+                    linebarOption['yAxis'][0]['max'] = null;
+                    linebarOption['yAxis'][0]['min'] = null;
+                    linebarOption['yAxis'].push({
+                        type: 'value',
+                        inverse: false,
+                        max: null,
+                        min: null,
+                        // interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
+                        axisLabel: {
+                            inside: false,
+                            formatter: function(value,index) {
+                                let isDecimal = _.cloneDeep(value).toString().indexOf('.');
+                                return isDecimal !== -1 ? value.toFixed(5) : value;
+                            }
+                        },
+                        axisLine: {},
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'solid',
+                                color: '#ececec'
+                            }
+                        },
+                    });
+                } else {
+                    linebarOption['yAxis'][0]['max'] = Math.abs(firstMin) > Math.abs(firstMax) ? Math.abs(firstMin) : Math.abs(firstMax);
+                    linebarOption['yAxis'][0]['min'] = Math.abs(firstMin) > Math.abs(firstMax) ? firstMin : -Math.abs(firstMax);
+                    linebarOption['yAxis'].push({
+                        type: 'value',
+                        inverse: false,
+                        max: Math.abs(secondMin) > Math.abs(secondMax) ? Math.abs(secondMin) : Math.abs(secondMax),
+                        min: Math.abs(secondMin) > Math.abs(secondMax) ? secondMin : -Math.abs(secondMax),
+                        // interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
+                        axisLabel: {
+                            inside: false,
+                            formatter: function(value,index) {
+                                let isDecimal = _.cloneDeep(value).toString().indexOf('.');
+                                return isDecimal !== -1 ? value.toFixed(5) : value;
+                            }
+                        },
+                        axisLine: {},
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'solid',
+                                color: '#ececec'
+                            }
+                        },
+                    });
+                }
             } else {
-                linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
+                linebarOption['yAxis'][0]['max'] = isStack ? null : firstMax;
+                linebarOption['yAxis'][0]['min'] = isStack ? null : 0;
+                linebarOption['yAxis'].push({
+                    type: 'value',
+                    inverse: false,
+                    max: null,
+                    min: null,
+                    // interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
+                    axisLabel: {
+                        inside: false,
+                        formatter: function(value,index) {
+                            let isDecimal = _.cloneDeep(value).toString().indexOf('.');
+                            return isDecimal !== -1 ? value.toFixed(5) : value;
+                        }
+                    },
+                    axisLine: {},
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#ececec'
+                        }
+                    },
+                });
+
             }
-            linebarOption['yAxis'].push({
-                type: 'value',
-                inverse: false,
-                max: !isStack && secondMin > 0 ? secondMax > 0 ? secondMax : 0 :null,
-                min: !isStack && secondMin > 0 ? secondMin > 0 ? 0 : secondMin : null,
-                interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
-                axisLabel: {
-                    inside: false,
-                    onZero: true,
-                    formatter: function(value,index) {
-                        let isDecimal = _.cloneDeep(value).toString().indexOf('.');
-                        return isDecimal !== -1 ? value.toFixed(5) : value;
-                    }
-                },
-                axisLine: {},
-                splitLine: {
-                    show: true,
-                    lineStyle: {
-                        type: 'solid',
-                        color: '#ececec'
-                    }
-                },
-            });
+
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['yAxis'].length === 2) {
                 yAxis.map((y, colorIndex) => {
@@ -288,11 +339,6 @@ export class EchartsService {
         let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
         if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
-            linebarOption['yAxis'][0]['min'] = firstMin >= 0 && isZero ? 0 : firstMin;
-            if (cellOption.double === 1) {
-                linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
-            }
-
             linebarOption['dataZoom']=[
                 {
                 type: 'slider',
@@ -355,7 +401,7 @@ export class EchartsService {
             pieOption['series'][0].radius = ['50%','80%'];
         }
         //是否设置自定义图表半径
-        if(cellOption['customPie'].hasOwnProperty('radius')){
+        if(cellOption['customPie'] && cellOption['customPie'].hasOwnProperty('radius')){
             pieOption['legend']['type'] = 'plain';
             pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
             if(cellChart.chart.chartType.type == 'pie'){
