@@ -36,6 +36,7 @@ let config={
         }
     ],
     afterRender(){
+	    this.data.isInit=true;
         let config={
             tableId:this.data.value,
             parentTableId:this.data.parent_table_id,
@@ -64,6 +65,7 @@ let config={
                     this.el.find('#requiredLogo').removeClass().addClass('required2');
                 }
                 this.events.emitDataIfInline(this.data);
+	            this.data.isInit=false;
             }
         })
 
