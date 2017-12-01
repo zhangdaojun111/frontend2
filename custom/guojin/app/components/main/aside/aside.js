@@ -45,6 +45,7 @@ let config = {
             this.actions.resetAvatar();
         });
         Mediator.on('tool-bar: workbench', () => {
+            this.el.find('.workbench').empty();
             this.el.find('.menu').css('display','none');
             this.el.find('.menu-setting').css('display','none');
             this.append(new WorkbenchComponent(), this.el.find('.workbench'));
