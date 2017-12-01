@@ -1,0 +1,41 @@
+@import "../../../../../../app/assets/scss/core/base";
+.aside-tool {
+    height: 100%;
+    .icon {
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        padding: 22px;
+        background-position: center;
+        background-repeat: no-repeat;
+        float: right;
+        &.message {
+            //background-image: url("../../../assets/images/framework/message.png");
+        }
+
+        &.calendar {
+            //background-image: url("../../../assets/images/framework/calendar.png");
+        }
+        &.unread {
+            position: relative;
+            &:after {
+                content: ' ';
+                position: absolute;
+                right: -4px;
+                top: -2px;
+                width: 8px;
+                height: 8px;
+                background-color: red;
+                border-radius: 4px;
+            }
+        }
+
+        &.setting{
+            //background-image: url("../../../assets/images/framework/setting.png");
+        }
+        //&.active {
+        //    background-color: #327ed3;
+        //}
+
+    }
+}
