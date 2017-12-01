@@ -696,17 +696,16 @@ let config = {
         },
         /**
          * 通过id打开iframe
-         * @param id id以数组方式传入
+         * @param id id以数组方式传入,适用一次打开多个tabs
          */
-        openIframeById:function (id) {
-            console.log(id);
+        openIframeById:function (id,flag) {
             let res = [];
             let menu  = window.config.menu;
             this.actions.findTabInfo(menu,id,res);
 
             if (res.length) {
                 for(let k of res){
-                    this.actions.openIframe(k.id,k.url,k.name,false);
+                    this.actions.openIframe(k.id,k.url,k.name,flag);
                 }
                 this.actions.focusIframe(res[res.length - 1].id);
             }
@@ -865,9 +864,9 @@ let config = {
                 this.actions.loadHidingIframes();
             }
         });
-
+        //订阅bi的画布块点击title，打开数据源的tab
         PMAPI.subscribe(PMENUM.open_iframe_by_id,(data) => {
-            this.actions.openIframeById(data.id);
+            this.actions.openIframeById(data.id,false);
         });
 
         this.actions.loadHidingIframes();
