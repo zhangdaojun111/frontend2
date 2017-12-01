@@ -29,14 +29,25 @@ let config = {
                 this.el.find('.title').addClass('no-title');
             }
             this.reload();
+            if(window.config.bi_user === 'client'){
+                this.el.find('.title-tips').addClass('client-click');
+            }
         },
+        /**
+         * 客户模式下允许点击画布标签打开数据源tab页
+         */
         jumpToSourceTab(){
+            if(window.config.bi_user !== 'client'){
+                return;
+            }
             let sources = this.data.chart.data.source || this.data.chart.data.sources;
             let idArr = [];
-            if(!$.isArray(sources)){
+            if(!$.isArray(sources) && sources.hasOwnProperty('id')){
                 idArr.push(sources.id);
             }else{
-                idArr.push(sources[0].sources.id)
+                if(sources.length){
+                    idArr.push(sources[0].sources.id);
+                }
             }
             PMAPI.sendToParent({
                 type:PMENUM.open_iframe_by_id,
