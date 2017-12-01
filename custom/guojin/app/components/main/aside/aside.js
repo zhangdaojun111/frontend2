@@ -31,6 +31,19 @@ let config = {
         this.actions.checkSysName();
     },
     firstAfterRender: function() {
+        Mediator.on('aside:size', (order) => {
+            if (order === 'full') {
+                this.actions.setSizeToFull();
+            } else {
+                this.actions.setSizeToMini();
+            }
+        });
+        Mediator.on('commonuse:change', () => {
+            this.actions.showCommonMenu(true);
+        });
+        Mediator.on("personal:setAvatar",() => {
+            this.actions.resetAvatar();
+        });
         Mediator.on('tool-bar: workbench', () => {
             this.el.find('.menu').css('display','none');
             this.el.find('.menu-setting').css('display','none');
