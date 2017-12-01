@@ -44,11 +44,9 @@ export const wchService = {
             let html = '<div style="text-align:center;">' +
                 '<a href=javascript:void(0); class="ui-link" data-type="view">查看</a>' +
                 '<span> | </span>' +
-                '<a href=javascript:void(0); class="ui-link" data-type="cancel">取消</a> ' +
-                '<span> | </span>' +
-                '<a href=javascript:void(0); class="ui-link" data-type="urge">催办</a> ';
+                '<a href=javascript:void(0); class="ui-link" data-type="cancel">取消</a> '
             if(data["record_status"] == 0 && data["edit_status"] == 0){
-                html += '<span> | </span><a href=javascript:void(0); class="ui-link" data-type="withdraw">撤回</a>';
+                html += '<span> | </span><a href=javascript:void(0); class="ui-link" data-type="urge">催办</a><span> | </span><a href=javascript:void(0); class="ui-link" data-type="withdraw">撤回</a>';
             }else if(data["edit_status"] == 1){
                 html += '<span> | </span><a href=javascript:void(0); class="ui-link" data-type="edit">编辑</a>';
             }
