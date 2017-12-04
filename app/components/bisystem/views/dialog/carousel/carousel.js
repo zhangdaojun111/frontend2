@@ -81,10 +81,17 @@ export let config = {
                 return ;
             }
 
+            let param = {
+                carousel_time:this.data.carousel,
+                stop_time:this.data.operate
+            };
+
+            let data = {param : JSON.stringify(param)};
+
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key: this.key,
-                data: {'carousel_time':this.data.carousel,'stop_time':this.data.operate}
+                data:data
             });
         },
         cancelCarousel:function () {

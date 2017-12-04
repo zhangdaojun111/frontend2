@@ -91,6 +91,7 @@ export const ViewsService = {
             url:'/bi/img_url/',
             type:'get'
         });
+        console.log(res);
         return Promise.resolve(res);
     }
 };

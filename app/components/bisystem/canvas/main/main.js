@@ -122,8 +122,11 @@ let config = {
                     }
                 },
                 doFullScreenCarousel: async () => {
-                    await this.actions.getCarouselSetting();
-                    console.log('go on ');
+                    let res = await this.actions.getCarouselSetting();
+                    console.log(res);
+                    this.data.carouselInterval = res.data.carousel_time;
+                    this.data.operateInterval = res.data.stop_time;
+                    console.log('go on ',this.data.carouselInterval, this.data.operateInterval);
                     this.data.carouselFlag = true;
                     this.actions.checkCanCarousel(this.data.carouselInterval);
                 }
