@@ -1,4 +1,82 @@
-# 定制写法
+# 定制写法2.0
+
+## 第一步 改造原始组件
+- 原始类的构造函数只能接受一个参数，那就是extendConfig，
+- 设置原始类的默认config
+ ` 
+let animalConfig = {
+     template: '<button>animal click</button><p>test</p>',
+     binds: [
+         {
+             event: 'click',
+             selector: 'button',
+             callback: function () {
+                 console.log('animal click');
+             }
+         },{
+             event: 'click',
+             selector: 'p',
+             callback: function () {
+                 console.log('animal p click');
+             }
+         }
+     ],
+     afterRender: function () {
+         console.log('animal after render');
+     }
+ }
+ class Animal extends Component {
+    // 构造函数必须按如下格式改造
+     constructor(extendConfig){
+         super($.extend(true, {}, animalConfig, extendConfig));
+     }
+ }
+ // 保存默认config
+ Animal.config = animalConfig;
+ ` 
+ ## 第二步 继承原始类
+ 采用这一种方式写的继承, 能读取父级的方法
+ `let Bird = Animal.extend({
+      template: '<button>bird click</button><p>test</p>',
+      binds: [
+          {
+              event: 'click',
+              selector: 'button',
+              callback: function () {
+                  console.log('bird click');
+              }
+          }
+      ],
+      afterRender: function () {
+          this._super.afterRender();
+          console.log('bird after render');
+      }
+  });`
+  - 注意：这个_super对象指向的是父级类的config，如果父级类里不存在某个方法，而根级又存在这个方法时，_super里面也是不存在的这个方法的，
+  - 在多级继承的时候，这个_super也是嵌套的，比如
+ `
+ let Swallow = Bird.extend({
+     template: '<button>swallow click</button><p>test</p>',
+     binds: [
+         {
+             event: 'click',
+             selector: 'button',
+             callback: function () {
+                 console.log('swallow click');
+             }
+         }
+     ],
+     afterRender: function () {
+        // 调用animal的afterRender
+         this._super._super.afterRender();
+         console.log('swallow after render');
+     }
+ })
+ `
+ 
+ ## scss和html的方法与之前的保持一致
+ 
+ 
 ## 组件binds继承的bug
 组件的binds由于是一个数组，在对象覆盖的时候，jq对数组的继承是按数组的序号进行覆盖，所以binds的继承得特殊处理
 ## 注意事项
