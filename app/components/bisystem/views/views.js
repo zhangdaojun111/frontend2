@@ -69,8 +69,8 @@ let config = {
             });
 
             if(res){
-                // 获取设置存入后台
-
+                // 设置轮播
+                Mediator.emit('views:setcarousel',res);
             }
         }
     },

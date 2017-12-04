@@ -20,8 +20,8 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
-        carouselInterval:5,
-        operateInterval:3,
+        carouselInterval:0,         //用户设置的轮播执行间隔
+        operateInterval:0,          //用户设置的操作暂停轮播间隔
         viewArr:window.config.bi_views,  //所有bi视图
         nextViewNo:1,   //记录当前视图在数组中的位置
         // firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
@@ -299,6 +299,11 @@ let config = {
                 }
             })
         }
+        Mediator.on('views:setcarousel',(res) => {
+            this.data.carouselInterval = Number(res.carousel);
+            this.data.operatorlInterval = Number(res.operate);
+            console.log(this.data.carouselInterval,this.data.operatorlInterval);
+        });
     },
     beforeDestory:function () {}
 };
