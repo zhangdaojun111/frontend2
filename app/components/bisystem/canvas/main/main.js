@@ -141,28 +141,6 @@ let config = {
                 this.el.find('.cells-container').addClass('hide-head');
             }
         },
-        /**
-         * 获取当前页面的html代码,去除样式部分
-         */
-        postHtmlCode(){
-            let html = document.documentElement.outerHTML;
-            let newHead = `
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BI</title>
-</head>`;
-            //替换head间的内容
-            html = html.replace(/<head>([\s\S]*?)<\/head>/,newHead);
-
-            let data = {
-                bi_str:html,
-                view_id:this.data.pdfViewId
-            };
-            ViewsService.postPdfHtml(data).done((res) => {
-                console.log(res);
-            });
-        },
     },
     afterRender:function(){
         if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
