@@ -5,19 +5,19 @@
         cursor: pointer;
         text-align: center;
         padding: ($toolbar-width - 32px)/2 0;
-        //&.unread {
-        //    position: relative;
-        //    &:after {
-        //        content: ' ';
-        //        position: absolute;
-        //        right: -4px;
-        //        top: -2px;
-        //        width: 8px;
-        //        height: 8px;
-        //        background-color: red;
-        //        border-radius: 4px;
-        //    }
-        //}
+        .unread {
+            position: relative;
+            &:after {
+                content: ' ';
+                position: absolute;
+                right: -4px;
+                top: -2px;
+                width: 8px;
+                height: 8px;
+                background-color: red;
+                border-radius: 4px;
+            }
+        }
     }
     .erds-logo {
         font-size: 16px;

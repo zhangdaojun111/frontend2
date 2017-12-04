@@ -8,6 +8,7 @@
                 //padding: 22px 0;
                 .text {
                     display: none;
+                    width: 100%;
                 }
             }
             .s-uinfo {
@@ -81,8 +82,7 @@
             .text{
                 box-sizing: border-box;
                 //padding-left: 10px;
-                width: 140px;
-                float: left;
+                width: 100%;
                 height:60px;
                 line-height: 25px;
                 font-size: 14px;
@@ -273,7 +273,7 @@
             }
         }
         .menu-setting {
-            //display: none;
+            display: none;
         }
     }
     .workbench-list {

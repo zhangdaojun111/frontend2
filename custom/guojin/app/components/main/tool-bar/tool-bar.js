@@ -62,9 +62,9 @@ let config = {
                 badge = 0;
             }
             if (badge > 0) {
-                this.el.find('.icon.message').addClass('unread');
+                this.el.find('.icon-toolbar-message').addClass('unread');
             } else {
-                this.el.find('.icon.message').removeClass('unread');
+                this.el.find('.icon-toolbar-message').removeClass('unread');
             }
         },
         /**
@@ -120,6 +120,7 @@ let config = {
 
     afterRender: function () {
         this.el.tooltip();
+        this.el.find('.workbench, .icon-toolbar-workbench').addClass('active');
         this.actions.displayMessageUnread({
             badge: window.config.sysConfig.unread_msg_count
         });

@@ -19,12 +19,13 @@ let config = {
             this.allBtn = this.el.find('.tabs p.all');
             this.commonBtn = this.el.find('.tabs p.common');
             this.actions.initAvatar();
-            if (window.config.isCommon === "0" || window.config.commonUse.data.length === 0) {
-                this.actions.showAllMenu();
-            } else {
-                this.actions.showCommonMenu();
-            }
+            // if (window.config.isCommon === "0" || window.config.commonUse.data.length === 0) {
+            //     this.actions.showAllMenu();
+            // } else {
+            //     this.actions.showCommonMenu();
+            // }
         }
+        this.append(new WorkbenchComponent(), this.el.find('.workbench'));
         //此处检查用户是否开启代理，并做提醒
         this.actions.checkAgent();
         //检测系统名称名字长度，长于8则修改ERDS logo的padding
@@ -54,7 +55,11 @@ let config = {
             this.el.find('.menu').css('display', 'inline');
             this.el.find('.workbench').empty();
             this.el.find('.menu-setting').css('display','inline');
-            this.actions.showAllMenu();
+            if (window.config.isCommon === "0" || window.config.commonUse.data.length === 0) {
+                this.actions.showAllMenu();
+            } else {
+                this.actions.showCommonMenu();
+            }
         })
     },
     beforeDestory: function() {
