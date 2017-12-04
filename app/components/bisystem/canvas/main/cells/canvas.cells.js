@@ -18,7 +18,8 @@ let config = {
         secondViewId:'',
         animateDuration:1000,  //动画执行时间1000ms
         deleteComponentArr:[],
-        prepareDeleteComponentArr:[]
+        prepareDeleteComponentArr:[],
+        mode:window.config.bi_user === 'client' ? window.config.bi_user : false,
     },
     actions: {
         /**
@@ -284,7 +285,7 @@ let config = {
             // 获取画布块最大zindex
             this.data.cellMaxZindex = Math.max(...zIndex);
             //第一次加载需要一次性加载两个视图，准备轮播
-            if(this.data.firstView === true){
+            if(this.data.mode === 'client' && this.data.firstView === true){
                 this.actions.loadSecondView();
                 this.data.firstView = false;
             }

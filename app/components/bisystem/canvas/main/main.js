@@ -30,6 +30,7 @@ let config = {
         animateTime: 1000,  //动画执行时间长度（ms）
         carouselFlag: false,  //轮播执行状态下为true
         isNewWindow: false,    //判断是否是在新窗口打开
+        mode:window.config.bi_user,
     },
     binds: [
         // 编辑模式
@@ -81,7 +82,7 @@ let config = {
             // if(this.data.firstViews === true){
             this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
             this.data.cells.render(this.el.find('.cells-container'));
-            if(this.data.views.length >= 2){
+            if(this.data.mode === 'client' && this.data.views.length >= 2 ){
                 this.actions.resetViewArrayNo(viewId);
             }
         },
@@ -183,7 +184,7 @@ let config = {
          * 检测是否符合执行轮播条件
          */
         checkCanCarousel(time) {
-            if (this.data.carouselInterval > 0 && this.data.operateInterval > 0 && window.config.bi_user === 'client' && this.data.carouselFlag === true) {
+            if (this.data.carouselInterval > 0 && this.data.operateInterval > 0  && this.data.carouselFlag === true && this.data.mode === 'client') {
                 this.el.find('.views-header').hide();
                 this.actions.startListenUserOperate();
                 this.actions.delayCarousel(time);
