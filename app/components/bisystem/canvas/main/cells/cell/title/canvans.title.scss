@@ -18,6 +18,9 @@
         min-width: 120px;
         margin-top: -9px;
         text-align: center;
+        &.client-click{
+            cursor: pointer;
+        }
         .deep-title {
             color: #999999;
             font-size: 14px;

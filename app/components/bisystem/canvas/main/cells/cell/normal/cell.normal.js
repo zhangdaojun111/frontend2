@@ -272,6 +272,9 @@ let config = {
     },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
+            let cellChart = _.cloneDeep(this.data);
+            cellChart.cell.size = data;
+            this.actions.updateChart(cellChart);
             this.normalChart.myChart.resize();
         });
         // 返回下穿数据(上一层)

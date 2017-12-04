@@ -5,7 +5,8 @@
 import template from './canvas.title.html';
 import Component from '../../../../../../../lib/component';
 import './canvans.title.scss';
-import {PMAPI} from '../../../../../../../lib/postmsg';
+import {PMAPI,PMENUM} from '../../../../../../../lib/postmsg';
+import Mediator from '../../../../../../../lib/mediator';
 
 let config = {
     template: template,
@@ -28,6 +29,31 @@ let config = {
                 this.el.find('.title').addClass('no-title');
             }
             this.reload();
+            if(window.config.bi_user === 'client'){
+                this.el.find('.title-tips').addClass('client-click');
+            }
+        },
+        /**
+         * 客户模式下允许点击画布标签打开数据源tab页
+         */
+        jumpToSourceTab(){
+            if(window.config.bi_user !== 'client'){
+                return;
+            }
+            let sources = this.data.chart.data.source || this.data.chart.data.sources;
+            let idArr = [];
+            console.log(sources);
+            if(!$.isArray(sources) && sources.hasOwnProperty('id')){
+                idArr.push(sources.id);
+            }else{
+                if(sources.length){
+                    idArr.push(sources[0].sources.id);
+                }
+            }
+            PMAPI.sendToParent({
+                type:PMENUM.open_iframe_by_id,
+                id:idArr
+            });
         },
 
         /**
@@ -56,6 +82,13 @@ let config = {
                 this.trigger('onShowOriginal');
             }
         },
+        {
+            event:'click',
+            selector:'.title-tips',
+            callback:function () {
+                this.actions.jumpToSourceTab();
+            }
+        }
     ],
     data: {
         title: '', // 画布块标题

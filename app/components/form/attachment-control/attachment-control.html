@@ -6,6 +6,7 @@
     {{else}}
         <div style="display: inline-block;color:#2298f4;position: relative;top: 0;margin:2px" class="view-attached-list">共{{value.length}}个文件</div>
         {{#unless is_view}}
+        <div style="display: inline-block" class="file-btns">
             <!--上传文件，截图上传-->
             <input type="file" class="selecting-file" style="display: none;" multiple>
             <input type="button" class='upload-file' style="margin:2px" value="上传文件">
@@ -15,6 +16,7 @@
             {{/if}}
             <div class="upload-process-queue"></div>
             <div class="ellipses" style="display: none; cursor: pointer;margin:2px 4px">......</div>
+        </div>
         {{/unless}}
 
         <div class="thumbnail-list-anchor"></div>
