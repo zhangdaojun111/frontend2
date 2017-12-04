@@ -60,6 +60,8 @@ let config = {
     beforeDestory: function() {
         Mediator.removeAll('aside');
         Mediator.removeAll('tool-bar');
+        Mediator.removeAll('commonuse');
+        Mediator.removeAll('personal');
     }
 };
 

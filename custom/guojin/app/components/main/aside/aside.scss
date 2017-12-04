@@ -1,4 +1,5 @@
 @import "../../../../../../app/assets/scss/core/base";
+@import "../../../assets/scss/core/param.scss";
 #aside {
     &.mini {
         width: $aside-mini-width;
@@ -272,7 +273,7 @@
             }
         }
         .menu-setting {
-            display: none;
+            //display: none;
         }
     }
 }

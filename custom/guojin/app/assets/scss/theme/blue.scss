@@ -1,10 +1,35 @@
 body.blue{
     #tool-bar {
-        background-color: #327ed3;
+        background-color: #296cb9;
         .icon {
             &.active {
-                background-color: #2769B4;
+                background-color: #337ed3;
             }
         }
+        .erds-logo {
+            color: #79ABE1;
+            background-color: #2667AE;
+        }
+        .icon-toolbar-message {
+
+        }
+        .icon-toolbar-workbench {
+
+        }
+        .icon-toolbar-calendar {
+
+        }
+        .icon-toolbar-folder {
+
+        }
+        .icon-toolbar-setting {
+
+        }
+    }
+    .s-name{
+        background-color: #296cb9!important;
+    }
+    .s-uinfo{
+        background-color: #337ed3!important;
     }
 }

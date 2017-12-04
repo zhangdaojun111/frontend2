@@ -80,7 +80,7 @@ let config = {
             selector: '.icon-toolbar-message',
             callback: function(){
                 this.el.find('.icon').removeClass('active');
-                this.el.find('.icon-toolbar-message').addClass('active');
+                this.el.find('.message').addClass('active');
                 this.actions.openMessageDialog();
             }
         },  {
@@ -88,7 +88,7 @@ let config = {
             selector: '.icon-toolbar-workbench',
             callback: function(){
                 this.el.find('.icon').removeClass('active');
-                this.el.find('.icon-toolbar-workbench').addClass('active');
+                this.el.find('.workbench').addClass('active');
                 Mediator.emit('tool-bar: workbench');
             }
         },  {
@@ -96,7 +96,7 @@ let config = {
             selector: '.icon-toolbar-calendar',
             callback: function () {
                 this.el.find('.icon').removeClass('active');
-                this.el.find('.icon-toolbar-calendar').addClass('active');
+                this.el.find('.calendar').addClass('active');
                 this.actions.openCalendarIframe();
             }
         }, {
@@ -104,7 +104,7 @@ let config = {
             selector: '.icon-toolbar-folder',
             callback: function(){
                 this.el.find('.icon').removeClass('active');
-                this.el.find('.icon-toolbar-folder').addClass('active');
+                this.el.find('.folder').addClass('active');
                 Mediator.emit('tool-bar: folder');
             }
         },  {
@@ -112,7 +112,7 @@ let config = {
             selector: '.icon-toolbar-setting',
             callback: function () {
                 this.el.find('.icon').removeClass('active');
-                this.el.find('.icon-toolbar-setting').addClass('active');
+                this.el.find('.setting').addClass('active');
                 this.actions.goSystemSetting();
             }
         },
