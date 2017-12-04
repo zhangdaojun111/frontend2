@@ -20,8 +20,8 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
-        carouselInterval:0,         //用户设置的轮播执行间隔
-        operateInterval:0,          //用户设置的操作暂停轮播间隔
+        carouselInterval:3,         //用户设置的轮播执行间隔
+        operateInterval:5,          //用户设置的操作暂停轮播间隔
         viewArr:window.config.bi_views,  //所有bi视图
         nextViewNo:1,   //记录当前视图在数组中的位置
         // firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
@@ -122,6 +122,7 @@ let config = {
                 },
                 doFullScreenCarousel:() => {
                     this.data.carouselFlag = true;
+                    console.log('do check');
                     this.actions.checkCanCarousel(this.data.carouselInterval);
                 }
             });
@@ -141,6 +142,7 @@ let config = {
          * 检测是否符合执行轮播条件
          */
         checkCanCarousel(time){
+            console.log(this.data.carouselInterval,this.data.operateInterval);
             if(this.data.carouselInterval > 0 && this.data.operateInterval > 0 && window.config.bi_user === 'client' && this.data.carouselFlag === true){
                 if(this.data.isNewWindow){
                     this.actions.launchFullScreen(document.documentElement);
