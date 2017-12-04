@@ -84,7 +84,7 @@ export let config = {
             PMAPI.sendToParent({
                 type: PMENUM.close_dialog,
                 key: this.key,
-                data: {'carousel':this.data.carousel,'operate':this.data.operate}
+                data: {'carousel_time':this.data.carousel,'stop_time':this.data.operate}
             });
         },
         cancelCarousel:function () {

@@ -70,7 +70,7 @@ let config = {
 
             if(res){
                 // 设置轮播
-                Mediator.emit('views:setcarousel',res);
+                ViewsService.saveCarouselSetting(res);
             }
         }
     },
