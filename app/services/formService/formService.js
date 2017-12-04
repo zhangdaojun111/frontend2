@@ -4,7 +4,7 @@ import msgbox from '../../lib/msgbox';
 export const FormService = {
     isCannotSub:false,
     isRefreshSongrid:false,
-    selectObj: {'select': 'options', 'radio': 'group', 'multi-select': 'options'},
+    selectObj: {'Select': 'options', 'Radio': 'group', 'MultiSelect': 'options'},
     continue_key: ["parent_real_id", "parent_table_id", "parent_temp_id", "real_id", "table_id", "temp_id"],
     need_key: ["id", "dfield", "effect", "expression", "dinput_type", "real_type"],
     dataSelectFrom: {
