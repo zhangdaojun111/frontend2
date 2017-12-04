@@ -282,12 +282,12 @@
         }
     }
     .list-item-label {
-        background-color: $aside-top-bg;
         span {
             display: block;
             line-height: 40px;
             margin-left: 30px;
             color: #fff;
+            cursor: pointer;
         }
     }
 }

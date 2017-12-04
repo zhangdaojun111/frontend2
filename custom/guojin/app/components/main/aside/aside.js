@@ -6,10 +6,44 @@ import WorkbenchComponent from '../workbench/workbench';
 import Mediator from '../../../../../../app/lib/mediator';
 import template from './aside.html';
 import './aside.scss';
+import {systemMessageUtil} from '../../../../../../app/components/main/system-message/system-message';
+import {SysSetting} from "../../../../../../app/components/main/system-setting/system-setting"
 let config = {
     template: template,
     data: {
     },
+    binds: [
+        {
+            event: 'click',
+            selector: '.messages-label',
+            callback: function(){
+                systemMessageUtil.show();
+                Mediator.emit('menu:item:openiframe', {
+                    id: 'calendar',
+                    name: '日历',
+                    url: window.config.sysConfig.calendar_index
+                });
+            }
+        },
+        {
+            event: 'click',
+            selector: '.calendar-label',
+            callback: function(){
+                Mediator.emit('menu:item:openiframe', {
+                    id: 'calendar',
+                    name: '日历',
+                    url: window.config.sysConfig.calendar_index
+                });
+            }
+        },
+        {
+            event: 'click',
+            selector: '.setting-label',
+            callback: function(){
+                SysSetting.show();
+            }
+        },
+    ],
     actions: {
 
 
@@ -65,21 +99,21 @@ let config = {
             this.el.find('.workbench').empty();
             this.el.find('.menu').css('display','none');
             this.el.find('.menu-setting').css('display','none');
-            let html = `<div class="list-item-label"><span class="title">消息提醒</span></div>`;
+            let html = `<div class="list-item-label"><span class="messages-label">消息提醒</span></div>`;
             this.el.find('.workbench').html(html);
         });
         Mediator.on('tool-bar: calendar', () => {
             this.el.find('.workbench').empty();
             this.el.find('.menu').css('display','none');
             this.el.find('.menu-setting').css('display','none');
-            let html = `<div class="list-item-label"><span class="title">日历</span></div>`;
+            let html = `<div class="list-item-label"><span class="calendar-label">日历</span></div>`;
             this.el.find('.workbench').html(html);
         });
         Mediator.on('tool-bar: setting', () => {
             this.el.find('.workbench').empty();
             this.el.find('.menu').css('display','none');
             this.el.find('.menu-setting').css('display','none');
-            let html = `<div class="list-item-label"><span class="title">主题设置</span></div>`;
+            let html = `<div class="list-item-label"><span class="setting-label">主题设置</span></div>`;
             this.el.find('.workbench').html(html);
         })
     },
