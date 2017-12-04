@@ -26,11 +26,11 @@ let config = {
         operateInterval: 0,          //用户设置的操作暂停轮播间隔
         viewArr: window.config.bi_views,  //所有bi视图
         nextViewNo: 1,   //记录当前视图在数组中的位置
-        // firstViews:true,   //第一次直接加载cells，后续通过轮播动画更换
         animateTime: 1000,  //动画执行时间长度（ms）
         carouselFlag: false,  //轮播执行状态下为true
         isNewWindow: false,    //判断是否是在新窗口打开
         mode:window.config.bi_user,
+        firstCarousel:true,
     },
     binds: [
         // 编辑模式
@@ -76,12 +76,9 @@ let config = {
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
-                this.data.cells.actions.postHtmlCode = this.actions.postHtmlCode;
                 this.data.cells.render(this.el.find('.cells-container'));
             }
-            // if(this.data.firstViews === true){
-            this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
-            this.data.cells.render(this.el.find('.cells-container'));
+            //客户模式下设置轮播视图序号
             if(this.data.mode === 'client' && this.data.views.length >= 2 ){
                 this.actions.resetViewArrayNo(viewId);
             }
@@ -128,15 +125,16 @@ let config = {
                     }
                 },
                 doFullScreenCarousel: async () => {
-                    console.log('do carousel',this.data.isNewWindow);
                     if (this.data.isNewWindow) {
-                        console.log('do full')
                         this.actions.launchFullScreen(document.documentElement);
+                    }
+                    if(this.data.firstCarousel){
+                        this.data.cells.actions.loadSecondView();
+                        this.data.firstCarousel = false;
                     }
                     let res = await this.actions.getCarouselSetting();
                     this.data.carouselInterval = res.data.carousel_time;
                     this.data.operateInterval = res.data.stop_time;
-                    console.log('go on ', this.data.carouselInterval, this.data.operateInterval);
                     this.data.carouselFlag = true;
                     this.actions.checkCanCarousel(this.data.carouselInterval);
                 }
@@ -229,10 +227,9 @@ let config = {
             }
             let no = Number(this.data.nextViewNo) + 1;
             if (this.data.viewArr.length === no) {
-                this.data.cells.data.secondViewId = this.data.viewArr[0].id;
-            } else {
-                this.data.cells.data.secondViewId = this.data.viewArr[no].id;
+                no = 0;
             }
+            this.data.cells.data.secondViewId = this.data.viewArr[no].id;
             this.data.nextViewNo = no;
             this.data.nextViewId = this.data.viewArr[no].id;
         },
@@ -343,11 +340,6 @@ let config = {
                 }
             })
         }
-        Mediator.on('views:setcarousel',(res) => {
-            this.data.carouselInterval = Number(res.carousel);
-            this.data.operatorlInterval = Number(res.operate);
-            console.log(this.data.carouselInterval,this.data.operatorlInterval);
-        });
         this.actions.checkUrl();
     },
     beforeDestory:function () {}

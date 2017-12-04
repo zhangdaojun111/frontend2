@@ -147,7 +147,7 @@ let config = {
         /**
          * 实例化画布块，并返回实例化的对象
          */
-        makeCell(data,flag) {
+        makeCell(data) {
             let cell = new CanvasCellComponent(data,{
                 onDrag: (componentId) => {
                     let comp = this.data.cells[componentId];
@@ -166,11 +166,8 @@ let config = {
                     delete this.data.cells[componentId];
                 },
             });
-            this.append(cell, this.el.find('.cells'));
-            if(flag === true){
-                // this.actions.postHtmlCode();
-            }
             let $wrap;
+            console.log(this.data.firstView);
             if(this.data.firstView === true){
                 $wrap = this.el.find('.current');
                 this.data.deleteComponentArr.push(cell);
@@ -256,11 +253,8 @@ let config = {
                     'currentViewId': this.data.currentViewId,
                     'cell': val
                 };
-                let isLast;
-                if(this.data.isPdf === true && index === layoutLen - 1 ){
-                    isLast = true;
-                }
-                let cell = this.actions.makeCell(data,isLast);
+
+                let cell = this.actions.makeCell(data);
                 this.data.cells[cell.componentId] = cell;
                 // 在客户模式下获取有没有下穿记录
                 let deep_info = {};
@@ -284,11 +278,6 @@ let config = {
 
             // 获取画布块最大zindex
             this.data.cellMaxZindex = Math.max(...zIndex);
-            //第一次加载需要一次性加载两个视图，准备轮播
-            if(this.data.mode === 'client' && this.data.firstView === true){
-                this.actions.loadSecondView();
-                this.data.firstView = false;
-            }
         },
 
         /**
@@ -369,6 +358,7 @@ let config = {
             },this.data.animateDuration)
         },
         loadSecondView(){
+            this.data.firstView = false;
             this.actions.prepareViewData(this.data.secondViewId);
         }
     },
