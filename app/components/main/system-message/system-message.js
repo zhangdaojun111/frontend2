@@ -218,6 +218,14 @@ let config = {
                 this.agGrid.actions.refreshView();
             }
         },
+        //渲染颜色
+        setRowStyle: function (param) {
+            if (param.data.wf_urgency_level == 2) {
+                return {background: '#FFB5C5'};
+            } else if (param.data.wf_urgency_level == 1) {
+                return {background: '#FCF5A5'};
+            }
+        },
         /**
          * 双击打开消息细节弹窗
          * @param $event
@@ -282,6 +290,9 @@ let config = {
                 }
                 this.actions._postReadData(JSON.stringify([data.id]));
             }
+            if($event.data.wf_urgency_level == 1){
+                msgbox.alert('催办消息：' + ($event.data.urge_info||''));
+            }
         },
         /**
          * 根据用户偏好初始化分页工具
@@ -307,6 +318,7 @@ let config = {
             columnDefs: systemMessageService.getColumnDefs(),
             onCellClicked: that.actions.onCellClicked,
             noFooter: true,
+            setRowStyle: this.actions.setRowStyle,
             onRowDoubleClicked:that.actions.onRowDoubleClicked,
             onSortChanged: this.actions.onSortChanged,
             footerData:[]
