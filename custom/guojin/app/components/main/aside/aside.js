@@ -60,6 +60,27 @@ let config = {
             } else {
                 this.actions.showCommonMenu();
             }
+        });
+        Mediator.on('tool-bar: message', () => {
+            this.el.find('.workbench').empty();
+            this.el.find('.menu').css('display','none');
+            this.el.find('.menu-setting').css('display','none');
+            let html = `<div class="list-item-label"><span class="title">消息提醒</span></div>`;
+            this.el.find('.workbench').html(html);
+        });
+        Mediator.on('tool-bar: calendar', () => {
+            this.el.find('.workbench').empty();
+            this.el.find('.menu').css('display','none');
+            this.el.find('.menu-setting').css('display','none');
+            let html = `<div class="list-item-label"><span class="title">日历</span></div>`;
+            this.el.find('.workbench').html(html);
+        });
+        Mediator.on('tool-bar: setting', () => {
+            this.el.find('.workbench').empty();
+            this.el.find('.menu').css('display','none');
+            this.el.find('.menu-setting').css('display','none');
+            let html = `<div class="list-item-label"><span class="title">主题设置</span></div>`;
+            this.el.find('.workbench').html(html);
         })
     },
     beforeDestory: function() {

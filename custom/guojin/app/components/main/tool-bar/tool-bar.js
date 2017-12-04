@@ -82,6 +82,7 @@ let config = {
                 this.el.find('.icon, .icon-toolbar').removeClass('active');
                 this.el.find('.message, .icon-toolbar-message').addClass('active');
                 this.actions.openMessageDialog();
+                Mediator.emit('tool-bar: message');
             }
         },  {
             event: 'click',
@@ -98,6 +99,7 @@ let config = {
                 this.el.find('.icon, .icon-toolbar').removeClass('active');
                 this.el.find('.calendar, .icon-toolbar-calendar').addClass('active');
                 this.actions.openCalendarIframe();
+                Mediator.emit('tool-bar: calendar');
             }
         }, {
             event: 'click',
@@ -114,6 +116,7 @@ let config = {
                 this.el.find('.icon, .icon-toolbar').removeClass('active');
                 this.el.find('.setting, .icon-toolbar-setting').addClass('active');
                 this.actions.goSystemSetting();
+                Mediator.emit('tool-bar: setting');
             }
         },
     ],
