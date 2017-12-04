@@ -170,7 +170,7 @@ let config = {
             this.formItems['countNum'].setValue(chart['countNum']);
             this.formItems['single'].setValue(chart['single']);
             this.formItems['columnNum'].setValue(chart['columnNum']);
-            this.formItems['editInterface'].setValue(chart['editInterface']);
+            this.formItems['editInterface'].setValue(chart['editInterface'] ? chart['editInterface'] : 1);
         }
     },
     data: {
