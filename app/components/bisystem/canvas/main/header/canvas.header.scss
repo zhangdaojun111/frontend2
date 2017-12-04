@@ -31,6 +31,13 @@
     input[type='file'] {
         display: none;
     }
+    .full-screen-carousel{
+        display: inline-block;
+        float: right;
+        width: 44px;
+        height: 16px;
+        cursor: pointer;
+    }
 }
 .select-all,.cancel-select,.reverse-select {
     font: 12px/1.5 "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
