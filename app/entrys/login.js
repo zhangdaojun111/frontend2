@@ -407,6 +407,9 @@ function resetLoginBoxInfo(result) {
     if(result.show_publish_link && result.show_publish_link.toString() === "1"){
         $('.self-service-update').show();
     }
+    if(result.show_mobile_download && result.show_mobile_download.toString() === "1"){
+        $('.mobile-download-btn').show();
+    }
     if(result.verify_code && result.verify_code.toString() === "1") {
         let obj = {
             id: 'verify-container',
