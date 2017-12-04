@@ -96,6 +96,8 @@ let config = {
         queryList: {},
         //请求数据参数
         commonQueryData: [],
+        //支持拼音
+        supportPy:[],
         //没有定制列
         noNeedCustom: false,
         postData: [],
@@ -407,6 +409,10 @@ let config = {
                         if (data.header[i] == '填写人') {
                             this.data.getDiarySearchField(data.data["field"]);
                         }
+                    }
+                    console.log(data.data)
+                    if(data.data.is_offer_py == 1){
+                        this.data.supportPy.push(data.data["field"]);
                     }
                     let obj = {
                         headerName: data.header[i],
@@ -1731,6 +1737,16 @@ let config = {
             //排序
             if (this.data.sortParam.sortField) {
                 json = _.defaultsDeep(json, this.data.sortParam)
+            }
+            //是否添加拼音搜索
+            if(json.filter && json.filter.length!=0){
+                for(let a of json.filter){
+                    if(this.data.supportPy.indexOf(a.cond.searchBy) != -1){
+                        a['cond']['py'] = 1;
+                    }else {
+                        a['cond']['py'] = 0;
+                    }
+                }
             }
             json = dgcService.returnQueryParams(json);
             this.data.filterParam.is_filter = 1;
