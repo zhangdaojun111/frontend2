@@ -1387,6 +1387,7 @@ let QuillAlert = {
         this.data.quill = new Quill(editorDom[0], {
             modules: {
                 toolbar: this.data.toolbarOption,
+                // imageDrop: true
             },
             readOnly: true,
             theme: 'snow'

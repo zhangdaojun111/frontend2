@@ -3060,7 +3060,7 @@ let config = {
             }
             //富文本字段
             if (data.colDef.real_type == fieldTypeService.UEDITOR) {
-                QuillAlert.data.value = data.value.replace(/(\n)/g, '');
+                QuillAlert.data.value = data.value.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
                 PMAPI.openDialogByComponent(QuillAlert, {
                     title: '文本编辑器',
                     width: 800,
