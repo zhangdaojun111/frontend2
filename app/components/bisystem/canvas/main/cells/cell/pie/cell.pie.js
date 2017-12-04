@@ -10,7 +10,7 @@ import msgbox from '../../../../../../../lib/msgbox';
 let config = {
     template: template,
     data: {
-        id: 'stylzie',
+        id: 'pie',
         cellChart: {},
     },
     actions: {
