@@ -44,11 +44,9 @@ export const wchService = {
             let html = '<div style="text-align:center;">' +
                 '<a href=javascript:void(0); class="ui-link" data-type="view">查看</a>' +
                 '<span> | </span>' +
-                '<a href=javascript:void(0); class="ui-link" data-type="cancel">取消</a> ' +
-                '<span> | </span>' +
-                '<a href=javascript:void(0); class="ui-link" data-type="urge">催办</a> ';
+                '<a href=javascript:void(0); class="ui-link" data-type="cancel">取消</a> '
             if(data["record_status"] == 0 && data["edit_status"] == 0){
-                html += '<span> | </span><a href=javascript:void(0); class="ui-link" data-type="withdraw">撤回</a>';
+                html += '<span> | </span><a href=javascript:void(0); class="ui-link" data-type="urge">催办</a><span> | </span><a href=javascript:void(0); class="ui-link" data-type="withdraw">撤回</a>';
             }else if(data["edit_status"] == 1){
                 html += '<span> | </span><a href=javascript:void(0); class="ui-link" data-type="edit">编辑</a>';
             }
@@ -87,19 +85,19 @@ export const wchService = {
         }}
     ],
     headerFor5: [
-        { headerName: '紧急程度', field: 'emergency_degree', width: 100,suppressMenu: true,suppressResize: true,minWidth: 50,
-        cellRenderer: (params) => {
-            let obj = {
-                "1":{color:"#999999",title:"超时"},
-                "2":{color:"#FF0000",title:"非常紧急"},
-                "3":{color:"#FF9900",title:"紧急"},
-                "4":{color:"#00CC00",title:"一般"}
-            };
-            let data = params.data;
-            let color = data.emergency_degree ? obj[data.emergency_degree]["color"] : "";
-            let title = data.emergency_degree ? obj[data.emergency_degree]["title"] : "";
-            return '<div style="width: 100%; height: 100%; text-align: center; color:'+ color +'">'+ title +'<div/>';
-        }},
+        // { headerName: '紧急程度', field: 'emergency_degree', width: 100,suppressMenu: true,suppressResize: true,minWidth: 50,
+        // cellRenderer: (params) => {
+        //     let obj = {
+        //         "1":{color:"#999999",title:"超时"},
+        //         "2":{color:"#FF0000",title:"非常紧急"},
+        //         "3":{color:"#FF9900",title:"紧急"},
+        //         "4":{color:"#00CC00",title:"一般"}
+        //     };
+        //     let data = params.data;
+        //     let color = data.emergency_degree ? obj[data.emergency_degree]["color"] : "";
+        //     let title = data.emergency_degree ? obj[data.emergency_degree]["title"] : "";
+        //     return '<div style="width: 100%; height: 100%; text-align: center; color:'+ color +'">'+ title +'<div/>';
+        // }},
         { headerName: '审批开始时间', field: 'approve_start_time',dinput_type:'5',width:150 },
         { headerName: '审批结束时间', field: 'approve_over_time',dinput_type:'5',width:150 },
         { headerName: '超时状态', field: 'approve_time_status',width:100 },
