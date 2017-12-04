@@ -1386,7 +1386,7 @@ let QuillAlert = {
         let editorDom = this.el.find('.content .editor');
         this.data.quill = new Quill(editorDom[0], {
             modules: {
-                toolbar: this.data.toolbarOption,
+                toolbar: [],
                 // imageDrop: true
             },
             readOnly: true,
