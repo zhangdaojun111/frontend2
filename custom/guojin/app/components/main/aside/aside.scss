@@ -276,4 +276,9 @@
             //display: none;
         }
     }
+    .workbench-list {
+        .item:hover {
+            background-color: $aside-top-bg;
+        }
+    }
 }

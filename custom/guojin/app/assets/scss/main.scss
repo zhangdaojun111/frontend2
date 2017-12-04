@@ -18,6 +18,51 @@ html.main, html.main body {
         color: #0088FF;
         background-color: #2b2b2b;
     }
+    .icon-toolbar-message {
+        background: url("../images/guojin/black/ico_msg_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_msg_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_msg_bk_pre.png");
+        }
+    }
+    .icon-toolbar-workbench {
+        background: url("../images/guojin/black/ico_data_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_data_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_data_bk_pre.png");
+        }
+    }
+    .icon-toolbar-calendar {
+        background: url("../images/guojin/black/ico_cal_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_cal_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_cal_bk_pre.png");
+        }
+    }
+    .icon-toolbar-folder {
+        background: url("../images/guojin/black/ico_doc_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_doc_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_doc_bk_pre.png");
+        }
+    }
+    .icon-toolbar-setting {
+        background: url("../images/guojin/black/ico_setup_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_setup_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_setup_bk_pre.png");
+        }
+    }
 }
 #header {
     position: absolute;

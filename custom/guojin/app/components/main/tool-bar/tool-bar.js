@@ -79,40 +79,40 @@ let config = {
             event: 'click',
             selector: '.icon-toolbar-message',
             callback: function(){
-                this.el.find('.icon').removeClass('active');
-                this.el.find('.message').addClass('active');
+                this.el.find('.icon, .icon-toolbar').removeClass('active');
+                this.el.find('.message, .icon-toolbar-message').addClass('active');
                 this.actions.openMessageDialog();
             }
         },  {
             event: 'click',
             selector: '.icon-toolbar-workbench',
             callback: function(){
-                this.el.find('.icon').removeClass('active');
-                this.el.find('.workbench').addClass('active');
+                this.el.find('.icon, .icon-toolbar').removeClass('active');
+                this.el.find('.workbench, .icon-toolbar-workbench').addClass('active');
                 Mediator.emit('tool-bar: workbench');
             }
         },  {
             event: 'click',
             selector: '.icon-toolbar-calendar',
             callback: function () {
-                this.el.find('.icon').removeClass('active');
-                this.el.find('.calendar').addClass('active');
+                this.el.find('.icon, .icon-toolbar').removeClass('active');
+                this.el.find('.calendar, .icon-toolbar-calendar').addClass('active');
                 this.actions.openCalendarIframe();
             }
         }, {
             event: 'click',
             selector: '.icon-toolbar-folder',
             callback: function(){
-                this.el.find('.icon').removeClass('active');
-                this.el.find('.folder').addClass('active');
+                this.el.find('.icon, .icon-toolbar').removeClass('active');
+                this.el.find('.folder, .icon-toolbar-folder').addClass('active');
                 Mediator.emit('tool-bar: folder');
             }
         },  {
             event: 'click',
             selector: '.icon-toolbar-setting',
             callback: function () {
-                this.el.find('.icon').removeClass('active');
-                this.el.find('.setting').addClass('active');
+                this.el.find('.icon, .icon-toolbar').removeClass('active');
+                this.el.find('.setting, .icon-toolbar-setting').addClass('active');
                 this.actions.goSystemSetting();
             }
         },
