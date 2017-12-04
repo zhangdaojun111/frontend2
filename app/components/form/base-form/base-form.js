@@ -1671,6 +1671,7 @@ let config = {
 				_this.data.childComponent[_this.data['quikAddDfield']].data.showValue = data.new_option.label;
 				_this.data.data[_this.data['quikAddDfield']] = _this.data.childComponent[_this.data['quikAddDfield']].data;
 				_this.data.childComponent[_this.data['quikAddDfield']].reload();
+                _this.actions.triggerControl();
 			});
 		},
 		//打开选择器

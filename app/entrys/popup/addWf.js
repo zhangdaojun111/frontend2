@@ -44,7 +44,7 @@ AddWf.showDom(obj).then(function (component) {
             component.hideLoading();
             isshow = false;
         }
-        if(obj.tableType !== 'child' && obj.btnType === 'new' && !obj.calendar){
+        if(obj.tableType !== 'child' && obj.btnType === 'new' && !obj.calendar  && !obj.isAddBuild){
           $('#miniFormBtn').show();
         }else{
            $('#miniFormBtn').hide();
