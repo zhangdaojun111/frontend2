@@ -204,7 +204,7 @@ let config = {
                 } else {
                     that.data.nextViewNo = temp;
                 }
-                console.log(that.data.nextViewNo);
+
                 that.data.nextViewId = that.data.viewArr[that.data.nextViewNo].id;
                 that.data.cells.data.currentViewId = that.data.nextViewId;
                 that.data.headerComponents.data.menus[that.data.currentViewId].actions.focus();
@@ -240,7 +240,6 @@ let config = {
             let that = this;
             window.clearTimeout(this.data.timer);
             window.clearTimeout(this.data.timer2);
-            // let time = this.data.carouselInterval > this.data.operateInterval ? this.data.carouselInterval - this.data.operateInterval : 0;
             let time = 0;
             this.data.timer2 = window.setTimeout(function () {
                 that.actions.checkCanCarousel(time);
