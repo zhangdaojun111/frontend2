@@ -1,5 +1,4 @@
-// import workflowPage from '../../components/customPage/workflow-page/workflow-page';
-import workflowPage from '../../../custom/guojin/app/components/customPage/workflow-page/workflow-page';
+import workflowPage from '../../components/customPage/workflow-page/workflow-page';
 $(document).ready(function(){
     let isNewWindow = window.location.href.indexOf( 'isNewWindow=true' ) == -1 ? false:true;
     let json = {

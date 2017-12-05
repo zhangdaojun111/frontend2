@@ -1,5 +1,4 @@
-// import workflowPage from '../../components/customPage/workflow-page/workflow-page.js'
-import workflowPage from '../../../custom/guojin/app/components/customPage/workflow-page/workflow-page.js'
+import workflowPage from '../../components/customPage/workflow-page/workflow-page.js'
 import myWorkflow from '../../components/customPage/my-workflow/my-workflow.js'
 import myOperation from '../../components/customPage/my-operation/my-operation.js'
 import department from '../../components/customPage/department/department'

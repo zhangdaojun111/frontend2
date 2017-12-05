@@ -1,6 +1,6 @@
 import 'jquery-ui/ui/widgets/dialog.js';
 import 'jquery-ui/ui/widgets/sortable.js';
-import dataTableAgGrid from '../../../custom/guojin/app/components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
+import dataTableAgGrid from '../../components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 $(document).ready(function(){
     let json = {
         tableId: window.config.tableId || '',
