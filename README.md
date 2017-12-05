@@ -35,6 +35,34 @@ let animalConfig = {
  // 保存默认config
  Animal.config = animalConfig;
 ` 
+
+也可以采用第二种方案
+
+`
+let Animal = Component.extend({
+   template: '<button>animal click</button><p>test</p>',
+   binds: [
+       {
+           event: 'click',
+           selector: 'button',
+           callback: function () {
+               console.log('animal click');
+           }
+       },{
+           event: 'click',
+           selector: 'p',
+           callback: function () {
+               console.log('animal p click');
+           }
+       }
+   ],
+   afterRender: function () {
+       console.log('animal after render');
+   }
+})
+`
+
+
 ### 第二步 继承原始类
 采用这一种方式写的继承, 能读取父级的方法
 
