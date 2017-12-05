@@ -436,10 +436,10 @@ const map = {
         x:'left'
     },
     dataZoom:{
+        type:'slider',
         show:true,
 
     },
-
     tooltip:{
         trigger: 'item',
         triggerOn:'none'
