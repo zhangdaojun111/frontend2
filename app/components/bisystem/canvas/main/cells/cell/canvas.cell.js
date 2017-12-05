@@ -94,7 +94,7 @@ let config = {
             let dragCell = this.el.find('.cell');
             const dragOption = {
                 containment: '.cells-container',
-                grid: [10, 10],
+                grid: [1, 1],
                 stop: (event, ui) => {
                     this.actions.cancelSelect();
                     this.data.cell.size.left = ui.position.left;
@@ -105,7 +105,7 @@ let config = {
             };
 
             const resizeOption = {
-                grid: [10, 10],
+                grid: [1, 1],
                 stop: (event, ui) => {
                     this.data.cell.size.width = ui.size.width;
                     this.data.cell.size.height = ui.size.height;
