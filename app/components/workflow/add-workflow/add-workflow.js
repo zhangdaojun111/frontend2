@@ -223,9 +223,11 @@ let config={
                 for(let k in data){
                     f_user.push(k)
                 }
+                let flowId;
+                this.data.obj.is_batch == 1 ?flowId = '':flowId =obj.flow_id;
                 msgBox.showLoadingSelf();
                 let postData = {
-                    flow_id: obj.flow_id || '',
+                    flow_id: flowId || '',
                     focus_users: JSON.stringify(f_user),
                     data: JSON.stringify(formData),
                     cache_new:JSON.stringify(formData),
