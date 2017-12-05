@@ -36,7 +36,7 @@ let animalConfig = {
  Animal.config = animalConfig;
 ` 
 
-也可以采用第二种方案
+### 也可以采用第二种方案
 
 `
 let Animal = Component.extend({
