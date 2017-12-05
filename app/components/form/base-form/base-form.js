@@ -108,6 +108,11 @@ let config = {
 				//子表的this.newData
 				let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
 				//循环给子表赋值
+				console.log('parentData');
+				console.log('parentData');
+				console.log('parentData');
+				console.log(parentData);
+				console.log(kvDict);
 				for (let key in kvDict) {
 					let val = parentData[key];
 					//子表的dfield
@@ -153,8 +158,9 @@ let config = {
 		},
 
 		//给子表统计赋值
-		async setCountData() {
+		async setCountData(dfield) {
     		MSG.showLoadingSelf();
+    		this.data.postData.push(dfield);
 			this.data.isSongCount = true;
 			this.actions.getDataForForm();
     		MSG.hideLoadingSelf();
@@ -1370,7 +1376,6 @@ let config = {
 				window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
 			}
 			if (!this.data.isInit && !noCount) {
-				console.log('这里执行了?')
 				this.actions.getDataForForm();
 			}
 		},
@@ -1615,7 +1620,7 @@ let config = {
 				this.data.sonTableId = data["value"];
 				if (isView == '0' && !this.data.SongridRef && !this.data.isInit && !data.isInit) {
 					this.data.SongridRef = true;
-					this.actions.setCountData();
+					this.actions.setCountData(data.dfield);
 				}
 			}
 
@@ -1752,6 +1757,7 @@ let config = {
 		//打开子表弹窗
 		openSongGrid(data) {
 			let _this = this;
+			// 保存父表数据
 			_this.data.can_not_open_form = data.can_not_open_form;
 			let type = data["popup"];
 			let isView = data["is_view"];
@@ -1769,16 +1775,15 @@ let config = {
 					modal: true
 				}).then(data => {
 					if (_this.viewMode == 'EditChild') {
-						_this.actions.setCountData();
+						_this.actions.setCountData(data.dfield);
 					}
 				})
 			} else {
 				_this.data.sonTableId = data["value"];
 				if (isView == '0') {
-					_this.actions.setCountData();
+					_this.actions.setCountData(data.dfield);
 				}
 			}
-			// 保存父表数据
 			window.top.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
 		},
 
@@ -2127,6 +2132,8 @@ let config = {
 			this.actions.setVoteValue(res);
 		})
 
+		window.top.frontendParentFormValue[this.tableId] = this.actions.createFormValue(this.data.data);
+
 		//默认表单样式
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
             this.el.find('table').parents('.form-print-position').css("margin-bottom","40px");
@@ -2138,6 +2145,7 @@ let config = {
 		this.data.isInit = false;
 	},
 	beforeDestory() {
+		delete window.top.frontendParentFormValue[this.tableId];
 		this.el.off();
 	}
 }
