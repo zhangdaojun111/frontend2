@@ -27,6 +27,7 @@ export const LoginService = {
                 this.currentSystem = key;
             }
         }
+        //不是chrome,不是crios
         if(!browser['chrome']){
             if(this.currentSystem== 'android'){
                 this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
@@ -41,11 +42,16 @@ export const LoginService = {
             }
             this.needDownload = true;
         }
+        //是chrome，不是crios
        else if(browser['chrome']  && !browser['crios']){
            if((browser['chrome'].slice(0,2)<62 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                this.needDownload=true;
             }
+        }
+        //是crios,是ios设备
+        else if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
+            this.needDownload=false;
         }
         //优先保证win和mac
         if(this.needDownload  && this.downLoadLink != 'False'){
