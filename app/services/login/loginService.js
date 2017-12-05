@@ -27,8 +27,10 @@ export const LoginService = {
                 this.currentSystem = key;
             }
         }
+
         //不是chrome,不是crios
         if(!browser['chrome']){
+            this.needDownload = true;
             if(this.currentSystem== 'android'){
                 this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
                 this.downLoadLink = 'False';
@@ -37,10 +39,14 @@ export const LoginService = {
                 this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
                 this.downLoadLink = 'False';
             }
+            //是crios,是ios设备
+            else if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
+                this.needDownload=false;
+            }
             else{
                 this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
             }
-            this.needDownload = true;
+
         }
         //是chrome，不是crios
        else if(browser['chrome']  && !browser['crios']){
@@ -49,10 +55,7 @@ export const LoginService = {
                this.needDownload=true;
             }
         }
-        //是crios,是ios设备
-        else if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
-            this.needDownload=false;
-        }
+
         //优先保证win和mac
         if(this.needDownload  && this.downLoadLink != 'False'){
             switch (this.currentSystem){
