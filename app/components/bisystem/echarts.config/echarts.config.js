@@ -435,11 +435,14 @@ const map = {
         subtext: '',
         x:'left'
     },
-    dataZoom:{
-        type:'slider',
-        show:true,
-
-    },
+    // dataZoom:{
+    //     type:'slider',
+    //     show:true,
+    //     xAxisIndex:{
+    //
+    //     }SSSS
+    //
+    // },
     tooltip:{
         trigger: 'item',
         triggerOn:'none'

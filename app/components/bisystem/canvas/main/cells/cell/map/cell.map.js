@@ -14,6 +14,7 @@ let config = {
     },
     actions: {
         echartsInit() {
+            console.log(this.data);
             let echartsService = new EchartsService(this.data);
             this.myChart = echartsService.myChart;
             let that = this;
