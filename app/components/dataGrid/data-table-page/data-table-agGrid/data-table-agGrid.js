@@ -1754,10 +1754,15 @@ let config = {
                 json = _.defaultsDeep(json, this.data.sortParam)
             }
             //是否添加拼音搜索
+            let addPy = false;
             if(json.filter && json.filter.length!=0){
                 for(let a of json.filter){
                     if(this.data.supportPy.indexOf(a.cond.searchBy) != -1){
                         a['cond']['py'] = 1;
+                        if(!addPy&&this.data.total>=5000){
+                            msgbox.alert('当前的数据量较大，检索时需要更长时间。');
+                            addPy = true;
+                        }
                     }else {
                         a['cond']['py'] = 0;
                     }
