@@ -27,18 +27,21 @@ export const LoginService = {
                 this.currentSystem = key;
             }
         }
-
         if(!browser['chrome']){
-            if(this.currentSystem== 'android' || this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad'){
+            if(this.currentSystem== 'android'){
                 this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
                 this.downLoadLink = 'False';
-            }else{
+            }
+            else if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && !browser['crios']){
+                this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
+                this.downLoadLink = 'False';
+            }
+            else{
                 this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
             }
             this.needDownload = true;
         }
-
-       else if(browser['chrome']){
+       else if(browser['chrome']  && !browser['crios']){
            if((browser['chrome'].slice(0,2)<62 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                this.needDownload=true;
@@ -83,7 +86,8 @@ export const LoginService = {
             (s = ua.match(/firefox\/([\d.]+)/)) ? Browser['firefox'] = s[1] :
                 (s = ua.match(/chrome\/([\d.]+)/)) ? Browser['chrome'] = s[1] :
                     (s = ua.match(/opera.([\d.]+)/)) ? Browser['opera'] = s[1] :
-                        (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser['safari'] = s[1] : 0;
+                        (s = ua.match(/crios.([\d.]+)/)) ? Browser['crios'] = s[1] :
+                            (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser['safari'] = s[1] : 0;
         return Browser;
     },
     /**
