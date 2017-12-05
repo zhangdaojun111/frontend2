@@ -445,8 +445,9 @@ export const CreateFormServer={
 		let data = this.mergeFormData(res[0], res[1]);
         let edit = await FormService.getColumnList(res[0].table_id);
         data.isEdit = edit.permission.edit;
-        if(data.isEdit == 1) {
-        	data.btnType = ''
+        if(data.isEdit == 0) {
+        	data.btnType = 'none';
+        	data.is_view = 0
 		}
 		//检查表单类型
 		let template = await this.checkFormType(data, res);
