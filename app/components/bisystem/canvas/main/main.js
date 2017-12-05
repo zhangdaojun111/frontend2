@@ -46,6 +46,14 @@ let config = {
                 return false;
             }
         },
+        //下载pdf
+        {
+            event: 'click',
+            selector: '.to-download-pdf',
+            callback: function (context, event) {
+                this.actions.downloadPDF();
+            }
+        }
     ],
     actions: {
         /**
@@ -141,6 +149,33 @@ let config = {
                 this.el.find('.cells-container').addClass('hide-head');
             }
         },
+        /**
+         * 最后一个cell加载完后执行的回调,将滚动条设置到body上
+         */
+        loadChartFinish(){
+            $('body').css('overflow','auto');
+            this.el.find('.cells-container').css('overflow','visible');
+        },
+        /**
+         * 点击下载pdf
+         */
+        downloadPDF(){
+            let widthIn = 8.27;
+            //计算实际内容高度
+            let height = document.body.scrollHeight;
+            this.el.find('.bi-table').each(function () {
+                height = height - $(this).height() + $(this)[0].scrollHeight;
+            });
+            this.el.find('.comment').each(function () {
+                height = height - $(this).height() + $(this)[0].scrollHeight;
+            });
+
+            console.log(height,'更新啦5:00');
+            let heightIn = Math.max((Number(height)/120).toFixed(2),11.7);
+            let origin = window.location.origin;
+            let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in`;
+            window.open(url);
+        }
     },
     afterRender:function(){
         if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
