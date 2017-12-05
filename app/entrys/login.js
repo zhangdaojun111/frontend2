@@ -436,7 +436,7 @@ function resetBackground(result) {
     }
 }
 
-if( isNeedDownload === false){      //正常显示登录表单
+if( isNeedDownload === true){      //正常显示登录表单
     controller.infoInit();  //初始化最近访问用户和密码
     let result = window.config && window.config.revision_info;
     if (result) {

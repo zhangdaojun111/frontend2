@@ -435,6 +435,10 @@ const map = {
         subtext: '',
         x:'left'
     },
+    dataZoom:{
+        show:true,
+
+    },
 
     tooltip:{
         trigger: 'item',

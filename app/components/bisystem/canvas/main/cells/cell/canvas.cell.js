@@ -84,6 +84,7 @@ let config = {
                 });
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
+                console.log(this.data.cellComponent);
             }
         },
 
@@ -203,8 +204,23 @@ let config = {
             this.data.cell.size.left = left;
             this.data.cell.size.top = top;
             this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
+        },
+        /**
+         * 手机旋转屏幕后画布块resize
+         */
+        resizeCanvas(){
+            let cmp = this.data.cellComponent;
+            let chart = cmp.myChart || cmp.pieChart || cmp.normalChart;
+            if(chart){
+                let myChart;
+                if(chart.hasOwnProperty('myChart')){
+                    myChart = chart.myChart;
+                }else{
+                    myChart = chart;
+                }
+                myChart.resize();
+            }
         }
-
     },
 
     data: {
@@ -322,6 +338,12 @@ let config = {
             this.actions.cellDragandResize();
         } else {
             this.el.off('mousedown mouseup');
+        }
+
+        //判断屏幕旋转事件是否存在，存在则监听
+        let evt = "onorientationchange" in window ? "orientationchange":false;
+        if(evt){
+            window.addEventListener(evt,this.actions.resizeCanvas,false);
         }
     }
 };
