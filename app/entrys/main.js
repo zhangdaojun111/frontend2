@@ -2,11 +2,13 @@
 // import 'jquery-ui/themes/base/base.css';
 // import 'jquery-ui/themes/base/theme.css';
 import '../assets/scss/main.scss';
+import '../../custom/guojin/app/assets/scss/main.scss';
 import '../assets/scss/framework/framework-base.scss';
 import {SocketMgr} from '../lib/socket';
 import {IframeComponent} from '../components/main/iframes/iframes';
 import {HeaderComponent} from '../components/main/header/header';
-import {AsideComponent} from '../components/main/aside/aside';
+import {AsideComponent} from '../../custom/guojin/app/components/main/aside/aside';
+import {ToolBar} from '../../custom/guojin/app/components/main/tool-bar/tool-bar';
 import '../assets/scss/dataGrid/dataGrid-icon.scss';
 import '../assets/scss/theme/blue.scss';
 import '../assets/scss/theme/ink-blue.scss';
@@ -19,6 +21,7 @@ SocketMgr.connect();
 let AsideInstance = new AsideComponent();
 let HeaderInstance = new HeaderComponent();
 let IframeInstance = new IframeComponent();
+let ToolbarInstance = new ToolBar();
 
 _.defaultsDeep(AsideInstance.data, {
     systemName: window.config.sysConfig.logic_config.sap_login_system_name,
@@ -31,12 +34,13 @@ _.defaultsDeep(AsideInstance.data, {
 IframeInstance.render($('#content'));
 HeaderInstance.render($('#header'));
 AsideInstance.render($('#aside'));
+ToolbarInstance.render($('#tool-bar'));
 Storage.clearAll();
 const clickEvent = ()=>{
-  PMAPI.sendToAllChildren({
-      type:PMENUM.send_event,
-      data:'click'
-  });
+    PMAPI.sendToAllChildren({
+        type:PMENUM.send_event,
+        data:'click'
+    });
 };
 document.addEventListener('click',clickEvent);
 

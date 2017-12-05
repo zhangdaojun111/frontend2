@@ -1,5 +1,6 @@
 import Component from '../../../lib/component';
-import template from './header.html';
+// import template from './header.html';
+import template from '../../../../custom/guojin/app/components/main/header/header.html';
 import './header.scss';
 import 'jquery-ui/ui/widgets/tooltip';
 import Mediator from '../../../lib/mediator';

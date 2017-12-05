@@ -1,0 +1,30 @@
+@import "../../../../../../app/assets/scss/core/base";
+.aside-tool {
+    height: 100%;
+    .icon {
+        cursor: pointer;
+        text-align: center;
+        padding: ($toolbar-width - 32px)/2 0;
+        .unread {
+            position: relative;
+            &:after {
+                content: ' ';
+                position: absolute;
+                right: -4px;
+                top: -2px;
+                width: 8px;
+                height: 8px;
+                background-color: red;
+                border-radius: 4px;
+            }
+        }
+    }
+    .erds-logo {
+        font-size: 16px;
+        font-weight: 700;
+        display: inline-block;
+        width: $toolbar-width;
+        text-align: center;
+        line-height: 60px;
+    }
+}

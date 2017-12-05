@@ -1,0 +1,103 @@
+@import "../../../../../app/assets/scss/core/base";
+html.main, html.main body {
+    width: 100%;
+    height: 100%;
+    min-width: $body-minwidth;
+    min-height: $body-minheight;
+    background-color: $main-bg;
+    position: relative;
+}
+#tool-bar {
+    background-color: $aside-top-bg;
+    .icon {
+        &.active {
+            background-color: $aside-bg;
+        }
+    }
+    .erds-logo {
+        color: #0088FF;
+        background-color: #2b2b2b;
+    }
+    .icon-toolbar-message {
+        background: url("../images/guojin/black/ico_msg_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_msg_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_msg_bk_pre.png");
+        }
+    }
+    .icon-toolbar-workbench {
+        background: url("../images/guojin/black/ico_data_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_data_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_data_bk_pre.png");
+        }
+    }
+    .icon-toolbar-calendar {
+        background: url("../images/guojin/black/ico_cal_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_cal_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_cal_bk_pre.png");
+        }
+    }
+    .icon-toolbar-folder {
+        background: url("../images/guojin/black/ico_doc_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_doc_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_doc_bk_pre.png");
+        }
+    }
+    .icon-toolbar-setting {
+        background: url("../images/guojin/black/ico_setup_bk_def.png");
+        &:hover {
+            background: url("../images/guojin/black/ico_setup_bk_pre.png");
+        }
+        &.active {
+            background: url("../images/guojin/black/ico_setup_bk_pre.png");
+        }
+    }
+}
+#header {
+    position: absolute;
+    left: $aside-width+$toolbar-width;
+    right: 0;
+    top: 0;
+    height: $header-height;
+    background-color: $header-bg;
+}
+
+#tool-bar {
+    position: absolute;
+    width: $toolbar-width;
+    height: 100%;
+}
+
+#aside {
+    position: absolute;
+    left: $toolbar-width;
+    top: 0;
+    width: $aside-width;
+    bottom: 0;
+    background-color: $aside-bg;
+}
+
+#content {
+    position: absolute;
+    background-color: $content-bg;
+    right: 0;
+    top: $header-height;
+    bottom: 0;
+    left: $aside-width+$toolbar-width;
+    iframe {
+        width: 100%;
+        height: 100%;
+    }
+}
+
