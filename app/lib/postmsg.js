@@ -505,7 +505,7 @@ export const PMAPI = {
             || typeof componentConfig === 'boolean') {
             return '' + componentConfig;
         } else if (typeof componentConfig === 'string') {
-            return '"' + componentConfig + '"';
+            return '"' + componentConfig.replace(/\n/g, '') + '"';
         } else if (componentConfig instanceof Function) {
             let str = String(componentConfig);
             let source = PMAPI._removeAllComments(str.substring(str.indexOf('{') + 1, str.lastIndexOf('}')));
@@ -582,7 +582,7 @@ export const PMAPI = {
         return new Promise(function (resolve) {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
-            PMAPI.sendToParent({
+            PMAPI.sendToRootParent({
                 type: PMENUM.open_preview,
                 key: key,
                 data: data,
