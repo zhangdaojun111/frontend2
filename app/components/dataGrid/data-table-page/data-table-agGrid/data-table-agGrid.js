@@ -1440,7 +1440,7 @@ let config = {
                 });
             }
             if (res[0].hasOwnProperty('error')) {
-                if (res[0].error == '您没有数据查看权限' && this.data.fromApprove == '0') {
+                if (res[0].error == '您没有数据查看权限' && this.data.fromApprove == 0) {
                     this.el.find('.ag-body-viewport-wrapper').html('<div style="width: 100%;height: 100%;background: #fff;position: relative;z-index: 1;"><p style="position: absolute;top: 50%;left: 50%;' +
                         'width: 200px;height: 20px;line-height: 20px;text-align: center;margin-left: -100px;margin-top: -10px;font-size: 16px">' + res[0].error + '</p></div>')
                 }
@@ -1625,7 +1625,8 @@ let config = {
                 rowId: this.data.rowId,
                 record_id: this.data.recordId,
                 is_filter: this.data.filterParam.is_filter,
-                filter: []
+                filter: [],
+                from_approve: this.data.fromApprove
             };
             for (let k in json) {
                 if (json[k] == 'undefined') {
