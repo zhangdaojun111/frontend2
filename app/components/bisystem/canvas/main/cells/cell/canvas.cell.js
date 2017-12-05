@@ -85,6 +85,11 @@ let config = {
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
             }
+
+            //bi打印pdf则执行回调
+            if(window.config.pdf === true && this.data.isLast === true){
+                this.actions.loadChartFinish();
+            }
         },
 
         /**
@@ -322,6 +327,10 @@ let config = {
             this.actions.cellDragandResize();
         } else {
             this.el.off('mousedown mouseup');
+        }
+
+        if(window.config.pdf){
+            this.el.find('.cell').addClass('download-pdf');
         }
     }
 };

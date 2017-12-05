@@ -238,6 +238,11 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/rich_text_icon.png') no-repeat;
     }
+
+    .download-pdf-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/pdf_download.png') no-repeat;
+    }
 }
 
 @mixin chart-com {
