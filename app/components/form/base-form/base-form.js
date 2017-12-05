@@ -1671,6 +1671,7 @@ let config = {
 				_this.data.childComponent[_this.data['quikAddDfield']].data.showValue = data.new_option.label;
 				_this.data.data[_this.data['quikAddDfield']] = _this.data.childComponent[_this.data['quikAddDfield']].data;
 				_this.data.childComponent[_this.data['quikAddDfield']].reload();
+                _this.actions.triggerControl();
 			});
 		},
 		//打开选择器
@@ -1761,7 +1762,7 @@ let config = {
 				} else {
 					_this.data.viewMode = 'ViewChild';
 				}
-				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`, {
+				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentRealId=${data.parent_real_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`, {
 					width: 1100,
 					height: 600,
 					title: `子表`,

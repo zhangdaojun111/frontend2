@@ -346,7 +346,9 @@ export const dgcService = {
 
             tempPinyin[operate] = keyword;
             tempDictPinyin[searchBy_P] = tempPinyin;
-            tempDictAndPinyin.push(tempDictPinyin);
+            if(searchDict.cond.py==1){
+                tempDictAndPinyin.push(tempDictPinyin);
+            }
         }
         if(typeof (cond["keyword"]) == "number" ){
             result =  tempDict;
