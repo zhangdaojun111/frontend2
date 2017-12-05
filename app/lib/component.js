@@ -266,6 +266,40 @@ class Component {
             return oldBinds;
         }
     }
+    
+    /**
+     * 继承写法2.0
+     * @param config
+     * @returns {newclazz} 返回一个全新的class
+     */
+    static extend(config){
+        let self = this;
+        class newclazz extends self {
+            constructor(extendConfig){
+                function addToLeaf(obj) {
+                    if (obj._super) {
+                        addToLeaf(obj._super);
+                    } else {
+                        obj._super = _super;
+                    }
+                }
+                let _super = $.extend(true, {}, self.config);
+                let selfCBinds = self.config.binds;
+                let cBinds = config.binds;
+                let extendCBinds;
+                let distBinds = Component.mergeBinds(cBinds, selfCBinds);
+                if (extendConfig) {
+                    extendCBinds = extendConfig.binds;
+                    distBinds = Component.mergeBinds(extendCBinds, distBinds);
+                }
+                let newConfig = $.extend(true, {}, self.config, config, extendConfig, {binds: distBinds});
+                addToLeaf(newConfig);
+                super(newConfig);
+            }
+        }
+        newclazz.config = config;
+        return newclazz;
+    }
 
 }
 

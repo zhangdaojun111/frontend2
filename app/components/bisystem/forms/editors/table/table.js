@@ -134,7 +134,8 @@ let config = {
                 sort: data.sort,
                 sortColumns:data.sortColumns ? [data.sortColumns] : [],
                 alignment:data.alignment,
-                columnNum:data.columnNum
+                columnNum:data.columnNum,
+                editInterface: data.editInterface,
             };
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
@@ -169,6 +170,7 @@ let config = {
             this.formItems['countNum'].setValue(chart['countNum']);
             this.formItems['single'].setValue(chart['single']);
             this.formItems['columnNum'].setValue(chart['columnNum']);
+            this.formItems['editInterface'].setValue(chart['editInterface'] ? chart['editInterface'] : 1);
         }
     },
     data: {
@@ -287,6 +289,16 @@ let config = {
                     {'value': 'right', 'name': '居右'},
                 ],
                 type: 'select'
+            },
+            {
+                label: '是否显示操作界面',
+                name: 'editInterface',
+                defaultValue: '1',
+                list: [
+                    {'value': '1', 'name': '隐藏'},
+                    {'value': '2', 'name': '显示'},
+                ],
+                type: 'radio'
             },
             {
                 label: '请输入显示多少列(默认10条)',
