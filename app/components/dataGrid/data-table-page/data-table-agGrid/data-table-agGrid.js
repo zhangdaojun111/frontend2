@@ -247,6 +247,8 @@ let config = {
         isShowTips: true,
         //是否第一次创建编辑表头
         firstCreateEditCol: true,
+        //处理表单子表内置父表数据用
+        parentBuiltinData:{},
         //第一次获取二维表数据
         firstReportTable: true,
         //二维表项目名称
@@ -1411,6 +1413,15 @@ let config = {
                 //渲染其他组件
                 this.actions.renderAgGrid();
             } else {
+            }
+            if(this.data.viewMode == 'EditChild'){
+                for(let j of this.data.rowData){
+                    for(let k in this.data.parentBuiltinData){
+                        if(k!='temp_id'){
+                            j[k] = this.data.parentBuiltinData[k];
+                        }
+                    }
+                }
             }
             let d = {
                 rowData: this.data.rowData,
@@ -3691,7 +3702,10 @@ let config = {
                 defaultMax: true,
                 // customSize: true
             }).then((data) => {
-                if (data == 'success' || data.refresh) {
+                if ((data == 'success' || data.type == 'success') || data.refresh) {
+                    if(data.parentBuiltinData){
+                        this.data.parentBuiltinData = data.parentBuiltinData;
+                    }
                     this.actions.timeDelayRefresh();
                 }
             })
