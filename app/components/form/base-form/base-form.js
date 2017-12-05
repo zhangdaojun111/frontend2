@@ -295,6 +295,9 @@ let config = {
 				if (this.data.idsOfSonDataByParent.indexOf(key) != -1) {
 					continue;
 				}
+				if(data.be_control_condition){
+					continue;
+				}
 				let type = data["type"];
 				if (type == 'Songrid') {
 					continue;
@@ -631,7 +634,7 @@ let config = {
 
 		//改变选择框的选项
 		changeOptions() {
-			for (let key in this.data.data) {
+			for(let key in this.data.data){
 				let data = this.data.data[key];
 				let obj = FormService.selectObj;
 				let affectType = data['type'];
@@ -645,7 +648,11 @@ let config = {
 						this.data.optionsToItem[key].push(o);
 					}
 				}
-				if (data['linkage'] != {}) {
+			}
+			for (let key in this.data.data) {
+				let data = this.data.data[key];
+				let obj = {'Select':'options','Radio':'group','MultiSelect':'options','Readonly':'options'};
+				if (!_.isEmpty(data['linkage'])) {
 					let j = 0;
 					let arr = [];
 					for (let value in data['linkage']) {
@@ -660,7 +667,7 @@ let config = {
 					}
 					if (j == 0) {
 						for (let field of arr) {
-							this.data.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
+							this.data.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem;
 							if(this.data.childComponent[field].data){
 								this.data.childComponent[field].data[obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
 								this.data.childComponent[field].reload();
@@ -673,7 +680,7 @@ let config = {
 
 		//改变选择框的选项
 		changeOptionOfSelect(data, l) {
-			let obj = {'select': 'options', 'radio': 'group', 'multi-select': 'options'};
+			let obj = {'Select': 'options', 'Radio': 'group', 'MultiSelect': 'options'};
 			let linkage = l;
 			// let field = data['dfield'];
 			let type = data['type'];
@@ -1321,7 +1328,7 @@ let config = {
 				isPustToPostData2 = this.actions.countFunc(data.dfield);
 			}
 			//改变选择框的选项
-			if (data['linkage'] != {}) {
+			if (!_.isEmpty(data['linkage'])) {
 				let j = 0;
 				let arr = [];
 				for (let value in data['linkage']) {
@@ -1337,7 +1344,8 @@ let config = {
 				if (j == 0) {
 					let obj = FormService.selectObj;
 					for (let field of arr) {
-						this.data.data[field][obj[this.data[field]['type']]] = this.data.optionsToItem[field];
+						this.data.data[field][obj[this.data.data[field]['type']]] = this.data.optionsToItem[field];
+						this.data.childComponent[field] && (this.data.childComponent[field].data[obj[this.data.data[field]['type']]]=this.data.optionsToItem[field]) && this.data.childComponent[field].reload();
 					}
 				}
 			}
@@ -1667,6 +1675,7 @@ let config = {
 				_this.data.childComponent[_this.data['quikAddDfield']].data.showValue = data.new_option.label;
 				_this.data.data[_this.data['quikAddDfield']] = _this.data.childComponent[_this.data['quikAddDfield']].data;
 				_this.data.childComponent[_this.data['quikAddDfield']].reload();
+                _this.actions.triggerControl();
 			});
 		},
 		//打开选择器
@@ -1757,7 +1766,7 @@ let config = {
 				} else {
 					_this.data.viewMode = 'ViewChild';
 				}
-				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`, {
+				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableId=${_this.data.sonTableId}&parentTableId=${data.parent_table_id}&parentRealId=${data.parent_real_id}&parentTempId=${data.temp_id}&rowId=${data.parent_temp_id}&tableType=child&viewMode=${_this.data.viewMode}`, {
 					width: 1100,
 					height: 600,
 					title: `子表`,
@@ -1917,6 +1926,13 @@ let config = {
 					case 'Readonly':
 						if(this.data.tempId){
 							data[key].canNotOpen=false;
+						}
+						if(data[key].real_type == 9 || data[key].real_type == 23 || data[key].real_type == 33){
+							data[key]['read_only']=1;
+                            let attachmentControl = new AttachmentControl(data[key], actions);
+                            attachmentControl.render(single);
+                            this.data.childComponent[data[key].dfield] = attachmentControl;
+                            break;
 						}
 						let readonly = new Readonly(data[key], actions);
 						readonly.render(single);
