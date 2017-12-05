@@ -108,11 +108,6 @@ let config = {
 				//子表的this.newData
 				let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
 				//循环给子表赋值
-				console.log('parentData');
-				console.log('parentData');
-				console.log('parentData');
-				console.log(parentData);
-				console.log(kvDict);
 				for (let key in kvDict) {
 					let val = parentData[key];
 					//子表的dfield
