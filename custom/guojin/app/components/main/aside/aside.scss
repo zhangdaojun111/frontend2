@@ -289,5 +289,8 @@
             color: #fff;
             cursor: pointer;
         }
+        &:hover {
+            background-color: $aside-top-bg;
+        }
     }
 }
