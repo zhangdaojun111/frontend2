@@ -5,8 +5,7 @@
 import Component from "../../../lib/component";
 import template from './my-workflow.html';
 import './my-workflow.scss';
-// import workflowPage from '../workflow-page/workflow-page';
-import workflowPage from '../../../../custom/guojin/app/components/customPage/workflow-page/workflow-page';
+import workflowPage from '../workflow-page/workflow-page';
 
 let config = {
     template: template,

@@ -10,8 +10,7 @@ import msgBox from '../../../lib/msgbox';
 import {HTTP} from "../../../lib/http";
 import TreeView from "../../util/tree/tree";
 import {AutoSelect} from '../../util/autoSelect/autoSelect';
-// import dataTableAgGrid from "../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid"
-import dataTableAgGrid from "../../../../custom/guojin/app/components/dataGrid/data-table-page/data-table-agGrid/data-table-agGrid";
+import dataTableAgGrid from "../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid"
 import {dataTableService} from "../../../services/dataGrid/data-table.service";
 
 /**
