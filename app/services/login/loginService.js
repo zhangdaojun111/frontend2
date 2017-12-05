@@ -34,7 +34,7 @@ export const LoginService = {
         }
 
        else if(browser['chrome']){
-           if((browser['chrome'].slice(0,2)<62 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
+           if((browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                this.needDownload=true;
             }
