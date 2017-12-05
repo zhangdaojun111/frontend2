@@ -170,8 +170,8 @@ let config = {
                 height = height - $(this).height() + $(this)[0].scrollHeight;
             });
 
-            console.log(height,'更新啦6:20');
-            let heightIn = Math.max((Number(height)/100).toFixed(2),11.7);
+            console.log(height,'更新啦');
+            let heightIn = Math.max((Number(height)/130).toFixed(2),11.7);
             let origin = window.location.origin;
             let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in`;
             window.open(url);
