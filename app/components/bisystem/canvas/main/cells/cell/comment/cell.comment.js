@@ -79,6 +79,10 @@ let config = {
                 toolbar: toolbarOptions
             }
         });
+
+        if(window.config.pdf){
+            this.el.find('.comment').addClass('download-pdf');
+        }
     },
     firstAfterRender(){}
 };

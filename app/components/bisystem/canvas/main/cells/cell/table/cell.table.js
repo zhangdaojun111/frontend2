@@ -165,6 +165,11 @@ let config = {
         }else{
             this.el.find('.bi-table').removeClass('editInterface');
         }
+
+        //pdf页面加overflow:hidden
+        if(window.config.pdf){
+            this.el.find('.bi-table').addClass('download-pdf');
+        }
     }
 };
 
