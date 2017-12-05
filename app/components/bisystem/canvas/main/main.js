@@ -127,6 +127,8 @@ let config = {
                 doFullScreenCarousel: async () => {
                     if (this.data.isNewWindow) {
                         this.actions.launchFullScreen(document.documentElement);
+                    }else{
+                        msgbox.showTips('按ESC退出轮播模式');
                     }
                     if(this.data.firstCarousel){
                         this.data.cells.actions.loadSecondView();

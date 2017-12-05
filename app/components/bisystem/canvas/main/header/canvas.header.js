@@ -152,7 +152,7 @@ let config = {
         },
         {
             event:'click',
-            selector:'.full-screen-carousel',
+            selector:'.to-do-carousel',
             callback:function () {
                 this.trigger('doFullScreenCarousel');
             }
