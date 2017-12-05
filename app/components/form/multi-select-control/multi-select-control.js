@@ -181,7 +181,11 @@ let config={
             event: 'click',
             selector: '.add-item',
             callback: function(){
-                this.events.addItem(this.data)
+            	if(this.data.dtype=='14'){
+            		this.events.addNewBuildIn(this.data);
+	            }else{
+		            this.events.addItem(this.data)
+	            }
             }
         }
     ],
