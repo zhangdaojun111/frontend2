@@ -162,7 +162,7 @@ let config = {
         downloadPDF(){
             let widthIn = 8.27;
             //计算实际内容高度
-            let height = document.body.scrollHeight;
+            let height = this.el.find('.cells-container')[0].scrollHeight;
             this.el.find('.bi-table').each(function () {
                 height = height - $(this).height() + $(this)[0].scrollHeight;
             });
