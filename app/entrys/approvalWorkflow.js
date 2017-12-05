@@ -261,8 +261,7 @@ const approveWorkflow = (para) => {
                 data:{refresh:true}
             })
         }else{
-	        msgBox.showTips('操作失败。');
-            // msgBox.alert(`失败：${res.error}`);
+	        msgBox.alert('操作失败：' + res.error);
         }
     })
 
