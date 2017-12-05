@@ -28,8 +28,13 @@ export const LoginService = {
             }
         }
 
-        if (!browser['chrome']){
-            this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
+        if(!browser['chrome']){
+            if(this.currentSystem== 'android' || this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad'){
+                this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
+                this.downLoadLink = 'False';
+            }else{
+                this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
+            }
             this.needDownload = true;
         }
 
@@ -40,7 +45,7 @@ export const LoginService = {
             }
         }
         //优先保证win和mac
-       // if(this.needDownLoad){
+        if(this.needDownload  && this.downLoadLink != 'False'){
             switch (this.currentSystem){
                 case 'win':
                     this.downLoadLink='http://sw.bos.baidu.com/sw-search-sp/software/e80aba170ee7c/ChromeStandalone_62.0.3202.94_Setup.exe';
@@ -56,7 +61,7 @@ export const LoginService = {
                     this.prompt='暂不支持windows，mac外的操作系统';
                     break;
             }
-     //   }
+        }
         // if(currentSystem == 'android'){
         //     this.needDownLoad=true;
         //     this.prompt="Android用户请下载本公司APP";

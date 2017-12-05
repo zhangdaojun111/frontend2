@@ -461,7 +461,10 @@ if( isNeedDownload === false){      //正常显示登录表单
     $('.login-content').hide();
     $(".need-download").show();
     let htmlDownload = '';
-    htmlDownload += '<span class="download-prompt">'+prompt+'</span>'+'<a class="download-link">下载链接</a>';
+    htmlDownload += '<span class="download-prompt">'+prompt+'</span>';
+    if(LoginService.downLoadLink != 'False'){
+        htmlDownload += '<a class="download-link">下载链接</a>';
+    }
 
     if(LoginService.currentSystem == 'win'){
         htmlDownload +=

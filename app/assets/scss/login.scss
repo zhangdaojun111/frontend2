@@ -461,6 +461,14 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                 padding: 5px;
             }
         }
+        @media screen and (min-width: 320px) and (max-width: 414px){
+            .need-download {
+                left: calc(50% - 150px);
+                span {
+                    font-size: 12px;
+                }
+            }
+        }
     }
 
     #shadow-box{
