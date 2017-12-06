@@ -239,6 +239,11 @@ let config = {
     },
     afterRender:function () {
         this.data.timestamp =  new Date().getTime();
+        if(this.data.file.name == undefined){
+            this.data.file.name = 'file-'+this.data.timestamp+'.'+this.data.file.type.substring(this.data.file.type.lastIndexOf('/')+1,this.data.file.type.length);
+            let title = this.data.file.name+"("+this.data.fileSize+")";
+            this.el.find('.file-name').prop('title',title).find('strong').text(title);
+        }
         this.actions.startUploadFile();
     }
 };
