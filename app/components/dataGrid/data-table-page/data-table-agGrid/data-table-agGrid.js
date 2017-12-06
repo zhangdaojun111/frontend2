@@ -1012,21 +1012,17 @@ let config = {
         },
         //初始化按钮，根据viewMode参数，生成不同模式需要的按钮
         renderBtn: function () {
-            console.log('****************111111*')
-            console.log(this.data.viewMode)
             let btnGroup = dgcService.gridBtn(this.data.viewMode);
             let btns = this.el.find('.dataGrid-btn-group')[0].querySelectorAll('a');
             let html = '';
             for (let btn of btns) {
                 let name = btn.className;
-                if (btnGroup.indexOf(name) != -1 && ( this.data.permission[dgcService.permission2btn[name]] )) {
+                if (btnGroup.indexOf(name) != -1 && ( this.data.permission[dgcService.permission2btn[name]] || dgcService.permission2btn[name] == 'especial' )) {
                     //工作流表无编辑模式
                     if (name == 'edit-btn' && this.data.flowId != '') {
                         continue;
                     }
                     //新窗口
-                    console.log('****************nnnnnnnn*')
-                    console.log(this.data.isNewWindow)
                     if (name == 'grid-new-window' && this.data.isNewWindow) {
                         continue;
                     }
