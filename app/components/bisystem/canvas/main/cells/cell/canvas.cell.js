@@ -19,7 +19,6 @@ import {CellStylzieComponent} from './stylzie/cell.stylzie';
 import {CanvasCellTitleComponent} from './title/canvas.title';
 import {CellGaugeComponent} from './gauge/cell.gauge';
 import {CellMapComponent} from './map/cell.map';
-import {CellMessageComponent} from './message/cell.message';
 import {CellApprovalComponent} from './approval/cell.approval';
 import {CellCalendarComponent} from './calendar/cell.calendar';
 
@@ -39,7 +38,6 @@ const cellTypes = {
     'stylzie': CellStylzieComponent,
     'map':CellMapComponent,
     'gauge' : CellGaugeComponent,
-    'message' : CellMessageComponent,
     'approval' : CellApprovalComponent,
     'calendar' : CellCalendarComponent,
 };

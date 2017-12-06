@@ -13,7 +13,6 @@ import {PieEditor as FormPieComponent} from '../editors/pie/pie';
 import {StylizeEditor as FormStylizeComponent} from '../editors/stylzie/stylize';
 import {MapEditor as FormMapComponent} from '../editors/map/map'
 import {GaugeEditor as FormGaugeComponent} from '../editors/gauge/gauge';
-import {MessageEditor as FormMessageComponent} from '../editors/message/message';
 import {ApprovalEditor as FormApprovalComponent} from '../editors/approval/approval';
 import {CalendarEditor as FormCalendarComponent} from '../editors/calendar/calendar';
 
@@ -84,22 +83,16 @@ export let componentsJson = {
         'icon':'chart-gauge-icon',
         'component': FormGaugeComponent
     },
-    'message': {
-        'entry': 'message',
-        'name': '消息',
-        'icon':'chart-gauge-icon',
-        'component': FormMessageComponent
-    },
     'approval': {
         'entry': 'approval',
         'name': '审批',
-        'icon':'chart-gauge-icon',
+        'icon':'chart-approval-icon',
         'component': FormApprovalComponent
     },
     'calendar': {
         'entry': 'calendar',
-        'name': '仪表盘',
-        'icon':'chart-gauge-icon',
+        'name': '日程',
+        'icon':'chart-calendar-icon',
         'component': FormCalendarComponent
     }
 };
