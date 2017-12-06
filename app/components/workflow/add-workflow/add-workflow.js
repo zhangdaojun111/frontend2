@@ -69,9 +69,9 @@ let config={
                 if (res.data.flow_data.length === 0) {
                     this.el.find('.workflow-foot').hide();
                     this.el.find('.workflow-flex').hide();
-                    $('#place-form').html('');
+                    this.el.find('#place-form').html('');
                     FormEntrys.initForm({
-                        el: $('#place-form'),
+                        el: this.el.find('#place-form'),
                         is_view: this.data.is_view,
                         from_focus: 0,
                         table_id: obj.table_id,
@@ -134,16 +134,17 @@ let config={
         getFlows(res) {
             let obj = this.data.obj;
             if (obj.btnType === 'view' && this.data.is_view !== 0) {
-                $('#toEdit').show();
-                $('#addFollower').hide();
+                this.el.find('#toEdit').show();
+	            this.el.find('#addFollower').hide();
             }else if(obj.btnType==='none'){
-                $('#toEdit').hide();
-                $('#addFollower').hide();
+	            this.el.find('#toEdit').hide();
+	            this.el.find('#addFollower').hide();
             }
+	        WorkFlow.saveCallBack(this.actions.getDefaultFocusUsers);
             if(obj.in_process === '1'){
                 WorkFlow.createFlow({
                     flow_id: this.data.obj.flow_id,
-                    el: "#flow-node",
+                    el: this.el.find("#flow-node"),
                     record_id: this.data.obj.record_id,
                 });
                 // Mediator.publish("workflow:hideselect", this.data.obj.flow_id);
@@ -151,15 +152,15 @@ let config={
             }else{
                 WorkFlow.createFlow({
                     flow_id: res.flow_id,
-                    el: "#flow-node",
+                    el: this.el.find("#flow-node"),
                     record_id:obj.record_id,
                 });
                 obj.flow_id = res.flow_id;
                 obj.form_id = res.form_id;
             }
-            $('#place-form').html('');
+            this.el.find('#place-form').html('');
             FormEntrys.initForm({
-                el: $('#place-form'),
+                el: this.el.find('#place-form'),
                 form_id: res.form_id,
                 flow_id: res.flow_id,
                 is_view: this.data.is_view,
@@ -238,9 +239,6 @@ let config={
                     parent_temp_id:obj.parent_temp_id,
                     parent_record_id:obj.parent_record_id
                 };
-                console.log("提交工作流表单数据");
-                console.log(obj);
-                console.log(postData);
                 //半触发操作用
                 if( obj.data_from_row_id ){
                     postData = {
@@ -288,16 +286,36 @@ let config={
             }
             this.data.is_view = 0;
             CreateFormServer.changeToEdit(res);
-        }
+        },
+	    getDefaultFocusUsers(data){
+		    workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
+			    this.data.htmlStr = [];
+			    this.data.allUsersInfo = res.rows;
+			    this.data.focusUsers={};
+			    for(let key in data['updateuser2focususer']) {
+				    this.data.idArr = data['updateuser2focususer'][key];
+				    for(let i of this.data.idArr) {
+					    this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
+					    this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];
+					    this.data.htmlStr.push(`<span class="selectSpan">${this.data.allUsersInfo[i]['name']}</span>`);
+				    }
+			    }
+			    this.el.find('#addFollowerList').html(this.data.htmlStr);
+			    this.data.user = this.data.focusUsers;
+		    })
+	    }
     },
-    afterRender(){
+    async afterRender(){
         PMAPI.getIframeParams(window.config.key).then((res) => {
             this.data.noRequestFormData = res.data;
         });
         let _this=this;
         _this.showLoading();
         this.data.key = this.data.obj.key;
-
+        let edit = await FormService.getColumnList(this.data.obj.table_id);
+        if(edit.permission.edit == 0){
+            this.data.obj.btnType = "none"
+        }
         if (this.data.obj.btnType === 'view'||this.data.obj.btnType ==="none") {
             this.el.find('#subAddworkflow').hide();
             this.data.is_view = 1;
@@ -328,24 +346,24 @@ let config={
             this.data.workflowData=msg.data[0];
             WorkFlow.show(msg.data[0],'#drawflow');
         });
-        Mediator.on('getDefaultFocusUsers', (data) => {
-            workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
-            this.data.htmlStr = [];
-            this.data.allUsersInfo = res.rows;
-            this.data.focusUsers={};
-            // console.log(this.data.allUsersInfo);
-            for(let key in data['updateuser2focususer']) {
-                this.data.idArr = data['updateuser2focususer'][key];
-                for(let i of this.data.idArr) {
-                    this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
-                    this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];
-                    this.data.htmlStr.push(`<span class="selectSpan">${this.data.allUsersInfo[i]['name']}</span>`);
-                }
-            }
-            this.el.find('#addFollowerList').html(this.data.htmlStr);
-            this.data.user = this.data.focusUsers;
-        })
-        });
+        // Mediator.on('getDefaultFocusUsers', (data) => {
+        //     workflowService.getWorkflowInfo({url: '/get_all_users/'}).then(res => {
+        //     this.data.htmlStr = [];
+        //     this.data.allUsersInfo = res.rows;
+        //     this.data.focusUsers={};
+        //     // console.log(this.data.allUsersInfo);
+        //     for(let key in data['updateuser2focususer']) {
+        //         this.data.idArr = data['updateuser2focususer'][key];
+        //         for(let i of this.data.idArr) {
+        //             this.data.nameArr.push(this.data.allUsersInfo[i]['name']);
+        //             this.data.focusUsers[i] = this.data.allUsersInfo[i]['name'];
+        //             this.data.htmlStr.push(`<span class="selectSpan">${this.data.allUsersInfo[i]['name']}</span>`);
+        //         }
+        //     }
+        //     this.el.find('#addFollowerList').html(this.data.htmlStr);
+        //     this.data.user = this.data.focusUsers;
+        // })
+        // });
 
         this.el.find('#subAddworkflow').on('click',()=>{
             // Mediator.publish('workflow:submit', 1);
@@ -368,23 +386,9 @@ let config={
         Mediator.removeAll('workflow:getParams');
     }
 };
-class AddWorkflow extends Component{
-    // constructor (data){
-    //     super(config,data);
-    // }
+export default class AddWorkflow extends Component{
     constructor(data,newConfig){
         config.data.obj = data;
         super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
-export default {
-    showDom(data){
-        return new Promise(function(resolve, reject){
-            let component = new AddWorkflow(data);
-            let el = $('#add-wf');
-            component.render(el);
-            resolve(component);
-        })
-
     }
 }

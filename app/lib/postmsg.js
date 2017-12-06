@@ -254,14 +254,16 @@ export const PMAPI = {
     /**
      * 向主框架发消息，拉取iframe的参数
      * @param key
+     * @param frame 指定接受消息的框架
      * @returns {Promise}
      */
-    getIframeParams: function (key) {
+    getIframeParams: function (key, frame) {
         let resolve = null;
+        frame = frame || PMAPI.getRoot();
         let promise = new Promise((_resolve) => {
             resolve = _resolve;
         });
-        PMAPI.sendToParent({
+        PMAPI.sendToIframe(frame, {
             type: PMENUM.get_param_from_root,
             key: key
         });
@@ -305,17 +307,12 @@ export const PMAPI = {
      * @param data
      */
     sendToParent: function (data) {
-        if(window.parent == this.getRoot()){
-            this.getRoot().postMessage(data, location.origin);
-        }else {
-            window.parent.postMessage(data, location.origin);
-            this.getRoot().postMessage(data, location.origin);
-        }
+        this.sendToIframe(this.getRoot(), data);
         return this;
     },
 
     sendToRootParent: function (data) {
-        this.getRoot().postMessage(data, location.origin);
+        this.sendToIframe(this.getRoot(), data);
         return this;
     },
 
@@ -324,7 +321,7 @@ export const PMAPI = {
      * @param data
      */
     sendToRealParent: function (data) {
-        window.parent.postMessage(data, location.origin);
+        this.sendToIframe(window.parent, data);
         return this;
     },
 
@@ -361,7 +358,7 @@ export const PMAPI = {
      * @returns {PMAPI}
      */
     sendToSelf: function (msg) {
-        window.postMessage(msg, location.origin);
+        this.sendToIframe(window, msg);
         return this;
     },
 
@@ -505,7 +502,7 @@ export const PMAPI = {
             || typeof componentConfig === 'boolean') {
             return '' + componentConfig;
         } else if (typeof componentConfig === 'string') {
-            return '"' + componentConfig + '"';
+            return '"' + componentConfig.replace(/\n/g, '') + '"';
         } else if (componentConfig instanceof Function) {
             let str = String(componentConfig);
             let source = PMAPI._removeAllComments(str.substring(str.indexOf('{') + 1, str.lastIndexOf('}')));
@@ -582,7 +579,7 @@ export const PMAPI = {
         return new Promise(function (resolve) {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
-            PMAPI.sendToParent({
+            PMAPI.sendToRootParent({
                 type: PMENUM.open_preview,
                 key: key,
                 data: data,

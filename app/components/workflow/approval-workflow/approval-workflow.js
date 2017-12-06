@@ -10,13 +10,7 @@ import '../../../assets/scss/workflow/workflow-base.scss';
 import Mediator from '../../../lib/mediator';
 import WorkFlow from '../workflow-drawflow/workflow';
 import WorkflowSeal from '../workflow-seal/workflow-seal';
-import {workflowService} from '../../../services/workflow/workflow.service';
-import msgBox from '../../../lib/msgbox';
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
-import approvalOpinion from '../approval-opinion/approval-opinion'
-import WorkFlowForm from '../workflow-form/workflow-form';
-import WorkFlowGrid from '../workflow-grid/workflow-grid';
-import followerDialog from '../approval-workflow/followerDialog/followerDialog';
 
 let serchStr = location.search.slice(1), nameArr = [], obj = {}, focus = [], is_view, tree = [], staff = [];
 serchStr.split('&').forEach(res => {
@@ -240,7 +234,9 @@ let config={
 			ev.toggle();
 		},
 		appPass() {
-			Mediator.publish('workflow:appPass');
+			this.events.appPass()
+			let _this=this;
+
 			PMAPI.openDialogByIframe(
 				'/iframe/approvalOpinion/',
 				{
@@ -250,12 +246,12 @@ let config={
 				}
 			).then(res => {
 				if(res.determine){
-					// Mediator.publish('workflow:comment',res);
-					Mediator.publish("approval:recordPass",{imgInfo: this.data.imgInfo, comment: res});
+					_this.events.recordPass({imgInfo: _this.data.imgInfo, comment: res});
 				}
 			})
 		},
 		appRejStart(){
+			let _this=this;
 			PMAPI.openDialogByIframe(
 				'/iframe/approvalOpinion/',
 				{
@@ -265,13 +261,12 @@ let config={
 				}
 			).then(res => {
 				if(res.determine===true){
-					// Mediator.publish('workflow:comment',res.comment);
-					// Mediator.publish('approval:recordRejStart',res.determine);
-					Mediator.publish('approval:recordRejStart',res);
+					_this.events.recordRejStart(res);
 				}
 			})
 		},
 		appRejUp(){
+			let _this=this;
 			PMAPI.openDialogByIframe(
 				'/iframe/approvalOpinion/',
 				{
@@ -281,9 +276,7 @@ let config={
 				}
 			).then(res => {
 				if(res.determine===true){
-					// Mediator.publish('workflow:comment',res.comment);
-					// Mediator.publish('approval:appRejUp',res.determine);
-					Mediator.publish('approval:appRejUp',res);
+					_this.events.appRejUp(res);
 				}
 			})
 		},
@@ -301,18 +294,18 @@ let config={
 				}
 			).then(res=>{
 				if(!res.onlyclose){
-					// Mediator.publish('workflow:comment',res.comment);
-					Mediator.publish('approval:rejToAny',res);
+					this.events.rejToAny(res);
 				}else {
 					this.el.find(".approval-btn-sel").removeClass('active');
 				}
 			});
 		},
 		reApp(){
-			Mediator.publish('approval:re-app');
+			this.events.reApp();
 		},
 		addSigner(){
 			this.el.find('.addUser').show();
+			let _this=this;
 			PMAPI.openDialogByIframe(`/iframe/addSigner/`,{
 				width:1000,
 				height:800,
@@ -321,7 +314,7 @@ let config={
 			}).then(res=>{
 				if(!res.onlyclose){
 					// Mediator.publish('workflow:comment',res.comment);
-					Mediator.publish("approval:signUser",{
+					_this.events.signUser({
 						sigh_type:res.sigh_type,
 						sigh_user_id:res.sigh_user_id,
 						comment: res.comment,
@@ -329,6 +322,15 @@ let config={
 					});
 				}
 			})
+		},
+		sendImgInfo(e){
+			this.data.imgInfo=e;
+		},
+		aggridorform(res){
+			if(res.record_info.is_batch==1){
+				this.el.find("#workflow-grid").show();
+				this.el.find("#workflow-form").hide();
+			}
 		},
 		workflowFocused: function (res) {
 			if(res.length>0){
@@ -435,9 +437,6 @@ let config={
 		this.el.on('click','#app-add',()=>{
 			this.actions.addSigner();
 		});
-		Mediator.subscribe("workflow:sendImgInfo",(e)=>{
-			this.data.imgInfo=e;
-		});
 		const pos={x:10,y:20};
 		this.el.on("mouseover","#cloneId3 .tipsText",function (e) {
 			let elDiv=$(this);
@@ -452,53 +451,10 @@ let config={
 			let J_tooltip=$("#J_tooltip");
 			__this.actions.tipsMousemove(pos,J_tooltip,e)
 		});
-		Mediator.subscribe("workflow:aggridorform",(res)=>{
-			if(res.record_info.is_batch==1){
-				this.el.find("#workflow-grid").show();
-				this.el.find("#workflow-form").hide();
-			}
-		});
-
-		Mediator.subscribe("workflow:focused", (res) => {
-			this.actions.workflowFocused(res);
-		});
-
 	}
 };
-class ApprovalWorkflow extends Component{
-	// constructor (data){
-	//     super(config,data);
-	// }
-	constructor(data,newConfig){
-		super($.extend(true,{},config,newConfig,{data:data||{}}));
+export default class ApprovalWorkflow extends Component{
+	constructor(data,events,newConfig){
+		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
 	}
 }
-
-
-
-export default {
-	showDom(){
-		return new Promise(function(resolve, reject){
-			let component = new ApprovalWorkflow();
-			let el = $('#approval-workflow');
-			component.render(el);
-			resolve(component);
-		})
-
-	},
-	create(elem){
-		return new Promise(function(resolve, reject){
-			let component = new ApprovalWorkflow();
-			let el = $(elem);
-			component.render(el);
-			resolve(component);
-		})
-
-	},
-
-};
-
-Mediator.subscribe("workflow:getStampImg",(msg)=>{
-	WorkflowSeal.showheader(msg);
-
-});
