@@ -171,7 +171,7 @@ let config = {
             });
 
             console.log(height,'更新啦12.6');
-            let heightIn = Math.max((Number(height)/130).toFixed(2),11.7);
+            let heightIn = Math.max((Number(height)/110).toFixed(2),11.7);
             let origin = window.location.origin;
             let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in`;
             window.open(url);
