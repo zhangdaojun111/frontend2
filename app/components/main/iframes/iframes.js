@@ -491,23 +491,24 @@ let config = {
                 //首页
                 if(result[3].succ === 1){
                     homeConfig = result[3];
-                    if (_.isArray(homeConfig) && homeConfig.length === 0) {
-                        if(homeConfig.data.substring(homeConfig.data.length - 1) !== "0" && homeConfig.data.substring(homeConfig.data.length - 1) !== "1"){
-                            homeConfig.data = "000";
-                        }
-                        window.config.sysConfig.logic_config.client_login_show_home = homeConfig.data.toString();
-                        window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + homeConfig.data.substring(0,homeConfig.data.length - 1);
-                        if((homeConfig.data && homeConfig.data.substring(homeConfig.data.length - 1) === "1")){
-                            that.data.biCalendarList.push({
-                                id: 'home',
-                                name: '首页',
-                                url: window.config.sysConfig.home_index
-                            });
-                        }else{
-
-                        }
+                    if(!homeConfig.data.length){
+                        msgbox.showTips("服务器暂不支持首页，请及时更新");
+                        homeConfig.data = "000";
                     }
+                    if(homeConfig.data.substring(homeConfig.data.length - 1) !== "0" && homeConfig.data.substring(homeConfig.data.length - 1) !== "1"){
+                        homeConfig.data = "000";
+                    }
+                    window.config.sysConfig.logic_config.client_login_show_home = homeConfig.data.toString();
+                    window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + homeConfig.data.substring(0,homeConfig.data.length - 1);
+                    if((homeConfig.data && homeConfig.data.substring(homeConfig.data.length - 1) === "1")){
+                        that.data.biCalendarList.push({
+                            id: 'home',
+                            name: '首页',
+                            url: window.config.sysConfig.home_index
+                        });
+                    }else{
 
+                    }
                 }
                 that.actions.autoOpenTabs();
             });

@@ -22,7 +22,7 @@ let config = {
             let val = this.el.find("input").val();
             let reg = this.data.reg;
 	        if(this.data.real_type =='11' || this.data.real_type =='10' || this.data.real_type =='26'){
-		        if(~(val.indexOf(','))){
+		        if(val && ~(val.indexOf(','))){
 			        val=val.replace(/,/g,"");
 		        }
 	        }
