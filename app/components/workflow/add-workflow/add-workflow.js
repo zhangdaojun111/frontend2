@@ -305,14 +305,17 @@ let config={
 		    })
 	    }
     },
-    afterRender(){
+    async afterRender(){
         PMAPI.getIframeParams(window.config.key).then((res) => {
             this.data.noRequestFormData = res.data;
         });
         let _this=this;
         _this.showLoading();
         this.data.key = this.data.obj.key;
-
+        let edit = await FormService.getColumnList(this.data.obj.table_id);
+        if(edit.permission.edit == 0){
+            this.data.obj.btnType = "none"
+        }
         if (this.data.obj.btnType === 'view'||this.data.obj.btnType ==="none") {
             this.el.find('#subAddworkflow').hide();
             this.data.is_view = 1;
