@@ -1484,12 +1484,12 @@ let config = {
                         }
                     }
                 }
+	            let d = {
+		            rowData: this.data.rowData
+	            };
+	            //赋值
+	            this.agGrid.actions.setGridData(d);
             }
-            let d = {
-                rowData: this.data.rowData
-            };
-            //赋值
-            this.agGrid.actions.setGridData(d);
         },
         //获取设置选择数据（刷新时回显已经选择的数据）
         calcSelectData: function (type) {
