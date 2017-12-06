@@ -169,8 +169,9 @@ let config = {
             this.el.find('.comment').each(function () {
                 height = height - $(this).height() + $(this)[0].scrollHeight;
             });
-
+            console.log('height',height);
             let heightIn = Math.max((Number(height)/105).toFixed(2),11.7);
+            console.log('heightIn',heightIn);
             let origin = window.location.origin;
             let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in`;
             window.open(url);
