@@ -18,9 +18,11 @@ let config = {
 
     actions:{
         showQuill() {
-            this.data.quill.container.firstChild.innerHTML = this.data.comment.rows[0] ? this.data.comment.rows[0][0] : '';
-            this.el.find('.editor').show();
-            this.el.find('.comment-ql-content').hide();
+            if(window.config.pdf !== true){
+                this.data.quill.container.firstChild.innerHTML = this.data.comment.rows[0] ? this.data.comment.rows[0][0] : '';
+                this.el.find('.editor').show();
+                this.el.find('.comment-ql-content').hide();
+            }
         }
     },
     binds:[
@@ -28,33 +30,37 @@ let config = {
             event: 'click',
             selector: '.comment',
             callback: function (context,event) {
-                this.data.quill.focus();
+                if(window.config.pdf !== true){
+                    this.data.quill.focus();
+                }
             }
         },
         {// 保存富文本编辑器内容到服务器
             event: 'click',
             selector: '.save-rich-btn',
             callback: function (context,event) {
-                $(context).prop('disabled',true);
-                this.data.quill.blur();
-                let quillContent = this.data.quill.container.firstChild.innerHTML;
-                const data = {
-                    content: quillContent,
-                    field_id: this.data.chart.columns.dfield,
-                    row_id: this.data.chart.data.rows['0']['1'],
-                    table_id: this.data.chart.source.id
-                };
-                ViewsService.saveRichText(data).then((res)=>{
-                   $(context).prop('disabled',true);
-                   if(res['success']===1){
-                       $(context).prop('disabled',false);
-                       this.el.find('.editor').hide();
-                       this.data.comment.rows[0][0] = data.content;
-                       this.reload();
-                   } else {
-                       msgbox.alert(res['error']);
-                   }
-                });
+                if(window.config.pdf !== true){
+                    $(context).prop('disabled',true);
+                    this.data.quill.blur();
+                    let quillContent = this.data.quill.container.firstChild.innerHTML;
+                    const data = {
+                        content: quillContent,
+                        field_id: this.data.chart.columns.dfield,
+                        row_id: this.data.chart.data.rows['0']['1'],
+                        table_id: this.data.chart.source.id
+                    };
+                    ViewsService.saveRichText(data).then((res)=>{
+                        $(context).prop('disabled',true);
+                        if(res['success']===1){
+                            $(context).prop('disabled',false);
+                            this.el.find('.editor').hide();
+                            this.data.comment.rows[0][0] = data.content;
+                            this.reload();
+                        } else {
+                            msgbox.alert(res['error']);
+                        }
+                    });
+                }
                 return false;
             }
         },
@@ -62,10 +68,12 @@ let config = {
             event: 'click',
             selector: '.cancel-rich-btn',
             callback: function (context,event) {
-                this.el.find('.editor').hide();
-                this.data.quill.blur();
-                this.data.quill.container.firstChild.innerHTML = '';
-                this.el.find('.comment-ql-content').show();
+                if(window.config.pdf !== true){
+                    this.el.find('.editor').hide();
+                    this.data.quill.blur();
+                    this.data.quill.container.firstChild.innerHTML = '';
+                    this.el.find('.comment-ql-content').show();
+                }
                 return false;
             }
         },
@@ -73,15 +81,17 @@ let config = {
     afterRender(){
         let toolbarOptions = [{ size: [ 'small', false, 'large', 'huge' ]},{ 'header': [1, 2, 3, 4, 5, 6]},{ 'list': 'ordered'}, { 'list': 'bullet' },'image'];
 
-        this.data.quill = new Quill(`#comment${this.componentId}`, {
-            theme: 'snow',
-            modules: {
-                toolbar: toolbarOptions
-            }
-        });
+        if(window.config.pdf !== true){
+            this.data.quill = new Quill(`#comment${this.componentId}`, {
+                theme: 'snow',
+                modules: {
+                    toolbar: toolbarOptions
+                }
+            });
 
-        if(window.config.pdf){
-            this.el.find('.comment').addClass('download-pdf');
+            if(window.config.pdf){
+                this.el.find('.comment').addClass('download-pdf');
+            }
         }
     },
     firstAfterRender(){}
