@@ -27,8 +27,9 @@ export const LoginService = {
                 this.currentSystem = key;
             }
         }
-
+        console.log(browser);
         if (!browser['chrome']){
+            console.log('no chrome');
             this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
             this.needDownload = true;
         }
@@ -36,6 +37,7 @@ export const LoginService = {
        else if(browser['chrome']){
            if((browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+               console.log('version problem',browser['chrome'].slice(0,2));
                this.needDownload=true;
             }
         }
