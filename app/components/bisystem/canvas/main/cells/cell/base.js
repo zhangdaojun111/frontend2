@@ -53,4 +53,12 @@ export class CellBaseComponent extends Component {
      * @param sort = {type: 'asc', filed:y轴字段对象}
      */
     deepSort(sort) {}
+
+    /**
+     * 当message服务有推送时更新
+     * @param sort = {type: 'asc', filed:y轴字段对象}
+     */
+    // updateCellDataFromMessage(data) {
+    //     this.data = data
+    // }
 }

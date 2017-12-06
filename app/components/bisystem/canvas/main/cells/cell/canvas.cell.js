@@ -94,7 +94,8 @@ let config = {
             let dragCell = this.el.find('.cell');
             const dragOption = {
                 containment: '.cells-container',
-                grid: [1, 1],
+                // grid: [1, 1],
+                // snap: false,
                 stop: (event, ui) => {
                     this.actions.cancelSelect();
                     this.data.cell.size.left = ui.position.left;
@@ -105,7 +106,7 @@ let config = {
             };
 
             const resizeOption = {
-                grid: [1, 1],
+                // grid: [1, 1],
                 stop: (event, ui) => {
                     this.data.cell.size.width = ui.size.width;
                     this.data.cell.size.height = ui.size.height;
@@ -305,7 +306,7 @@ let config = {
         },
         //是否用键盘移动画布
         {
-            event:'click',
+            event:'onorientationchange',
             selector:'.move-with-keyboard',
             callback:function (event) {
                 if(event.checked){
@@ -314,7 +315,7 @@ let config = {
                     this.actions.removeKeyboardListener();
                 }
             }
-        }
+        },
     ],
     afterRender() {
         this.actions.renderCell();
@@ -322,7 +323,7 @@ let config = {
             this.actions.cellDragandResize();
         } else {
             this.el.off('mousedown mouseup');
-        }
+        };
     }
 };
 

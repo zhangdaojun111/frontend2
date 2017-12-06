@@ -21,6 +21,31 @@ let config = {
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
         isSingle:false,
+        PMENUM:{
+            open_iframe_dialog: '0',
+            close_dialog: '1',
+            recieve_data: '2',
+            open_component_dialog: '3',
+            iframe_active: '4',
+            iframe_silent: '5',
+            table_invalid: '6',              // 表格数据失效
+            one_the_way_invalid: '7',         // 在途数据失效
+            data_invalid: '11',
+            open_iframe_params: '8',
+            get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
+            send_param_to_iframe: '10',       // 来组主框架的消息，向iframe发送参数
+            workflow_approve_msg: '11',
+            show_tips: '12',
+            send_data_to_dialog_component: '13', //向子componentDialog发消息，需和openDialogByComponentWithKey结合使用，便于获得dialog的key
+            send_data_to_iframe:'14',
+            get_data:'15',
+            show_loading:'16',          //打开loading
+            hide_loading:'17',          //隐藏loading
+            open_preview:'18',          //打开图片浏览
+            aside_fold: '19',
+            send_event:'20',
+            open_iframe_by_id:'21',     //bi点击title打开数据源tab
+        }
     },
     binds: [
         // 编辑模式
@@ -58,7 +83,6 @@ let config = {
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
-                this.data.cells.actions.postHtmlCode = this.actions.postHtmlCode;
                 this.data.cells.render(this.el.find('.cells-container'));
             }
         },
@@ -148,6 +172,11 @@ let config = {
             let h = $(self.frameElement).closest('.iframes').height();
             $('.bi-container').css({'width': w, 'height': h});
         }
+
+        //订阅数据失效
+        PMAPI.subscribe(this.data.PMENUM.data_invalid, (info) => {
+            this.data.cells.actions.updateCells(info);
+        });
 
         //根据判断是否单行模式加载header
         this.actions.headLoad();

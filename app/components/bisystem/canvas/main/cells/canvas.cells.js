@@ -175,18 +175,21 @@ let config = {
             this.data.cells[cellLayout.componentId] = cellLayout;
         },
 
+        // 全选画布快
         selectAllCells(){
             Object.keys(this.data.cells).forEach((key)=>{
                 this.data.cells[key].actions.select();
             })
         },
 
+        // 取消全选画布快
         cancelSelectCells(){
             Object.keys(this.data.cells).forEach((key)=>{
                 this.data.cells[key].actions.cancelSelect();
             })
         },
 
+        // 反选画布快
         reverseSelectCells(){
             Object.keys(this.data.cells).forEach((key)=>{
                 this.data.cells[key].actions.toggleSelect();
@@ -306,6 +309,27 @@ let config = {
                 this.actions.getCellChartData(layouts,cells);
             }
         },
+
+        /*
+        * 更新可见画布块数据
+        * */
+        async updateCells(info) {
+            // let [layouts,cells] = [[],[]];
+            // Object.keys(this.data.cells).forEach(key => {
+            //     if (this.data.cells[key].data.chart) {
+            //         layouts.push(this.data.cells[key].data.layout);
+            //         cells.push(this.data.cells[key]);
+            //     }
+            // })
+            //
+            // const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1},false);
+            // cells.map((item,index) => {
+            //     if (res[index].data.assortment === 'table') {
+            //         item.data.cellComponent.data.chart = res[index].data;
+            //         item.data.cellComponent.reload();
+            //     }
+            // })
+        }
     },
     binds: [
         { //滚动距离

@@ -266,10 +266,19 @@ let config = {
                 }
                 return false;
             }
-        }
-
+        },
 
     },
+    binds: [
+        // 拖拽start画布mousedown触发
+        {
+            event: 'click',
+            selector: '',
+            callback: function (context,event) {
+                alert('hello world')
+            }
+        },
+    ],
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             let cellChart = _.cloneDeep(this.data);
