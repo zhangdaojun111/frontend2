@@ -1446,7 +1446,9 @@ let config = {
                 }
             }
             //子表内置父表数据
-            this.actions.parentBuildinChild();
+            setTimeout(()=>{
+                this.actions.parentBuildinChild();
+            },700)
         },
         //请求footer数据
         getFooterData: function (data) {
