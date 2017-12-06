@@ -8,33 +8,24 @@ import './workflow-grid.scss'
 
 
 let config = {
-    template: template,
-    data:{},
+	template: template,
+	data:{},
 
-    actions: {
-      
-    },
-    afterRender: function() {
+	actions: {
 
-    }
+	},
+	afterRender: function() {
+
+	}
 }
 
-class WorkFlowGrid extends Component {
-    // constructor(data){
-    //     config.data = data;
-    //     super(config);
-    // }
+export default class WorkFlowGrid extends Component {
+	// constructor(data){
+	//     config.data = data;
+	//     super(config);
+	// }
 
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
+	constructor(data,newConfig){
+		super($.extend(true,{},config,newConfig,{data:data||{}}));
+	}
 }
-
-export default {
-     showGrid(data) {
-
-        let component = new WorkFlowGrid();
-        let el = $('#workflow-grid');
-        component.render(el);
-     }
-};

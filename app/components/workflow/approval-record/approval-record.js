@@ -101,23 +101,8 @@ let config={
     }
 
 };
-class workflowRecord extends Component{
-    // constructor (data){
-    //     super(config,data);
-    // }
-
+export default class workflowRecord extends Component{
     constructor(data,newConfig){
         super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
-
-export default {
-    showRecord(data){
-        let component = new workflowRecord(data);
-        let el = $('#workflow-record');
-        component.render(el);
-        component.hideLoading()
-
-    },
-};
-
