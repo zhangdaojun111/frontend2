@@ -68,7 +68,10 @@ export const TabService = {
         let json2 = {action:'get', pre_type:5};
         let p3 = HTTP.get(url2,json2);
 
-        let res = Promise.all([p1,p2,p3]);
+        let json3 = {action:'get', pre_type:10};
+        let p4 = HTTP.get(url2,json3);
+
+        let res = Promise.all([p1,p2,p3,p4]);
         HTTP.flush();
         return res;
     }
