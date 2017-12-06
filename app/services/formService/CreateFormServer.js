@@ -447,7 +447,6 @@ export const CreateFormServer={
         data.isEdit = edit.permission.edit;
         if(data.isEdit == 0) {
             data.btnType = 'none';
-            data.is_view = 0
         }
 		//检查表单类型
 		let template = await this.checkFormType(data, res);
