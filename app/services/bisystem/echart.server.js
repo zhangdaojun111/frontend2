@@ -614,7 +614,6 @@ export class EchartsService {
      * @returns {*}
      */
     mapOption(cellChart){
-        console.log(cellChart.chart.customAccuracy);
         const mapOption = EchartsOption.getEchartsConfigOption('map');
         let data = [];
         let cellOption = cellChart['chart'];
