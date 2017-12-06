@@ -12,14 +12,17 @@ export const LoginService = {
     downLoadLink:'',
     prompt:'',
     currentSystem:'',
+    browser:'',
+    desc:'',
     /**
      * 检查当前浏览器是否为chrome
      * @returns {boolean}
      */
     support:function () {
-        let browser = this.currentBrowser();
+        this.browser = this.currentBrowser();
         console.log(browser);
         let system=this.CurrentSystem().system;
+        this.desc = navigator.mimeTypes['application/x-shockwave-flash'];
         // let currentSystem;
 
         for(let key in system){
@@ -29,7 +32,7 @@ export const LoginService = {
         }
 
         //不是chrome
-        if(!browser['chrome']){
+        if(!this.browser['chrome']){
             this.needDownload = true;
             //是安卓
             if(this.currentSystem== 'android'){
@@ -37,21 +40,26 @@ export const LoginService = {
                 this.downLoadLink = 'False';
             }
             //不是crios,是ios设备
-            else if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && !browser['crios']){
+            else if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && !this.browser['crios']){
                 this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
                 this.downLoadLink = 'False';
             }
             //是crios,是ios设备
-            else if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
+            else if(this.browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
                 this.needDownload=false;
             }
             else{
-                this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
+                if(this.desc){
+                    this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
+                }else{
+                    this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
+                }
+
             }
         }
         //是chrome，不是crios
-       else if(browser['chrome']  && !browser['crios']){
-           if((browser['chrome'].slice(0,2)<62 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
+       else if(this.browser['chrome']  && !this.browser['crios']){
+           if((this.browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (this.browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                this.needDownload=true;
             }
