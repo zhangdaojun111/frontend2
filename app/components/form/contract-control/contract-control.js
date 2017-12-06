@@ -36,7 +36,16 @@ let config = {
                 title:title
             }).then(res=>{
                 if(res.onlyclose){
-                    Storage.init((new URL(document.URL)).searchParams.get('key'));
+                    if((new URL(document.URL)).searchParams!=undefined){
+                        Storage.init((new URL(document.URL)).searchParams.get('key'));
+                    } else {
+                        let params = (new URL(document.URL)).search.split("&");
+                        params.forEach((param)=>{
+                            if(param.indexOf('key')!=-1){
+                                Storage.init(param.replace('key=',''));
+                            }
+                        })
+                    }
                     let obj = Storage.getItem('contractCache-'+this.data.id,Storage.SECTION.FORM);
                     if(obj == undefined){
                         return;
