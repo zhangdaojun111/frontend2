@@ -19,8 +19,9 @@ export const LoginService = {
      * @returns {boolean}
      */
     support:function () {
-        this.browser = this.currentBrowser();
-        console.log( this.browser);
+        let browser = this.currentBrowser();
+        console.log( browser);
+        debugger
         let system=this.CurrentSystem().system;
         this.desc = navigator.mimeTypes['application/x-shockwave-flash'];
         // let currentSystem;
@@ -32,7 +33,7 @@ export const LoginService = {
         }
 
         //不是chrome
-        if(!this.browser['chrome']){
+        if(!browser['chrome']){
             this.needDownload = true;
             //是移动设备
             if(this.currentSystem== 'android' || this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad'){
@@ -66,8 +67,8 @@ export const LoginService = {
             }
         }
         //是chrome，不是crios
-       else if(this.browser['chrome']  && !this.browser['crios']){
-           if((this.browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (this.browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
+       else if(browser['chrome']  && !browser['crios']){
+           if((browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
                if(this.desc){
                    this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
                }else{
