@@ -18,6 +18,8 @@ let config = {
         postMessageVisible: window.config.sysConfig.userInfo.is_superuser.toString() === "1",
         calendarVisible: window.config.sysConfig.logic_config.use_calendar.toString() === "1",
         biVisible: window.config.sysConfig.logic_config.use_bi.toString() === "1",
+        // homeVisible: window.config.sysConfig.logic_config.use_home.toString() === "1",
+        homeVisible: true,
         // imVisible: window.config.sysConfig.logic_config.use_im.toString() === "1",
     },
     actions: {
@@ -43,6 +45,17 @@ let config = {
                 id: 'bi',
                 name: 'BI',
                 url: window.config.sysConfig.bi_index
+            });
+        },
+        /**
+         * 打开首页窗口
+         */
+        openHome:function () {
+            console.log(window.config)
+            Mediator.emit('menu:item:openiframe', {
+                id: 'home',
+                name: '首页',
+                url: window.config.sysConfig.home_index
             });
         },
         /**

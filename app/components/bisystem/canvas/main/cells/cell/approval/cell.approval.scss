@@ -1,0 +1,26 @@
+.echarts-cell {
+    .approval-ul {
+        margin: 10px;
+        height: calc(100% - 25px);
+        width: calc(100% - 15px);
+        overflow-y: auto;
+        overflow-x: hidden;
+        .approval-li{
+            padding: 8px;
+            margin: 2px 0;
+            max-width: 100%;
+            background: #EAF8FE;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            height: 14px;
+            line-height: 14px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        &::-webkit-scrollbar{
+            width: 1px;
+        }
+    }
+}
