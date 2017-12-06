@@ -2,7 +2,7 @@ import Component from '../../../lib/component';
 import template from './editor.html';
 import './editor.scss';
 import Quill from 'quill';
-import { ImageDrop } from 'quill-image-drop-module';
+import { ImageDrop } from './quill-image-drop';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 
