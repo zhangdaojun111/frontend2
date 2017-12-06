@@ -42,6 +42,8 @@ export const LoginService = {
             }
         }
         //优先保证win和mac
+
+
        // if(this.needDownLoad){
             switch (this.currentSystem){
                 case 'win':
