@@ -74,6 +74,8 @@ let config = {
         frontendSort: false,
         //第一次设置数据
         firstSetData: true,
+        //催办id
+        urge_record_id:'',
         //定制列数据
         customColumnsFields: [{name:'序号',field:'number',canhide:false,candrag:false,canFix:false}, {name:'操作',field:'myOperate',canhide:true,candrag:true,canFix:true}]
     },
@@ -200,6 +202,7 @@ let config = {
                 footerData: this.data.footerData,
                 fieldsData: this.data.fieldsData,
                 floatingFilter: true,
+                setRowStyle: this.actions.setRowStyle,
                 onColumnResized: this.actions.onColumnResized,
                 onSortChanged: this.actions.onSortChanged,
                 onDragStopped: this.actions.onDragStopped,
@@ -244,6 +247,14 @@ let config = {
                 this.data.isShowCustomPanel = false;
                 this.actions.changeAgGridWidth(true);
             } )
+        },
+        //渲染颜色
+        setRowStyle: function (param) {
+            if (param.data.wf_urgency_level == 2) {
+                return {background: '#FFB5C5'};
+            } else if (param.data.wf_urgency_level == 1) {
+                return {background: '#FCF5A5'};
+            }
         },
         //返回选择数据
         retureSelectData: function () {
@@ -404,7 +415,7 @@ let config = {
                     tableId: this.data.tableId,
                     fieldsData: this.data.expertSearchFields,
                     commonQuery: this.data.commonQueryData,
-                    commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select option').length
+                    commonQuerySelectLength:this.el.find('.dataGrid-commonQuery-select li').length
                     // getExpertSearchData:this.actions.getExpertSearchData,
                     // postExpertSearch:this.actions.postExpertSearch,
                     // saveTemporaryCommonQuery:this.actions.saveTemporaryCommonQuery
@@ -422,6 +433,7 @@ let config = {
                             this.actions.postExpertSearch(res.value,res.id,res.name);
                         }
                         this.el.find('.dataGrid-commonQuery-select').val(res.name);
+                        this.el.find('.dataGrid-commonQuery-select span').html(res.name);
                     }
                     if(res.appendChecked) {
                         this.data.temporaryCommonQuery = res.value;
@@ -441,22 +453,59 @@ let config = {
                     //     return false
                     // }
                 })
-            } );
-            _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
-                if($(this).val() == '常用查询') {
-                    _this.actions.postExpertSearch([],'');
-                    _this.el.find('.query-tips').css('display','none');
-                } else if($(this).val() == '临时高级查询') {
-                    _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
-                } else {
-                    // $(this).find('.Temporary').remove();
-                    _this.data.commonQueryData.forEach((item) => {
-                        if(item.name == $(this).val()){
-                            _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
-                        }
-                    })
-                }
-            });
+            } )
+			_this.el.bind('click', function() {
+				$(this).find('.dataGrid-commonQuery-ul').hide();
+			});
+			_this.el.find('.dataGrid-commonQuery-ul').bind('mouseenter', function() {
+				$(this).find('li').addClass('remove')
+			});
+			_this.el.find('.dataGrid-commonQuery-ul').bind('mousemove', function($event) {
+				if(!$($event.target).hasClass('active')){
+					$($event.target).siblings().removeClass('active')
+					$($event.target).addClass('active')
+				}
+			});
+			_this.el.find('.dataGrid-commonQuery-ul').bind('click', function($event) {
+				$($event.target).parent().parent().val($($event.target).html())
+				$($event.target).parent().parent().find('span').html($($event.target).html())
+				if($($event.target).html() == '常用查询') {
+					_this.actions.postExpertSearch([],'');
+					_this.el.find('.query-tips').css('display','none');
+				} else if($($event.target).html() == '临时高级查询') {
+					_this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
+				} else {
+					// $(this).find('.Temporary').remove();
+					_this.data.commonQueryData.forEach((item) => {
+						if(item.name == $($event.target).html()){
+							_this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+						}
+					})
+				}
+			});
+			_this.el.find('.dataGrid-commonQuery-select').bind('click', function($event) {
+				$event.stopPropagation();
+				if($(this).find('.dataGrid-commonQuery-ul').is(':visible')){
+					$(this).find('.dataGrid-commonQuery-ul').hide();
+				}else{
+					$(this).find('.dataGrid-commonQuery-ul').show();
+				}
+			});
+            // _this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
+            //     if($(this).val() == '常用查询') {
+            //         _this.actions.postExpertSearch([],'');
+            //         _this.el.find('.query-tips').css('display','none');
+            //     } else if($(this).val() == '临时高级查询') {
+            //         _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
+            //     } else {
+            //         // $(this).find('.Temporary').remove();
+            //         _this.data.commonQueryData.forEach((item) => {
+            //             if(item.name == $(this).val()){
+            //                 _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
+            //             }
+            //         })
+            //     }
+            // })
             this.actions.getExpertSearchData();
         },
         //返回数据url
@@ -578,14 +627,15 @@ let config = {
         },
         //设置常用查询选项值
         appendQuerySelect: function() {
-            let length = this.el.find('.dataGrid-commonQuery-select option').length;
+            let length = this.el.find('.dataGrid-commonQuery-select li').length
             for (let i = 0; i< length ;i++) {
-                if(this.el.find('.dataGrid-commonQuery-select option').eq(i).val() == '临时高级查询'){
-                    this.el.find('.dataGrid-commonQuery-select option').eq(i).remove()
+                if(this.el.find('.dataGrid-commonQuery-select li').eq(i).html() == '临时高级查询'){
+                    this.el.find('.dataGrid-commonQuery-select li').eq(i).remove()
                 }
             }
-            this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</option>`);
+            this.el.find('.dataGrid-commonQuery-ul').append(`<li class="dataGrid-commonQuery-option Temporary" fieldId="00" value="临时高级查询">临时高级查询</li>`)
             this.el.find('.dataGrid-commonQuery-select').val('临时高级查询');
+            this.el.find('.dataGrid-commonQuery-select span').html('临时高级查询');
 
         },
         //获取高级查询数据
@@ -593,14 +643,15 @@ let config = {
             let obj = {'actions':JSON.stringify( ['queryParams'] ),'table_id':this.data.tableId};
             dataTableService.getPreferences( obj ).then( res=>{
                 this.el.find('.dataGrid-commonQuery-option').remove();
-                this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</option>`);
+                this.el.find('.dataGrid-commonQuery-ul').append(`<li class="dataGrid-commonQuery-option" fieldId="100" value="常用查询">常用查询</li>`)
                 if(res.rows.length != 0){
                     res.rows.forEach((row) => {
-                        this.el.find('.dataGrid-commonQuery-select').append(`<option class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</option>`)
+                        this.el.find('.dataGrid-commonQuery-ul').append(`<li class="dataGrid-commonQuery-option" fieldId="${row.id}" value="${row.name}">${row.name}</li>`)
                     });
                 }
                 if(this.data.filterParam['common_filter_name'] && this.data.onlyCloseExpertSearch) {
                     this.el.find('.dataGrid-commonQuery-select').val(this.data.filterParam['common_filter_name']);
+                    this.el.find('.dataGrid-commonQuery-select span').html(this.data.filterParam['common_filter_name']);
                 }
                 if(this.data.commonQueryData && res.rows && this.data.commonQueryData.length > res.rows.length){
                     let inCheck = true;
@@ -618,6 +669,7 @@ let config = {
                     if(inCheck) {
                         this.actions.postExpertSearch([],'');
                         this.el.find('.dataGrid-commonQuery-select').val('常用查询');
+                        this.el.find('.dataGrid-commonQuery-select span').html('常用查询');
                     }
                 }
                 this.data.commonQueryData = res.rows;
@@ -627,6 +679,7 @@ let config = {
                             if(item.name == addNameAry[i]){
                                 this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
                                 this.el.find('.dataGrid-commonQuery-select').val(item.name);
+                                this.el.find('.dataGrid-commonQuery-select span').html(item.name);
                             }
                         }
                     })
@@ -719,17 +772,8 @@ let config = {
                     let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                     this.actions.openSourceDataGrid( url,winTitle );
                 }else if(type === 'urge'){
-                    let json = {
-                        record_id: $event["data"]["id"]
-                    };
-                    workflowService.urge( json )
-                        .then(res => {
-                            if( res.success ){
-                                msgBox.showTips( '操作成功' );
-                            }else {
-                                msgBox.alert( '操作失败：' + res.error );
-                            }
-                        })
+                    this.actions.calcUrge(true);
+                    this.data.urge_record_id = $event["data"]["id"];
                 }
             }
             if( this.data.pageType == 5 ){
@@ -744,7 +788,38 @@ let config = {
                 }
                 let url = dgcService.returnIframeUrl( '/wf/approval/',obj );
                 this.actions.openSourceDataGrid( url,winTitle );
+                if($event.data.wf_urgency_level == 1){
+                    msgBox.alert('催办消息：' + ($event.data.urge_info||''));
+                }
             }
+        },
+        //打开关闭催办
+        calcUrge: function (show) {
+            if(show){
+                this.el.find('.urge-con').show();
+                this.el.find('.urge').show();
+            }else {
+                this.el.find('.urge-info').val('');
+                this.data.urge_record_id = '';
+                this.el.find('.urge-con').hide();
+                this.el.find('.urge').hide();
+            }
+        },
+        //保存催办
+        saveUrge: function () {
+            let json = {
+                record_id: this.data.urge_record_id,
+                info: this.el.find('.urge-info').val()
+            };
+            workflowService.urge( json )
+                .then(res => {
+                    if( res.success ){
+                        msgBox.showTips( '操作成功' );
+                    }else {
+                        msgBox.alert( '操作失败：' + res.error );
+                    }
+                })
+            this.actions.calcUrge(false);
         },
         //设置失效
         setInvalid: function () {
@@ -839,6 +914,22 @@ let config = {
             this.agGrid.gridOptions["enableSorting"] = this.data.frontendSort;
         },
     },
+    binds: [
+        {
+            event: 'click',
+            selector: '.cancel-urge',
+            callback: function (context) {
+                this.actions.calcUrge(false);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.submit-urge',
+            callback: function (context) {
+                this.actions.saveUrge(false);
+            }
+        },
+    ],
     afterRender: function (){
         this.showLoading();
         this.el.find( '.headerTips' ).eq(0).find( 'span' ).eq(0).html( this.data.tableId2Name[this.data.tableId] );

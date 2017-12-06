@@ -346,7 +346,9 @@ export const dgcService = {
 
             tempPinyin[operate] = keyword;
             tempDictPinyin[searchBy_P] = tempPinyin;
-            tempDictAndPinyin.push(tempDictPinyin);
+            if(searchDict.cond.py==1){
+                tempDictAndPinyin.push(tempDictPinyin);
+            }
         }
         if(typeof (cond["keyword"]) == "number" ){
             result =  tempDict;
@@ -531,7 +533,7 @@ export const dgcService = {
         // console.log(data.orderFields)
     },
     //根据偏好返回agGrid sate
-    calcColumnState: function (data,agGrid,defaultArr) {
+    calcColumnState: function (data,agGrid,defaultArr,columnDefs) {
         let gridState = agGrid.gridOptions.columnApi.getColumnState();
         // console.log('gridState')
         // console.log(gridState)
@@ -563,6 +565,18 @@ export const dgcService = {
             state['hide'] = data.ignoreFields.indexOf( col ) != -1;
             state['pinned'] = 'left';
             arr.push(state);
+        }
+        // 初始化偏好之后重置列排序
+        let orderArr = [];
+        if(columnDefs && data.orderFields.length != 0) {
+            for (let i = 0; i < columnDefs.length; i++) {
+                for (let item of data.orderFields) {
+                    if (columnDefs[i]['field'] == item) {
+                        orderArr.push(item)
+                    }
+                }
+            }
+            data.orderFields = orderArr;
         }
         //中间不固定
         let fixArr = data.fixCols.l.concat( data.fixCols.r );

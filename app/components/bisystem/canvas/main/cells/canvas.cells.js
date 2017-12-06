@@ -135,7 +135,7 @@ let config = {
         /**
          * 实例化画布块，并返回实例化的对象
          */
-        makeCell(data) {
+        makeCell(data,flag) {
             let cell = new CanvasCellComponent(data,{
 
                 onDrag: (componentId) => {
@@ -156,6 +156,9 @@ let config = {
                 },
             });
             this.append(cell, this.el.find('.cells'));
+            if(flag === true){
+                // this.actions.postHtmlCode();
+            }
             return cell;
         },
 
@@ -170,6 +173,24 @@ let config = {
             };
             let cellLayout = this.actions.makeCell(data);
             this.data.cells[cellLayout.componentId] = cellLayout;
+        },
+
+        selectAllCells(){
+            Object.keys(this.data.cells).forEach((key)=>{
+                this.data.cells[key].actions.select();
+            })
+        },
+
+        cancelSelectCells(){
+            Object.keys(this.data.cells).forEach((key)=>{
+                this.data.cells[key].actions.cancelSelect();
+            })
+        },
+
+        reverseSelectCells(){
+            Object.keys(this.data.cells).forEach((key)=>{
+                this.data.cells[key].actions.toggleSelect();
+            })
         },
 
         /**
@@ -205,7 +226,7 @@ let config = {
             let zIndex = [];  // 获取每个画布块的zIndex(用来获取最大)
             let layouts = []; // 需要请求服务器画布块的chart数据
             let userMode = window.config.bi_user === 'manager' ? 'manager' : 'client'; // 判断是客户端还是编辑模式
-
+            let layoutLen = Object.keys(layoutsData).length;
             // 通过cells渲染画布块
             layoutsData.map((val, index) => {
                 zIndex.push(val.size.zIndex);
@@ -215,8 +236,11 @@ let config = {
                     'currentViewId': this.data.currentViewId,
                     'cell': val
                 };
-
-                let cell = this.actions.makeCell(data);
+                let isLast;
+                if(this.data.isPdf === true && index === layoutLen - 1 ){
+                    isLast = true;
+                }
+                let cell = this.actions.makeCell(data,isLast);
                 this.data.cells[cell.componentId] = cell;
                 // 在客户模式下获取有没有下穿记录
                 let deep_info = {};

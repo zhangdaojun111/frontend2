@@ -25,6 +25,7 @@ let config = {
                     });
                     this.formItems['countColumn'].setList(fields);
                     this.formItems['countColumn'].el.show();
+                    this.formItems['countColumn'].setValue(this.formItems['countColumn'].data.list[0].value);
                 } else {
                     this.formItems['countColumn'].actions.clear();
                     this.formItems['countColumn'].el.hide();
@@ -67,14 +68,13 @@ let config = {
        async init() {
            this.formItems['countColumn'].el.hide();
            this.formItems['single'].trigger('onChange');
-           // 获取数据来源
-            ChartFormService.getChartSource().then(res => {
-                if (res['success'] === 1) {
-                    this.formItems['source'].setList(res['data']);
-                } else {
-                    msgbox.alert(res['error'])
-                }
-            });
+            // 获取数据来源
+            const res = await ChartFormService.getChartSource();
+            if (res['success'] === 1) {
+                this.formItems['source'].setList(res['data']);
+            } else {
+                msgbox.alert(res['error'])
+            }
 
 
             // 获取图标
@@ -134,14 +134,12 @@ let config = {
                 sort: data.sort,
                 sortColumns:data.sortColumns ? [data.sortColumns] : [],
                 alignment:data.alignment,
-                columnNum:data.columnNum
+                columnNum:data.columnNum,
+                editInterface: data.editInterface,
             };
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
-                    if(window.config.query_mark !== 'single' && key=='countColumn'){
-                        continue;
-                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
@@ -172,6 +170,7 @@ let config = {
             this.formItems['countNum'].setValue(chart['countNum']);
             this.formItems['single'].setValue(chart['single']);
             this.formItems['columnNum'].setValue(chart['columnNum']);
+            this.formItems['editInterface'].setValue(chart['editInterface'] ? chart['editInterface'] : 1);
         }
     },
     data: {
@@ -290,6 +289,16 @@ let config = {
                     {'value': 'right', 'name': '居右'},
                 ],
                 type: 'select'
+            },
+            {
+                label: '是否显示操作界面',
+                name: 'editInterface',
+                defaultValue: '1',
+                list: [
+                    {'value': '1', 'name': '隐藏'},
+                    {'value': '2', 'name': '显示'},
+                ],
+                type: 'radio'
             },
             {
                 label: '请输入显示多少列(默认10条)',

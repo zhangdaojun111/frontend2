@@ -63,6 +63,33 @@ let config = {
 
     },
     binds: [
+        {
+            event:'click',
+            selector:'.views-btn-group .select-all',
+            callback: function () {
+                this.trigger('selectAllCanvas');
+                return false;
+
+            }
+        },
+        {
+            event:'click',
+            selector:'.views-btn-group .cancel-select',
+            callback: function () {
+                this.trigger('cancelSelectCanvas');
+                return false;
+
+            }
+        },
+        {
+            event:'click',
+            selector:'.views-btn-group .reverse-select',
+            callback: function () {
+                this.trigger('reverseSelectCanvas');
+                return false;
+
+            }
+        },
         { //保存画布块
             event: 'click',
             selector: '.views-btn-group .view-save-btn',
@@ -155,6 +182,15 @@ let config = {
 };
 export class CanvasHeaderComponent extends Component {
     constructor(data, events,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, events);
+        let _config = $.extend(true, {}, config);
+        if (extendConfig) {
+            let binds = Component.mergeBinds(extendConfig.binds, config.binds);
+            let _extendConfig = $.extend(true, {}, extendConfig);
+            delete _config.binds;
+            _extendConfig.binds = binds;
+            super($.extend(true,{},_config,_extendConfig), data, events);
+        } else {
+            super(_config, data, events);
+        }
     }
 }

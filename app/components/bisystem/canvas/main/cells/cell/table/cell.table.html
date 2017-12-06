@@ -7,16 +7,26 @@
                 {{#each chart.columns}}
                 <th>{{name}}</th>
                 {{/each}}
+                <th class="edit-operate">操作</th>
             </tr>
             </thead>
             <tbody>
             {{#each chart.data.rows}}
             <tr>
                 {{#each @this}}
-                <td align="{{@root.chart.alignment}}">
-                    {{this}}
-                </td>
+                {{#ifLast @index @root.chart.data.rows}}
+                    <td align="{{@root.chart.alignment}}">
+                        {{this}}
+                    </td>
+                {{/ifLast}}
                 {{/each}}
+
+                <td class="table-operate" align="{{@root.chart.alignment}}">
+                    <a href="javascript:;" class="table-view" data-index="{{@index}}">查看</a>
+                    <a href="javascript:;" class="table-edit" data-index="{{@index}}">编辑</a>
+                    <a href="javascript:;" class="table-history" data-index="{{@index}}">历史</a>
+                </td>
+
             </tr>
             {{/each}}
             </tbody>

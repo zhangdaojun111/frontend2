@@ -131,25 +131,28 @@
     //    }
     //}
     .dataGrid-commonQuery {
-        //display: none;
+        display: none;
         float: left;
         padding-left: 15px;
         .dataGrid-commonQuery-select {
             //box-shadow: 0 0 2px 2px #327ed3;
+            position: relative;
             background-color: #333;
             background-image:  url("../../../assets/images/dataGrid/icon_xiala_white.png");
             background-repeat: no-repeat;
             background-position: center;
             border: 1px solid #333;
-            cursor: pointer;
             padding: 0 23px 0 12px;
+            cursor: pointer;
             border-radius: 4px;
             text-indent: 0;
             color: #fff;
             float: left;
             width: 115px;
+            box-sizing: border-box;
             font-size: 12px;
             height: 25px;
+            line-height: 25px;
             display: inline-block;
             outline: none;
             //box-shadow: none;
@@ -157,6 +160,31 @@
             -moz-appearance: none;
             -webkit-appearance: none;
             background-position: 90px;
+
+            .dataGrid-commonQuery-ul {
+                display: none;
+                z-index: 9;
+                position: absolute;
+                height: auto;
+                width: 115px;
+                background: #333;
+                top: 24px;
+                left: -1px;
+                border: 1px solid #333;
+                box-sizing: border-box;
+                li{
+                    padding-left: 12px;
+                    box-sizing: border-box;
+                }
+                .active {
+                    background: #fff!important;
+                    color:#333!important;
+                }
+                .remove{
+                    background: transparent;
+                    color:#fff;
+                }
+            }
         }
     }
     .workflow-grid-con {
@@ -201,6 +229,72 @@
             }
             a{
                 margin-left: 10px !important;
+            }
+        }
+    }
+    .urge-con{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #333333;
+        opacity: 0.6;
+        z-index: 999;
+        display: none;
+    }
+    .urge{
+        width: 600px;
+        position: absolute;
+        height: 300px;
+        border: 1px solid #E4E4E4;
+        top: calc(50% - 200px);
+        left: calc(50% - 300px);
+        background-color: #fff;
+        z-index: 1000;
+        display: none;
+        .urge-title {
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+            border: 0 none;
+            border-radius: 0;
+            text-align: center;
+            background: #e9e9e9;
+            color: #666;
+            font-weight: normal;
+            font-size: 12px;
+        }
+        .urge-text{
+            height: 225px;
+            p{
+                line-height: 30px;
+                font-size: 12px;
+                text-align: center;
+            }
+            textarea{
+                width: 90%;
+                height: 80%;
+                margin: auto;
+                display: block;
+                border-radius: 3px;
+            }
+        }
+        .btn-group{
+            margin-left: 380px;
+            button {
+                cursor: pointer;
+                width: 91px;
+                height: 30px;
+                background-color: #0088ff;
+                border: 1px solid #0088ff;
+                border-radius: 4px;
+                color: #fff;
+                margin-right: 8px;
+            }
+            .cancel-urge{
+                color: #666;
+                background-color: #fff;
             }
         }
     }

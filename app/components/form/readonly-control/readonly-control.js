@@ -21,18 +21,23 @@ let config = {
             let regErrorMsg;
             let val = this.el.find("input").val();
             let reg = this.data.reg;
-
+	        if(this.data.real_type =='11' || this.data.real_type =='10' || this.data.real_type =='26'){
+		        if(~(val.indexOf(','))){
+			        val=val.replace(/,/g,"");
+		        }
+	        }
             //输入框输入时的实时验证提示
-            let regReg = new RegExp(reg);
             if (val != "" && reg !== "") {
                 for (let r in reg) {
-	                let reg = eval(r);
-	                let flag = reg.test(val);
+	                let reg1 = eval(r);
+	                let flag = reg1.test(val);
                     if (!flag) {
-                        this.el.find("#error_tip").css("display", "inline-block");
-                        regErrorMsg = reg[r];
-                        this.el.find("#error_tip").children("pre").text(regErrorMsg);
-                        return false;
+	                    regErrorMsg = reg[r];
+	                    if(regErrorMsg){
+		                    this.el.find("#error_tip").css("display", "inline-block");
+		                    this.el.find("#error_tip").children("pre").text(regErrorMsg);
+		                    return false;
+	                    }
                     } else {
                         this.el.find("#error_tip").css("display", "none");
                     }
@@ -40,8 +45,14 @@ let config = {
                 // this.reload();
             }
             if (val != "" && this.data.numArea) {
-                let minNum = this.data.numArea.min;
-                let maxNum = this.data.numArea.max;
+                let minNum = this.data["numArea"]["min"] || '';
+                let maxNum = this.data["numArea"]["max"] || '';
+                if(this.data["numArea"]["min"].toString()=='0'){
+                    minNum = '0';
+                }
+                if(this.data["numArea"]["max"].toString()=='0'){
+                    maxNum = '0';
+                }
                 let errorInfo = this.data.numArea.error;
 
                 if (minNum !== "" && maxNum === "") {
@@ -113,9 +124,9 @@ let config = {
         if(this.data.history){
             this.el.find('.ui-history').css('visibility','visible').addClass('icon-fl');
         }
-        if(this.data.value && this.data.value != this.data.originalValue){
+        // if(this.data.value && this.data.value != this.data.originalValue){
         	this.actions.keyup();
-        }
+        // }
     },
     beforeDestory() {
         this.el.off();

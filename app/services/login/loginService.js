@@ -11,6 +11,7 @@ export const LoginService = {
     userName:'',
     downLoadLink:'',
     prompt:'',
+    currentSystem:'',
     /**
      * 检查当前浏览器是否为chrome
      * @returns {boolean}
@@ -19,28 +20,46 @@ export const LoginService = {
         let browser = this.currentBrowser();
         console.log(browser);
         let system=this.CurrentSystem().system;
-        let currentSystem;
+        // let currentSystem;
 
         for(let key in system){
             if(system[key] != false){
-                currentSystem = key;
+                this.currentSystem = key;
             }
         }
 
-        if (!browser['chrome']){
-            this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
+        //不是chrome
+        if(!browser['chrome']){
             this.needDownload = true;
+            //是安卓
+            if(this.currentSystem== 'android'){
+                this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
+                this.downLoadLink = 'False';
+            }
+            //不是crios,是ios设备
+            else if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && !browser['crios']){
+                this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
+                this.downLoadLink = 'False';
+            }
+            //是crios,是ios设备
+            else if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
+                this.needDownload=false;
+            }
+            else{
+                this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
+            }
         }
-
-       else if(browser['chrome']){
-           if((browser['chrome'].slice(0,2)<62 && currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && currentSystem == 'mac')){
+        //是chrome，不是crios
+       else if(browser['chrome']  && !browser['crios']){
+           if((browser['chrome'].slice(0,2)<62 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                this.needDownload=true;
             }
         }
+
         //优先保证win和mac
-       // if(this.needDownLoad){
-            switch (currentSystem){
+        if(this.needDownload  && this.downLoadLink != 'False'){
+            switch (this.currentSystem){
                 case 'win':
                     this.downLoadLink='http://sw.bos.baidu.com/sw-search-sp/software/e80aba170ee7c/ChromeStandalone_62.0.3202.94_Setup.exe';
                     break;
@@ -55,7 +74,7 @@ export const LoginService = {
                     this.prompt='暂不支持windows，mac外的操作系统';
                     break;
             }
-     //   }
+        }
         // if(currentSystem == 'android'){
         //     this.needDownLoad=true;
         //     this.prompt="Android用户请下载本公司APP";
@@ -77,7 +96,8 @@ export const LoginService = {
             (s = ua.match(/firefox\/([\d.]+)/)) ? Browser['firefox'] = s[1] :
                 (s = ua.match(/chrome\/([\d.]+)/)) ? Browser['chrome'] = s[1] :
                     (s = ua.match(/opera.([\d.]+)/)) ? Browser['opera'] = s[1] :
-                        (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser['safari'] = s[1] : 0;
+                        (s = ua.match(/crios.([\d.]+)/)) ? Browser['crios'] = s[1] :
+                            (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser['safari'] = s[1] : 0;
         return Browser;
     },
     /**

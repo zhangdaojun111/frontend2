@@ -57,7 +57,8 @@ export const PMENUM = {
     hide_loading:'17',          //隐藏loading
     open_preview:'18',          //打开图片浏览
     aside_fold: '19',
-    send_event:'20'
+    send_event:'20',
+    open_iframe_by_id:'21',     //bi点击title打开数据源tab
 };
 
 /**
@@ -172,10 +173,12 @@ window.addEventListener('message', function (event) {
                 break;
 
             case PMENUM.get_param_from_root:
-                PMAPI.sendToIframe(dialogHash[data.key].element[0], {
-                    type: PMENUM.send_param_to_iframe,
-                    data: dialogHash[data.key].params
-                });
+                try{
+                    PMAPI.sendToIframe(dialogHash[data.key].element[0], {
+                        type: PMENUM.send_param_to_iframe,
+                        data: dialogHash[data.key].params
+                    });
+                }catch(e){console.log('get param from root error',e)}
                 break;
 
             case PMENUM.show_tips:
@@ -251,14 +254,16 @@ export const PMAPI = {
     /**
      * 向主框架发消息，拉取iframe的参数
      * @param key
+     * @param frame 指定接受消息的框架
      * @returns {Promise}
      */
-    getIframeParams: function (key) {
+    getIframeParams: function (key, frame) {
         let resolve = null;
+        frame = frame || PMAPI.getRoot();
         let promise = new Promise((_resolve) => {
             resolve = _resolve;
         });
-        PMAPI.sendToParent({
+        PMAPI.sendToIframe(frame, {
             type: PMENUM.get_param_from_root,
             key: key
         });
@@ -302,7 +307,12 @@ export const PMAPI = {
      * @param data
      */
     sendToParent: function (data) {
-        this.getRoot().postMessage(data, location.origin);
+        this.sendToIframe(this.getRoot(), data);
+        return this;
+    },
+
+    sendToRootParent: function (data) {
+        this.sendToIframe(this.getRoot(), data);
         return this;
     },
 
@@ -311,7 +321,7 @@ export const PMAPI = {
      * @param data
      */
     sendToRealParent: function (data) {
-        window.parent.postMessage(data, location.origin);
+        this.sendToIframe(window.parent, data);
         return this;
     },
 
@@ -348,7 +358,7 @@ export const PMAPI = {
      * @returns {PMAPI}
      */
     sendToSelf: function (msg) {
-        window.postMessage(msg, location.origin);
+        this.sendToIframe(window, msg);
         return this;
     },
 
@@ -439,7 +449,7 @@ export const PMAPI = {
         return new Promise(function (resolve) {
             let key = PMAPI._getKey();
             dialogWaitHash[key] = resolve;
-            PMAPI.sendToParent({
+            PMAPI.sendToRootParent({
                 type: PMENUM.open_component_dialog,
                 key: key,
                 component: PMAPI.serializeComponent(componentConfig),

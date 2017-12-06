@@ -95,7 +95,6 @@ export class EchartsService {
         let isStack = false; // 判断是否堆叠
 
         yAxis.forEach((y,i) => {
-
            // 判断是否是堆叠情况
            if (cellOption.yAxis[i] && cellOption.yAxis[i]['group']) {
                isStack = true;
@@ -191,38 +190,90 @@ export class EchartsService {
         }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
-            linebarOption['grid']['right'] = '2.3%';
+            linebarOption['grid']['right'] = 15;
             // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
-            if(!isStack) {
-                linebarOption['yAxis'][0]['max'] = firstMax > 0 ? firstMax : 0;
-                linebarOption['yAxis'][0]['interval'] =  linebarOption['yAxis'][0]['min'] >= 0 ? linebarOption['yAxis'][0]['max'] / splitNumber > 1 ? Math.ceil(linebarOption['yAxis'][0]['max'] / splitNumber) : Number((linebarOption['yAxis'][0]['max'] / splitNumber).toFixed(5)) : null
+            // 双y轴 如果有一个y轴小于0
+            if (firstMin < 0 || secondMin < 0) {
+                if (isStack) {
+                    linebarOption['yAxis'][0]['max'] = null;
+                    linebarOption['yAxis'][0]['min'] = null;
+                    linebarOption['yAxis'].push({
+                        type: 'value',
+                        inverse: false,
+                        max: null,
+                        min: null,
+                        // interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
+                        axisLabel: {
+                            inside: false,
+                            formatter: function(value,index) {
+                                let isDecimal = _.cloneDeep(value).toString().indexOf('.');
+                                return isDecimal !== -1 ? value.toFixed(5) : value;
+                            }
+                        },
+                        axisLine: {},
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'solid',
+                                color: '#ececec'
+                            }
+                        },
+                    });
+                } else {
+                    linebarOption['yAxis'][0]['max'] = Math.abs(firstMin) > Math.abs(firstMax) ? Math.abs(firstMin) : Math.abs(firstMax);
+                    linebarOption['yAxis'][0]['min'] = Math.abs(firstMin) > Math.abs(firstMax) ? firstMin : -Math.abs(firstMax);
+                    linebarOption['yAxis'].push({
+                        type: 'value',
+                        inverse: false,
+                        max: Math.abs(secondMin) > Math.abs(secondMax) ? Math.abs(secondMin) : Math.abs(secondMax),
+                        min: Math.abs(secondMin) > Math.abs(secondMax) ? secondMin : -Math.abs(secondMax),
+                        // interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
+                        axisLabel: {
+                            inside: false,
+                            formatter: function(value,index) {
+                                let isDecimal = _.cloneDeep(value).toString().indexOf('.');
+                                return isDecimal !== -1 ? value.toFixed(5) : value;
+                            }
+                        },
+                        axisLine: {},
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                type: 'solid',
+                                color: '#ececec'
+                            }
+                        },
+                    });
+                }
             } else {
-                linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
+                linebarOption['yAxis'][0]['max'] = isStack ? null : firstMax;
+                linebarOption['yAxis'][0]['min'] = isStack ? null : 0;
+                linebarOption['yAxis'].push({
+                    type: 'value',
+                    inverse: false,
+                    max: null,
+                    min: null,
+                    // interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
+                    axisLabel: {
+                        inside: false,
+                        formatter: function(value,index) {
+                            let isDecimal = _.cloneDeep(value).toString().indexOf('.');
+                            return isDecimal !== -1 ? value.toFixed(5) : value;
+                        }
+                    },
+                    axisLine: {},
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'solid',
+                            color: '#ececec'
+                        }
+                    },
+                });
+
             }
-            linebarOption['yAxis'].push({
-                type: 'value',
-                inverse: false,
-                max: !isStack && secondMin > 0 ? secondMax > 0 ? secondMax : 0 :null,
-                min: !isStack && secondMin > 0 ? secondMin > 0 ? 0 : secondMin : null,
-                interval:!isStack && secondMin > 0 ?  (secondMax - secondMin) / splitNumber > 1 ? Math.ceil((secondMax - secondMin) / splitNumber) : Number(((secondMax - secondMin) / splitNumber).toFixed(5)) : null,
-                axisLabel: {
-                    inside: false,
-                    onZero: true,
-                    formatter: function(value,index) {
-                        let isDecimal = _.cloneDeep(value).toString().indexOf('.');
-                        return isDecimal !== -1 ? value.toFixed(5) : value;
-                    }
-                },
-                axisLine: {},
-                splitLine: {
-                    show: true,
-                    lineStyle: {
-                        type: 'solid',
-                        color: '#ececec'
-                    }
-                },
-            });
+
             // 当双y轴 只有2个y轴字段时 修改折线颜色
             if (cellOption['yAxis'].length === 2) {
                 yAxis.map((y, colorIndex) => {
@@ -297,10 +348,6 @@ export class EchartsService {
         let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
         if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
-            linebarOption['yAxis'][0]['min'] = firstMin > 0 ? 0 : firstMin;
-            if (cellOption.double === 1) {
-                linebarOption['yAxis'][1]['min'] = secondMin > 0 ? 0 : secondMin;
-            }
             linebarOption['dataZoom']=[
                 {
                 type: 'slider',
@@ -327,8 +374,12 @@ export class EchartsService {
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
-        console.log('-----------------');
-        console.log(linebarOption);
+
+        //最后一条数据必显示
+        if(cellOption.data.xAxis){
+            linebarOption['xAxis'][0]['axisLabel']['showMaxLabel'] = true;
+            linebarOption['xAxis'][0]['axisLabel']['showMinLabel'] = true;
+        }
         return linebarOption;
     }
 
@@ -356,7 +407,17 @@ export class EchartsService {
         pieOption['series'][0].name = title;
         pieOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if(cellChart.chart.chartType.type == 'circular'){
-            pieOption['series'][0].radius = ['50%','70%'];
+            pieOption['series'][0].radius = ['50%','80%'];
+        }
+        //是否设置自定义图表半径
+        if(cellOption['customPie'] && cellOption['customPie'].hasOwnProperty('radius')){
+            pieOption['legend']['type'] = 'plain';
+            pieOption['series'][0]['center'] = [cellOption['customPie']['centerX'],cellOption['customPie']['centerY']];
+            if(cellChart.chart.chartType.type == 'pie'){
+                pieOption['series'][0]['radius'] = cellOption['customPie']['radius'];
+            }else{
+                pieOption['series'][0]['radius'] = isNaN(cellOption['customPie']['radius'])?[(parseFloat(cellOption['customPie']['radius'])-20)+'%',cellOption['customPie']['radius']]:[cellOption['customPie']['radius']-20+'',cellOption['customPie']['radius']];
+            }
         }
         return pieOption;
     }
@@ -419,8 +480,8 @@ export class EchartsService {
                         }
                     }
                 });
-                let max = Math.max.apply(null, y['data']);
-                let min = Math.min.apply(null, y['data']);
+                let max = Math.max.apply(null, y['data'])
+                let min = Math.min.apply(null, y['data'])
                 ymin.push(min);
                 ymax.push(max);
             });
@@ -550,8 +611,6 @@ export class EchartsService {
         links.pop();
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
-        console.log('================================');
-        console.log(data);
         return stylzieOption;
     }
 
@@ -608,9 +667,9 @@ export class EchartsService {
         if (cellOption['yAxis'].length === 0 ) {
             return defaultOption;
         }
-        gaugeOption.series[0].min = cellOption['data']['range'][0];
-        gaugeOption.series[0].max = cellOption['data']['range'][1];
-        if(cellOption['data']['range'][0] == 0 && cellOption['data']['range'][1] == 0){
+        gaugeOption.series[0].min = Math.min(...cellOption['data']['range']);
+        gaugeOption.series[0].max = Math.max(...cellOption['data']['range']);
+        if(cellOption['data']['range'] && cellOption['data']['range'][0] == 0 && cellOption['data']['range'][1] == 0){
             if(cellOption['data']['yAxis']>0){
                 gaugeOption.series[0].min = 0;
                 gaugeOption.series[0].max = cellOption['data']['yAxis'];
@@ -621,9 +680,15 @@ export class EchartsService {
         }
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
         gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
-        gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
-            return value;
-        };
+
+        if(cellOption['yAxis'][0]['real_accuracy']){
+            gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
+                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+            };
+            gaugeOption.series[0]['detail']['formatter'] = function(value){
+                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+            };
+        }
         return gaugeOption;
     }
 

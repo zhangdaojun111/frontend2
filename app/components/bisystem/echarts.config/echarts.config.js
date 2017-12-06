@@ -160,11 +160,6 @@ const pie = {
                         str += '\n';
                         str += param.data.value + '\n';
                         str += param.percent + '%';
-
-
-
-
-
                         return str;
                     }
                 }
@@ -287,8 +282,8 @@ const linebar = {
         type: 'scroll'
     },
     grid: {
-        left: 0,
-        right: '2.3%',
+        left: 10,
+        right: 15,
         bottom: 10,
         top:30,
         containLabel: true
@@ -308,8 +303,7 @@ const linebar = {
                 }
             },
             axisLabel : {
-
-            }
+            },
         }
     ],
     yAxis: [

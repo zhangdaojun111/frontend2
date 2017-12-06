@@ -53,7 +53,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
 
         .header-content{
             margin: 0 auto;
-            width: 80%;
+            width: 60%;
             height:100%;
             max-width: 1200px;
             line-height: 60px;
@@ -86,10 +86,13 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                 font-size: 14px;
                 color: #666666;
                 margin-right: 80px;
-                .update-btn{
+                .update-btn,.register-btn{
                     margin-right: 40px;
+                    display: none;
                 }
-
+                .mobile-download-btn {
+                    display: none;
+                }
                 a{
                     cursor: pointer;
                 }
@@ -107,7 +110,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
         margin-left: -600px;
         .login-content {
             width: 340px;
-            height: 350px;
+            //height: 380px;
             position: absolute;
             right: 0;
             top: 150px;
@@ -131,8 +134,9 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
             .white-panel {
                 //background-color: #ffffff;
                 width: 340px;
-                height: 350px;
+                //height: 380px;
                 border-radius: 5px;
+                overflow: hidden;
                 background: rgba(242, 242, 242, 1);
 
                 .panel-header{
@@ -177,7 +181,25 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                             background-repeat: no-repeat;
                         }
                     }
-
+                    .verify-group {
+                        display: none;
+                        position: relative;
+                        height: 40px;
+                        margin-left: 20px;
+                        margin-bottom: 0px!important;
+                        margin-top: 30px;
+                        .verify-control {
+                            width: 105px;
+                            position: relative;
+                            top: -15px;
+                        }
+                        #verify-container{
+                            display: inline-block;
+                            height: 40px;
+                            margin-left: 20px;
+                            width: 160px;
+                        }
+                    }
                     .ps-group {
                         height: 40px;
                         width: 100%;
@@ -213,7 +235,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                             }
                         }
                     }
-                    .form-group,.ps-group {
+                    .form-group,.ps-group,.verify-group {
                         margin-bottom: 20px;
                         input {
                             margin: 0!important;
@@ -299,6 +321,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                     }
                     .panel-bottom {
                         height: 54px;
+                        margin-bottom: 20px;
                         //border-top: solid 1px rgba(212, 212, 212, 0.24);
 
                         button {
@@ -416,18 +439,34 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
             position: fixed;
             width: 680px;
             height: 200px;
-            top: calc(65% - 100px);
+            top: calc(70% - 100px);
             left: calc(50% - 300px);
             display: none;
             span {
                 font-size: 20px;
                 font-weight: bold;
-                color: #2298f4;
+                color: white;
             }
             a {
-                color: #2298f4;
+                color: white;
                 padding-left: 20px;
                 font-size: 20px
+            }
+            .install-introduce {
+                font-size: 16px;
+                color: white;
+                margin-top: 20px;
+            }
+            .install-introduce p {
+                padding: 5px;
+            }
+        }
+        @media screen and (min-width: 320px) and (max-width: 414px){
+            .need-download {
+                left: calc(50% - 150px);
+                span {
+                    font-size: 12px;
+                }
             }
         }
     }
@@ -521,6 +560,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
                     color: #FFFFFF;
                     margin-left: 220px;
                     cursor: pointer;
+                    display: none;
                 }
 
             }
