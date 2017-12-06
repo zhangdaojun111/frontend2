@@ -254,14 +254,16 @@ export const PMAPI = {
     /**
      * 向主框架发消息，拉取iframe的参数
      * @param key
+     * @param frame 指定接受消息的框架
      * @returns {Promise}
      */
-    getIframeParams: function (key) {
+    getIframeParams: function (key, frame) {
         let resolve = null;
+        frame = frame || PMAPI.getRoot();
         let promise = new Promise((_resolve) => {
             resolve = _resolve;
         });
-        PMAPI.sendToParent({
+        PMAPI.sendToIframe(frame, {
             type: PMENUM.get_param_from_root,
             key: key
         });
@@ -305,16 +307,12 @@ export const PMAPI = {
      * @param data
      */
     sendToParent: function (data) {
-        if(window.parent == this.getRoot()){
-            this.getRoot().postMessage(data, location.origin);
-        }else {
-            this.getRoot().postMessage(data, location.origin);
-        }
+        this.sendToIframe(this.getRoot(), data);
         return this;
     },
 
     sendToRootParent: function (data) {
-        this.getRoot().postMessage(data, location.origin);
+        this.sendToIframe(this.getRoot(), data);
         return this;
     },
 
@@ -328,7 +326,7 @@ export const PMAPI = {
      * @param data
      */
     sendToRealParent: function (data) {
-        window.parent.postMessage(data, location.origin);
+        this.sendToIframe(window.parent, data);
         return this;
     },
 
@@ -365,7 +363,7 @@ export const PMAPI = {
      * @returns {PMAPI}
      */
     sendToSelf: function (msg) {
-        window.postMessage(msg, location.origin);
+        this.sendToIframe(window, msg);
         return this;
     },
 
