@@ -247,8 +247,8 @@ export class CellTableComponent extends CellBaseComponent {
     static numFormat(num,acc) {
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-        num[0] = parseFloat(num[0]).toFixed(acc);
-        return num.join(".");
+        num = num.join(".");
+        return parseFloat(num).toFixed(acc);
     }
 
     static isNumber(value) {         //验证是否为数字
