@@ -174,20 +174,8 @@ let config={
         });
     }
 };
-class WorkflowAddSigner extends Component{
-    // constructor (data){
-    //     super(config,data);
-    // }
-
+export default class WorkflowAddSigner extends Component{
     constructor(data,newConfig){
         super($.extend(true,{},config,newConfig,{data:data||{}}));
     }
 }
-
-export default {
-    showAddSigner(data) {
-        let component = new WorkflowAddSigner(data);
-        let el = $('#add-signer');
-        component.render(el);
-    }
-};
