@@ -247,6 +247,8 @@ let config = {
         isShowTips: true,
         //是否第一次创建编辑表头
         firstCreateEditCol: true,
+        //处理表单子表内置父表数据用
+        parentBuiltinData:{},
         //第一次获取二维表数据
         firstReportTable: true,
         //二维表项目名称
@@ -1443,6 +1445,10 @@ let config = {
                         'width: 200px;height: 20px;line-height: 20px;text-align: center;margin-left: -100px;margin-top: -10px;font-size: 16px">' + res[0].error + '</p></div>')
                 }
             }
+            //子表内置父表数据
+            setTimeout(()=>{
+                this.actions.parentBuildinChild();
+            },700)
         },
         //请求footer数据
         getFooterData: function (data) {
@@ -1462,6 +1468,26 @@ let config = {
 
             });
             HTTP.flush();
+        },
+        //子表内置父表数据用
+        parentBuildinChild: function(){
+            if(this.data.viewMode == 'EditChild'||this.data.viewMode == 'ViewChild'){
+                if(window.top.frontendRelation[this.data.parentTableId]&&window.top.frontendRelation[this.data.parentTableId][this.data.tableId]&&window.top.frontendRelation[this.data.parentTableId][this.data.tableId]['pdfield_2_cdfield']){
+                    this.data.parentBuiltinData = window.top.frontendRelation[this.data.parentTableId][this.data.tableId]['pdfield_2_cdfield'];
+                }
+                for(let j of this.data.rowData){
+                    for(let k in this.data.parentBuiltinData){
+                        if(!j[this.data.parentBuiltinData[k]]&&k!='temp_id'&&window.top.frontendParentFormValue[this.data.parentTableId]){
+                            j[this.data.parentBuiltinData[k]] = window.top.frontendParentFormValue[this.data.parentTableId][k];
+                        }
+                    }
+                }
+            }
+            let d = {
+                rowData: this.data.rowData
+            };
+            //赋值
+            this.agGrid.actions.setGridData(d);
         },
         //获取设置选择数据（刷新时回显已经选择的数据）
         calcSelectData: function (type) {
@@ -1743,10 +1769,15 @@ let config = {
                 json = _.defaultsDeep(json, this.data.sortParam)
             }
             //是否添加拼音搜索
+            let addPy = false;
             if(json.filter && json.filter.length!=0){
                 for(let a of json.filter){
                     if(this.data.supportPy.indexOf(a.cond.searchBy) != -1){
                         a['cond']['py'] = 1;
+                        if(!addPy&&this.data.total>=5000){
+                            msgbox.showTips('当前的数据量较大，检索时需要更长时间。');
+                            addPy = true;
+                        }
                     }else {
                         a['cond']['py'] = 0;
                     }
@@ -3076,12 +3107,13 @@ let config = {
             }
             //富文本字段
             if (data.colDef.real_type == fieldTypeService.UEDITOR) {
-                QuillAlert.data.value = data.value.replace(/(\n)/g, '');
+                QuillAlert.data.value = data.value.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
                 PMAPI.openDialogByComponent(QuillAlert, {
                     title: '文本编辑器',
-                    width: 800,
-                    height: 500,
+                    width: 1200,
+                    height: 650,
                     modal: true,
+                    maxable: true,
                 })
             }
             //合同编辑器
