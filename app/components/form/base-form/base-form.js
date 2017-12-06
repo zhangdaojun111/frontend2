@@ -1856,7 +1856,7 @@ let config = {
 			this.setData('oldData', _.defaultsDeep({}, data));
 			let actions = this.actions.createActions();
 			for (let key in data) {
-				if(this.data.isEdit == 0) {
+				if(this.data.isEdit == 0 && this.data.isCalendar === '1') {
 					data[key].is_view = 1;
 				}
 				let single = this.el.find('div[data-dfield=' + data[key].dfield + ']');
