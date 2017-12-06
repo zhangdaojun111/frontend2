@@ -18,7 +18,6 @@ export const LoginService = {
      */
     support:function () {
         let browser = this.currentBrowser();
-        console.log(browser);
         let system=this.CurrentSystem().system;
         // let currentSystem;
 
