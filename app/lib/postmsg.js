@@ -308,7 +308,6 @@ export const PMAPI = {
         if(window.parent == this.getRoot()){
             this.getRoot().postMessage(data, location.origin);
         }else {
-            window.parent.postMessage(data, location.origin);
             this.getRoot().postMessage(data, location.origin);
         }
         return this;
