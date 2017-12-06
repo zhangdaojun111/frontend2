@@ -1900,6 +1900,7 @@ let config = {
 							formData[k] = data[k].value || '';
 						}
 						let songrid = new Songrid(Object.assign(data[key], {
+                            fromApprove: this.data.fromApprove,
 							popupType: popupType,
 							formData: JSON.stringify(formData)
 						}), actions);
