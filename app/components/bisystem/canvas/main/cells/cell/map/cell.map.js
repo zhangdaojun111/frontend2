@@ -15,7 +15,6 @@ let config = {
     actions: {
         echartsInit() {
             this.customAccuracy(this.data.cellChart.chart);
-            console.log(this.data.cellChart.chart);
             let echartsService = new EchartsService(this.data);
             this.myChart = echartsService.myChart;
             let that = this;
