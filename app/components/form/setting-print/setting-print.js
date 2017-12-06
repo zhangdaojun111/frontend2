@@ -64,16 +64,19 @@ let css = `
  bottom: 10px ;
  border:none;
  outline: none;
- width: 91px;
+ width: 90px;
+ border: 1px solid #0088ff;
  height: 30px;
- line-height: 31px;
+ line-height: 29px;
  color: #fff;
  border-radius:4px;
  cursor: pointer;
  }
  .J-print-btn.cancel{
     right:100px;
-    background: #ddd;
+    color: #666;
+    border: 1px solid #d7d7d7;
+    background: #fff;
  }
  .J-print-btn.confirm{
     left:100px;

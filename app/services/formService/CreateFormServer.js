@@ -443,6 +443,11 @@ export const CreateFormServer={
 	async createFormData(res){
 		//处理static,dynamic数据
 		let data = this.mergeFormData(res[0], res[1]);
+        let edit = await FormService.getColumnList(res[0].table_id);
+        data.isEdit = edit.permission.edit;
+        if(data.isEdit == 0) {
+            data.btnType = 'none';
+        }
 		//检查表单类型
 		let template = await this.checkFormType(data, res);
 		//发送审批记录

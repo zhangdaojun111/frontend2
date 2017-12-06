@@ -48,7 +48,7 @@ let config = {
 			self.actions.approvalBtnToggle(elDiv,elParent);
 		});
 		this.el.on('click','.gz',(e)=>{
-			Mediator.publish('workflow:getFormTrans',this.showgz);
+			this.events.getFormTrans(this.showgz);
 			this.actions.toogz(e);
 		});
 		this.el.on('click','.vote',(e)=>{
@@ -93,22 +93,8 @@ let config = {
 	}
 };
 
-class ApprovalHeader extends Component{
-	// constructor (data){
-	//     super(config,data);
-	// }
-
-	constructor(data,newConfig){
-		super($.extend(true,{},config,newConfig,{data:data||{}}));
+export default class ApprovalHeader extends Component{
+	constructor(data,events,newConfig){
+		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
 	}
 }
-
-export default {
-	showheader(data){
-		let component = new ApprovalHeader(data);
-		let el = $('#approval-info');
-		component.render(el);
-		component.hideLoading();
-	},
-
-};
