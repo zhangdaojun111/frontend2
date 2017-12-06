@@ -3107,12 +3107,13 @@ let config = {
             }
             //富文本字段
             if (data.colDef.real_type == fieldTypeService.UEDITOR) {
-                QuillAlert.data.value = data.value.replace(/(\n)/g, '');
+                QuillAlert.data.value = data.value.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
                 PMAPI.openDialogByComponent(QuillAlert, {
                     title: '文本编辑器',
-                    width: 800,
-                    height: 500,
+                    width: 1200,
+                    height: 650,
                     modal: true,
+                    maxable: true,
                 })
             }
             //合同编辑器
