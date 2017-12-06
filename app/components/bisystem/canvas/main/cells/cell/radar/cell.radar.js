@@ -29,11 +29,13 @@ let config = {
 
                     }
                     if (isDraw) {
-                        //设置echarts渲染容器尺寸
-                        let data = this.data;
-                        let width = data.cell.size.width - 20;
-                        let height = data.cell.size.height - 30;
-                        this.el.find('#' + data.id).css('width',width).css('height',height);
+                        if(window.config.pdf){
+                            //设置echarts渲染容器尺寸
+                            let data = this.data;
+                            let width = data.cell.size.width - 20;
+                            let height = data.cell.size.height - 30;
+                            this.el.find('#' + data.id).css('width',width).css('height',height);
+                        }
 
                         let echartsService = new EchartsService(this.data);
                         this.myChart = echartsService.myChart;
