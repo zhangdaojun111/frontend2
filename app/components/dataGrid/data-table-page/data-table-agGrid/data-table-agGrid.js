@@ -1626,7 +1626,7 @@ let config = {
                 record_id: this.data.recordId,
                 is_filter: this.data.filterParam.is_filter,
                 filter: [],
-                from_approve: this.data.fromApprove
+                from_approve: this.data.fromApprove || 0
             };
             for (let k in json) {
                 if (json[k] == 'undefined') {
