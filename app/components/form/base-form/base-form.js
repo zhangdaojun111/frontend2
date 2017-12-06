@@ -105,10 +105,6 @@ let config = {
 				let formDataFromParent = window.top.frontendParentFormValue[this.data.parentTableId];
 				//组装子表所需列表或表单中内置或相关的父表中数据
 				let parentData = FormService.packageParentDataForChildData(kvDict, formDataFromParent, this.data.parentTableId);
-				console.log("--------------------")
-				console.log("--------------------")
-				console.log(parentData)
-				window.config['parentBuiltinData'] = parentData;
 				//子表的this.newData
 				let newDataFromSongrid = window.top.frontendParentNewData[this.data.tableId];
 				//循环给子表赋值
@@ -1097,7 +1093,7 @@ let config = {
 					PMAPI.sendToRealParent({
 						type: PMENUM.close_dialog,
 						key: this.data.key,
-						data: {type:'success',parentBuiltinData:window.config['parentBuiltinData']},
+						data: 'success',
 					});
 				}
 				//清空子表内置父表的ids

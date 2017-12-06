@@ -1414,15 +1414,6 @@ let config = {
                 this.actions.renderAgGrid();
             } else {
             }
-            if(this.data.viewMode == 'EditChild'){
-                for(let j of this.data.rowData){
-                    for(let k in this.data.parentBuiltinData){
-                        if(k!='temp_id'){
-                            j[k] = this.data.parentBuiltinData[k];
-                        }
-                    }
-                }
-            }
             let d = {
                 rowData: this.data.rowData,
                 footerData: this.data.footerData
@@ -1454,6 +1445,8 @@ let config = {
                         'width: 200px;height: 20px;line-height: 20px;text-align: center;margin-left: -100px;margin-top: -10px;font-size: 16px">' + res[0].error + '</p></div>')
                 }
             }
+            //子表内置父表数据
+            this.actions.parentBuildinChild();
         },
         //请求footer数据
         getFooterData: function (data) {
@@ -1473,6 +1466,26 @@ let config = {
 
             });
             HTTP.flush();
+        },
+        //子表内置父表数据用
+        parentBuildinChild: function(){
+            if(this.data.viewMode == 'EditChild'||this.data.viewMode == 'ViewChild'){
+                if(window.top.frontendRelation[this.data.parentTableId]&&window.top.frontendRelation[this.data.parentTableId][this.data.tableId]&&window.top.frontendRelation[this.data.parentTableId][this.data.tableId]['pdfield_2_cdfield']){
+                    this.data.parentBuiltinData = window.top.frontendRelation[this.data.parentTableId][this.data.tableId]['pdfield_2_cdfield'];
+                }
+                for(let j of this.data.rowData){
+                    for(let k in this.data.parentBuiltinData){
+                        if(!j[k]&&k!='temp_id'&&window.top.frontendParentFormValue[this.data.parentTableId]){
+                            j[k] = window.top.frontendParentFormValue[this.data.parentTableId][this.data.parentBuiltinData[k]];
+                        }
+                    }
+                }
+            }
+            let d = {
+                rowData: this.data.rowData
+            };
+            //赋值
+            this.agGrid.actions.setGridData(d);
         },
         //获取设置选择数据（刷新时回显已经选择的数据）
         calcSelectData: function (type) {
@@ -3711,10 +3724,7 @@ let config = {
                 defaultMax: true,
                 // customSize: true
             }).then((data) => {
-                if ((data == 'success' || data.type == 'success') || data.refresh) {
-                    if(data.parentBuiltinData){
-                        this.data.parentBuiltinData = data.parentBuiltinData;
-                    }
+                if (data == 'success' || data.refresh) {
                     this.actions.timeDelayRefresh();
                 }
             })
