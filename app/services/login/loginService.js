@@ -46,7 +46,7 @@ export const LoginService = {
                 //是crios,是ios
                 if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
                     //crios版本检测
-                    if(browser['crios'].slice(0,2)<65){
+                    if(browser['crios'].slice(0,2)<63){
                         this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                         this.downLoadLink = 'False';
                     }else{
@@ -60,13 +60,13 @@ export const LoginService = {
         //是chrome，不是crios
         if(browser['chrome']  && !browser['crios']){
             //android版本检测
-            if(this.currentSystem== 'android' && (browser['chrome'].slice(0,2)<65)){
+            if(this.currentSystem== 'android' && (browser['chrome'].slice(0,2)<63)){
                 this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                 this.downLoadLink = 'False';
                 this.needDownload=true;
             }
             //win和mac版本检测
-            if((browser['chrome'].slice(0,2)<53 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
+            if((browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
                 this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                 this.needDownload=true;
             }
