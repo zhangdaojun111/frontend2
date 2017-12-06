@@ -67,6 +67,10 @@ $border-color: #eee;
                 float: left !important;
                 vertical-align: middle;
                 border-right: 1px solid $border-color;
+                span{
+                    display: inline-block;
+                    margin: 17px auto;
+                }
             }
         }
         &.grid-type-4{
@@ -74,6 +78,9 @@ $border-color: #eee;
                 height: 20%;
                 div{
                     width: 19.8%;
+                    span{
+                        margin: 15px auto;
+                    }
                 }
             }
         }
