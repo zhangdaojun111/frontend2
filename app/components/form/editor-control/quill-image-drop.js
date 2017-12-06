@@ -71,6 +71,8 @@ export class ImageDrop {
 	insert(dataUrl) {
 		const index = (this.quill.getSelection() || {}).index || this.quill.getLength();
 		this.quill.insertEmbed(index, 'image', dataUrl, 'user');
+		//插入图片后设置光标位置在图片后
+		this.quill.setSelection(index+dataUrl.length,0);
 	}
 
 	/**
