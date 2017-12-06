@@ -104,17 +104,20 @@ input::-webkit-input-placeholder{
         padding-top: 10px;
         text-align: center;
         button {
-            width: 80px;
+            width: 90px;
             height: 30px;
             outline: none;
             border: 0 none;
             background-color: #0088ff;
             color: #fff;
             border-radius: 3px;
+            border: 1px solid #0088ff;
             cursor: pointer;
             margin: 0 5px;
             &.no {
-                background-color: #999;
+                background-color: #fff;
+                color: #666;
+                border: 1px solid #d7d7d7;
             }
         }
     }
