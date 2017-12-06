@@ -79,7 +79,7 @@ let config = {
                 this.el.find('.echarts-cell').removeClass('date-filed');
             }
             let type = cellChart.chart.data['x'] ? cellChart.chart.data['x']['type'] : cellChart.chart.xAxis.type;
-            if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30)) {
+            if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30) && window.config.pdf !== true) {
                 // 添加日期筛选,改变cell显示高度
                 this.el.find('.echarts-cell').addClass('date-filed');
                 this.normalRange = new NormalRangeComponent({id: this.data.id}, {
