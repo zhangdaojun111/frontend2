@@ -132,6 +132,7 @@ let config = {
         },
 
         echartsInit() {
+            this.customAccuracy(this.data.cellChart.chart);
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
                 // 当attribute or select　等于空时　代表全选

@@ -109,17 +109,24 @@ $border-color: #eee;
             }
             label {
                 font-weight: 400;
+                white-space: nowrap;
             }
         }
     }
+    .grid-type-4 {
+        width: 480px;
+        height: 240px;
+    }
     .legend-type-4 {
+        width: 480px;
         li {
             width: 25%;
         }
     }
 }
+
 @media print {
     .bi-nine-grid {
-        overflow: hidden!important;
+        overflow: hidden !important;
     }
 }

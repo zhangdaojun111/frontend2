@@ -371,6 +371,7 @@ export class EchartsService {
             linebarOption['xAxis'][0]['axisLabel']['showMaxLabel'] = true;
             linebarOption['xAxis'][0]['axisLabel']['showMinLabel'] = true;
         }
+
         return linebarOption;
     }
 
@@ -410,6 +411,8 @@ export class EchartsService {
                 pieOption['series'][0]['radius'] = isNaN(cellOption['customPie']['radius'])?[(parseFloat(cellOption['customPie']['radius'])-20)+'%',cellOption['customPie']['radius']]:[cellOption['customPie']['radius']-20+'',cellOption['customPie']['radius']];
             }
         }
+
+
         return pieOption;
     }
 
@@ -471,8 +474,8 @@ export class EchartsService {
                         }
                     }
                 });
-                let max = Math.max.apply(null, y['data'])
-                let min = Math.min.apply(null, y['data'])
+                let max = Math.max.apply(null, y['data']);
+                let min = Math.min.apply(null, y['data']);
                 ymin.push(min);
                 ymax.push(max);
             });
@@ -611,6 +614,7 @@ export class EchartsService {
      * @returns {*}
      */
     mapOption(cellChart){
+        console.log(cellChart.chart.customAccuracy);
         const mapOption = EchartsOption.getEchartsConfigOption('map');
         let data = [];
         let cellOption = cellChart['chart'];
@@ -672,7 +676,15 @@ export class EchartsService {
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
         gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
 
-        if(cellOption['yAxis'][0]['real_accuracy']){
+        //自定义设置精度
+        if(cellOption['customAccuracy']){
+            gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
+                return value.toFixed(parseInt(cellOption['customAccuracy']));
+            };
+            gaugeOption.series[0]['detail']['formatter'] = function(value){
+                return value.toFixed(parseInt(cellOption['customAccuracy']));
+            };
+        }else if(!cellOption['customAccuracy'] && cellOption['yAxis'][0]['real_accuracy']){
             gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
                 return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
             };
