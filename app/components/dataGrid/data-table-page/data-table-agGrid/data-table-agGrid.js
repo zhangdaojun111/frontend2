@@ -1775,7 +1775,7 @@ let config = {
                     if(this.data.supportPy.indexOf(a.cond.searchBy) != -1){
                         a['cond']['py'] = 1;
                         if(!addPy&&this.data.total>=5000){
-                            msgbox.showTips('当前的数据量较大，检索时需要更长时间。');
+                            msgbox.alert('当前的数据量较大，检索时需要更长时间。');
                             addPy = true;
                         }
                     }else {
