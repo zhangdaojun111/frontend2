@@ -218,8 +218,8 @@ function getLoginController() {
          * 初始化公司名称
          */
         sysNameInit:function () {
-           this.systemName = this.versionInfo.sap_login_system_name;
-           this.resetSysName(this.systemName);
+            this.systemName = this.versionInfo.sap_login_system_name;
+            this.resetSysName(this.systemName);
         },
 
         /**
@@ -395,7 +395,8 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 let controller = getLoginController();
 controller.formInit();  //初始化表单控件
 controller.getNextUrl();       //根据url判断是否跳转页面
- let isNeedDownload = controller.browser_check();     //暂时屏蔽
+let isNeedDownload = controller.browser_check();     //暂时屏蔽
+let showLoginAnimation = false;
 
 function resetLoginBoxInfo(result) {
     if(result.use_register && result.use_register.toString() === "1"){
@@ -407,18 +408,19 @@ function resetLoginBoxInfo(result) {
     if(result.show_publish_link && result.show_publish_link.toString() === "1"){
         $('.self-service-update').show();
     }
-    if(result.show_mobile_download && result.show_mobile_download.toString() === "1"){
-        $('.mobile-download-btn').show();
+    if(result.login_open_animation && result.login_open_animation.toString() === "1"){
+        showLoginAnimation = true;
     }
-    if(result.verify_code && result.verify_code.toString() === "1") {
-        let obj = {
-            id: 'verify-container',
-            width: "160",
-            height: "40",
+    if(result.show_mobile_download && result.show_mobile_download.toString() === "1")
+        if(result.verify_code && result.verify_code.toString() === "1") {
+            let obj = {
+                id: 'verify-container',
+                width: "160",
+                height: "40",
+            }
+            controller.verifyCode = new verify(obj);
+            controller.verifyShow = 1;
         }
-        controller.verifyCode = new verify(obj);
-        controller.verifyShow = 1;
-    }
     controller.versionInfo = result;
     controller.sysNameInit();   //初始化公司名称
     controller.versionInit();   //初始化版本table
@@ -468,7 +470,7 @@ if( isNeedDownload === false){      //正常显示登录表单
 
     if(LoginService.currentSystem == 'win'){
         htmlDownload +=
-        '<div class="install-introduce">'+
+            '<div class="install-introduce">'+
             '<p>Windows版安装更新说明：</p>'+
             '<p>1.点击下载链接，下载最新版chrome浏览器。</p>'+
             '<p> 2.点击下载完成的安装包，按步骤安装。</p>'+
@@ -482,6 +484,8 @@ if( isNeedDownload === false){      //正常显示登录表单
 
 // 延时处理动画，会阻塞dom操作
 window.setTimeout(function () {
-    starter.init();
-    starter.animate();
+    if(showLoginAnimation) {
+        starter.init();
+        starter.animate();
+    }
 }, 500);
