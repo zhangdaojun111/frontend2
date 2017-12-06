@@ -20,7 +20,7 @@ export const LoginService = {
      */
     support:function () {
         this.browser = this.currentBrowser();
-        console.log(browser);
+        console.log( this.browser);
         let system=this.CurrentSystem().system;
         this.desc = navigator.mimeTypes['application/x-shockwave-flash'];
         // let currentSystem;
@@ -34,21 +34,29 @@ export const LoginService = {
         //不是chrome
         if(!this.browser['chrome']){
             this.needDownload = true;
-            //是安卓
-            if(this.currentSystem== 'android'){
-                this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
-                this.downLoadLink = 'False';
-            }
-            //不是crios,是ios设备
-            else if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && !this.browser['crios']){
-                this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
-                this.downLoadLink = 'False';
-            }
-            //是crios,是ios设备
-            else if(this.browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
-                this.needDownload=false;
-            }
-            else{
+            //是移动设备
+            if(this.currentSystem== 'android' || this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad'){
+                //是android
+                if(this.currentSystem== 'android'){
+                    this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
+                    this.downLoadLink = 'False';
+                }
+                //不是crios,是ios
+                if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && !browser['crios']){
+                    this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
+                    this.downLoadLink = 'False';
+                }
+                //是crios,是ios
+                if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
+                    //crios版本检测
+                    if(browser['crios'].slice(0,2)<63){
+                        this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+                        this.downLoadLink = 'False';
+                    }else{
+                        this.needDownload=false;
+                    }
+                }
+            }else{
                 if(this.desc){
                     this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
                 }else{
@@ -60,7 +68,11 @@ export const LoginService = {
         //是chrome，不是crios
        else if(this.browser['chrome']  && !this.browser['crios']){
            if((this.browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (this.browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
-               this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+               if(this.desc){
+                   this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
+               }else{
+                   this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+               }
                this.needDownload=true;
             }
         }
