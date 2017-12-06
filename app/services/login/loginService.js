@@ -31,33 +31,48 @@ export const LoginService = {
         //不是chrome
         if(!browser['chrome']){
             this.needDownload = true;
-            //是安卓
-            if(this.currentSystem== 'android'){
-                this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
-                this.downLoadLink = 'False';
-            }
-            //不是crios,是ios设备
-            else if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && !browser['crios']){
-                this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
-                this.downLoadLink = 'False';
-            }
-            //是crios,是ios设备
-            else if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
-                this.needDownload=false;
-            }
-            else{
+            //是移动设备
+            if(this.currentSystem== 'android' || this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad'){
+                //是android
+                if(this.currentSystem== 'android'){
+                    this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
+                    this.downLoadLink = 'False';
+                }
+                //不是crios,是ios
+                if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && !browser['crios']){
+                    this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
+                    this.downLoadLink = 'False';
+                }
+                //是crios,是ios
+                if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
+                    //crios版本检测
+                    if(browser['crios'].slice(0,2)<65){
+                        this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+                        this.downLoadLink = 'False';
+                    }else{
+                        this.needDownload=false;
+                    }
+                }
+            }else{
                 this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
             }
         }
         //是chrome，不是crios
-       else if(browser['chrome']  && !browser['crios']){
-           if((browser['chrome'].slice(0,2)<62 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
-               this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
-               this.needDownload=true;
+        if(browser['chrome']  && !browser['crios']){
+            //android版本检测
+            if(this.currentSystem== 'android' && (browser['chrome'].slice(0,2)<65)){
+                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+                this.downLoadLink = 'False';
+                this.needDownload=true;
+            }
+            //win和mac版本检测
+            if((browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
+                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+                this.needDownload=true;
             }
         }
 
-        //优先保证win和mac
+        //低版本提供下载链接优先保证win和mac
         if(this.needDownload  && this.downLoadLink != 'False'){
             switch (this.currentSystem){
                 case 'win':
