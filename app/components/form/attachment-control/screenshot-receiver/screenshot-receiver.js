@@ -73,14 +73,10 @@ export const screenShotConfig={
         this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         let t = this;
         this.el.on('paste',(event)=>{
-            console.log('paste');
-            console.dir(event);
-            console.dir(this.data.file);
             if(this.data.file != ''){
                 return;
             }
             var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-            console.dir(items);
             for (let index in items) {
                 var item = items[index];
                 if (item.kind === 'file') {
