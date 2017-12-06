@@ -647,6 +647,12 @@ export class EchartsService {
         mapOption.series[0].data = data;
         mapOption.series[0].name = cellOption.data.yAxis[0].name;
         mapOption.visualMap.pieces = splitList;
+        //自定义设置精度
+        if(cellOption['customAccuracy']){
+            mapOption['tooltip']['formatter'] = function(params,ticket,callback){
+                return params.seriesName+'<br/>' + params.data.name + ' : ' + parseFloat(params.data.value).toFixed(parseInt(cellOption['customAccuracy']));
+            };
+        }
         return mapOption;
     }
 
