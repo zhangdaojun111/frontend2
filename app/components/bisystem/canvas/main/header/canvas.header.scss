@@ -2,7 +2,7 @@
     position: relative;
     height: 50px;
     white-space: nowrap;
-    width: calc(100% - 400px);
+    width: calc(100% - 410px);
     background: transparent;
     display: inline-block;
     overflow: hidden;
@@ -26,7 +26,7 @@
     display: inline-block;
     right: 0;
     top: 0;
-    width: 300px;
+    width: 310px;
     float: right;
     input[type='file'] {
         display: none;
@@ -40,6 +40,7 @@
 }
 
 .view-header-refresh-cache {
+    width: 100px;
     position: relative;
     display: inline-block;
     right: 0;

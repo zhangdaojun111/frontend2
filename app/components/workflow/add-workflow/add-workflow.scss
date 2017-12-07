@@ -33,7 +33,7 @@
     .workflow-flex{
         display: flex;
         position: fixed;
-        bottom: 0px;
+        bottom: 0;
         width: 100%;
         justify-content: flex-end;
         background: #f2f2f2;
@@ -41,7 +41,7 @@
         padding-top: 12px;
         div{
             background: #0088ff;
-            width: 91px;
+            width: 90px;
             height: 30px;
             text-align: center;
             border-radius: 4px;
@@ -50,6 +50,8 @@
             margin-right: 35px;
             line-height: 30px;
             cursor: pointer;
+            position: relative;
+            top: -5px;
         }
     }
     .addPrint{

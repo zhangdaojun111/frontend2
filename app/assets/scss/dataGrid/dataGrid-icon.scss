@@ -153,10 +153,25 @@ To change `display` (e.g. `display: inline-block;`), we suggest using a common C
     background: url("../../../assets/images/form/icon_time.png") no-repeat center center;
 }
 
-//@media screen and (max-width: 1200px){
-//    .dataGrid-btn-group {
-//        span {
-//            display: none;
-//        }
-//    }
-//}
+.data-table-agGrid-con{
+    @media screen and (min-width: 1100px) and (max-width: 1350px){
+        .dataGrid-btn-group {
+            span {
+                display: none;
+            }
+            a{
+                margin-left: 30px !important;
+            }
+        }
+    }
+    @media screen and (max-width: 1100px){
+        .dataGrid-btn-group {
+            span {
+                display: none;
+            }
+            a{
+                margin-left: 10px !important;
+            }
+        }
+    }
+}

@@ -142,7 +142,6 @@ let config = {
 
 export default class TreeNode extends Component {
     constructor(data,callback){
-    	console.log(data);
         data.callback = callback;
         super(config,data,callback);
     }

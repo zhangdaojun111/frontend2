@@ -60,6 +60,8 @@ let config = {
         fieldContent: null,
         rowData: [],
         footerData: [{myfooter: '合计'}],
+        //是否处于审批中
+        fromApprove: 0,
         //iframe弹窗key
         key: '',
         // 提醒颜色
@@ -96,6 +98,8 @@ let config = {
         queryList: {},
         //请求数据参数
         commonQueryData: [],
+        //支持拼音
+        supportPy:[],
         //没有定制列
         noNeedCustom: false,
         postData: [],
@@ -245,6 +249,8 @@ let config = {
         isShowTips: true,
         //是否第一次创建编辑表头
         firstCreateEditCol: true,
+        //处理表单子表内置父表数据用
+        parentBuiltinData:{},
         //第一次获取二维表数据
         firstReportTable: true,
         //二维表项目名称
@@ -407,6 +413,10 @@ let config = {
                         if (data.header[i] == '填写人') {
                             this.data.getDiarySearchField(data.data["field"]);
                         }
+                    }
+                    console.log(data.data)
+                    if(data.data.is_offer_py == 1){
+                        this.data.supportPy.push(data.data["field"]);
                     }
                     let obj = {
                         headerName: data.header[i],
@@ -1432,11 +1442,15 @@ let config = {
                 });
             }
             if (res[0].hasOwnProperty('error')) {
-                if (res[0].error == '您没有数据查看权限') {
+                if (res[0].error == '您没有数据查看权限' && this.data.fromApprove == 0) {
                     this.el.find('.ag-body-viewport-wrapper').html('<div style="width: 100%;height: 100%;background: #fff;position: relative;z-index: 1;"><p style="position: absolute;top: 50%;left: 50%;' +
                         'width: 200px;height: 20px;line-height: 20px;text-align: center;margin-left: -100px;margin-top: -10px;font-size: 16px">' + res[0].error + '</p></div>')
                 }
             }
+            //子表内置父表数据
+            setTimeout(()=>{
+                this.actions.parentBuildinChild();
+            },700)
         },
         //请求footer数据
         getFooterData: function (data) {
@@ -1456,6 +1470,26 @@ let config = {
 
             });
             HTTP.flush();
+        },
+        //子表内置父表数据用
+        parentBuildinChild: function(){
+            if(this.data.viewMode == 'EditChild'||this.data.viewMode == 'ViewChild'){
+                if(window.top.frontendRelation[this.data.parentTableId]&&window.top.frontendRelation[this.data.parentTableId][this.data.tableId]&&window.top.frontendRelation[this.data.parentTableId][this.data.tableId]['pdfield_2_cdfield']){
+                    this.data.parentBuiltinData = window.top.frontendRelation[this.data.parentTableId][this.data.tableId]['pdfield_2_cdfield'];
+                }
+                for(let j of this.data.rowData){
+                    for(let k in this.data.parentBuiltinData){
+                        if(!j[this.data.parentBuiltinData[k]]&&k!='temp_id'&&window.top.frontendParentFormValue[this.data.parentTableId]){
+                            j[this.data.parentBuiltinData[k]] = window.top.frontendParentFormValue[this.data.parentTableId][k];
+                        }
+                    }
+                }
+	            let d = {
+		            rowData: this.data.rowData
+	            };
+	            //赋值
+	            this.agGrid.actions.setGridData(d);
+            }
         },
         //获取设置选择数据（刷新时回显已经选择的数据）
         calcSelectData: function (type) {
@@ -1617,7 +1651,8 @@ let config = {
                 rowId: this.data.rowId,
                 record_id: this.data.recordId,
                 is_filter: this.data.filterParam.is_filter,
-                filter: []
+                filter: [],
+                from_approve: this.data.fromApprove || 0
             };
             for (let k in json) {
                 if (json[k] == 'undefined') {
@@ -1643,6 +1678,10 @@ let config = {
             //二维表
             if (this.data.viewMode == 'reportTable2') {
                 json['is_report'] = 1;
+                if(this.data.tableType == "child"){
+                    json["childInfo"] = {parent_page_id: this.data.parentTableId, parent_row_id: this.data.rowId};
+                    delete json['rowId']
+                }
             }
             if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                 // json['rows'] = 99999;
@@ -1731,6 +1770,21 @@ let config = {
             //排序
             if (this.data.sortParam.sortField) {
                 json = _.defaultsDeep(json, this.data.sortParam)
+            }
+            //是否添加拼音搜索
+            let addPy = false;
+            if(json.filter && json.filter.length!=0){
+                for(let a of json.filter){
+                    if(this.data.supportPy.indexOf(a.cond.searchBy) != -1){
+                        a['cond']['py'] = 1;
+                        if(!addPy&&this.data.total>=5000){
+                            msgbox.showTips('当前的数据量较大，检索时需要更长时间。');
+                            addPy = true;
+                        }
+                    }else {
+                        a['cond']['py'] = 0;
+                    }
+                }
             }
             json = dgcService.returnQueryParams(json);
             this.data.filterParam.is_filter = 1;
@@ -3056,12 +3110,13 @@ let config = {
             }
             //富文本字段
             if (data.colDef.real_type == fieldTypeService.UEDITOR) {
-                QuillAlert.data.value = data.value.replace(/(\n)/g, '');
+                QuillAlert.data.value = data.value.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
                 PMAPI.openDialogByComponent(QuillAlert, {
                     title: '文本编辑器',
-                    width: 800,
-                    height: 500,
+                    width: 1200,
+                    height: 650,
                     modal: true,
+                    maxable: true,
                 })
             }
             //合同编辑器
@@ -3326,7 +3381,7 @@ let config = {
                 msgBox.alert('该表为外部数据表,不可' + test + '。');
                 return true
             }
-            if (this.data.permission.view == 0 && type == 'view') {
+            if (this.data.permission.view == 0 && type == 'view' && this.data.fromApprove == '0') {
                 msgBox.alert('没有查看权限');
                 return true
             }
