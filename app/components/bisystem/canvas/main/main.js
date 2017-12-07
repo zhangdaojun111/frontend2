@@ -173,14 +173,15 @@ let config = {
 
             //计算最大宽度
             this.el.find('.cell').each(function () {
-                width = Math.max(width,$(this).width());
+                width = Math.max(width,$(this)[0].scrollWidth());
             });
-
+            console.log('width',width);
             console.log('height',height);
             let heightIn = Math.max((Number(height)/105).toFixed(2),11.7);
-            let widthIn = Math.max((Number(width)/105).toFixed(2),8.27);
-            console.log('heightIn',heightIn);
+            let widthIn = Math.min(Math.max((Number(width)/105).toFixed(2),8.27),12);
             console.log('widthIn',widthIn);
+            console.log('heightIn',heightIn);
+
             let origin = window.location.origin;
             let parent_table_id = window.config.parent_table_id || '';
             let row_id = window.config.row_id || '';
