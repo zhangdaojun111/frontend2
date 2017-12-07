@@ -5,12 +5,14 @@ import './approval-opinion.scss';
 import {PMAPI} from '../../../lib/postmsg'
 import AttachmentControl from "../../form/attachment-control/attachment-control";
 import msgbox from '../../../lib/msgbox';
-import EditorControl from '.././form/editor-control/editor';
+import EditorControl from '../../form/editor-control/editor';
+import Quill from 'quill';
 
 let config = {
     template: template,
     data: {
         // css: css.replace(/(\n)/g, ''),
+        comment:'',
         fileList: [],
     },
     binds:[
@@ -40,7 +42,6 @@ let config = {
                         }
                     })
                 }
-
             }
         },
         {
@@ -59,7 +60,12 @@ let config = {
     ],
     actions:{
         determine(){
-            this.data.comment = this.el.find('#comment').val();
+            let editorDom = this.el.find('.content .editor');
+            this.quill = new Quill(editorDom[0], {
+                imageDrop: true,
+            });
+            this.data.comment = this.quill.root.innerHTML;
+            this.el.find('.ql-toolbar').hide();
         }
     },
     afterRender(){
@@ -73,6 +79,10 @@ let config = {
         let attachmentControl = new AttachmentControl(json, {changeValue: changeValue});
         this.append(attachmentControl, this.el.find('.workflow-attachment-box'));
         this.data.attachmentControl=attachmentControl
+        let editorControl = new EditorControl({value:''}, {changeValue: ''});
+        this.append(editorControl, this.el.find('.approve-textarea'));
+
+
     },
     beforeDestory(){
         this.data.style.remove();

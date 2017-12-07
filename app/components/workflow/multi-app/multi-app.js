@@ -24,7 +24,8 @@ let config={
                     msgBox.showLoadingSelf();
                     let postData={};
                     postData.action=e;
-                    postData.comment=$('#comment').val();
+                    //postData.comment=$('#comment').val();
+                    postData.comment=$('.content .editor').val();
                     postData.checkIds=this.data.checkIds;
                     (async function () {
                         return workflowService.approveManyWorkflow(postData);

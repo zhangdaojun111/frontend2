@@ -9,6 +9,7 @@ import '././approval-record.scss';
 import AttachmentList from "../../form/attachment-list/attachment-list";
 import {PMAPI} from '../../../lib/postmsg';
 import {workflowService} from '../../../services/workflow/workflow.service';
+import QuillAlert from '../../form/quill-alert/quill-alert';
 
 let config={
     template: template,
@@ -53,6 +54,19 @@ let config={
                 }
             }
         },
+        {
+            event: 'click',
+            selector: '.approval-comment',
+            callback: function (e) {
+                let id = $(e).attr('data-id');
+                QuillAlert.data.value =this.data.approve_tips[id].comment.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
+                    PMAPI.openDialogByComponent(QuillAlert,{
+                        width: 900,
+                        height: 600,
+                        title: '文本编辑器'
+                    })
+                }
+        },
     ],
     actions:{
         tipsMouseover:function (pos,txt,event) {
@@ -84,6 +98,12 @@ let config={
     afterRender(){
         this.showLoading();
         let self=this;
+        let id = $(event).attr('data-id');
+        console.log('********')
+        debugger
+        if( this.data.approve_tips[id].comment){
+        }
+
         const pos={x:10,y:20};
         this.el.on("mouseover",".tipsText",function (e) {
              let elDiv=$(this);

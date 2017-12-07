@@ -1397,6 +1397,7 @@ let QuillAlert = {
         });
         this.data.quill.pasteHTML(this.data.value);
         this.el.find('.ql-toolbar').hide();
+
     },
     beforeDestory() {
         this.data.quill = null;
