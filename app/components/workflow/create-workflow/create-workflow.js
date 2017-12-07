@@ -75,6 +75,7 @@ let config = {
 			this.actions.autoSaving();
 		},
 		async chooseCb(msg) {
+			this.data.wfObj.tableid?CreateFormServer.destoryForm(this.data.wfObj.tableid):'';
 			this.data.wfObj = msg;
 			this.data.isSuccessSubmit = true;
 			this.actions.domChange();

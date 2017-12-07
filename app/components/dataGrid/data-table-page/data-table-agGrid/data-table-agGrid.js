@@ -414,7 +414,6 @@ let config = {
                             this.data.getDiarySearchField(data.data["field"]);
                         }
                     }
-                    console.log(data.data)
                     if(data.data.is_offer_py == 1){
                         this.data.supportPy.push(data.data["field"]);
                     }
