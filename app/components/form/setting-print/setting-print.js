@@ -6,10 +6,9 @@
 import template from './setting-print.html';
 let css = `
 .wrap{
-    margin: 20px auto 0;
-    width: 270px;
-    position: relative;
-    
+    padding: 30px 20px;
+    overflow: hidden;
+    text-align: center;
 }
 .global-search-history {
     padding: 0;
@@ -61,7 +60,7 @@ let css = `
 }
 .J-print-btn{
  position: absolute;
- bottom: 10px ;
+ bottom: 25px ;
  border:none;
  outline: none;
  width: 90px;

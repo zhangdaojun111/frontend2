@@ -17,7 +17,7 @@ let css = `
 }
 .add-container .input-box input{
     width: 240px;
-    height: 30px;
+    height: 24px;
 }
 .add-container .button-box {
     position: absolute;
