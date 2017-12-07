@@ -40,14 +40,14 @@ let config = {
             if(window.config.bi_user !== 'client'){
                 return;
             }
-            let sources = this.data.chart.data.source || this.data.chart.data.sources || null;
+            let sources = this.data.chart.data.source || this.data.chart.data.sources;
             let idArr = [];
             console.log(sources);
             if(sources){
                 if(!$.isArray(sources) && sources.hasOwnProperty('id')){
                     idArr.push(sources.id);
                 }else{
-                    if(sources.length){
+                    if(sources.length && sources[0].sources.id){
                         idArr.push(sources[0].sources.id);
                     }
                 }
