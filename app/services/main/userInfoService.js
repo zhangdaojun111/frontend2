@@ -177,13 +177,14 @@ export const UserInfoService = {
      * @param json2
      * @returns {Promise.<*[]>|Promise<[any , any , any , any , any , any , any , any , any , any]>}
      */
-    saveUserConfig:function (json,json2) {
+    saveUserConfig:function (json,json2,json3) {
         let url = 'user_preference';
 
         let p1 = HTTP.post(url,json);
         let p2 = HTTP.post(url,json2);
+        let p3 = HTTP.post(url,json3);
 
-        let res = Promise.all([p1,p2]);
+        let res = Promise.all([p1,p2,p3]);
         HTTP.flush();
         return res;
     },
@@ -233,6 +234,22 @@ export const UserInfoService = {
             url:url,
             type:"post",
             data:body
+        });
+    },
+    getHomePageList:function () {
+        let url = '/bi/home/?query_mark=home';
+        return this.http.getImmediately({
+            url:url,
+            type:"get"
+        });
+    },
+    saveHomePageConfig:function (json3) {
+        let url = '/user_preference/';
+
+        return HTTP.postImmediately({
+            url:url,
+            type:"post",
+            data:json3
         });
     }
 };

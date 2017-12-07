@@ -48,6 +48,7 @@ let config={
             tableType:'child',
             viewMode:this.data.is_view==0?'EditChild':'ViewChild',
             formData: this.data.formData,
+            fromApprove: this.data.fromApprove,
             parent_btnType: window.config.btnType,
             form_songrid: 1,
         };

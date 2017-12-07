@@ -26,4 +26,11 @@
             overflow: hidden !important;
         }
     }
+
+    &.download-pdf{
+        height: auto !important;
+        display: block !important;
+        position: static !important;
+        margin-top: 20px;
+    }
 }

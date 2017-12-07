@@ -70,7 +70,7 @@ let config = {
             callback:function () {
                 PMAPI.openDialogByIframe(
                     // `/iframe/calendarOpenForm/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
-                    `/iframe/addWf/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}`,
+                    `/iframe/addWf/?table_id=${this.data.remindTableId}&real_id=${this.data.remindRealId}&isCalendar=1`,
                     {
                         width: "1700",
                         height: '800',

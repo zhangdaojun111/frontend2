@@ -59,6 +59,15 @@ export class EchartsService {
             case 'gauge':
                 option = this.gaugeOption(cellChart); // 仪表盘处理
                 break;
+            case 'message':
+                option = this.messageOption(cellChart); // 消息处理
+                break;
+            case 'approval':
+                option = this.approvalOption(cellChart); // 审批处理
+                break;
+            case 'calendar':
+                option = this.calendarOption(cellChart); // 日程处理
+                break;
         }
         return option;
     }
@@ -339,26 +348,29 @@ export class EchartsService {
         let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
         if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
-            linebarOption['dataZoom']=[
-                {
-                type: 'slider',
-                xAxisIndex: 0,
-                bottom:5,
-                height:20,
-                left:0,
-                right:5,
-                startValue: linebarOption['xAxis'][0]['data'][0],
-                endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
-                rangeMode: ['value', 'value']
-                },
-                {
-                    type: 'inside',
-                    xAxisIndex: 0,
-                    startValue: linebarOption['xAxis'][0]['data'][0],
-                    endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
-                    rangeMode: ['value', 'value']
-                }
-            ]
+            console.log(window.config);
+            if(!window.config.pdf){
+                linebarOption['dataZoom']=[
+                    {
+                        type: 'slider',
+                        xAxisIndex: 0,
+                        bottom:5,
+                        height:20,
+                        left:0,
+                        right:5,
+                        startValue: linebarOption['xAxis'][0]['data'][0],
+                        endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
+                        rangeMode: ['value', 'value']
+                    },
+                    {
+                        type: 'inside',
+                        xAxisIndex: 0,
+                        startValue: linebarOption['xAxis'][0]['data'][0],
+                        endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
+                        rangeMode: ['value', 'value']
+                    }
+                ]
+            }
         }
         //是否设置自定义高度top
         if(cellOption['customTop']){
@@ -681,6 +693,40 @@ export class EchartsService {
             };
         }
         return gaugeOption;
+    }
+
+    /**
+     * 消息
+     * @param chart = cellChart['chart']数据
+     */
+    messageOption(cellChart) {
+        const messageOption = EchartsOption.getEchartsConfigOption('message');
+        let cellOption = cellChart['chart'];
+
+
+        return messageOption;
+    }
+    /**
+     * 审批
+     * @param chart = cellChart['chart']数据
+     */
+    approvalOption(cellChart) {
+        const approvalOption = EchartsOption.getEchartsConfigOption('approval');
+        let cellOption = cellChart['chart'];
+
+
+        return approvalOption;
+    }
+    /**
+     * 日程
+     * @param chart = cellChart['chart']数据
+     */
+    calendarOption(cellChart) {
+        const calendarOption = EchartsOption.getEchartsConfigOption('calendar');
+        let cellOption = cellChart['chart'];
+
+
+        return calendarOption;
     }
     /**
      * 获取下穿数据
