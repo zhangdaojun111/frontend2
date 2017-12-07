@@ -190,7 +190,11 @@ export class EchartsService {
         }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
-            linebarOption['grid']['right'] = 15;
+            let cellWidth = cellChart.cell.size['width'];
+            let str = cellChart.chart.data.xAxis[0];
+            let len = str.length;
+            linebarOption['grid']['right'] = Math.min(Math.max(len*1000/(cellWidth^3),15),40);
+
             // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
             // 双y轴 如果有一个y轴小于0
