@@ -12,24 +12,27 @@ export const LoginService = {
     downLoadLink:'',
     prompt:'',
     currentSystem:'',
+    browser:'',
+    desc:'',
+    is360:'',
     /**
      * 检查当前浏览器是否为chrome
      * @returns {boolean}
      */
     support:function () {
-        let browser = this.currentBrowser();
-        console.log(browser);
-        let system=this.CurrentSystem().system;
-        // let currentSystem;
+        this.browser = this.currentBrowser();
+        console.log(  this.browser);
 
+        let system=this.CurrentSystem().system;
+        this.desc = navigator.mimeTypes['application/x-shockwave-flash'];
+        this.is360 = this.checkBrowser360();
         for(let key in system){
             if(system[key] != false){
                 this.currentSystem = key;
             }
         }
-
         //不是chrome
-        if(!browser['chrome']){
+        if(! this.browser['chrome']){
             this.needDownload = true;
             //是移动设备
             if(this.currentSystem== 'android' || this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad'){
@@ -39,14 +42,14 @@ export const LoginService = {
                     this.downLoadLink = 'False';
                 }
                 //不是crios,是ios
-                if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && !browser['crios']){
+                if((this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad') && ! this.browser['crios']){
                     this.prompt = "为了保证更好的使用体验, 请切换到chrome浏览器访问";
                     this.downLoadLink = 'False';
                 }
                 //是crios,是ios
-                if(browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
+                if( this.browser['crios'] && (this.currentSystem== 'ios' || this.currentSystem== 'iphone' || this.currentSystem== 'ipad')){
                     //crios版本检测
-                    if(browser['crios'].slice(0,2)<63){
+                    if( this.browser['crios'].slice(0,2)<63){
                         this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
                         this.downLoadLink = 'False';
                     }else{
@@ -54,20 +57,28 @@ export const LoginService = {
                     }
                 }
             }else{
-                this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
+                //如果是IE，检测360兼容模式用
+                if( this.browser['ie']){
+                    this.prompt = "为了保证您的正常使用，请切换到360极速模式或使用chrome浏览器";
+                    this.downLoadLink = 'False';
+                }
+                //检测360极速模式用
+                else if(this.desc && this.is360 == '360'){
+                    this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
+                }
+                else{
+                    this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
+                }
             }
         }
         //是chrome，不是crios
-        if(browser['chrome']  && !browser['crios']){
-            //android版本检测
-            if(this.currentSystem== 'android' && (browser['chrome'].slice(0,2)<63)){
-                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
-                this.downLoadLink = 'False';
-                this.needDownload=true;
-            }
-            //win和mac版本检测
-            if((browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
-                this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+        else if( this.browser['chrome']  && ! this.browser['crios']){
+            if(( this.browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || ( this.browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
+                if(this.desc && this.is360 == '360'){
+                    this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
+                }else{
+                    this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+                }
                 this.needDownload=true;
             }
         }
@@ -112,8 +123,34 @@ export const LoginService = {
                 (s = ua.match(/chrome\/([\d.]+)/)) ? Browser['chrome'] = s[1] :
                     (s = ua.match(/opera.([\d.]+)/)) ? Browser['opera'] = s[1] :
                         (s = ua.match(/crios.([\d.]+)/)) ? Browser['crios'] = s[1] :
-                            (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser['safari'] = s[1] : 0;
+                            (s = ua.match(/trident.([\d.]+)/)) ? Browser['ie'] = s[1] :
+                                 (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser['safari'] = s[1] : 0;
         return Browser;
+    },
+    /**
+     * 获取浏览器信息
+     * 主要是检测360用
+     * @returns {{}}
+     */
+    checkBrowser360:function(){
+        let ua = navigator.userAgent.toLocaleLowerCase();
+        let browserType=null;
+        if (ua.match(/chrome/) != null) {
+            let is360 = _mime("type", "application/vnd.chromium.remoting-viewer");
+            function _mime(option, value) {
+                let mimeTypes = navigator.mimeTypes;
+                for (let mt in mimeTypes) {
+                    if (mimeTypes[mt][option] == value) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if(is360) {
+                browserType = '360';
+            }
+            return browserType;
+        }
     },
     /**
      * 获取设备信息
