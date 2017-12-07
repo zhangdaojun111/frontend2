@@ -20,7 +20,7 @@ let css = `
     flex-flow: column;
     position: absolute;
     height:auto;
-    width:207px;
+    width:238px;
     background: #fff;
     overflow: hidden;
 }

@@ -16,7 +16,7 @@ let css = `
     margin-right: 15px;
 }
 .add-container .input-box input{
-    width: 240px;
+    width: 236px;
     height: 24px;
 }
 .add-container .button-box {
