@@ -421,7 +421,7 @@ function resetLoginBoxInfo(result) {
                 id: 'verify-container',
                 width: "160",
                 height: "40",
-            }
+            };
             controller.verifyCode = new verify(obj);
             controller.verifyShow = 1;
         }
