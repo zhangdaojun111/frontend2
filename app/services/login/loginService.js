@@ -69,22 +69,21 @@ export const LoginService = {
                 else{
                     this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
                 }
-
             }
         }
         //是chrome，不是crios
-       else if( this.browser['chrome']  && ! this.browser['crios']){
-           if(( this.browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || ( this.browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
-               if(this.desc && this.is360 == '360'){
-                   this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
-               }else{
-                   this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
-               }
-               this.needDownload=true;
+        else if( this.browser['chrome']  && ! this.browser['crios']){
+            if(( this.browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || ( this.browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
+                if(this.desc && this.is360 == '360'){
+                    this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
+                }else{
+                    this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
+                }
+                this.needDownload=true;
             }
         }
 
-        //优先保证win和mac
+        //低版本提供下载链接优先保证win和mac
         if(this.needDownload  && this.downLoadLink != 'False'){
             switch (this.currentSystem){
                 case 'win':

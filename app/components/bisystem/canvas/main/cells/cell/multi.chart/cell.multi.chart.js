@@ -13,6 +13,7 @@ let config = {
     },
     actions: {
         echartsInit() {
+            this.customAccuracy(this.data.cellChart.chart);
             if(window.config.pdf){
                 //设置echarts渲染容器尺寸
                 let data = this.data;

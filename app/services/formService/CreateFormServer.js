@@ -31,6 +31,7 @@ export const CreateFormServer={
 		this.data.isView = config.is_view || 0;
 		this.data.isBatch = config.is_batch || 0;//是否是批量工作流
 		this.data.inProcess = config.in_process || 0;//是否是在途
+		this.data.isCalendar = config.isCalendar || 0;//是否日历打开
 		this.data.recordId = config.record_id || '';
 		this.data.el = config.el || '';//form的外层dom
 		this.data.reloadDraftData = config.reload_draft_data || 0;//工作流接口用到
