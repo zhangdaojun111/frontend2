@@ -164,7 +164,7 @@ let config = {
 		//给外部提供formValue格式数据
 		//@param isCheck判断是否需要执行表单校验
 		getFormValue(isCheck) {
-			this.actions.changeValueForChildTable(this.data.data);
+			// this.actions.changeValueForChildTable(this.data.data);
 			return isCheck ? this.actions.createFormValue(this.data.data, true) : this.actions.createFormValue(this.data.data);
 		},
 
@@ -925,7 +925,7 @@ let config = {
 			}
 		},
 		//给相关赋值
-		async setAboutData(id, value) {
+		setAboutData(id, value) {
 			let buildin_fields = {};
 			buildin_fields[id] = value;
 			this.data.buildin_fields = buildin_fields;
@@ -1284,7 +1284,7 @@ let config = {
 			if (this.data.data[data.dfield]) {
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
-			if (data.type == 'Buildin' || data.type == 'MultiLinkage' && !this.data.isInit && !noCount) {
+			if ((data.type == 'Buildin' || data.type == 'MultiLinkage') && !this.data.isInit && !noCount) {
 				let id = data["id"];
 				let value;
 				if(data.type == 'Buildin'){
@@ -1297,7 +1297,7 @@ let config = {
 				}else{
 					value=data.value;
 				}
-				await this.actions.setAboutData(id, value);
+				this.actions.setAboutData(id, value);
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
@@ -2142,6 +2142,10 @@ let config = {
         })
 
 		this.data.isInit = false;
+		console.log('***********')
+		setTimeout(()=>{
+			console.log(JSON.parse(JSON.stringify(this.data.data)));
+		},3000)
 	},
 	beforeDestory() {
 		delete window.top.frontendParentFormValue[this.tableId];
