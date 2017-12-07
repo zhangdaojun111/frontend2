@@ -173,7 +173,7 @@ let config = {
 
             //计算最大宽度
             this.el.find('.cell').each(function () {
-                width = Math.max(width,$(this)[0].scrollWidth());
+                width = Math.max(width,$(this)[0].scrollWidth);
             });
             console.log('width',width);
             console.log('height',height);
