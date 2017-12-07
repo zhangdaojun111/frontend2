@@ -21,7 +21,15 @@
                 }
             }
         }
-        .marginBottomx, .textNum, .marginBottom, .limitNum, .endLimitNum, .customTopNum {
+        .marginBottomx,
+        .textNum,
+        .marginBottom,
+        .limitNum,
+        .endLimitNum,
+        .customTopNum,
+        .titleSize,
+        .chartSize
+        {
             .form-chart-wrapper {
                 span {
                     margin-left: 16px;

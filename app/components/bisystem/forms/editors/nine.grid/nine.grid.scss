@@ -2,4 +2,16 @@
     .y1 {
         clear: both;
     }
+    .titleSize,
+    .chartSize {
+        .form-chart-wrapper {
+            span {
+                margin-left: 16px;
+                color: #666666;
+            }
+            input {
+                width: 200px;
+            }
+        }
+    }
 }

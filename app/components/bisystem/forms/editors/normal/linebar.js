@@ -222,7 +222,7 @@ let config = {
                 limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
                 endlimit: data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
                 customTop: data.customTop[0] && data.customTopNum ? data.customTopNum : 0,
-                customFontFamily: data.customTextStyle[0] ? data.customFontFamily : 'sans-serif',
+                customTextStyle: data.customTextStyle[0] ? {titleSize: data.titleSize,chartSize: data.chartSize} : {},
             };
             if (data.chartAssignment == 1) {
                 chart['chartGroup'] = data.chartGroup;
@@ -306,8 +306,9 @@ let config = {
             this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : 0);
             this.formItems['customTop'].setValue(chart['customTop'] ? 1 : 0);
             this.formItems['customTopNum'].setValue(chart['customTop'] ? chart['customTop'] : 0);
-            this.formItems['customTextStyle'].setValue(chart['customFontFamily'] ? 1 : 0);
-            this.formItems['customFontFamily'].setValue(chart['customFontFamily'] ? chart['customFontFamily'] : 'sans-serif');
+            this.formItems['customTextStyle'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? 1 : 0);
+            this.formItems['titleSize'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? chart['customTextStyle']['titleSize'] : 12);
+            this.formItems['chartSize'].setValue(chart['customTextStyle'].hasOwnProperty('chartSize') ? chart['customTextStyle']['chartSize'] : 12);
         },
     },
     data: {
@@ -688,41 +689,43 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '自定义文字的字体系列'
+                        value:1, name: '自定义字体大小（默认12）'
                     }
                 ],
                 type: 'checkbox',
                 events: {
                     onChange:function(value) {
                         if (value && value[0]) {
-                            this.formItems['customFontFamily'].el.show();
-                            } else {
-                            this.formItems['customFontFamily'].el.hide();
+                                this.formItems['titleSize'].el.show();
+                                this.formItems['chartSize'].el.show();
+                            }else{
+                                this.formItems['titleSize'].el.hide();
+                                this.formItems['chartSize'].el.hide();
                         }
                     }
                 }
             },
             {
                 label: '',
-                name: 'customFontFamily',
-                class: 'customFontFamily',
-                defaultValue: 'sans-serif',
-                list: [
-                    {'value': 'sans-serif', 'name': 'sans-serif'},
-                    {'value': 'serif', 'name': 'serif'},
-                    {'value': 'monospace', 'name': 'monospace'},
-                    {'value': 'Courier New', 'name': 'Courier New'},
-                    {'value': 'Arial', 'name': 'Arial'},
-                    {'value': '微软雅黑', 'name': '微软雅黑'},
-                    {'value': '黑体', 'name': '黑体'},
-                    {'value': '仿宋', 'name': '仿宋'},
-                ],
-                type: 'select',
-                events:{
-                    onChange: function(value) {
-
-                    }
-                }
+                name: 'titleSize',
+                defaultValue:'12',
+                placeholder: '标题字体大小',
+                type: 'text',
+                category: 'number',
+                textTip:'标题字体大小：',
+                class: 'titleSize',
+                events: {}
+            },
+            {
+                label: '',
+                name: 'chartSize',
+                defaultValue: '12',
+                placeholder: '图例字体大小',
+                category: 'number',
+                type: 'text',
+                class: 'chartSize',
+                textTip:'图例字体大小：',
+                events: {}
             },
             {
                 label: '',
