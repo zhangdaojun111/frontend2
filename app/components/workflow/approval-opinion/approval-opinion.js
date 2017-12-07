@@ -65,7 +65,7 @@ let config = {
                 imageDrop: true,
             });
             this.data.comment = this.quill.root.innerHTML;
-            this.el.find('.ql-toolbar').hide();
+            $('.ql-toolbar').hide();
         }
     },
     afterRender(){

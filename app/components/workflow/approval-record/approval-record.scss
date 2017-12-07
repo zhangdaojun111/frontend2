@@ -50,6 +50,11 @@
       &:last-child{
         border-bottom: none;
       }
+      .approval-comment {
+        display: none;
+        color: #63AAFB;
+        cursor: pointer;
+      }
 
     }
 

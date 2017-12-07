@@ -31,7 +31,13 @@
         .approve-textarea{
             width: 100%;
             padding: 10px;
-        }
+            .ql-toolbar {
+                display: none;
+            }
+            .ql-editor {
+                border-top: 1px solid #CCCCCC;
+            }
+         }
     }
     .workflow-btn{
         text-align: right;

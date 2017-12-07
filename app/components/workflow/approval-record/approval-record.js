@@ -13,7 +13,9 @@ import QuillAlert from '../../form/quill-alert/quill-alert';
 
 let config={
     template: template,
-    data:{},
+    data:{
+       id:'',
+    },
     binds: [
         {
             event: 'click',
@@ -58,8 +60,8 @@ let config={
             event: 'click',
             selector: '.approval-comment',
             callback: function (e) {
-                let id = $(e).attr('data-id');
-                QuillAlert.data.value =this.data.approve_tips[id].comment.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
+                this.id = $(e).attr('data-id');
+                QuillAlert.data.value =this.data.approve_tips[this.id].comment.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
                     PMAPI.openDialogByComponent(QuillAlert,{
                         width: 900,
                         height: 600,
@@ -98,12 +100,16 @@ let config={
     afterRender(){
         this.showLoading();
         let self=this;
-        let id = $(event).attr('data-id');
         console.log('********')
-        debugger
-        if( this.data.approve_tips[id].comment){
-        }
-
+        console.log('********')
+         let dataId = this.el.find('.approval-comment').attr('data-id');
+        console.log(this.el)
+        $('.approval-comment').show();
+        // for(let k in this.data.approve_tips){
+        //     if(this.data.approve_tips[k]['comment'] && this.data.approve_tips[k]['index']== dataId){
+        //        $('.approval-comment')[dataId].show();
+        //     }
+        // }
         const pos={x:10,y:20};
         this.el.on("mouseover",".tipsText",function (e) {
              let elDiv=$(this);
