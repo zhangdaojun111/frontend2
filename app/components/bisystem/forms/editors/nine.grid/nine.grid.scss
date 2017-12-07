@@ -2,6 +2,17 @@
     .y1 {
         clear: both;
     }
+    .customAccuracyNum {
+        .form-chart-wrapper {
+            span {
+                margin-left: 16px;
+                color: #666666;
+            }
+            input {
+                width: 200px;
+            }
+        }
+    }
     .titleSize,
     .chartSize {
         .form-chart-wrapper {

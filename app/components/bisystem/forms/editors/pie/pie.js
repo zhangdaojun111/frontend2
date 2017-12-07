@@ -76,6 +76,8 @@ let config = {
             this.formItems['limit'].trigger('onChange');
             this.formItems['circular'].trigger('onChange');
             this.formItems['customPie'].trigger('onChange');
+            this.formItems['customAccuracy'].trigger('onChange');
+
             // 获取数据来源
             const res = await ChartFormService.getChartSource();
             if (res['success'] === 1) {
@@ -143,6 +145,7 @@ let config = {
                 limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
                 endlimit: data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
                 customPie: data.customPie[0] ? {radius:data.customRadius,centerX:'50%',centerY:'50%'} : {} ,
+                customAccuracy: data.customAccuracy[0] && data.customAccuracyNum ? data.customAccuracyNum : 0,
             };
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
@@ -207,6 +210,8 @@ let config = {
             this.formItems['customRadius'].setValue(chart['customPie'].hasOwnProperty('radius') ? chart['customPie']['radius'] : '80%');
             // this.formItems['customCenterX'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['centerX'] : '50%');
             // this.formItems['customCenterY'].setValue(Object.keys(chart['customPie'])[0] ? chart['customPie']['centerY'] : '50%');
+            this.formItems['customAccuracy'].setValue(chart['customAccuracy'] ? 1 : 0);
+            this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 0);
         }
     },
     data: {
@@ -477,6 +482,37 @@ let config = {
                 textTip:'请输入显示后多少条数据：',
                 type: 'text',
                 class: 'endLimitNum',
+                events: {}
+            },
+            {
+                label: '',
+                name: 'customAccuracy',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '自定义设置精度'
+                    }
+                ],
+                type: 'checkbox',
+                class:'customAccuracy',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['customAccuracyNum'].el.show();
+                        } else {
+                            this.formItems['customAccuracyNum'].el.hide();
+                        }
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'customAccuracyNum',
+                defaultValue: '0',
+                category: 'number',
+                textTip:'请输入自定义精度：',
+                type: 'text',
+                class: 'customAccuracyNum',
                 events: {}
             },
             {

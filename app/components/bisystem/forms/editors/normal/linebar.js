@@ -121,6 +121,7 @@ let config = {
             this.formItems['defaultY'].trigger('onChange');
             this.formItems['limit'].trigger('onChange');
             this.formItems['customTop'].trigger('onChange');
+            this.formItems['customAccuracy'].trigger('onChange');
             this.formItems['customTextStyle'].trigger('onChange');
             // 获取数据来源
             const res = await ChartFormService.getChartSource();
@@ -222,6 +223,7 @@ let config = {
                 limit: data.limit[0] && data.limitNum ? data.limitNum : 0,
                 endlimit: data.limit[0] && data.endLimitNum ? data.endLimitNum : 0,
                 customTop: data.customTop[0] && data.customTopNum ? data.customTopNum : 0,
+                customAccuracy: data.customAccuracy[0] && data.customAccuracyNum ? data.customAccuracyNum : 0,
                 customTextStyle: data.customTextStyle[0] ? {titleSize: data.titleSize,chartSize: data.chartSize} : {},
             };
             if (data.chartAssignment == 1) {
@@ -306,6 +308,8 @@ let config = {
             this.formItems['endLimitNum'].setValue(chart['endlimit'] ? chart['endlimit'] : 0);
             this.formItems['customTop'].setValue(chart['customTop'] ? 1 : 0);
             this.formItems['customTopNum'].setValue(chart['customTop'] ? chart['customTop'] : 0);
+            this.formItems['customAccuracy'].setValue(chart['customAccuracy'] ? 1 : 0);
+            this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 0);
             this.formItems['customTextStyle'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? 1 : 0);
             this.formItems['titleSize'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? chart['customTextStyle']['titleSize'] : 12);
             this.formItems['chartSize'].setValue(chart['customTextStyle'].hasOwnProperty('chartSize') ? chart['customTextStyle']['chartSize'] : 12);
@@ -681,6 +685,37 @@ let config = {
                 textTip:'请输入图表top高度：',
                 type: 'text',
                 class: 'customTopNum',
+                events: {}
+            },
+            {
+                label: '',
+                name: 'customAccuracy',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '自定义设置精度'
+                    }
+                ],
+                type: 'checkbox',
+                class:'customAccuracy',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['customAccuracyNum'].el.show();
+                        } else {
+                            this.formItems['customAccuracyNum'].el.hide();
+                        }
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'customAccuracyNum',
+                defaultValue: '0',
+                category: 'number',
+                textTip:'请输入自定义精度：',
+                type: 'text',
+                class: 'customAccuracyNum',
                 events: {}
             },
             {

@@ -16,6 +16,7 @@ let config = {
        async init() {
            this.formItems['countColumn'].el.hide();
            this.formItems['type'].trigger('onChange',this.data.value);
+           this.formItems['customAccuracy'].trigger('onChange');
             this.formItems['customTextStyle'].trigger('onChange');
 
            // 获取数据来源
@@ -83,6 +84,7 @@ let config = {
                 type: data.type == 3 ? {'name': '3*3', 'value':3} : {'name': '4*4', 'value':4},
                 xAxis:xAxis,
                 yAxis:yAxis,
+                customAccuracy: data.customAccuracy[0] && data.customAccuracyNum ? data.customAccuracyNum : 0,
                 customTextStyle: data.customTextStyle[0] ? {titleSize: data.titleSize,chartSize: data.chartSize} : {},
             };
 
@@ -115,6 +117,8 @@ let config = {
                 this.formItems['x'+i].setValue(chart['xAxis']['x'+i]);
                 this.formItems['y'+i].setValue(chart['yAxis']['y'+i]);
             }
+            this.formItems['customAccuracy'].setValue(chart['customAccuracy'] ? 1 : 0);
+            this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 0);
             this.formItems['customTextStyle'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? 1 : 0);
             this.formItems['titleSize'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? chart['customTextStyle']['titleSize'] : 12);
             this.formItems['chartSize'].setValue(chart['customTextStyle'].hasOwnProperty('chartSize') ? chart['customTextStyle']['chartSize'] : 12);
@@ -258,6 +262,37 @@ let config = {
                 class:'fl',
                 placeholder: '请输入y4',
                 type: 'text'
+            },
+            {
+                label: '更多设置',
+                name: 'customAccuracy',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '自定义设置精度'
+                    }
+                ],
+                type: 'checkbox',
+                class:'customAccuracy',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['customAccuracyNum'].el.show();
+                        } else {
+                            this.formItems['customAccuracyNum'].el.hide();
+                        }
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'customAccuracyNum',
+                defaultValue: '0',
+                category: 'number',
+                textTip:'请输入自定义精度：',
+                type: 'text',
+                class: 'customAccuracyNum',
+                events: {}
             },
             {
                 label: '',
