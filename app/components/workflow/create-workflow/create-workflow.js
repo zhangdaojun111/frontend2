@@ -72,7 +72,7 @@ let config = {
 				is_view: 0
 			});
 			clearInterval(this.data.timer);
-			this.actions.autoSaving();
+			// this.actions.autoSaving();
 		},
 		async chooseCb(msg) {
 			this.data.wfObj.tableid?CreateFormServer.destoryForm(this.data.wfObj.tableid):'';
