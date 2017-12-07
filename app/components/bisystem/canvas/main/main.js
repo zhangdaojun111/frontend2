@@ -178,7 +178,7 @@ let config = {
             console.log('width',width);
             console.log('height',height);
             let heightIn = Math.max((Number(height)/105).toFixed(2),11.7);
-            let widthIn = Math.min(Math.max((Number(width)/105).toFixed(2),8.27),12);
+            let widthIn = Math.min(Math.max((Number(width)/105).toFixed(2),8.27),18);
             console.log('widthIn',widthIn);
             console.log('heightIn',heightIn);
 
