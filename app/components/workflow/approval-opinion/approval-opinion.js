@@ -5,6 +5,7 @@ import './approval-opinion.scss';
 import {PMAPI} from '../../../lib/postmsg'
 import AttachmentControl from "../../form/attachment-control/attachment-control";
 import msgbox from '../../../lib/msgbox';
+import EditorControl from '.././form/editor-control/editor';
 
 let config = {
     template: template,
