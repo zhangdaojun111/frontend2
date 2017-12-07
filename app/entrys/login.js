@@ -29,6 +29,7 @@ function getLoginController() {
         registerBtnOpen:1,      //是否可以使用注册功能
         verifyShow:0,           //是否显示验证码
         verifyCode:null,        //验证码组件
+        $loginContent: $('.login-content'),         //登陆窗口
         $loginMainTitle:$('.login-main-title'),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
         $rememberPwCheck:$('.remember-pw-check'),   //记住密码
@@ -63,7 +64,6 @@ function getLoginController() {
             let $wrap = $('.password-component');
             this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
             this.passwordInputComp.render($wrap);
-            $('.login-content').show();
 
 
             //系统名称改变
@@ -380,7 +380,11 @@ function getLoginController() {
             if(url && url !== '/'){
                 this.nextUrl = decodeURIComponent(url);
             }
+        },
+        showLoginContent: function () {
+            this.$loginContent.show();
         }
+
     };
     return loginController;
 }
@@ -424,6 +428,7 @@ function resetLoginBoxInfo(result) {
     controller.versionInfo = result;
     controller.sysNameInit();   //初始化公司名称
     controller.versionInit();   //初始化版本table
+    controller.showLoginContent();
 }
 
 function resetBackground(result) {
