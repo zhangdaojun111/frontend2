@@ -467,10 +467,6 @@ if( isNeedDownload === false){      //正常显示登录表单
     if(LoginService.downLoadLink != 'False'){
         htmlDownload += '<a class="download-link">下载链接</a>';
     }
-    console.log('*********')
-    console.log(LoginService.currentSystem == 'win')
-    console.log(LoginService.is360 != '360')
-    console.log(LoginService.browser['ie'])
     if(LoginService.currentSystem == 'win' && LoginService.is360 != '360'&& !LoginService.browser['ie'] ){
         htmlDownload +=
             '<div class="install-introduce">'+
