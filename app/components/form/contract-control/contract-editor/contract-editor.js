@@ -189,6 +189,7 @@ export const contractEditorConfig = {
                     butStates.display.download_current = 'inline';
                     this.actions.loadButtons(this.data['current_tab']);
                     this.data.local_data[this.data['current_tab']].k2v = this.data.editingK2v;
+                    console.dir(this.data.editingK2v);
                     //将修改缓存到本地，如果需要编辑即保存，将下一行放到editContract的input事件回调中
                     Storage.init(this.data.iframe_key);
                     Storage.setItem(this.data.local_data,'contractCache-'+this.data.real_id+'-'+this.data.id+'-'+this.data.temp_id+'-'+this.data.field_id,Storage.SECTION.FORM);
@@ -445,7 +446,7 @@ export const contractEditorConfig = {
             this.el.find('.contract-template-anchor').find('span').attr('contenteditable', 'true');
             this.el.find('.contract-template-anchor').find('span').on('input', _.debounce(event => {
                 let changedColor = 'pink';
-                let changedValue = event.target.textContent;
+                let changedValue = event.target.innerHTML;
                 let title = event.target.title;
                 k2v["##"+title+"##"]=changedValue;
                 if(changedValue == ''){
@@ -456,7 +457,7 @@ export const contractEditorConfig = {
                 let eles = this.el.find('span[title="'+title+'"]');
                 for(let i=0;i<eles.length;i++){
                     if(eles[i] != event.target){//绕开本span，如果本span改变，则光标会挪到首位
-                        $(eles[i]).text(changedValue);
+                        $(eles[i]).html(changedValue);
                     }
                 }
                 this.data.local_data[this.data['current_tab']]['content']=this.el.find('.contract-template-anchor').html();
