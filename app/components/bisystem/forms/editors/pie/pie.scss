@@ -1,6 +1,7 @@
 .form-chart-pie {
     .form-group {
-        .endLimitNum, .limitNum {
+        .endLimitNum,
+        .limitNum {
             .form-chart-wrapper {
                 span {
                     margin-left: 16px;
@@ -22,6 +23,17 @@
                 i, span {
                     display: none;
                 }
+            }
+        }
+    }
+    .customAccuracyNum {
+        .form-chart-wrapper {
+            span {
+                margin-left: 16px;
+                color: #666666;
+            }
+            input {
+                width: 200px;
             }
         }
     }
