@@ -711,13 +711,6 @@ export class EchartsService {
             gaugeOption.series[0]['detail']['formatter'] = function(value){
                 return value.toFixed(parseInt(cellOption['customAccuracy']));
             };
-        }else if(!cellOption['customAccuracy'] && cellOption['yAxis'][0]['real_accuracy']){
-            gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
-                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
-            };
-            gaugeOption.series[0]['detail']['formatter'] = function(value){
-                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
-            };
         }
         return gaugeOption;
     }
