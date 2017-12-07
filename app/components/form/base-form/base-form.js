@@ -959,7 +959,10 @@ let config = {
 						buildin_fields[id] = value;
 					}
 				} else {
-					if (data.value && data.dfield.startsWith('f') && !(~this.data.postData.indexOf(data.dfield))) {
+					if ((data.value || (data.effect &&data.effect.length &&data.effect.length>0)) && data.dfield.startsWith('f') && !(~this.data.postData.indexOf(data.dfield))) {
+						if(typeof data.value=='string' && data.value.trim()=='' && data.effect.length==0){
+							continue;
+						}
 						this.data.postData.push(data.dfield);
 					}
 				}
@@ -2131,7 +2134,7 @@ let config = {
 			this.actions.setVoteValue(res);
 		})
 
-		window.top.frontendParentFormValue[this.tableId] = this.actions.createFormValue(this.data.data);
+		window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
 
 		//默认表单样式
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
@@ -2170,7 +2173,7 @@ class BaseForm extends Component {
 		}
 		window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
 		//存父表的newData
-		window.top.frontendParentNewData[formData.data.tableId] = formData.data.data;
+		window.top.frontendParentNewData[formData.data.tableId] = _.defaultsDeep({},formData.data.data);
 		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
 		super($.extend(true, {}, config, newConfig), formData.data);
 	}
