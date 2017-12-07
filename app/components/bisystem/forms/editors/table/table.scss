@@ -1,10 +1,23 @@
-.form-chart {
-    .form-group{
-        >div{
-            margin-bottom:15px;
+.form-chart-table{
+    .form-chart {
+        .form-group{
+            >div{
+                margin-bottom:15px;
+            }
+            >div:nth-child(8){
+                margin-top: 0;
+            }
         }
-        >div:nth-child(8){
-            margin-top: 0;
+    }
+    .customAccuracyNum {
+        .form-chart-wrapper {
+            span {
+                margin-left: 16px;
+                color: #666666;
+            }
+            input {
+                width: 200px;
+            }
         }
     }
 }

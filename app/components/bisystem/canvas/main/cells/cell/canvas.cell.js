@@ -18,7 +18,9 @@ import {CellCommentComponent} from './comment/cell.comment';
 import {CellStylzieComponent} from './stylzie/cell.stylzie';
 import {CanvasCellTitleComponent} from './title/canvas.title';
 import {CellGaugeComponent} from './gauge/cell.gauge';
-import {CellMapComponent} from './map/cell.map'
+import {CellMapComponent} from './map/cell.map';
+import {CellApprovalComponent} from './approval/cell.approval';
+import {CellCalendarComponent} from './calendar/cell.calendar';
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../lib/msgbox';
@@ -36,6 +38,8 @@ const cellTypes = {
     'stylzie': CellStylzieComponent,
     'map':CellMapComponent,
     'gauge' : CellGaugeComponent,
+    'approval' : CellApprovalComponent,
+    'calendar' : CellCalendarComponent,
 };
 
 
@@ -84,7 +88,11 @@ let config = {
                 });
                 let cellContainer = this.el.find('.cell-chart');
                 this.data.cellComponent.render(cellContainer);
-                console.log(this.data.cellComponent);
+            }
+
+            //bi打印pdf则执行回调
+            if(window.config.pdf === true && this.data.isLast === true){
+                this.actions.loadChartFinish();
             }
         },
 
@@ -95,7 +103,7 @@ let config = {
             let dragCell = this.el.find('.cell');
             const dragOption = {
                 containment: '.cells-container',
-                grid: [10, 10],
+                grid: [1, 1],
                 stop: (event, ui) => {
                     this.actions.cancelSelect();
                     this.data.cell.size.left = ui.position.left;
@@ -106,7 +114,7 @@ let config = {
             };
 
             const resizeOption = {
-                grid: [10, 10],
+                grid: [1, 1],
                 stop: (event, ui) => {
                     this.data.cell.size.width = ui.size.width;
                     this.data.cell.size.height = ui.size.height;
@@ -221,6 +229,7 @@ let config = {
                 myChart.resize();
             }
         }
+
     },
 
     data: {
@@ -344,6 +353,10 @@ let config = {
         let evt = "onorientationchange" in window ? "orientationchange":false;
         if(evt){
             window.addEventListener(evt,this.actions.resizeCanvas,false);
+        }
+
+        if(window.config.pdf){
+            this.el.find('.cell').addClass('download-pdf');
         }
     }
 };

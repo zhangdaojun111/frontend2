@@ -6,7 +6,9 @@ $border-color: #eee;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
 }
+
 
 @mixin diagonal {
     li:first-child div {
@@ -43,26 +45,44 @@ $border-color: #eee;
         width: 406px;
         height: 206px;
         box-sizing: border-box;
-        @include dis-flex;
-        align-items: stretch;
+        //@include dis-flex;
+        //align-items: stretch;
         li {
             box-sizing: border-box;
-            order: 1;
-            flex-grow: 1;
-            overflow: hidden;
-            @include dis-flex;
-            flex-direction: row;
+            //order: 1;
+            //flex-grow: 1;
+            //overflow: hidden;
+            //@include dis-flex;
+            //flex-direction: row;
+            width: 100%;
+            height: 25%;
             border-bottom: 1px solid $border-color;
             font-weight: bold;
-            height: 100px;
             div {
-                flex-grow: 1;
-                overflow: hidden;
-                @include dis-flex;
-                flex-direction: row;
-                width: 100px;
+                //flex-grow: 1;
+                //overflow: hidden;
+                //@include dis-flex;
+                //flex-direction: row;
+                width: 24.8%;
                 height: 100%;
+                float: left !important;
+                vertical-align: middle;
                 border-right: 1px solid $border-color;
+                span{
+                    display: inline-block;
+                    margin: 17px auto;
+                }
+            }
+        }
+        &.grid-type-4{
+            li{
+                height: 20%;
+                div{
+                    width: 19.8%;
+                    span{
+                        margin: 15px auto;
+                    }
+                }
             }
         }
         @include diagonal;
@@ -95,31 +115,41 @@ $border-color: #eee;
         width: 406px;
         box-sizing: border-box;
         margin-top: 10px;
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
+        //display: flex;
+        //flex-wrap: wrap;
+        //flex-direction: row;
         li {
             border-bottom: 1px solid #ddd;
             padding: 10px 0 4px 4px;
-            display: flex;
-            width: 33.3%;
+            //display: flex;
+            width: 33%;
+            height: 33%;
+            float: left;
             box-sizing: border-box;
             label, span {
                 display: inline-block;
             }
             label {
                 font-weight: 400;
+                white-space: nowrap;
             }
         }
     }
+    .grid-type-4 {
+        width: 480px;
+        height: 240px;
+    }
     .legend-type-4 {
+        width: 480px;
         li {
             width: 25%;
+            height: 25%;
         }
     }
 }
+
 @media print {
     .bi-nine-grid {
-        overflow: hidden!important;
+        overflow: hidden !important;
     }
 }

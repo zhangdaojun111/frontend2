@@ -1856,6 +1856,9 @@ let config = {
 			this.setData('oldData', _.defaultsDeep({}, data));
 			let actions = this.actions.createActions();
 			for (let key in data) {
+				if(this.data.isEdit == 0 && this.data.isCalendar === '1') {
+					data[key].is_view = 1;
+				}
 				let single = this.el.find('div[data-dfield=' + data[key].dfield + ']');
                 if(single.parent().find('div').length >2){
                     single.css('display','inline-block');
@@ -1897,6 +1900,7 @@ let config = {
 							formData[k] = data[k].value || '';
 						}
 						let songrid = new Songrid(Object.assign(data[key], {
+                            fromApprove: this.data.fromApprove,
 							popupType: popupType,
 							formData: JSON.stringify(formData)
 						}), actions);

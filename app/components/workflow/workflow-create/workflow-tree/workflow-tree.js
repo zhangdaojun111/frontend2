@@ -80,7 +80,7 @@ let config = {
         clickChild:function(e){
             //get current clicked node info
             let {formid,tableid}=$(e.target)[0].dataset;
-            Mediator.publish('workflow:choose', $(e.target)[0].dataset);
+	        this.events.chooseCb($(e.target)[0].dataset);
             let childValue = $(e.target).text();
             let rootNode = this.el.find('.J_select-Workflow');
             let tree = this.el.find(".J_tree");
@@ -89,6 +89,10 @@ let config = {
             this.data.showTree = true;
         },
 
+	    chooseCb(msg){
+		    let rootNode = this.el.find('.J_select-Workflow');
+		    rootNode.text(msg.name);
+	    },
         /**
          * 输入搜索改变下拉菜单
          */
@@ -262,12 +266,9 @@ let config = {
 };
 
 class WorkFlowTree extends Component {
-    // constructor(data){
-    //     super(config,data);
-    // }
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
+	constructor(data,events,newConfig){
+		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
+	}
 }
 
 export default WorkFlowTree;
