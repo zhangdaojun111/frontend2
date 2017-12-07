@@ -959,7 +959,7 @@ let config = {
 						buildin_fields[id] = value;
 					}
 				} else {
-					if (data.value && data.dfield.startsWith('f') && !(~this.data.postData.indexOf(data.dfield))) {
+					if (data.value && data.value.trim() && data.dfield.startsWith('f') && !(~this.data.postData.indexOf(data.dfield))) {
 						this.data.postData.push(data.dfield);
 					}
 				}

@@ -116,6 +116,7 @@ let config = {
     ],
     afterRender() {
         this.el.find('.ui-width').attr('title', this.data.value);
+	    this.el.find('input').attr('value', this.data.value);
         this.el.find('.ui-width').css('width', this.data.width);
         //如果是统计字段有值 显示穿透查看
         if(this.data.dtype==10 && this.data.value && this.data.canNotOpen){
