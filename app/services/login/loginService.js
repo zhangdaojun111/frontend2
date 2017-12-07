@@ -14,6 +14,7 @@ export const LoginService = {
     currentSystem:'',
     browser:'',
     desc:'',
+    is360:'',
     /**
      * 检查当前浏览器是否为chrome
      * @returns {boolean}
@@ -21,16 +22,16 @@ export const LoginService = {
     support:function () {
         let browser = this.currentBrowser();
         console.log( browser);
-        debugger
+
         let system=this.CurrentSystem().system;
         this.desc = navigator.mimeTypes['application/x-shockwave-flash'];
-        // let currentSystem;
-
+        this.is360 = this.checkBrowser360();
         for(let key in system){
             if(system[key] != false){
                 this.currentSystem = key;
             }
         }
+
 
         //不是chrome
         if(!browser['chrome']){
@@ -58,7 +59,7 @@ export const LoginService = {
                     }
                 }
             }else{
-                if(this.desc){
+                if(this.desc && this.is360 == '360'){
                     this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
                 }else{
                     this.prompt = "为了保证更好的使用体验，请您使用我们为您推荐的浏览器";
@@ -69,7 +70,7 @@ export const LoginService = {
         //是chrome，不是crios
        else if(browser['chrome']  && !browser['crios']){
            if((browser['chrome'].slice(0,2)<55 && this.currentSystem== 'win') || (browser['chrome'].slice(0,2)<62 && this.currentSystem == 'mac')){
-               if(this.desc){
+               if(this.desc && this.is360 == '360'){
                    this.prompt = "为了保证您的正常使用，请选择极速模式更新至最新版本";
                }else{
                    this.prompt="您的浏览器版本过低，为了您的正常使用请下载新版本";
@@ -120,6 +121,31 @@ export const LoginService = {
                         (s = ua.match(/crios.([\d.]+)/)) ? Browser['crios'] = s[1] :
                             (s = ua.match(/version\/([\d.]+).*safari/)) ? Browser['safari'] = s[1] : 0;
         return Browser;
+    },
+    /**
+     * 获取浏览器信息
+     * 主要是检测360用
+     * @returns {{}}
+     */
+    checkBrowser360:function(){
+        let ua = navigator.userAgent.toLocaleLowerCase();
+        let browserType=null;
+        if (ua.match(/chrome/) != null) {
+            let is360 = _mime("type", "application/vnd.chromium.remoting-viewer");
+            function _mime(option, value) {
+                let mimeTypes = navigator.mimeTypes;
+                for (let mt in mimeTypes) {
+                    if (mimeTypes[mt][option] == value) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            if(is360) {
+                browserType = '360';
+            }
+            return browserType;
+        }
     },
     /**
      * 获取设备信息

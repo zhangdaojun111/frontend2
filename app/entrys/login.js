@@ -468,7 +468,7 @@ if( isNeedDownload === false){      //正常显示登录表单
         htmlDownload += '<a class="download-link">下载链接</a>';
     }
 
-    if(LoginService.currentSystem == 'win' && !LoginService.desc){
+    if(LoginService.currentSystem == 'win' && LoginService.is360 != '360'){
         htmlDownload +=
             '<div class="install-introduce">'+
             '<p>Windows版安装更新说明：</p>'+
@@ -478,7 +478,7 @@ if( isNeedDownload === false){      //正常显示登录表单
             '<p>4.成功登陆ERDS系统。</p>'
         '</div>'
     }
-    if(LoginService.currentSystem == 'win' && LoginService.desc){
+    if(LoginService.currentSystem == 'win' && LoginService.desc && LoginService.is360 == '360'){
         htmlDownload +=
             '<div class="install-introduce">'+
             '<p>Windows版安装更新说明：</p>'+
