@@ -21,8 +21,10 @@ let css = `
 }
 .add-container .button-box {
     position: absolute;
+    width: 200px;
     bottom: 30px;
-    right: 35px;
+    right: 50%;
+    margin-right: -106px;
 }
 .add-container .button-box .save-btn{
     cursor: pointer;
