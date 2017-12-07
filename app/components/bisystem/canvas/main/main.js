@@ -173,7 +173,14 @@ let config = {
             let heightIn = Math.max((Number(height)/105).toFixed(2),11.7);
             console.log('heightIn',heightIn);
             let origin = window.location.origin;
-            let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in`;
+            let parent_table_id = window.config.parent_table_id || '';
+            let row_id = window.config.row_id || '';
+            let query_mark = window.config.query_mark || '';
+            let operation_id = window.config.operation_id || '';
+            let folder_id = window.config.folder_id || '';
+
+            let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in&parent_table_id=${parent_table_id}&row_id=${row_id}&query_mark=${query_mark}&operation_id=${operation_id}&folder_id=${folder_id}`;
+            console.log(url);
             window.open(url);
         }
     },
