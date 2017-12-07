@@ -184,6 +184,7 @@ let config = {
 					let res = await workflowService.createWorkflowRecord(postData);
 					msgBox.hideLoadingSelf();
 					if(res.success===1){
+						this.data.isSuccessSubmit=false;
 						// CreateFormServer.changeToView(wfObj.tableid);
 						this.el.find('#place-form').empty();
 						FormEntrys.initForm({
