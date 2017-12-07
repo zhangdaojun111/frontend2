@@ -75,6 +75,7 @@ let config={
                         is_view: this.data.is_view,
                         from_focus: 0,
                         table_id: obj.table_id,
+                        isCalendar: this.data.isCalendar || 0,
                         //表级操作用
                         data_from_row_id: obj.data_from_row_id,
                         operation_id: obj.operation_id,

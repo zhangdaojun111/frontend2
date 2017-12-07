@@ -160,9 +160,8 @@ let config = {
 	    this.append(this.data.workTree, this.el.find('.J_select-container'));
         //添加常用工作流组件
         this.data.fav.rows.forEach((row)=>{
-            this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
+            this.append(new WorkFlowBtn(row,actions), this.el.find('.J_workflow-content'));
         });
-	    this.append(new WorkFlowBtn(row,actions), this.el.find('.J_workflow-content'));
         //订阅 select list click
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0],'#drawflow');

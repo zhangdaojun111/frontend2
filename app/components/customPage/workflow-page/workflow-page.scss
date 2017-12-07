@@ -264,6 +264,17 @@
             color: #666;
             font-weight: normal;
             font-size: 12px;
+            .cancel-urge{
+                position: absolute;
+                display: block;
+                color: #999;
+                width: 16px;
+                height: 16px;
+                right: 5px;
+                top: 7px;
+                cursor: pointer;
+                background: url(../../../assets/images/framework/close.png) no-repeat scroll center center transparent;
+            }
         }
         .urge-text{
             height: 225px;
