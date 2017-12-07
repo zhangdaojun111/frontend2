@@ -5,6 +5,7 @@
 import Component from "../../../../lib/component";
 import template from './workflow-btn.html';
 import './workflow-btn.scss';
+import {workflowService} from '../../../../services/workflow/workflow.service';
 
 import Mediator from '../../../../lib/mediator';
 
@@ -12,7 +13,7 @@ let config = {
     template: template,
     actions: {
         choose: function(e) {
-            Mediator.publish('workflow:choose', _.defaultsDeep({},$(e.target)[0].dataset,{type:'btn'}));
+	        this.events.chooseCb(_.defaultsDeep({},$(e.target)[0].dataset,{type:'btn'}));
         }
     },
     afterRender: function() {
@@ -20,19 +21,15 @@ let config = {
             this.actions.choose(e);
         });
         this.el.on('click', '.delFav', (e) => {
-            Mediator.publish('workflow:delFav', $(e.target)[0].dataset.id);
+	        workflowService.delWorkflowFavorite({'id':$(e.target)[0].dataset.id});
         });
     }
 }
 
 class WorkFlowBtn extends Component {
-    // constructor(data){
-    //     config.data = data;
-    //     super(config);
-    // }
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
+	constructor(data,events,newConfig){
+		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
+	}
 }
 
 export default WorkFlowBtn;

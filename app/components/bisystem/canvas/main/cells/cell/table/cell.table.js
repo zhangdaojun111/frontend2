@@ -155,7 +155,7 @@ let config = {
         // 向agid服务器获取数据 flow_id，form_id
         let prepareParmas = this.actions.getPrepareParmas({table_id: this.data.chart.table_id});
         Promise.all([prepareParmas]).then(res => {
-            this.data.flowId = res[0]['data']['flow_data'][0] && res[0]['data']['flow_data'][0]['flow_id'] || '';
+            this.data.flowId = (res[0]['data']['flow_data'][0] && res[0]['data']['flow_data'][0]['flow_id']) || '';
             this.data.formId = res[0]['data']['form_id'];
         });
         HTTP.flush();
@@ -164,6 +164,11 @@ let config = {
             this.el.find('.bi-table').addClass('editInterface');
         }else{
             this.el.find('.bi-table').removeClass('editInterface');
+        }
+
+        //pdf页面加overflow:hidden
+        if(window.config.pdf){
+            this.el.find('.bi-table').addClass('download-pdf');
         }
     }
 };

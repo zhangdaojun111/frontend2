@@ -15,9 +15,9 @@ let css = `
     font-weight: bold;
     margin-right: 15px;
 }
-.add-container .input-box .input{
-    width: 250px;
-    height: 25px;
+.add-container .input-box input{
+    width: 240px;
+    height: 30px;
 }
 .add-container .button-box {
     position: absolute;
@@ -25,25 +25,26 @@ let css = `
     right: 35px;
 }
 .add-container .button-box .save-btn{
-    color: #fff;
-    background: #0088ff;
-    padding: 6px 17px;
-    border: none;
-    font-size: 12px;
-    padding: 6px 17px;
-    margin-right: 15px;
-    border-radius: 4px;
     cursor: pointer;
+    width: 90px;
+    height: 30px;
+    background-color: #0088ff;
+    border: 1px solid #0088ff;
+    border-radius: 4px;
+    color: #fff;
+    margin-right: 8px;
+    font-size:12px;
 }
 .add-container .button-box .cancel-btn {
-    color: #fff;
-    background: #0088ff;
-    padding: 6px 17px;
-    border: none;
-    font-size: 12px;
-    padding: 6px 17px;
-    border-radius: 4px;
     cursor: pointer;
+    width: 90px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #d7d7d7;
+    border-radius: 4px;
+    color: #666;
+    margin-right: 8px;
+    font-size:12px;
 }
 \`;
 `;

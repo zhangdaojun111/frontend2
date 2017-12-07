@@ -92,6 +92,13 @@ export const workflowService={
         return HTTP.getImmediately('/node_attachment/', params)
     },
 
+	GetQueryString(name) {
+		let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+		let r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]);
+		return null;
+	},
+
     //获取文件名后缀
     getFileExtension (filename) {
         return filename.slice((filename.lastIndexOf(".") - 1 >>> 0) + 2);

@@ -58,6 +58,14 @@ let config = {
                     chartData.cellChart = cellChart;
                 }
             }
+            //设置echarts渲染容器尺寸
+            if(window.config.pdf){
+                let data = chartData ? chartData : this.data;
+                let width = data.cell.size.width - 20;
+                let height = data.cell.size.height - 30;
+                this.el.find('#' + data.id).css('width',width).css('height',height);
+            }
+
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.pieChart = echartsService;
             this.trigger('onUpdateChartDeepTitle',this.data);
