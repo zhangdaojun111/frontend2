@@ -6,7 +6,7 @@
     {{else if is_textarea}}
     <textarea type="text" disabled="disabled" class='dynamic-form-input ui-readonly ui-width'  style="color: #666666;height: 100px;" value="{{value}}">{{value}}</textarea>
     {{else}}
-    <input type="text" readonly="readonly" class='dynamic-form-input ui-readonly ui-width'  style="color: #666666;" value="{{value}}">
+    <input type="text" readonly="readonly" class='dynamic-form-input ui-readonly ui-width'  style="color: #666666;">
     <div style="float: left;min-width: 60px">
         {{#if required}}
         <span id="requiredLogo" class="{{requiredClass}}"></span>
