@@ -974,7 +974,7 @@ let config = {
 			data.count_data = this.actions.createFormValue(this.data.data);
 			for (let key in this.data.data) {
 				let d = this.data.data[key];
-				if (d.type == 'Buildin' || d.type == 'Select') {
+				if (d.type == 'Buildin' || d.type == 'Select' || d.type=='Radio') {
 					data.data[key] = this.actions.getTextByOptionID(d.dfield, data.data[key]);
 				}
 			}
