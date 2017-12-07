@@ -959,8 +959,8 @@ let config = {
 						buildin_fields[id] = value;
 					}
 				} else {
-					if (data.value && data.dfield.startsWith('f') && !(~this.data.postData.indexOf(data.dfield))) {
-						if(typeof data.value=='string' && data.value.trim()=='' ){
+					if ((data.value || (data.effect &&data.effect.length &&data.effect.length>0)) && data.dfield.startsWith('f') && !(~this.data.postData.indexOf(data.dfield))) {
+						if(typeof data.value=='string' && data.value.trim()=='' && data.effect.length==0){
 							continue;
 						}
 						this.data.postData.push(data.dfield);
