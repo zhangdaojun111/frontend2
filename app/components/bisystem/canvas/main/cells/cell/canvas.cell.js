@@ -91,8 +91,14 @@ let config = {
             }
 
             //bi打印pdf则执行回调
-            if(window.config.pdf === true && this.data.isLast === true){
-                this.actions.loadChartFinish();
+            if(window.config.pdf === true){
+                if(this.el.find('.bi-table').length > 0){
+                    let width = this.el.find('.bi-table')[0].scrollWidth + 30;
+                    this.el.find('.cell').css('width',width);
+                }
+                if(this.data.isLast === true){
+                    this.actions.loadChartFinish();
+                }
             }
         },
 
