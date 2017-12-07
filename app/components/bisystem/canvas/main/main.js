@@ -160,18 +160,27 @@ let config = {
          * 点击下载pdf
          */
         downloadPDF(){
-            let widthIn = 8.27;
             //计算实际内容高度
+            let width = 0;
             let height = this.el.find('.cells-container')[0].scrollHeight;
+            //计算内容高度
             this.el.find('.bi-table').each(function () {
                 height = height - $(this).height() + $(this)[0].scrollHeight;
             });
             this.el.find('.comment').each(function () {
                 height = height - $(this).height() + $(this)[0].scrollHeight;
             });
+
+            //计算最大宽度
+            this.el.find('.cell').each(function () {
+                width = Math.max(width,$(this).width());
+            });
+
             console.log('height',height);
             let heightIn = Math.max((Number(height)/105).toFixed(2),11.7);
+            let widthIn = Math.max((Number(width)/105).toFixed(2),8.27);
             console.log('heightIn',heightIn);
+            console.log('widthIn',widthIn);
             let origin = window.location.origin;
             let parent_table_id = window.config.parent_table_id || '';
             let row_id = window.config.row_id || '';
