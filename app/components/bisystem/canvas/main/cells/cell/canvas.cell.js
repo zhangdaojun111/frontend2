@@ -87,12 +87,24 @@ let config = {
                     }
                 });
                 let cellContainer = this.el.find('.cell-chart');
+                if (cellContainer.length === 0) {
+                    debugger;
+                }
                 this.data.cellComponent.render(cellContainer);
             }
 
             //bi打印pdf则执行回调
-            if(window.config.pdf === true && this.data.isLast === true){
-                this.actions.loadChartFinish();
+            if(window.config.pdf === true){
+                if(this.el.find('.bi-table').length > 0){
+                    let cellWidth = this.data.cell.size.width;
+                    let width = Math.max(this.el.find('.bi-table')[0].scrollWidth + 30,cellWidth);
+                    let widthChart = width - 20;
+                    this.el.find('.cell').css('width',width);
+                    this.el.find('.cell-chart').css('width',widthChart);
+                }
+                if(this.data.isLast === true){
+                    this.actions.loadChartFinish();
+                }
             }
         },
 
@@ -124,7 +136,6 @@ let config = {
                     Mediator.publish(`bi:cell${myChartComponentId}:resize`, this.data.cell.size);
                 }
             };
-
             dragCell.draggable(dragOption).resizable(resizeOption);
         },
 
@@ -212,6 +223,22 @@ let config = {
             this.data.cell.size.left = left;
             this.data.cell.size.top = top;
             this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
+        },
+        /**
+         * 手机旋转屏幕后画布块resize
+         */
+        resizeCanvas(){
+            let cmp = this.data.cellComponent;
+            let chart = cmp.myChart || cmp.pieChart || cmp.normalChart;
+            if(chart){
+                let myChart;
+                if(chart.hasOwnProperty('myChart')){
+                    myChart = chart.myChart;
+                }else{
+                    myChart = chart;
+                }
+                myChart.resize();
+            }
         }
 
     },
@@ -333,6 +360,12 @@ let config = {
             this.el.off('mousedown mouseup');
         }
 
+        //判断屏幕旋转事件是否存在，存在则监听
+        let evt = "onorientationchange" in window ? "orientationchange":false;
+        if(evt){
+            window.addEventListener(evt,this.actions.resizeCanvas,false);
+        }
+
         if(window.config.pdf){
             this.el.find('.cell').addClass('download-pdf');
         }
@@ -356,7 +389,7 @@ export class CanvasCellComponent extends Component {
             this.data.chart = chart['data'];
             this.actions.loadCellChart(chart);
         } catch (err) {
-            console.log(err)
+            console.log(err);
         } finally {
 
         }

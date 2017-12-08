@@ -24,18 +24,15 @@
         }
     }
     .form-group {
-        > div:nth-child(4) {
-            margin-bottom: 0;
-        }
-    }
-    .customAccuracyNum {
-        .form-chart-wrapper {
-            span {
-                margin-left: 16px;
-                color: #666666;
-            }
-            input {
-                width: 200px;
+        .customAccuracyNum {
+            .form-chart-wrapper {
+                span {
+                    margin-left: 16px;
+                    color: #666666;
+                }
+                input {
+                    width: 200px;
+                }
             }
         }
     }
