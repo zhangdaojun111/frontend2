@@ -100,7 +100,8 @@ export class CellBaseComponent extends Component {
                 res['data'].assortment === 'pie' ||
                 res['data'].assortment === 'radar' ||
                 res['data'].assortment === 'multilist' ||
-                res['data'].assortment === 'stylzie'
+                res['data'].assortment === 'stylzie' ||
+                res['data'].assortment === 'map'
             ) {
                 this.data.chart = this.data.cellChart.chart = res['data'];
                 this.actions.updateChart(res['data'].assortment === 'multilist' ? this.data.cellChart : {'chart':res['data']});

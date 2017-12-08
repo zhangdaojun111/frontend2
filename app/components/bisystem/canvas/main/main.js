@@ -46,8 +46,7 @@ let config = {
             aside_fold: '19',
             send_event:'20',
             open_iframe_by_id:'21',     //bi点击title打开数据源tab
-        }
-        isSingle: false,
+        },
         carouselInterval: 0,         //用户设置的轮播执行间隔
         operateInterval: 0,          //用户设置的操作暂停轮播间隔
         viewArr: window.config.bi_views,  //所有bi视图
