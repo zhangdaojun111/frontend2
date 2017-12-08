@@ -50,6 +50,9 @@ let config = {
 		},
 		async draftInit(res) {
 			let is_draft;
+            if(res.success===1){
+                $('#draftBtn').show();
+            }
 			if (res.the_last_draft != '') {
 				is_draft = await msgBox.confirm(`您于${res.the_last_draft}时填写该工作表单尚未保存，是否继续编辑？`)
 			} else {
