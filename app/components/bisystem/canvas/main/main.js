@@ -188,7 +188,7 @@ let config = {
             let query_mark = window.config.query_mark || '';
             let operation_id = window.config.operation_id || '';
             let folder_id = window.config.folder_id || '';
-            let time = new Date().toLocaleTimeString();
+            let time = new Date().getTime();
             console.log(time);
 
             let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in&parent_table_id=${parent_table_id}&row_id=${row_id}&query_mark=${query_mark}&operation_id=${operation_id}&folder_id=${folder_id}&t=${time}`;
