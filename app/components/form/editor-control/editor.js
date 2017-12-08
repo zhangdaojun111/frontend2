@@ -65,6 +65,10 @@ let config = {
         if (this.data.is_view) {
             this.el.find('.wrap').attr('title', this.data.value.replace(/<.*?>/ig,""))
         }
+        console.log('***************')
+        console.log(this.data.history)
+        console.log(this.data.isApproval)
+        debugger
         if(this.data.history && !this.data.isApproval){
             this.el.find('.ui-history').css('visibility','visible');
         }
