@@ -1,6 +1,6 @@
 import template from './common-query-add.html';
 import msgBox from '../../../../lib/msgbox';
-import './common-query-add.scss';
+// import './common-query-add.scss';
 let css = `
 .add-container{
     padding: 20px;
