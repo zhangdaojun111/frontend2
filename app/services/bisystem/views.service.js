@@ -17,7 +17,7 @@ export const ViewsService = {
         };
         const res = await HTTP.getImmediately('/bi/set_new_view_data',Object.assign(data,params));
         return new Promise((resolve, reject) => {
-                resolve(res);
+            resolve(res);
         })
     },
     /**
