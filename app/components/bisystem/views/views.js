@@ -61,12 +61,21 @@ let config = {
          * 设置轮播
          */
         async setCarousel() {
+            const data = await ViewsService.getCarouselSetting();
+            carouselConfig.data.carousel = data.data.carousel_time || 0;
+            carouselConfig.data.operate = data.data.stop_time || 0;
+
             const res = await PMAPI.openDialogByComponent(carouselConfig,{
                 width: 348,
-                height: 217,
+                height: 280,
                 title: '设置轮播'
             });
-        }
+
+            if(res){
+                // 设置轮播
+                ViewsService.saveCarouselSetting(res);
+            }
+        },
     },
     binds:[
         {
