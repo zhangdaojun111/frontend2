@@ -380,11 +380,13 @@ export class EchartsService {
             linebarOption['grid']['top'] = cellOption['customTop'];
             linebarOption['legend']['type'] = 'plain';
         }
+
         //最后一条数据必显示
         if(cellOption.data.xAxis){
             linebarOption['xAxis'][0]['axisLabel']['showMaxLabel'] = true;
             linebarOption['xAxis'][0]['axisLabel']['showMinLabel'] = true;
         }
+
         //自定义 图表字体大小
         if(cellOption['customTextStyle'] && cellOption['customTextStyle'].hasOwnProperty('chartSize')){
             linebarOption['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
