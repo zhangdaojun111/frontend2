@@ -81,7 +81,7 @@ let config = {
         let attachmentControl = new AttachmentControl(json, {changeValue: changeValue});
         this.append(attachmentControl, this.el.find('.workflow-attachment-box'));
         this.data.attachmentControl=attachmentControl
-        let editorControl = new EditorControl({value:''}, {changeValue: changeValueEdit });
+        let editorControl = new EditorControl({value:'', isApproval: true}, {changeValue: changeValueEdit });
         this.append(editorControl, this.el.find('.approve-textarea'));
     },
     beforeDestory(){
