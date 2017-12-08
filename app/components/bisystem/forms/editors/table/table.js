@@ -142,6 +142,9 @@ let config = {
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
+                    if(key =='columnNum' && chart.single == 0){
+                        continue
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
@@ -328,7 +331,6 @@ let config = {
                             this.formItems['columnNum'].el.show();
                             this.formItems['countNum'].el.hide();
                             this.formItems['table_single'].el.show();
-
                         } else {
                             this.formItems['columnNum'].el.hide();
                             this.formItems['countNum'].el.show();
@@ -343,6 +345,7 @@ let config = {
                 defaultValue: '1',
                 placeholder: '请输入默认显示单行为多少列',
                 type: 'text',
+                required: true,
                 rules: [
                     {
                         errorMsg: '显示多少列数必须是大于0的整数',
