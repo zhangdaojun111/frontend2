@@ -42,7 +42,6 @@ let config = {
             }
             let sources = this.data.chart.data.source || this.data.chart.data.sources;
             let idArr = [];
-            console.log(sources);
             if(!$.isArray(sources) && sources.hasOwnProperty('id')){
                 idArr.push(sources.id);
             }else{

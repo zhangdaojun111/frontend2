@@ -6,6 +6,7 @@
 import Component from '../../../../../../lib/component';
 import {CanvasOriginalDataComponent} from './original.data/original.data';
 
+
 export class CellBaseComponent extends Component {
     constructor(config,data,event,extendConfig) {
         super($.extend(true,{},config,extendConfig),data,event)
@@ -56,9 +57,22 @@ export class CellBaseComponent extends Component {
 
     /**
      * 当message服务有推送时更新
-     * @param sort = {type: 'asc', filed:y轴字段对象}
+     * @param data = 后台返回的chart data
      */
-    // updateCellDataFromMessage(data) {
-    //     this.data = data
-    // }
+    updateCellDataFromMessage(res) {
+        if (res['success'] === 1) {
+            if (res['data'].assortment === 'table') {
+                if (res['data']['single'] === 1) {
+                    this.data.rows = this.actions.singleTable(res['data']);
+                } else {
+                    this.data.chart = res['data'];
+                }
+                this.reload();
+            } else if (res['data'].assortment === 'normal' || res['data'].assortment === 'pie' || res['data'].assortment ==='radar') {
+                this.data.chart = this.data.cellChart.chart = res['data'];
+                this.actions.updateChart({'chart': res['data']});
+            };
+
+        }
+    }
 }

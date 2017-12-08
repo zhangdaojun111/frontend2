@@ -30,19 +30,25 @@ let config = {
                     }
                     if (isDraw) {
                         let echartsService = new EchartsService(this.data);
-                        this.myChart = echartsService.myChart;
+                        this.radarChart = echartsService;
                     } else {
                         // alert('雷达图数据不能为非数字');
                     }
 
                 }
             }
+        },
+
+        updateChart(data) {
+            //重新渲染echarts
+            const option = this.radarChart.radarOption(data);
+            this.radarChart.myChart.setOption(option, true);
         }
     },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
-            if (this.myChart) {
-                this.myChart.resize();
+            if (this.radarChart.myChart) {
+                this.radarChart.myChart.resize();
             }
         })
     },
