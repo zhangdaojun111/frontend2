@@ -40,7 +40,11 @@ let css = `
     }
   .contract-tabs {
     display: inline-block;
-    max-width: 1700px;
+    max-width: 560px;
+    max-height:30px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    white-space:nowrap;
   }
 
   .contract-tab {
@@ -96,6 +100,9 @@ let css = `
   .contract-tab{
     cursor: pointer;
   }
+  .contract-tab.active{
+    color:#0088FF;
+  }
   .contract-template-anchor span{
         color: #0088FF;
         background-color: yellow; */
@@ -124,7 +131,7 @@ let css = `
     width: 10px;
     height: 10px;
     background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAMNJREFUGBmNUDkOwkAQ8yQLFc+gQ0hpeQgNP6FLF15Cw2do0vGM0CRaBnuWQEpW2h3L9hw7gM7R64gX36PzZ1zhhZbCtEONGzIqxhdWYRDWkQZHws1ymERmDDCyM1ZsbVRIUAtly1ShIWcS+DYcAVQ27JKNxoH0mtcpql5pbZiIVV2JY8Xnr5PoOnxbq53h+sk8sd7913pZr/MtjX1Qzv+e7THLVayndc1YBi8zWVQSJ417LuuJmUnyd4ST9MCKPTmu8A2pxEh6XTDHawAAAABJRU5ErkJggg==') no-repeat;
-    margin: 0 10px;
+    margin: 10px 10px;
     cursor: pointer;
   }
 
@@ -133,7 +140,7 @@ let css = `
     width: 10px;
     height: 10px;
     background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAGKAAABigEzlzBYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABBUlEQVQYGVWQ3U7CQBSEv1OkSBXfrKAmJMolxkcQXgE08QVQL9XYRI3c+Vb+Fasp65y1N+xm09np7JlzxrgMXSquabFkYncMQwtfhdXMwkgoJ2W8xQ9X7HLMFwPmoWJqj1E4D4cEFuyQURKM8zBkzQ3bkn+rNhxEITyJ64j7JGFskbwIOTX3ssjk8BG5lJ5wicltai8JD+rpzJbqcaAfb3rdi8excxK5JqFojGraQklz808iF+c0GCrs67/xW1l3VPU9cil7wpUUIx/QmggWajxT4yvV2Y/CNc/iuuJK3U/dKo8RrDSdcaQsX+Nx7BNn2oG+xcB/FbgpjokVG4F7dEFxtTn5AzxdXK/Y1PcdAAAAAElFTkSuQmCC') no-repeat;
-    margin: 0 16px;
+    margin: 10px 16px;
     cursor: pointer;
   }
 `;
@@ -215,6 +222,21 @@ export const contractEditorConfig = {
                 } else {
                     this.actions._loadTemplateByIndex(currentIndex,true,false);
                 }
+                if(this.el.find('.contract-tab').length < 10){//仅允许最多有五个标签
+                    this.el.find('.add-tab-button').show();
+                }
+            }
+        },{
+            event:'mouseover',
+            selector:'.contract-tabs',
+            callback:function () {
+                this.el.find('.contract-tabs').css('overflow-x','auto');
+            }
+        },{
+            event:'mouseout',
+            selector:'.contract-tabs',
+            callback:function () {
+                this.el.find('.contract-tabs').css('overflow-x','hidden');
             }
         }
     ],
@@ -279,7 +301,8 @@ export const contractEditorConfig = {
             return HTTP.postImmediately('/customize/rzrk/get_element/', json);
         },
         addTab: function () {
-            let tabEle = $('<li class="contract-tab">新建</li>');
+            let tabEle = $('<li class="contract-tab active">新建</li>');
+            $(this.el.find('.contract-tab').get(this.data['current_tab'])).removeClass('active');
             let length = this.el.find('.contract-tab').length;
             this.el.find('.contract-tabs').append(tabEle);
             this.el.find('.contract-model').val(0).removeAttr('disabled');
@@ -293,11 +316,16 @@ export const contractEditorConfig = {
             tabEle.on('click', () => {
                 this.actions.loadTab(length, true);
             })
+            if(this.el.find('.contract-tab').length >= 10){//仅允许最多有十个标签
+                this.el.find('.add-tab-button').hide();
+            }
         },
         loadTab: function (i, isLoadCache,disabled) {
             if (i == this.data['current_tab']) {
                 return;
             }
+            $(this.el.find('.contract-tab').get(this.data['current_tab'])).removeClass('active');
+            $(this.el.find('.contract-tab').get(i)).addClass('active');
             this.actions._loadTemplateByIndex(i, isLoadCache,disabled);
         },
         initButtonStates:function (i) {
@@ -514,6 +542,8 @@ export const contractEditorConfig = {
                 this.actions.loadTab(i,true,false);
             })
         }
+        $(this.el.find('.contract-tab').get(this.data.local_data.length-1)).addClass('active');
+
 
     },
     beforeDestroy() {
