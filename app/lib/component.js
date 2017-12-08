@@ -6,6 +6,7 @@ let count = 0;
 
 let defaultConfig = {
     template: '',
+    replaceTemplate:[],
     data: {},
     events: {},
     actions: {},
@@ -64,6 +65,11 @@ class Component {
         let compiler = Handlerbar.compile(this.template);
         let html = compiler(this.data);
         this.el.html(html);
+        if(this.replaceTemplate.length !=0){
+            for(let t of this.replaceTemplate){
+                this.el.find(t.selector).replaceWith(t.template);
+            }
+        }
         if (this.firstAfterRenderRunned === false) {
             this.bindEvents();
             this.firstAfterRender && this.firstAfterRender();
