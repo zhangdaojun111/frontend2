@@ -97,7 +97,9 @@ let config = {
                     console.log(cellWidth);
                     console.log(this.el.find('.bi-table')[0].scrollWidth);
                     let width = Math.max(this.el.find('.bi-table')[0].scrollWidth + 30,cellWidth);
+                    console.log(width);
                     let widthChart = width - 20;
+                    console.log(widthChart);
                     this.el.find('.cell').css('width',width);
                     this.el.find('.cell-chart').css('width',widthChart);
                 }
