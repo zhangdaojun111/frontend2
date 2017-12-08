@@ -9,6 +9,7 @@ import '././approval-record.scss';
 import AttachmentList from "../../form/attachment-list/attachment-list";
 import {PMAPI} from '../../../lib/postmsg';
 import {workflowService} from '../../../services/workflow/workflow.service';
+import QuillAlert from '../../form/quill-alert/quill-alert';
 
 let config={
     template: template,
@@ -53,6 +54,21 @@ let config={
                 }
             }
         },
+        {
+            event: 'click',
+            selector: '.approval-comment',
+            callback: function (e) {
+                let id = $(e).attr('data-id');
+                QuillAlert.data.value =this.data.approve_tips[id].comment.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
+                    PMAPI.openDialogByComponent(QuillAlert,{
+                        width: 1200,
+                        height: 650,
+                        title: '文本编辑器',
+                        modal: true,
+                        maxable: true,
+                    })
+                }
+        },
     ],
     actions:{
         tipsMouseover:function (pos,txt,event) {
@@ -84,6 +100,14 @@ let config={
     afterRender(){
         this.showLoading();
         let self=this;
+        for(let k in this.data.approve_tips){
+            if(this.data.approve_tips[k]['comment']){
+                $(this.el.find('.workflow-record-item').get(k)).find('.approval-comment1').children('a').show();
+            }
+            if(this.data.approve_tips[k]['comment_attachment'].length > 0){
+                $(this.el.find('.workflow-record-item').get(k)).find('.comment-attachment').children('a').show();
+            }
+        }
         const pos={x:10,y:20};
         this.el.on("mouseover",".tipsText",function (e) {
              let elDiv=$(this);
