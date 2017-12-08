@@ -23,7 +23,8 @@
                         <div class="txt-item">{{this.approve_result}}</div>
                         <!--<div class="txt-item tipsText">{{this.comment}}</div>-->
                         <div class="txt-item approval-comment1"><a class="approval-comment" data-id="{{this.index}}" >查看详情</a></div>
-                        <div class="txt-item comment-attachment" id="{{this.index}}">{{this.comment_attachment.length}}个附件</div>
+                        <!--<div class="txt-item comment-attachment" id="{{this.index}}">{{this.comment_attachment.length}}个附件</div>-->
+                        <div class="txt-item comment-attachment" id="{{this.index}}"><a class="approval-comment1" style="display: none">{{this.comment_attachment.length}}个附件</a></div>
                     </div>
                 {{/each}}
             </div>

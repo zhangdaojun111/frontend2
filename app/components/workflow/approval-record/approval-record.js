@@ -63,7 +63,9 @@ let config={
                     PMAPI.openDialogByComponent(QuillAlert,{
                         width: 1200,
                         height: 650,
-                        title: '文本编辑器'
+                        title: '文本编辑器',
+                        modal: true,
+                        maxable: true,
                     })
                 }
         },
@@ -101,6 +103,9 @@ let config={
         for(let k in this.data.approve_tips){
             if(this.data.approve_tips[k]['comment']){
                 $(this.el.find('.workflow-record-item').get(k)).find('.approval-comment1').children('a').show();
+            }
+            if(this.data.approve_tips[k]['comment_attachment'].length > 0){
+                $(this.el.find('.workflow-record-item').get(k)).find('.comment-attachment').children('a').show();
             }
         }
         const pos={x:10,y:20};
