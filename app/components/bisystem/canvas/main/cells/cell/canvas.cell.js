@@ -269,35 +269,35 @@ let config = {
                 return true;
             }
         },
-        // 从左侧导航拖拽图表渲染到画布块
-        {
-            event: 'drop',
-            selector: '',
-            callback: function (context,event) {
-                let ev = event.originalEvent;
-                let data = JSON.parse(ev.dataTransfer.getData("Text"));
-                ev.dataTransfer.clearData("Text");
-                let layout = {
-                    chart_id: data.id,
-                    floor: 0,
-                    view_id: this.data.currentViewId,
-                    layout_id: this.data.cell.layout_id,
-                    xOld: {},
-                    row_id:0,
-                    deep_info: {}
-                };
-                this.actions.dragChartData({
-                    data:{
-                        layouts:[JSON.stringify(layout)],
-                        query_type:'deep',
-                        is_deep:1,
-                    },
-                    chart_id: data.id
-                });
-                this.loadData = true;
-                return false;
-            }
-        },
+        // // 从左侧导航拖拽图表渲染到画布块
+        // {
+        //     event: 'drop',
+        //     selector: '',
+        //     callback: function (context,event) {
+        //         let ev = event.originalEvent;
+        //         let data = JSON.parse(ev.dataTransfer.getData("Text"));
+        //         ev.dataTransfer.clearData("Text");
+        //         let layout = {
+        //             chart_id: data.id,
+        //             floor: 0,
+        //             view_id: this.data.currentViewId,
+        //             layout_id: this.data.cell.layout_id,
+        //             xOld: {},
+        //             row_id:0,
+        //             deep_info: {}
+        //         };
+        //         this.actions.dragChartData({
+        //             data:{
+        //                 layouts:[JSON.stringify(layout)],
+        //                 query_type:'deep',
+        //                 is_deep:1,
+        //             },
+        //             chart_id: data.id
+        //         });
+        //         this.loadData = true;
+        //         return false;
+        //     }
+        // },
         // 返回(下穿)上一层
         {
             event: 'click',
@@ -345,6 +345,34 @@ let config = {
         this.actions.renderCell();
         if (window.config.bi_user !== 'client') {
             this.actions.cellDragandResize();
+            let __this = this;
+            this.el.find('.cell').droppable({
+                drop:function (event,ui) {
+                    if(canvasCellService.chartId == -1) {
+                        return;
+                    }
+                    let layout = {
+                        chart_id: canvasCellService.chartId,
+                        floor: 0,
+                        view_id: __this.data.currentViewId,
+                        layout_id: __this.data.cell.layout_id,
+                        xOld: {},
+                        row_id:0,
+                        deep_info: {}
+                    };
+                    __this.actions.dragChartData({
+                        data:{
+                            layouts:[JSON.stringify(layout)],
+                            query_type:'deep',
+                            is_deep:1,
+                        },
+                        chart_id: canvasCellService.chartId
+                    });
+                    __this.loadData = true;
+                    canvasCellService.chartId = -1;
+                    return false;
+                }
+            })
         } else {
             this.el.off('mousedown mouseup');
         }
