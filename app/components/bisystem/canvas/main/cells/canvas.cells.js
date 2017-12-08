@@ -338,18 +338,21 @@ let config = {
         * 更新可见画布块数据
         * */
         async updateCells(info) {
+            let sourceTableId = info.data.table_id;
             let [layouts,cells] = [[],[]];
             Object.keys(this.data.cells).forEach(key => {
                 if (this.data.cells[key].data.chart) {
                     layouts.push(this.data.cells[key].data.layout);
                     cells.push(this.data.cells[key]);
                 }
-            })
+            });
 
             if (layouts.length > 0) {
                 const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1},false);
                 cells.map((item,index) => {
-                    item.data.cellComponent.updateCellDataFromMessage(res[index])
+                    if(res[index].data.table_id === sourceTableId){
+                        item.data.cellComponent.updateCellDataFromMessage(res[index]);
+                    }
                 })
             }
         },
