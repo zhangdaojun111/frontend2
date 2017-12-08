@@ -2,31 +2,31 @@ import template from './common-query-add.html';
 import msgBox from '../../../../lib/msgbox';
 // import './common-query-add.scss';
 let css = `
-.add-container{
+.commponent-add-container{
     padding: 20px;
     overflow: hidden;
 }
-.add-container .input-box {
+.commponent-add-container .input-box {
     text-align: center;
 }
-.add-container .input-box .title{
+.commponent-add-container .input-box .title{
     display: inline-block;
     font-size: 12px;
     font-weight: bold;
     margin-right: 15px;
 }
-.add-container .input-box input{
+.commponent-add-container .input-box input{
     width: 236px;
     height: 24px;
 }
-.add-container .button-box {
+.commponent-add-container .button-box {
     position: absolute;
     width: 200px;
     bottom: 30px;
     right: 50%;
     margin-right: -106px;
 }
-.add-container .button-box .save-btn{
+.commponent-add-container .button-box .save-btn{
     cursor: pointer;
     width: 90px;
     height: 30px;
@@ -37,7 +37,7 @@ let css = `
     margin-right: 8px;
     font-size:12px;
 }
-.add-container .button-box .cancel-btn {
+.commponent-add-container .button-box .cancel-btn {
     cursor: pointer;
     width: 90px;
     height: 30px;
