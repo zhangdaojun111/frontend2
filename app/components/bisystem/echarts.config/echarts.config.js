@@ -435,7 +435,14 @@ const map = {
         subtext: '',
         x:'left'
     },
-
+    // dataZoom:{
+    //     type:'slider',
+    //     show:true,
+    //     xAxisIndex:{
+    //
+    //     }SSSS
+    //
+    // },
     tooltip:{
         trigger: 'item',
         triggerOn:'none'
@@ -451,7 +458,12 @@ const map = {
         {
             type: 'map',
             mapType: 'china',
-            roam: false,    //是否开启鼠标缩放和平移漫游
+            roam: true,    //是否开启鼠标缩放和平移漫游
+            zoom:1,
+            scaleLimit:{
+                min:0.5,
+                max:2
+            },
             itemStyle:{     //地图区域的多边形 图形样式
                 normal:{        //是图形在默认状态下的样式
                     label:{

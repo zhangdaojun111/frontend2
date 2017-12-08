@@ -17,7 +17,7 @@ let config = {
          * 初始化图表操作
          */
        async init() {
-
+            this.formItems['customAccuracy'].trigger('onChange');
            // 获取数据来源
           // let p1 =  ChartFormService.getChartSource().then(res => {
           //       if (res['success'] === 1) {
@@ -87,6 +87,7 @@ let config = {
                 icon: data.icon,
                 sources: sources,
                 theme: data.theme,
+                customAccuracy: data.customAccuracy[0] && data.customAccuracyNum ? data.customAccuracyNum : 0,
             };
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
@@ -115,6 +116,8 @@ let config = {
             this.formItems['chartName'].setValue(chart['chartName']['name']);
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
+            this.formItems['customAccuracy'].setValue(chart['customAccuracy'] ? 1 : 0);
+            this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 0);
             chart['sources'].forEach(item => {
                 let comp = this.actions.addChart(this.data.source);
                 comp.setValue(item);
@@ -146,6 +149,37 @@ let config = {
             chartName,
             theme,
             icon,
+            {
+                label: '更多设置',
+                name: 'customAccuracy',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '自定义设置精度'
+                    }
+                ],
+                type: 'checkbox',
+                class:'customAccuracy',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['customAccuracyNum'].el.show();
+                        } else {
+                            this.formItems['customAccuracyNum'].el.hide();
+                        }
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'customAccuracyNum',
+                defaultValue: '0',
+                category: 'number',
+                textTip:'请输入自定义精度：',
+                type: 'text',
+                class: 'customAccuracyNum',
+                events: {}
+            },
             {
                 label: '',
                 name: '保存',

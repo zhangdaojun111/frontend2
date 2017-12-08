@@ -14,6 +14,7 @@ let config = {
     },
     actions: {
         echartsInit() {
+            this.customAccuracy(this.data.cellChart.chart);
             let cellChart = this.data.cellChart.chart;
             if (cellChart['data']['rows']) {
                 if (cellChart['data']['rows'].length > 0) {
