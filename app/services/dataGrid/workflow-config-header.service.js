@@ -2,7 +2,10 @@
 //pageType{0:'进展中的工作',1:'已完成的工作',2:'我的工作申请中的工作',3:'我的工作已完成的工作',4:'我的工作审批过的工作',5:'工作审批',6:'我的工作已关注的工作'}
 export const wchService = {
     getWorkflowHeader ( type ){
-        return this.ordinaryHeader.concat( this['headerFor' + type] );
+        this['headerFor' + type].forEach((item) => {
+            this.ordinaryHeader.unshift(item);
+        })
+        return this.ordinaryHeader;
     },
     //公共的头
     ordinaryHeader: [
