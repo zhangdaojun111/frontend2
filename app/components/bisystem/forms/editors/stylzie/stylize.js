@@ -6,6 +6,7 @@ import {ChartFormService} from '../../../../../services/bisystem/chart.form.serv
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
+import './stylize.scss';
 
 let config = {
     template: template,
@@ -64,6 +65,7 @@ let config = {
          */
         async init() {
             this.formItems['countColumn'].el.hide();
+            this.formItems['customTextStyle'].trigger('onChange');
             // 获取数据来源
             const res = await ChartFormService.getChartSource();
             if (res['success'] === 1) {
@@ -125,7 +127,8 @@ let config = {
                 theme: data.theme,
                 xAxis:data.xAxis,
                 yAxis:[data.yAxis],
-                dateAxis: data.dateAxis
+                dateAxis: data.dateAxis,
+                customTextStyle: data.customTextStyle[0] ? {titleSize: data.titleSize,chartSize: data.chartSize} : {},
             };
 
             let pass = true; // 判断表单是否验证通过
@@ -157,6 +160,9 @@ let config = {
             this.formItems['xAxis'].setValue(chart['xAxis']);
             this.formItems['yAxis'].setValue(chart['yAxis'][0]);
             this.formItems['dateAxis'].setValue(chart['dateAxis']);
+            this.formItems['customTextStyle'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? 1 : 0);
+            this.formItems['titleSize'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? chart['customTextStyle']['titleSize'] : 14);
+            this.formItems['chartSize'].setValue(chart['customTextStyle'].hasOwnProperty('chartSize') ? chart['customTextStyle']['chartSize'] : 14);
         }
     },
     data: {
@@ -241,6 +247,50 @@ let config = {
                     }
                 ],
                 type: 'autocomplete'
+            },
+            {
+                label: '更多设置',
+                name: 'customTextStyle',
+                defaultValue: [],
+                list: [
+                    {
+                        value:1, name: '自定义字体大小（默认14）'
+                    }
+                ],
+                type: 'checkbox',
+                events: {
+                    onChange:function(value) {
+                        if (value && value[0]) {
+                            this.formItems['titleSize'].el.show();
+                            this.formItems['chartSize'].el.show();
+                        }else{
+                            this.formItems['titleSize'].el.hide();
+                            this.formItems['chartSize'].el.hide();
+                        }
+                    }
+                }
+            },
+            {
+                label: '',
+                name: 'titleSize',
+                defaultValue:'14',
+                placeholder: '标题字体大小',
+                type: 'text',
+                category: 'number',
+                textTip:'标题字体大小：',
+                class: 'titleSize',
+                events: {}
+            },
+            {
+                label: '',
+                name: 'chartSize',
+                defaultValue: '14',
+                placeholder: '图表字体大小',
+                category: 'number',
+                type: 'text',
+                class: 'chartSize',
+                textTip:'图表字体大小：',
+                events: {}
             },
             {
                 label: '',

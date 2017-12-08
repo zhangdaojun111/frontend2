@@ -27,7 +27,12 @@ let config = {
         legend: []
     },
     actions: {},
-    afterRender() {},
+    afterRender() {
+        //自定义 图表字体大小
+        if(this.data.chart.customTextStyle && this.data.chart.customTextStyle.hasOwnProperty('chartSize')){
+            this.el.find('.bi-nine-grid').css('font-size',this.data.chart.customTextStyle.chartSize + 'px');
+        }
+    },
     firstAfterRender() {}
 };
 

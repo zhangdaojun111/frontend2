@@ -311,8 +311,8 @@ let config = {
             this.formItems['customAccuracy'].setValue(chart['customAccuracy'] ? 1 : 0);
             this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 0);
             this.formItems['customTextStyle'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? 1 : 0);
-            this.formItems['titleSize'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? chart['customTextStyle']['titleSize'] : 12);
-            this.formItems['chartSize'].setValue(chart['customTextStyle'].hasOwnProperty('chartSize') ? chart['customTextStyle']['chartSize'] : 12);
+            this.formItems['titleSize'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? chart['customTextStyle']['titleSize'] : 14);
+            this.formItems['chartSize'].setValue(chart['customTextStyle'].hasOwnProperty('chartSize') ? chart['customTextStyle']['chartSize'] : 14);
         },
     },
     data: {
@@ -724,7 +724,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '自定义字体大小（默认12）'
+                        value:1, name: '自定义字体大小（默认14）'
                     }
                 ],
                 type: 'checkbox',
@@ -743,7 +743,7 @@ let config = {
             {
                 label: '',
                 name: 'titleSize',
-                defaultValue:'12',
+                defaultValue:'14',
                 placeholder: '标题字体大小',
                 type: 'text',
                 category: 'number',
@@ -754,12 +754,12 @@ let config = {
             {
                 label: '',
                 name: 'chartSize',
-                defaultValue: '12',
-                placeholder: '图例字体大小',
+                defaultValue: '14',
+                placeholder: '图表字体大小',
                 category: 'number',
                 type: 'text',
                 class: 'chartSize',
-                textTip:'图例字体大小：',
+                textTip:'图表字体大小：',
                 events: {}
             },
             {

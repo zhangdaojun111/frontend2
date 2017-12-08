@@ -170,6 +170,11 @@ let config = {
         if(window.config.pdf){
             this.el.find('.bi-table').addClass('download-pdf');
         }
+
+        //自定义 图表字体大小
+        if(this.data.chart.customTextStyle && this.data.chart.customTextStyle.hasOwnProperty('chartSize')){
+            this.el.find('.bi-table table').css('font-size',this.data.chart.customTextStyle.chartSize + 'px');
+        }
     }
 };
 
