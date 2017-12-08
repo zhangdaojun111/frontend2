@@ -65,7 +65,6 @@ let config = {
                 imageDrop: true,
             });
             this.data.comment = this.quill.root.innerHTML;
-            $('.ql-toolbar').hide();
         }
     },
     afterRender(){
@@ -76,13 +75,14 @@ let config = {
         let changeValue = (res) => {
             this.data.fileList = res.value;
         };
+        let changeValueEdit = (res) => {
+            this.data.comment = res.value;
+        };
         let attachmentControl = new AttachmentControl(json, {changeValue: changeValue});
         this.append(attachmentControl, this.el.find('.workflow-attachment-box'));
         this.data.attachmentControl=attachmentControl
-        let editorControl = new EditorControl({value:''}, {changeValue: ''});
+        let editorControl = new EditorControl({value:''}, {changeValue: changeValueEdit });
         this.append(editorControl, this.el.find('.approve-textarea'));
-
-
     },
     beforeDestory(){
         this.data.style.remove();

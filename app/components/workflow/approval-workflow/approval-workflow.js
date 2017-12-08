@@ -236,6 +236,7 @@ let config={
 		appPass() {
 			this.events.appPass()
 			let _this=this;
+
 			PMAPI.openDialogByIframe(
 				'/iframe/approvalOpinion/',
 				{

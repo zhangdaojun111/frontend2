@@ -13,9 +13,7 @@ import QuillAlert from '../../form/quill-alert/quill-alert';
 
 let config={
     template: template,
-    data:{
-       id:'',
-    },
+    data:{},
     binds: [
         {
             event: 'click',
@@ -60,8 +58,8 @@ let config={
             event: 'click',
             selector: '.approval-comment',
             callback: function (e) {
-                this.id = $(e).attr('data-id');
-                QuillAlert.data.value =this.data.approve_tips[this.id].comment.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
+                let id = $(e).attr('data-id');
+                QuillAlert.data.value =this.data.approve_tips[id].comment.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
                     PMAPI.openDialogByComponent(QuillAlert,{
                         width: 1200,
                         height: 650,
