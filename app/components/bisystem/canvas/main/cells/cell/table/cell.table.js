@@ -295,8 +295,15 @@ export class CellTableComponent extends CellBaseComponent {
     static numFormat(num,acc) {
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+        if(acc){
+            if(num[1]){
+                num[1] = parseFloat(num[1]).toFixed(acc);
+            }else{
+                num[1]  = new String('0').repeat(acc);
+            }
+        }
         num = num.join(".");
-        return parseFloat(num).toFixed(acc);
+        return num;
     }
 
     static isNumber(value) {         //验证是否为数字
