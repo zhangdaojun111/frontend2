@@ -183,7 +183,7 @@ let config = {
 					};
 					let res = await workflowService.createWorkflowRecord(postData);
 					msgBox.hideLoadingSelf();
-					if(res.success===1){
+					if(res.success===1 && res.error=='执行成功'){
 						this.data.isSuccessSubmit=false;
 						// CreateFormServer.changeToView(wfObj.tableid);
 						this.el.find('#place-form').empty();
@@ -209,10 +209,6 @@ let config = {
 						});
 						WorkFlow.createFlow({flow_id:this.data.wfObj.id,record_id:res.record_id,el:this.el.find("#flow-node")});
 					}else{
-						msgBox.alert(`${res.error}`);
-						this.el.find("#submitWorkflow").show();
-					}
-					if(res.error!='执行成功'){
 						msgBox.alert(`${res.error}`);
 						this.el.find("#submitWorkflow").show();
 					}
