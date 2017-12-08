@@ -25,6 +25,7 @@ let config = {
             this.data.richText = chart['data']['assortment'] === 'comment' ? true : false;
             this.data.newCell = true;
             this.data.icon = chart['data']['icon'];
+            this.data.nonPdf = !window.config.pdf;
             if (this.data.icon){
                 this.el.find('.title').addClass('no-title');
             }
