@@ -82,6 +82,12 @@ export class CellNineGridComponent extends CellBaseComponent {
         }
         let nineType = parseInt(cellChart['chart']['type']);
         let grids = cellChart['chart']['data']['rows'][0];
+        //自定义设置精度
+        if(cellChart.chart.customAccuracy){
+            grids.forEach((val, index) => {
+                grids[index] = val.toFixed(parseInt(cellChart.chart.customAccuracy));
+            })
+        }
         let types = [];
         let xAxis = [];
         let yAxis = [];

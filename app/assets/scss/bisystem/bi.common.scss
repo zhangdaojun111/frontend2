@@ -91,8 +91,8 @@ html.bi, body.bi {
         background: url('../../../assets/images/bisystem/manager_edit.png') no-repeat;
     }
     .add-cell-icon {
-         @include icon;
-         background: url('../../../assets/images/bisystem/add_cell.png') no-repeat;
+        @include icon;
+        background: url('../../../assets/images/bisystem/add_cell.png') no-repeat;
     }
     .export-icon {
         @include icon;
@@ -170,10 +170,6 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/chart_stylize.png') no-repeat;
     }
-    .chart-message-icon {
-        @include icon;
-        background: url('../../../assets/images/bisystem/chart_message.png') no-repeat;
-    }
     .chart-approval-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/chart_approval.png') no-repeat;
@@ -222,10 +218,6 @@ html.bi, body.bi {
         @include icon;
         background: url('../../../assets/images/bisystem/aside_stylize.png') no-repeat;
     }
-    .aside-message-icon {
-        @include icon;
-        background: url('../../../assets/images/bisystem/aside_message.png') no-repeat;
-    }
     .aside-approval-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/aside_approval.png') no-repeat;
@@ -237,6 +229,19 @@ html.bi, body.bi {
     .rich-text-icon {
         @include icon;
         background: url('../../../assets/images/bisystem/rich_text_icon.png') no-repeat;
+    }
+
+    .download-pdf-icon {
+        @include icon;
+        background: url('../../../assets/images/bisystem/pdf_download.png') no-repeat;
+    }
+    .do-carousel-icon{
+        @include icon;
+        background: url('../../../assets/images/bisystem/do_carousel_icon.png') no-repeat;
+    }
+    .set-carousel-icon{
+        @include icon;
+        background: url('../../../assets/images/bisystem/set_carousel_icon.png') no-repeat;
     }
 }
 
@@ -328,7 +333,7 @@ html.bi, body.bi {
         overflow-x: hidden;
         margin: 0 auto;
         > div {
-            margin-bottom: 40px;
+            margin-bottom: 15px;
         }
         .form-chart-wrapper {
             padding-left: 10px;
@@ -342,7 +347,7 @@ html.bi, body.bi {
                 padding: 6px 8px;
                 color: #ffffff;
             }
-            .start-icon{
+            .start-icon {
                 vertical-align: middle;
                 margin-bottom: 2px;
             }

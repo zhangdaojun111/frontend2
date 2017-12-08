@@ -170,12 +170,18 @@
 
   }
   #workflow-Under {
-    position: relative;
-    top: -5px;
+    display: flex;
+    justify-content: flex-start;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    padding: 10px 20px;
+    background: #ebebeb;
   }
   .workflow-submit,.workflow-close{
     background: rgba(0,136,255,1);
-    width: 91px;
+    width: 90px;
     height:30px;
     text-align: center;
     border-radius: 4px;
@@ -185,7 +191,7 @@
   }
   #workflowClose{
     background: #fff;
-    color: #000;
+    color: #666;
   }
 }
 #workflow-form{

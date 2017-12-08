@@ -153,8 +153,9 @@ let config = {
 		},
 
 		//给子表统计赋值
-		async setCountData() {
+		async setCountData(dfield) {
     		MSG.showLoadingSelf();
+    		this.data.postData.push(dfield);
 			this.data.isSongCount = true;
 			this.actions.getDataForForm();
     		MSG.hideLoadingSelf();
@@ -163,7 +164,7 @@ let config = {
 		//给外部提供formValue格式数据
 		//@param isCheck判断是否需要执行表单校验
 		getFormValue(isCheck) {
-			this.actions.changeValueForChildTable(this.data.data);
+			// this.actions.changeValueForChildTable(this.data.data);
 			return isCheck ? this.actions.createFormValue(this.data.data, true) : this.actions.createFormValue(this.data.data);
 		},
 
@@ -924,7 +925,7 @@ let config = {
 			}
 		},
 		//给相关赋值
-		async setAboutData(id, value) {
+		setAboutData(id, value) {
 			let buildin_fields = {};
 			buildin_fields[id] = value;
 			this.data.buildin_fields = buildin_fields;
@@ -958,7 +959,10 @@ let config = {
 						buildin_fields[id] = value;
 					}
 				} else {
-					if (data.value && data.dfield.startsWith('f') && !(~this.data.postData.indexOf(data.dfield))) {
+					if ((data.value || (data.effect &&data.effect.length &&data.effect.length>0)) && data.dfield.startsWith('f') && !(~this.data.postData.indexOf(data.dfield))) {
+						if(typeof data.value=='string' && data.value.trim()=='' && data.effect.length==0){
+							continue;
+						}
 						this.data.postData.push(data.dfield);
 					}
 				}
@@ -973,7 +977,7 @@ let config = {
 			data.count_data = this.actions.createFormValue(this.data.data);
 			for (let key in this.data.data) {
 				let d = this.data.data[key];
-				if (d.type == 'Buildin' || d.type == 'Select') {
+				if (d.type == 'Buildin' || d.type == 'Select' || d.type=='Radio') {
 					data.data[key] = this.actions.getTextByOptionID(d.dfield, data.data[key]);
 				}
 			}
@@ -1283,7 +1287,7 @@ let config = {
 			if (this.data.data[data.dfield]) {
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
-			if (data.type == 'Buildin' || data.type == 'MultiLinkage' && !this.data.isInit && !noCount) {
+			if ((data.type == 'Buildin' || data.type == 'MultiLinkage') && !this.data.isInit && !noCount) {
 				let id = data["id"];
 				let value;
 				if(data.type == 'Buildin'){
@@ -1296,7 +1300,7 @@ let config = {
 				}else{
 					value=data.value;
 				}
-				await this.actions.setAboutData(id, value);
+				this.actions.setAboutData(id, value);
 			}
 			//检查是否是默认值的触发条件
 			// if(this.flowId != "" && this.data.baseIds.indexOf(data["dfield"]) != -1 && !isTrigger) {
@@ -1370,7 +1374,6 @@ let config = {
 				window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
 			}
 			if (!this.data.isInit && !noCount) {
-				console.log('这里执行了?')
 				this.actions.getDataForForm();
 			}
 		},
@@ -1615,7 +1618,7 @@ let config = {
 				this.data.sonTableId = data["value"];
 				if (isView == '0' && !this.data.SongridRef && !this.data.isInit && !data.isInit) {
 					this.data.SongridRef = true;
-					this.actions.setCountData();
+					this.actions.setCountData(data.dfield);
 				}
 			}
 
@@ -1752,6 +1755,7 @@ let config = {
 		//打开子表弹窗
 		openSongGrid(data) {
 			let _this = this;
+			// 保存父表数据
 			_this.data.can_not_open_form = data.can_not_open_form;
 			let type = data["popup"];
 			let isView = data["is_view"];
@@ -1769,16 +1773,15 @@ let config = {
 					modal: true
 				}).then(data => {
 					if (_this.viewMode == 'EditChild') {
-						_this.actions.setCountData();
+						_this.actions.setCountData(data.dfield);
 					}
 				})
 			} else {
 				_this.data.sonTableId = data["value"];
 				if (isView == '0') {
-					_this.actions.setCountData();
+					_this.actions.setCountData(data.dfield);
 				}
 			}
-			// 保存父表数据
 			window.top.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
 		},
 
@@ -1856,6 +1859,9 @@ let config = {
 			this.setData('oldData', _.defaultsDeep({}, data));
 			let actions = this.actions.createActions();
 			for (let key in data) {
+				if(this.data.isEdit == 0 && this.data.isCalendar === '1') {
+					data[key].is_view = 1;
+				}
 				let single = this.el.find('div[data-dfield=' + data[key].dfield + ']');
                 if(single.parent().find('div').length >2){
                     single.css('display','inline-block');
@@ -1897,6 +1903,7 @@ let config = {
 							formData[k] = data[k].value || '';
 						}
 						let songrid = new Songrid(Object.assign(data[key], {
+                            fromApprove: this.data.fromApprove,
 							popupType: popupType,
 							formData: JSON.stringify(formData)
 						}), actions);
@@ -2127,6 +2134,8 @@ let config = {
 			this.actions.setVoteValue(res);
 		})
 
+		window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
+
 		//默认表单样式
         if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
             this.el.find('table').parents('.form-print-position').css("margin-bottom","40px");
@@ -2136,8 +2145,13 @@ let config = {
         })
 
 		this.data.isInit = false;
+		console.log('***********')
+		setTimeout(()=>{
+			console.log(JSON.parse(JSON.stringify(this.data.data)));
+		},3000)
 	},
 	beforeDestory() {
+		delete window.top.frontendParentFormValue[this.tableId];
 		this.el.off();
 	}
 }
@@ -2163,8 +2177,8 @@ class BaseForm extends Component {
 		}
 		window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
 		//存父表的newData
-		window.top.frontendParentNewData[formData.data.tableId] = formData.data.data;
-		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
+		window.top.frontendParentNewData[formData.data.tableId] = _.defaultsDeep({},formData.data.data);
+		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id'] && formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
 		super($.extend(true, {}, config, newConfig), formData.data);
 	}
 

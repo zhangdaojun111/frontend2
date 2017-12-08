@@ -5,6 +5,7 @@ import template from './canvas.cells.html';
 import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.service';
 import Mediator from '../../../../../lib/mediator';
 import msgbox from '../../../../../lib/msgbox';
+import './canvas.cells.scss';
 
 let config = {
     template: template,
@@ -13,6 +14,12 @@ let config = {
         cells: {}, // 用于存储cell的信息(通过componentId标识唯一标识符)
         cellMaxZindex: 0,
         isPdf:false,
+        firstView:true,
+        secondViewId:'',
+        animateDuration:1000,  //动画执行时间1000ms
+        deleteComponentArr:[],
+        prepareDeleteComponentArr:[],
+        mode:window.config.bi_user === 'client' ? window.config.bi_user : false,
     },
     actions: {
         /**
@@ -41,7 +48,13 @@ let config = {
                 })
             }
         },
-
+        renderCanvas(){
+            // 当返回成功时，通知各个cell渲染chart数据
+            let that = this;
+            this.data.cells.map((item,index) => {
+                item.setChartData(that.data.resData[index]);
+            })
+        },
         /**
          * 瀑布流方式加载cell chart data 数据(pc端的处理)
          * @param option = {top：scrollbar的滚动距离}
@@ -51,6 +64,7 @@ let config = {
             let layouts = [];
             let cells = [];
             let cellsHeight = this.el.height();
+
             Object.keys(this.data.cells).forEach(key => {
                 let cellSizeTop = this.data.cells[key].data.cell.size.top;
                 let cellSizeHeight = this.data.cells[key].data.cell.size.height;
@@ -136,8 +150,14 @@ let config = {
          * 实例化画布块，并返回实例化的对象
          */
         makeCell(data,flag) {
-            let cell = new CanvasCellComponent(data,{
+            if(this.data.isPdf === true){
+                data['isPdf'] = true;
+                if(flag === true){
+                    data['isLast'] = true;
+                }
+            }
 
+            let cell = new CanvasCellComponent(data,{
                 onDrag: (componentId) => {
                     let comp = this.data.cells[componentId];
                     this.data.cellMaxZindex++;
@@ -155,10 +175,17 @@ let config = {
                     delete this.data.cells[componentId];
                 },
             });
-            this.append(cell, this.el.find('.cells'));
-            if(flag === true){
-                // this.actions.postHtmlCode();
+            let $wrap;
+            console.log(this.data.firstView);
+            if(this.data.firstView === true){
+                $wrap = this.el.find('.current');
+                this.data.deleteComponentArr.push(cell);
+            }else{
+                $wrap = this.el.find('.prepare');
+                this.data.prepareDeleteComponentArr.push(cell);
             }
+            this.append(cell, $wrap);
+            cell.actions.loadChartFinish = this.actions.loadChartFinish;
             return cell;
         },
 
@@ -175,21 +202,18 @@ let config = {
             this.data.cells[cellLayout.componentId] = cellLayout;
         },
 
-        // 全选画布快
         selectAllCells(){
             Object.keys(this.data.cells).forEach((key)=>{
                 this.data.cells[key].actions.select();
             })
         },
 
-        // 取消全选画布快
         cancelSelectCells(){
             Object.keys(this.data.cells).forEach((key)=>{
                 this.data.cells[key].actions.cancelSelect();
             })
         },
 
-        // 反选画布快
         reverseSelectCells(){
             Object.keys(this.data.cells).forEach((key)=>{
                 this.data.cells[key].actions.toggleSelect();
@@ -213,7 +237,7 @@ let config = {
                 try {
                     this.actions.loadCellChart(res['data']['data']);
                 } catch (e){
-
+                    console.log(e);
                 } finally {
 
                 }
@@ -328,6 +352,47 @@ let config = {
                     item.data.cellComponent.updateCellDataFromMessage(res[index])
                 })
             }
+        },
+        /**
+         * 预加载下一视图至.prepare 容器
+         */
+        async prepareViewData(viewId) {
+            this.data.currentViewId = viewId;
+            await this.actions.getCellLayout();
+            if (this.data) {
+                let windowSize = $(window).width();
+                if (windowSize && windowSize <= 960) {
+                    this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
+                } else {
+                    this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
+                }
+            }
+        },
+        /**
+         * 执行切换视图动画
+         */
+        doCarouselAnimate(){
+            let current = this.el.find('.current').addClass('animate-fade-out');
+            let prepare = this.el.find('.prepare').addClass('animate-fade-in');
+            //动画执行1.5S完成,交换div身份
+            let that = this;
+            setTimeout(async function () {
+                current.attr('class','prepare cells');
+                prepare.attr('class','current cells');
+                // 销毁淡出的组件
+                for( let comp of that.data.deleteComponentArr){
+                    delete that.data.cells[comp.componentId];
+                    comp.destroySelf();
+                }
+                that.data.deleteComponentArr.length = 0;
+                that.data.deleteComponentArr = _.cloneDeep(that.data.prepareDeleteComponentArr);
+                that.data.prepareDeleteComponentArr.length = 0;
+                that.actions.prepareViewData(that.data.currentViewId);
+            },this.data.animateDuration)
+        },
+        loadSecondView(){
+            this.data.firstView = false;
+            this.actions.prepareViewData(this.data.secondViewId);
         }
     },
     binds: [
@@ -366,6 +431,9 @@ let config = {
                     this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
                 }
             }
+        }
+        if(window.config.pdf){
+            this.el.find('.ui-draggable.ui-draggable-handle.ui-resizable').css({'position':'absolute'});
         }
     },
     beforeDestory() {}

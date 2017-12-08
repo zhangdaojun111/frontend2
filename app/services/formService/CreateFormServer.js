@@ -31,6 +31,7 @@ export const CreateFormServer={
 		this.data.isView = config.is_view || 0;
 		this.data.isBatch = config.is_batch || 0;//是否是批量工作流
 		this.data.inProcess = config.in_process || 0;//是否是在途
+		this.data.isCalendar = config.isCalendar || 0;//是否日历打开
 		this.data.recordId = config.record_id || '';
 		this.data.el = config.el || '';//form的外层dom
 		this.data.reloadDraftData = config.reload_draft_data || 0;//工作流接口用到
@@ -443,6 +444,11 @@ export const CreateFormServer={
 	async createFormData(res){
 		//处理static,dynamic数据
 		let data = this.mergeFormData(res[0], res[1]);
+        let edit = await FormService.getColumnList(res[0].table_id);
+        data.isEdit = edit.permission.edit;
+        if(data.isEdit == 0) {
+            data.btnType = 'none';
+        }
 		//检查表单类型
 		let template = await this.checkFormType(data, res);
 		//发送审批记录

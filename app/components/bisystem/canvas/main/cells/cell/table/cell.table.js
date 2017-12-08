@@ -208,6 +208,11 @@ let config = {
         }else{
             this.el.find('.bi-table').removeClass('editInterface');
         }
+
+        //pdf页面加overflow:hidden
+        if(window.config.pdf){
+            this.el.find('.bi-table').addClass('download-pdf');
+        }
     }
 };
 
@@ -230,7 +235,9 @@ export class CellTableComponent extends CellBaseComponent {
             for (let n in data[k]){
                 let temp = data[k][n];
                 if(CellTableComponent.isNumber(temp)){
-                    data[k][n] = CellTableComponent.numFormat(temp);
+                    //自定义设置精度
+                    let acc = cellChart.chart.customAccuracy?cellChart.chart.customAccuracy:0;
+                    data[k][n] = CellTableComponent.numFormat(temp,acc);
                 }
             }
         }
@@ -285,10 +292,11 @@ export class CellTableComponent extends CellBaseComponent {
         }
         cellChart.rows = tableRows;
     }
-    static numFormat(num) {
+    static numFormat(num,acc) {
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-        return num.join(".");
+        num = num.join(".");
+        return parseFloat(num).toFixed(acc);
     }
 
     static isNumber(value) {         //验证是否为数字

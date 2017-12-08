@@ -13,6 +13,9 @@ import template from './system-setting.html';
 import msgbox from "../../../lib/msgbox";
 import {UserInfoService} from "../../../services/main/userInfoService"
 import Mediator from "../../../lib/mediator";
+import {ViewsService} from "../../../services/bisystem/views.service";
+import {config as viewDialogConfig} from "../../../components/bisystem/views/dialog/edit/dialog.edit";
+import {PMAPI} from '../../../lib/postmsg';
 
 let config = {
     template:template,
@@ -22,9 +25,11 @@ let config = {
     data:{
         biSort:1,           //记录bi的顺序
         calendarSort:2,     //记录日历顺序
+        homeStatus:0,       //记录快捷首页状态（0为不快捷打开首页）
         biStatus:0,         //记录快捷bi状态（0为不快捷打开bi）
-        calendarStatus:0,   //记录快捷bi状态（0为不快捷打开日历）
+        calendarStatus:0,   //记录快捷日历状态（0为不快捷打开日历）
         currentTheme:'default',
+        bi_view:'',         //当前首页选中的bi视图id
     },
     actions:{
         /**
@@ -33,8 +38,10 @@ let config = {
         showStyleSetting:function () {
             this.el.find('.style-setting').show();
             this.el.find('.rapid-setting').hide();
+            this.el.find('.home-page-setting').hide();
             this.el.find('.style-btn').addClass('active');
             this.el.find('.rapid-btn').removeClass('active');
+            this.el.find('.home-page-btn').removeClass('active');
         },
         /**
          * 打开快捷设置页面
@@ -42,8 +49,21 @@ let config = {
         showRapidSetting:function () {
             this.el.find('.style-setting').hide();
             this.el.find('.rapid-setting').show();
+            this.el.find('.home-page-setting').hide();
             this.el.find('.style-btn').removeClass('active');
             this.el.find('.rapid-btn').addClass('active');
+            this.el.find('.home-page-btn').removeClass('active');
+        },
+        /**
+         * 打开首页设置页面
+         */
+        showHomePageSetting:function () {
+            this.el.find('.style-setting').hide();
+            this.el.find('.rapid-setting').hide();
+            this.el.find('.home-page-setting').show();
+            this.el.find('.style-btn').removeClass('active');
+            this.el.find('.rapid-btn').removeClass('active');
+            this.el.find('.home-page-btn').addClass('active');
         },
         /**
          * 清理缓存
@@ -68,6 +88,10 @@ let config = {
             this.data.calendarSort = calendarStatus.split('')[0];
             this.data.calendarStatus = calendarStatus.split('')[1];
 
+            let homeStatus = window.config.sysConfig.logic_config.client_login_show_home || "000";
+            this.data.bi_view = homeStatus.substring(0,homeStatus.length - 1);
+            this.data.homeStatus = homeStatus.substring(homeStatus.length - 1);
+
             this.actions.addCheckbox();
         },
         /**
@@ -88,17 +112,184 @@ let config = {
             }else{
                 $parent.prepend($ul);
             }
+
+            let home = $(`
+                <li class="isShow-home" title="不可拖动" draggable="false">
+                    <label class="custom-checkbox" style="display: inline">
+                        <input class="home-Show" title="点击设置此功能" type="checkbox" >
+                    </label>
+                    <span>登录时自动开启首页</span>
+                    <i class="drag-icon icon-framework-drag" style="display: none"></i>
+                </li>`);
+
+            $parent.prepend(home);
             this.actions.setCheckboxStatus();
+        },
+        /**
+         * 获取用户首页bi视图列表
+         */
+        getHomePageData: function (fromDelete) {
+            let displaySty = 'none';
+            if(fromDelete){
+                displaySty = 'inline-block'
+            }
+            UserInfoService.getHomePageList().then(res=>{
+                console.log(res)
+                let li = '';
+                if(this.data.bi_view == "00"){
+                    res.data.bi_view[0] && (this.data.bi_view = res.data.bi_view[0].id)
+                }
+                res.data.bi_view.forEach((item,index)=>{
+                    if(this.data.bi_view == item.id) {
+                        li += `
+                            <li class="bi-view">
+                                <label style="display: inline" class="custom-checkbox">
+                                    <input type="checkbox" title="${item.id}" name="home-page-checkbox" class="check-box" checked>
+                                </label>
+                                <span class="set-home-page" title="${item.id}">${item.name}</span>
+                                <i class="home-page-delete" style="display: ${displaySty};" title="${item.id}">×</i>
+                            </li>`
+                    }else{
+                        li += `
+                            <li class="bi-view">
+                                <label style="display: inline" class="custom-checkbox">
+                                    <input type="checkbox" title="${item.id}" name="home-page-checkbox" class="check-box">
+                                </label>
+                                <span class="set-home-page" title="${item.id}">${item.name}</span>
+                                <i class="home-page-delete" style="display: ${displaySty};" title="${item.id}">×</i>
+                            </li>`
+                    }
+                });
+                $('#home-page-ul').html(li);
+            })
+        },
+        /**
+         * 编辑首页
+         */
+        editHomePage:function(cancle){
+            this.el.find('.cover').show();
+            this.el.find('.home-page-delete').show();
+            this.el.find('.home-page-save-btn').html('保存');
+        },
+        /**
+         * 保存
+         * **/
+        editHomePageSave: function(){
+            if(this.el.find('.home-page-save-btn').html() == '关闭并刷新'){
+                this.actions.saveSetting(true);
+            }
+            if(this.el.find('.home-page-save-btn').html() == '保存') {
+                this.el.find('.cover').hide();
+                this.el.find('.home-page-delete').hide();
+                this.el.find('.home-page-save-btn').html('关闭并刷新');
+            }
+        },
+        /**
+         * 新建首页
+         * **/
+        async createHomePage() {
+            viewDialogConfig.data.view = null;
+            window.config.query_mark = 'home';
+            window.config.folder_id = '';
+            window.config.parent_table_id = '';
+            window.config.id = '';
+            window.config.operation_id = '';
+            const res = await PMAPI.openDialogByComponent(viewDialogConfig, {
+                width: 348,
+                height: 217,
+                title: '新建视图'
+            });
+            if (res['name']) {
+                ViewsService.update(res).then((res) => {
+                    if (res['success'] === 1) {
+                        msgbox.showTips('添加成功');
+                        this.actions.getHomePageData();
+                    } else {
+                        msgbox.alert(res['error']);
+                    }
+                })
+            }
+            return false;
+        },
+        /**
+         * 选择首页
+         * **/
+        selectHomePage:function (e) {
+            $("[name='home-page-checkbox']").not($(e)).prop("checked",false)
+            $(e).prop("checked","checked");
+            if(this.data.bi_view != e.title){
+                this.data.bi_view = e.title;
+                this.actions.saveHomePage()
+            }
+            //此处刷新首页tab
+        },
+        /**
+         * 切换首页保存
+         * */
+        saveHomePage:function () {
+            let homeflag = '';
+            let homeValue = this.el.find('input.home-Show').prop("checked");
+            if(homeValue === true){
+                homeflag = this.data.bi_view + "1";
+            }else{
+                homeflag = this.data.bi_view + "0";
+            }
+            let json3 = {
+                action:'save',
+                pre_type:10,
+                content:homeflag
+            };
+            UserInfoService.saveHomePageConfig(json3).then((res)=>{
+                if(res.success === 1){
+                    msgbox.showTips("设置成功")
+                    window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + this.data.bi_view;
+                    window.config.sysConfig.logic_config.client_login_show_home = res.data.toString();
+                }else{
+                    msgbox.showTips("服务器错误")
+                }
+            })
+        },
+        /**
+         * 删除首页
+         * **/
+        deleteHomePage:function (e) {
+            ViewsService.delData({view_id:e.title}).then(res=>{
+                if(res['success']===1){
+                    this.actions.getHomePageData(true);
+                    msgbox.showTips('删除成功');
+                }else{
+                    msgbox.alert(res['error']);
+                }
+            });
+        },
+        /**
+         * 编辑首页
+         * **/
+        setHomePage:function (e) {
+            let iFrameUrl = '/bi/manager/?query_mark=home#/canvas/' + e.title;
+            PMAPI.openDialogByIframe(
+                iFrameUrl,
+                {
+                    title: '编辑模式',
+                    modal: true,
+                    customSize: true,
+
+                }).then((data) => {
+
+                }
+            );
         },
         /**
          * 保存用户快捷设置状态
          */
-        saveSetting:function () {
+        saveSetting:function (refresh) {
             this.showLoading();
             let biflag = 10;
             let calendarflag = 20;
+            let homeflag = '';
             let biValue = this.el.find('input.bi-Show').prop("checked");
             let calendarValue = this.el.find('input.calendar-Show').prop("checked");
+            let homeValue = this.el.find('input.home-Show').prop("checked");
             if(biValue === true){
                 biflag = this.data.biSort + "1";
             }else{
@@ -108,6 +299,11 @@ let config = {
                 calendarflag = this.data.calendarSort + "1";
             }else{
                 calendarflag = this.data.calendarSort + "0";
+            }
+            if(homeValue === true){
+                homeflag = this.data.bi_view + "1";
+            }else{
+                homeflag = this.data.bi_view + "0";
             }
             //以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
             let json = {
@@ -122,14 +318,32 @@ let config = {
                 content:calendarflag
             };
 
+            let json3 = {
+                action:'save',
+                pre_type:10,
+                content:homeflag
+            };
+
             let that = this;
-            UserInfoService.saveUserConfig(json,json2).then((result) => {
+            UserInfoService.saveUserConfig(json,json2,json3).then((result) => {
                 that.hideLoading();
-                if(result[0].succ === 1 && result[1].succ === 1){
+                if(result[0].succ === 1 && result[1].succ === 1 && result[2].succ === 1){
                     window.config.sysConfig.logic_config.client_login_show_bi = result[0].data.toString();
                     window.config.sysConfig.logic_config.client_login_show_calendar = result[1].data.toString();
-                    msgbox.alert("设置保存成功");
+                    window.config.sysConfig.logic_config.client_login_show_home = result[2].data.toString();
+                    if(!refresh) {
+                        msgbox.alert("设置保存成功");
+                    }
                     SysSetting.hide();
+                    if(refresh){
+                        // _.debounce(()=>{
+                            Mediator.emit('menu:homePageRefresh',{
+                                id: 'home',
+                                name: '首页',
+                                url: window.config.sysConfig.home_index
+                            })
+                        // },200)
+                    }
                 }else{
                     msgbox.alert("设置保存失败");
                 }
@@ -166,6 +380,9 @@ let config = {
             }
             if(this.data.calendarStatus === '1'){
                 this.el.find('input.calendar-Show').attr("checked",true);
+            }
+            if(this.data.homeStatus === '1'){
+                this.el.find('input.home-Show').attr("checked",true);
             }
         },
         /**
@@ -216,6 +433,55 @@ let config = {
         },
         {
             event:'click',
+            selector:'.home-page-btn',
+            callback:function () {
+                this.actions.showHomePageSetting();
+            }
+        },
+        {
+            event:'click',
+            selector:'.home-page-save-btn',
+            callback:function () {
+                this.actions.editHomePageSave();
+            }
+        },
+        {
+            event:'click',
+            selector:'.home-page-edit',
+            callback:function () {
+                this.actions.editHomePage(false);
+            }
+        },
+        {
+            event:'click',
+            selector:"[name='home-page-checkbox']",
+            callback:function (e) {
+                this.actions.selectHomePage(e);
+            }
+        },
+        {
+            event:'click',
+            selector:".home-page-delete",
+            callback:function (e) {
+                this.actions.deleteHomePage(e);
+            }
+        },
+        {
+            event:'click',
+            selector:".home-page-add",
+            callback:function (e) {
+                this.actions.createHomePage(e);
+            }
+        },
+        {
+            event:'click',
+            selector:".set-home-page",
+            callback:function (e) {
+                this.actions.setHomePage(e);
+            }
+        },
+        {
+            event:'click',
             selector:'.clear-storage',
             callback:function () {
                 this.actions.clearStorage();
@@ -246,6 +512,7 @@ let config = {
     afterRender:function () {
         this.actions.initThemeUl();
         this.actions.getItemData();
+        this.actions.getHomePageData();
     },
     beforeDestory:function () {
 

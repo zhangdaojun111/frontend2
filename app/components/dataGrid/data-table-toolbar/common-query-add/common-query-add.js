@@ -1,49 +1,52 @@
 import template from './common-query-add.html';
 import msgBox from '../../../../lib/msgbox';
-import './common-query-add.scss';
+// import './common-query-add.scss';
 let css = `
-.add-container{
+.commponent-add-container{
     padding: 20px;
     overflow: hidden;
 }
-.add-container .input-box {
+.commponent-add-container .input-box {
     text-align: center;
 }
-.add-container .input-box .title{
+.commponent-add-container .input-box .title{
     display: inline-block;
     font-size: 12px;
     font-weight: bold;
     margin-right: 15px;
 }
-.add-container .input-box .input{
-    width: 250px;
-    height: 25px;
+.commponent-add-container .input-box input{
+    width: 236px;
+    height: 24px;
 }
-.add-container .button-box {
+.commponent-add-container .button-box {
     position: absolute;
+    width: 200px;
     bottom: 30px;
-    right: 35px;
+    right: 50%;
+    margin-right: -106px;
 }
-.add-container .button-box .save-btn{
-    color: #fff;
-    background: #0088ff;
-    padding: 6px 17px;
-    border: none;
-    font-size: 12px;
-    padding: 6px 17px;
-    margin-right: 15px;
-    border-radius: 4px;
+.commponent-add-container .button-box .save-btn{
     cursor: pointer;
+    width: 90px;
+    height: 30px;
+    background-color: #0088ff;
+    border: 1px solid #0088ff;
+    border-radius: 4px;
+    color: #fff;
+    margin-right: 8px;
+    font-size:12px;
 }
-.add-container .button-box .cancel-btn {
-    color: #fff;
-    background: #0088ff;
-    padding: 6px 17px;
-    border: none;
-    font-size: 12px;
-    padding: 6px 17px;
-    border-radius: 4px;
+.commponent-add-container .button-box .cancel-btn {
     cursor: pointer;
+    width: 90px;
+    height: 30px;
+    background-color: #fff;
+    border: 1px solid #d7d7d7;
+    border-radius: 4px;
+    color: #666;
+    margin-right: 8px;
+    font-size:12px;
 }
 \`;
 `;

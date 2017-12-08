@@ -6,10 +6,9 @@
 import template from './setting-print.html';
 let css = `
 .wrap{
-    margin: 20px auto 0;
-    width: 270px;
-    position: relative;
-    
+    padding: 30px 20px;
+    overflow: hidden;
+    text-align: center;
 }
 .global-search-history {
     padding: 0;
@@ -21,7 +20,7 @@ let css = `
     flex-flow: column;
     position: absolute;
     height:auto;
-    width:207px;
+    width:238px;
     background: #fff;
     overflow: hidden;
 }
@@ -52,6 +51,7 @@ let css = `
     height: 26px;
     font-size: 12px;
     text-indent: 5px;
+    width: 238px;
 }
 .global-search-history .oneSelect{
     height: 25px;
@@ -61,19 +61,22 @@ let css = `
 }
 .J-print-btn{
  position: absolute;
- bottom: 10px ;
+ bottom: 25px ;
  border:none;
  outline: none;
- width: 91px;
+ width: 90px;
+ border: 1px solid #0088ff;
  height: 30px;
- line-height: 31px;
+ line-height: 29px;
  color: #fff;
  border-radius:4px;
  cursor: pointer;
  }
  .J-print-btn.cancel{
     right:100px;
-    background: #ddd;
+    color: #666;
+    border: 1px solid #d7d7d7;
+    background: #fff;
  }
  .J-print-btn.confirm{
     left:100px;

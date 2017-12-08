@@ -56,6 +56,33 @@ export class CellBaseComponent extends Component {
     deepSort(sort) {}
 
     /**
+     *自定义设置精度
+     */
+    customAccuracy(cellChart){
+        if(cellChart.customAccuracy) {
+            if(cellChart.assortment == "multilist"){
+                cellChart.data.multillist.forEach((val,index)=>{
+                    val.yAxis[0]['data'].forEach((val_y,index)=>{
+                        val.yAxis[0]['data'][index] = parseFloat(val_y).toFixed(parseInt(cellChart.customAccuracy));
+                    });
+                })
+            } else if(cellChart.assortment == "radar") {
+                cellChart.data.rows.forEach((parentVal, index) => {
+                    parentVal.forEach((val, index) => {
+                        parentVal[index] = val.toFixed(parseInt(cellChart.customAccuracy));
+                    })
+                })
+            } else {
+                cellChart.data.yAxis.forEach((parentVal, index) => {
+                    parentVal['data'].forEach((val, index) => {
+                        parentVal['data'][index] = parseFloat(val).toFixed(parseInt(cellChart.customAccuracy));
+                    })
+                })
+            }
+        }
+    }
+
+    /**
      * 当message服务有推送时更新
      * @param data = 后台返回的chart data
      */

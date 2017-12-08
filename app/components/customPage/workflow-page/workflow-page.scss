@@ -264,6 +264,17 @@
             color: #666;
             font-weight: normal;
             font-size: 12px;
+            .cancel-urge{
+                position: absolute;
+                display: block;
+                color: #999;
+                width: 16px;
+                height: 16px;
+                right: 5px;
+                top: 7px;
+                cursor: pointer;
+                background: url(../../../assets/images/framework/close.png) no-repeat scroll center center transparent;
+            }
         }
         .urge-text{
             height: 225px;
@@ -284,7 +295,7 @@
             margin-left: 380px;
             button {
                 cursor: pointer;
-                width: 91px;
+                width: 90px;
                 height: 30px;
                 background-color: #0088ff;
                 border: 1px solid #0088ff;
@@ -294,6 +305,7 @@
             }
             .cancel-urge{
                 color: #666;
+                border: 1px solid #d7d7d7;
                 background-color: #fff;
             }
         }

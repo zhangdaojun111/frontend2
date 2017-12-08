@@ -79,7 +79,7 @@ let config = {
                 this.el.find('.echarts-cell').removeClass('date-filed');
             }
             let type = cellChart.chart.data['x'] ? cellChart.chart.data['x']['type'] : cellChart.chart.xAxis.type;
-            if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30)) {
+            if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30) && window.config.pdf !== true) {
                 // 添加日期筛选,改变cell显示高度
                 this.el.find('.echarts-cell').addClass('date-filed');
                 this.normalRange = new NormalRangeComponent({id: this.data.id}, {
@@ -132,6 +132,7 @@ let config = {
         },
 
         echartsInit() {
+            this.customAccuracy(this.data.cellChart.chart);
             let chartData;
             if (window.config.bi_user === 'client') { // 如果是客户模式下，优先渲染原始数据
                 // 当attribute or select　等于空时　代表全选
@@ -165,6 +166,14 @@ let config = {
                     item.data.reverse();
                 });
             }
+            //设置echarts渲染容器尺寸
+            if(window.config.pdf){
+                let data = chartData ? chartData : this.data;
+                let width = data.cell.size.width - 20;
+                let height = data.cell.size.height - 30;
+                this.el.find('#' + data.id).css('width',width).css('height',height);
+            }
+
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle', this.data);
