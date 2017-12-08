@@ -63,8 +63,8 @@ let config={
                 this.id = $(e).attr('data-id');
                 QuillAlert.data.value =this.data.approve_tips[this.id].comment.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
                     PMAPI.openDialogByComponent(QuillAlert,{
-                        width: 900,
-                        height: 600,
+                        width: 1200,
+                        height: 650,
                         title: '文本编辑器'
                     })
                 }
@@ -100,16 +100,11 @@ let config={
     afterRender(){
         this.showLoading();
         let self=this;
-        console.log('********')
-        console.log('********')
-         let dataId = this.el.find('.approval-comment').attr('data-id');
-        console.log(this.el)
-        $('.approval-comment').show();
-        // for(let k in this.data.approve_tips){
-        //     if(this.data.approve_tips[k]['comment'] && this.data.approve_tips[k]['index']== dataId){
-        //        $('.approval-comment')[dataId].show();
-        //     }
-        // }
+        for(let k in this.data.approve_tips){
+            if(this.data.approve_tips[k]['comment']){
+                $(this.el.find('.workflow-record-item').get(k)).find('.approval-comment1').children('a').show();
+            }
+        }
         const pos={x:10,y:20};
         this.el.on("mouseover",".tipsText",function (e) {
              let elDiv=$(this);
