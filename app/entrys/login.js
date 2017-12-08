@@ -29,6 +29,7 @@ function getLoginController() {
         registerBtnOpen:1,      //是否可以使用注册功能
         verifyShow:0,           //是否显示验证码
         verifyCode:null,        //验证码组件
+        $loginContent: $('.login-content'),         //登陆窗口
         $loginMainTitle:$('.login-main-title'),     //系统名称显示
         $companyInfo:$('.company-info'),            //公司名称显示
         $rememberPwCheck:$('.remember-pw-check'),   //记住密码
@@ -63,7 +64,6 @@ function getLoginController() {
             let $wrap = $('.password-component');
             this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
             this.passwordInputComp.render($wrap);
-            $('.login-content').show();
 
 
             //系统名称改变
@@ -218,8 +218,8 @@ function getLoginController() {
          * 初始化公司名称
          */
         sysNameInit:function () {
-           this.systemName = this.versionInfo.sap_login_system_name;
-           this.resetSysName(this.systemName);
+            this.systemName = this.versionInfo.sap_login_system_name;
+            this.resetSysName(this.systemName);
         },
 
         /**
@@ -380,7 +380,11 @@ function getLoginController() {
             if(url && url !== '/'){
                 this.nextUrl = decodeURIComponent(url);
             }
+        },
+        showLoginContent: function () {
+            this.$loginContent.show();
         }
+
     };
     return loginController;
 }
@@ -395,7 +399,8 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 let controller = getLoginController();
 controller.formInit();  //初始化表单控件
 controller.getNextUrl();       //根据url判断是否跳转页面
- let isNeedDownload = controller.browser_check();     //暂时屏蔽
+let isNeedDownload = controller.browser_check();     //暂时屏蔽
+let showLoginAnimation = false;
 
 function resetLoginBoxInfo(result) {
     if(result.use_register && result.use_register.toString() === "1"){
@@ -407,21 +412,23 @@ function resetLoginBoxInfo(result) {
     if(result.show_publish_link && result.show_publish_link.toString() === "1"){
         $('.self-service-update').show();
     }
-    if(result.show_mobile_download && result.show_mobile_download.toString() === "1"){
-        $('.mobile-download-btn').show();
+    if(result.login_open_animation && result.login_open_animation.toString() === "1"){
+        showLoginAnimation = true;
     }
-    if(result.verify_code && result.verify_code.toString() === "1") {
-        let obj = {
-            id: 'verify-container',
-            width: "160",
-            height: "40",
+    if(result.show_mobile_download && result.show_mobile_download.toString() === "1")
+        if(result.verify_code && result.verify_code.toString() === "1") {
+            let obj = {
+                id: 'verify-container',
+                width: "160",
+                height: "40",
+            };
+            controller.verifyCode = new verify(obj);
+            controller.verifyShow = 1;
         }
-        controller.verifyCode = new verify(obj);
-        controller.verifyShow = 1;
-    }
     controller.versionInfo = result;
     controller.sysNameInit();   //初始化公司名称
     controller.versionInit();   //初始化版本table
+    controller.showLoginContent();
 }
 
 function resetBackground(result) {
@@ -461,16 +468,27 @@ if( isNeedDownload === false){      //正常显示登录表单
     $('.login-content').hide();
     $(".need-download").show();
     let htmlDownload = '';
-    htmlDownload += '<span class="download-prompt">'+prompt+'</span>'+'<a class="download-link">下载链接</a>';
-
-    if(LoginService.currentSystem == 'win'){
+    htmlDownload += '<span class="download-prompt">'+prompt+'</span>';
+    if(LoginService.downLoadLink != 'False'){
+        htmlDownload += '<a class="download-link">下载链接</a>';
+    }
+    if(LoginService.currentSystem == 'win' && LoginService.is360 != '360'&& !LoginService.browser['ie'] ){
         htmlDownload +=
-        '<div class="install-introduce">'+
+            '<div class="install-introduce">'+
             '<p>Windows版安装更新说明：</p>'+
             '<p>1.点击下载链接，下载最新版chrome浏览器。</p>'+
-            '<p> 2.点击下载完成的安装包，按步骤安装。</p>'+
+            '<p>2.点击下载完成的安装包，按步骤安装。</p>'+
             '<p>3.在控制面板中选择【程序与功能】，手动将电脑中低版本的chrome卸载。</p>'+
             '<p>4.成功登陆ERDS系统。</p>'
+        '</div>'
+    }
+    if((LoginService.currentSystem == 'win' && LoginService.is360 == '360'&& !LoginService.browser['ie'])){
+        htmlDownload +=
+            '<div class="install-introduce">'+
+            '<p>Windows版安装更新说明：</p>'+
+            '<p>1.点击下载链接，下载最新版360浏览器。</p>'+
+            '<p>2.点击下载完成的安装包，按步骤安装。</p>'+
+            '<p>3.成功登陆ERDS系统。</p>'
         '</div>'
     }
     $(".need-download").append(htmlDownload);
@@ -479,6 +497,8 @@ if( isNeedDownload === false){      //正常显示登录表单
 
 // 延时处理动画，会阻塞dom操作
 window.setTimeout(function () {
-    starter.init();
-    starter.animate();
+    if(showLoginAnimation) {
+        starter.init();
+        starter.animate();
+    }
 }, 500);

@@ -304,4 +304,6 @@ class Component {
 
 }
 
+Component.config = defaultConfig;
+
 export default Component;

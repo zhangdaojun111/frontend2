@@ -56,14 +56,14 @@ let config = {
                 return false;
             }
         },
-        // {
-        //     event:'keydown',
-        //     selector:'.cells-container',
-        //     callback:function (context, event) {
-        //         // this.actions.listenExistCoursel();
-        //         console.log(event);
-        //     }
-        // }
+        //下载pdf
+        {
+            event: 'click',
+            selector: '.to-download-pdf',
+            callback: function (context, event) {
+                this.actions.downloadPDF();
+            }
+        }
     ],
     actions: {
         /**
@@ -76,6 +76,7 @@ let config = {
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
                 this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
+                this.data.cells.actions.loadChartFinish = this.actions.loadChartFinish;
                 this.data.cells.render(this.el.find('.cells-container'));
             }
             //客户模式下设置轮播视图序号
@@ -315,6 +316,50 @@ let config = {
         getCarouselSetting: function () {
             return ViewsService.getCarouselSetting();
         },
+        /**
+         * 最后一个cell加载完后执行的回调,将滚动条设置到body上
+         */
+        loadChartFinish(){
+            $('body').css('overflow','auto');
+            this.el.find('.cells-container').css('overflow','visible');
+        },
+        /**
+         * 点击下载pdf
+         */
+        downloadPDF(){
+            //计算实际内容高度
+            let width = 0;
+            let height = this.el.find('.cells-container')[0].scrollHeight;
+            //计算内容高度
+            this.el.find('.bi-table').each(function () {
+                height = height - $(this).height() + $(this)[0].scrollHeight;
+            });
+            this.el.find('.comment').each(function () {
+                height = height - $(this).height() + $(this)[0].scrollHeight;
+            });
+
+            //计算最大宽度
+            this.el.find('.cell').each(function () {
+                width = Math.max(width,$(this)[0].scrollWidth);
+            });
+            // console.log('width',width);
+            // console.log('height',height);
+            let heightIn = Math.max((Number(height)/105).toFixed(2),11.7);
+            let widthIn = Math.min(Math.max((Number(width)/105).toFixed(2),8.27),18);
+            // console.log('widthIn',widthIn);
+            // console.log('heightIn',heightIn);
+
+            let origin = window.location.origin;
+            let parent_table_id = window.config.parent_table_id || '';
+            let row_id = window.config.row_id || '';
+            let query_mark = window.config.query_mark || '';
+            let operation_id = window.config.operation_id || '';
+            let folder_id = window.config.folder_id || '';
+
+            let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in&parent_table_id=${parent_table_id}&row_id=${row_id}&query_mark=${query_mark}&operation_id=${operation_id}&folder_id=${folder_id}`;
+            // console.log(url);
+            window.open(url);
+        }
     },
     afterRender:function(){
         let that = this;

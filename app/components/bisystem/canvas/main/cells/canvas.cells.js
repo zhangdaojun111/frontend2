@@ -147,7 +147,14 @@ let config = {
         /**
          * 实例化画布块，并返回实例化的对象
          */
-        makeCell(data) {
+        makeCell(data,flag) {
+            if(this.data.isPdf === true){
+                data['isPdf'] = true;
+                if(flag === true){
+                    data['isLast'] = true;
+                }
+            }
+
             let cell = new CanvasCellComponent(data,{
                 onDrag: (componentId) => {
                     let comp = this.data.cells[componentId];
@@ -176,6 +183,7 @@ let config = {
                 this.data.prepareDeleteComponentArr.push(cell);
             }
             this.append(cell, $wrap);
+            cell.actions.loadChartFinish = this.actions.loadChartFinish;
             return cell;
         },
 
@@ -253,8 +261,11 @@ let config = {
                     'currentViewId': this.data.currentViewId,
                     'cell': val
                 };
-
-                let cell = this.actions.makeCell(data);
+                let isLast;
+                if(this.data.isPdf === true && index === layoutLen - 1 ){
+                    isLast = true;
+                }
+                let cell = this.actions.makeCell(data,isLast);
                 this.data.cells[cell.componentId] = cell;
                 // 在客户模式下获取有没有下穿记录
                 let deep_info = {};
@@ -398,6 +409,9 @@ let config = {
                     this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
                 }
             }
+        }
+        if(window.config.pdf){
+            this.el.find('.ui-draggable.ui-draggable-handle.ui-resizable').css({'position':'absolute'});
         }
     },
     firstAfterRender() {},

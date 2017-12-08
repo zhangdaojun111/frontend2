@@ -60,7 +60,6 @@ let config = {
                 }
             });
         }
-
     },
     binds: [
         {

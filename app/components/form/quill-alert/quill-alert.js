@@ -6,8 +6,11 @@
 import template from './quill-alert.html';
 
 let css = `
+.content{
+  height: 100%;
+}
 .form-rich-editor .editor{
-        height: 300px;
+  height: 100%;
 }
 .ql-container {
   box-sizing: border-box;
@@ -1386,13 +1389,14 @@ let QuillAlert = {
         let editorDom = this.el.find('.content .editor');
         this.data.quill = new Quill(editorDom[0], {
             modules: {
-                toolbar: this.data.toolbarOption,
+                toolbar: [],
+                // imageDrop: true
             },
             readOnly: true,
             theme: 'snow'
         });
         this.data.quill.pasteHTML(this.data.value);
-
+        this.el.find('.ql-toolbar').hide();
     },
     beforeDestory() {
         this.data.quill = null;

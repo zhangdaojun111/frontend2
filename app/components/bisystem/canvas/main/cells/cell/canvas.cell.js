@@ -18,7 +18,9 @@ import {CellCommentComponent} from './comment/cell.comment';
 import {CellStylzieComponent} from './stylzie/cell.stylzie';
 import {CanvasCellTitleComponent} from './title/canvas.title';
 import {CellGaugeComponent} from './gauge/cell.gauge';
-import {CellMapComponent} from './map/cell.map'
+import {CellMapComponent} from './map/cell.map';
+import {CellApprovalComponent} from './approval/cell.approval';
+import {CellCalendarComponent} from './calendar/cell.calendar';
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../lib/msgbox';
@@ -36,6 +38,8 @@ const cellTypes = {
     'stylzie': CellStylzieComponent,
     'map':CellMapComponent,
     'gauge' : CellGaugeComponent,
+    'approval' : CellApprovalComponent,
+    'calendar' : CellCalendarComponent,
 };
 
 
@@ -88,6 +92,11 @@ let config = {
                 }
                 this.data.cellComponent.render(cellContainer);
             }
+
+            //bi打印pdf则执行回调
+            if(window.config.pdf === true && this.data.isLast === true){
+                this.actions.loadChartFinish();
+            }
         },
 
         /**
@@ -97,7 +106,7 @@ let config = {
             let dragCell = this.el.find('.cell');
             const dragOption = {
                 containment: '.cells-container',
-                grid: [10, 10],
+                grid: [1, 1],
                 stop: (event, ui) => {
                     this.actions.cancelSelect();
                     this.data.cell.size.left = ui.position.left;
@@ -108,7 +117,7 @@ let config = {
             };
 
             const resizeOption = {
-                grid: [10, 10],
+                grid: [1, 1],
                 stop: (event, ui) => {
                     this.data.cell.size.width = ui.size.width;
                     this.data.cell.size.height = ui.size.height;
@@ -206,6 +215,22 @@ let config = {
             this.data.cell.size.left = left;
             this.data.cell.size.top = top;
             this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
+        },
+        /**
+         * 手机旋转屏幕后画布块resize
+         */
+        resizeCanvas(){
+            let cmp = this.data.cellComponent;
+            let chart = cmp.myChart || cmp.pieChart || cmp.normalChart;
+            if(chart){
+                let myChart;
+                if(chart.hasOwnProperty('myChart')){
+                    myChart = chart.myChart;
+                }else{
+                    myChart = chart;
+                }
+                myChart.resize();
+            }
         }
 
     },
@@ -325,6 +350,16 @@ let config = {
             this.actions.cellDragandResize();
         } else {
             this.el.off('mousedown mouseup');
+        }
+
+        //判断屏幕旋转事件是否存在，存在则监听
+        let evt = "onorientationchange" in window ? "orientationchange":false;
+        if(evt){
+            window.addEventListener(evt,this.actions.resizeCanvas,false);
+        }
+
+        if(window.config.pdf){
+            this.el.find('.cell').addClass('download-pdf');
         }
     }
 };
