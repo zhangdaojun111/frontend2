@@ -68,10 +68,19 @@ export class CellBaseComponent extends Component {
                     this.data.chart = res['data'];
                 }
                 this.reload();
-            } else if (res['data'].assortment === 'normal' || res['data'].assortment === 'pie' || res['data'].assortment ==='radar') {
+            } else if (
+                res['data'].assortment === 'normal' ||
+                res['data'].assortment === 'pie' ||
+                res['data'].assortment === 'radar' ||
+                res['data'].assortment === 'multilist' ||
+                res['data'].assortment === 'stylzie'
+            ) {
                 this.data.chart = this.data.cellChart.chart = res['data'];
-                this.actions.updateChart({'chart': res['data']});
-            };
+                this.actions.updateChart(res['data'].assortment === 'multilist' ? this.data.cellChart : {'chart':res['data']});
+            } else if (res['data'].assortment === 'nineGrid') {
+                this.data = this.actions.reassemble({'chart':res['data']});
+                this.reload();
+            }
 
         }
     }

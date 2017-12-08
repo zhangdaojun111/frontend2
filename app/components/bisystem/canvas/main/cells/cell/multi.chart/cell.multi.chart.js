@@ -14,14 +14,20 @@ let config = {
     actions: {
         echartsInit() {
             let echartsService = new EchartsService(this.data);
-            this.myChart = echartsService;
-        }
+            this.multiChart = echartsService;
+        },
+
+        updateChart(data) {
+            //重新渲染echarts
+            const option = this.multiChart.multiChartOption(data);
+            this.multiChart.myChart.setOption(option,true);
+        },
     },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             this.data.cellChart.cell.size = data;
-            const option = this.myChart.multiChartOption(this.data.cellChart);
-            const myChart = this.myChart.myChart;
+            const option = this.multiChart.multiChartOption(this.data.cellChart);
+            const myChart = this.multiChart.myChart;
             myChart.setOption(option);
             myChart.resize();
         });

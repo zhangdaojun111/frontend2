@@ -195,7 +195,6 @@ let config = {
 
     },
     afterRender() {
-        console.log(this.data);
         // 向agid服务器获取数据 flow_id，form_id
         let prepareParmas = this.actions.getPrepareParmas({table_id: this.data.chart.table_id});
         Promise.all([prepareParmas]).then(res => {
