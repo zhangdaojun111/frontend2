@@ -58,7 +58,7 @@ let config={
         let dataGrid=new DataTableAgGrid(config);
         this.append(dataGrid,this.el.find('.songGrid'));
         Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
-            if(res.tableId == this.data["value"]){
+            if(res && this.data &&  res.tableId == this.data["value"]){
                 this.data["total"] = res.total;
                 if (this.data.total == 0) {
                     this.el.find('#requiredLogo').removeClass().addClass('required');
