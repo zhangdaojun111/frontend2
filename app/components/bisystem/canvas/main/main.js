@@ -175,12 +175,9 @@ let config = {
             this.el.find('.cell').each(function () {
                 width = Math.max(width,$(this)[0].scrollWidth);
             });
-            // console.log('width',width);
-            // console.log('height',height);
+
             let heightIn = Math.max((Number(height)/105).toFixed(2),11.7);
             let widthIn = Math.min(Math.max((Number(width)/105).toFixed(2),8.27),18);
-            // console.log('widthIn',widthIn);
-            // console.log('heightIn',heightIn);
 
             let origin = window.location.origin;
             let parent_table_id = window.config.parent_table_id || '';
@@ -190,7 +187,7 @@ let config = {
             let folder_id = window.config.folder_id || '';
 
             let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in&parent_table_id=${parent_table_id}&row_id=${row_id}&query_mark=${query_mark}&operation_id=${operation_id}&folder_id=${folder_id}`;
-            // console.log(url);
+            console.log(url);
             window.open(url);
         }
     },
