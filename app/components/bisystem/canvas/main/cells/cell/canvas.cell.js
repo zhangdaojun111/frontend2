@@ -92,17 +92,17 @@ let config = {
 
             //bi打印pdf则执行回调
             if(window.config.pdf === true){
-                // if(this.el.find('.bi-table').length > 0){
-                //     let cellWidth = this.el.find('.cell').width();
-                //     console.log(cellWidth);
-                //     console.log(this.el.find('.bi-table')[0].scrollWidth);
-                //     let width = Math.max(this.el.find('.bi-table')[0].scrollWidth + 30,cellWidth);
-                //     console.log(width);
-                //     let widthChart = width - 20;
-                //     console.log(widthChart);
-                //     this.el.find('.cell').css('width',width);
-                //     this.el.find('.cell-chart').css('width',widthChart);
-                // }
+                if(this.el.find('.bi-table').length > 0){
+                    let cellWidth = this.el.find('.cell').width();
+                    console.log(cellWidth);
+                    console.log(this.el.find('.bi-table')[0].scrollWidth);
+                    let width = Math.max(this.el.find('.bi-table')[0].scrollWidth + 30,cellWidth);
+                    console.log(width);
+                    $(`<div>cellwidth:${cellWidth},width:${width}</div>`).appendTo('.cell');
+                    let widthChart = width - 20;
+                    this.el.find('.cell').css('width',width);
+                    this.el.find('.cell-chart').css('width',widthChart);
+                }
                 if(this.data.isLast === true){
                     this.actions.loadChartFinish();
                 }
