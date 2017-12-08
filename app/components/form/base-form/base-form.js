@@ -2178,7 +2178,7 @@ class BaseForm extends Component {
 		window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
 		//存父表的newData
 		window.top.frontendParentNewData[formData.data.tableId] = _.defaultsDeep({},formData.data.data);
-		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
+		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id'] && formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
 		super($.extend(true, {}, config, newConfig), formData.data);
 	}
 
