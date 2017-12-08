@@ -155,7 +155,6 @@ let config={
                         title:'提示'
                     }
                 ).then(res => {
-                    debugger
                     if(res.determine){
                         // Mediator.publish('workflow:comment',res.comment);
                         o.comment = res.comment;
