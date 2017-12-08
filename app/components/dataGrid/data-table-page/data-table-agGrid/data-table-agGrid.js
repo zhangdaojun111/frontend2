@@ -1326,6 +1326,9 @@ let config = {
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                         this.actions.checkCorrespondence(true);
                     }
+	                if(this.data.correspondenceSelectedList){
+		                this.data.correspondenceSelectedList.length>0?Mediator.publish('form:correspondenceRequired:' + this.data.tableId, true):Mediator.publish('form:correspondenceRequired:' + this.data.tableId, false);
+	                }
                     if (this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild') {
                         Mediator.publish('form:songGridRefresh:' + this.data.tableId, this.data);
                     }
