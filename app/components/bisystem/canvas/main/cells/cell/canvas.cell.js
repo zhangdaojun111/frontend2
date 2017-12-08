@@ -24,6 +24,8 @@ import {CellCalendarComponent} from './calendar/cell.calendar';
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../lib/msgbox';
+import 'jquery-ui/ui/widgets/draggable';
+import 'jquery-ui/ui/widgets/droppable';
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
 const cellTypes = {
