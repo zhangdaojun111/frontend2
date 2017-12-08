@@ -12,7 +12,6 @@ import  './views.scss';
 import Mediator from '../../../lib/mediator';
 import 'jquery-ui/ui/widgets/sortable.js';
 
-
 let config = {
     template:template,
     data:{
@@ -150,12 +149,8 @@ let config = {
             this.append(viewItemComponent,this.el.find('.view-list'));
         });
     },
-    firstAfterRender() {
-
-    },
-    beforeDestory() {
-
-    }
+    firstAfterRender() {},
+    beforeDestory() {}
 };
 
 export class ViewsEditComponent extends Component{

@@ -70,7 +70,7 @@ export const ViewsService = {
             traditional: true
         });
         return new Promise((resolve, reject) => {
-            resolve(res);
+                resolve(res);
         })
     },
     /**

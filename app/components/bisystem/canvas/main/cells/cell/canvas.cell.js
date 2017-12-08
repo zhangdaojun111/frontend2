@@ -94,8 +94,17 @@ let config = {
             }
 
             //bi打印pdf则执行回调
-            if(window.config.pdf === true && this.data.isLast === true){
-                this.actions.loadChartFinish();
+            if(window.config.pdf === true){
+                if(this.el.find('.bi-table').length > 0){
+                    let cellWidth = this.data.cell.size.width;
+                    let width = Math.max(this.el.find('.bi-table')[0].scrollWidth + 30,cellWidth);
+                    let widthChart = width - 20;
+                    this.el.find('.cell').css('width',width);
+                    this.el.find('.cell-chart').css('width',widthChart);
+                }
+                if(this.data.isLast === true){
+                    this.actions.loadChartFinish();
+                }
             }
         },
 
@@ -127,7 +136,6 @@ let config = {
                     Mediator.publish(`bi:cell${myChartComponentId}:resize`, this.data.cell.size);
                 }
             };
-
             dragCell.draggable(dragOption).resizable(resizeOption);
         },
 

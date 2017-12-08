@@ -1,9 +1,11 @@
 <h3 class="title">
     <span class="title-tips">
-        {{#if icon}}
-        <img src="{{imgUrl}}?file_id={{icon}}">
-        {{else}}
-        <!--<i class="title-left"></i>-->
+        {{#if nonPdf}}
+            {{#if icon}}
+            <img src="{{imgUrl}}?file_id={{icon}}">
+            {{else}}
+            <!--<i class="title-left"></i>-->
+            {{/if}}
         {{/if}}
         <span>{{title}}</span> <b class="deep-title"></b>
     </span>
