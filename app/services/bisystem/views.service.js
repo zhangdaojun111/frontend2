@@ -17,7 +17,7 @@ export const ViewsService = {
         };
         const res = await HTTP.getImmediately('/bi/set_new_view_data',Object.assign(data,params));
         return new Promise((resolve, reject) => {
-                resolve(res);
+            resolve(res);
         })
     },
     /**
@@ -72,17 +72,26 @@ export const ViewsService = {
         return new Promise((resolve, reject) => {
                 resolve(res);
         })
+    },
+    /**
+     * 保存轮播设置
+     */
+    saveCarouselSetting(data){
+        HTTP.getImmediately({
+            url:'/bi/set_carousel/',
+            data:data,
+            type:'get'
+        });
+    },
+    /**
+     * 获取轮播设置
+     */
+    getCarouselSetting(){
+        let res =  HTTP.getImmediately({
+            url:'/bi/img_url/',
+            type:'get'
+        });
+
+        return Promise.resolve(res);
     }
-    // postPdfHtml(data){
-    //     return HTTP.ajaxImmediately({
-    //         url:'/bi/download_pdf/',
-    //         data: {
-    //             bi_str:data.bi_str,
-    //             view_id:data.view_id,
-    //             pdf_name:'',
-    //         },
-    //         method:'post',
-    //         traditional: true
-    //     });
-    // },
 };
