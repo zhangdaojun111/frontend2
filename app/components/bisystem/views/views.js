@@ -12,7 +12,6 @@ import  './views.scss';
 import Mediator from '../../../lib/mediator';
 import 'jquery-ui/ui/widgets/sortable.js';
 
-
 let config = {
     template:template,
     data:{
@@ -67,12 +66,6 @@ let config = {
                 height: 217,
                 title: '设置轮播'
             });
-            if(res){
-                // Mediator.emit('carousel:date',res);
-
-
-            }
-
         }
     },
     binds:[
@@ -105,7 +98,7 @@ let config = {
         this.data.views = window.config.bi_views;
 
         // 视图排序
-        let sortable_list = this.el.find('.view-list')
+        let sortable_list = this.el.find('.view-list');
         sortable_list.sortable({
             'update': function(event,ui) {
                 let view_sort_list = sortable_list.sortable( "toArray");
