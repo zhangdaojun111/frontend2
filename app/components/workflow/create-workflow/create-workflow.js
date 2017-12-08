@@ -212,6 +212,10 @@ let config = {
 						msgBox.alert(`${res.error}`);
 						this.el.find("#submitWorkflow").show();
 					}
+					if(res.error!='执行成功'){
+						msgBox.alert(`${res.error}`);
+						this.el.find("#submitWorkflow").show();
+					}
 				}
 			} else {
 				let postData = {
