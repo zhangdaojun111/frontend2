@@ -94,8 +94,12 @@ let config = {
             if(window.config.pdf === true){
                 if(this.el.find('.bi-table').length > 0){
                     let cellWidth = this.el.find('.cell').width();
+                    console.log(cellWidth);
+                    console.log(this.el.find('.bi-table')[0].scrollWidth);
                     let width = Math.max(this.el.find('.bi-table')[0].scrollWidth + 30,cellWidth);
+                    let widthChart = width - 20;
                     this.el.find('.cell').css('width',width);
+                    this.el.find('.cell-chart').css('width',widthChart);
                 }
                 if(this.data.isLast === true){
                     this.actions.loadChartFinish();
