@@ -45,7 +45,7 @@ function formatTreeData(list) {
     return res;
 }
 
-let config = {
+let workReport = Component.extend({
     template: template,
     data: {
         moment : require('moment'),
@@ -242,7 +242,7 @@ let config = {
                 isExternalFilterPresent: this.actions.isExternalFilterPresent,
                 doesExternalFilterPass: this.actions.doesExternalFilterPass
             };
-            this.agGrid = new agGrid(gridData);
+            this.agGrid = new agGrid({data:gridData});
             this.append(this.agGrid , this.el.find('.report-data'));
             this.agGrid.gridOptions.api.sizeColumnsToFit();
             let That = this;
@@ -553,15 +553,15 @@ let config = {
             That.agGrid.gridOptions.api.setQuickFilter($event.target.value)
         },1000))
     }
-};
+});
 
-class workReport extends Component {
-    constructor(data,newConfig){
-        for (let d in data) {
-            config.data[d] = data[d];
-        }
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class workReport extends Component {
+//     constructor(data,newConfig){
+//         for (let d in data) {
+//             config.data[d] = data[d];
+//         }
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default workReport;

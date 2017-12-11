@@ -98,8 +98,10 @@ let ResearchResult = Component.extend({
         initPageController:function () {
             //初始化data页面分页控制
             this.dataPageController = new dataPagination({
-                currentPage:1,
-                rows:20,
+                data:{
+                    currentPage:1,
+                    rows:20,
+                }
             });
             let $parent1 = this.el.find('.data-page-control');
             this.dataPageController.render($parent1);
@@ -110,8 +112,10 @@ let ResearchResult = Component.extend({
 
             //初始化attachment页面分页控制
             this.attachmentPageController = new dataPagination({
-                currentPage:1,
-                rows:15,
+                data: {
+                    currentPage:1,
+                    rows:15,
+                }
             });
             let $parent2 = this.el.find('.attachment-page-control');
             this.attachmentPageController.render($parent2);

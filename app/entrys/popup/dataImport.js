@@ -10,6 +10,6 @@ $(document).ready(function(){
         isSuperUser: window.config.isSuperUser,
         viewMode: window.config.viewMode
     };
-    let dataImport = new dataTableImport(obj);
+    let dataImport = new dataTableImport({data: obj});
     dataImport.render($('#dataImport'));
 })

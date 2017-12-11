@@ -20,7 +20,7 @@ import msgBox from '../../../../lib/msgbox';
 import dataTableAgGrid from '../../data-table-page/data-table-agGrid/data-table-agGrid'
 import './expert-search.scss';
 
-let config = {
+let expertSearch = Component.extend({
     template: template,
     ulChecked: true,
     inputValue: null,
@@ -608,11 +608,11 @@ let config = {
         })
     }
 
-};
-class expertSearch extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-        console.log(this.data)
-    }
-}
+});
+// class expertSearch extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//         console.log(this.data)
+//     }
+// }
 export default expertSearch

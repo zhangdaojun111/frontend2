@@ -17,14 +17,14 @@ $(document).ready(function(){
             tableId: ts_name,
             isNewWindow: isNewWindow
         };
-        com = new workflowPage(json);
+        com = new workflowPage({data: json});
     }
     if( ts_name == 'my-workflow' ){
         json = {
             tableId: ts_name,
             isNewWindow: isNewWindow
         };
-        com = new myWorkflow(json);
+        com = new myWorkflow({data: json});
     }
     if( ts_name == 'my-operations'){
         tableName = '我的操作';
@@ -32,7 +32,7 @@ $(document).ready(function(){
             tableId: ts_name,
             isNewWindow: isNewWindow
         };
-        com = new myOperation(json);
+        com = new myOperation({data: json});
     }
     if( ts_name == 'department-information' ){
         tableName = '部门信息';
@@ -40,7 +40,7 @@ $(document).ready(function(){
             tableId: window.config.table_id,
             isNewWindow: isNewWindow
         };
-        com = new department(json);
+        com = new department({data: json});
     }
     if( ts_name == 'personal-information' ){
         tableName = '人员信息';
@@ -48,7 +48,7 @@ $(document).ready(function(){
             tableId: window.config.table_id,
             isNewWindow: isNewWindow
         };
-        com = new personnel(json);
+        com = new personnel({data: json});
     }
     if( ts_name == 'work-report' ){
         tableName = '工作日报';
@@ -56,7 +56,7 @@ $(document).ready(function(){
             tableName: '工作日报',
             isNewWindow: isNewWindow
         };
-        com = new workReport(json);
+        com = new workReport({data: json});
     }
     if( ts_name == 'department-work-report' ){
         tableName = '部门工作日报';
@@ -65,7 +65,7 @@ $(document).ready(function(){
             isNewWindow: isNewWindow,
             department: 1,
         };
-        com = new workReport(json);
+        com = new workReport({data: json});
     }
     if( ts_name == 'department-daily' ){
         tableName = '部门日报';
@@ -73,7 +73,7 @@ $(document).ready(function(){
             tableName: '部门日报',
             isNewWindow: isNewWindow
         };
-        com = new departmentDiary(json);
+        com = new departmentDiary({data: json});
     }
     com.render($('#customDataGrid'));
 });

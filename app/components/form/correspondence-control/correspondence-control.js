@@ -38,7 +38,7 @@ let config={
             recordId:this.data.recordId || '',
             correspondenceField:this.data.dfield,
         }
-        let dataGrid=new DataTableAgGrid(config);
+        let dataGrid=new DataTableAgGrid({data: config});
         this.data.dataGrid=dataGrid;
         this.append(dataGrid,this.el.find('.correspondence-box'));
     },

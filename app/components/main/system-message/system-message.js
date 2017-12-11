@@ -299,9 +299,11 @@ let SystemMessage = Component.extend({
          */
         initPagination:function () {
             this.pagination = new dataPagination({
-                currentPage: 1,
-                rows: this.data.rows,
-                tableId:this.data.tableId
+                data: {
+                    currentPage: 1,
+                    rows: this.data.rows,
+                    tableId:this.data.tableId
+                }
             });
             this.pagination.render(this.el.find('.pagination'));
             this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
@@ -315,13 +317,15 @@ let SystemMessage = Component.extend({
         let that = this;
         //设置表格表头信息
         gridPref = this.agGrid = new agGrid({
-            columnDefs: systemMessageService.getColumnDefs(),
-            onCellClicked: that.actions.onCellClicked,
-            noFooter: true,
-            setRowStyle: this.actions.setRowStyle,
-            onRowDoubleClicked:that.actions.onRowDoubleClicked,
-            onSortChanged: this.actions.onSortChanged,
-            footerData:[]
+            data:{
+                columnDefs: systemMessageService.getColumnDefs(),
+                onCellClicked: that.actions.onCellClicked,
+                noFooter: true,
+                setRowStyle: this.actions.setRowStyle,
+                onRowDoubleClicked:that.actions.onRowDoubleClicked,
+                onSortChanged: this.actions.onSortChanged,
+                footerData:[]
+            }
         });
         this.agGrid.render(gridDom);
         this.showLoading();

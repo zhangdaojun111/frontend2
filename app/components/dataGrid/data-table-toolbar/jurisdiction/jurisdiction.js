@@ -9,7 +9,7 @@ import {dataTableService} from '../../../../services/dataGrid/data-table.service
 import {HTTP} from "../../../../lib/http";
 import './jurisdiction.scss'
 
-let config = {
+let jurisdiction = Component.extend({
     template: template,
     choosedList:[],
     data: {
@@ -57,10 +57,10 @@ let config = {
             this.actions.afterGetMsg()
         })
     }
-}
-class jurisdiction extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+})
+// class jurisdiction extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default jurisdiction

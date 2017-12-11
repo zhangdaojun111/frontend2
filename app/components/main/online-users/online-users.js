@@ -65,9 +65,11 @@ let OnlineUser = Component.extend({
         },
         initPagination:function () {
             this.pagination = new dataPagination({
-                currentPage: 1,
-                rows: this.data.rows,
-                tableId:this.data.tableId
+                data: {
+                    currentPage: 1,
+                    rows: this.data.rows,
+                    tableId:this.data.tableId
+                }
             });
             this.pagination.render(this.el.find('.user-pagination'));
             this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
@@ -79,9 +81,11 @@ let OnlineUser = Component.extend({
         let gridRoot = this.el.find('.user-grid');
         //设置表头
         this.agGrid = new agGrid({
-            columnDefs: GlobalService.getOnlineColumnDefs(),
-            footerData:[],
-            onSortChanged: this.actions.onSortChanged,
+            data: {
+                columnDefs: GlobalService.getOnlineColumnDefs(),
+                footerData:[],
+                onSortChanged: this.actions.onSortChanged,
+            }
         });
         this.agGrid.render(gridRoot);
         this.showLoading();

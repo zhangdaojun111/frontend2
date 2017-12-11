@@ -18,7 +18,7 @@ import dataPagination from "../../dataGrid/data-table-toolbar/data-pagination/da
 import FloatingFilter from "../../dataGrid/data-table-toolbar/floating-filter/floating-filter";
 import customColumns from "../../dataGrid/data-table-toolbar/custom-columns/custom-columns";
 
-let config = {
+let workflowPage = Component.extend({
     template: template,
     data: {
         tableId: '',
@@ -209,7 +209,7 @@ let config = {
                 onCellClicked: this.actions.onCellClicked,
                 onRowDoubleClicked: this.actions.onRowDoubleClicked
             };
-            this.agGrid = new agGrid(gridData);
+            this.agGrid = new agGrid({data:gridData});
             this.append(this.agGrid , this.el.find('#workflow-agGrid'));
             dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll"] );
             //渲染分页
@@ -220,7 +220,7 @@ let config = {
                 type: 'workflow'
             };
             //渲染分页
-            this.pagination = new dataPagination(paginationData);
+            this.pagination = new dataPagination({data: paginationData});
             this.pagination.actions.paginationChanged = this.actions.refreshData;
             this.append(this.pagination, this.el.find('.pagination'));
 
@@ -235,7 +235,7 @@ let config = {
             };
             //渲染定制列
             if( $('.custom-column-btn')[0] ){
-                this.customColumnsCom  = new customColumns(custom);
+                this.customColumnsCom  = new customColumns({data:custom});
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
             }
             this.data.firstRender = false;
@@ -945,14 +945,14 @@ let config = {
         this.data.pageType = this.data.tableId2pageType[this.data.tableId];
         this.actions.getData();
     }
-};
-class workflowPage extends Component {
-    constructor(data,newConfig){
-        for (let d in data) {
-            config.data[d] = data[d];
-        }
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+});
+// class workflowPage extends Component {
+//     constructor(data,newConfig){
+//         for (let d in data) {
+//             config.data[d] = data[d];
+//         }
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default workflowPage;

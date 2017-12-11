@@ -9,7 +9,7 @@ import DateControl from "../grid-data-control/grid-data-control";
 import TimeControl from "../../../form/time-control/time-control";
 import msgBox from '../../../../lib/msgbox';
 import './fast-search.scss';
-let config = {
+let fastSearch = Component.extend({
     template: template,
     inputObject: null,
     inputNextObject: null,
@@ -164,13 +164,13 @@ let config = {
             _this.actions.submitData();
         })
     }
-}
-class fastSearch extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-        }
-        super(config)
-    }
-}
+})
+// class fastSearch extends Component {
+//     constructor(data) {
+//         for (let d in data) {
+//             config.data[d] = data[d]
+//         }
+//         super(config)
+//     }
+// }
 export default fastSearch
