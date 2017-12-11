@@ -173,7 +173,8 @@ let config = {
                 let height = data.cell.size.height - 30;
                 this.el.find('#' + data.id).css('width',width).css('height',height);
             }
-
+            console.log(chartData ? chartData : this.data,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            debugger;
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle', this.data);
