@@ -6,6 +6,7 @@ import msgbox from "../../../../lib/msgbox";
 import Mediator from '../../../../lib/mediator';
 
 import "./charts.scss";
+import {canvasCellService} from "../../../../services/bisystem/canvas.cell.service";
 
 let config = {
     template:template,
@@ -82,12 +83,19 @@ let config = {
         },
     ],
     afterRender() {
-        this.el.on('dragstart',(ev) =>{
-            let event = ev.originalEvent;
-            event.dataTransfer.setData("Text",JSON.stringify(this.data));
-            return true;
+        // this.el.on('dragstart',(ev) =>{
+        //     let event = ev.originalEvent;
+        //     event.dataTransfer.setData("Text",JSON.stringify(this.data));
+        //     return true;
+        // });
+        let __this = this;
+        this.el.draggable({
+            helper: "clone",
+            cursor: "move",
+            start:function () {
+                canvasCellService.chartId = __this.data.id;
+            }
         });
-
     },
     firstAfterRender() {
         //点击编辑删除隐藏

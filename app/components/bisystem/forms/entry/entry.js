@@ -9,7 +9,17 @@ import {componentsJson} from './loadFormChart.json';
 
 // 将对象转化为数组
 let components = [];
-Object.keys(componentsJson).map(key => {components.push(componentsJson[key])});
+for(let k of Object.keys(componentsJson)){
+    if(window.config.query_mark !== 'home'){
+           if(k == 'approval' || k == 'calendar'){
+                continue
+           }
+        components.push(componentsJson[k])
+    }else {
+        components.push(componentsJson[k])
+    }
+}
+
 
 let config = {
     template: template,

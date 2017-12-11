@@ -9,6 +9,7 @@ import WorkFlowBtn from './workflow-btn/workflow-btn';
 import WorkFlowTree from './workflow-tree/workflow-tree';
 import Mediator from '../../../lib/mediator';
 import WorkFlow from '../workflow-drawflow/workflow';
+import {workflowService} from '../../../services/workflow/workflow.service';
 
 let config = {
     template: template,
@@ -78,7 +79,7 @@ let config = {
          * 添加常用工作流按钮
          */
         addFav(){
-            Mediator.publish('workflow:addFav', this.data.id);
+	        workflowService.addWorkflowFavorite({'id': this.data.id})
             let len = this.data.fav.rows.length;
             for(let i = 0;i<this.data.tree.data.length;i++){
                 for(let j = 0;j<this.data.tree.data[i].children.length;j++){
@@ -93,8 +94,13 @@ let config = {
                 }
             }
             this.el.find('.J_workflow-content').children().remove();
+	        let actions={
+		        chooseCb(msg){
+			        this.events.chooseCb(msg);
+		        }
+	        }
             this.data.fav.rows.forEach((row)=>{
-                this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
+	            this.append(new WorkFlowBtn(row,actions), this.el.find('.J_workflow-content'));
             });
             this.actions.init();
         },
@@ -106,7 +112,15 @@ let config = {
             this.actions.init();
             this.data.favoDel = true;
             this.actions.operate();
-        }
+        },
+	    chooseCb(msg){
+		    this.data.id=msg.id;
+		    this.data.boxshow = false;
+		    this.actions.init();
+		    this.el.find("#workflow-box").hide();
+		    this.events.contentShow();
+		    this.data.workTree.actions.chooseCb(msg);
+	    }
     },
     binds:[
         {
@@ -136,46 +150,31 @@ let config = {
         this.actions.init();
         this.data.boxshow = true;
         //添加流程下来菜单
-        this.append(new WorkFlowTree(this.data.tree), this.el.find('.J_select-container'));
+	    let _this=this;
+	    let actions={
+		    chooseCb(msg){
+			    _this.events.chooseCb(msg);
+		    }
+	    }
+	    this.data.workTree=new WorkFlowTree(this.data.tree,actions)
+	    this.append(this.data.workTree, this.el.find('.J_select-container'));
         //添加常用工作流组件
         this.data.fav.rows.forEach((row)=>{
-            this.append(new WorkFlowBtn(row), this.el.find('.J_workflow-content'));
-        });
-
-        //订阅btn click
-        Mediator.subscribe('workflow:choose', (msg)=> {
-            this.data.id=msg.id;
-            this.data.boxshow = false;
-            this.actions.init();
-            this.el.find("#workflow-box").hide();
-            $("#workflow-content").show();
+            this.append(new WorkFlowBtn(row,actions), this.el.find('.J_workflow-content'));
         });
         //订阅 select list click
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
             WorkFlow.show(msg.data[0],'#drawflow');
         });
-        Mediator.subscribe("workflow:contentClose",(msg)=>{
-            this.actions.contentClose();
-        })
     },
     beforeDestory: function(){
        
     }
 };
 
-class WorkFlowCreate extends Component{
+export default class WorkFlowCreate extends Component{
 
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
+	constructor(data,events,newConfig){
+		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
     }
 }
-
-export default {
-    
-    //获取常用工作流和下拉工作流名称
-    loadData(data){
-        let component = new WorkFlowCreate(data);
-        let el = $('#workflow-header');
-        component.render(el);
-    },
-};

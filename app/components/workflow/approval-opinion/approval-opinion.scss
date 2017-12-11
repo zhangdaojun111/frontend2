@@ -31,21 +31,46 @@
         .approve-textarea{
             width: 100%;
             padding: 10px;
-        }
+            .ql-toolbar {
+                display: none;
+            }
+            .ql-editor {
+                border-top: 1px solid #E4E4E4;
+            }
+            .editor {
+                height: 150px;
+            }
+            .ql-snow {
+                border: 1px solid #E4E4E4;
+            }
+            .form-icon {
+                display: none;
+            }
+         }
     }
     .workflow-btn{
         text-align: right;
-        button{
-            width: 100px;
-            height: 30px;
-            font-size: 12px;
-            background: #0088ff;
-            color: #fff;
-            border: 0 none;
-            outline: none;
-            border-radius: 3px;
+        .J_sure{
             cursor: pointer;
-            margin-right: 10px;
+            width: 90px;
+            height: 30px;
+            background-color: #0088ff;
+            border: 1px solid #0088ff;
+            border-radius: 4px;
+            color: #fff;
+            margin-right: 8px;
+            font-size:12px;
+        }
+        .J_cancel {
+            cursor: pointer;
+            width: 90px;
+            height: 30px;
+            background-color: #fff;
+            border: 1px solid #d7d7d7;
+            border-radius: 4px;
+            color: #666;
+            margin-right: 8px;
+            font-size:12px;
         }
     }
     #comment{

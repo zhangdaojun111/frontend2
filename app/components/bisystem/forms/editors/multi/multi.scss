@@ -23,4 +23,17 @@
             margin-left: 256px;
         }
     }
+    .form-group {
+        .customAccuracyNum {
+            .form-chart-wrapper {
+                span {
+                    margin-left: 16px;
+                    color: #666666;
+                }
+                input {
+                    width: 200px;
+                }
+            }
+        }
+    }
 }

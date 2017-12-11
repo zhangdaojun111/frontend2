@@ -12,7 +12,6 @@ import  './views.scss';
 import Mediator from '../../../lib/mediator';
 import 'jquery-ui/ui/widgets/sortable.js';
 
-
 let config = {
     template:template,
     data:{
@@ -62,18 +61,21 @@ let config = {
          * 设置轮播
          */
         async setCarousel() {
+            const data = await ViewsService.getCarouselSetting();
+            carouselConfig.data.carousel = data.data.carousel_time || 0;
+            carouselConfig.data.operate = data.data.stop_time || 0;
+
             const res = await PMAPI.openDialogByComponent(carouselConfig,{
                 width: 348,
-                height: 217,
+                height: 280,
                 title: '设置轮播'
             });
+
             if(res){
-                // Mediator.emit('carousel:date',res);
-
-
+                // 设置轮播
+                ViewsService.saveCarouselSetting(res);
             }
-
-        }
+        },
     },
     binds:[
         {
@@ -105,7 +107,7 @@ let config = {
         this.data.views = window.config.bi_views;
 
         // 视图排序
-        let sortable_list = this.el.find('.view-list')
+        let sortable_list = this.el.find('.view-list');
         sortable_list.sortable({
             'update': function(event,ui) {
                 let view_sort_list = sortable_list.sortable( "toArray");

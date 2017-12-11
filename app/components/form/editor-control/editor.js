@@ -2,6 +2,7 @@ import Component from '../../../lib/component';
 import template from './editor.html';
 import './editor.scss';
 import Quill from 'quill';
+import { ImageDrop } from './quill-image-drop';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 
@@ -28,6 +29,8 @@ let toolbarOption = [
 
 ];
 
+Quill.register('modules/imageDrop', ImageDrop);
+
 let config = {
     template: template,
     binds:[
@@ -51,6 +54,7 @@ let config = {
         this.quill = new Quill(editorDom[0], {
             modules: {
                 toolbar: toolbarOption,
+                imageDrop: true
             },
             readOnly: this.data.is_view == 1,
             theme: 'snow'
@@ -61,7 +65,7 @@ let config = {
         if (this.data.is_view) {
             this.el.find('.wrap').attr('title', this.data.value.replace(/<.*?>/ig,""))
         }
-        if(this.data.history){
+        if(this.data.history && !this.data.isApproval){
             this.el.find('.ui-history').css('visibility','visible');
         }
         this.quill.on('text-change', _.debounce(() => {
