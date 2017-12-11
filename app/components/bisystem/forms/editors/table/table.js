@@ -420,7 +420,7 @@ let config = {
 
     async afterRender() {
         if (this.data.chart_id) {
-            const res = await this.actions.getChartData(this.data.chart_id);
+            const res = await this.getChartData(this.data.chart_id);
             if (res[0]['success'] === 1) {
                 this.data.chart = res[0]['data']
             } else {

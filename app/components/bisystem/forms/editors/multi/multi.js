@@ -35,6 +35,7 @@ let config = {
                 msgbox.alert(p1['error'])
             }
 
+
             // 获取图标
             let p2 = ChartFormService.getChartIcon().then(res => {
                 if (res['success'] === 1) {
@@ -127,7 +128,7 @@ let config = {
         /**
          * 添加图表
          */
-        addChart(data) {
+         addChart(data) {
             let chart = new ChartEditor({
                 source: data,
             }, {
@@ -209,7 +210,7 @@ let config = {
         this.data.charts = {};
         this.data.chart_id = this.data.id;
         if (this.data.chart_id) {
-            const res = await this.getChartData(this.data.chart_id);
+            const res = await this.actions.getChartData(this.data.chart_id);
             if (res[0]['success'] === 1) {
                 this.data.chart = res[0]['data']
             } else {
@@ -234,4 +235,10 @@ let config = {
 
 let MultiEditor = Base.extend(config);
 
-export {MultiEditor}
+// class MultiEditor extends Base {
+//     constructor(data, event,extendConfig) {
+//         super($.extend(true,{},config,extendConfig), data, event);
+//     }
+// }
+
+export {MultiEditor};

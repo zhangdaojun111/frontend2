@@ -104,9 +104,7 @@ let config = {
             this.formItems['columns'].data.list = data;
             this.formItems['columns'].reload();
             this.formItems['columns'].actions.selectAll();
-        },
-
-
+        }
     },
     data: {
         options: [
@@ -252,12 +250,11 @@ let config = {
                 }
             }
             if(!pass){
-                this.events.onChange(pass);
+                // this.events.onChange(pass);
             }
         })
     }
 };
-
 
 class ChartEditor extends Base {
     constructor(data, event,extendConfig) {

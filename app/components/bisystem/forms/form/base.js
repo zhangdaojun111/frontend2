@@ -2,6 +2,10 @@ import Component from '../../../../lib/component';
 import {formChartValidateService as formValidate} from '../../../../services/bisystem/bi.chart.validate.service';
 
 class Base extends Component {
+
+    constructor(config, data, event,extendConfig) {
+        super($.extend(true,{},config,extendConfig), data, event)
+    }
     setValue(){}
     getValue(){
         return this.data.value;
@@ -42,7 +46,5 @@ class Base extends Component {
         this.el.find('.form-label .error-msg').html('');
     }
 }
-
-Base.config = {};
 
 export {Base}
