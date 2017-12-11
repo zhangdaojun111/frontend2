@@ -19,13 +19,5 @@ let config = {
 	}
 }
 
-export default class WorkFlowGrid extends Component {
-	// constructor(data){
-	//     config.data = data;
-	//     super(config);
-	// }
-
-	constructor(data,newConfig){
-		super($.extend(true,{},config,newConfig,{data:data||{}}));
-	}
-}
+let WorkFlowGrid = Component.extend(config);
+export default WorkFlowGrid

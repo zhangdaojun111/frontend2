@@ -30,23 +30,25 @@ const workflowForGrid={
         obj.table_id=para.table_id;
         obj.form_id=para.form_id;
         obj.flow_id=para.flow_id;
-        var self=this;
-        ApprovalWorkflow.create(para.el).then(function (component) {
-            self.create();
-            setTimeout(()=>component.hideLoading(),1000)
-        });
-
+	    this.data.approvalWorkflow = new ApprovalWorkflow({events:actions});
+	    this.data.approvalWorkflow.render(this.el);
+	    this.data.approvalWorkflow.hideLoading();
     },
     create(){
         $('#addFollower').hide();
-        WorkFlowForm.showForm();
+	    this.data.workForm = new WorkFlowForm();
+	    this.data.workForm.render(this.el.find('#workflow-form'));
         
         let nameArr=[],focus=[],is_view,tree=[],staff=[];
         is_view=obj.btnType==='view'?1:0;
         //订阅form data
         Mediator.subscribe('workFlow:record_info', (res) => {
-            ApprovalHeader.showheader(res.record_info);
-            WorkflowRecord.showRecord(res.record_info);
+	        this.data.approvalHeader=new ApprovalHeader({data:res.record_info});
+	        this.data.approvalHeader.render(this.el.find('#approval-info'));
+	        this.data.approvalHeader.hideLoading();
+	        this.data.workflowRecord=new WorkflowRecord({data:res.record_info});
+	        this.data.workflowRecord.render(this.el.find('#workflow-record'));
+	        this.data.workflowRecord.hideLoading();
             let current_node_arr = res.record_info.current_node.split('、');
             if(current_node_arr.indexOf(window.config.name)==-1){
                 $('#approval-workflow').find('.for-hide').hide();

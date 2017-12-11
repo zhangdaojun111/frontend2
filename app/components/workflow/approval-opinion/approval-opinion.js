@@ -89,10 +89,5 @@ let config = {
     },
 };
 
-class approvalOpinion extends Component{
-    constructor(data,newConfig){
-        config.data = data;
-        super($.extend(true,{},config,newConfig));
-    }
-}
-export default approvalOpinion;
+let approvalOpinion = Component.extend(config);
+export default approvalOpinion
