@@ -103,6 +103,7 @@ let config = {
             event:'click',
             selector: '.view-attached-list',
             callback: function () {
+                console.log('before view list value:'+JSON.stringify(this.data.value));
                 if(this.data.value.length == 0){
                     return;
                 }
@@ -118,6 +119,7 @@ let config = {
                         }
                     })
                 }
+                console.log((new URL(document.URL)).searchParams.get('key'));
                 Storage.deleteItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
                 FormService.getAttachment({
                     file_ids:JSON.stringify(this.data.value),
@@ -338,8 +340,10 @@ let config = {
             }
         },
         _updateDeleted:function(res){
-            Storage.init('null');
             let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
+            console.log('deletedFiles');
+            console.dir(deletedFiles);
+            console.dir(window.localStorage);
             if(!deletedFiles){
                 return;
             }
@@ -352,10 +356,12 @@ let config = {
                     this.actions._deleteItemFromThumbnailList(file);
                 }
             }
+            console.log('after deleted value:'+JSON.stringify(this.data.value));
             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
             if(this.data.value.length > 0){
                 this.el.find('.view-attached-list').css('cursor','pointer');
             }
+            Storage.deleteItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
             this.trigger('changeValue',this.data);
         }
     },

@@ -997,6 +997,7 @@ let config = {
 			}
 			let res = await FormService.getAllCountData(data);
 			for (let k in res["data"]) {
+				console.log('k:'+k);
 				let data = this.data.data;
 				//如果是周期规则
 				if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
@@ -1291,6 +1292,8 @@ let config = {
 				return;
 			}
 			if (this.data.data[data.dfield]) {
+				console.log('checkValue data.data');
+				console.dir(data);
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
 			if ((data.type == 'Buildin' || data.type == 'MultiLinkage') && !this.data.isInit && !noCount) {
@@ -1384,6 +1387,7 @@ let config = {
 				window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
 			}
 			if (!this.data.isInit && !noCount) {
+				console.log('getDataForForm');
 				this.actions.getDataForForm();
 			}
 		},
