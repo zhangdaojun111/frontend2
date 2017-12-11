@@ -266,7 +266,7 @@ let config = {
 				_this.actions.submitData(res);
 			}
 		}
-		this.data.workInit = new WorkflowInitial({}, actions);
+		this.data.workInit = new WorkflowInitial({events:actions});
 		this.data.workInit.render(this.el);
 		this.data.workForm = new WorkFlowForm();
 		this.data.workForm.render(this.el.find('#workflow-form'));
@@ -276,7 +276,8 @@ let config = {
 	}
 }
 export default class CreateWorkflow extends Component {
-	constructor(data, newConfig) {
-		super($.extend(true, {}, config, newConfig), data);
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
 	}
 }
+CreateWorkflow.config=config;

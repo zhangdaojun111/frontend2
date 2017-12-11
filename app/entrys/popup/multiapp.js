@@ -15,6 +15,6 @@ function GetQueryString(name)
     if(r!=null)return  unescape(r[2]); return null;
 }
 let key=GetQueryString('key');
-let multiApp = new MultiApp({key:key});
+let multiApp = new MultiApp({data:{key:key}});
 
 multiApp.render($('#multi-app'));

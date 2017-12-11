@@ -33,9 +33,10 @@ let config = {
 };
 
 class FollowerDialog extends Component {
-    constructor(data, newconfig = {}) {
-        config.data = data;
-        super($.extend(true ,{}, config, newconfig));
-    }
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
+	}
 }
 export default FollowerDialog;
+
+FollowerDialog.config=config;

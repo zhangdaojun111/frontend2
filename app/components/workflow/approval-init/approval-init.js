@@ -37,14 +37,14 @@ let config = {
 					comment['index'] = count;
 					count += 1;
 				}
-				this.data.approvalHeader=new ApprovalHeader(res.record_info,{
+				this.data.approvalHeader=new ApprovalHeader({data:res.record_info,events:{
 					getFormTrans(res){
 						_this.data.workForm.actions.getFormTrans(res);
 					}
-				});
+				}});
 				this.data.approvalHeader.render(this.el.find('#approval-info'));
 				this.data.approvalHeader.hideLoading();
-				this.data.workflowRecord=new WorkflowRecord(res.record_info);
+				this.data.workflowRecord=new WorkflowRecord({data:res.record_info});
 				this.data.workflowRecord.render(this.el.find('#workflow-record'));
 				this.data.workflowRecord.hideLoading();
 				let current_node_arr = res.record_info.current_node.split('、');
@@ -273,14 +273,14 @@ let config = {
 			}
 			data.url = obj;
 			let _this=this;
-			this.data.workSeal=new WorkflowSeal(data,{
+			this.data.workSeal=new WorkflowSeal({data,events:{
 				hideImg(){
 					_this.data.workForm.actions.hideImg();
 				},
 				showImg(){
 					_this.data.workForm.actions.showImg();
 				}
-			})
+			}})
 			this.data.workSeal.render(this.el.find('#workflow-seal'));
 		}
 	},
@@ -321,13 +321,13 @@ let config = {
 					this.data.is_view = 1;
 				}
 			}
-			this.data.approvalWorkflow = new ApprovalWorkflow({},actions);
+			this.data.approvalWorkflow = new ApprovalWorkflow({events:actions});
 			this.data.approvalWorkflow.render(this.el);
-			this.data.workForm = new WorkFlowForm({},{
+			this.data.workForm = new WorkFlowForm({events:{
 				sendImgInfo(res){
 					_this.actions.sendImgInfo(res);
 				}
-			});
+			}});
 			this.data.workForm.render(this.el.find('#workflow-form'));
 			this.data.workGrid = new WorkFlowGrid();
 			this.data.workGrid.render(this.el.find('#workflow-grid'));
@@ -348,8 +348,9 @@ let config = {
 	},
 }
 export default class ApprovalInit extends Component {
-	constructor(data, newConfig) {
-		super($.extend(true, {}, config, newConfig), data);
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
 	}
-
 }
+
+ApprovalInit.config=config;

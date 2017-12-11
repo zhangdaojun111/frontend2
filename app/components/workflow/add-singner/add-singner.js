@@ -63,14 +63,14 @@ let config = {
 		this.data.staff=res.data.department2user;
 		this.actions.recur(this.data.tree);
 		let key = workflowService.GetQueryString('key');
-		new WorkflowAddSigner({key:key}).render(this.el);
+		new WorkflowAddSigner({data:{key:key}}).render(this.el);
 		this.actions.createTree();
 
 	}
 }
 
 export default class AddSingner extends Component {
-	constructor(data, newConfig) {
-		super($.extend(true, {}, config, newConfig), data);
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
 	}
 }

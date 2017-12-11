@@ -18,7 +18,7 @@ let config ={
 		}
 	},
 	afterRender(){
-		this.data.addWf=new AddWf(this.data.obj);
+		this.data.addWf=new AddWf({data:{obj:this.data.obj}});
 		this.data.addWf.render(this.el);
 		this.data.workFlowForm=new WorkFlowForm();
 		this.data.workFlowForm.render(this.el.find('#workflow-form'));
@@ -28,8 +28,7 @@ let config ={
 }
 
 export default class AddWfInit extends Component{
-	constructor(data, newConfig) {
-		super($.extend(true, {}, config, newConfig), data);
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
 	}
-
 }

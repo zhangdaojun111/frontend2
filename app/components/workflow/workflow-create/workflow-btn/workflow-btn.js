@@ -27,9 +27,11 @@ let config = {
 }
 
 class WorkFlowBtn extends Component {
-	constructor(data,events,newConfig){
-		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
 	}
 }
 
 export default WorkFlowBtn;
+
+WorkFlowBtn.config=config;

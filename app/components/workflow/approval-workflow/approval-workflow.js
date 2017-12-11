@@ -454,7 +454,9 @@ let config={
 	}
 };
 export default class ApprovalWorkflow extends Component{
-	constructor(data,events,newConfig){
-		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
 	}
 }
+
+ApprovalWorkflow.config=config;

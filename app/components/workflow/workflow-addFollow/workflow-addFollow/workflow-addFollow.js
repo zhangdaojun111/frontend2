@@ -49,9 +49,9 @@ let config = {
 					if (val) {
 						val.id = i;
 						if (checked.length === 0) {
-							this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:{val}}), this.el.find('#staffMulti'));
 						} else if (arr.indexOf(i) === -1) {
-							this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:{val}}), this.el.find('#staffMulti'));
 						}
 					}
 				});
@@ -96,9 +96,9 @@ let config = {
 					val.id = i;
 					val.preventClick = this.data.preventClick;
 					if (checked.length === 0) {
-						this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+						this.append(new SelectStaff({data:{val}}), this.el.find('#staffMulti'));
 					} else if (arr.indexOf(i) === -1) {
-						this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+						this.append(new SelectStaff({data:{val}}), this.el.find('#staffMulti'));
 					}
 				}
 			});
@@ -115,9 +115,9 @@ let config = {
 					if (val) {
 						val.id = i;
 						if (checked.length === 0) {
-							this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:{val}}), this.el.find('#staffMulti'));
 						} else if (arr.indexOf(i) === -1) {
-							this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:{val}}), this.el.find('#staffMulti'));
 						}
 					}
 				});
@@ -156,12 +156,12 @@ let config = {
 		});
 		//注册SelectedStaff组件
 		Mediator.subscribe('workflow:pubCheck', (res) => {
-			this.append(new SelectedStaff(res), this.el.find('#selected'));
+			this.append(new SelectedStaff({data:{res}}), this.el.find('#selected'));
 			this.data.total++;
 			this.action.addtotal(this.data.total);
 		});
 		Mediator.subscribe('workflow:pubCheckNoDel', (res) => {
-			this.append(new SelectedStaffNoDel(res), this.el.find('#selected'));
+			this.append(new SelectedStaffNoDel({data:{res}}), this.el.find('#selected'));
 			this.data.total++;
 			this.action.addtotal(this.data.total);
 		});
@@ -235,7 +235,9 @@ let config = {
 };
 
 export default class WorkflowAddFollow extends Component {
-	constructor(data, events, newConfig) {
-		super($.extend(true, {}, config, newConfig, {data: data || {}}), {},events);
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
 	}
 }
+
+WorkflowAddFollow.config=config;

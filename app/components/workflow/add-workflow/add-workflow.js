@@ -388,8 +388,7 @@ let config={
     }
 };
 export default class AddWorkflow extends Component{
-    constructor(data,newConfig){
-        config.data.obj = data;
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
+	}
 }

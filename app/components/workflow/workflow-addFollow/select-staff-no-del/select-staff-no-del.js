@@ -21,9 +21,11 @@ class SelectStaffNoDel extends Component{
     //     super(config,data);
     // }
 
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
+	constructor(extendConfig){
+		super($.extend(true, {}, config, extendConfig));
+	}
 }
 
 export default SelectStaffNoDel;
+
+SelectStaffNoDel.config=config;

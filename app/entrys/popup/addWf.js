@@ -14,4 +14,4 @@ serchStr.split('&').forEach(res => {
 	let arr = res.split('=');
 	obj[arr[0]] = arr[1];
 });
-new AddWfInit({obj:obj}).render($('#add-wf'));
+new AddWfInit({data:{obj:obj}}).render($('#add-wf'));
