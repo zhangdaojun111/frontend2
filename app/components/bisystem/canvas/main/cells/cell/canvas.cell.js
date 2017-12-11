@@ -81,13 +81,15 @@ let config = {
                 cell: this.data.cell,
                 viewId: this.data.currentViewId,
             };
-            console.log(chart);
+            
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart,this.data.currentViewId);
                 this.data.cellComponent = new cellTypes[chart['data']['assortment']]({
-                    data,
-                    onUpdateChartDeepTitle: (data) => {
-                        this.cellTitle.actions.setDeepTitle(data);
+                    data:data,
+                    events:{
+                        onUpdateChartDeepTitle: (data) => {
+                            this.cellTitle.actions.setDeepTitle(data);
+                        }
                     }
                 });
 

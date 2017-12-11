@@ -29,10 +29,12 @@ let config = {
             event:'click',
             selector:'.table-operate a',
             callback:function (context,event) {
+                console.log(this.data,'.............................................');
                 let data = {
                     table_id: this.data.chart.table_id,
                     real_id:this.data.chart.data.rows[$(context).attr('data-index')][this.data.chart.data.rows[0].length - 1]
                 };
+                console.log(data);
                 this.actions.gridHandle($(context).attr('class'), data);
             }
         },
@@ -220,6 +222,7 @@ let config = {
             cell:this.data.cell,
             chart:this.data.chart
         };
+        console.log(this.data.chart);
         let cellChart = CellTableComponent.init(data);
         $.extend(true, this.data, cellChart);
     }
