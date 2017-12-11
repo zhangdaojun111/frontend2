@@ -41,7 +41,7 @@ let config={
             tableId:this.data.value,
             parentTableId:this.data.parent_table_id,
             rowId:this.data.parent_temp_id || '',
-            // record_id:this.data.recordId || '',
+            record_id:this.data.recordId || '',
             parentRealId:this.data.parent_real_id || '',
             // parentRecordId:this.data.recordId || '',
             parentTempId:this.data.parent_temp_id || '',
