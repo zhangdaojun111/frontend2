@@ -363,6 +363,7 @@ let config = {
         }
     ],
     afterRender() {
+        console.log(this.data);
         this.actions.renderCell();
         if (window.config.bi_user !== 'client') {
             this.actions.cellDragandResize();
@@ -411,9 +412,8 @@ let config = {
 };
 
 export class CanvasCellComponent extends Component {
-
-    constructor(data, events,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, events);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
         // config.data.biUser = window.config.bi_user === 'client' ? false : true;
         // super(config);
         // this.data.cell = data['cell'];
