@@ -30,7 +30,8 @@ let config = {
 		async approveWorkflow(para) {
 			let key = this.data.obj.key;
 			let formData = CreateFormServer.getFormValue(this.data.obj.table_id),
-				comment = this.el.find('#comment').val();
+				//comment = this.el.find('#comment').val();
+            comment=$('.content .editor').val();
 			para.data = JSON.stringify(formData);
 			para.comment = comment;
 			para.focus_users = JSON.stringify(focusArr);

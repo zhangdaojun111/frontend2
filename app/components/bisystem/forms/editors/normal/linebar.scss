@@ -1,27 +1,31 @@
 .form-chart-normal {
     .form-group {
-        .form-chart-normal {
-            .auto-select-component {
-                width: 250px;
-            }
-            .chart-group {
-                position: relative;
-                right: -265px;
-                max-width: 250px;
-                margin-top: -56px;
-            }
-            .default-y {
-                .form-chart-wrapper {
-                    padding-top: 20px;
-                }
-            }
-            .double-y {
-                h4 {
-                    margin-bottom: 20px;
-                }
+        .auto-select-component {
+            width: 250px;
+        }
+        .chart-group {
+            position: relative;
+            right: -265px;
+            max-width: 250px;
+            margin-top: -56px;
+        }
+        .default-y {
+            .form-chart-wrapper {
+                padding-top: 20px;
             }
         }
-        .marginBottomx, .textNum, .marginBottom, .limitNum, .endLimitNum, .customTopNum {
+        .double-y {
+            h4 {
+                margin-bottom: 20px;
+            }
+        }
+        .marginBottomx,
+        .textNum,
+        .marginBottom,
+        .limitNum,
+        .endLimitNum,
+        .customTopNum,
+        .customAccuracyNum {
             .form-chart-wrapper {
                 span {
                     margin-left: 16px;
