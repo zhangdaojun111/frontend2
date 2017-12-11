@@ -299,7 +299,7 @@ export class CellTableComponent extends CellBaseComponent {
         if(acc){
             if(num[1]){
                 let len = acc - num[1].length > 0 ? acc - num[1].length : acc;
-                if(len > 0){
+                if(len < 0){
                     num[1] = num[1].substr(0,len);
                 }else{
                     num[1] = parseFloat(num[1]).toFixed(len);
