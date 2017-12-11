@@ -78,6 +78,14 @@ let config = {
             }
         },
     ],
+    beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        this.data.comment = this.data.cellChart['chart']['data'];
+        this.data.componentId = this.componentId;
+    },
     afterRender(){
         let toolbarOptions = [{ size: [ 'small', false, 'large', 'huge' ]},{ 'header': [1, 2, 3, 4, 5, 6]},{ 'list': 'ordered'}, { 'list': 'bullet' },'image'];
 
@@ -97,21 +105,16 @@ let config = {
     firstAfterRender(){}
 };
 
+export let CellCommentComponent = CellBaseComponent.extend(config);
 
-export class CellCommentComponent extends CellBaseComponent {
-    // constructor(cellChart) {
-    //     config.data.cellChart = cellChart;
-    //     super(config);
-    //     this.data.comment = cellChart['chart']['data'];
-    // }
-
-    constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart,
-        };
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.comment = this.data.cellChart['chart']['data'];
-        this.data.componentId = this.componentId;
-    }
-}
+// export class CellCommentComponent extends CellBaseComponent {
+//     // constructor(cellChart) {
+//     //     config.data.cellChart = cellChart;
+//     //     super(config);
+//     //     this.data.comment = cellChart['chart']['data'];
+//     // }
+//
+//     constructor(extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,event);
+//     }
+// }

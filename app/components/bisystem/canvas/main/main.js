@@ -100,7 +100,11 @@ let config = {
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
-                this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
+                this.data.cells = new CanvasCellsComponent({
+                    data:{
+                        currentViewId:this.data.currentViewId
+                    }
+                });
                 this.data.cells.actions.loadChartFinish = this.actions.loadChartFinish;
                 this.data.cells.render(this.el.find('.cells-container'));
             }
@@ -418,11 +422,13 @@ let config = {
     beforeDestory:function () {}
 };
 
-export class CanvasMain extends Component {
-    constructor(data, events,extendConfig) {
-        config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
-        super($.extend(true,{},config,extendConfig), data, events);
-    }
-}
+export let CanvasMain = Component.extend(config);
+
+// export class CanvasMain extends Component {
+//     constructor(data, events,extendConfig) {
+//         config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
+//         super($.extend(true,{},config,extendConfig), data, events);
+//     }
+// }
 
 

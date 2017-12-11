@@ -101,8 +101,10 @@ let config = {
     beforeDestory() {}
 };
 
-export class NormalRangeComponent extends Component {
-    constructor(data,event,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,event)
-    }
-}
+export let NormalRangeComponent = Component.extend(config);
+
+// export class NormalRangeComponent extends Component {
+//     constructor(data,event,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,event)
+//     }
+// }

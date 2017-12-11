@@ -157,7 +157,8 @@ let config = {
                 }
             }
 
-            let cell = new CanvasCellComponent(data,{
+            let cell = new CanvasCellComponent({
+                data:data,
                 onDrag: (componentId) => {
                     let comp = this.data.cells[componentId];
                     this.data.cellMaxZindex++;
@@ -442,9 +443,11 @@ let config = {
     beforeDestory() {}
 };
 
-export class CanvasCellsComponent extends Component {
-    constructor(id, events,extendConfig) {
-        super($.extend(true,{},config,extendConfig), {currentViewId: id});
-    }
-}
+export let CanvasCellsComponent = Component.extend(config);
+
+// export class CanvasCellsComponent extends Component {
+//     constructor(id, events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig), {currentViewId: id});
+//     }
+// }
 

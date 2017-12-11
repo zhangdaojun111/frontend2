@@ -97,11 +97,11 @@ let config = {
 		let focus = this.data.focus;
 		let key = workflowService.GetQueryString('key');
 		let _this=this;
-		this.data.addFollow=new WorkflowAddFollow({key: key},{
+		this.data.addFollow=new WorkflowAddFollow({data:{key},events:{
 			addFocusCb(res){
 				_this.actions.addFocusCb(res)
 			}
-		});
+		}});
 		this.data.addFollow.render(this.el);
 		if (focus.length >= 1 && focus[0].indexOf('key') === -1) {
 			let dept = [], idArr = [];
@@ -127,11 +127,5 @@ let config = {
 		this.actions.subscribe();
 	}
 }
-
-export default class AddFocus extends Component {
-	constructor(data, newConfig) {
-		super($.extend(true, {}, config, newConfig), data);
-	}
-
-
-}
+let AddFocus = Component.extend(config)
+export default AddFocus

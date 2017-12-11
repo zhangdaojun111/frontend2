@@ -178,12 +178,5 @@ let config = {
 	beforeDestory: function(){
 	}
 }
-export default class WorkflowSeal extends Component{
-	// constructor (data){
-	//     super(config,data);
-	// }
-
-	constructor(data,events,newConfig){
-		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
-	}
-}
+let WorkflowSeal = Component.extend(config);
+export default WorkflowSeal

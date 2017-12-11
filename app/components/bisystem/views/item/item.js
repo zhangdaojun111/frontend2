@@ -85,8 +85,10 @@ let config = {
     firstAfterRender(){}
 };
 
-export class ViewItemComponent extends Component{
-    constructor(data,events,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,events);
-    }
-}
+export let ViewItemComponent = Component.extend(config);
+
+// export class ViewItemComponent extends Component{
+//     constructor(data,events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,events);
+//     }
+// }

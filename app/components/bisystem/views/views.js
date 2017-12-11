@@ -153,7 +153,11 @@ let config = {
     beforeDestory() {}
 };
 
-let ViewsEditComponent = Component.extend(config);
+export let ViewsEditComponent = Component.extend(config);
 
-export {ViewsEditComponent};
+// export class ViewsEditComponent extends Component{
+//     constructor(data,events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,events)
+//     }
+// }
 
