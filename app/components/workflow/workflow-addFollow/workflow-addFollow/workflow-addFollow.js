@@ -156,18 +156,18 @@ let config = {
 		});
 		//注册SelectedStaff组件
 		Mediator.subscribe('workflow:pubCheck', (res) => {
-			this.append(new SelectedStaff({data:{res}}), this.el.find('#selected'));
+			this.append(new SelectedStaff({data:res}), this.el.find('#selected'));
 			this.data.total++;
 			this.action.addtotal(this.data.total);
 		});
 		Mediator.subscribe('workflow:pubCheckNoDel', (res) => {
-			this.append(new SelectedStaffNoDel({data:{res}}), this.el.find('#selected'));
+			this.append(new SelectedStaffNoDel({data:res}), this.el.find('#selected'));
 			this.data.total++;
 			this.action.addtotal(this.data.total);
 		});
 		//注册SelectedStaff组件
 		Mediator.subscribe('workflow:pubCheckSingle', (res) => {
-			this.append(new SelectedStaff(res), this.el.find('#selected'));
+			this.append(new SelectedStaff({data:res}), this.el.find('#selected'));
 			this.data.total++;
 			this.action.addtotal(this.data.total);
 		});
