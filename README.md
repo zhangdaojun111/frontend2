@@ -110,6 +110,44 @@ let Bird = Animal.extend({
  
 ### scss和html的方法与之前的保持一致
 
+### html的部分重写方法
+
+- 如继承类中不需要重写全部的html，而是重写部分html，则可以采用在config中声明replaceTemplace属性来进行重写
+- replaceTemplate包含两个属性：selector表示需要替换的element元素，template表示用于替换的html片段
+
+`
+let Swallow = Bird.extend({
+    template: '<button>swallow click</button><p>test</p>',
+    binds: [
+        {
+            event: 'click',
+            selector: 'button',
+            callback: function () {
+                console.log('swallow click');
+            }
+        },
+        {
+            event: 'click',
+            selector: '#button-1',
+            callback: function () {
+                console.log("swallow-button click");
+            }
+        }
+    ],
+    replaceTemplate:[
+        {
+            selector:'p',
+            template:'<input type="button" value="swallow-button" id="button-1">'
+        }
+    ],
+    afterRender: function () {
+        this._super.afterRender();
+        console.log('swallow after render');
+    }
+})
+`
+
+
 ## 定制继承1.0
  
 ### 组件binds继承的bug

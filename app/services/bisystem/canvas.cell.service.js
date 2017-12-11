@@ -183,5 +183,7 @@ export const canvasCellService = {
             resolve(res);
         })
     },
+
+    chartId:-1
 };
 
