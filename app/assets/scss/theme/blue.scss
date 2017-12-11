@@ -41,7 +41,18 @@ body.blue{
                     background: url("../../images/theme/blue/icon-blue-edit.png");
                 }
             }
+            .edit-model-title {
+                background-color: #337ed3;
+                border-bottom: 1px solid #BFD8F2;
+                color: #ffffff;
+                a {
+                    color: #ffffff;
+                }
+            }
             .menu{
+                &.edit {
+                    background-color: #337ed3;
+                }
                 label{
                     border-bottom: 1px solid #fff;
                 }

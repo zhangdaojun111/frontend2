@@ -41,7 +41,18 @@ body.ink-blue{
                     background: url("../../images/theme/ink-blue/icon-ink-blue-edit.png");
                 }
             }
+            .edit-model-title {
+                background-color: #304253;
+                border-bottom: 1px solid #BFD8F2;
+                color: #ffffff;
+                a {
+                    color: #ffffff;
+                }
+            }
             .menu{
+                &.edit {
+                    background-color: #304253;
+                }
                 label{
                     border-bottom: 1px solid #fff;
                 }
