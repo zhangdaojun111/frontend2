@@ -37,8 +37,8 @@ let formItemTypes = {
 };
 
 class Base extends Component {
-    constructor(config, data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event);
+    constructor(extendConfig){
+        super($.extend(true,{},extendConfig));
     }
     drawForm(container){
         let options = this.data.options;
@@ -116,4 +116,7 @@ class Base extends Component {
         this.data.chart = null;
     }
 }
+
+Base.config = {};
+
 export {Base}

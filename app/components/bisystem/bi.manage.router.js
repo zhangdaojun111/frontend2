@@ -84,13 +84,15 @@ const BiAppRouter = Backbone.Router.extend({
         console.log(type);
         let comType = {
             assortment: type,
-            id: id
+            id: id ? id: null
         };
         if (formComponent[type]) {
             formComponent[type].reset(comType);
             formComponent[type].reload();
         } else {
-            let component = new componentsJson[type]['component'](comType);
+            let component = new componentsJson[type]['component']({
+                data: comType
+            });
             component.render($('#route-outlet'));
             formComponent[type] = component;
         }

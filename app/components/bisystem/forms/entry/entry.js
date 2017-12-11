@@ -31,8 +31,7 @@ let config = {
     firstRender() {}
 };
 
-export class FormEntryComponent extends BiBaseComponent {
-    constructor(extendConfig) {
-        super($.extend(true,{},config,extendConfig))
-    }
-}
+
+let FormEntryComponent = BiBaseComponent.extend(config);
+
+export {FormEntryComponent}

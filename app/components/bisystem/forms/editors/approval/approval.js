@@ -117,10 +117,6 @@ let config = {
     },
 };
 
-class ApprovalEditor extends Base {
-    constructor(data,extendConfig) {
-        super($.extend(true,{},config,extendConfig));
-    }
-}
+let ApprovalEditor = Base.extend(config);
 
 export {ApprovalEditor}

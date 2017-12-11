@@ -296,11 +296,6 @@ let config = {
     },
 };
 
-class MapEditor extends Base {
-    constructor(data,extendConfig) {
-        config.data.chart_id = data.id ? data.id : null;
-        super($.extend(true,{},config,extendConfig));
-    }
-}
+let MapEditor = Base.extend(config);
 
 export {MapEditor}

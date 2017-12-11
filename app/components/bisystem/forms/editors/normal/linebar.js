@@ -749,9 +749,6 @@ let config = {
     }
 };
 
-class LineBarEditor extends Base {
-    constructor(data, event,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, event);
-    }
-}
+let LineBarEditor = Base.extend(config);
+
 export {LineBarEditor}

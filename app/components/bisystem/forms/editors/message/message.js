@@ -345,10 +345,6 @@ let config = {
     },
 };
 
-class MessageEditor extends Base {
-    constructor(data,extendConfig) {
-        super($.extend(true,{},config,extendConfig));
-    }
-}
+let MessageEditor = Base.extend(config);
 
 export {MessageEditor}

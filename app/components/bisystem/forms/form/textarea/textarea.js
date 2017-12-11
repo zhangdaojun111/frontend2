@@ -33,8 +33,9 @@ let config = {
         this.$textarea = this.el.find('textarea');
         this.$label = this.el.find('label');
     }
-}
+};
 
+// let Textarea = Base.extend(config);
 class Textarea extends Base {
     constructor(data, event,extendConfig) {
         super($.extend(true,{},config,extendConfig), data, event)

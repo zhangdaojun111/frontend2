@@ -279,11 +279,6 @@ let config = {
     }
 };
 
-class GaugeEditor extends Base {
-    constructor(data,extendConfig) {
-        config.data.chart_id = data.id ? data.id : null;
-        super($.extend(true,{},config,extendConfig));
-    }
-}
+let GaugeEditor = Base.extend(config);
 
 export {GaugeEditor}

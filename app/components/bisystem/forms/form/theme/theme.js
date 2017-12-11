@@ -96,6 +96,8 @@ let config = {
     }
 };
 
+// let Theme = Base.extend(config);
+
 class Theme extends Base {
     constructor(data, event,extendConfig){
         super($.extend(true,{},config,extendConfig), data, event)
