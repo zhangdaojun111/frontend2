@@ -118,3 +118,6 @@ class FullMenuItem extends Component {
 }
 
 export {FullMenuItem};
+// let FullMenuItem = Component.extend(config);
+//
+// export {FullMenuItem};

@@ -55,9 +55,13 @@ let config = {
         this.append(new DateControl({value: '',isCalendar: true, timeType: 'all'},{changeValue: changeEndValue}), this.el.find('.end-date'));
     },
 };
-class CalendarExport extends Component {
-    constructor(newconfig = {}) {
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarExport extends Component {
+//     constructor(newconfig = {}) {
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+// export default CalendarExport;
+
+let CalendarExport = Component.extend(config);
+
 export default CalendarExport;

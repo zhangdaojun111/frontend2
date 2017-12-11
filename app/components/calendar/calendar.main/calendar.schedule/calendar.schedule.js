@@ -57,7 +57,7 @@ let config = {
         this.el.css({"height":"100%","width":"100%"});
 
         this.data.scheduleDataList.forEach(item => {
-            this.append(new CalendarScheduleItem({dayDate: item['dataTime'], dayScheduleList: item['data']}), this.el.find('.schedule-content'));
+            this.append(new CalendarScheduleItem({data: {dayDate: item['dataTime'], dayScheduleList: item['data']}}), this.el.find('.schedule-content'));
         });
         // let _this = this;
         // this.el.on('click', '.ok-btn', function () {
@@ -77,13 +77,16 @@ let config = {
     },
 };
 
-class CalendarSchedule extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.scheduleStart = data.startDate;
-        config.data.scheduleEnd = data.endDate;
-        config.data.scheduleDataList = data.scheduleDataList;
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarSchedule extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.scheduleStart = data.startDate;
+//         config.data.scheduleEnd = data.endDate;
+//         config.data.scheduleDataList = data.scheduleDataList;
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default CalendarSchedule;
+let CalendarSchedule = Component.extend(config);
 
 export default CalendarSchedule;

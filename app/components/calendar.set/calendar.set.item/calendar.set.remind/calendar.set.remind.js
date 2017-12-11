@@ -268,10 +268,13 @@ let config = {
 
 };
 
-class CalendarSetRemindMethod extends Component {
-    constructor(newConfig) {
-        super($.extend(true,{},config,newConfig));
-    }
-}
+// class CalendarSetRemindMethod extends Component {
+//     constructor(newConfig) {
+//         super($.extend(true,{},config,newConfig));
+//     }
+// }
+//
+// export default CalendarSetRemindMethod;
+let CalendarSetRemindMethod = Component.extend(config);
 
 export default CalendarSetRemindMethod;
