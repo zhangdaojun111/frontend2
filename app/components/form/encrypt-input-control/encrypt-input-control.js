@@ -44,11 +44,5 @@ let config = {
         this.el.off();
     }
 }
-
-class PasswordControl extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
-
+let PasswordControl = Component.extend(config)
 export default PasswordControl

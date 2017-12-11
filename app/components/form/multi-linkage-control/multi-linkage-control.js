@@ -209,8 +209,5 @@ let config={
         this.el.off();
     }
 }
-export default class MultiLinkageControl extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let MultiLinkageControl = Component.extend(config)
+export default MultiLinkageControl

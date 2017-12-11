@@ -12,10 +12,5 @@ let config={
     actions:{
     },
 }
-class HiddenControl extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig),data)
-    }
-}
-
+let HiddenControl = Component.extend(config)
 export default HiddenControl

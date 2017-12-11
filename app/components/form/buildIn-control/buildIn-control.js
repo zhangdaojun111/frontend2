@@ -77,8 +77,5 @@ let config={
         this.el.off();
     }
 }
-export default class BuildInControl extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let BuildInControl = Component.extend(config)
+export default BuildInControl

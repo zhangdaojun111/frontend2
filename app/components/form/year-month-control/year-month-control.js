@@ -110,8 +110,5 @@ let config={
         this.el.off();
     }
 }
-export default class YearMonthControl extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let YearMonthControl = Component.extend(config)
+export default YearMonthControl;
