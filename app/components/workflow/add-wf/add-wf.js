@@ -18,8 +18,6 @@ let config ={
 		}
 	},
 	afterRender(){
-		console.log('这边传的什么')
-		console.log(this.data.obj);
 		this.data.addWf=new AddWf({data:{obj:this.data.obj}});
 		this.data.addWf.render(this.el);
 		this.data.workFlowForm=new WorkFlowForm();
