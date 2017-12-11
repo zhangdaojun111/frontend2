@@ -38,13 +38,16 @@ let config = {
 
     },
 };
-
-class CalendarScheduleItem extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.dayDate = data['dayDate'];
-        config.data.dayScheduleList = data['dayScheduleList'];
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+//
+// class CalendarScheduleItem extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.dayDate = data['dayDate'];
+//         config.data.dayScheduleList = data['dayScheduleList'];
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default CalendarScheduleItem;
+let CalendarScheduleItem = Component.extend(config);
 
 export default CalendarScheduleItem;

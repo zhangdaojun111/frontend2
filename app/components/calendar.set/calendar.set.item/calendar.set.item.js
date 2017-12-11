@@ -319,22 +319,6 @@ let config = {
     }
 };
 
-class CalendarSetItem extends Component {
-    constructor(data,newConfig) {
-        config.data.rowSetData = data.rowData;
-        config.data.dropdown = data.dropdown;
-        config.data.dropdownForRes = data.dropdownForRes;
-        config.data.dropdownForCalendarChange = data.dropdownForCalendarChange;
-        config.data.rowTitle = data.rowTitle;
-        config.data.replaceDropDown = data.replaceDropDown;
-        config.data.isConfigText = data.isConfigField;
-        config.data.recipients = data.recipients;
-        config.data.recipients_per = data.recipients_per;
-        config.data.copypeople = data.copypeople;
-        config.data.emailAddressList = data.emailAddressList;
-        config.data.emailAddress = data.emailAddress;
-        super($.extend(true,{},config,newConfig));
-    }
-}
+let CalendarSetItem = Component.extend(config);
 
 export default CalendarSetItem;

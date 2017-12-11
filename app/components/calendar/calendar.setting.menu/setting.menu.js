@@ -57,11 +57,14 @@ let config = {
     }
 }
 
-class SettingMenuComponent extends Component {
-    constructor(data){
-        super(config, data);
-    }
-}
-
+// class SettingMenuComponent extends Component {
+//     constructor(data){
+//         super(config, data);
+//     }
+// }
+//
+//
+// export {SettingMenuComponent};
+let SettingMenuComponent = Component.extend(config);
 
 export {SettingMenuComponent};

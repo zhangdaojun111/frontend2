@@ -42,11 +42,14 @@ let config = {
     },
 }
 
-class leftContentFinished extends Component {
-    constructor(data,newConfig) {
-        config.data = data;
-        super(config,$.extend(true,{},config,newConfig));
-    }
-}
+// class leftContentFinished extends Component {
+//     constructor(data,newConfig) {
+//         config.data = data;
+//         super(config,$.extend(true,{},config,newConfig));
+//     }
+// }
+//
+// export default leftContentFinished;
+let leftContentFinished = Component.extend(config);
 
 export default leftContentFinished;
