@@ -32,7 +32,8 @@ let config = {
             cell:this.data.cell,
             chart:this.data.chart
         };
-        CellNineGridComponent.init(cellChart);
+        let _cellChart = CellNineGridComponent.init(cellChart);
+        $.extend(true, this.data, _cellChart);
     },
     afterRender() {},
     firstAfterRender() {}
@@ -48,7 +49,6 @@ export class CellNineGridComponent extends CellBaseComponent {
      * @param cellChart 画布块数据(通过父类初始化子类传递进来)
      */
    static init(cellChart) {
-       console.log(cellChart);
         if (cellChart['chart']['data']['rows'].length === 0) {
             return false;
         }
@@ -84,7 +84,8 @@ export class CellNineGridComponent extends CellBaseComponent {
         cellChart.xAxis = xAxis;
         cellChart.yAxis = yAxis;
         cellChart.legend = legend;
-        $.extend(true, this.data, cellChart);
+
+        return cellChart;
     }
 }
 

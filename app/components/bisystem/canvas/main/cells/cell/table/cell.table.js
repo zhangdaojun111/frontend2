@@ -177,7 +177,8 @@ let config = {
             cell:this.data.cell,
             chart:this.data.chart
         };
-        CellTableComponent.init(data);
+        let cellChart = CellTableComponent.init(data);
+        $.extend(true, this.data, cellChart);
     }
 };
 
@@ -211,7 +212,7 @@ export class CellTableComponent extends CellBaseComponent {
                 CellTableComponent.singleTable(cellChart);
             }
         }
-        $.extend(true, this.data, cellChart);
+        return cellChart;
     }
 
     /**
