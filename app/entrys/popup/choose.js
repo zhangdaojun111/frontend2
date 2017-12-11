@@ -5,6 +5,6 @@
 import BuildChoose from '../../components/popup/buildChoose/buildChoose';
 $(document).ready(function(){
     let el=$('<div></div>').appendTo($('body'));
-    let buildChoose=new BuildChoose(window.config);
+    let buildChoose=new BuildChoose({data:window.config});
     buildChoose.render(el);
 });

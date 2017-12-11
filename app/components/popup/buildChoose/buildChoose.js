@@ -43,7 +43,7 @@ let config = {
 					_this.el.find('ul').append(`<li><a class="choose-aside-a" href="javascript:void(0);" title="${_this.data['options'][i]['label']}" data-value="${_this.data['options'][i]['value']}">${_this.data['options'][i]['label']}</a></li>`)
 				}
 			}
-			let searchBar = new SearchBar({tableId: _this.data.source_table_id});
+			let searchBar = new SearchBar({data:{tableId: _this.data.source_table_id}});
 			_this.append(searchBar, _this.el.find('.search-bar'));
 			_this.data.selected = {value: value, label: label};
 		});
@@ -101,7 +101,7 @@ let config = {
 	}
 }
 export default class BuildChoose extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig),data)
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig))
     }
 }

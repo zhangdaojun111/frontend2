@@ -92,7 +92,7 @@ let config = {
     }
 }
 export default class SearchBar extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig),data)
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
