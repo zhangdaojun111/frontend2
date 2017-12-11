@@ -22,3 +22,5 @@ export class BiBaseComponent extends Component{
         this.el.trigger(name,data);
     }
 }
+
+BiBaseComponent.config = {};

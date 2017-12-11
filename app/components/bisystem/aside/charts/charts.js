@@ -88,6 +88,9 @@ let config = {
             }
         },
     ],
+    beforeRender(){
+        this.data.charts = this.data;
+    },
     afterRender() {
         this.actions.setConfigData();
         // this.el.on('dragstart',(ev) =>{

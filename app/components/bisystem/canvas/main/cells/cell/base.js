@@ -7,8 +7,8 @@ import Component from '../../../../../../lib/component';
 import {CanvasOriginalDataComponent} from './original.data/original.data';
 
 export class CellBaseComponent extends Component {
-    constructor(config,data,event,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,event)
+    constructor(extendConfig) {
+        super($.extend(true,{},extendConfig))
     }
 
     /**
@@ -81,3 +81,5 @@ export class CellBaseComponent extends Component {
         }
     }
 }
+
+CellBaseComponent.config = {};

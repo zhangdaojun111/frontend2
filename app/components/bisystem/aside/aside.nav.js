@@ -47,12 +47,13 @@ let config = {
     afterRender() {
         //加载左侧导航数据
         this.data.charts.forEach((val,index) => {
+            let data = val ? val : null;
+            data.imgUrl = window.config.img_url;
+            data.isIcon = val['icon']? true:false;
+            data.userSelf = val['self'] == 1 ? true : false;
+
             let chartsComponent = new ChartsComponent({
-                data:{
-                    imgUrl: window.config.img_url,
-                    isIcon: val['icon']? true:false,
-                    userSelf: val['self'] == 1 ? true : false,
-                },
+                data,
                 onDelete: (res)=>{
                     let charts = this.data.charts;
                     _.remove(charts,function (val) {

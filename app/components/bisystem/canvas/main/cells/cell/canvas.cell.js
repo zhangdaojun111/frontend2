@@ -365,7 +365,6 @@ let config = {
         }
     ],
     afterRender() {
-        console.log(this.data);
         this.actions.renderCell();
         if (window.config.bi_user !== 'client') {
             this.actions.cellDragandResize();
