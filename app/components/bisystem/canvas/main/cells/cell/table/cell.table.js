@@ -295,9 +295,16 @@ export class CellTableComponent extends CellBaseComponent {
     static numFormat(num,acc) {
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+
         if(acc){
             if(num[1]){
-                num[1] = parseFloat(num[1]).toFixed(acc);
+                let len = acc - num[1].length > 0 ? acc - num[1].length:acc;
+                if(acc==1 && num[1].length>2){
+                    num[1] = num[1].substr(0,1);
+                }else{
+                    num[1] = parseFloat(num[1]).toFixed(len);
+                    num[1] = num[1].replace('.','');
+                }
             }else{
                 num[1]  = new String('0').repeat(acc);
             }
