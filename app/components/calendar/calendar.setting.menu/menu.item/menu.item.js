@@ -6,7 +6,7 @@ import template from './menu.item.html';
 import Mediator from '../../../../lib/mediator';
 import 'jquery-ui/ui/widgets/tooltip';
 
-let config = {
+let FullMenuItem = Component.extend({
     template: template,
     data: {
         type: 'full',
@@ -91,6 +91,7 @@ let config = {
                 this.append(component, this.childlist, 'li');
             });
         }
+
         if (this.data.root !== true) {
             if (this.data.type === 'full') {
                 let offset = this.data.offset;
@@ -109,15 +110,7 @@ let config = {
         }
 
     }
-}
-
-class FullMenuItem extends Component {
-    constructor(data, event) {
-        super(config, data, event)
-    }
-}
-
-export {FullMenuItem};
-// let FullMenuItem = Component.extend(config);
+});
+export {FullMenuItem};// let FullMenuItem = Component.extend(config);
 //
 // export {FullMenuItem};
