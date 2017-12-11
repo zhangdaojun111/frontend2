@@ -12,7 +12,7 @@ import strikeTable from "./history-approve-StrTable/history-approve-StrTable";
 import './history-approve-data.scss'
 import agGrid from "../../agGrid/agGrid";
 
-let config = {
+let historyApprove = Component.extend({
     template: template,
     dataShow:[],
     recordHistory:[],
@@ -114,10 +114,10 @@ let config = {
             this.actions.afterGetMsg()
         })
     }
-}
-class historyApprove extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+})
+// class historyApprove extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default historyApprove

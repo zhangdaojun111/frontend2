@@ -12,7 +12,7 @@ import {HTTP} from "../../../../../lib/http";
 import {dgcService} from "../../../../../services/dataGrid/data-table-control.service";
 import {Loading} from "../../../../../components/util/loading/loading"
 
-let config = {
+let lifeCycle = Component.extend({
     template:template,
     data:{
         //@input
@@ -414,13 +414,13 @@ let config = {
             this.actions.init();
         })
     }
-};
+});
 
 
-class lifeCycle extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class lifeCycle extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default lifeCycle;

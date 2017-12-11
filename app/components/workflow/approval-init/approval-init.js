@@ -213,13 +213,15 @@ let config = {
 				this.data.agorfo = false;
 			}
 			let AgGrid = new Grid({
-				batchIdList: res.record_info.temp_ids,
-				tableId: this.data.obj.table_id,
-				recordId: this.data.obj.record_id,
-				viewMode: "approveBatch",
-				cannotopenform: cannotopenform,
-				parentRecordId: res['record_info']['id'],
-			});
+				data:{
+                    batchIdList: res.record_info.temp_ids,
+                    tableId: this.data.obj.table_id,
+                    recordId: this.data.obj.record_id,
+                    viewMode: "approveBatch",
+                    cannotopenform: cannotopenform,
+                    parentRecordId: res['record_info']['id'],
+                }
+            });
 			AgGrid.actions.returnBatchData =(ids) =>{
 				this.data.temp_ids = ids;
 			};

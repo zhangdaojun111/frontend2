@@ -10,7 +10,7 @@ import './file-display.scss';
 import template from './file-display.html';
 
 
-let config = {
+let FileResult = Component.extend({
     template:template,
     data:{
         searchData:{},
@@ -60,20 +60,13 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-class FileResult extends Component{
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig));
-        this.data.searchData = data;
-    }
-}
+});
 
 export const FileDisplay = {
     el:null,
     create:function (data,$father) {
         this.el = $("<div class='single-type2'>").appendTo($father);
-        let component = new FileResult(data);
+        let component = new FileResult({data:{searchData:data}});
         component.render(this.el);
     }
 };

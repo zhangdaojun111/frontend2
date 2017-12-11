@@ -5,7 +5,7 @@ import template from './treeNode.html';
 import Component from "../../../../lib/component";
 import './treeNode.scss';
 
-let config = {
+let TreeNode = Component.extend({
     template:template,
     data:{
         childNodes:[],
@@ -122,7 +122,8 @@ let config = {
                 let data=node;
                 data['options']=this.data.options;
                 data['indent']=this.data.indent+1;
-                let com = new TreeNode(data,this.data.options.callback);
+                data['options']['callback'] = this.data.options.callback;
+                let com = new TreeNode({data:data});
                 com.render(ele);
                 this.data.childNodes.push(com);
             });
@@ -138,11 +139,6 @@ let config = {
 		    this.el.find('.node-check').removeClass('checked_box').addClass('unchecked_box');
 	    }
     }
-};
+});
 
-export default class TreeNode extends Component {
-    constructor(data,callback){
-        data.callback = callback;
-        super(config,data,callback);
-    }
-}
+export default TreeNode;

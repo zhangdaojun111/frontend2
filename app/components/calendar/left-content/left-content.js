@@ -184,13 +184,15 @@ let config = {
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.el.find('.item-content-3').empty();
             data.forEach((row) => {
-                this.append(new RightContentWorkFlow(row), this.el.find('.item-content-3'));
+                let rightContentWorkflow = new RightContentWorkFlow();
+                rightContentWorkflow.data = row;
+                this.append(rightContentWorkflow, this.el.find('.item-content-3'));
             });
         });
         Mediator.on('CalendarFinishedWorkflowData: workflowData', data => {
             this.el.find('.item-content-4').empty();
             data.forEach((row) => {
-                this.append(new leftContentFinished(row), this.el.find('.item-content-4'));
+                this.append(new leftContentFinished({data: row}), this.el.find('.item-content-4'));
             });
         });
         Mediator.on('calendar-left:hideRemindType', data => {
@@ -204,12 +206,14 @@ let config = {
         Mediator.removeAll('calendar-left');
     }
 };
+let LeftContent = Component.extend(config);
 
-class Leftcontent extends Component {
-    constructor(data, newConfig) {
-        config.data.calendarTreeData = data;
-        super($.extend(true, {}, config, newConfig));
-    }
-}
-
-export default Leftcontent;
+export default LeftContent;
+// class Leftcontent extends Component {
+//     constructor(data, newConfig) {
+//         config.data.calendarTreeData = data;
+//         super($.extend(true, {}, config, newConfig));
+//     }
+// }
+//
+// export default Leftcontent;

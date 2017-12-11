@@ -9,7 +9,7 @@ import DateControl from "../grid-data-control/grid-data-control";
 import TimeControl from "../../../form/time-control/time-control";
 import msgBox from '../../../../lib/msgbox';
 import './fast-search.scss';
-let config = {
+let fastSearch = Component.extend({
     template: template,
     inputObject: null,
     inputNextObject: null,
@@ -101,7 +101,7 @@ let config = {
                 case "datetime":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.fast-search-input').remove();
-                    let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    let dateTimeControl = new DateTimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){}}});
                     dateTimeControl.render(this.el.find('.fast-search-value'));
                     break;
                 case "date":
@@ -113,7 +113,7 @@ let config = {
                 case "time":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.fast-search-input').remove();
-                    let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    let timeControl = new TimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){}}});
                     timeControl.render(this.el.find('.fast-search-value'));
                     break;
                 case "text":
@@ -164,13 +164,13 @@ let config = {
             _this.actions.submitData();
         })
     }
-}
-class fastSearch extends Component {
-    constructor(data) {
-        for (let d in data) {
-            config.data[d] = data[d]
-        }
-        super(config)
-    }
-}
+})
+// class fastSearch extends Component {
+//     constructor(data) {
+//         for (let d in data) {
+//             config.data[d] = data[d]
+//         }
+//         super(config)
+//     }
+// }
 export default fastSearch

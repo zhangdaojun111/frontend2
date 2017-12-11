@@ -21,7 +21,7 @@ import {fieldTypeService} from "../../../services/dataGrid/field-type-service";
 import {TabService} from "../../../services/main/tabService";
 import TreeView from "../../util/tree/tree";
 
-let config = {
+let personnel = Component.extend({
     template: template,
     data: {
         tableId:'',
@@ -200,7 +200,7 @@ let config = {
                 onRowDoubleClicked: this.actions.onRowDoubleClicked,
                 onRowSelected: this.actions.onRowSelected
             };
-            this.agGrid = new agGrid(gridData);
+            this.agGrid = new agGrid({data:gridData});
             this.append(this.agGrid , this.el.find('#data-agGrid'));
             //渲染定制列
             if( this.el.find('.custom-column-btn')[0] ){
@@ -215,7 +215,7 @@ let config = {
                     close: this.actions.calcCustomColumn,
                     setFloatingFilterInput: this.actions.setFloatingFilterInput
                 };
-                this.customColumnsCom  = new customColumns(custom);
+                this.customColumnsCom  = new customColumns({data: custom});
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
 
                 //点击关掉定制列panel
@@ -232,7 +232,7 @@ let config = {
                     rows: this.data.rows,
                     tableId: this.data.tableId
                 };
-                this.pagination = new dataPagination(paginationData);
+                this.pagination = new dataPagination({data: paginationData});
                 this.pagination.actions.paginationChanged = this.actions.refreshData;
                 this.append(this.pagination, this.el.find('.pagination'));
             }
@@ -415,7 +415,7 @@ let config = {
         //创建部门树
         createDepartment: function () {
             this.actions.departmentTreeFun(this.data.department_tree);
-            let treeView = new TreeView(this.data.department_tree,{
+            let treeView = new TreeView({data:{treeNodes:this.data.department_tree,options:{
                 callback:(event,node) => {
                     if( node.id ){
                         this.data.page = 1;
@@ -428,7 +428,7 @@ let config = {
                 selectParentMode:'Select',
                 isSearch: true,
                 treeName:"department-tree"
-            });
+            },indent:0}});
             treeView.render(this.el.find( '.choose-department-tree' ));
         },
         departmentTreeFun:function (tree) {
@@ -1018,12 +1018,12 @@ let config = {
         this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
         this.actions.getHeaderData();
     }
-};
+});
 
-class personnel extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class personnel extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default personnel;

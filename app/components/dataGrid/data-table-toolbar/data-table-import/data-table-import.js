@@ -12,7 +12,7 @@ import {Uploader} from "../../../../lib/uploader";
 import {FormService} from "../../../../services/formService/formService";
 import WorkFlow from "../../../../components/workflow/workflow-drawflow/workflow";
 
-let config = {
+let dataTableImport = Component.extend({
     template: template,
     data: {
         tableId: '',
@@ -256,12 +256,12 @@ let config = {
             this.el.find( '.more-btn' )[0].outerHTML = '';
         }
     }
-}
+})
 
-class dataTableImport extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class dataTableImport extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default dataTableImport;

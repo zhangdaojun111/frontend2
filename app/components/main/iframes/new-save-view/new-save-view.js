@@ -12,7 +12,7 @@ import {TabService} from "../../../../services/main/tabService"
 import Mediator from "../../../../lib/mediator"
 import msgbox from "../../../../lib/msgbox";
 
-let config = {
+let SaveView = Component.extend({
     template:template,
     data:{
         favoriteList:[],
@@ -63,6 +63,9 @@ let config = {
          * @returns {Promise.<void>}
          */
         saveFavorite:async function () {
+
+            this.data.currentIframesList = this.data.iframesComponent.data.sort;
+
             //过滤List中的bi和日历
             _.remove(this.data.currentIframesList,function (n) {
                 return (n === "bi" || n === 'calendar');
@@ -324,16 +327,7 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-
-class SaveView extends Component {
-    constructor(newConfig,data,callback){
-        super($.extend(true,{},config,newConfig));
-        this.data.currentIframesList = data;
-        this.actions.closeSaveView = callback;
-    }
-}
+});
 
 export {SaveView};
 // export const SaveView = {

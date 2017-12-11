@@ -172,19 +172,21 @@ let config = {
                     }
                 }
                 let calendarSetItem = new CalendarSetItem({
-                    rowData: row,
-                    dropdown: this.data.dropdown,
-                    dropdownForRes: this.data.dropdownForRes,
-                    dropdownForCalendarChange: this.data.dropdownForCalendarChange,
-                    replaceDropDown: this.data.replaceDropDown,
-                    isConfigField: isConfig,
-                    rowTitle: rowTitleItem,
+                    data: {
+                        rowSetData: row,
+                        dropdown: this.data.dropdown,
+                        dropdownForRes: this.data.dropdownForRes,
+                        dropdownForCalendarChange: this.data.dropdownForCalendarChange,
+                        replaceDropDown: this.data.replaceDropDown,
+                        isConfigText: isConfig,
+                        rowTitle: rowTitleItem,
 
-                    recipients: this.data.recipients,
-                    recipients_per: this.data.recipients_per,
-                    copypeople: this.data.copypeople,
-                    emailAddressList: this.data.emailAddressList,
-                    emailAddress: this.data.emailAddress,
+                        recipients: this.data.recipients,
+                        recipients_per: this.data.recipients_per,
+                        copypeople: this.data.copypeople,
+                        emailAddressList: this.data.emailAddressList,
+                        emailAddress: this.data.emailAddress,
+                    }
                 });
                 this.data.childComponents.push(calendarSetItem);
                 this.append(calendarSetItem, this.el.find('.set-items'));
@@ -435,11 +437,14 @@ let config = {
     },
 };
 
-class CalendarSet extends Component {
-    constructor(data,newConfig) {
-        config.data.tableId = data;
-        super($.extend(true,{},config,newConfig));
-    }
-}
+// class CalendarSet extends Component {
+//     constructor(data,newConfig) {
+//         config.data.tableId = data;
+//         super($.extend(true,{},config,newConfig));
+//     }
+// }
+//
+// export default CalendarSet;
+let CalendarSet = Component.extend(config);
 
 export default CalendarSet;
