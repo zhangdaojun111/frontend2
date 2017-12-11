@@ -164,7 +164,7 @@ let config={
                         d['list'].push({name: item, id: item});
                     }
                 }
-                let autoSelect = new AutoSelect(d);
+                let autoSelect = new AutoSelect({data:d});
                 this.data.childDrop[i] = autoSelect;
                 this.append(autoSelect, this.el.find('.multi-drop'));
                 if (this.data.is_view && this.data.value) {

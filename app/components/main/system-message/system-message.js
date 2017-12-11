@@ -15,7 +15,7 @@ import {dataTableService} from "../../../services/dataGrid/data-table.service"
 import Mediator from '../../../lib/mediator';
 
 let gridPref;
-let config = {
+let SystemMessage = Component.extend({
     template: template,
     data:{
         frontendSort:true,      //排序方式（前端/后端）
@@ -348,13 +348,7 @@ let config = {
             this.actions.batchDelete();
         });
     }
-};
-
-class SystemMessage extends Component {
-    constructor(newConfig) {
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 let systemMessageUtil = {
     el: null,

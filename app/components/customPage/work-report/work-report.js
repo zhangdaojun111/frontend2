@@ -246,12 +246,12 @@ let config = {
             this.append(this.agGrid , this.el.find('.report-data'));
             this.agGrid.gridOptions.api.sizeColumnsToFit();
             let That = this;
-            this.autoSelect = new AutoSelect({
+            this.autoSelect = new AutoSelect({data:{
                 displayType: 'static',           // popup或者static popup为弹出的形式 static 为静态显示
                 selectBoxHeight: '100%',           // select 框的高度
                 width: 190,                     // 为0表示显示默认宽度240
                 displayChoosed: false,
-            }, {
+            }, events:{
                 onSelect: function (param) {
                     That.data.selectFilter = [];
                     for(let d of param){
@@ -259,7 +259,7 @@ let config = {
                     }
                     try {That.agGrid.gridOptions.api.onFilterChanged();}catch(e){}
                 }
-            });
+            }});
             this.autoSelect.render(this.el.find('.sidebar-select'));
         },
         //外部搜索
@@ -379,14 +379,14 @@ let config = {
          * 初始化部门树
          */
         initTree: function () {
-            let treeView = new TreeView(this.data.departmentData, {
+            let treeView = new TreeView({data:{treeNodes:this.data.departmentData, options:{
                 callback: (order, node) => {
                     this.actions._selectNode(order, node);
                 },
                 isSearch: true,
                 treeType: "MULTI_SELECT",
                 treeName: "post-message-depatment-tree",
-            });
+            },indent:0}});
             let $container = this.el.find(".sidebar-tree");
             treeView.render($container);
         },
@@ -395,12 +395,12 @@ let config = {
          */
         initChoosedUsers: function () {
             let That = this;
-            this.userSelect = new AutoSelect({
+            this.userSelect = new AutoSelect({data:{
                 displayType: 'static',           // popup或者static popup为弹出的形式 static 为静态显示
                 selectBoxHeight: '100%',           // select 框的高度
                 width: 230,                     // 为0表示显示默认宽度240
                 displayChoosed: false,
-            }, {
+            },events: {
                 onSelect: function (param) {
                     That.data.user_id_list = [];
                     for(let u of param){
@@ -411,7 +411,7 @@ let config = {
                     }
                     That.data.firstRender = false;
                 }
-            });
+            }});
             this.userSelect.render(this.el.find('.sidebar-users'));
         },
         /**

@@ -46,7 +46,7 @@ let config = {
                     }
                 }
             }
-            this.append(new AutoSelect(selectData),this.el.find('.jurisdiction-select'))
+            this.append(new AutoSelect({data:selectData}),this.el.find('.jurisdiction-select'))
         }
     },
     afterRender: function() {

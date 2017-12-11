@@ -9,7 +9,7 @@ import {FormService} from "../../../services/formService/formService";
 import {AutoSelect} from "../../util/autoSelect/autoSelect";
 import template from './searchBar.html'
 
-let config = {
+let SearchBar = Component.extend({
     template: template,
     data: {
         searchTerms: {
@@ -60,8 +60,8 @@ let config = {
                 _this.data.regValue = data[0].id;
             }
         }
-        let dropDown = new AutoSelect(d);
-        let dropDown2 = new AutoSelect(this.data.searchTerms);
+        let dropDown = new AutoSelect({data:d});
+        let dropDown2 = new AutoSelect({data:this.data.searchTerms});
         this.append(dropDown, this.el.find('.ui-box-1'));
         this.append(dropDown2, this.el.find('.ui-box-2'));
         this.el.on('click', '.select', async function () {
@@ -90,9 +90,6 @@ let config = {
             }, 300)();
         })
     }
-}
-export default class SearchBar extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig),data)
-    }
-}
+});
+
+export default SearchBar;

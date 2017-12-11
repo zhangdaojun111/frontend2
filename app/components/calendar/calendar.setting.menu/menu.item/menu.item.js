@@ -87,7 +87,7 @@ let config = {
                     searchDisplay: true,
                     type: this.data.type
                 });
-                let component = new FullMenuItem(newData);
+                let component = new FullMenuItem({data:newData});
                 this.append(component, this.childlist, 'li');
             });
         }

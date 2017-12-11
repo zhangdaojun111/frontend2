@@ -16,7 +16,7 @@ import dataPagination from "../../../components/dataGrid/data-table-toolbar/data
 import msgbox from "../../../lib/msgbox";
 // import msgbox from "../../../lib/msgbox";
 
-let config = {
+let ResearchResult = Component.extend({
     template:template,
     data:{
         searchText:'',
@@ -301,12 +301,6 @@ let config = {
     beforeDestroy:function () {
         Mediator.removeAll();
     }
-};
-
-class ResearchResult extends  Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export {ResearchResult}

@@ -32,7 +32,7 @@ function getData(component_instance) {
     });
 }
 
-let config = {
+let PersonalSetting = Component.extend({
     template:template,
     data:{
         isCapsLock:false,
@@ -194,17 +194,17 @@ let config = {
         initPasswordPage:function () {
             //初始化旧密码框
             let $wrap1 = this.el.find('.old-pw-group');
-            this.old_pswInput = new PasswordInput({title:'旧密码：',checkChar:false});
+            this.old_pswInput = new PasswordInput({data:{title:'旧密码：',checkChar:false}});
             this.old_pswInput.render($wrap1);
 
             //初始化新密码框
             let $wrap2 = this.el.find('.new-pw-group');
-            this.new_pswInput = new PasswordInput({title:'新密码：'});
+            this.new_pswInput = new PasswordInput({data:{title:'新密码：'}});
             this.new_pswInput.render($wrap2);
 
             //初始化确认新密码框
             let $wrap3 = this.el.find('.confirm-new-pw-group');
-            this.confirm_new_pswInput = new PasswordInput({title:'确认新密码：'});
+            this.confirm_new_pswInput = new PasswordInput({data:{title:'确认新密码：'}});
             this.confirm_new_pswInput.render($wrap3);
         },
         /**
@@ -345,13 +345,7 @@ let config = {
     beforeDestory:function () {
         // Mediator.removeAll("personal:setAvatar");
     }
-};
-
-class PersonalSetting extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const PersonSetting  = {
     el:null,

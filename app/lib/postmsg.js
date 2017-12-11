@@ -202,7 +202,7 @@ window.addEventListener('message', function (event) {
                 break;
 
             case PMENUM.open_preview:
-                let preview = new Preview(data.data);
+                let preview = new Preview({data:data.data});
                 let ele = $('<div class="preview"></div>');
                 ele.appendTo(document.body);
                 preview.render(ele);
