@@ -924,6 +924,13 @@ let config = {
         },
         {
             event: 'click',
+            selector: '.close-urge',
+            callback: function (context) {
+                this.actions.calcUrge(false);
+            }
+        },
+        {
+            event: 'click',
             selector: '.submit-urge',
             callback: function (context) {
                 this.actions.saveUrge(false);

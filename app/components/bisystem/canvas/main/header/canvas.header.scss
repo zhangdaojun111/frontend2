@@ -2,7 +2,7 @@
     position: relative;
     height: 50px;
     white-space: nowrap;
-    width: calc(100% - 400px);
+    width: calc(100% - 490px);
     background: transparent;
     display: inline-block;
     overflow: hidden;
@@ -26,10 +26,17 @@
     display: inline-block;
     right: 0;
     top: 0;
-    width: 300px;
+    width: 390px;
     float: right;
     input[type='file'] {
         display: none;
+    }
+    .full-screen-carousel{
+        display: inline-block;
+        float: right;
+        width: 44px;
+        height: 16px;
+        cursor: pointer;
     }
 }
 .select-all,.cancel-select,.reverse-select {

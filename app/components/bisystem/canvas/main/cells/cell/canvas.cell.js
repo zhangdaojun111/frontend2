@@ -24,6 +24,8 @@ import {CellCalendarComponent} from './calendar/cell.calendar';
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../lib/msgbox';
+import 'jquery-ui/ui/widgets/draggable';
+import 'jquery-ui/ui/widgets/droppable';
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
 const cellTypes = {
@@ -87,7 +89,24 @@ let config = {
                     }
                 });
                 let cellContainer = this.el.find('.cell-chart');
+                if (cellContainer.length === 0) {
+                    debugger;
+                }
                 this.data.cellComponent.render(cellContainer);
+            }
+
+            //bi打印pdf则执行回调
+            if(window.config.pdf === true){
+                if(this.el.find('.bi-table').length > 0){
+                    let cellWidth = this.data.cell.size.width;
+                    let width = Math.max(this.el.find('.bi-table')[0].scrollWidth + 30,cellWidth);
+                    let widthChart = width - 20;
+                    this.el.find('.cell').css('width',width);
+                    this.el.find('.cell-chart').css('width',widthChart);
+                }
+                if(this.data.isLast === true){
+                    this.actions.loadChartFinish();
+                }
             }
         },
 
@@ -98,7 +117,7 @@ let config = {
             let dragCell = this.el.find('.cell');
             const dragOption = {
                 containment: '.cells-container',
-                grid: [10, 10],
+                grid: [1, 1],
                 stop: (event, ui) => {
                     this.actions.cancelSelect();
                     this.data.cell.size.left = ui.position.left;
@@ -109,7 +128,7 @@ let config = {
             };
 
             const resizeOption = {
-                grid: [10, 10],
+                grid: [1, 1],
                 stop: (event, ui) => {
                     this.data.cell.size.width = ui.size.width;
                     this.data.cell.size.height = ui.size.height;
@@ -119,7 +138,6 @@ let config = {
                     Mediator.publish(`bi:cell${myChartComponentId}:resize`, this.data.cell.size);
                 }
             };
-
             dragCell.draggable(dragOption).resizable(resizeOption);
         },
 
@@ -207,6 +225,22 @@ let config = {
             this.data.cell.size.left = left;
             this.data.cell.size.top = top;
             this.trigger('onUpdateLayout', {componentId: this.componentId,cell:this.data.cell});
+        },
+        /**
+         * 手机旋转屏幕后画布块resize
+         */
+        resizeCanvas(){
+            let cmp = this.data.cellComponent;
+            let chart = cmp.myChart || cmp.pieChart || cmp.normalChart;
+            if(chart){
+                let myChart;
+                if(chart.hasOwnProperty('myChart')){
+                    myChart = chart.myChart;
+                }else{
+                    myChart = chart;
+                }
+                myChart.resize();
+            }
         }
 
     },
@@ -248,35 +282,35 @@ let config = {
                 return true;
             }
         },
-        // 从左侧导航拖拽图表渲染到画布块
-        {
-            event: 'drop',
-            selector: '',
-            callback: function (context,event) {
-                let ev = event.originalEvent;
-                let data = JSON.parse(ev.dataTransfer.getData("Text"));
-                ev.dataTransfer.clearData("Text");
-                let layout = {
-                    chart_id: data.id,
-                    floor: 0,
-                    view_id: this.data.currentViewId,
-                    layout_id: this.data.cell.layout_id,
-                    xOld: {},
-                    row_id:0,
-                    deep_info: {}
-                };
-                this.actions.dragChartData({
-                    data:{
-                        layouts:[JSON.stringify(layout)],
-                        query_type:'deep',
-                        is_deep:1,
-                    },
-                    chart_id: data.id
-                });
-                this.loadData = true;
-                return false;
-            }
-        },
+        // // 从左侧导航拖拽图表渲染到画布块
+        // {
+        //     event: 'drop',
+        //     selector: '',
+        //     callback: function (context,event) {
+        //         let ev = event.originalEvent;
+        //         let data = JSON.parse(ev.dataTransfer.getData("Text"));
+        //         ev.dataTransfer.clearData("Text");
+        //         let layout = {
+        //             chart_id: data.id,
+        //             floor: 0,
+        //             view_id: this.data.currentViewId,
+        //             layout_id: this.data.cell.layout_id,
+        //             xOld: {},
+        //             row_id:0,
+        //             deep_info: {}
+        //         };
+        //         this.actions.dragChartData({
+        //             data:{
+        //                 layouts:[JSON.stringify(layout)],
+        //                 query_type:'deep',
+        //                 is_deep:1,
+        //             },
+        //             chart_id: data.id
+        //         });
+        //         this.loadData = true;
+        //         return false;
+        //     }
+        // },
         // 返回(下穿)上一层
         {
             event: 'click',
@@ -324,8 +358,46 @@ let config = {
         this.actions.renderCell();
         if (window.config.bi_user !== 'client') {
             this.actions.cellDragandResize();
+            let __this = this;
+            this.el.find('.cell').droppable({
+                drop:function (event,ui) {
+                    if(canvasCellService.chartId == -1) {
+                        return;
+                    }
+                    let layout = {
+                        chart_id: canvasCellService.chartId,
+                        floor: 0,
+                        view_id: __this.data.currentViewId,
+                        layout_id: __this.data.cell.layout_id,
+                        xOld: {},
+                        row_id:0,
+                        deep_info: {}
+                    };
+                    __this.actions.dragChartData({
+                        data:{
+                            layouts:[JSON.stringify(layout)],
+                            query_type:'deep',
+                            is_deep:1,
+                        },
+                        chart_id: canvasCellService.chartId
+                    });
+                    __this.loadData = true;
+                    canvasCellService.chartId = -1;
+                    return false;
+                }
+            })
         } else {
             this.el.off('mousedown mouseup');
+        }
+
+        //判断屏幕旋转事件是否存在，存在则监听
+        let evt = "onorientationchange" in window ? "orientationchange":false;
+        if(evt){
+            window.addEventListener(evt,this.actions.resizeCanvas,false);
+        }
+
+        if(window.config.pdf){
+            this.el.find('.cell').addClass('download-pdf');
         }
     }
 };
@@ -347,7 +419,7 @@ export class CanvasCellComponent extends Component {
             this.data.chart = chart['data'];
             this.actions.loadCellChart(chart);
         } catch (err) {
-            console.log(err)
+            console.log(err);
         } finally {
 
         }

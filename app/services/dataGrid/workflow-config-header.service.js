@@ -17,7 +17,7 @@ export const wchService = {
     ],
     //操作列
     headerFor0: [
-        { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
+        { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             return `
                 <div style="text-align:center;">
                     <a href=javascript:void(0); class="ui-link" data-type="view">查看</a>
@@ -29,7 +29,7 @@ export const wchService = {
     ],
     headerFor1: [
         { headerName: '完成时间', field: 'end_time',dinput_type:'5',width:150 },
-        { headerName: '操作', width: 80,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
+        { headerName: '操作', width: 80,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             return `
                 <div style="text-align:center;">
                     <a href=javascript:void(0); class="ui-link" data-type="view">查看</a>
@@ -39,7 +39,7 @@ export const wchService = {
     ],
     headerFor2: [
         { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
-        { headerName: '操作', width: 150,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
+        { headerName: '操作', width: 180,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             let data = param["data"];
             let html = '<div style="text-align:center;">' +
                 '<a href=javascript:void(0); class="ui-link" data-type="view">查看</a>' +
@@ -57,7 +57,7 @@ export const wchService = {
     headerFor3: [
         { headerName: '完成时间', field: 'end_time',dinput_type:'5',width:150 },
         { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
-        { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
+        { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             let data = param["data"];
             let html = `
             <div style="text-align:center;">
@@ -72,7 +72,7 @@ export const wchService = {
     headerFor4: [
         { headerName: '完成时间', field: 'end_time',dinput_type:'5',width:150 },
         { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
-        { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
+        { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             let data = param["data"];
             let html = `
             <div style="text-align:center;">
@@ -101,7 +101,7 @@ export const wchService = {
         { headerName: '审批开始时间', field: 'approve_start_time',dinput_type:'5',width:150 },
         { headerName: '审批结束时间', field: 'approve_over_time',dinput_type:'5',width:150 },
         { headerName: '超时状态', field: 'approve_time_status',width:100 },
-        { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,
+        { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,
             cellRenderer: (param)=>{
             return `
                 <div style="text-align:center;">
@@ -114,7 +114,7 @@ export const wchService = {
     ],
     headerFor6: [
         { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
-        { headerName: '操作', width: 80,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: true,minWidth: 50,cellRenderer: (param)=>{
+        { headerName: '操作', width: 80,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             return '<div style="text-align:center;"></span><a href=javascript:void(0); class="ui-link" data-type="focusWorkflow">查看</a></div>';
         }}
     ]

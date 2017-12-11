@@ -190,7 +190,11 @@ export class EchartsService {
         }
         linebarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
         if (cellOption.double !== 1) {
-            linebarOption['grid']['right'] = 15;
+            let cellWidth = cellChart.cell.size['width'];
+            let str = cellChart.chart.data.xAxis[0];
+            let len = str.length;
+            linebarOption['grid']['right'] = Math.min(Math.max(len*1000/(cellWidth^3),15),40);
+
             // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
             // 双y轴 如果有一个y轴小于0
@@ -348,26 +352,29 @@ export class EchartsService {
         let xDateType = cellOption['data']['x'] ? cellOption['data']['x'] : cellOption['xAxis'];
         if(!cellOption['yHorizontal'] && xDateType && xDateType['type'] && dateType.indexOf(xDateType['type']) != -1 && window.config.bi_user !== 'manager'){
             linebarOption['grid']['bottom'] = parseInt(linebarOption['grid']['bottom']) + 30;
-            linebarOption['dataZoom']=[
-                {
-                type: 'slider',
-                xAxisIndex: 0,
-                bottom:5,
-                height:20,
-                left:0,
-                right:5,
-                startValue: linebarOption['xAxis'][0]['data'][0],
-                endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
-                rangeMode: ['value', 'value']
-                },
-                {
-                    type: 'inside',
-                    xAxisIndex: 0,
-                    startValue: linebarOption['xAxis'][0]['data'][0],
-                    endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
-                    rangeMode: ['value', 'value']
-                }
-            ]
+            console.log(window.config);
+            if(!window.config.pdf){
+                linebarOption['dataZoom']=[
+                    {
+                        type: 'slider',
+                        xAxisIndex: 0,
+                        bottom:5,
+                        height:20,
+                        left:0,
+                        right:5,
+                        startValue: linebarOption['xAxis'][0]['data'][0],
+                        endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
+                        rangeMode: ['value', 'value']
+                    },
+                    {
+                        type: 'inside',
+                        xAxisIndex: 0,
+                        startValue: linebarOption['xAxis'][0]['data'][0],
+                        endValue: linebarOption['xAxis'][0]['data'][linebarOption['xAxis'][0]['data'].length-1],
+                        rangeMode: ['value', 'value']
+                    }
+                ]
+            }
         }
         //是否设置自定义高度top
         if(cellOption['customTop']){
@@ -380,6 +387,7 @@ export class EchartsService {
             linebarOption['xAxis'][0]['axisLabel']['showMaxLabel'] = true;
             linebarOption['xAxis'][0]['axisLabel']['showMinLabel'] = true;
         }
+
         return linebarOption;
     }
 
@@ -419,6 +427,8 @@ export class EchartsService {
                 pieOption['series'][0]['radius'] = isNaN(cellOption['customPie']['radius'])?[(parseFloat(cellOption['customPie']['radius'])-20)+'%',cellOption['customPie']['radius']]:[cellOption['customPie']['radius']-20+'',cellOption['customPie']['radius']];
             }
         }
+
+
         return pieOption;
     }
 
@@ -480,8 +490,8 @@ export class EchartsService {
                         }
                     }
                 });
-                let max = Math.max.apply(null, y['data'])
-                let min = Math.min.apply(null, y['data'])
+                let max = Math.max.apply(null, y['data']);
+                let min = Math.min.apply(null, y['data']);
                 ymin.push(min);
                 ymax.push(max);
             });
@@ -653,6 +663,12 @@ export class EchartsService {
         mapOption.series[0].data = data;
         mapOption.series[0].name = cellOption.data.yAxis[0].name;
         mapOption.visualMap.pieces = splitList;
+        //自定义设置精度
+        if(cellOption['customAccuracy']){
+            mapOption['tooltip']['formatter'] = function(params,ticket,callback){
+                return params.seriesName+'<br/>' + params.data.name + ' : ' + parseFloat(params.data.value).toFixed(parseInt(cellOption['customAccuracy']));
+            };
+        }
         return mapOption;
     }
 
@@ -681,12 +697,13 @@ export class EchartsService {
         gaugeOption.series[0].name = cellOption['yAxis'][0].name;
         gaugeOption.series[0].data['value'] = cellOption['data']['yAxis'];
 
-        if(cellOption['yAxis'][0]['real_accuracy']){
+        //自定义设置精度
+        if(cellOption['customAccuracy']){
             gaugeOption.series[0]['axisLabel']['formatter'] = function(value){
-                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+                return value.toFixed(parseInt(cellOption['customAccuracy']));
             };
             gaugeOption.series[0]['detail']['formatter'] = function(value){
-                return value.toFixed(cellOption['yAxis'][0]['real_accuracy']);
+                return value.toFixed(parseInt(cellOption['customAccuracy']));
             };
         }
         return gaugeOption;

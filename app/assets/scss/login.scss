@@ -11,10 +11,10 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
     bottom: 0;
     right: 0;
     top: 0;
-    z-index: 1;
+    z-index: 0;
     background-position: center bottom;
     background-image: url("../images/login/wave_bg.jpg");
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-color: #0c3281;
 }
@@ -109,6 +109,7 @@ $input_color: rgb(0, 0, 0); //输入文字颜色
         height: calc(100% - 60px);
         margin-left: -600px;
         .login-content {
+            display: none;
             width: 340px;
             //height: 380px;
             position: absolute;

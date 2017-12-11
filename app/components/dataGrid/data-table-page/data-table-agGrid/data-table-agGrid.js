@@ -60,6 +60,8 @@ let config = {
         fieldContent: null,
         rowData: [],
         footerData: [{myfooter: '合计'}],
+        //是否处于审批中
+        fromApprove: 0,
         //iframe弹窗key
         key: '',
         // 提醒颜色
@@ -412,7 +414,6 @@ let config = {
                             this.data.getDiarySearchField(data.data["field"]);
                         }
                     }
-                    console.log(data.data)
                     if(data.data.is_offer_py == 1){
                         this.data.supportPy.push(data.data["field"]);
                     }
@@ -1440,7 +1441,7 @@ let config = {
                 });
             }
             if (res[0].hasOwnProperty('error')) {
-                if (res[0].error == '您没有数据查看权限') {
+                if (res[0].error == '您没有数据查看权限' && this.data.fromApprove == 0) {
                     this.el.find('.ag-body-viewport-wrapper').html('<div style="width: 100%;height: 100%;background: #fff;position: relative;z-index: 1;"><p style="position: absolute;top: 50%;left: 50%;' +
                         'width: 200px;height: 20px;line-height: 20px;text-align: center;margin-left: -100px;margin-top: -10px;font-size: 16px">' + res[0].error + '</p></div>')
                 }
@@ -1482,12 +1483,12 @@ let config = {
                         }
                     }
                 }
+	            let d = {
+		            rowData: this.data.rowData
+	            };
+	            //赋值
+	            this.agGrid.actions.setGridData(d);
             }
-            let d = {
-                rowData: this.data.rowData
-            };
-            //赋值
-            this.agGrid.actions.setGridData(d);
         },
         //获取设置选择数据（刷新时回显已经选择的数据）
         calcSelectData: function (type) {
@@ -1649,7 +1650,8 @@ let config = {
                 rowId: this.data.rowId,
                 record_id: this.data.recordId,
                 is_filter: this.data.filterParam.is_filter,
-                filter: []
+                filter: [],
+                from_approve: this.data.fromApprove || 0
             };
             for (let k in json) {
                 if (json[k] == 'undefined') {
@@ -1775,7 +1777,7 @@ let config = {
                     if(this.data.supportPy.indexOf(a.cond.searchBy) != -1){
                         a['cond']['py'] = 1;
                         if(!addPy&&this.data.total>=5000){
-                            msgbox.showTips('当前的数据量较大，检索时需要更长时间。');
+                            msgbox.alert('当前的数据量较大，检索时需要更长时间。');
                             addPy = true;
                         }
                     }else {
@@ -3378,7 +3380,7 @@ let config = {
                 msgBox.alert('该表为外部数据表,不可' + test + '。');
                 return true
             }
-            if (this.data.permission.view == 0 && type == 'view') {
+            if (this.data.permission.view == 0 && type == 'view' && this.data.fromApprove == '0') {
                 msgBox.alert('没有查看权限');
                 return true
             }
