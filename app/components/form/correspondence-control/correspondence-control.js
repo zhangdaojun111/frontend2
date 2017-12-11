@@ -47,8 +47,5 @@ let config={
         this.el.off();
     }
 }
-export default class Correspondence extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let Correspondence = Component.extend(config)
+export default Correspondence

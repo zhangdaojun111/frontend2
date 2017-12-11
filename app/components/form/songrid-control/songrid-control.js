@@ -76,8 +76,5 @@ let config={
         this.el.off();
     }
 };
-export default class Songrid extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let Songrid = Component.extend(config)
+export default Songrid;

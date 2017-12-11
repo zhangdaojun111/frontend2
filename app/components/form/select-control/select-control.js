@@ -74,8 +74,5 @@ let config={
        this.el.off();
     }
 }
-export default class SelectControl extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let SelectControl = Component.extend(config)
+export default SelectControl

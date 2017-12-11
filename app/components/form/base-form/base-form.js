@@ -1889,7 +1889,7 @@ let config = {
 				switch (type) {
 					case 'Correspondence':
 						data[key]['temp_id'] = data['temp_id']['value'];
-						let correspondence = new Correspondence(data[key], actions);
+						let correspondence = new Correspondence({data:data[key], events:actions});
 						correspondence.render(single);
 						this.data.childComponent[data[key].dfield] = correspondence;
 						break;
@@ -1902,27 +1902,27 @@ let config = {
 						for (let k in data) {
 							formData[k] = data[k].value || '';
 						}
-						let songrid = new Songrid(Object.assign(data[key], {
+                        let songrid = new Songrid({data:Object.assign(data[key], {
                             fromApprove: this.data.fromApprove,
-							popupType: popupType,
-							formData: JSON.stringify(formData)
-						}), actions);
+                            popupType: popupType,
+                            formData: JSON.stringify(formData)
+                        }), events:actions});
 						songrid.render(single);
 						this.data.childComponent[data[key].dfield] = songrid;
 						break;
 					case 'Radio':
 						this.actions.setRadioCheck(data[key]);
-						let radio = new Radio(data[key], actions);
+						let radio = new Radio({data:data[key], events:actions});
 						radio.render(single);
 						this.data.childComponent[data[key].dfield] = radio;
 						break;
 					case 'Input':
-						let input = new Input(data[key], actions);
+						let input = new Input({data:data[key], events:actions});
 						input.render(single);
 						this.data.childComponent[data[key].dfield] = input;
 						break;
 					case 'Textarea':
-						let textArea = new TextArea(data[key], actions);
+						let textArea = new TextArea({data:data[key], events:actions});
 						textArea.render(single);
 						this.data.childComponent[data[key].dfield] = textArea;
 						break;
@@ -1932,47 +1932,47 @@ let config = {
 						}
 						if(data[key].real_type == 9 || data[key].real_type == 23 || data[key].real_type == 33){
 							data[key]['read_only']=1;
-                            let attachmentControl = new AttachmentControl(data[key], actions);
+                            let attachmentControl = new AttachmentControl({data:data[key], events:actions});
                             attachmentControl.render(single);
                             this.data.childComponent[data[key].dfield] = attachmentControl;
                             break;
 						}
-						let readonly = new Readonly(data[key], actions);
+						let readonly = new Readonly({data:data[key], events:actions});
 						readonly.render(single);
 						this.data.childComponent[data[key].dfield] = readonly;
 						break;
 					case 'EnctyptInput':
-						let password = new Password(data[key], actions);
+						let password = new Password({data:data[key], events:actions});
 						password.render(single);
 						this.data.childComponent[data[key].dfield] = password;
 						break;
 					case 'Hidden':
-						let hidden = new Hidden(data[key]);
+						let hidden = new Hidden({data:data[key]});
 						hidden.render(single);
 						this.data.childComponent[data[key].dfield] = hidden;
 						break;
 					case 'Select':
-						let selectControl = new SelectControl(data[key], actions);
+						let selectControl = new SelectControl({data:data[key], events:actions});
 						selectControl.render(single);
 						this.data.childComponent[data[key].dfield] = selectControl;
 						break;
 					case 'Year':
-						let yearControl = new YearControl(data[key], actions);
+						let yearControl = new YearControl({data:data[key], events:actions});
 						yearControl.render(single);
 						this.data.childComponent[data[key].dfield] = yearControl;
 						break;
 					case 'Yearmonthtime':
-						let yearMonthControl = new YearMonthControl(data[key], actions);
+						let yearMonthControl = new YearMonthControl({data:data[key], events:actions});
 						yearMonthControl.render(single);
 						this.data.childComponent[data[key].dfield] = yearMonthControl;
 						break;
 					case 'Buildin':
-						let buildInControl = new BuildInControl(data[key], actions);
+						let buildInControl = new BuildInControl({data:data[key], events:actions});
 						buildInControl.render(single);
 						this.data.childComponent[data[key].dfield] = buildInControl;
 						break;
 					case 'MultiLinkage':
-						let multiLinkageControl = new MultiLinkageControl(data[key], actions);
+						let multiLinkageControl = new MultiLinkageControl({data:data[key], events:actions});
 						multiLinkageControl.render(single);
 						this.data.childComponent[data[key].dfield] = multiLinkageControl;
 						break;
@@ -1984,38 +1984,38 @@ let config = {
 							data[key].childData = single.data('selectType');
 						}
 						data[key].is_special = data[key].field_content['special_multi_choice'] == 1 ? true : false;
-						let multiSelectControl = new MultiSelectControl(data[key], actions);
+						let multiSelectControl = new MultiSelectControl({data:data[key], events:actions});
 						multiSelectControl.render(single);
 						this.data.childComponent[data[key].dfield] = multiSelectControl;
 						break;
 					case 'Editor':
-						let editorControl = new EditorControl(data[key], actions);
+						let editorControl = new EditorControl({data:data[key], events:actions});
 						editorControl.render(single);
 						this.data.childComponent[data[key].dfield] = editorControl;
 						break;
 					case 'SettingTextarea':
-						let settingTextareaControl = new SettingTextareaControl(data[key], actions);
+						let settingTextareaControl = new SettingTextareaControl({data:data[key], events:actions});
 						settingTextareaControl.render(single);
 						this.data.childComponent[data[key].dfield] = settingTextareaControl;
 						break;
 					case 'Attachment':
 					case 'Picture':
-						let attachmentControl = new AttachmentControl(data[key], actions);
+						let attachmentControl = new AttachmentControl({data:data[key], events:actions});
 						attachmentControl.render(single);
 						this.data.childComponent[data[key].dfield] = attachmentControl;
 						break;
 					case 'Time':
-						let timeControl = new TimeControl(data[key], actions);
+						let timeControl = new TimeControl({data:data[key], events:actions});
 						timeControl.render(single);
 						this.data.childComponent[data[key].dfield] = timeControl;
 						break;
 					case 'Date':
-						let dateControl = new DateControl(data[key], actions);
+						let dateControl = new DateControl({data:data[key], events:actions});
 						dateControl.render(single);
 						this.data.childComponent[data[key].dfield] = dateControl;
 						break;
 					case 'Datetime':
-						let dateTimeControl = new DateTimeControl(data[key], actions);
+						let dateTimeControl = new DateTimeControl({data:data[key], events:actions});
 						dateTimeControl.render(single);
 						this.data.childComponent[data[key].dfield] = dateTimeControl;
 						break;
@@ -2024,7 +2024,7 @@ let config = {
 						data[key]['table_id'] = data['table_id']['value'];
 						data[key]['temp_id'] = data['temp_id']['value'];
 						data[key]['iframe_key'] = window.config.key;
-						let contractControl = new ContractControl(data[key], actions);
+						let contractControl = new ContractControl({data:data[key], events:actions});
 						contractControl.render(single);
 						this.data.childComponent[data[key].dfield] = contractControl;
 						break;
@@ -2110,6 +2110,27 @@ let config = {
 		}
 	},
 	afterRender() {
+        //存父子表关系
+        if (!window.top.frontendRelation) {
+            window.top.frontendRelation = {};
+        }
+        if (!window.top.frontendParentNewData) {
+            window.top.frontendParentNewData = {};
+        }
+        if (!window.top.isSonGridDataNeedParentTepmId) {
+            window.top.isSonGridDataNeedParentTepmId = '';
+        }
+        if (!window.top.idsInChildTableToParent) {
+            window.top.idsInChildTableToParent = {};
+        }
+        if (!window.top.frontendParentFormValue) {
+            window.top.frontendParentFormValue = {};
+        }
+        window.top.frontendRelation[this.data.tableId] = this.data["frontend_cal_parent_2_child"];
+        //存父表的newData
+        window.top.frontendParentNewData[this.data.tableId] = _.defaultsDeep({},this.data.data);
+        window.top.isSonGridDataNeedParentTepmId = this.data.data['temp_id'] && this.data.data['temp_id']['value']?this.data.data['temp_id']['value'] : '';
+
 		this.data.isInit = true;
 		this.actions.createFormControl();
 		if (this.data.is_view == 1) {
@@ -2156,32 +2177,34 @@ let config = {
 	}
 }
 
-class BaseForm extends Component {
-	constructor(formData, newConfig) {
-		config.template = formData.template;
-		//存父子表关系
-		if (!window.top.frontendRelation) {
-			window.top.frontendRelation = {};
-		}
-		if (!window.top.frontendParentNewData) {
-			window.top.frontendParentNewData = {};
-		}
-		if (!window.top.isSonGridDataNeedParentTepmId) {
-			window.top.isSonGridDataNeedParentTepmId = '';
-		}
-		if (!window.top.idsInChildTableToParent) {
-			window.top.idsInChildTableToParent = {};
-		}
-		if (!window.top.frontendParentFormValue) {
-			window.top.frontendParentFormValue = {};
-		}
-		window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
-		//存父表的newData
-		window.top.frontendParentNewData[formData.data.tableId] = _.defaultsDeep({},formData.data.data);
-		window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id'] && formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
-		super($.extend(true, {}, config, newConfig), formData.data);
-	}
-
-}
-
+// class BaseForm extends Component {
+// 	// constructor(formData, newConfig) {
+// 	// 	config.template = formData.template;
+// 	// 	//存父子表关系
+// 	// 	if (!window.top.frontendRelation) {
+// 	// 		window.top.frontendRelation = {};
+// 	// 	}
+// 	// 	if (!window.top.frontendParentNewData) {
+// 	// 		window.top.frontendParentNewData = {};
+// 	// 	}
+// 	// 	if (!window.top.isSonGridDataNeedParentTepmId) {
+// 	// 		window.top.isSonGridDataNeedParentTepmId = '';
+// 	// 	}
+// 	// 	if (!window.top.idsInChildTableToParent) {
+// 	// 		window.top.idsInChildTableToParent = {};
+// 	// 	}
+// 	// 	if (!window.top.frontendParentFormValue) {
+// 	// 		window.top.frontendParentFormValue = {};
+// 	// 	}
+// 	// 	window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
+// 	// 	//存父表的newData
+// 	// 	window.top.frontendParentNewData[formData.data.tableId] = _.defaultsDeep({},formData.data.data);
+// 	// 	window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id'] && formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
+// 	// 	super($.extend(true, {}, config, newConfig), formData.data);
+// 	// }
+//     constructor(extendConfig){
+//         super($.extend(true, {}, config, extendConfig));
+//     }
+// }
+let BaseForm = Component.extend(config)
 export default BaseForm
