@@ -6,6 +6,7 @@
 import Component from '../../../../../../lib/component';
 import {CanvasOriginalDataComponent} from './original.data/original.data';
 
+
 export class CellBaseComponent extends Component {
     constructor(config,data,event,extendConfig) {
         super($.extend(true,{},config,extendConfig),data,event)
@@ -77,6 +78,37 @@ export class CellBaseComponent extends Component {
                         parentVal['data'][index] = parseFloat(val).toFixed(parseInt(cellChart.customAccuracy));
                     })
                 })
+            }
+        }
+    }
+
+    /**
+     * 当message服务有推送时更新
+     * @param data = 后台返回的chart data
+     */
+    updateCellDataFromMessage(res) {
+        if (res['success'] === 1) {
+            if (res['data'].assortment === 'table') {
+                if (res['data']['single'] === 1) {
+                    this.data.rows = this.actions.singleTable(res['data']);
+                } else {
+                    this.data.chart = res['data'];
+                }
+                this.reload();
+            } else if (
+                res['data'].assortment === 'normal' ||
+                res['data'].assortment === 'pie' ||
+                res['data'].assortment === 'radar' ||
+                res['data'].assortment === 'multilist' ||
+                res['data'].assortment === 'stylzie' ||
+                res['data'].assortment === 'map' ||
+                res['data'].assortment === 'gauge'
+            ) {
+                this.data.chart = this.data.cellChart.chart = res['data'];
+                this.actions.updateChart(res['data'].assortment === 'multilist' ? this.data.cellChart : {'chart':res['data']});
+            } else if (res['data'].assortment === 'nineGrid') {
+                this.data = this.actions.reassemble({'chart':res['data']});
+                this.reload();
             }
         }
     }

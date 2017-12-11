@@ -391,12 +391,20 @@ export class CanvasOriginalDataComponent extends Component {
                 return {'name': name, 'select': true}
             });
         } else {
-            data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
-                let value = JSON.parse(item);
-                if (!value.select) {
-                    data.selectAllX = false;
-                }
-                return value;
+            // data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
+            //     let value = JSON.parse(item);
+            //     if (!value.select) {
+            //         data.selectAllX = false;
+            //     }
+            //     return value;
+            // });
+            data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
+                return {'name': name, 'select': data.cellChart.cell.select.map(item => {
+                    let value = JSON.parse(item);
+                    if (value.name === name) {
+                        return value.select;
+                    };
+                })}
             });
         }
         // 如果attribute有数据就用attribute的数据 attribute = yAxis
