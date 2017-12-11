@@ -33,7 +33,7 @@ let config = {
             placeholder:this.data.placeholder ? this.data.placeholder : '请选择数据',
             onSelect: this.actions.onSelect
         };
-        this.autoselect = new AutoSelect(autoselect_data);
+        this.autoselect = new AutoSelect({data:autoselect_data});
         this.append(this.autoselect, this.el.find('.form-chart-wrapper'));
     },
     firstAfterRender() {}

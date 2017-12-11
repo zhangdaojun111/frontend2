@@ -54,7 +54,7 @@ let config = {
         initList:function (tempData) {
             let $wrap = this.el.find('.user-list');
             let that = this;
-            let autoSelect = new AutoSelect({
+            let autoSelect = new AutoSelect({data:{
                 list: tempData,
                 multiSelect: false,
                 editable: true,
@@ -65,7 +65,7 @@ let config = {
                         that.data._otherId = '';
                     }
                 }
-            });
+            }});
             autoSelect.render($wrap);
         },
         /**

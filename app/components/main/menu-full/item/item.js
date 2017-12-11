@@ -323,11 +323,11 @@ let config = {
                     type: this.data.type
                 });
 
-                let component = new FullMenuItem(newData, {
+                let component = new FullMenuItem({data:newData,events:{
                     onSubCheckboxChange: function (value) {
                         that.actions.checkChildrenChecked();
                     }
-                });
+                }});
                 this.append(component, this.childlist, 'li');
                 this.data.listComp.push(component);
             });
@@ -353,8 +353,8 @@ let config = {
 };
 
 class FullMenuItem extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
 

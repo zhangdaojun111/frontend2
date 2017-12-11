@@ -853,7 +853,7 @@ let config = {
         });
 
         //初始化保存视图组件
-        this.saveView = new SaveView({},this.data.sort,this.actions.closeSaveViewPage);
+        this.saveView = new SaveView({data:{currentIframesList:this.data.sort},actions:{closeSaveView:this.actions.closeSaveViewPage}});
         this.saveView.render(this.el.find('.view-save-component'));
     },
 

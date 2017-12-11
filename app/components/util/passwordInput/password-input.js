@@ -161,7 +161,7 @@ let config = {
         sendPawToParent:function () {
             console.log('do send');
             let password = this.el.find('.set-password-input').val();
-	        this.setValue && this.setValue(password);
+            this.trigger('setValue',password);
         }
     },
     binds:[
@@ -229,9 +229,8 @@ let config = {
  */
 
 class PasswordInput extends Component {
-    constructor(data,callback){
-        super(config,data);
-        this.setValue = callback;
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
 

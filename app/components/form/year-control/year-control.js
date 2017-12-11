@@ -48,7 +48,7 @@ let config={
                 _this.data.value=data[0]['id'];
                 _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             };
-            let autoSelect=new AutoSelect(data);
+            let autoSelect=new AutoSelect({data:data});
             this.append(autoSelect,el);
         }
         this.data.isInit=false;

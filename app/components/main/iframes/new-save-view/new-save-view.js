@@ -328,10 +328,8 @@ let config = {
 
 
 class SaveView extends Component {
-    constructor(newConfig,data,callback){
+    constructor(newConfig){
         super($.extend(true,{},config,newConfig));
-        this.data.currentIframesList = data;
-        this.actions.closeSaveView = callback;
     }
 }
 

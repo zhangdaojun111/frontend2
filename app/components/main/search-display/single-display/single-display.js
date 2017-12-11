@@ -61,9 +61,8 @@ let config = {
 };
 
 class SingleResult extends Component{
-    constructor(data,newConfig){
+    constructor(newConfig){
         super($.extend(true,{},config,newConfig));
-        this.data.searchData = data;
     }
 }
 
@@ -71,7 +70,7 @@ export const SingleDisplay = {
     el:null,
     create:function (data,$father) {
         this.el = $("<div class='single-container'>").appendTo($father);
-        let component = new SingleResult(data);
+        let component = new SingleResult({data:{searchData:data}});
         component.render(this.el);
     }
 };

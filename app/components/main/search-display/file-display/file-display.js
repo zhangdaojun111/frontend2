@@ -63,9 +63,8 @@ let config = {
 };
 
 class FileResult extends Component{
-    constructor(data,newConfig){
+    constructor(newConfig){
         super($.extend(true,{},config,newConfig));
-        this.data.searchData = data;
     }
 }
 
@@ -73,7 +72,7 @@ export const FileDisplay = {
     el:null,
     create:function (data,$father) {
         this.el = $("<div class='single-type2'>").appendTo($father);
-        let component = new FileResult(data);
+        let component = new FileResult({data:{searchData:data}});
         component.render(this.el);
     }
 };

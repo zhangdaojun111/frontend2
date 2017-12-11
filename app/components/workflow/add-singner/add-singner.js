@@ -32,28 +32,28 @@ let config = {
 		},
 		createTree(){
 			let _this=this;
-			let treeComp3 = new TreeView(this.data.tree, {
-				callback: function (event, selectedNode) {
-					if (event === 'select') {
-						for (let k in _this.data.staff) {
-							if (k == selectedNode.id) {
-								Mediator.publish('workflow:checkAdder', _this.data.staff[k]);
-								_this.actions.recursion(_this.data.staff, selectedNode, 'checkAdder');
-							}
-						}
-					} else {
-						for (let k in _this.data.staff) {
-							if (k == selectedNode.id) {
-								Mediator.publish('workflow:unCheckAdder', staff[k]);
-								_this.actions.recursion(_this.data.staff, selectedNode, 'unCheckAdder');
-							}
-						}
-					}
-				},
-				treeType: 'MULTI_SELECT',
-				isSearch: true,
-				withButtons: true
-			});
+			let treeComp3 = new TreeView({data:{treeNodes:this.data.tree, options:{
+                        callback: function (event, selectedNode) {
+                            if (event === 'select') {
+                                for (let k in _this.data.staff) {
+                                    if (k == selectedNode.id) {
+                                        Mediator.publish('workflow:checkAdder', _this.data.staff[k]);
+                                        _this.actions.recursion(_this.data.staff, selectedNode, 'checkAdder');
+                                    }
+                                }
+                            } else {
+                                for (let k in _this.data.staff) {
+                                    if (k == selectedNode.id) {
+                                        Mediator.publish('workflow:unCheckAdder', staff[k]);
+                                        _this.actions.recursion(_this.data.staff, selectedNode, 'unCheckAdder');
+                                    }
+                                }
+                            }
+                        },
+                        treeType: 'MULTI_SELECT',
+                        isSearch: true,
+                        withButtons: true
+                    },indent:0}});
 			treeComp3.render(this.el.find('#addUser'));
 		}
 	},

@@ -111,7 +111,7 @@ let config = {
          */
         showAllMenu: function () {
             if (!this.allMenu) {
-                this.allMenu = new MenuComponent({list: this.actions.presetMenuData(window.config.menu)});
+                this.allMenu = new MenuComponent({data:{list: this.actions.presetMenuData(window.config.menu)}});
                 this.allMenu.render(this.el.find('.menu.all'));
             }
             if (this.commonMenu) {
@@ -133,7 +133,7 @@ let config = {
          */
         showCommonMenu: function (reload) {
             if (!this.commonMenu) {
-                this.commonMenu = new MenuComponent({list: this.actions.presetCommonMenuData(window.config.menu, window.config.commonUse)});
+                this.commonMenu = new MenuComponent({data:{list: this.actions.presetCommonMenuData(window.config.menu, window.config.commonUse)}});
                 this.commonMenu.render(this.el.find('.menu.common'));
             }
             if (reload) {

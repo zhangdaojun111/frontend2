@@ -98,11 +98,11 @@ let config = {
             this.destroyChildren();
             this.data.listComp = [];
             this.data.list.forEach((data) => {
-                let component = new FullMenuItem(_.defaultsDeep({}, data, {
+                let component = new FullMenuItem({data:_.defaultsDeep({}, data, {
                     root: true,
                     offset: 0,
                     type: this.data.type
-                }));
+                })});
                 this.append(component, this.$root, 'li');
                 this.data.listComp.push(component);
             });
@@ -157,8 +157,8 @@ let config = {
 };
 
 class MenuComponent extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }
 

@@ -44,26 +44,26 @@ let config = {
 		},
 		renderTree(tree) {
 			let _this = this;
-			let treeComp2 = new TreeView(tree, {
-				callback: function (event, selectedNode) {
-					if (event === 'select') {
-						for (let k in  _this.data.staff) {
-							if (k == selectedNode.id) {
-								Mediator.publish('workflow:checkDept', _this.data.staff[k]);
-							}
-						}
-					} else {
-						for (let k in  _this.data.staff) {
-							if (k == selectedNode.id) {
-								Mediator.publish('workflow:unCheckDept', _this.data.staff[k]);
-							}
-						}
-					}
-				},
-				treeType: 'MULTI_SELECT',
-				isSearch: true,
-				withButtons: true
-			});
+			let treeComp2 = new TreeView({data:{treeNodes:tree,options:{
+                    callback: function (event, selectedNode) {
+                        if (event === 'select') {
+                            for (let k in  _this.data.staff) {
+                                if (k == selectedNode.id) {
+                                    Mediator.publish('workflow:checkDept', _this.data.staff[k]);
+                                }
+                            }
+                        } else {
+                            for (let k in  _this.data.staff) {
+                                if (k == selectedNode.id) {
+                                    Mediator.publish('workflow:unCheckDept', _this.data.staff[k]);
+                                }
+                            }
+                        }
+                    },
+                    treeType: 'MULTI_SELECT',
+                    isSearch: true,
+                    withButtons: true
+                },indent:0}});
 			treeComp2.render(this.el.find('#treeMulti'));
 		},
 		subscribe() {

@@ -114,14 +114,14 @@ let config = {
         this.data.selected = originData.commonUse;
         this.data.menu = originData.menu;
 
-        let treeView = new TreeView(this.data.menu, {
+        let treeView = new TreeView({data:{treeNodes:this.data.menu, options:{
             callback: (event, node) => {
                 this.actions.handle(event, node);
                 console.log(this.data.selected)
             },
             treeType: "MULTI_SELECT",
             treeName: "menu-tree"
-        });
+        },indent:0}});
         let $container = this.el.find("div.menu-tree");
         treeView.render($container);
         this.el.on('click', '.save button', () => {
@@ -131,7 +131,7 @@ let config = {
 }
 
 class CommonUse extends Component {
-    constructor(newConfig,data) {
+    constructor(newConfig) {
         super($.extend(true,{},config,newConfig));
     }
 }

@@ -259,16 +259,15 @@ let config = {
 
 
 class SaveViewController extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig));
-        this.data.currentIframesList = data;
+    constructor(newConfig) {
+        super($.extend(true, {}, config, newConfig));
     }
 }
 
 export const SaveView = {
     el:null,
     show: function (data) {
-        let component = new SaveViewController(data);
+        let component = new SaveViewController({data:{currentIframesList:data}});
         this.el = $('<div id="save-view">').appendTo(document.body);
         component.render(this.el);
         this.el.erdsDialog({

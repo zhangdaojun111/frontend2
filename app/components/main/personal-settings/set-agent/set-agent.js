@@ -59,14 +59,14 @@ let config = {
          */
         initWorkflow:function () {
             this.actions.formatOriginData(this.data.formatData);
-            let treeView = new TreeView(this.data.formatData,{
+            let treeView = new TreeView({data:{treeNodes:this.data.formatData,options:{
                 callback:(event,node) => {
                     this.actions.selectNode(event,node);
                 },
                 treeType:"MULTI_SELECT",
                 treeName:"workflow-tree",
                 isSearch:true
-            });
+            },indent:0}});
             let $container = this.el.find("div.work-tree");
             treeView.render($container);
             this.el.find('.flex-between > .txt').html("流程搜索");
@@ -117,16 +117,16 @@ let config = {
             if( Object.keys(this.data.selectedAgent).length > 0){
                 temp.push(this.data.selectedAgent);
             }
-            let autoSelect = new AutoSelect({
+            let autoSelect = new AutoSelect({data:{
                 list: tempData,
                 multiSelect: false,
                 editable: true,
                 choosed:temp
-            }, {
+            },event: {
                 onSelect: function (choosed) {
                     that.actions.setAgentId(choosed);
                 }
-            });
+            }});
 
             this.data.atSelect = autoSelect;
             autoSelect.render($wrap);

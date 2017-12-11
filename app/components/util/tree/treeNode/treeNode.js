@@ -122,7 +122,8 @@ let config = {
                 let data=node;
                 data['options']=this.data.options;
                 data['indent']=this.data.indent+1;
-                let com = new TreeNode(data,this.data.options.callback);
+                data['options']['callback'] = this.data.options.callback;
+                let com = new TreeNode({data:data});
                 com.render(ele);
                 this.data.childNodes.push(com);
             });
@@ -141,8 +142,7 @@ let config = {
 };
 
 export default class TreeNode extends Component {
-    constructor(data,callback){
-        data.callback = callback;
-        super(config,data,callback);
+    constructor(newConfig){
+        super($.extend(true,{},config,newConfig));
     }
 }

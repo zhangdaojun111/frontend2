@@ -280,7 +280,7 @@ let config = {
             },
         };
 
-        this.data.multiSelectMenu = new AutoSelect(select_item_data);
+        this.data.multiSelectMenu = new AutoSelect({data:select_item_data});
         this.append(this.data.multiSelectMenu, this.el.find('.multi-select-item'));
 
         /**
@@ -301,7 +301,7 @@ let config = {
             },
         };
 
-        this.data.singleSelectMenu = new AutoSelect(single_item_data);
+        this.data.singleSelectMenu = new AutoSelect({data:single_item_data});
         this.append(this.data.singleSelectMenu, this.el.find('.single-select-item'));
 
         this.actions.checkChangeTextSelected();

@@ -415,7 +415,7 @@ let config = {
         //创建部门树
         createDepartment: function () {
             this.actions.departmentTreeFun(this.data.department_tree);
-            let treeView = new TreeView(this.data.department_tree,{
+            let treeView = new TreeView({data:{treeNodes:this.data.department_tree,options:{
                 callback:(event,node) => {
                     if( node.id ){
                         this.data.page = 1;
@@ -428,7 +428,7 @@ let config = {
                 selectParentMode:'Select',
                 isSearch: true,
                 treeName:"department-tree"
-            });
+            },indent:0}});
             treeView.render(this.el.find( '.choose-department-tree' ));
         },
         departmentTreeFun:function (tree) {
