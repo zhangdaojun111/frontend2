@@ -39,8 +39,7 @@ let config = {
 };
 
 export class CellNineGridComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        let cellChart = CellNineGridComponent.init(data);
+    constructor(extendConfig) {
         super($.extend(true,{},config,extendConfig));
     }
 
@@ -49,6 +48,7 @@ export class CellNineGridComponent extends CellBaseComponent {
      * @param cellChart 画布块数据(通过父类初始化子类传递进来)
      */
    static init(cellChart) {
+       console.log(cellChart);
         if (cellChart['chart']['data']['rows'].length === 0) {
             return false;
         }
