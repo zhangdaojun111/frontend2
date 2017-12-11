@@ -291,13 +291,6 @@ let config = {
 	}
 }
 
-export default class WorkFlowForm extends Component {
-	// constructor(data){
-	//     config.data = data;
-	//     super(config);
-	// }
 
-	constructor(data, events, newConfig) {
-		super($.extend(true, {}, config, newConfig, {data: data || {}}), {}, events);
-	}
-}
+let WorkFlowForm = Component.extend(config);
+export default WorkFlowForm

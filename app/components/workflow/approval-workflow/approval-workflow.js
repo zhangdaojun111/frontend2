@@ -453,8 +453,5 @@ let config={
 		});
 	}
 };
-export default class ApprovalWorkflow extends Component{
-	constructor(data,events,newConfig){
-		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
-	}
-}
+let ApprovalWorkflow = Component.extend(config);
+export default ApprovalWorkflow

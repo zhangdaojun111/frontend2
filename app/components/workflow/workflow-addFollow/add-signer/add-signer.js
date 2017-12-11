@@ -17,13 +17,5 @@ let config={
     
     }
 };
-class AddSigner extends Component{
-    // constructor (data){
-    //     super(config,data);
-    // }
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
-
-export default AddSigner;
+let AddSigner = Component.extend(config);
+export default AddSigner
