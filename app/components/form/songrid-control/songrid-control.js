@@ -43,7 +43,7 @@ let config={
             rowId:this.data.parent_temp_id || '',
             // record_id:this.data.recordId || '',
             parentRealId:this.data.parent_real_id || '',
-            parentRecordId:this.data.recordId || '',
+            // parentRecordId:this.data.recordId || '',
             parentTempId:this.data.parent_temp_id || '',
             tableType:'child',
             viewMode:this.data.is_view==0?'EditChild':'ViewChild',
