@@ -347,10 +347,5 @@ let config = {
 		this.actions.getStmpImg();
 	},
 }
-export default class ApprovalInit extends Component {
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
-
-ApprovalInit.config=config;
+let ApprovalInit = Component.extend(config);
+export default ApprovalInit

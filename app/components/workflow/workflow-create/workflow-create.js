@@ -172,11 +172,5 @@ let config = {
     }
 };
 
-export default class WorkFlowCreate extends Component{
-
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
-
-WorkFlowCreate.config=config;
+let WorkFlowCreate = Component.extend(config);
+export default WorkFlowCreate

@@ -32,16 +32,5 @@ let config={
         });
     }
 };
-class SelectStaff extends Component{
-    // constructor (data){
-    //     super(config,data);
-    // }
-
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
-
-export default SelectStaff;
-
-SelectStaff.config=config;
+let SelectStaff = Component.extend(config);
+export default SelectStaff

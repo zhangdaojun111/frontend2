@@ -174,8 +174,5 @@ let config={
         });
     }
 };
-export default class WorkflowAddSigner extends Component{
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
+let WorkflowAddSigner = Component.extend(config);
+export default WorkflowAddSigner

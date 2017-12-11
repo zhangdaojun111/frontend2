@@ -68,9 +68,5 @@ let config = {
 
 	}
 }
-
-export default class AddSingner extends Component {
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
+let AddSingner = Component.extend(config)
+export default AddSingner

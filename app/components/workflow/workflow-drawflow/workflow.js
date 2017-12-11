@@ -572,16 +572,7 @@ let config = {
 
 	}
 };
-
-
-class WF extends Component {
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
-
-WF.config=config;
-
+let WF = Component.extend(config);
 let WorkFlow = {
 	show(data, elem) {
 		let workFlowData = _.defaultsDeep({}, data, {

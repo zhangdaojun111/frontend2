@@ -156,15 +156,5 @@ let config = {
 	}
 };
 
-class WorkflowInitial extends Component {
-	// constructor(data) {
-	//     super(config, data);
-	// }
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
-
-export default WorkflowInitial;
-
-WorkflowInitial.config=config;
+let WorkflowInitial = Component.extend(config);
+export default WorkflowInitial

@@ -264,13 +264,5 @@ let config = {
        })
     }
 };
-
-class WorkFlowTree extends Component {
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
-
-export default WorkFlowTree;
-
-WorkFlowTree.config=config;
+let WorkFlowTree = Component.extend(config);
+export default WorkFlowTree

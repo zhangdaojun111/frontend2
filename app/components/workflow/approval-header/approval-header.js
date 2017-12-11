@@ -92,9 +92,5 @@ let config = {
 
 	}
 };
-
-export default class ApprovalHeader extends Component{
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
+let ApprovalHeader = Component.extend(config);
+export default ApprovalHeader

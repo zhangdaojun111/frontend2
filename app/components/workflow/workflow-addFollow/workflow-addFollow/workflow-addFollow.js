@@ -239,10 +239,5 @@ let config = {
 	}
 };
 
-export default class WorkflowAddFollow extends Component {
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
-
-WorkflowAddFollow.config=config;
+let WorkflowAddFollow = Component.extend(config);
+export default WorkflowAddFollow

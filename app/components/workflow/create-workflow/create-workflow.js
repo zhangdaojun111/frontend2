@@ -275,9 +275,5 @@ let config = {
 		this.actions.subscribe();
 	}
 }
-export default class CreateWorkflow extends Component {
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
-CreateWorkflow.config=config;
+let CreateWorkflow = Component.extend(config);
+export default CreateWorkflow

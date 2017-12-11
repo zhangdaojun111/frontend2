@@ -27,8 +27,5 @@ let config ={
 	}
 }
 
-export default class AddWfInit extends Component{
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
+let AddWfInit = Component.extend(config)
+export default AddWfInit

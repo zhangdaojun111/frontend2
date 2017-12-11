@@ -78,16 +78,5 @@ let config={
         })
     }
 };
-class MultiApp extends Component{
-    // constructor (data){
-    //     super(config,data);
-    // }
-
-	constructor(extendConfig){
-		super($.extend(true, {}, config, extendConfig));
-	}
-}
-
-export default MultiApp;
-
-MultiApp.config=config;
+let MultiApp = Component.extend(config);
+export default MultiApp
