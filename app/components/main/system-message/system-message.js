@@ -268,7 +268,7 @@ let config = {
                     customSize:true
                 }).then((result) => {
                     if (result.refresh === true) {
-                        this.actions.loadData(this.data.getDataParams);
+                        setTimeout(()=>{this.actions.loadData(this.data.getDataParams);},500)
                     }
                 })
             } else {
