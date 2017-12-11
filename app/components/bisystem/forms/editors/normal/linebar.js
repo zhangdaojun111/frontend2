@@ -279,7 +279,7 @@ let config = {
             this.formItems['xAxis'].setValue(chart['xAxis']);
             this.formItems['advancedDataTemplates'].setValue(chart['advancedDataTemplates']);
             let yAxis1 = _.remove(chart['yAxis'],(item) => {
-                return item.yAxisIndex != 0
+                return item.yAxisIndex && item.yAxisIndex != 0
             });
             this.formItems['yAxis0'].setValue(chart['yAxis']);
             this.formItems['double'].setValue(chart['double']);

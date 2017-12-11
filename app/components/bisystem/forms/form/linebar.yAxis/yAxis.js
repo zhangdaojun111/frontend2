@@ -152,6 +152,7 @@ class YaXis extends Base {
      * @param yAxis = y轴数据
      */
     setValue(yAxis) {
+        console.log()
         if (yAxis.length === 0) return false;
 
         Object.keys(this.data.yAxis).forEach(key => {
