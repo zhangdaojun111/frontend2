@@ -50,13 +50,6 @@ let config = {
                 });
             }
         },
-        setConfigData:function () {
-            this.data = this.data.charts? charts : null;
-            this.data.imgUrl = window.config.img_url;
-            this.data.isIcon = this.data.charts['icon']? true:false;
-            this.data.userSelf = this.data.charts['self'] == 1 ? true : false;
-        }
-
     },
     binds:[
         {   //滑上li显示提示图标
@@ -88,11 +81,8 @@ let config = {
             }
         },
     ],
-    beforeRender(){
-        this.data.charts = this.data;
-    },
+    beforeRender(){},
     afterRender() {
-        this.actions.setConfigData();
         // this.el.on('dragstart',(ev) =>{
         //     let event = ev.originalEvent;
         //     event.dataTransfer.setData("Text",JSON.stringify(this.data));
