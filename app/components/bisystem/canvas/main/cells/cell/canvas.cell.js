@@ -89,9 +89,6 @@ let config = {
                     }
                 });
                 let cellContainer = this.el.find('.cell-chart');
-                if (cellContainer.length === 0) {
-                    debugger;
-                }
                 this.data.cellComponent.render(cellContainer);
             }
 
@@ -117,7 +114,8 @@ let config = {
             let dragCell = this.el.find('.cell');
             const dragOption = {
                 containment: '.cells-container',
-                grid: [1, 1],
+                // grid: [1, 1],
+                // snap: false,
                 stop: (event, ui) => {
                     this.actions.cancelSelect();
                     this.data.cell.size.left = ui.position.left;
@@ -128,7 +126,7 @@ let config = {
             };
 
             const resizeOption = {
-                grid: [1, 1],
+                // grid: [1, 1],
                 stop: (event, ui) => {
                     this.data.cell.size.width = ui.size.width;
                     this.data.cell.size.height = ui.size.height;
@@ -352,7 +350,7 @@ let config = {
                     this.actions.removeKeyboardListener();
                 }
             }
-        }
+        },
     ],
     afterRender() {
         this.actions.renderCell();
@@ -419,7 +417,7 @@ export class CanvasCellComponent extends Component {
             this.data.chart = chart['data'];
             this.actions.loadCellChart(chart);
         } catch (err) {
-            console.log(err);
+            console.log(err)
         } finally {
 
         }

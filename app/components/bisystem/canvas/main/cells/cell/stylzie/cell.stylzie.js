@@ -24,13 +24,18 @@ let config = {
             }
 
             let echartsService = new EchartsService(this.data);
-            this.myChart = echartsService.myChart;
-        }
+            this.stylzieChart = echartsService;
+        },
+        updateChart(data) {
+            //重新渲染echarts
+            const option = this.stylzieChart.stylzieOption(data);
+            this.stylzieChart.myChart.setOption(option,true);
+        },
     },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
-            if (this.myChart) {
-                this.myChart.resize();
+            if (this.stylzieChart.myChart) {
+                this.stylzieChart.myChart.resize();
             }
         })
     },

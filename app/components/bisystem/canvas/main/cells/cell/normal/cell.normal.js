@@ -185,7 +185,6 @@ let config = {
             //重新获取外层容器大小
             this.normalChart.myChart.resize();
             this.normalChart.myChart.setOption(option, true);
-
         },
         /**
          * 初始化pie图表数据
@@ -275,10 +274,10 @@ let config = {
                 }
                 return false;
             }
-        }
-
+        },
 
     },
+    binds: [],
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             let cellChart = _.cloneDeep(this.data);
