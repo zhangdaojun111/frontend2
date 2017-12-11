@@ -492,7 +492,7 @@ let IframeComponent = Component.extend({
                 if (result[3].succ === 1) {
                     homeConfig = result[3];
                     if (!homeConfig.data.length) {
-                        msgbox.showTips("服务器暂不支持首页，请及时更新");
+                        // msgbox.showTips("服务器暂不支持首页，请及时更新");
                         homeConfig.data = "000";
                     }
                     if (homeConfig.data.substring(homeConfig.data.length - 1) !== "0" && homeConfig.data.substring(homeConfig.data.length - 1) !== "1") {
