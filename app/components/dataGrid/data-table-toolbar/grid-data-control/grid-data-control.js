@@ -197,6 +197,4 @@ export default class DateControl extends Component {
     constructor(data, events) {
         super(config, data, events);
     }
-}/**
- * Created by dell on 2017/9/12.
- */
+}

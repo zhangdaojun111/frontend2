@@ -8,7 +8,7 @@ import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import msgBox from '../../../../lib/msgbox';
 import './search-import.scss';
 
-let config = {
+let searchImport = Component.extend({
     template: template,
     data: {
         tableId: null,
@@ -113,10 +113,10 @@ let config = {
             this.actions.afterGetMsg();
         })
     },
-};
-class searchImport extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+});
+// class searchImport extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default searchImport

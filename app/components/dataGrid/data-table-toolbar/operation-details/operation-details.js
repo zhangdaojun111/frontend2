@@ -9,7 +9,7 @@ import {dgcService} from '../../../../services/dataGrid/data-table-control.servi
 import {HTTP} from "../../../../lib/http";
 import './operation-details.scss'
 
-let config = {
+let operationDetails = Component.extend({
     template: template,
     data: {
         tableId:'',
@@ -17,17 +17,6 @@ let config = {
         content:'',
         dataInfo:[],
     },
-    dataInfo:[{
-        record_id:'599bdb325700e9eeb23029fb',
-        record_name:'11111',
-        form_id:181,
-        flow_id:43
-    },{
-        record_id:'599bdb325700e9eeb23029fb',
-        record_name:'22222',
-        form_id:181,
-        flow_id:43
-    }],
     bind:[{
         // event:'click',
         // selector:'.operation-from-details',
@@ -102,10 +91,10 @@ let config = {
             this.actions.afterGetMsg()
         })
     }
-}
-class operationDetails extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+});
+// class operationDetails extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default operationDetails

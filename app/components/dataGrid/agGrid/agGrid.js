@@ -15,7 +15,7 @@ import 'ag-grid/dist/styles/theme-fresh.css';
 
 import {dgcService} from '../../../services/dataGrid/data-table-control.service';
 
-let config = {
+let agGrid = Component.extend({
     template: template,
     data: {
         columnDefs : [],
@@ -188,15 +188,15 @@ let config = {
         this.actions.createGridOptions();
         this.actions.createAgGrid();
     }
-};
+});
 
-class agGrid extends Component {
-    constructor(data,newConfig){
-        for (let d in data) {
-            config.data[d] = data[d];
-        }
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class agGrid extends Component {
+//     constructor(data,newConfig){
+//         for (let d in data) {
+//             config.data[d] = data[d];
+//         }
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default agGrid;

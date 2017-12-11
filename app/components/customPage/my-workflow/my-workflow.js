@@ -7,7 +7,7 @@ import template from './my-workflow.html';
 import './my-workflow.scss';
 import workflowPage from '../workflow-page/workflow-page';
 
-let config = {
+let myWorkflow = Component.extend({
     template: template,
     data: {
         pageArr: []
@@ -28,7 +28,7 @@ let config = {
                 let div = document.createElement( 'div' );
                 div.className = select;
                 let json = {tableId:select};
-                let work = new workflowPage(json);
+                let work = new workflowPage({data: json});
                 this.el.find( '#page-contener' ).append( div );
                 work.render( this.el.find( '.' + select ) );
             }
@@ -55,15 +55,15 @@ let config = {
         this.actions.renderGrid();
         this.actions.liClick();
     }
-}
+})
 
-class myWorkflow extends Component {
-    constructor(data,newConfig){
-        for (let d in data) {
-            config.data[d] = data[d];
-        }
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class myWorkflow extends Component {
+//     constructor(data,newConfig){
+//         for (let d in data) {
+//             config.data[d] = data[d];
+//         }
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default myWorkflow;

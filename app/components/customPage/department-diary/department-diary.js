@@ -45,7 +45,7 @@ function formatTreeData(list) {
     return res;
 }
 
-let config = {
+let departmentDiary = Component.extend({
     template: template,
     data: {
         tableId: '',
@@ -200,7 +200,7 @@ let config = {
                     getDiarySearchField: this.actions.getDiarySearchField,
                     cacheData: false
                 };
-                this.dataGrid = new dataTableAgGrid(json);
+                this.dataGrid = new dataTableAgGrid({data: json});
                 this.append(this.dataGrid, this.el.find('.diary-grid'));
                 this.actions.getDepartmentData();
             }else {
@@ -211,11 +211,11 @@ let config = {
             },700 )
         } )
     }
-};
-class departmentDiary extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+});
+// class departmentDiary extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default departmentDiary;

@@ -119,10 +119,12 @@ let config = {
 				parent_temp_id: null,
 			});
 			let AgGrid = new Grid({
-				parentTempId: this.data.temp_id,
-				tableId: res.table_id,
-				viewMode: "createBatch"
-			});
+				data:{
+                    parentTempId: this.data.temp_id,
+                    tableId: res.table_id,
+                    viewMode: "createBatch"
+                }
+            });
 			AgGrid.actions.returnBatchData =(ids) => {
 				this.data.temp_ids = ids;
 			};
