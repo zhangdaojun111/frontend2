@@ -25,12 +25,16 @@ let config = {
 
             let echartsService = new EchartsService(this.data);
             this.myChart = echartsService.myChart;
+        },
+        setChartData:function () {
+            config.data.cellChart = cellChart ? cellChart : null;
         }
     },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             this.myChart.resize();
-        })
+        });
+        this.data.id += this.componentId;
     },
     firstAfterRender() {
         this.actions.echartsInit()
@@ -38,9 +42,7 @@ let config = {
 };
 
 export class CellFunnelComponent extends BiBaseComponent {
-    constructor(cellChart,extendConfig) {
-        config.data.cellChart = cellChart ? cellChart : null;
+    constructor(extendConfig) {
         super($.extend(true,{},config,extendConfig));
-        this.data.id += this.componentId
     }
 }

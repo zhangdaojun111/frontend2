@@ -83,11 +83,12 @@ let config = {
             };
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart,this.data.currentViewId);
-                this.data.cellComponent = new cellTypes[chart['data']['assortment']](data, {
+                this.data.cellComponent = new cellTypes[chart['data']['assortment']]({
                     onUpdateChartDeepTitle: (data) => {
-                        this.cellTitle.actions.setDeepTitle(data)
+                        this.cellTitle.actions.setDeepTitle(data);
                     }
                 });
+                this.data.cellComponent.actions.setChartData(data);
                 let cellContainer = this.el.find('.cell-chart');
                 if (cellContainer.length === 0) {
                     debugger;
