@@ -46,6 +46,7 @@ let config = {
         }
     },
     afterRender() {
+        this.data.id += this.componentId;
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             if (this.myChart) {
                 this.myChart.resize();
@@ -53,17 +54,21 @@ let config = {
         })
     },
     firstAfterRender() {
+        this.data.cellChart = {
+            cell:this.data.cellChart.cell,
+            chart:this.data.cellChart.chart
+        };
         this.actions.echartsInit()
     }
 };
 
 export class CellMapComponent extends CellBaseComponent {
     constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart
-        };
+        // data.cellChart = {
+        //     cell: data.cell,
+        //     chart: data.chart
+        // };
         super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
+
     }
 }

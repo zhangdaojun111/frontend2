@@ -26,9 +26,6 @@ let config = {
 
             let echartsService = new EchartsService(this.data);
             this.myChart = echartsService.myChart;
-        },
-        setChartData:function () {
-            config.data.cellChart = cellChart ? cellChart : null;
         }
     },
     afterRender() {
@@ -38,7 +35,8 @@ let config = {
         this.data.id += this.componentId;
     },
     firstAfterRender() {
-        this.actions.echartsInit()
+        console.log(this.data.cellChart);
+        this.actions.echartsInit();
     }
 };
 
@@ -47,6 +45,8 @@ export let CellFunnelComponent = BiBaseComponent.extend(config);
 
 // export class CellFunnelComponent extends BiBaseComponent {
 //     constructor(extendConfig) {
+//         config.data.cellChart = cellChart ? cellChart : null;
 //         super($.extend(true,{},config,extendConfig));
+//         this.data.id += this.componentId
 //     }
 // }

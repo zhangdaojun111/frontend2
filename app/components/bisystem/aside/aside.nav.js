@@ -48,14 +48,20 @@ let config = {
         //加载左侧导航数据
         this.data.charts.forEach((val,index) => {
             let chartsComponent = new ChartsComponent({
+                data:{
+                    imgUrl: window.config.img_url,
+                    isIcon: val['icon']? true:false,
+                    userSelf: val['self'] == 1 ? true : false,
+                },
                 onDelete: (res)=>{
                     let charts = this.data.charts;
                     _.remove(charts,function (val) {
                         return res.id === val.id;
                     });
                     window.config.charts = charts;
-                },
+                }
             });
+
             this.append(chartsComponent,this.el.find('.charts-items'));
         });
     },

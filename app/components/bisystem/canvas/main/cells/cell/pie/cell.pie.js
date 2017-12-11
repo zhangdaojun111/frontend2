@@ -171,6 +171,7 @@ let config = {
         });
     },
     firstAfterRender() {
+        console.log(this.data.cellChart);
         this.actions.echartsInit();
 
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {

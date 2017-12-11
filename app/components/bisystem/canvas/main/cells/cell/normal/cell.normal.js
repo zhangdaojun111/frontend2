@@ -297,6 +297,8 @@ let config = {
         });
     },
     firstAfterRender() {
+        console.log(this.data,'***************************************************');
+        this.actions.initNormal();
         // 是否显示时间字段
         if (window.config.bi_user !== 'manager') {
             this.actions.judgeDateZoom(this.data.cellChart);
@@ -310,9 +312,8 @@ let config = {
 };
 
 export class CellNormalComponent extends CellBaseComponent {
-    constructor(data, event, extendConfig) {
-        super($.extend(true, {}, config, extendConfig), data, event);
-        this.actions.initNormal();
+    constructor(extendConfig) {
+        super($.extend(true, {},config, extendConfig));
     }
 
     /**

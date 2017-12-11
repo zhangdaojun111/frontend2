@@ -418,9 +418,11 @@ let config = {
     beforeDestory() {}
 };
 
-export class CanvasCellsComponent extends Component {
-    constructor(id, events,extendConfig) {
-        super($.extend(true,{},config,extendConfig), {currentViewId: id});
-    }
-}
+export let CanvasCellsComponent = Component.extend(config);
+
+// export class CanvasCellsComponent extends Component {
+//     constructor(id, events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig), {currentViewId: id});
+//     }
+// }
 
