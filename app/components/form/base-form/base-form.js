@@ -1852,7 +1852,7 @@ let config = {
 			})
 		},
 		//动态创建组件
-		createFormControl() {
+		async createFormControl() {
 			let _this = this;
 			this.setData('childComponent', {});
 			let data = this.data.data;
@@ -1967,6 +1967,14 @@ let config = {
 						this.data.childComponent[data[key].dfield] = yearMonthControl;
 						break;
 					case 'Buildin':
+						if(data[key].options=='other_place'){
+							if(!this.data.buildin_options ||(this.data.buildin_options[data[key].id] && this.data.buildin_options[data[key].id].length==0)){
+								let res=await FormService.getFormStaticBuildinData(this.actions.createPostJson());
+								this.data.oldData[key].options=data[key].options=(res.data && res.data.buildin_options)?res.data.buildin_options:[{value:'',label:''}];
+							}else{
+								this.data.oldData[key].options=data[key].options=this.data.buildin_options[data[key].id];
+							}
+						}
 						let buildInControl = new BuildInControl(data[key], actions);
 						buildInControl.render(single);
 						this.data.childComponent[data[key].dfield] = buildInControl;
