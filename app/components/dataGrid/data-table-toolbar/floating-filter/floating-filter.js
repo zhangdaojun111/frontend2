@@ -60,7 +60,7 @@ let config = {
                             }
                         },1000 ))
                     }else if( colInfo  == 'datetime' ){ //使用年月日时分秒插件
-                        let dateTimeControl = new DateTimeControl({data:{value: '', isAgGrid: true},event:{changeValue:function(data){
+                        let dateTimeControl = new DateTimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){
                             setTimeout(()=>{
                                 That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                             },1000)

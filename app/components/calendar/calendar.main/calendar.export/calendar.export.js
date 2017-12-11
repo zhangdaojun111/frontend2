@@ -51,8 +51,8 @@ let config = {
             _this.actions.getExportDate();
         };
 
-        this.append(new DateControl({value: '',isCalendar: true, timeType: 'all'},{changeValue: changeStartValue}), this.el.find('.start-date'));
-        this.append(new DateControl({value: '',isCalendar: true, timeType: 'all'},{changeValue: changeEndValue}), this.el.find('.end-date'));
+        this.append(new DateControl({data:{value: '',isCalendar: true, timeType: 'all'},events:{changeValue: changeStartValue}}), this.el.find('.start-date'));
+        this.append(new DateControl({data:{value: '',isCalendar: true, timeType: 'all'},events:{changeValue: changeEndValue}}), this.el.find('.end-date'));
     },
 };
 // class CalendarExport extends Component {

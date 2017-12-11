@@ -101,7 +101,7 @@ let fastSearch = Component.extend({
                 case "datetime":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.fast-search-input').remove();
-                    let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    let dateTimeControl = new DateTimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){}}});
                     dateTimeControl.render(this.el.find('.fast-search-value'));
                     break;
                 case "date":
@@ -113,7 +113,7 @@ let fastSearch = Component.extend({
                 case "time":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.fast-search-input').remove();
-                    let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    let timeControl = new TimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){}}});
                     timeControl.render(this.el.find('.fast-search-value'));
                     break;
                 case "text":
