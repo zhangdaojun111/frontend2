@@ -162,6 +162,9 @@ let config = {
 
         }
     },
+    beforeRender(){
+        this.actions.initPie();
+    },
     afterRender() {
         // 下穿数据
         this.pieChart.myChart.on('click', (params) => {
@@ -186,9 +189,8 @@ let config = {
 };
 
 export class CellPieComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.actions.initPie();
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
     }
 
     /**
@@ -254,3 +256,5 @@ export class CellPieComponent extends CellBaseComponent {
         return Promise.resolve(this.data);
     }
 }
+
+CellPieComponent.config = config;

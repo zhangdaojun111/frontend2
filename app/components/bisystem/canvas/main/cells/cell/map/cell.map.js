@@ -45,8 +45,10 @@ let config = {
             });
         }
     },
-    afterRender() {
+    beforeRender(){
         this.data.id += this.componentId;
+    },
+    afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             if (this.myChart) {
                 this.myChart.resize();
@@ -62,13 +64,15 @@ let config = {
     }
 };
 
-export class CellMapComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        // data.cellChart = {
-        //     cell: data.cell,
-        //     chart: data.chart
-        // };
-        super($.extend(true,{},config,extendConfig),data,event);
+export let CellMapComponent = Component(config);
 
-    }
-}
+// export class CellMapComponent extends CellBaseComponent {
+//     constructor(data,event,extendConfig) {
+//         // data.cellChart = {
+//         //     cell: data.cell,
+//         //     chart: data.chart
+//         // };
+//         super($.extend(true,{},config,extendConfig),data,event);
+//
+//     }
+// }

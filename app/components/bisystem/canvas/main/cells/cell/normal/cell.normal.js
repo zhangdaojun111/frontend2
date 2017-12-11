@@ -173,7 +173,7 @@ let config = {
                 let height = data.cell.size.height - 30;
                 this.el.find('#' + data.id).css('width',width).css('height',height);
             }
-            console.log(chartData ? chartData : this.data,'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
             let echartsService = new EchartsService(chartData ? chartData : this.data);
             this.normalChart = echartsService;
             this.trigger('onUpdateChartDeepTitle', this.data);
@@ -279,6 +279,9 @@ let config = {
 
 
     },
+    beforeRender(){
+        this.actions.initNormal();
+    },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             let cellChart = _.cloneDeep(this.data);
@@ -297,7 +300,6 @@ let config = {
         });
     },
     firstAfterRender() {
-        this.actions.initNormal();
         console.log(this.data);
         // 是否显示时间字段
         if (window.config.bi_user !== 'manager') {
@@ -396,3 +398,5 @@ export class CellNormalComponent extends CellBaseComponent {
         return Promise.resolve(this.data);
     }
 }
+
+CellNormalComponent.config = config;

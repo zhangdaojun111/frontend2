@@ -28,11 +28,13 @@ let config = {
             this.myChart = echartsService.myChart;
         }
     },
+    beforeRender(){
+        this.data.id += this.componentId;
+    },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             this.myChart.resize();
         });
-        this.data.id += this.componentId;
     },
     firstAfterRender() {
         console.log(this.data.cellChart);

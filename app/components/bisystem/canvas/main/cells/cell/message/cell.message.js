@@ -11,13 +11,18 @@ let config = {
         cellChart: {}
     },
     actions: {},
+    beforeRender(){
+        this.data.id += this.componentId;
+    },
     afterRender() {},
     firstAfterRender() {}
 };
 
-export class CellMessageComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+export let CellMessageComponent = Component(config);
+
+// export class CellMessageComponent extends CellBaseComponent {
+//     constructor(data,event,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,event);
+//
+//     }
+// }

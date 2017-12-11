@@ -72,7 +72,6 @@ let config = {
          * 动态渲染图表
          */
         loadCellChart(chart) {
-            console.log(chart,'7474');
             if (!chart || chart['success'] !== 1) {
                 msgbox.showTips(chart['error']);
                 return false;
@@ -85,7 +84,6 @@ let config = {
             console.log(data);
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart,this.data.currentViewId);
-                console.log(data,'----------------------------------------------------------------------');
                 this.data.cellComponent = new cellTypes[chart['data']['assortment']]({
                     data,
                     onUpdateChartDeepTitle: (data) => {
@@ -95,7 +93,7 @@ let config = {
 
                 let cellContainer = this.el.find('.cell-chart');
                 if (cellContainer.length === 0) {
-                    debugger;
+
                 }
                 this.data.cellComponent.render(cellContainer);
             }

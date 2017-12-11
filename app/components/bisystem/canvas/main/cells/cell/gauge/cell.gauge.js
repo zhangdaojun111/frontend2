@@ -26,6 +26,9 @@ let config = {
             this.myChart = echartsService.myChart;
         }
     },
+    beforeRender(){
+        this.data.id += this.componentId;
+    },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             if (this.myChart) {
@@ -39,14 +42,15 @@ let config = {
     }
 };
 
-export class CellGaugeComponent extends CellBaseComponent {
+export let CellGaugeComponent = Component(config);
 
-    constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart
-        };
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+// export class CellGaugeComponent extends CellBaseComponent {
+//
+//     constructor(extendConfig) {
+//         data.cellChart = {
+//             cell: data.cell,
+//             chart: data.chart
+//         };
+//         super($.extend(true,{},config,extendConfig),data,event);
+//     }
+// }

@@ -26,6 +26,9 @@ let config = {
             this.myChart = echartsService;
         }
     },
+    beforeRender(){
+        this.data.id += this.componentId;
+    },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             this.data.cellChart.cell.size = data;
@@ -40,18 +43,20 @@ let config = {
     }
 };
 
-export class CellMultiChartComponent extends CellBaseComponent {
-    // constructor(cellChart) {
-    //     config.data.cellChart = cellChart ? cellChart : null;
-    //     super(config);
-    //     this.data.id += this.componentId;
-    // }
-    constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart
-        };
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+export let CellMultiChartComponent = Component(config);
+
+
+// export class CellMultiChartComponent extends CellBaseComponent {
+//     // constructor(cellChart) {
+//     //     config.data.cellChart = cellChart ? cellChart : null;
+//     //     super(config);
+//     //     this.data.id += this.componentId;
+//     // }
+//     constructor(data,event,extendConfig) {
+//         data.cellChart = {
+//             cell: data.cell,
+//             chart: data.chart
+//         };
+//         super($.extend(true,{},config,extendConfig),data,event);
+//     }
+// }
