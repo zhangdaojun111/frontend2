@@ -18,7 +18,10 @@ const defaultOption = {
 
 export class EchartsService {
     constructor(cellChart) {
+        console.log(cellChart);
+        debugger;
         let myChart = echarts.init(document.getElementById(cellChart['id']));
+        console.log(myChart);
         this.myChart = myChart;
         let option = this.getEchartsOption(cellChart['cellChart']);
         myChart.setOption(option);
