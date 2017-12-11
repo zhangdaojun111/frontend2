@@ -66,6 +66,8 @@ let config={
             (async function () {
                 return workflowService.getPrepareParams({table_id: _this.data.obj.table_id});
             })().then(res => {
+	            console.log('1111111111');
+	            console.log(this.data);
                 if (res.data.flow_data.length === 0) {
                     this.el.find('.workflow-foot').hide();
                     this.el.find('.workflow-flex').hide();
