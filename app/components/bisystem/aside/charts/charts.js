@@ -49,6 +49,12 @@ let config = {
                     }
                 });
             }
+        },
+        setConfigData:function () {
+            this.data = this.data.charts? charts : null;
+            this.data.imgUrl = window.config.img_url;
+            this.data.isIcon = this.data.charts['icon']? true:false;
+            this.data.userSelf = this.data.charts['self'] == 1 ? true : false;
         }
 
     },
@@ -83,6 +89,7 @@ let config = {
         },
     ],
     afterRender() {
+        this.actions.setConfigData();
         // this.el.on('dragstart',(ev) =>{
         //     let event = ev.originalEvent;
         //     event.dataTransfer.setData("Text",JSON.stringify(this.data));
@@ -109,13 +116,14 @@ let config = {
     }
 };
 
+export let ChartsComponent = Component.extend(config);
 
-export class ChartsComponent extends Component{
-    constructor(charts,events,extendConfig) {
-        config.data = charts? charts : null;
-        config.data.imgUrl = window.config.img_url;
-        config.data.isIcon = charts['icon']? true:false;
-        config.data.userSelf = charts['self'] == 1 ? true : false;
-        super($.extend(true,{},config,extendConfig),charts,events);
-    }
-}
+// export class ChartsComponent extends Component{
+//     constructor(charts,extendConfig) {
+//         // config.data = charts? charts : null;
+//         // config.data.imgUrl = window.config.img_url;
+//         // config.data.isIcon = charts['icon']? true:false;
+//         // config.data.userSelf = charts['self'] == 1 ? true : false;
+//         super($.extend(true,{},config,extendConfig),charts,events);
+//     }
+// }

@@ -388,11 +388,13 @@ let config = {
     beforeDestory:function () {}
 };
 
-export class CanvasMain extends Component {
-    constructor(data, events,extendConfig) {
-        config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
-        super($.extend(true,{},config,extendConfig), data, events);
-    }
-}
+export let CanvasMain = Component.extend(config);
+
+// export class CanvasMain extends Component {
+//     constructor(data, events,extendConfig) {
+//         config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
+//         super($.extend(true,{},config,extendConfig), data, events);
+//     }
+// }
 
 

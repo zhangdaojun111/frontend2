@@ -47,7 +47,7 @@ let config = {
     afterRender() {
         //加载左侧导航数据
         this.data.charts.forEach((val,index) => {
-            let chartsComponent = new ChartsComponent(val,{
+            let chartsComponent = new ChartsComponent({
                 onDelete: (res)=>{
                     let charts = this.data.charts;
                     _.remove(charts,function (val) {
@@ -79,10 +79,12 @@ let config = {
     }
 };
 
-class AsideNavComponent extends Component{
-    constructor(data,events,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,events)
-    }
-}
+let AsideNavComponent = Component.extend(config);
+
+// class AsideNavComponent extends Component{
+//     constructor(data,events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,events)
+//     }
+// }
 
 export default AsideNavComponent;

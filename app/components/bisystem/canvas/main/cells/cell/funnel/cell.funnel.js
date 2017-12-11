@@ -5,6 +5,7 @@ import {BiBaseComponent} from '../../../../../bi.base.component';
 import template from './cell.funnel.html';
 import {EchartsService} from '../../../../../../../services/bisystem/echart.server';
 import Mediator from '../../../../../../../lib/mediator';
+import Component from "../../../../../../../lib/component";
 
 
 let config = {
@@ -41,8 +42,11 @@ let config = {
     }
 };
 
-export class CellFunnelComponent extends BiBaseComponent {
-    constructor(extendConfig) {
-        super($.extend(true,{},config,extendConfig));
-    }
-}
+export let CellFunnelComponent = BiBaseComponent.extend(config);
+
+
+// export class CellFunnelComponent extends BiBaseComponent {
+//     constructor(extendConfig) {
+//         super($.extend(true,{},config,extendConfig));
+//     }
+// }
