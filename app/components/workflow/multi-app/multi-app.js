@@ -71,6 +71,8 @@ let config={
     ],
     afterRender(){
         PMAPI.getIframeParams(this.data.key).then((res) => {
+        	console.log('this.data.key');
+        	console.log(this.data);
             Mediator.publish('workflow:addusers', res.data);
             this.data.checkIds=res.data;
         })

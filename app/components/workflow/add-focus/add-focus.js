@@ -97,7 +97,7 @@ let config = {
 		let focus = this.data.focus;
 		let key = workflowService.GetQueryString('key');
 		let _this=this;
-		this.data.addFollow=new WorkflowAddFollow({data:{key: key},events:{
+		this.data.addFollow=new WorkflowAddFollow({data:{key},events:{
 			addFocusCb(res){
 				_this.actions.addFocusCb(res)
 			}

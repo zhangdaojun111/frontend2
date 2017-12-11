@@ -49,9 +49,9 @@ let config = {
 					if (val) {
 						val.id = i;
 						if (checked.length === 0) {
-							this.append(new SelectStaffNoDel({data:{val}}), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:val}), this.el.find('#staffMulti'));
 						} else if (arr.indexOf(i) === -1) {
-							this.append(new SelectStaffNoDel({data:{val}}), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:val}), this.el.find('#staffMulti'));
 						}
 					}
 				});
@@ -96,9 +96,9 @@ let config = {
 					val.id = i;
 					val.preventClick = this.data.preventClick;
 					if (checked.length === 0) {
-						this.append(new SelectStaff({data:{val}}), this.el.find('#staffMulti'));
+						this.append(new SelectStaff({data:val}), this.el.find('#staffMulti'));
 					} else if (arr.indexOf(i) === -1) {
-						this.append(new SelectStaff({data:{val}}), this.el.find('#staffMulti'));
+						this.append(new SelectStaff({data:val}), this.el.find('#staffMulti'));
 					}
 				}
 			});
@@ -115,9 +115,9 @@ let config = {
 					if (val) {
 						val.id = i;
 						if (checked.length === 0) {
-							this.append(new SelectStaffNoDel({data:{val}}), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:val}), this.el.find('#staffMulti'));
 						} else if (arr.indexOf(i) === -1) {
-							this.append(new SelectStaffNoDel({data:{val}}), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:val}), this.el.find('#staffMulti'));
 						}
 					}
 				});
@@ -208,11 +208,16 @@ let config = {
 		});
 		//saving follower
 		this.el.on('click', '#saveFollower', () => {
+			console.log('哪个啊');
+			console.log(this.data.key);
 			let o = {};
 			let domSpan = this.el.find('#selected').find('span');
 			for (var i = 0; i < domSpan.length; i++) {
+				console.log(domSpan[i]);
 				o[$(domSpan[i]).data('id')] = $(domSpan[i]).text();
 			}
+			console.log('oooo');
+			console.log(o);
 			PMAPI.sendToParent({
 				type: PMENUM.close_dialog,
 				key: this.data.key,

@@ -45,7 +45,7 @@ let config={
         Mediator.subscribe('workflow:checkDept', (res)=> {
             $.each(res,(i,val)=>{
                 val.id=i;
-                this.append(new SelectStaff({data:{val}}), this.el.find('#staffMulti'));
+                this.append(new SelectStaff({data:val}), this.el.find('#staffMulti'));
             });
         });
         //部门反选，删除SelectedStaff组件
@@ -89,9 +89,9 @@ let config={
             $.each(res,(i,val)=>{
                 val.id=i;
                 if(checked.length===0){
-                    this.append(new AddSigner({data:{val}}), this.el.find('#addUsercheck'));
+                    this.append(new AddSigner({data:val}), this.el.find('#addUsercheck'));
                 }else if(arr.indexOf(i)===-1){
-                    this.append(new AddSigner({data:{val}}), this.el.find('#addUsercheck'));
+                    this.append(new AddSigner({data:val}), this.el.find('#addUsercheck'));
                 }
             });
         });
