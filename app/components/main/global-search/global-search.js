@@ -13,7 +13,7 @@ import Mediator from '../../../lib/mediator';
 import {UserInfoService} from "../../../services/main/userInfoService"
 import msgbox from "../../../lib/msgbox";
 
-let config ={
+let GlobalSearch =Component.extend({
     template:template,
     data:{
         historyList:[],             //存放历史搜索记录
@@ -352,13 +352,7 @@ let config ={
     beforeDestroy:function () {
 
     }
-};
-
-class GlobalSearch extends  Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export {GlobalSearch}
 

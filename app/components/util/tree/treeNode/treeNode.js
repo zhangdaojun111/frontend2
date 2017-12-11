@@ -5,7 +5,7 @@ import template from './treeNode.html';
 import Component from "../../../../lib/component";
 import './treeNode.scss';
 
-let config = {
+let TreeNode = Component.extend({
     template:template,
     data:{
         childNodes:[],
@@ -139,10 +139,6 @@ let config = {
 		    this.el.find('.node-check').removeClass('checked_box').addClass('unchecked_box');
 	    }
     }
-};
+});
 
-export default class TreeNode extends Component {
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+export default TreeNode;

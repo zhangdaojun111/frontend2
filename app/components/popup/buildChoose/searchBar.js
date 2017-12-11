@@ -9,7 +9,7 @@ import {FormService} from "../../../services/formService/formService";
 import {AutoSelect} from "../../util/autoSelect/autoSelect";
 import template from './searchBar.html'
 
-let config = {
+let SearchBar = Component.extend({
     template: template,
     data: {
         searchTerms: {
@@ -90,9 +90,6 @@ let config = {
             }, 300)();
         })
     }
-}
-export default class SearchBar extends Component {
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
+
+export default SearchBar;

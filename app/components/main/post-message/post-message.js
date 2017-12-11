@@ -44,7 +44,7 @@ function formatTreeData(list) {
     return res;
 }
 
-let config = {
+let PostMessage = Component.extend({
     template: template,
     data: {
         // 用户数据
@@ -218,13 +218,7 @@ let config = {
     beforeDestory: function () {
 
     }
-}
-
-class PostMessage extends Component {
-    constructor(newConfig) {
-        super($.extend(true,{},config,newConfig));
-    }
-}
+})
 
 let postMessageUtil = {
     el: null,

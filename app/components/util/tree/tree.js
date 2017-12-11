@@ -6,7 +6,7 @@ import template from './tree.html';
 import './tree.scss';
 import TreeNode from './treeNode/treeNode';
 
-let config = {
+let TreeView = Component.extend({
     template:template,
     data:{
         trees:[]
@@ -72,10 +72,6 @@ let config = {
             this.data.trees.push(comp);
         });
     }
-};
+});
 
-export default class TreeView extends Component {
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+export default TreeView;

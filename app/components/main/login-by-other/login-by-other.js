@@ -13,7 +13,7 @@ import {AutoSelect} from '../../../components/util/autoSelect/autoSelect';
 import {UserInfoService} from "../../../services/main/userInfoService";
 import msgbox from "../../../lib/msgbox";
 
-let config = {
+let LoginOther = Component.extend({
     template:template,
     data:{
         userData:null,
@@ -109,13 +109,7 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-class LoginOther extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const LoginByOther =  {
     el:null,

@@ -10,7 +10,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import template from './password-input.html';
 import './password-input.scss';
 
-let config = {
+let PasswordInput = Component.extend({
     template:template,
     data:{
         password_value:'',
@@ -215,7 +215,7 @@ let config = {
     beforeDestory:function () {
 
     },
-};
+});
 
 /**
  * data可传入json对象:
@@ -228,10 +228,5 @@ let config = {
  * }
  */
 
-class PasswordInput extends Component {
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
 
 export {PasswordInput};

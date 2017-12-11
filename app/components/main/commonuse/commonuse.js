@@ -6,7 +6,7 @@ import TreeView from '../../util/tree/tree';
 import {HTTP} from '../../../lib/http';
 import Mediator from '../../../lib/mediator';
 
-let config = {
+let CommonUse = Component.extend({
     template: template,
     data: {
         selected: []
@@ -128,13 +128,7 @@ let config = {
             this.actions.save();
         })
     }
-}
-
-class CommonUse extends Component {
-    constructor(newConfig) {
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const commonuse = {
     el: null,

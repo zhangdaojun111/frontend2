@@ -4,7 +4,7 @@ import Mediator from '../../../../lib/mediator';
 import 'jquery-ui/ui/widgets/tooltip';
 import './item.scss';
 
-let config = {
+let FullMenuItem = Component.extend({
     template: template,
     data: {
         type: 'full',
@@ -350,12 +350,6 @@ let config = {
             // this.actions.showChildrenAtFull();
         }
     }
-};
-
-class FullMenuItem extends Component {
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export {FullMenuItem};

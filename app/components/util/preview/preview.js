@@ -8,7 +8,7 @@ import './preview.css';
 
 let preview_file = ["gif","jpg","jpeg","png","wmv","mp4"];
 
-let config = {
+let Preview = Component.extend({
     template:template,
     data:{
         firstPreviewableIndex:0,
@@ -239,10 +239,6 @@ let config = {
         }
         this.actions._loadPreview(this.data.id);
     }
-};
+});
 
-export default class Preview extends Component {
-    constructor(newConfig) {
-        super($.extend(true,{},config,newConfig));
-    }
-}
+export default Preview;

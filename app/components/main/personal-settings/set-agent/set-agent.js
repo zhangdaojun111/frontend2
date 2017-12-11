@@ -16,7 +16,7 @@ import '../../../../assets/scss/core/common.scss';
 import TreeView from "../../../util/tree/tree";
 
 
-let config = {
+let SetAgent = Component.extend({
     template:template,
     data:{
         selectedAgent:{},              //记录被选中的代理人
@@ -287,13 +287,7 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-class SetAgent extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const agentSetting = {
     el: null,

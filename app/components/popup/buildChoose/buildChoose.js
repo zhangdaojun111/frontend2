@@ -8,7 +8,7 @@ import FormEntry from '../../../entrys/form';
 import SearchBar from "./searchBar";
 import template from './buildChoose.html';
 import {CreateFormServer} from "../../../services/formService/CreateFormServer";
-let config = {
+let BuildChoose = Component.extend({
 	template: template,
 	data:{
 		isCreatingForm:false,
@@ -99,9 +99,6 @@ let config = {
 			}
 		})
 	}
-}
-export default class BuildChoose extends Component {
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig))
-    }
-}
+});
+
+export default BuildChoose;

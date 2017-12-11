@@ -12,7 +12,7 @@ import {TabService} from "../../../../services/main/tabService"
 import Mediator from "../../../../lib/mediator"
 import msgbox from "../../../../lib/msgbox";
 
-let config = {
+let SaveViewController = Component.extend({
     template:template,
     data:{
         favoriteList:[],
@@ -255,14 +255,7 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-
-class SaveViewController extends Component {
-    constructor(newConfig) {
-        super($.extend(true, {}, config, newConfig));
-    }
-}
+});
 
 export const SaveView = {
     el:null,

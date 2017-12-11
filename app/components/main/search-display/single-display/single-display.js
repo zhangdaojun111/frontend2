@@ -11,7 +11,7 @@ import template from './single-display.html';
 import {PMAPI} from '../../../../lib/postmsg';
 
 
-let config = {
+let SingleResult = Component.extend({
     template:template,
     data:{
         searchData:{},
@@ -58,13 +58,7 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-class SingleResult extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const SingleDisplay = {
     el:null,

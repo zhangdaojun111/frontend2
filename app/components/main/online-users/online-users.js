@@ -15,7 +15,7 @@ import {dataTableService} from "../../../services/dataGrid/data-table.service"
 import {HTTP} from '../../../lib/http';
 
 let component;
-let config = {
+let OnlineUser = Component.extend({
     template:template,
     data:{
         columnDefs:{},
@@ -102,13 +102,7 @@ let config = {
     beforeDestory:function () {
         
     }
-};
-
-class OnlineUser extends Component {
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig))
-    }
-}
+});
 
 export const OnlineDisplay = {
     el:null,

@@ -32,7 +32,7 @@ function getData(component_instance) {
     });
 }
 
-let config = {
+let PersonalSetting = Component.extend({
     template:template,
     data:{
         isCapsLock:false,
@@ -345,13 +345,7 @@ let config = {
     beforeDestory:function () {
         // Mediator.removeAll("personal:setAvatar");
     }
-};
-
-class PersonalSetting extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const PersonSetting  = {
     el:null,

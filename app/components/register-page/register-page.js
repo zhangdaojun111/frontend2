@@ -12,7 +12,7 @@ import template from './register-page.html';
 import {UserInfoService} from '../../services/main/userInfoService';
 import msgbox from '../../lib/msgbox';
 
-let config ={
+let RegisterComponent =Component.extend({
     template:template,
     data:{
         state:0,      //管理页面状态，0：investors，1：manager
@@ -399,14 +399,7 @@ let config ={
     beforeDestory:function () {
 
     }
-};
-
-
-class RegisterComponent extends  Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export {RegisterComponent};
 

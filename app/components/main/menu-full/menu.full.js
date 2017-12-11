@@ -3,7 +3,7 @@ import template from './menu.full.html';
 import './menu.full.scss';
 import {FullMenuItem} from './item/item';
 
-let config = {
+let MenuComponent =  Component.extend({
     template: template,
     data: {
         list: [],
@@ -154,13 +154,6 @@ let config = {
     beforeDestory: () => {
         $(window).off('resize.menu')
     }
-};
-
-class MenuComponent extends Component {
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
-
+});
 
 export {MenuComponent};

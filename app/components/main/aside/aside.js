@@ -11,7 +11,7 @@ import {AvatarSet} from '../personal-settings/set-avatar/set-avatar';
 // import {commonuse} from '../commonuse/commonuse';
 // import {Uploader} from "../../../lib/uploader";
 
-let config = {
+let AsideComponent = Component.extend({
     template: template,
     data: {},
     actions: {
@@ -371,13 +371,7 @@ let config = {
     beforeDestory: function() {
         Mediator.removeAll('aside');
     }
-};
-
-class AsideComponent extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig))
-    }
-}
+});
 
 export {AsideComponent};
 // export const AsideInstance = new Component(config);
