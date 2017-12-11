@@ -54,7 +54,7 @@ let config = {
         rowId: '',
         fieldId: '',
         flowId: '',
-        recordId: '',
+        record_id: '',
         source_field_dfield: '',
         base_buildin_dfield: '',
         fieldContent: null,
@@ -1645,10 +1645,11 @@ let config = {
                 parent_table_id: this.data.parentTableId,
                 parent_real_id: this.data.parentRealId,
                 parent_temp_id: this.data.parentTempId,
+                parent_record_id: this.data.parentRecordId,
                 tableType: this.data.tableType,
                 fieldId: this.data.fieldId,
                 rowId: this.data.rowId,
-                record_id: this.data.recordId,
+                record_id: this.data.record_id,
                 is_filter: this.data.filterParam.is_filter,
                 filter: [],
                 from_approve: this.data.fromApprove || 0
@@ -1685,8 +1686,8 @@ let config = {
             if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                 // json['rows'] = 99999;
                 // json['first'] = 0;
-                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
-                json['is_temp'] = 1;
+                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                // json['is_temp'] = 1;
                 json['tableType'] = 'dy';
                 delete json['rowId']
             }
