@@ -110,7 +110,6 @@ export class CellBaseComponent extends Component {
                 this.data = this.actions.reassemble({'chart':res['data']});
                 this.reload();
             }
-
         }
     }
 }
