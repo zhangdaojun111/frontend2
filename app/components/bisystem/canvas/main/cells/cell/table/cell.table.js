@@ -42,6 +42,8 @@ let config = {
     actions: {
         //操作列点击事件
         gridHandle: function (type,data) {
+            console.log(type);
+            console.log(data);
                 if (type == 'table-view') {
                     let obj = {
                         table_id: data.table_id,

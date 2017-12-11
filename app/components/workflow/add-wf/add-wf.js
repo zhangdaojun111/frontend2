@@ -18,11 +18,11 @@ let config ={
 		}
 	},
 	afterRender(){
-		// this.data.addWf=new AddWf({data:obj:this.data.obj});
-        // this.data.addWf.render(this.el);
-        // this.data.workFlowForm=new WorkFlowForm();
-        // this.data.workFlowForm.render(this.el.find('#workflow-form'));
-        // this.actions.subscribe();
+        this.data.addWf=new AddWf(this.data.obj);
+        this.data.addWf.render(this.el);
+        this.data.workFlowForm=new WorkFlowForm();
+        this.data.workFlowForm.render(this.el.find('#workflow-form'));
+        this.actions.subscribe();
 
 	}
 }
