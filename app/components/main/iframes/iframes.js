@@ -65,18 +65,18 @@ let IframeComponent = Component.extend({
         count: 0,                //iframes的数量
         sort: [],                //经排序后的iframs的id
         focus: null,             //当前焦点iframe
-        hideFlag:false,
-        openingTabsList:[],      //记录未关闭的tabs的id
-        timeList:{},             //记录tabs的时间戳
-        biCalendarList:[],       //记录日历BI是否开启，tabs排序完成后，与autoOpenList合并
-        autoOpenList:[],         //记录根据id找到的iframes的所有信息url、id、name用于打开iframes
-        tabsTotalWidth:"",       //tabs可用总长度 = div.tabs - 85;
-        tabWidth:150,            //单个tabs长度，默认150（需和scss同步修改），空间不足以后自适应宽度
-        minTabWidth:100,         //用于估算小屏设备最大tabs数量
-        closeHistory:[],         //用于保存历史关闭记录，记录最近5个
-        tabsControlOpen:false,   //标签控制界面标记
-        saveViewOpen:false,       //保存视图界面标记
-        commonUseList:[]          //保存常用iframes，用于预加载
+        hideFlag: false,
+        openingTabsList: [],      //记录未关闭的tabs的id
+        timeList: {},             //记录tabs的时间戳
+        biCalendarList: [],       //记录日历BI是否开启，tabs排序完成后，与autoOpenList合并
+        autoOpenList: [],         //记录根据id找到的iframes的所有信息url、id、name用于打开iframes
+        tabsTotalWidth: "",       //tabs可用总长度 = div.tabs - 85;
+        tabWidth: 150,            //单个tabs长度，默认150（需和scss同步修改），空间不足以后自适应宽度
+        minTabWidth: 100,         //用于估算小屏设备最大tabs数量
+        closeHistory: [],         //用于保存历史关闭记录，记录最近5个
+        tabsControlOpen: false,   //标签控制界面标记
+        saveViewOpen: false,       //保存视图界面标记
+        commonUseList: []          //保存常用iframes，用于预加载
     },
     actions: {
 
@@ -131,9 +131,9 @@ let IframeComponent = Component.extend({
         /**
          * 方法同上，新增与后台同步tab信息的功能
          */
-        openIframe: function (id, url, name,flag) {
+        openIframe: function (id, url, name, flag) {
             this.actions._openIframe(id, url, name);
-            if(flag !== false){
+            if (flag !== false) {
                 this.actions.sendOpenRequest(id);
             }
         },
@@ -141,13 +141,13 @@ let IframeComponent = Component.extend({
          * 打开iframe时向后台发送请求，后台记录未关闭的iframe
          * @param id
          */
-        sendOpenRequest:function (id) {
-            if (id !== 'search-result'){
+        sendOpenRequest: function (id) {
+            if (id !== 'search-result') {
                 // 向后台发送请求记录
                 TabService.onOpenTab(id).done((result) => {
-                    if(result.success === 1){
+                    if (result.success === 1) {
                         // console.log("post open record success");
-                    }else{
+                    } else {
                         console.log("post open record failed")
                     }
                 });
@@ -157,11 +157,11 @@ let IframeComponent = Component.extend({
          * 关闭iframe时向后台发送请求，后台记录未关闭的iframe
          * @param id
          */
-        sendCloseRequest:function (id) {
-            TabService.onCloseTab(id,this.data.focus.id).done((result) => {
-                if(result.success === 1){
+        sendCloseRequest: function (id) {
+            TabService.onCloseTab(id, this.data.focus.id).done((result) => {
+                if (result.success === 1) {
                     // console.log("post close record success")
-                }else{
+                } else {
                     console.log("post close record failed")
                 }
             });
@@ -178,7 +178,7 @@ let IframeComponent = Component.extend({
          * @param id
          */
         closeIframe: function (id) {
-            if ( id === undefined) {
+            if (id === undefined) {
                 return;
             }
             this.actions.sendCloseRequest(id);
@@ -205,13 +205,13 @@ let IframeComponent = Component.extend({
          * 记录最近关闭的5个iframe历史记录
          * @param item
          */
-        setCloseHistory:function (item) {
-            if(item.name !== 'BI' && item.name !== '日历'&& item.name !== '搜索结果'){    //不保存搜索/BI/日历
-                _.remove(this.data.closeHistory,function (n) {      //去重和重新插入，确保最后关闭的在记录最前面
+        setCloseHistory: function (item) {
+            if (item.name !== 'BI' && item.name !== '日历' && item.name !== '搜索结果') {    //不保存搜索/BI/日历
+                _.remove(this.data.closeHistory, function (n) {      //去重和重新插入，确保最后关闭的在记录最前面
                     return n.name === item.name;
                 });
                 this.data.closeHistory.unshift(item);
-                if(this.data.closeHistory.length > 5){
+                if (this.data.closeHistory.length > 5) {
                     this.data.closeHistory.pop();
                 }
             }
@@ -238,12 +238,12 @@ let IframeComponent = Component.extend({
             let complete = that.data.focus.iframe.attr('load') === 'complete';
             if (!src) {
                 this.actions.iframeShowLoading(this.data.focus.iframe);
-                iframe.on('load',function () {
+                iframe.on('load', function () {
                     let item = $(this).parent();
                     item.attr('load', 'complete');
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         that.actions.iframeHideLoading(item);
-                    },0)
+                    }, 0)
                 });
                 iframe.attr('src', iframe.attr('_src'));
                 iframe.removeAttr('_src');
@@ -266,19 +266,19 @@ let IframeComponent = Component.extend({
         /**
          * 关闭所有iframes
          */
-        closeAllIframes:function () {
-            let temp_arr = _.defaultsDeep([],this.data.sort);
-            for(let k of temp_arr){
+        closeAllIframes: function () {
+            let temp_arr = _.defaultsDeep([], this.data.sort);
+            for (let k of temp_arr) {
                 this.actions.closeIframe(k);
             }
         },
         /**
          * 关闭除焦点iframe以外的其它iframe
          */
-        closeOtherIframes:function () {
-            let temp_arr = _.defaultsDeep([],this.data.sort);
-            for (let k of temp_arr){
-                if( k !== this.data.focus.id){
+        closeOtherIframes: function () {
+            let temp_arr = _.defaultsDeep([], this.data.sort);
+            for (let k of temp_arr) {
+                if (k !== this.data.focus.id) {
                     this.actions.closeIframe(k);
                 }
             }
@@ -286,8 +286,8 @@ let IframeComponent = Component.extend({
         /**
          * 打开标签管理界面（与视图保存界面互斥）
          */
-        showTabsPopup:function () {
-            if(this.data.tabsControlOpen === false){
+        showTabsPopup: function () {
+            if (this.data.tabsControlOpen === false) {
                 this.actions.initTabList(this.data.closeHistory);
                 this.el.find('.tab-list').show();
                 this.el.find('.popup-icon').addClass('mouse-enter-icon');
@@ -295,7 +295,7 @@ let IframeComponent = Component.extend({
                 //保证tabs控制面板和保存视图面板互斥打开
                 this.el.find('.view-save-component').hide();
                 this.data.saveViewOpen = false;
-            }else{
+            } else {
                 this.el.find('.tab-list').hide();
                 this.el.find('.popup-icon').removeClass('mouse-enter-icon');
                 this.data.tabsControlOpen = false;
@@ -304,13 +304,13 @@ let IframeComponent = Component.extend({
         /**
          * 取消面板延迟隐藏
          */
-        removeTimeOut:function () {
+        removeTimeOut: function () {
             window.clearTimeout(this.data.timer);
         },
         /**
          * 延时隐藏标签管理界面
          */
-        hideTabsPopup(){
+        hideTabsPopup() {
             this.data.timer = window.setTimeout(() => {
                 this.el.find('.tab-list').hide();
                 this.el.find('.popup-icon').removeClass('mouse-enter-icon');
@@ -320,7 +320,7 @@ let IframeComponent = Component.extend({
         /**
          * 直接隐藏标签管理界面
          */
-        hideTabsPopupImmediately(){
+        hideTabsPopupImmediately() {
             this.el.find('.tab-list').hide();
             this.el.find('.popup-icon').removeClass('mouse-enter-icon');
             this.data.tabsControlOpen = false;
@@ -329,11 +329,11 @@ let IframeComponent = Component.extend({
          * 更新标签管理界面
          * @param data
          */
-        initTabList:function (data) {
+        initTabList: function (data) {
             let $parent = this.el.find('.tabs-ul');
             $parent.empty();
-            if(data.length > 0){
-                for(let j of data){
+            if (data.length > 0) {
+                for (let j of data) {
                     let $li = $(`<li class='tab-item' item_name = ${j.name} item_url = ${j.url} item_id = ${j.id}>`);
                     $li.html(j.name);
                     $parent.append($li);
@@ -345,8 +345,8 @@ let IframeComponent = Component.extend({
         /**
          * 关闭当前tabs
          */
-        closeFocusTab:function () {
-            if(this.data.focus && this.data.count > 0){
+        closeFocusTab: function () {
+            if (this.data.focus && this.data.count > 0) {
                 this.actions.closeIframe(this.data.focus.id);
             }
         },
@@ -354,23 +354,23 @@ let IframeComponent = Component.extend({
          * 冒泡方式监听标签控制界面的点击
          * @param event
          */
-        controlTabs:function (event) {
+        controlTabs: function (event) {
             let name = event.target.textContent;
-            if(name === '关闭标签'){
+            if (name === '关闭标签') {
                 this.actions.closeFocusTab();
                 this.actions.initTabList(this.data.closeHistory);
-            }else if(name === '关闭全部标签'){
+            } else if (name === '关闭全部标签') {
                 this.actions.closeAllIframes();
                 this.actions.initTabList(this.data.closeHistory);
-            }else if(name === '关闭其他标签'){
+            } else if (name === '关闭其他标签') {
                 this.actions.closeOtherIframes();
                 this.actions.initTabList(this.data.closeHistory);
-            }else if(event.target.className.includes('tab-item')){
+            } else if (event.target.className.includes('tab-item')) {
                 //打开历史记录标签
                 let name = event.target.attributes.item_name.value;
                 let id = event.target.attributes.item_id.value;
                 let url = event.target.attributes.item_url.value;
-                this.actions.openIframe(id,url,name);
+                this.actions.openIframe(id, url, name);
                 this.actions.focusIframe(id);
             }
         },
@@ -401,35 +401,35 @@ let IframeComponent = Component.extend({
         /**
          * 获取最后一次退出系统时未关闭的标签数据以及快捷设置中bi/日历的设置记录
          */
-        readyOpenTabs:function () {
+        readyOpenTabs: function () {
             //自动打开的标签由系统设置的bi/日历 和 最后一次系统关闭时未关闭的标签两部分组成
             //第一部分：获取系统关闭时未关闭的tabs
             let that = this;
-            let calendarConfig,biConfig,homeConfig;
+            let calendarConfig, biConfig, homeConfig;
 
             TabService.getOpeningTabs().then((result) => {
                 let tabs = {};
                 //将未关闭的标签id加入openingTabsList
-                if(result[0].succ === 1){
+                if (result[0].succ === 1) {
                     tabs = result[0].tabs;
                     that.data.timeList = tabs;
                     delete tabs["0"];
-                    if(tabs){
-                        for(let k in tabs){
+                    if (tabs) {
+                        for (let k in tabs) {
                             that.data.openingTabsList.push(k);
                         }
                     }
-                }else{
-                    console.log("get tabs failed",result[0].err);
+                } else {
+                    console.log("get tabs failed", result[0].err);
                 }
 
-                if(result[1].succ === 1){
+                if (result[1].succ === 1) {
                     biConfig = result[1];
                     //检测数据biConfig.data是否为两位数，如果不是（ng系统为1位数），给用户设置默认值10
-                    if(biConfig.data !== "10" && biConfig.data !== "11" && biConfig.data !== "20" && biConfig.data !== "21"){
+                    if (biConfig.data !== "10" && biConfig.data !== "11" && biConfig.data !== "20" && biConfig.data !== "21") {
                         biConfig.data = "10";
                     }
-                    if((biConfig.data && biConfig.data.toString() !== "10" && biConfig.data.toString() !== "20")){
+                    if ((biConfig.data && biConfig.data.toString() !== "10" && biConfig.data.toString() !== "20")) {
                         that.data.biCalendarList.push({
                             id: 'bi',
                             name: 'BI',
@@ -437,24 +437,24 @@ let IframeComponent = Component.extend({
                         });
                     }
                     window.config.sysConfig.logic_config.client_login_show_bi = biConfig.data.toString();
-                }else{
-                    console.log("get tabs failed",result[1].err);
+                } else {
+                    console.log("get tabs failed", result[1].err);
                 }
 
-                if(result[2].succ === 1){
+                if (result[2].succ === 1) {
                     calendarConfig = result[2];
                     //检测数据calendarConfig.data是否为两位数，如果不是，给用户设置默认值20
-                    if(calendarConfig.data !== "10" && calendarConfig.data !== "11" && calendarConfig.data !== "20" && calendarConfig.data !== "21"){
+                    if (calendarConfig.data !== "10" && calendarConfig.data !== "11" && calendarConfig.data !== "20" && calendarConfig.data !== "21") {
                         calendarConfig.data = "20";
                     }
                     window.config.sysConfig.logic_config.client_login_show_calendar = calendarConfig.data.toString();
-                    if((calendarConfig.data && calendarConfig.data.toString() === "11")){
+                    if ((calendarConfig.data && calendarConfig.data.toString() === "11")) {
                         that.data.biCalendarList.unshift({
                             id: 'calendar',
                             name: '日历',
                             url: window.config.sysConfig.calendar_index
                         });
-                    }else if((calendarConfig.data && calendarConfig.data.toString() === "21")){
+                    } else if ((calendarConfig.data && calendarConfig.data.toString() === "21")) {
                         that.data.biCalendarList.push({
                             id: 'calendar',
                             name: '日历',
@@ -464,22 +464,22 @@ let IframeComponent = Component.extend({
                 }
                 //如果bi、calendar均未勾选，则参考后台bi、calendar自动开启设置
 
-                if((biConfig.data === "10" || biConfig.data === "20") && (calendarConfig.data === "10" || calendarConfig.data === "20")){
-                    if(window.config.sysConfig.logic_config.login_show_bi === "1"){
+                if ((biConfig.data === "10" || biConfig.data === "20") && (calendarConfig.data === "10" || calendarConfig.data === "20")) {
+                    if (window.config.sysConfig.logic_config.login_show_bi === "1") {
                         that.data.biCalendarList.push({
                             id: 'bi',
                             name: 'BI',
                             url: window.config.sysConfig.bi_index
                         });
                     }
-                    if(window.config.sysConfig.logic_config.login_show_calendar === "1"){
-                        if((calendarConfig.data && calendarConfig.data.toString() === "10")){
+                    if (window.config.sysConfig.logic_config.login_show_calendar === "1") {
+                        if ((calendarConfig.data && calendarConfig.data.toString() === "10")) {
                             that.data.biCalendarList.unshift({
                                 id: 'calendar',
                                 name: '日历',
                                 url: window.config.sysConfig.calendar_index
                             });
-                        }else if((calendarConfig.data && calendarConfig.data.toString() === "20")){
+                        } else if ((calendarConfig.data && calendarConfig.data.toString() === "20")) {
                             that.data.biCalendarList.push({
                                 id: 'calendar',
                                 name: '日历',
@@ -489,24 +489,24 @@ let IframeComponent = Component.extend({
                     }
                 }
                 //首页
-                if(result[3].succ === 1){
+                if (result[3].succ === 1) {
                     homeConfig = result[3];
-                    if(!homeConfig.data.length){
+                    if (!homeConfig.data.length) {
                         msgbox.showTips("服务器暂不支持首页，请及时更新");
                         homeConfig.data = "000";
                     }
-                    if(homeConfig.data.substring(homeConfig.data.length - 1) !== "0" && homeConfig.data.substring(homeConfig.data.length - 1) !== "1"){
+                    if (homeConfig.data.substring(homeConfig.data.length - 1) !== "0" && homeConfig.data.substring(homeConfig.data.length - 1) !== "1") {
                         homeConfig.data = "000";
                     }
                     window.config.sysConfig.logic_config.client_login_show_home = homeConfig.data.toString();
-                    window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + homeConfig.data.substring(0,homeConfig.data.length - 1);
-                    if((homeConfig.data && homeConfig.data.substring(homeConfig.data.length - 1) === "1")){
+                    window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + homeConfig.data.substring(0, homeConfig.data.length - 1);
+                    if ((homeConfig.data && homeConfig.data.substring(homeConfig.data.length - 1) === "1")) {
                         that.data.biCalendarList.push({
                             id: 'home',
                             name: '首页',
                             url: window.config.sysConfig.home_index
                         });
-                    }else{
+                    } else {
 
                     }
                 }
@@ -516,16 +516,16 @@ let IframeComponent = Component.extend({
         /**
          * 根据设置准备的数据结果打开iframes
          */
-        autoOpenTabs:function () {
+        autoOpenTabs: function () {
             let menu = window.config.menu;
-            this.actions.findTabInfo(menu,this.data.openingTabsList,this.data.autoOpenList);
-            this.actions.sortTabs(this.data.autoOpenList,this.data.timeList);
-            this.data.autoOpenList =  this.data.autoOpenList.concat(this.data.biCalendarList);
+            this.actions.findTabInfo(menu, this.data.openingTabsList, this.data.autoOpenList);
+            this.actions.sortTabs(this.data.autoOpenList, this.data.timeList);
+            this.data.autoOpenList = this.data.autoOpenList.concat(this.data.biCalendarList);
             console.log(this.data.autoOpenList);
             //依次打开各标签
             if (this.data.autoOpenList.length) {
-                for(let k of this.data.autoOpenList){
-                    this.actions._openIframe(k.id,k.url,k.name);
+                for (let k of this.data.autoOpenList) {
+                    this.actions._openIframe(k.id, k.url, k.name);
                 }
                 this.actions.focusIframe(this.data.autoOpenList[this.data.autoOpenList.length - 1].id);
             }
@@ -536,11 +536,11 @@ let IframeComponent = Component.extend({
          * @param tabsList
          * @param timeList
          */
-        sortTabs:function (tabsList,timeList) {
-            for(let k of tabsList){
+        sortTabs: function (tabsList, timeList) {
+            for (let k of tabsList) {
                 k.time = timeList[k.id];
             }
-            tabsList.sort((a,b) => {
+            tabsList.sort((a, b) => {
                 return a.time - b.time;
             })
         },
@@ -549,35 +549,35 @@ let IframeComponent = Component.extend({
          * @param nodes
          * @param targetList
          */
-        findTabInfo:function (nodes,targetList,resultList) {
-            for( let i=0; i < nodes.length; i++){
-                if(targetList.includes(nodes[i].ts_name ) || targetList.includes(nodes[i].table_id )){
+        findTabInfo: function (nodes, targetList, resultList) {
+            for (let i = 0; i < nodes.length; i++) {
+                if (targetList.includes(nodes[i].ts_name) || targetList.includes(nodes[i].table_id)) {
                     let item = {};
-                    if(nodes[i].table_id && nodes[i].table_id !== ''&& nodes[i].table_id !== '0'){
+                    if (nodes[i].table_id && nodes[i].table_id !== '' && nodes[i].table_id !== '0') {
                         item.id = nodes[i].table_id;
-                    }else{
+                    } else {
                         item.id = nodes[i].ts_name || '0';
                     }
 
                     item.url = nodes[i].url;
                     item.name = nodes[i].label;
                     resultList.push(item);
-                    _.remove(targetList,function (n) {
+                    _.remove(targetList, function (n) {
                         return n.id === nodes[i].id;
                     });
-                    if(targetList.length === 0){        //找到所有目标
+                    if (targetList.length === 0) {        //找到所有目标
                         return;
                     }
                 }
-                if(nodes[i].items && nodes[i].items.length > 0){
-                    this.actions.findTabInfo(nodes[i].items,targetList,resultList);
+                if (nodes[i].items && nodes[i].items.length > 0) {
+                    this.actions.findTabInfo(nodes[i].items, targetList, resultList);
                 }
             }
         },
         /**
          * 根据标签条总宽度tabsTotalWidth计算标签数量
          */
-        setTabsCount:function () {
+        setTabsCount: function () {
             this.data.tabsTotalWidth = parseInt(this.el.find('div.tabs').width()) - 85;   //标签可用总宽度
             maxIframeCount = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);  //自适应最大tabs数量
             // let count = Math.round(this.data.tabsTotalWidth / this.data.minTabWidth);
@@ -586,58 +586,58 @@ let IframeComponent = Component.extend({
         /**
          * 自适应宽度
          */
-        adaptTabWidth:function () {
-            let singleWidth = this.data.tabsTotalWidth/this.data.count ;
-            if(singleWidth  > this.data.tabWidth){              //空间有剩余
-                this.el.find('.tabs div.item').css("width","150px");      //有40px padding和1px border,总长150px
-            }else{
-                this.el.find('.tabs div.item').css("width",singleWidth);
+        adaptTabWidth: function () {
+            let singleWidth = this.data.tabsTotalWidth / this.data.count;
+            if (singleWidth > this.data.tabWidth) {              //空间有剩余
+                this.el.find('.tabs div.item').css("width", "150px");      //有40px padding和1px border,总长150px
+            } else {
+                this.el.find('.tabs div.item').css("width", singleWidth);
             }
         },
         /**
          * 打开全局搜索界面或通过变更url更新全局搜索界面的内容
          * @param data
          */
-        displaySearchResult:function (data) {
+        displaySearchResult: function (data) {
             let content = data.content;
             let formerContent = data.formerContent;
             //判断搜索结果iframe是否已打开，打开则重置src
             //此处全局搜索div.iframes
             let resultIframe;
-            let iframes =  this.el.find("div.iframes iframe");
+            let iframes = this.el.find("div.iframes iframe");
             let str = "searchContent=" + formerContent;
             str = encodeURI(str);
-            for(let k of iframes){
+            for (let k of iframes) {
                 let src = k.src;
-                if(src.indexOf(str) > 0){
+                if (src.indexOf(str) > 0) {
                     resultIframe = k;
                 }
             }
 
-            if(resultIframe){
+            if (resultIframe) {
                 let newSrc = '/search_result?searchContent=' + content;
-                $(resultIframe).attr("src",newSrc);
+                $(resultIframe).attr("src", newSrc);
                 this.actions.focusIframe("search-result");
-            }else{
+            } else {
                 //搜索结果展示窗口未打开
                 let id = "search-result";
                 let url = "/search_result?searchContent=" + content;
                 let name = "搜索结果";
-                this.actions.openIframe(id,url,name);
+                this.actions.openIframe(id, url, name);
                 this.actions.focusIframe(id);
             }
         },
         /**
          * 打开视图保存界面（与标签控制界面互斥打开）
          */
-        showViewSave:function () {
-            if(this.data.saveViewOpen === false){
+        showViewSave: function () {
+            if (this.data.saveViewOpen === false) {
                 this.el.find('.view-save-component').show();
                 this.data.saveViewOpen = true;
                 //保证保存视图页面和标签控制页面互斥打开
                 this.el.find('.tab-list').hide();
                 this.data.tabsControlOpen = false;
-            }else{
+            } else {
                 this.el.find('.view-save-component').hide();
                 this.data.saveViewOpen = false;
                 //调用子组件方法，清空input，切换至普通模式
@@ -647,14 +647,14 @@ let IframeComponent = Component.extend({
         /**
          * 直接关闭保存视图页面
          */
-        closeSaveViewPage:function () {
+        closeSaveViewPage: function () {
             this.el.find('.view-save-component').hide();
             this.data.saveViewOpen = false;
         },
         /**
          * 延迟关闭保存视图页面
          */
-        hideSaveViewPage:function () {
+        hideSaveViewPage: function () {
             this.data.timer = window.setTimeout(() => {
                 this.el.find('.view-save-component').hide();
                 //调用子组件方法，清空input，切换为正常模式
@@ -665,7 +665,7 @@ let IframeComponent = Component.extend({
         /**
          * 预加载常用iframes
          */
-        preLoadIframes:function () {
+        preLoadIframes: function () {
             // let menu = window.config.menu;
             // let tempList = window.config.commonUse.data;
             // this.actions.findTabInfo(menu,tempList,this.data.commonUseList);
@@ -674,6 +674,7 @@ let IframeComponent = Component.extend({
 
         loadHidingIframes: function () {
             let that = this;
+
             function loadIframe(iframe) {
                 iframe.attr('src', iframe.attr('_src'));
                 iframe.removeAttr('_src');
@@ -684,17 +685,19 @@ let IframeComponent = Component.extend({
                     that.actions.iframeHideLoading(item);
                 });
             }
+
             function start() {
                 let iframe = that.data.iframes.find('iframe[_src]:last');
                 if (iframe.length) {
                     loadIframe(iframe);
                 }
             }
+
             setTimeout(() => {
                 start();
             }, 3000);
         },
-        iframeShowLoading:function (root) {
+        iframeShowLoading: function (root) {
             let size = 50;
             root.addClass('component-loading-effect');
             $('<div class="component-loading-cover">').appendTo(root);
@@ -702,17 +705,17 @@ let IframeComponent = Component.extend({
             this.loadingEffectBox = $(loadingHtml).appendTo(root);
 
             this.loadingEffectBox.css({
-                "width":size,
-                "height":size,
-                marginLeft: -size/2,
-                marginTop: -size/2
+                "width": size,
+                "height": size,
+                marginLeft: -size / 2,
+                marginTop: -size / 2
             });
         },
         /**
          * 隐藏iframeloading
          * @param root
          */
-        iframeHideLoading:function (root) {
+        iframeHideLoading: function (root) {
             root.find('.component-loading-cover').remove();
             root.find('.component-loading-box').remove();
             root.removeClass('component-loading-effect');
@@ -721,45 +724,45 @@ let IframeComponent = Component.extend({
          * 通过id打开iframe
          * @param id id以数组方式传入,适用一次打开多个tabs
          */
-        openIframeById:function (id,flag) {
+        openIframeById: function (id, flag) {
             let res = [];
-            let menu  = window.config.menu;
-            this.actions.findTabInfo(menu,id,res);
+            let menu = window.config.menu;
+            this.actions.findTabInfo(menu, id, res);
 
             if (res.length) {
-                for(let k of res){
-                    this.actions.openIframe(k.id,k.url,k.name,flag);
+                for (let k of res) {
+                    this.actions.openIframe(k.id, k.url, k.name, flag);
                 }
                 this.actions.focusIframe(res[res.length - 1].id);
             }
         }
     },
-    binds:[
+    binds: [
         {
-            event:'click',
-            selector:'.tabs .item',
-            callback:function (target) {
+            event: 'click',
+            selector: '.tabs .item',
+            callback: function (target) {
                 let id = $(target).attr('iframeid');
                 this.actions.focusIframe(id);
-                window.top.miniFormValTableId = id ;
+                window.top.miniFormValTableId = id;
             }
         },
         {
-            event:'click',
-            selector:'.tabs .item .close',
-            callback:function (target) {
+            event: 'click',
+            selector: '.tabs .item .close',
+            callback: function (target) {
                 let bool = false;
-                if(window.top.miniFormVal){
-                    if(Object.keys(window.top.miniFormVal).indexOf($(target).attr('iframeid')) != -1 && window.top.miniFormVal[$(target).attr('iframeid')] !=''){
+                if (window.top.miniFormVal) {
+                    if (Object.keys(window.top.miniFormVal).indexOf($(target).attr('iframeid')) != -1 && window.top.miniFormVal[$(target).attr('iframeid')] != '') {
                         msgbox.alert('本表中有未提交的表单，请先完成提交或关闭表单');
-                    }else{
+                    } else {
                         delete window.top.miniFormVal[$(target).attr('iframeid')];
                         bool = true;
                     }
-                }else{
+                } else {
                     bool = true;
                 }
-                if(bool){
+                if (bool) {
                     let id = $(target).attr('iframeid');
                     this.actions.closeIframe(id);
                     return false;
@@ -782,59 +785,59 @@ let IframeComponent = Component.extend({
         //     }
         // },
         {
-            event:'click',
-            selector:'.popup-icon',
-            callback:function () {
+            event: 'click',
+            selector: '.popup-icon',
+            callback: function () {
                 this.actions.showTabsPopup();       //打开标签控制页面
             }
         },
         {
-            event:'mouseenter',
-            selector:'.view-popup',
-            callback:function () {
+            event: 'mouseenter',
+            selector: '.view-popup',
+            callback: function () {
                 this.actions.removeTimeOut();       //取消隐藏标签控制页面
             }
         },
         {
-            event:'click',
-            selector:'.tab-list',
-            callback:function (target,event) {
+            event: 'click',
+            selector: '.tab-list',
+            callback: function (target, event) {
                 this.actions.controlTabs(event);
             }
         },
         {
-            event:'mouseleave',
-            selector:'.view-popup',
-            callback:function () {
+            event: 'mouseleave',
+            selector: '.view-popup',
+            callback: function () {
                 this.actions.hideTabsPopup();       //鼠标离开延迟隐藏标签控制页面
             }
         },
         {
-            event:'click',
-            selector:'.drop-up-icon',
-            callback:function (target,event) {
+            event: 'click',
+            selector: '.drop-up-icon',
+            callback: function (target, event) {
                 this.actions.hideTabsPopupImmediately();        //点击三角立刻关闭标签控制页面
                 event.stopPropagation();
             }
         },
         {
-            event:'click',
-            selector:'.view-save',
-            callback:function (target,event) {
+            event: 'click',
+            selector: '.view-save',
+            callback: function (target, event) {
                 this.actions.showViewSave();            //打开保存视图页面
             }
         },
         {
-            event:'mouseenter',
-            selector:'.view-save-group',
-            callback:function () {
+            event: 'mouseenter',
+            selector: '.view-save-group',
+            callback: function () {
                 this.actions.removeTimeOut();       //取消隐藏视图保存页面
             }
         },
         {
-            event:'mouseleave',
-            selector:'.view-save-group',
-            callback:function () {
+            event: 'mouseleave',
+            selector: '.view-save-group',
+            callback: function () {
                 this.actions.hideSaveViewPage();       //鼠标离开延迟隐藏视图保存页面
             }
         },
@@ -853,16 +856,21 @@ let IframeComponent = Component.extend({
         });
 
         //初始化保存视图组件
-        this.saveView = new SaveView({data:{currentIframesList:this.data.sort},actions:{closeSaveView:this.actions.closeSaveViewPage}});
+        this.saveView = new SaveView({
+            data: {
+                iframesComponent: this
+            },
+            actions: {closeSaveView: this.actions.closeSaveViewPage}
+        });
         this.saveView.render(this.el.find('.view-save-component'));
     },
 
     firstAfterRender: function () {
         Mediator.on('menu:item:openiframe', (data) => {
-            this.actions.openIframe(data.id, data.url, data.name,data.flag);
+            this.actions.openIframe(data.id, data.url, data.name, data.flag);
             this.actions.focusIframe(data.id);
         });
-        Mediator.on('search:displayreuslt',(data) => {
+        Mediator.on('search:displayreuslt', (data) => {
             this.actions.displaySearchResult(data);
         });
         Mediator.on('aside:size', (order) => {
@@ -880,21 +888,21 @@ let IframeComponent = Component.extend({
         Mediator.on('saveview:displayview', (data) => {
             this.actions.closeAllIframes();  //先关闭所有标签，再打开view中的标签
             if (data.length) {
-                for(let k of data){
-                    this.actions.openIframe(k.id,k.url,k.name);
+                for (let k of data) {
+                    this.actions.openIframe(k.id, k.url, k.name);
                 }
                 this.actions.focusIframe(data[data.length - 1].id);
                 this.actions.loadHidingIframes();
             }
         });
         //订阅bi的画布块点击title，打开数据源的tab
-        PMAPI.subscribe(PMENUM.open_iframe_by_id,(data) => {
-            this.actions.openIframeById(data.id,false);
+        PMAPI.subscribe(PMENUM.open_iframe_by_id, (data) => {
+            this.actions.openIframeById(data.id, false);
         });
 
-        Mediator.subscribe('menu:homePageRefresh',(data)=>{
+        Mediator.subscribe('menu:homePageRefresh', (data) => {
             this.actions.closeIframe('home');
-            this.actions.openIframe(data.id, data.url, data.name,data.flag);
+            this.actions.openIframe(data.id, data.url, data.name, data.flag);
             this.actions.focusIframe(data.id);
         })
 

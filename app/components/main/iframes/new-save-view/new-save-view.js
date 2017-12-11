@@ -63,6 +63,9 @@ let SaveView = Component.extend({
          * @returns {Promise.<void>}
          */
         saveFavorite:async function () {
+
+            this.data.currentIframesList = this.data.iframesComponent.data.sort;
+
             //过滤List中的bi和日历
             _.remove(this.data.currentIframesList,function (n) {
                 return (n === "bi" || n === 'calendar');
