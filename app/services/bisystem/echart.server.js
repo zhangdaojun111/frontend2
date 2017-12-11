@@ -18,10 +18,7 @@ const defaultOption = {
 
 export class EchartsService {
     constructor(cellChart) {
-        console.log(document.getElementById(cellChart['id']));
-        debugger;
         let myChart = echarts.init(document.getElementById(cellChart['id']));
-        console.log(myChart);
         this.myChart = myChart;
         let option = this.getEchartsOption(cellChart['cellChart']);
         myChart.setOption(option);
@@ -32,6 +29,7 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     getEchartsOption(cellChart) {
+        console.log(cellChart);
         const chartType = cellChart['chart']['assortment'] || '';
         let option = {};
         switch (chartType) {

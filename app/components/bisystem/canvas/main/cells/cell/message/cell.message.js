@@ -18,7 +18,7 @@ let config = {
     firstAfterRender() {}
 };
 
-export let CellMessageComponent = Component(config);
+export let CellMessageComponent = CellBaseComponent.extend(config);
 
 // export class CellMessageComponent extends CellBaseComponent {
 //     constructor(data,event,extendConfig) {

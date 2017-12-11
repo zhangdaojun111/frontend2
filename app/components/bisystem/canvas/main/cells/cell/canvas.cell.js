@@ -76,12 +76,19 @@ let config = {
                 msgbox.showTips(chart['error']);
                 return false;
             }
-            const data = {
+            let data = {
                 chart: chart['data'],
                 cell: this.data.cell,
                 viewId: this.data.currentViewId,
             };
-            console.log(data);
+
+            //特殊处理九宫格和表格data
+            // if(chart['data']['assortment'] && (chart['data']['assortment'] === 'nineGrid' || 'table')){
+            //     console.log(cellTypes[chart['data']['assortment']]);
+            //     debugger;
+            //     data = cellTypes[chart['data']['assortment']].init(data);
+            // }
+
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart,this.data.currentViewId);
                 this.data.cellComponent = new cellTypes[chart['data']['assortment']]({
@@ -428,3 +435,5 @@ export class CanvasCellComponent extends Component {
         }
     }
 }
+
+CanvasCellComponent.config = config;

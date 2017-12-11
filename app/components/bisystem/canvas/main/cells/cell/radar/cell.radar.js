@@ -49,6 +49,10 @@ let config = {
         }
     },
     beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
         this.data.id += this.componentId;
     },
     afterRender() {
@@ -64,7 +68,7 @@ let config = {
     }
 };
 
-export let CellRadarComponent = Component(config);
+export let CellRadarComponent = CellBaseComponent.extend(config);
 
 // export class CellRadarComponent extends CellBaseComponent {
 //     // constructor(cellChart) {

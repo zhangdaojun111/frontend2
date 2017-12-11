@@ -27,6 +27,10 @@ let config = {
         }
     },
     beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
         this.data.id += this.componentId;
     },
     afterRender() {
@@ -42,7 +46,7 @@ let config = {
     }
 };
 
-export let CellGaugeComponent = Component(config);
+export let CellGaugeComponent = CellBaseComponent.extend(config);
 
 // export class CellGaugeComponent extends CellBaseComponent {
 //

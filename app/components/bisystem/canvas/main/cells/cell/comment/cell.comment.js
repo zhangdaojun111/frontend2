@@ -79,6 +79,10 @@ let config = {
         },
     ],
     beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
         this.data.comment = this.data.cellChart['chart']['data'];
         this.data.componentId = this.componentId;
     },
@@ -101,7 +105,7 @@ let config = {
     firstAfterRender(){}
 };
 
-export let CellCommentComponent = Component.extend(config);
+export let CellCommentComponent = CellBaseComponent.extend(config);
 
 // export class CellCommentComponent extends CellBaseComponent {
 //     // constructor(cellChart) {

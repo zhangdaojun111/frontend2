@@ -27,6 +27,13 @@ let config = {
         legend: []
     },
     actions: {},
+    beforeRender: function () {
+        let cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        CellNineGridComponent.init(cellChart);
+    },
     afterRender() {},
     firstAfterRender() {}
 };
@@ -34,7 +41,7 @@ let config = {
 export class CellNineGridComponent extends CellBaseComponent {
     constructor(data,event,extendConfig) {
         let cellChart = CellNineGridComponent.init(data);
-        super($.extend(true,{},config,extendConfig),cellChart,event);
+        super($.extend(true,{},config,extendConfig));
     }
 
     /**
@@ -77,6 +84,8 @@ export class CellNineGridComponent extends CellBaseComponent {
         cellChart.xAxis = xAxis;
         cellChart.yAxis = yAxis;
         cellChart.legend = legend;
-        return cellChart;
+        $.extend(true, this.data, cellChart);
     }
 }
+
+CellNineGridComponent.config = config;

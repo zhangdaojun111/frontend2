@@ -28,6 +28,10 @@ let config = {
         }
     },
     beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
         this.data.id += this.componentId;
     },
     afterRender() {
@@ -43,7 +47,7 @@ let config = {
     }
 };
 
-export let CellStylzieComponent = Component(config);
+export let CellStylzieComponent = CellBaseComponent.extend(config);
 
 // export class CellStylzieComponent extends CellBaseComponent {
 //     // constructor(cellChart) {

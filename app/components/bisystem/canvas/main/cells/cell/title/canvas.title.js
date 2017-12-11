@@ -106,7 +106,7 @@ let config = {
     beforeDestory() {}
 };
 
-export let CanvasCellTitleComponent = Component(config);
+export let CanvasCellTitleComponent = Component.extend(config);
 
 
 // export class CanvasCellTitleComponent extends Component {

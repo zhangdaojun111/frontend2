@@ -170,6 +170,14 @@ let config = {
         if(window.config.pdf){
             this.el.find('.bi-table').addClass('download-pdf');
         }
+    },
+
+    beforeRender: function () {
+        let data = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        CellTableComponent.init(data);
     }
 };
 
@@ -180,9 +188,8 @@ export class CellTableComponent extends CellBaseComponent {
     //     config.actions.init(cellChart);
     //     super(config);
     // }
-    constructor(data,event,extendConfig) {
-        let cellChart = CellTableComponent.init(data);
-        super($.extend(true,{},config,extendConfig),cellChart,event);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
     }
 
     static init(cellChart) {
@@ -204,7 +211,7 @@ export class CellTableComponent extends CellBaseComponent {
                 CellTableComponent.singleTable(cellChart);
             }
         }
-        return cellChart
+        $.extend(true, this.data, cellChart);
     }
 
     /**
@@ -261,3 +268,5 @@ export class CellTableComponent extends CellBaseComponent {
         return !(patrn.exec(value) === null || value === "");
     }
 }
+
+CellTableComponent.config = config;
