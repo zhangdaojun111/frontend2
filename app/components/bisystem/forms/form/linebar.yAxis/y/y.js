@@ -66,8 +66,8 @@ let config = {
 };
 
 class Y extends Base {
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig){
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -80,3 +80,4 @@ class Y extends Base {
 }
 
 export {Y}
+Y.config = config;

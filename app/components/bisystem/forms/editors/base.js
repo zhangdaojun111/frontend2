@@ -46,17 +46,20 @@ class Base extends Component {
         options.forEach((item) => {
             let clazz = formItemTypes[item.type];
             let instance = new clazz({
-                value: item.defaultValue,
-                label: item.label,
-                name: item.name,
-                list: item.list,
-                class: item.class,
-                rules: item.rules,
-                placeholder: item.placeholder,
-                required: item.required,
-                category: item.category, // 用于input输入框类型 number text
-                textTip: item.textTip,
-            }, item.events);
+                data: {
+                    value: item.defaultValue,
+                    label: item.label,
+                    name: item.name,
+                    list: item.list,
+                    class: item.class,
+                    rules: item.rules,
+                    placeholder: item.placeholder,
+                    required: item.required,
+                    category: item.category, // 用于input输入框类型 number text
+                    textTip: item.textTip,
+                },
+                events: item.events
+            });
             this.append(instance, this.el.find(container ? container : '.form-group'));
             this.formItems[item.name] = instance;
         });

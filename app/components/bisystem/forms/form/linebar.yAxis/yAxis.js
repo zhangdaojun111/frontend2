@@ -128,8 +128,8 @@ let config = {
 }
 
 class YaXis extends Base {
-    constructor(data, event,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -152,7 +152,6 @@ class YaXis extends Base {
      * @param yAxis = y轴数据
      */
     setValue(yAxis) {
-        console.log()
         if (yAxis.length === 0) return false;
 
         Object.keys(this.data.yAxis).forEach(key => {
@@ -178,3 +177,4 @@ class YaXis extends Base {
 }
 
 export {YaXis}
+YaXis.config = config;

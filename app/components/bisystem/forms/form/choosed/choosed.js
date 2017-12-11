@@ -35,8 +35,8 @@ let config = {
 };
 
 export class Choosed extends Base{
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig){
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -47,3 +47,5 @@ export class Choosed extends Base{
         this.actions.update(choosed);
     }
 }
+Choosed.config = config;
+

@@ -60,8 +60,8 @@ let config = {
 };
 
 class Checkbox extends Base {
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig){
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -112,3 +112,4 @@ class Checkbox extends Base {
 }
 
 export {Checkbox}
+Checkbox.config = config;

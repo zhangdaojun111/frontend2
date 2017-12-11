@@ -130,14 +130,17 @@ let config = {
          */
          addChart(data) {
             let chart = new ChartEditor({
-                source: data,
-            }, {
-                onRemoveChart: (componentId) => {
-                    delete this.data.charts[componentId];
+                data:{
+                    source: data,
                 },
-                onChange: function (data) {
-                    config.data.succ = data;
-                },
+                events:{
+                    onRemoveChart: (componentId) => {
+                        delete this.data.charts[componentId];
+                    },
+                    onChange: function (data) {
+                        config.data.succ = data;
+                    },
+                }
             });
             this.data.charts[chart.componentId] = chart;
             this.append(chart, this.el.find('.form-group'));
