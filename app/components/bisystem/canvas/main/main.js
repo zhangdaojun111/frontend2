@@ -21,7 +21,32 @@ let config = {
         editMode: window.config.bi_user === 'manager' ? window.config.bi_user : false,
         singleMode: window.location.href.indexOf('single') !== -1,
         isViewEmpty: false,
-        isSingle: false,
+        isSingle:false,
+        PMENUM:{
+            open_iframe_dialog: '0',
+            close_dialog: '1',
+            recieve_data: '2',
+            open_component_dialog: '3',
+            iframe_active: '4',
+            iframe_silent: '5',
+            table_invalid: '6',              // 表格数据失效
+            one_the_way_invalid: '7',         // 在途数据失效
+            data_invalid: '11',
+            open_iframe_params: '8',
+            get_param_from_root: '9',        // 来自子框架的消息，需要获取iframe的参数
+            send_param_to_iframe: '10',       // 来组主框架的消息，向iframe发送参数
+            workflow_approve_msg: '11',
+            show_tips: '12',
+            send_data_to_dialog_component: '13', //向子componentDialog发消息，需和openDialogByComponentWithKey结合使用，便于获得dialog的key
+            send_data_to_iframe:'14',
+            get_data:'15',
+            show_loading:'16',          //打开loading
+            hide_loading:'17',          //隐藏loading
+            open_preview:'18',          //打开图片浏览
+            aside_fold: '19',
+            send_event:'20',
+            open_iframe_by_id:'21',     //bi点击title打开数据源tab
+        },
         carouselInterval: 0,         //用户设置的轮播执行间隔
         operateInterval: 0,          //用户设置的操作暂停轮播间隔
         viewArr: window.config.bi_views,  //所有bi视图
@@ -75,7 +100,11 @@ let config = {
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
-                this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
+                this.data.cells = new CanvasCellsComponent({
+                    data:{
+                        currentViewId:this.data.currentViewId
+                    }
+                });
                 this.data.cells.actions.loadChartFinish = this.actions.loadChartFinish;
                 this.data.cells.render(this.el.find('.cells-container'));
             }
@@ -92,54 +121,57 @@ let config = {
             // if (!this.data.singleMode) {
             //
             // }
-            let header = new CanvasHeaderComponent({}, {
-                selectAllCanvas: () => {
-                    this.data.cells.actions.selectAllCells();
-                },
-                cancelSelectCanvas: () => {
-                    this.data.cells.actions.cancelSelectCells();
-                },
-                reverseSelectCanvas: () => {
-                    this.data.cells.actions.reverseSelectCells();
-                },
-                onAddCell: (cell) => {
-                    this.data.cells.actions.addCell(cell);
-                },
+            let header = new CanvasHeaderComponent({
+                data:{},
+                events: {
+                    selectAllCanvas: () => {
+                        this.data.cells.actions.selectAllCells();
+                    },
+                    cancelSelectCanvas: () => {
+                        this.data.cells.actions.cancelSelectCells();
+                    },
+                    reverseSelectCanvas: () => {
+                        this.data.cells.actions.reverseSelectCells();
+                    },
+                    onAddCell: (cell) => {
+                        this.data.cells.actions.addCell(cell);
+                    },
 
-                onSaveCanvas: () => {
-                    this.data.cells.actions.saveCanvas();
-                },
-                onWhenPrintCellDataFinish: async () => {
-                    msgbox.showLoadingRoot();
-                    if (Array.isArray(this.data.views) && this.data.views.length > 0) {
-                        const res = await this.data.cells.actions.cellsDataIsFinish();
+                    onSaveCanvas: () => {
+                        this.data.cells.actions.saveCanvas();
+                    },
+                    onWhenPrintCellDataFinish: async () => {
+                        msgbox.showLoadingRoot();
+                        if (Array.isArray(this.data.views) && this.data.views.length > 0) {
+                            const res = await this.data.cells.actions.cellsDataIsFinish();
+                        }
+                        if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
+                            $('.bi-container').css({'width': 'auto', 'height': 'auto'});
+                        }
+                        window.print();
+                        msgbox.hideLoadingRoot();
+                        if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
+                            let w = $(self.frameElement).closest('.iframes').width();
+                            let h = $(self.frameElement).closest('.iframes').height();
+                            $('.bi-container').css({'width': w, 'height': h});
+                        }
+                    },
+                    doFullScreenCarousel: async () => {
+                        if (this.data.isNewWindow) {
+                            this.actions.launchFullScreen(document.documentElement);
+                        } else {
+                            msgbox.showTips('按ESC退出轮播模式');
+                        }
+                        if (this.data.firstCarousel) {
+                            this.data.cells.actions.loadSecondView();
+                            this.data.firstCarousel = false;
+                        }
+                        let res = await this.actions.getCarouselSetting();
+                        this.data.carouselInterval = res.data.carousel_time;
+                        this.data.operateInterval = res.data.stop_time;
+                        this.data.carouselFlag = true;
+                        this.actions.checkCanCarousel(this.data.carouselInterval);
                     }
-                    if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
-                        $('.bi-container').css({'width': 'auto', 'height': 'auto'});
-                    }
-                    window.print();
-                    msgbox.hideLoadingRoot();
-                    if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
-                        let w = $(self.frameElement).closest('.iframes').width();
-                        let h = $(self.frameElement).closest('.iframes').height();
-                        $('.bi-container').css({'width': w, 'height': h});
-                    }
-                },
-                doFullScreenCarousel: async () => {
-                    if (this.data.isNewWindow) {
-                        this.actions.launchFullScreen(document.documentElement);
-                    }else{
-                        msgbox.showTips('按ESC退出轮播模式');
-                    }
-                    if(this.data.firstCarousel){
-                        this.data.cells.actions.loadSecondView();
-                        this.data.firstCarousel = false;
-                    }
-                    let res = await this.actions.getCarouselSetting();
-                    this.data.carouselInterval = res.data.carousel_time;
-                    this.data.operateInterval = res.data.stop_time;
-                    this.data.carouselFlag = true;
-                    this.actions.checkCanCarousel(this.data.carouselInterval);
                 }
             });
             this.append(header, this.el.find('.views-header'));
@@ -366,6 +398,11 @@ let config = {
             $('.bi-container').css({'width': w, 'height': h});
         }
 
+        //订阅数据失效
+        PMAPI.subscribe(this.data.PMENUM.data_invalid, (info) => {
+            this.data.cells.actions.updateCells(info);
+        });
+
         //根据判断是否单行模式加载header
         this.actions.headLoad();
 
@@ -388,11 +425,13 @@ let config = {
     beforeDestory:function () {}
 };
 
-export class CanvasMain extends Component {
-    constructor(data, events,extendConfig) {
-        config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
-        super($.extend(true,{},config,extendConfig), data, events);
-    }
-}
+export let CanvasMain = Component.extend(config);
+
+// export class CanvasMain extends Component {
+//     constructor(data, events,extendConfig) {
+//         config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
+//         super($.extend(true,{},config,extendConfig), data, events);
+//     }
+// }
 
 

@@ -334,6 +334,15 @@ let config = {
             }
         },
     ],
+    beforeRender(){
+        let cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        let originalData = CanvasOriginalDataComponent.handleOriginalData(cellChart);
+        this.template = originalData.template ? originalData.template : template;
+
+    },
     afterRender() {
         if (this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id']) {
             // 新增高级字段
@@ -346,10 +355,8 @@ let config = {
 };
 
 export class CanvasOriginalDataComponent extends Component {
-    constructor(data,events,extendConfig) {
-        let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
-        config.template = originalData.template ? originalData.template : template;
-        super($.extend(true,{},config,extendConfig),originalData,events);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
     }
     /**
      * 处理初始化数据 用于组装需要的数据格式
@@ -373,7 +380,7 @@ export class CanvasOriginalDataComponent extends Component {
                 }
             });
         }
-        return data;
+        $.extend(true, this.data, data);
     }
     /**
      * 处理折线柱状图的原始数据
@@ -391,12 +398,20 @@ export class CanvasOriginalDataComponent extends Component {
                 return {'name': name, 'select': true}
             });
         } else {
-            data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
-                let value = JSON.parse(item);
-                if (!value.select) {
-                    data.selectAllX = false;
-                }
-                return value;
+            // data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
+            //     let value = JSON.parse(item);
+            //     if (!value.select) {
+            //         data.selectAllX = false;
+            //     }
+            //     return value;
+            // });
+            data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
+                return {'name': name, 'select': data.cellChart.cell.select.map(item => {
+                    let value = JSON.parse(item);
+                    if (value.name === name) {
+                        return value.select;
+                    };
+                })}
             });
         }
         // 如果attribute有数据就用attribute的数据 attribute = yAxis

@@ -2,7 +2,7 @@ import {Base} from '../base';
 import template from './table.html';
 import './table.scss';
 
-import {chartName, theme, icon, button,countColumn} from '../form.chart.common';
+import {chartName, theme, icon, button, countColumn} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -19,7 +19,7 @@ let config = {
             let table = data ? data : null;
             if (table) {
                 if (table.count_fields.length > 0) {
-                    let fields =[];
+                    let fields = [];
                     fields = table.count_fields.map(item => {
                         return {value: JSON.stringify(item), name: item.name}
                     });
@@ -31,7 +31,7 @@ let config = {
                     this.formItems['countColumn'].el.hide();
                 }
                 let res = await ChartFormService.getChartField(table.id);
-                if (res['success'] === 1){
+                if (res['success'] === 1) {
                     this.actions.loadColumns(res['data']['x_field']);
                 } else {
                     msgbox.alert(res['error'])
@@ -65,9 +65,9 @@ let config = {
         /**
          * 初始化图表操作
          */
-       async init() {
-           this.formItems['countColumn'].el.hide();
-           this.formItems['single'].trigger('onChange');
+        async init() {
+            this.formItems['countColumn'].el.hide();
+            this.formItems['single'].trigger('onChange');
             this.formItems['customAccuracy'].trigger('onChange');
             // 获取数据来源
             const res = await ChartFormService.getChartSource();
@@ -79,17 +79,17 @@ let config = {
 
 
             // 获取图标
-           ChartFormService.getChartIcon().then(res => {
-               if (res['success'] === 1) {
-                   let icons =[];
-                   icons = res['data'].map(icon => {
-                       return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
-                   });
-                   this.formItems['icon'].setList(icons)
-               } else {
-                   msgbox.alert(res['error'])
-               }
-           });
+            ChartFormService.getChartIcon().then(res => {
+                if (res['success'] === 1) {
+                    let icons = [];
+                    icons = res['data'].map(icon => {
+                        return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
+                    });
+                    this.formItems['icon'].setList(icons)
+                } else {
+                    msgbox.alert(res['error'])
+                }
+            });
 
         },
 
@@ -98,18 +98,18 @@ let config = {
          */
         async getChartData(id) {
             let layout = {
-                "chart_id":id,
-                "floor":0,
-                "view_id":"",
-                "layout_id":"",
-                "xOld":{},
-                "row_id":0,
-                "deep_info":{}
+                "chart_id": id,
+                "floor": 0,
+                "view_id": "",
+                "layout_id": "",
+                "xOld": {},
+                "row_id": 0,
+                "deep_info": {}
             };
             const data = {
-                layouts:[JSON.stringify(layout)],
-                query_type:'deep',
-                is_deep:1,
+                layouts: [JSON.stringify(layout)],
+                query_type: 'deep',
+                is_deep: 1,
             };
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
@@ -121,27 +121,30 @@ let config = {
             let data = this.getData();
             let chart = {
                 assortment: 'table',
-                chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
+                chartName: {id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 countColumn: typeof data.countColumn === 'string' ? JSON.parse(data.countColumn) : {},
-                columns:data.columns,
+                columns: data.columns,
                 icon: data.icon,
                 source: data.source,
                 theme: data.theme,
                 filter: data.filter.filter,
                 filter_source: data.filter.filter_source,
                 countNum: data.countNum,
-                single:data.single[0] ? data.single[0]: 0,
-                singleColumnWidthList:[],
+                single: data.single[0] ? data.single[0] : 0,
+                singleColumnWidthList: [],
                 sort: data.sort,
-                sortColumns:data.sortColumns ? [data.sortColumns] : [],
-                alignment:data.alignment,
-                columnNum:data.columnNum,
+                sortColumns: data.sortColumns ? [data.sortColumns] : [],
+                alignment: data.alignment,
+                columnNum: data.columnNum,
                 editInterface: data.editInterface,
                 customAccuracy: data.customAccuracy[0] && data.customAccuracyNum ? data.customAccuracyNum : 0,
             };
             let pass = true; // 判断表单是否验证通过
             for (let key of Object.keys(this.formItems)) {
                 if (this.formItems[key].data.rules) {
+                    if (key == 'columnNum' && chart.single == 0) {
+                        continue
+                    }
                     let isValid = this.formItems[key].valid();
                     if (!isValid) {
                         pass = false;
@@ -149,7 +152,7 @@ let config = {
                 }
             }
 
-            if(pass) {
+            if (pass) {
                 this.save(chart);
             }
         },
@@ -164,7 +167,10 @@ let config = {
             this.formItems['countColumn'].setValue(JSON.stringify(chart['countColumn']));
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
-            this.formItems['filter'].setValue({filter: chart['filter']?chart['filter']: '', filter_source:chart['filter_source']?chart['filter_source']:[]});
+            this.formItems['filter'].setValue({
+                filter: chart['filter'] ? chart['filter'] : '',
+                filter_source: chart['filter_source'] ? chart['filter_source'] : []
+            });
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['sort'].setValue(chart['sort']);
             this.formItems['sortColumns'].setValue(chart['sortColumns'][0]);
@@ -178,7 +184,7 @@ let config = {
         }
     },
     data: {
-        xAxis:[],
+        xAxis: [],
         options: [
             chartName,
             {
@@ -232,7 +238,7 @@ let config = {
                 ],
                 type: 'checkbox',
                 events: {
-                    onChange:function(value) {
+                    onChange: function (value) {
                         this.formItems['columns'].clearErrorMsg();
                         this.formItems['choosed'].actions.update(value);
                         this.formItems['table_single'].actions.setColumns(value, this.formItems['columnNum'].getValue());
@@ -241,8 +247,8 @@ let config = {
                         // 以选择列名排序
                         let sort_items = this.formItems['choosed'].el.find('.form-chart-clo');
                         sort_items.sortable({
-                            'update': function(event, ui) {
-                                let sort_columns_list = sort_items.sortable( "toArray");
+                            'update': function (event, ui) {
+                                let sort_columns_list = sort_items.sortable("toArray");
                                 let columns = [];
                                 sort_columns_list.forEach(item => {
                                     for (let column of me.formItems['columns'].data.value) {
@@ -271,8 +277,8 @@ let config = {
                 name: 'sort',
                 defaultValue: '-1',
                 list: [
-                    {value: '1',name: '升序'},
-                    {value: '-1', name:'降序'}
+                    {value: '1', name: '升序'},
+                    {value: '-1', name: '降序'}
                 ],
                 type: 'radio'
             },
@@ -318,17 +324,16 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '是否显示为单行'
+                        value: 1, name: '是否显示为单行'
                     }
                 ],
                 type: 'checkbox',
                 events: {
-                    onChange:function(value) {
+                    onChange: function (value) {
                         if (value && value[0]) {
                             this.formItems['columnNum'].el.show();
                             this.formItems['countNum'].el.hide();
                             this.formItems['table_single'].el.show();
-
                         } else {
                             this.formItems['columnNum'].el.hide();
                             this.formItems['countNum'].el.show();
@@ -343,6 +348,7 @@ let config = {
                 defaultValue: '1',
                 placeholder: '请输入默认显示单行为多少列',
                 type: 'text',
+                required: true,
                 rules: [
                     {
                         errorMsg: '显示多少列数必须是大于0的整数',
@@ -351,12 +357,12 @@ let config = {
                 ],
                 category: 'number',
                 events: {
-                    onChange: _.debounce(function(value) {
+                    onChange: _.debounce(function (value) {
                         let columnNum = parseInt(value);
                         if (columnNum !== NaN) {
                             this.formItems['table_single'].actions.setColumns(this.formItems['choosed'].data.list, columnNum);
                         }
-                    },100)
+                    }, 100)
                 }
             },
             {
@@ -372,13 +378,13 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '自定义设置精度'
+                        value: 1, name: '自定义设置精度'
                     }
                 ],
                 type: 'checkbox',
-                class:'customAccuracy',
+                class: 'customAccuracy',
                 events: {
-                    onChange:function(value) {
+                    onChange: function (value) {
                         if (value && value[0]) {
                             this.formItems['customAccuracyNum'].el.show();
                         } else {
@@ -392,7 +398,7 @@ let config = {
                 name: 'customAccuracyNum',
                 defaultValue: '0',
                 category: 'number',
-                textTip:'请输入自定义精度：',
+                textTip: '请输入自定义精度：',
                 type: 'text',
                 class: 'customAccuracyNum',
                 events: {}
@@ -411,9 +417,11 @@ let config = {
             button,
         ]
     },
-
+    beforeRender(){
+        this.data.chart_id = this.data.id
+    },
     async afterRender() {
-        if(this.data.chart_id) {
+        if (this.data.chart_id) {
             const res = await this.actions.getChartData(this.data.chart_id);
             if (res[0]['success'] === 1) {
                 this.data.chart = res[0]['data']
@@ -431,11 +439,6 @@ let config = {
     }
 };
 
-class TableEditor extends Base {
-    constructor(data,extendConfig) {
-        config.data.chart_id = data.id ? data.id : null;
-        super($.extend(true,{},config,extendConfig));
-    }
-}
+let TableEditor = Base.extend(config);
 
 export {TableEditor}

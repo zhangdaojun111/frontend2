@@ -86,8 +86,8 @@ let config = {
 };
 
 class Search extends Base {
-    constructor(data, event,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -100,3 +100,4 @@ class Search extends Base {
 }
 
 export {Search}
+Search.config = config;

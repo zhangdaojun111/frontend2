@@ -81,16 +81,21 @@ let config = {
                 cell: this.data.cell,
                 viewId: this.data.currentViewId,
             };
+            
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart,this.data.currentViewId);
-                this.data.cellComponent = new cellTypes[chart['data']['assortment']](data, {
-                    onUpdateChartDeepTitle: (data) => {
-                        this.cellTitle.actions.setDeepTitle(data)
+                this.data.cellComponent = new cellTypes[chart['data']['assortment']]({
+                    data:data,
+                    events:{
+                        onUpdateChartDeepTitle: (data) => {
+                            this.cellTitle.actions.setDeepTitle(data);
+                        }
                     }
                 });
+
                 let cellContainer = this.el.find('.cell-chart');
                 if (cellContainer.length === 0) {
-                    debugger;
+
                 }
                 this.data.cellComponent.render(cellContainer);
             }
@@ -403,9 +408,8 @@ let config = {
 };
 
 export class CanvasCellComponent extends Component {
-
-    constructor(data, events,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, events);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
         // config.data.biUser = window.config.bi_user === 'client' ? false : true;
         // super(config);
         // this.data.cell = data['cell'];
@@ -425,3 +429,5 @@ export class CanvasCellComponent extends Component {
         }
     }
 }
+
+CanvasCellComponent.config = config;

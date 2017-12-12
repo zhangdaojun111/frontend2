@@ -29,10 +29,12 @@ let config = {
             event:'click',
             selector:'.table-operate a',
             callback:function (context,event) {
+                console.log(this.data,'.............................................');
                 let data = {
                     table_id: this.data.chart.table_id,
                     real_id:this.data.chart.data.rows[$(context).attr('data-index')][this.data.chart.data.rows[0].length - 1]
                 };
+                console.log(data);
                 this.actions.gridHandle($(context).attr('class'), data);
             }
         },
@@ -40,6 +42,8 @@ let config = {
     actions: {
         //操作列点击事件
         gridHandle: function (type,data) {
+            console.log(type);
+            console.log(data);
                 if (type == 'table-view') {
                     let obj = {
                         table_id: data.table_id,
@@ -150,6 +154,49 @@ let config = {
             return HTTP.post('prepare_params',data )
         },
 
+        /**
+         * 用于组装单行表格所需数据
+         * @param cellChart = 表格的原始数据
+         */
+        singleTable(cellChart) {
+            let cellData = cellChart['chart'];
+            const columnNum = cellData['columnNum']; // 显示多少列
+            let rows = Math.ceil(cellData['columns'].length / columnNum); // 计算出显示多少行
+            let list = []; // 组合 字段的name 和 value 成一个列表
+            let columnList = []; // 获取每列字段
+            let tableRows = []; // 单行表格每行的数据
+
+            // 组装列字段和列数据
+            cellData['columns'].forEach((title, index) => {
+                list.push(title['name']);
+                list.push(cellData['data']['rows'][0][index]);
+            });
+
+            // 显示每列的数据
+            for (let i = 0; i < columnNum; i++) {
+                columnList.push(list.slice(i * rows * 2, (i * rows + rows) * 2));
+            }
+
+            // 把每列的数据转化为行
+            for (let i = 0; i < rows ; i++) {
+                let row = [];
+                columnList.forEach((val, index, items) => {
+                    if (index === items.length - 1) {
+                        if (val.length < rows * 2) {
+                            for (let i = 0; i < (rows * 2 - val.length); i++) {
+                                val.push(' ');
+                            }
+                        }
+                    }
+                    val.slice(i * 2, i * 2 + 2).map(v => {
+                        row.push(v);
+                    });
+                });
+                tableRows.push(row);
+            }
+            return tableRows;
+        }
+
     },
     afterRender() {
         // 向agid服务器获取数据 flow_id，form_id
@@ -170,6 +217,16 @@ let config = {
         if(window.config.pdf){
             this.el.find('.bi-table').addClass('download-pdf');
         }
+    },
+
+    beforeRender: function () {
+        let data = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        console.log(this.data.chart);
+        let cellChart = CellTableComponent.init(data);
+        $.extend(true, this.data, cellChart);
     }
 };
 
@@ -180,9 +237,8 @@ export class CellTableComponent extends CellBaseComponent {
     //     config.actions.init(cellChart);
     //     super(config);
     // }
-    constructor(data,event,extendConfig) {
-        let cellChart = CellTableComponent.init(data);
-        super($.extend(true,{},config,extendConfig),cellChart,event);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
     }
 
     static init(cellChart) {
@@ -204,7 +260,7 @@ export class CellTableComponent extends CellBaseComponent {
                 CellTableComponent.singleTable(cellChart);
             }
         }
-        return cellChart
+        return cellChart;
     }
 
     /**
@@ -252,8 +308,17 @@ export class CellTableComponent extends CellBaseComponent {
     static numFormat(num,acc) {
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+        if(acc){
+            if(num[1]){
+                num[1] = '0.' + num[1];
+                num[1] = parseFloat(num[1]).toFixed(acc);
+                num[1] = num[1].replace('0.','');
+            }else{
+                num[1]  = new String('0').repeat(acc);
+            }
+        }
         num = num.join(".");
-        return parseFloat(num).toFixed(acc);
+        return num;
     }
 
     static isNumber(value) {         //验证是否为数字
@@ -261,3 +326,5 @@ export class CellTableComponent extends CellBaseComponent {
         return !(patrn.exec(value) === null || value === "");
     }
 }
+
+CellTableComponent.config = config;
