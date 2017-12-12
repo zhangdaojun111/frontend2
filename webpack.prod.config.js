@@ -150,12 +150,12 @@ module.exports = {
             name: 'vendors',
             minChunks: 3
         }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     minimize: true,
-        //     mangle: {
-        //         except: ['$']
-        //     }
-        // }),
+        new webpack.optimize.UglifyJsPlugin({
+            minimize: true,
+            mangle: {
+                except: ['$']
+            }
+        }),
 
         new ExtractTextPlugin({
             filename: (getPath) => {
