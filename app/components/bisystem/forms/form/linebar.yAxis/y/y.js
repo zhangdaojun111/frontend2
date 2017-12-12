@@ -51,15 +51,15 @@ let config = {
         };
         this.data.value.type = {name: "折线图", type:"line"};
         this.type = new Select({
-            typeConfig:typeConfig,
+            data:typeConfig,
             events:{
-            onChange: (value) => {
-                this.data.value.type = value === 'line' ? {name: "折线图", type:"line"} : {name: "柱状图", type:"bar"};
-                this.trigger('onSetBG', value);
+                onChange: (value) => {
+                    this.data.value.type = value === 'line' ? {name: "折线图", type:"line"} : {name: "柱状图", type:"bar"};
+                    this.trigger('onSetBG', value);
             }}
         });
         this.group = new Text({
-            placeholder: '分组名称',
+            data:{placeholder: '分组名称'},
             events:{
                 onChange:(value) => {
                     this.data.value.group = value ? value : 0;
