@@ -8,7 +8,7 @@ import DateTimeControl from "../../../form/datetime-control/datetime-control";
 import DateControl from "../grid-data-control/grid-data-control";
 import TimeControl from "../../../form/time-control/time-control";
 import agGrid from "../../agGrid/agGrid";
-let config = {
+let FloatingFilter = Component.extend({
     template: template,
     data: {
     },
@@ -48,9 +48,9 @@ let config = {
                             }
                         },1000 ))
                     }else if( colInfo  == 'time' ){  //使用时间插件
-                        let timeControl = new TimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){
+                        let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
-                        }}});
+                        }});
                         timeControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
@@ -60,11 +60,11 @@ let config = {
                             }
                         },1000 ))
                     }else if( colInfo  == 'datetime' ){ //使用年月日时分秒插件
-                        let dateTimeControl = new DateTimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){
+                        let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){
                             setTimeout(()=>{
                                 That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                             },1000)
-                        }}});
+                        }});
                         dateTimeControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
@@ -129,10 +129,10 @@ let config = {
     },
     afterRender: function() {
     }
-}
-class FloatingFilter extends Component {
-    constructor() {
-        super(config)
-    }
-}
+})
+// class FloatingFilter extends Component {
+//     constructor() {
+//         super(config)
+//     }
+// }
 export default FloatingFilter

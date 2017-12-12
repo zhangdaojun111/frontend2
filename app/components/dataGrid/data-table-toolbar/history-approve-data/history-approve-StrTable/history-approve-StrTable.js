@@ -7,7 +7,7 @@ import strikeItem from "./history-approve-StrItem/history-approve-StrItem"
 
 
 
-let config = {
+let strikeTable = Component.extend({
     template: template,
     data: {
         trigger_work_records:[],
@@ -25,16 +25,10 @@ let config = {
         //     })
         // }
     }
-}
-class strikeTable extends Component {
-    // constructor(data) {
-    //     for (let d in data) {
-    //         config.data[d] = data[d]
-    //     }
-    //     super(config)
-    // }
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+})
+// class strikeTable extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default strikeTable

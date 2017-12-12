@@ -20,7 +20,7 @@ import msgBox from '../../../../lib/msgbox';
 import dataTableAgGrid from '../../data-table-page/data-table-agGrid/data-table-agGrid'
 import './expert-search.scss';
 
-let expertSearch = Component.extend({
+let config = {
     template: template,
     ulChecked: true,
     inputValue: null,
@@ -73,7 +73,7 @@ let expertSearch = Component.extend({
         //渲染第一个查询条
         rendSearchItem: function(){
             this.data.searchInputAry = [];
-            let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
+            let epCondition = new expertCondition({data:{expertItemData:this.data.fieldsData}});
             let dom = document.createElement('div');
             dom.className = 'condition-search-choice';
             this.append(epCondition, $(dom));
@@ -169,7 +169,7 @@ let expertSearch = Component.extend({
             this.el.find('.condition-search-container').find('div').remove();
             this.actions.rendSearchItem();
             for(let i = 0; i<searchData.length-1; i++) {
-                let epCondition = new expertCondition({expertItemData:this.data.fieldsData});
+                let epCondition = new expertCondition({data:{expertItemData:this.data.fieldsData}});
                 let dom = document.createElement('div');
                 dom.className = 'condition-search-choice';
                 this.append(epCondition, $(dom));
@@ -220,7 +220,7 @@ let expertSearch = Component.extend({
                         case "datetime":
                             this.el.find('.result').eq(index).attr('search-type','datetime');
                             this.el.find('.condition-search-input').eq(index).remove();
-                            let dateTimeControl = new DateTimeControl({data:{value: value},events:{changeValue:function(data){}}});
+                            let dateTimeControl = new DateTimeControl({value: value},{changeValue:function(data){}});
                             dateTimeControl.render(this.el.find('.condition-search-value').eq(index));
                             this.el.find('.condition-search-select.relation').eq(index).html(html);
                             this.el.find('.condition-search-select.relation').eq(index).val(relation);
@@ -236,7 +236,7 @@ let expertSearch = Component.extend({
                         case "time":
                             this.el.find('.result').eq(index).attr('search-type','time');
                             this.el.find('.condition-search-input').eq(index).remove();
-                            let timeControl = new TimeControl({data:{value: value},events:{changeValue:function(data){}}});
+                            let timeControl = new TimeControl({value: value},{changeValue:function(data){}});
                             timeControl.render(this.el.find('.condition-search-value').eq(index));
                             this.el.find('.condition-search-select.relation').eq(index).html(html);
                             this.el.find('.condition-search-select.relation').eq(index).val(relation);
@@ -506,7 +506,7 @@ let expertSearch = Component.extend({
             let _this = this;
             this.el.on('click','.condition-search-add',function() {
                 // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
-                let epCondition = new expertCondition({expertItemData:_this.data.fieldsData});
+                let epCondition = new expertCondition({data:{expertItemData:this.data.fieldsData}});
                 let Dom = document.createElement('div');
                 Dom.className = 'condition-search-choice';
                 _this.append(epCondition, $(Dom));
@@ -608,11 +608,11 @@ let expertSearch = Component.extend({
         })
     }
 
-});
-// class expertSearch extends Component {
-//     constructor(data,newConfig){
-//         super($.extend(true,{},config,newConfig,{data:data||{}}));
-//         console.log(this.data)
-//     }
-// }
+};
+class expertSearch extends Component {
+    constructor(data,newConfig){
+        super($.extend(true,{},config,newConfig,{data:data||{}}));
+        console.log(this.data)
+    }
+}
 export default expertSearch
