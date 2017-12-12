@@ -4,8 +4,6 @@
 import Component from "../../../../lib/component";
 import template from './calendar.set.remind.html';
 import './calendar.set.remind.scss';
-import CalendarSetItemMulitSelect from '../calendar.set.item.multiselect/calendar.set.item.multiselect';
-import {CalendarService} from '../../../../services/calendar/calendar.service';
 import {AutoSelect} from '../../../util/autoSelect/autoSelect';
 import {PMAPI, PMENUM} from '../../../../lib/postmsg';
 import MSG from '../../../../lib/msgbox';

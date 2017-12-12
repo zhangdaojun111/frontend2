@@ -85,7 +85,7 @@ let config = {
             }
             this.data.hide_tables.forEach((row) => {
                 if (row.tableName !== "") {
-                    this.append(new LeftContentHide(row), this.el.find('.left-calendar-hide'));
+                    this.append(new LeftContentHide({data: row}), this.el.find('.left-calendar-hide'));
                 }
             })
         },
@@ -115,7 +115,7 @@ let config = {
                     });
                     this.data.cancelFields = res['cancel_fields'];
                     this.data.LeftCalendarSet.destroySelf();
-                    this.data.LeftCalendarSet = new LeftContentCalendarSet(res);
+                    this.data.LeftCalendarSet = new LeftContentCalendarSet({data: {calendarTreeData: res}});
 
                     this.append(this.data.LeftCalendarSet, this.el.find('.left-calendar-set'));
                 });
@@ -179,14 +179,12 @@ let config = {
         this.el.tooltip();
         this.el.css({"height": "100%", "width": "100%"});
         this.actions.getCalendarTreeData();
-        this.data.LeftCalendarSet = new LeftContentCalendarSet(this.data.calendarTreeData);
+        this.data.LeftCalendarSet = new LeftContentCalendarSet({data: {calendarTreeData: this.data.calendarTreeData}});
         this.append(this.data.LeftCalendarSet, this.el.find('.left-calendar-set'));
         Mediator.on('CalendarWorkflowData: workflowData', data => {
             this.el.find('.item-content-3').empty();
             data.forEach((row) => {
-                let rightContentWorkflow = new RightContentWorkFlow();
-                rightContentWorkflow.data = row;
-                this.append(rightContentWorkflow, this.el.find('.item-content-3'));
+                this.append(new RightContentWorkFlow({data: row}), this.el.find('.item-content-3'));
             });
         });
         Mediator.on('CalendarFinishedWorkflowData: workflowData', data => {
@@ -196,7 +194,7 @@ let config = {
             });
         });
         Mediator.on('calendar-left:hideRemindType', data => {
-            this.append(new LeftContentHide(data.data), this.el.find('.left-calendar-hide'));
+            this.append(new LeftContentHide({data: data.data}), this.el.find('.left-calendar-hide'));
         });
         Mediator.on('calendar-left:showRemindType', () => {
             this.actions.showRemindType();

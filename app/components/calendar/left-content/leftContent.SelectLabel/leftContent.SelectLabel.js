@@ -271,7 +271,7 @@ let config = {
 // class LeftContentSelect extends Component {
 //     constructor(data, cancel_fields, hide_item_table, rows, event,newConfig) {
 //         config.data.dataitem = data;
-//         // config.data.dataitem.searchValue = 0;
+//         config.data.dataitem.searchValue = 0;
 //         config.data.cancel_fields = cancel_fields;
 //         config.data.rows = rows;
 //         config.events.checkbox = event;
