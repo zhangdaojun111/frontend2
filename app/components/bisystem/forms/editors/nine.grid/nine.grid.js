@@ -300,7 +300,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '自定义字体大小（默认14）'
+                        value:1, name: '自定义字体大小'
                     }
                 ],
                 type: 'checkbox',

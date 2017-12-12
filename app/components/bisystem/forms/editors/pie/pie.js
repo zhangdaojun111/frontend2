@@ -216,7 +216,7 @@ let config = {
             this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 0);
             this.formItems['customTextStyle'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? 1 : 0);
             this.formItems['titleSize'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? chart['customTextStyle']['titleSize'] : 14);
-            this.formItems['chartSize'].setValue(chart['customTextStyle'].hasOwnProperty('chartSize') ? chart['customTextStyle']['chartSize'] : 14);
+            this.formItems['chartSize'].setValue(chart['customTextStyle'].hasOwnProperty('chartSize') ? chart['customTextStyle']['chartSize'] : 12);
         }
     },
     data: {
@@ -526,7 +526,7 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '自定义字体大小（默认14）'
+                        value:1, name: '自定义字体大小'
                     }
                 ],
                 type: 'checkbox',
@@ -556,7 +556,7 @@ let config = {
             {
                 label: '',
                 name: 'chartSize',
-                defaultValue: '14',
+                defaultValue: '12',
                 placeholder: '图表字体大小',
                 category: 'number',
                 type: 'text',
