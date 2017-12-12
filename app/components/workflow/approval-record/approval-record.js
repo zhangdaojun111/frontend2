@@ -101,13 +101,20 @@ let config={
         this.showLoading();
         let self=this;
         for(let k in this.data.approve_tips){
-            if(this.data.approve_tips[k]['comment']){
-                $(this.el.find('.workflow-record-item').get(k)).find('.approval-comment1').children('a').show();
+            let comment = this.data.approve_tips[k]['comment'];
+            let commentM = comment.match(/<img(.*?)>/g);
+            if(comment && commentM != null){
+                $(this.el.find('.workflow-record-item').get(k)).find('.approval-comment1').children('.approval-comment').show();
+            }
+            if(comment && commentM == null){
+                $(this.el.find('.workflow-record-item').get(k)).find('.approval-comment1').text(comment.replace(/<.*?>/ig,""));
+                $(this.el.find('.workflow-record-item').get(k)).find('.approval-comment1').addClass('tipsText')
             }
             if(this.data.approve_tips[k]['comment_attachment'].length > 0){
-                $(this.el.find('.workflow-record-item').get(k)).find('.comment-attachment').children('a').show();
+                $(this.el.find('.workflow-record-item').get(k)).find('.comment-attachment').children('.comment-attachment1').show();
             }
         }
+
         const pos={x:10,y:20};
         this.el.on("mouseover",".tipsText",function (e) {
              let elDiv=$(this);
