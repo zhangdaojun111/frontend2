@@ -1031,6 +1031,7 @@ let dataTableAgGrid = Component.extend({
                     }
                     html += btn.outerHTML;
                 }
+
             }
             let con = this.el.find('.dataGrid-btn-group')[0];
             con.innerHTML = html;

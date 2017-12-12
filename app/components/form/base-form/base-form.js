@@ -1298,7 +1298,11 @@ let config = {
 				let value;
 				if(data.type == 'Buildin'){
 					for (let obj of data['options']) {
-						if (obj.value == data.value) {
+						if(data.value == ''){
+							value = '';
+                            break;
+						}
+						if (obj.value == data.value ) {
 							value = obj.value;
 							break;
 						}
