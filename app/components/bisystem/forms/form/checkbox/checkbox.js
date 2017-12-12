@@ -110,6 +110,5 @@ class Checkbox extends Base {
     }
 
 }
-
-export {Checkbox}
 Checkbox.config = config;
+export {Checkbox}

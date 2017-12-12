@@ -101,20 +101,24 @@ let config = {
          */
         yMoreSetting() {
             this.data.label = new Checkbox({
-                value: [],
-                list: [
-                    {
-                        value:1, name: '显示折柱图值'
-                    }
-                ]
+                data: {
+                    value: [],
+                    list: [
+                        {
+                            value:1, name: '显示折柱图值'
+                        }
+                    ]
+                }
             });
             this.data.areaStyle = new Checkbox({
-                value: [],
-                list: [
-                    {
-                        value:1, name: '显示折线图面积区域<b style="color:red;">(只有Y轴全部为"折线图"时才可以勾选此项)</b>'
-                    }
-                ]
+                data: {
+                    value: [],
+                    list: [
+                        {
+                            value:1, name: '显示折线图面积区域<b style="color:red;">(只有Y轴全部为"折线图"时才可以勾选此项)</b>'
+                        }
+                    ]
+                }
             });
             this.append(this.data.label, this.el.find('.yAxis-setting'));
             this.append(this.data.areaStyle, this.el.find('.yAxis-setting'));
@@ -175,6 +179,5 @@ class YaXis extends Base {
 
 
 }
-
-export {YaXis}
 YaXis.config = config;
+export {YaXis}
