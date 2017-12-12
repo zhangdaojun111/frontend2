@@ -17,7 +17,7 @@ import {ViewsService} from "../../../services/bisystem/views.service";
 import {config as viewDialogConfig} from "../../../components/bisystem/views/dialog/edit/dialog.edit";
 import {PMAPI} from '../../../lib/postmsg';
 
-let config = {
+let SettingPage = Component.extend({
     template:template,
     /**
      * 以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
@@ -517,13 +517,7 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-class SettingPage extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const SysSetting = {
     el:null,

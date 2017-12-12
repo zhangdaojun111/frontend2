@@ -11,7 +11,7 @@ import template from './single-display.html';
 import {PMAPI} from '../../../../lib/postmsg';
 
 
-let config = {
+let SingleResult = Component.extend({
     template:template,
     data:{
         searchData:{},
@@ -58,20 +58,13 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-class SingleResult extends Component{
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig));
-        this.data.searchData = data;
-    }
-}
+});
 
 export const SingleDisplay = {
     el:null,
     create:function (data,$father) {
         this.el = $("<div class='single-container'>").appendTo($father);
-        let component = new SingleResult(data);
+        let component = new SingleResult({data:{searchData:data}});
         component.render(this.el);
     }
 };

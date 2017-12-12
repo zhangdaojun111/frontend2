@@ -77,10 +77,5 @@ let config = {
     }
 };
 
-class EditorControl extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
-
+let EditorControl = Component.extend(config)
 export default EditorControl;

@@ -31,7 +31,6 @@ let config = {
     }
 }
 
-let item = new Component(config);
 let dom = $("<div class='tips-box'>").appendTo(document.body);
 
 let Tips = {

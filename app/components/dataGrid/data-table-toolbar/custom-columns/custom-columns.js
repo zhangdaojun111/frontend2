@@ -9,7 +9,7 @@ import {HTTP} from "../../../../lib/http"
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
 import 'jquery-ui/ui/widgets/sortable.js';
 
-let config = {
+let customColumns = Component.extend({
     template: template,
     data: {
         gridoptions: null,
@@ -334,12 +334,12 @@ let config = {
             this.data.close();
         } )
     }
-}
+});
 
-class customColumns extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class customColumns extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default customColumns;

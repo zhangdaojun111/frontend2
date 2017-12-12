@@ -3,8 +3,8 @@ import {formChartValidateService as formValidate} from '../../../../services/bis
 
 class Base extends Component {
 
-    constructor(config, data, event,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(config,extendConfig) {
+        super($.extend(true,{},config,extendConfig))
     }
     setValue(){}
     getValue(){
@@ -48,3 +48,4 @@ class Base extends Component {
 }
 
 export {Base}
+Base.config = config;

@@ -41,7 +41,7 @@ import msgbox from '../../../../lib/msgbox';
 
 
 
-let config = {
+let dataTableAgGrid = Component.extend({
     template: template,
     data: {
         tableId: '',
@@ -1828,7 +1828,7 @@ let config = {
                     close: this.actions.calcCustomColumn,
                     setFloatingFilterInput: this.actions.setFloatingFilterInput
                 };
-                this.customColumnsCom = new customColumns(custom);
+                this.customColumnsCom = new customColumns({data: custom});
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
 
                 //点击关掉定制列panel
@@ -1851,7 +1851,7 @@ let config = {
                     groupFields: this.data.myGroup,
                     close: this.actions.calcGroup
                 };
-                this.groupGridCom = new groupGrid(groupLit);
+                this.groupGridCom = new groupGrid({data: groupLit});
                 this.append(this.groupGridCom, this.el.find('.group-panel'));
 
                 this.groupGridCom.actions.onGroupChange = this.actions.onGroupChange;
@@ -1862,7 +1862,7 @@ let config = {
                     fieldsData: this.data.fastSearchFields,
                     fastSearchData:this.actions.fastSearchData,
                 }
-                this.append(new fastSearch(d), this.el.find('.fast-search-con'))
+                this.append(new fastSearch({data: d}), this.el.find('.fast-search-con'))
             }
             //渲染分页
             let noPagination = ['in_process', 'newFormCount', 'reportTable2'];
@@ -1876,7 +1876,7 @@ let config = {
                     isSuperUser: window.config.is_superuser || 0,
                     gridOptions: this.agGrid.gridOptions
                 };
-                this.pagination = new dataPagination(paginationData);
+                this.pagination = new dataPagination({data: paginationData});
                 this.pagination.actions.paginationChanged = this.actions.refreshData;
                 this.append(this.pagination, this.el.find('.pagination'));
             } else {
@@ -3839,7 +3839,7 @@ let config = {
             rowDataChanged: this.actions.rowDataChanged,
             onRowSelected: this.actions.onRowSelected
         };
-        this.agGrid = new agGrid(gridData);
+        this.agGrid = new agGrid({data:gridData});
         this.append(this.agGrid, this.el.find('#data-agGrid'));
 
         this.floatingFilterCom = new FloatingFilter();
@@ -3890,7 +3890,7 @@ let config = {
         window.top.hideMiniForm[this.data.tableId]=null;
         delete window.top.hideMiniForm[this.data.tableId];
     }
-};
+});
 
 //加载用户偏好样式
 UserInfoService.getUserTheme().done((res) => {
@@ -3901,13 +3901,13 @@ UserInfoService.getUserTheme().done((res) => {
     }
 });
 
-class dataTableAgGrid extends Component {
-    constructor(data, newConfig) {
-        for (let d in data) {
-            config.data[d] = data[d];
-        }
-        super($.extend(true, {}, config, newConfig, {data: data || {}}));
-    }
-}
+// class dataTableAgGrid extends Component {
+//     constructor(data, newConfig) {
+//         for (let d in data) {
+//             config.data[d] = data[d];
+//         }
+//         super($.extend(true, {}, config, newConfig, {data: data || {}}));
+//     }
+// }
 
 export default dataTableAgGrid;

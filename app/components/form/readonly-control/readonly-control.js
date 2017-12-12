@@ -115,6 +115,11 @@ let config = {
         }
     ],
     afterRender() {
+        if(this.data.type == 'Textarea'){
+        	this.data.is_textarea = 1;
+        }
+        this.data.originalValue=this.data.value;
+
         this.el.find('.ui-width').attr('title', this.data.value);
 	    this.el.find('input').attr('value', this.data.value);
         this.el.find('.ui-width').css('width', this.data.width);
@@ -134,14 +139,5 @@ let config = {
     }
 };
 
-class ReadonlyControl extends Component {
-    constructor(data,events,newConfig){
-		if(data.type == 'Textarea'){
-			data.is_textarea = 1;
-		}
-    	data.originalValue=data.value;
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
-
+let ReadonlyControl = Component.extend(config)
 export default ReadonlyControl

@@ -8,7 +8,7 @@ import {dataTableService} from "../../../../services/dataGrid/data-table.service
 import './data-table-group.scss';
 import 'jquery-ui/ui/widgets/sortable.js';
 
-let config = {
+let groupGrid = Component.extend({
     template: template,
 
     data: {
@@ -85,12 +85,12 @@ let config = {
         })
 
     }
-}
+});
 
-class groupGrid extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class groupGrid extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default groupGrid;

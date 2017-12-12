@@ -7,6 +7,6 @@ $(document).ready(function(){
     let obj = {
         key: window.config.key
     }
-    let opDetails = new operationDetails(obj);
+    let opDetails = new operationDetails({data: obj});
     opDetails.render($('#operationDetails'));
 })

@@ -74,10 +74,5 @@ let config = {
     }
 }
 
-class SettingTextareaControl extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
-
+let SettingTextareaControl = Component.extend(config)
 export default SettingTextareaControl;

@@ -25,6 +25,6 @@ $(document).ready(function(){
         isNewWindow: window.config.isNewWindow || false
     }
     $( 'title' ).html( window.config.tableName || 'REDS' );
-    let DataTableAgGrid=new dataTableAgGrid( json );
+    let DataTableAgGrid=new dataTableAgGrid( {data: json} );
     DataTableAgGrid.render($('#sourceDataGrid'));
 });

@@ -164,7 +164,7 @@ let config={
                         d['list'].push({name: item, id: item});
                     }
                 }
-                let autoSelect = new AutoSelect(d);
+                let autoSelect = new AutoSelect({data:d});
                 this.data.childDrop[i] = autoSelect;
                 this.append(autoSelect, this.el.find('.multi-drop'));
                 if (this.data.is_view && this.data.value) {
@@ -209,8 +209,5 @@ let config={
         this.el.off();
     }
 }
-export default class MultiLinkageControl extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let MultiLinkageControl = Component.extend(config)
+export default MultiLinkageControl

@@ -178,9 +178,5 @@ let config = {
         this.el.off();
     }
 }
-class InputControl extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let InputControl = Component.extend(config)
 export default InputControl

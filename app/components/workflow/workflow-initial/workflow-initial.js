@@ -52,7 +52,7 @@ let config = {
 						_this.events.chooseCb(msg);
 					}
 				};
-				_this.data.workCreate = new WorkFlowCreate(obj, actions);
+				_this.data.workCreate = new WorkFlowCreate({data:obj, events:actions});
 				_this.data.workCreate.render(this.el.find('#workflow-header'));
 			});
 			HTTP.flush();
@@ -140,6 +140,8 @@ let config = {
 				defaultFocus: this.data.focusUsers,
 			}).then(res => {
 				if (!res.onlyclose) {
+					console.log('111111');
+					console.log(res);
 					this.data.htmlStr = [];
 					for (let k in res) {
 						this.data.nameArr.push(res[k]);
@@ -154,13 +156,5 @@ let config = {
 	}
 };
 
-class WorkflowInitial extends Component {
-	// constructor(data) {
-	//     super(config, data);
-	// }
-	constructor(data, events, newConfig) {
-		super($.extend(true, {}, config, newConfig, {data: data || {}}), {}, events);
-	}
-}
-
-export default WorkflowInitial;
+let WorkflowInitial = Component.extend(config);
+export default WorkflowInitial

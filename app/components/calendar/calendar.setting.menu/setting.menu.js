@@ -22,12 +22,12 @@ let config = {
             //this.destroyChildren();
             this.data.list.forEach((data) => {
                 data.display = true;
-                let component = new FullMenuItem(_.defaultsDeep({}, data, {
+                let component = new FullMenuItem({data:_.defaultsDeep({}, data, {
                     root: true,
                     offset: 0,
                     searchDisplay: true,
                     type: this.data.type
-                }));
+                })});
                 this.append(component, this.$root, 'li');
             });
         }
@@ -57,11 +57,14 @@ let config = {
     }
 }
 
-class SettingMenuComponent extends Component {
-    constructor(data){
-        super(config, data);
-    }
-}
-
+// class SettingMenuComponent extends Component {
+//     constructor(data){
+//         super(config, data);
+//     }
+// }
+//
+//
+// export {SettingMenuComponent};
+let SettingMenuComponent = Component.extend(config);
 
 export {SettingMenuComponent};

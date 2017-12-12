@@ -7,7 +7,7 @@ import historyItem from "./history-approve-HisItem/history-approve-HisItem";
 
 
 
-let config = {
+let historyTable = Component.extend({
     template: template,
     data: {
     },
@@ -19,7 +19,7 @@ let config = {
         this.el.find('.editName').html(`&nbsp;&nbsp;&nbsp;修改人:${name}`);
         if(this.data.history_data && this.data.history_data.data.length > 0){
             this.data.history_data.data.forEach((item)=>{
-                this.append(new historyItem(item), this.el.find('.history-table-body.history'));
+                this.append(new historyItem({data:item}), this.el.find('.history-table-body.history'));
             })
         }
         // this.el.find('.history-table-header').eq(0).css('display','block')
@@ -29,14 +29,10 @@ let config = {
         //     })
         // }
     }
-}
-class historyTable extends Component {
-    // constructor(data) {
-    //     config.data = data
-    //     super(config)
-    // }
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+})
+// class historyTable extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default historyTable

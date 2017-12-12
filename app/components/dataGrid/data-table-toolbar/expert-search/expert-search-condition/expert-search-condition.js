@@ -10,7 +10,7 @@ import DateControl from "../../grid-data-control/grid-data-control";
 import {AutoSelect} from '../../../../util/autoSelect/autoSelect';
 import TimeControl from "../../../../form/time-control/time-control";
 import expertSearch from '../expert-search';
-let config = {
+let expertCondition = Component.extend({
     template: template,
     data: {
         expertItemData: [],
@@ -81,19 +81,19 @@ let config = {
                 case "datetime":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let dateTimeControl = new DateTimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    let dateTimeControl = new DateTimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){}}});
                     dateTimeControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "date":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    let dateControl = new DateControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){}}});
                     dateControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "time":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let timeControl = new TimeControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    let timeControl = new TimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){}}});
                     timeControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "text":
@@ -170,16 +170,10 @@ let config = {
         });
         this.actions.inputSearch();
     }
-}
-class expertCondition extends Component {
-    // constructor(data) {
-    //     for (let d in data) {
-    //         config.data[d] = data[d]
-    //     }
-    //     super(config)
-    // }
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+})
+// class expertCondition extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default expertCondition

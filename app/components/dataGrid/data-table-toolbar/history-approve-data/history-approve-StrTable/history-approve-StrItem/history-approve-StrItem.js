@@ -5,7 +5,7 @@ import Component from "../../../../../../lib/component";
 import template from './history-approve-StrItem.html'
 
 
-let config = {
+let strikeItem = Component.extend({
     template: template,
     data: {
     },
@@ -14,11 +14,11 @@ let config = {
     },
     afterRender: function() {
     }
-}
-class strikeItem extends Component {
-    constructor(data) {
-        config.data = data
-        super(config)
-    }
-}
+})
+// class strikeItem extends Component {
+//     constructor(data) {
+//         config.data = data
+//         super(config)
+//     }
+// }
 export default strikeItem

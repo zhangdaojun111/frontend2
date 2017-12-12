@@ -102,16 +102,13 @@ let config={
              _.debounce(function(){_this.events.changeValue(_this.data)},200)();
         }
         this.destroyChildren();
-        this.append(new AutoSelect(yearData),this.el.find('.year'));
-        this.append(new AutoSelect(monthData),this.el.find('.month'));
+        this.append(new AutoSelect({data:yearData}),this.el.find('.year'));
+        this.append(new AutoSelect({data:monthData}),this.el.find('.month'));
         this.data.isInit=false;
     },
     beforeDestory(){
         this.el.off();
     }
 }
-export default class YearMonthControl extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let YearMonthControl = Component.extend(config)
+export default YearMonthControl;

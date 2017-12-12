@@ -6,17 +6,13 @@ import template from './calendar.html';
 import './calendar.scss';
 import '../../assets/scss/calendar/icon-calendar.scss';
 import LeftContent from './left-content/left-content';
-import RightContent from './right-content/right-content';
 import CalendarMain from './calendar.main/calendar.main';
-import CalendarExport from './calendar.main/calendar.export/calendar.export';
-
 import {CalendarService} from '../../services/calendar/calendar.service';
-import {PMAPI} from '../../lib/postmsg';
 import {CalendarTimeService} from '../../services/calendar/calendar.tool.service';
 
 import Mediator from '../../lib/mediator';
 
-let config = {
+let calendarConfig = {
     template: template,
     data: {
         title: 'calendar',
@@ -29,7 +25,7 @@ let config = {
             CalendarService.getCalendarTreeData().then(res => {
                 this.data.cancelFields = res['cancel_fields'];
                 this.el.find('.left-content').empty();
-                this.append(new LeftContent(res), this.el.find('.left-content'));
+                this.append(new LeftContent({data: {calendarTreeData: res}}), this.el.find('.left-content'));
                 Mediator.emit('Calendar: tool', {toolMethod: 'refresh', data: res['cancel_fields']});
                 this.hideLoading();
             });
@@ -57,22 +53,12 @@ let config = {
         }
         CalendarService.getCalendarTreeData().then(res => {
             this.cancelFields = res['cancel_fields'];
-            this.append(new LeftContent(res), this.el.find('.left-content'));
-            this.append(new CalendarMain(res['cancel_fields']), this.el.find('.main-content'));
+            this.append(new LeftContent({data: {calendarTreeData: res}}), this.el.find('.left-content'));
+            this.append(new CalendarMain({data: {cancel_fields: res['cancel_fields']}}), this.el.find('.main-content'));
             setTimeout(() => {
                 this.hideLoading();
             },800);
         });
-
-        // Mediator.on('Calendar: closeSetting', (data) => {
-        //     CalendarService.getCalendarTreeData().then(res => {
-        //         console.log(res);
-        //         this.data.cancelFields = res['cancel_fields'];
-        //         this.el.find('.left-content').empty();
-        //         this.append(new LeftContent(res), this.el.find('.left-content'));
-        //         // this.hideLoading();
-        //     });
-        // });
 
         this.el.on('click', '#monthView', () => {
             // 切换月视图
@@ -145,12 +131,6 @@ let config = {
         Mediator.removeAll('CalendarMain: remindCount');
     }
 };
-
-class Calendar extends Component {
-    constructor(newconfig = {}) {
-        // super(config);
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+let Calendar = Component.extend(calendarConfig);
 
 export default Calendar;

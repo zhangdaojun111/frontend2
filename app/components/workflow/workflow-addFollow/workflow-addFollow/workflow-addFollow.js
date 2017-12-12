@@ -49,9 +49,9 @@ let config = {
 					if (val) {
 						val.id = i;
 						if (checked.length === 0) {
-							this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:val}), this.el.find('#staffMulti'));
 						} else if (arr.indexOf(i) === -1) {
-							this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:val}), this.el.find('#staffMulti'));
 						}
 					}
 				});
@@ -96,9 +96,9 @@ let config = {
 					val.id = i;
 					val.preventClick = this.data.preventClick;
 					if (checked.length === 0) {
-						this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+						this.append(new SelectStaff({data:val}), this.el.find('#staffMulti'));
 					} else if (arr.indexOf(i) === -1) {
-						this.append(new SelectStaff(val), this.el.find('#staffMulti'));
+						this.append(new SelectStaff({data:val}), this.el.find('#staffMulti'));
 					}
 				}
 			});
@@ -115,9 +115,9 @@ let config = {
 					if (val) {
 						val.id = i;
 						if (checked.length === 0) {
-							this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:val}), this.el.find('#staffMulti'));
 						} else if (arr.indexOf(i) === -1) {
-							this.append(new SelectStaffNoDel(val), this.el.find('#staffMulti'));
+							this.append(new SelectStaffNoDel({data:val}), this.el.find('#staffMulti'));
 						}
 					}
 				});
@@ -156,18 +156,18 @@ let config = {
 		});
 		//注册SelectedStaff组件
 		Mediator.subscribe('workflow:pubCheck', (res) => {
-			this.append(new SelectedStaff(res), this.el.find('#selected'));
+			this.append(new SelectedStaff({data:res}), this.el.find('#selected'));
 			this.data.total++;
 			this.action.addtotal(this.data.total);
 		});
 		Mediator.subscribe('workflow:pubCheckNoDel', (res) => {
-			this.append(new SelectedStaffNoDel(res), this.el.find('#selected'));
+			this.append(new SelectedStaffNoDel({data:res}), this.el.find('#selected'));
 			this.data.total++;
 			this.action.addtotal(this.data.total);
 		});
 		//注册SelectedStaff组件
 		Mediator.subscribe('workflow:pubCheckSingle', (res) => {
-			this.append(new SelectedStaff(res), this.el.find('#selected'));
+			this.append(new SelectedStaff({data:res}), this.el.find('#selected'));
 			this.data.total++;
 			this.action.addtotal(this.data.total);
 		});
@@ -208,11 +208,16 @@ let config = {
 		});
 		//saving follower
 		this.el.on('click', '#saveFollower', () => {
+			console.log('哪个啊');
+			console.log(this.data.key);
 			let o = {};
 			let domSpan = this.el.find('#selected').find('span');
 			for (var i = 0; i < domSpan.length; i++) {
+				console.log(domSpan[i]);
 				o[$(domSpan[i]).data('id')] = $(domSpan[i]).text();
 			}
+			console.log('oooo');
+			console.log(o);
 			PMAPI.sendToParent({
 				type: PMENUM.close_dialog,
 				key: this.data.key,
@@ -234,8 +239,5 @@ let config = {
 	}
 };
 
-export default class WorkflowAddFollow extends Component {
-	constructor(data, events, newConfig) {
-		super($.extend(true, {}, config, newConfig, {data: data || {}}), {},events);
-	}
-}
+let WorkflowAddFollow = Component.extend(config);
+export default WorkflowAddFollow

@@ -257,8 +257,8 @@ let config = {
 };
 
 class ChartEditor extends Base {
-    constructor(data, event,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, event);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
     }
 
     /**
@@ -296,3 +296,4 @@ class ChartEditor extends Base {
 }
 
 export {ChartEditor}
+ChartEditor.config = config;
