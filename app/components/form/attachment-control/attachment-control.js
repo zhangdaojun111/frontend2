@@ -343,8 +343,10 @@ let config = {
             if(!deletedFiles){
                 return;
             }
-             for(let file of deletedFiles){
-                this.data.value.splice(this.data.value.indexOf(file),1);
+            for(let file of deletedFiles){
+                if(this.data.value.indexOf(file)!=-1){
+                    this.data.value.splice(this.data.value.indexOf(file),1);
+                }
                 this.el.find('#'+file).remove();
                 if(this.data.real_type == 23){
                     this.actions._deleteItemFromThumbnailList(file);
