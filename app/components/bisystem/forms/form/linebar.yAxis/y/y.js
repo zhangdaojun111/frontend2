@@ -34,10 +34,12 @@ let config = {
         }
     ],
     afterRender(){
-        this.field = new AutoComplete({},{
-            onSelect: (value)=> {
-                this.data.value.field = value;
-                this.trigger('onSelectY',value);
+        this.field = new AutoComplete({
+            events:{
+                onSelect: (value)=> {
+                    this.data.value.field = value;
+                    this.trigger('onSelectY',value);
+                }
             }
         });
         let typeConfig = {
@@ -48,16 +50,20 @@ let config = {
             ]
         };
         this.data.value.type = {name: "折线图", type:"line"};
-        this.type = new Select(typeConfig, {
+        this.type = new Select({
+            typeConfig:typeConfig,
+            events:{
             onChange: (value) => {
                 this.data.value.type = value === 'line' ? {name: "折线图", type:"line"} : {name: "柱状图", type:"bar"};
                 this.trigger('onSetBG', value);
-            }
+            }}
         });
-        this.group = new Text({placeholder: '分组名称'},{
-            onChange:(value) => {
-                this.data.value.group = value ? value : 0;
-            }
+        this.group = new Text({
+            placeholder: '分组名称',
+            events:{
+                onChange:(value) => {
+                    this.data.value.group = value ? value : 0;
+            }}
         });
         this.append(this.field, this.el.find(".form-chart-y-columns"));
         this.append(this.type, this.el.find(".form-chart-y-columns"));

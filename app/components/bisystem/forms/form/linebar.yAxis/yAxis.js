@@ -20,7 +20,9 @@ let config = {
          * 添加y轴
          */
         addY(data = {}) {
-            let y = new Y(data, {
+            let y = new Y({
+                data:data,
+                events:{
                 /**
                  * 增加y轴
                  * @param value
@@ -57,15 +59,15 @@ let config = {
                             checkBar = true;
                             break;
                         }
-                    };
+                    }
                     if(checkBar) {
                             this.data.areaStyle.data.value = [];
                             areaStyle.prop('checked', false);
                             areaStyle.prop('disabled', true);
                     } else {
                         areaStyle.prop('disabled', false);
-                    };
-                },
+                    }
+                },}
             });
             this.append(y, this.el.find('.form-chart-yAxis'));
             this.data.yAxis[y.componentId] = y;
@@ -137,6 +139,8 @@ class YaXis extends Base {
      */
     getYaxisData() {
         let data = [];
+        console.log(this.data.label);
+        console.log(this.data.areaStyle);
         Object.keys(this.data.yAxis).forEach(key => {
             data.push(Object.assign(
                 {
@@ -152,6 +156,8 @@ class YaXis extends Base {
      * @param yAxis = y轴数据
      */
     setValue(yAxis) {
+        console.log('-----------------');
+        console.log(yAxis);
         if (yAxis.length === 0) return false;
 
         Object.keys(this.data.yAxis).forEach(key => {
