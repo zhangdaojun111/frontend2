@@ -1999,6 +1999,14 @@ let config = {
 						this.data.childComponent[data[key].dfield] = buildInControl;
 						break;
 					case 'MultiLinkage':
+							if(data[key].dataList=='other_place'){
+							if(!this.data.buildin_options ||(this.data.buildin_options[data[key].id] && $.isEmptyObject(this.data.buildin_options[data[key].id]))){
+								let res=await FormService.getFormStaticBuildinData(this.actions.createPostJson());
+								this.data.oldData[key].dataList=data[key].dataList=(res.data && res.data.buildin_options)?res.data.buildin_options:{' ':{value:'',label:''}};
+							}else{
+								this.data.oldData[key].dataList=data[key].dataList=this.data.buildin_options[data[key].id];
+							}
+						}
 						let multiLinkageControl = new MultiLinkageControl({data:data[key], events:actions});
 						multiLinkageControl.render(single);
 						this.data.childComponent[data[key].dfield] = multiLinkageControl;
