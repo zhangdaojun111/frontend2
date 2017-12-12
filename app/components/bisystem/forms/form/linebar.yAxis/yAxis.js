@@ -106,7 +106,7 @@ let config = {
                     {
                         value:1, name: '显示折柱图值'
                     }
-                ],
+                ]
             });
             this.data.areaStyle = new Checkbox({
                 value: [],
@@ -114,9 +114,7 @@ let config = {
                     {
                         value:1, name: '显示折线图面积区域<b style="color:red;">(只有Y轴全部为"折线图"时才可以勾选此项)</b>'
                     }
-                ],
-            },{
-                onChange() {}
+                ]
             });
             this.append(this.data.label, this.el.find('.yAxis-setting'));
             this.append(this.data.areaStyle, this.el.find('.yAxis-setting'));
@@ -139,8 +137,6 @@ class YaXis extends Base {
      */
     getYaxisData() {
         let data = [];
-        console.log(this.data.label);
-        console.log(this.data.areaStyle);
         Object.keys(this.data.yAxis).forEach(key => {
             data.push(Object.assign(
                 {
@@ -156,8 +152,6 @@ class YaXis extends Base {
      * @param yAxis = y轴数据
      */
     setValue(yAxis) {
-        console.log('-----------------');
-        console.log(yAxis);
         if (yAxis.length === 0) return false;
 
         Object.keys(this.data.yAxis).forEach(key => {
