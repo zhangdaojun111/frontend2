@@ -103,7 +103,6 @@ let config = {
             event:'click',
             selector: '.view-attached-list',
             callback: function () {
-                console.log('before view list value:'+JSON.stringify(this.data.value));
                 if(this.data.value.length == 0){
                     return;
                 }
@@ -308,6 +307,59 @@ let config = {
             //             }
             //         }
             //     });
+            let item = new AttachmentQueueItem({file: file, real_type: this.data.real_type, fileOrder:i, toolbox:toolbox},
+                {
+                    changeFile: event => {
+                        if (event.event == 'delete') {
+                            ele.remove();
+                            this.data.queueItemEles.splice(this.data.queueItemEles.indexOf(ele),1);
+                            if (event.data != undefined){
+                                let i = 0;
+                                let l = this.data.queue.length;
+                                for(; i < l; i++){
+                                    let item = this.data.queue[i];
+                                    if(item.file.name == event.data.file.name && item.md5 == event.data.md5){
+                                        break;
+                                    }
+                                }
+                                if(i < l){
+                                    this.data.queue.splice(i,1);
+                                }
+                                this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
+                                this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                                this.actions._deleteItemFromThumbnailList(event.data.fileId);
+                                this.events.changeValue(this.data);
+                                this.actions._playQueueItems();
+                                if(this.data.value.length == 0){
+                                    this.el.find('.view-attached-list').css('cursor','auto');
+                                }
+                            }
+                        }
+                        if (event.event == 'finished') {
+                            this.data.value = this.data.value == '' ? [] : this.data.value;
+                            this.data.value.push(event.data.fileId);
+                            ele.attr('id',event.data.fileId);
+                            this.data.queue.push(event.data);
+                            this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                            if(this.data.value.length > 0){
+                                this.el.find('.view-attached-list').css('cursor','pointer');
+                            }
+                            this.trigger('changeValue', this.data);
+                            let obj = {};
+                            obj[event.data.fileId] = event.data.thumbnail;
+                            if(!event.data.thumbnail || event.data.thumbnail ==''){
+                                return;
+                            }
+                            if (this.data['thumbnailListComponent']) {
+                                this.data['thumbnailListComponent'].actions.addItem(obj);
+                            } else if(this.data.real_type == 23) {
+                                let comp = new ThumbnailList([obj],this.data.real_type);
+                                comp.render(this.el.find('.thumbnail-list-anchor'));
+                                this.data['thumbnailListComponent'] = comp;
+                            }
+                        }
+                    }
+                });
             this.el.find('.upload-process-queue').prepend(ele);
             item.render(ele);
             this.data.queueItemEles.unshift(ele);
@@ -341,8 +393,6 @@ let config = {
         },
         _updateDeleted:function(res){
             let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
-            console.log('deletedFiles');
-            console.dir(deletedFiles);
             if(!deletedFiles){
                 return;
             }
@@ -355,7 +405,6 @@ let config = {
                     this.actions._deleteItemFromThumbnailList(file);
                 }
             }
-            console.log('after deleted value:'+JSON.stringify(this.data.value));
             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
             if(this.data.value.length > 0){
                 this.el.find('.view-attached-list').css('cursor','pointer');
