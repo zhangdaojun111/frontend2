@@ -122,7 +122,7 @@ let SetAgent = Component.extend({
                 multiSelect: false,
                 editable: true,
                 choosed:temp
-            },event: {
+            },events: {
                 onSelect: function (choosed) {
                     that.actions.setAgentId(choosed);
                 }
