@@ -21,8 +21,7 @@ let config = {
                 let height = data.cell.size.height - 30;
                 this.el.find('#' + data.id).css('width',width).css('height',height);
             }
-
-            console.log(this.data);
+            
             let echartsService = new EchartsService(this.data);
             this.myChart = echartsService.myChart;
             let that = this;
@@ -44,7 +43,12 @@ let config = {
                     });
                 }
             });
-        }
+        },
+        updateChart(data) {
+            //重新渲染echarts
+            const option = this.echartsService.mapOption(data);
+            this.myChart.setOption(option,true);
+        },
     },
     beforeRender(){
         this.data.cellChart = {

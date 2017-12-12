@@ -29,12 +29,10 @@ let config = {
             event:'click',
             selector:'.table-operate a',
             callback:function (context,event) {
-                console.log(this.data,'.............................................');
                 let data = {
                     table_id: this.data.chart.table_id,
                     real_id:this.data.chart.data.rows[$(context).attr('data-index')][this.data.chart.data.rows[0].length - 1]
                 };
-                console.log(data);
                 this.actions.gridHandle($(context).attr('class'), data);
             }
         },
@@ -42,8 +40,6 @@ let config = {
     actions: {
         //操作列点击事件
         gridHandle: function (type,data) {
-            console.log(type);
-            console.log(data);
                 if (type == 'table-view') {
                     let obj = {
                         table_id: data.table_id,
@@ -243,9 +239,20 @@ export class CellTableComponent extends CellBaseComponent {
 
     static init(cellChart) {
         //格式化数据
+        let columns = cellChart.chart.columns;
         let data = cellChart.chart.data.rows;
+
+        //遍历列类型，找出需要格式化的列
+        let formatColIndex = [];
+
+        for (let k in columns){
+            if(columns[k]['type'].toString() === '10'){
+                formatColIndex.push(k);
+            }
+        }
+
         for (let k in data){
-            for (let n in data[k]){
+            for (let n of formatColIndex){
                 let temp = data[k][n];
                 if(CellTableComponent.isNumber(temp)){
                     //自定义设置精度
