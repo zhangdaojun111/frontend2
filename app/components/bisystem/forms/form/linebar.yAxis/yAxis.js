@@ -124,10 +124,11 @@ let config = {
     },
     binds: [],
     afterRender(){
+        console.log(this.data);
         this.actions.yMoreSetting();
         this.actions.addY();
     }
-}
+};
 
 class YaXis extends Base {
     constructor(extendConfig) {

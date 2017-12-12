@@ -24,7 +24,7 @@ let config ={
 		this.data.workFlowForm.render(this.el.find('#workflow-form'));
 		this.actions.subscribe();
 	}
-}
+};
 
-let AddWfInit = Component.extend(config)
+let AddWfInit = Component.extend(config);
 export default AddWfInit

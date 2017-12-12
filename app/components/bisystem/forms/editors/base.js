@@ -41,6 +41,7 @@ class Base extends Component {
         super($.extend(true,{},extendConfig));
     }
     drawForm(container){
+        console.log(this.data);
         let options = this.data.options;
         this.formItems = {};
         options.forEach((item) => {
