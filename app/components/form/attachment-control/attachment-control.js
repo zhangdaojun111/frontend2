@@ -109,17 +109,17 @@ let config = {
                 }
                 //初始化清空一下缓存
                 //支持低版本的chrome
-                if((new URL(document.URL)).searchParams!=undefined){
-                    Storage.init((new URL(document.URL)).searchParams.get('key'));
-                } else {
-                    let params = (new URL(document.URL)).search.split("&");
-                    params.forEach((param)=>{
-                        if(param.indexOf('key')!=-1){
-                            Storage.init(param.replace('key=',''));
-                        }
-                    })
-                }
-                console.log((new URL(document.URL)).searchParams.get('key'));
+                // if((new URL(document.URL)).searchParams!=undefined){
+                //     Storage.init((new URL(document.URL)).searchParams.get('key'));
+                // } else {
+                //     let params = (new URL(document.URL)).search.split("&");
+                //     params.forEach((param)=>{
+                //         if(param.indexOf('key')!=-1){
+                //             Storage.init(param.replace('key=',''));
+                //         }
+                //     })
+                // }
+                Storage.init('null');
                 Storage.deleteItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
                 FormService.getAttachment({
                     file_ids:JSON.stringify(this.data.value),
@@ -343,7 +343,6 @@ let config = {
             let deletedFiles = Storage.getItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
             console.log('deletedFiles');
             console.dir(deletedFiles);
-            console.dir(window.localStorage);
             if(!deletedFiles){
                 return;
             }
