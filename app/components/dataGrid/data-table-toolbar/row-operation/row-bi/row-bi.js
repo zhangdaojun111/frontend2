@@ -134,7 +134,7 @@ let rowBi = Component.extend({
         }
     ],
     afterRender: function (){
-        PMAPI.getIframeParams(window.config.key).then((res) => {
+        PMAPI.getIframeParams(window.config.key,window.parent).then((res) => {
             this.data.params = res.data;
             let json = {
                 table_id: this.data.params.parent_table_id,
