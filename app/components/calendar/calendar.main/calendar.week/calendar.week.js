@@ -21,7 +21,7 @@ let config = {
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
         this.data.weekData.forEach(item => {
-            this.append(new TableGrid({bodyData: item, type: 'week'}), this.el.find('.week-body'));
+            this.append(new TableGrid({data:{bodyData: item, type: 'week'}}), this.el.find('.week-body'));
         });
     }
 };
