@@ -25,8 +25,10 @@ let config = {
     afterRender() {}
 };
 
-export class CanvasHeaderMenuComponent extends Component {
-    constructor(data, events,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, events);
-    }
-}
+export let CanvasHeaderMenuComponent = Component.extend(config);
+
+// export class CanvasHeaderMenuComponent extends Component {
+//     constructor(data, events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig), data, events);
+//     }
+// }

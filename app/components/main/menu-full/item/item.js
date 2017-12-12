@@ -4,7 +4,7 @@ import Mediator from '../../../../lib/mediator';
 import 'jquery-ui/ui/widgets/tooltip';
 import './item.scss';
 
-let config = {
+let FullMenuItem = Component.extend({
     template: template,
     data: {
         type: 'full',
@@ -323,11 +323,11 @@ let config = {
                     type: this.data.type
                 });
 
-                let component = new FullMenuItem(newData, {
+                let component = new FullMenuItem({data:newData,events:{
                     onSubCheckboxChange: function (value) {
                         that.actions.checkChildrenChecked();
                     }
-                });
+                }});
                 this.append(component, this.childlist, 'li');
                 this.data.listComp.push(component);
             });
@@ -350,12 +350,6 @@ let config = {
             // this.actions.showChildrenAtFull();
         }
     }
-};
-
-class FullMenuItem extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+});
 
 export {FullMenuItem};

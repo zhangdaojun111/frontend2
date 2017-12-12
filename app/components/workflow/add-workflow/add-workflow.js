@@ -387,9 +387,5 @@ let config={
         Mediator.removeAll('workflow:getParams');
     }
 };
-export default class AddWorkflow extends Component{
-    constructor(data,newConfig){
-        config.data.obj = data;
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+let AddWorkflow = Component.extend(config)
+export default AddWorkflow

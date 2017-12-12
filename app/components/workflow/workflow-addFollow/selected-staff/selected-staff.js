@@ -15,14 +15,5 @@ let config={
     afterRender(){
     }
 };
-class SelectedStaff extends Component{
-    // constructor (data){
-    //     super(config,data);
-    // }
-
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
-
-export default SelectedStaff;
+let SelectedStaff = Component.extend(config);
+export default SelectedStaff

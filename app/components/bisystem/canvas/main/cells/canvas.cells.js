@@ -157,26 +157,30 @@ let config = {
                 }
             }
 
-            let cell = new CanvasCellComponent(data,{
-                onDrag: (componentId) => {
-                    let comp = this.data.cells[componentId];
-                    this.data.cellMaxZindex++;
-                    comp.data.cellMaxZindex = comp.data.cell.size.zIndex = this.data.cellMaxZindex;
-                },
+            let cell = new CanvasCellComponent({
+                data:data,
+                events:{
+                    onDrag: (componentId) => {
+                        let comp = this.data.cells[componentId];
+                        this.data.cellMaxZindex++;
+                        comp.data.cellMaxZindex = comp.data.cell.size.zIndex = this.data.cellMaxZindex;
+                    },
 
-                onUpdateLayout:(data) => {
-                    this.data.cells[data.componentId].data.cell = data.cell;
-                    if (data['deep_clear']) {
-                        this.data.cells[data.componentId].data.cell.deep_clear = data.deep_clear;
-                    }
-                },
+                    onUpdateLayout:(data) => {
+                        this.data.cells[data.componentId].data.cell = data.cell;
+                        if (data['deep_clear']) {
+                            this.data.cells[data.componentId].data.cell.deep_clear = data.deep_clear;
+                        }
+                    },
 
-                onRemoveLayout:(componentId) => {
-                    delete this.data.cells[componentId];
-                },
+                    onRemoveLayout:(componentId) => {
+                        console.log(this.data);
+                        delete this.data.cells[componentId];
+                    },
+                }
             });
             let $wrap;
-            console.log(this.data.firstView);
+
             if(this.data.firstView === true){
                 $wrap = this.el.find('.current');
                 this.data.deleteComponentArr.push(cell);
@@ -297,6 +301,7 @@ let config = {
          * 保存画布布局
          */
         saveCanvas() {
+            console.log(this.data.cells,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
             let cells = Object.values(this.data.cells).map(cell => cell.data.cell);
             const data = {
                 view_id: this.data.currentViewId,
@@ -442,9 +447,11 @@ let config = {
     beforeDestory() {}
 };
 
-export class CanvasCellsComponent extends Component {
-    constructor(id, events,extendConfig) {
-        super($.extend(true,{},config,extendConfig), {currentViewId: id});
-    }
-}
+export let CanvasCellsComponent = Component.extend(config);
+
+// export class CanvasCellsComponent extends Component {
+//     constructor(id, events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig), {currentViewId: id});
+//     }
+// }
 

@@ -8,6 +8,7 @@ import 'jquery-ui/ui/widgets/droppable';
 import 'jquery-ui/ui/widgets/sortable';
 import CalendarRemindTaskItem from './calendar.remind.task.item/calendar.remind.task.item';
 import Mediator from '../../../../../lib/mediator';
+import MSG from '../../../../../lib/msgbox';
 
 let config = {
     template: template,
@@ -94,12 +95,53 @@ let config = {
                 lastNum = 50;
             }
             for(let i= 0;i < lastNum;i ++){
-                this.append(new CalendarRemindTaskItem({data:taskData[firstNum + i], type: this.data.type}), this.el.find('.task-list'));
+                let data = taskData[firstNum + i],
+                    remindTaskData = {},
+                    isHomeCalendar = false,
+                    isFinishedTask = false,
+                    isNone = false;
+                if(data['data3show']) {
+                    remindTaskData = data['data3show'][0][0];
+                }
+                if(data.tableName === "首页日历事件表"){
+                    isHomeCalendar = true;
+                    if(remindTaskData['selectLabel']) {
+                        let checkText = '已';
+                        let uncheckText = '未';
+                        if(remindTaskData['selectLabel'].indexOf(checkText) >= 0) {
+                            isFinishedTask = true;
+                        }else if (remindTaskData['selectLabel'].indexOf(uncheckText) >= 0) {
+                            isFinishedTask = false
+                        }
+                    } else {
+                        isNone = true;
+                    }
+                }else{
+                    if(remindTaskData === undefined) {
+                        MSG.alert('undefined!该表未设置代表字段');
+                    }
+                    if(remindTaskData['selectLabel']) {
+                        isFinishedTask = true;
+                    } else {
+                        isNone = true;
+                    }
+                }
+
+                let calendarRemindTaskItem = new CalendarRemindTaskItem({
+                    data: {
+                        remindTaskItemData: taskData[firstNum + i],
+                        type: this.data.type,
+                        remindTaskData: remindTaskData,
+                        isHomeCalendar: isHomeCalendar,
+                        isFinishedTask: isFinishedTask,
+                        isNone: isNone,
+                    }
+                });
+                this.append(calendarRemindTaskItem, this.el.find('.task-list'));
+                // this.append(new CalendarRemindTaskItem({data:taskData[firstNum + i], type: this.data.type}), this.el.find('.task-list'));
             }
             this.data.firstNum += 50;
         },
-
-
     },
     binds:[
         //拖动进入.task-item排序
@@ -150,16 +192,6 @@ let config = {
         }
         //滚动条滚动 动态加载过大数据
         let that = this;
-        // this.el.find('.task-list').scroll(function() {
-        //     let divHeight = $(this).height();
-        //     let nScrollHeight = $(this)[0].scrollHeight;
-        //     let scrollTop = $(this)[0].scrollTop;
-        //     if(scrollTop + divHeight >= nScrollHeight) {
-        //         if(that.data.firstNum < that.data.EndNum){
-        //             that.actions.newRemindTaskItem(that.data.firstNum,that.data.EndNum);
-        //         }
-        //     }
-        // });
         // 给对应日历棋盘格创建提醒数据
         let taskData = this.data.bodyData['data'];
         if(taskData && taskData.length > 0) {
@@ -184,12 +216,15 @@ let config = {
     }
 };
 
-class TableGrid extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.bodyData = data['bodyData'];
-        config.data.type = data.type;
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class TableGrid extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.bodyData = data['bodyData'];
+//         config.data.type = data.type;
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default TableGrid;
+let TableGrid = Component.extend(config);
 
 export default TableGrid;

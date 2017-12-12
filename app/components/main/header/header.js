@@ -11,7 +11,7 @@ import {GlobalSearch} from '../global-search/global-search';
 import {OnlineDisplay} from "../online-users/online-users";
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
 
-let config = {
+let HeaderComponent = Component.extend({
     template: template,
     data: {
         asideSize: 'full',
@@ -236,13 +236,7 @@ let config = {
         // Mediator.removeAll('socket:voice_message');
         // Mediator.removeAll('socket:workflow_approve_msg');
     }
-}
-
-class HeaderComponent extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig))
-    }
-}
+});
 
 export {HeaderComponent};
 

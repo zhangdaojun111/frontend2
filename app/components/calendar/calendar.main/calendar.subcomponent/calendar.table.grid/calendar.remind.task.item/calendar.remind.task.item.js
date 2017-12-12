@@ -4,7 +4,6 @@
 import Component from "../../../../../../lib/component";
 import template from './calendar.remind.task.item.html';
 import './calendar.remind.task.item.scss';
-import CalendarRemind from '../../../calendar.remind/calendar.remind';
 import {PMAPI} from '../../../../../../lib/postmsg';
 import MSG from '../../../../../../lib/msgbox';
 import Mediator from '../../../../../../lib/mediator';
@@ -93,34 +92,6 @@ let config = {
                     }).then(data => {
                 });
             })
-            // let tempData = this.data.remindTaskItemData.data2show[0];
-            // if(tempData.length > 0) {
-            //     tempData.forEach(item => {
-            //         if(typeof item['fieldValue'] === "string"){
-            //             item['fieldValue'] = item['fieldValue'].replace(/(\n)/g, '');
-            //         }
-            //
-            //     })
-            // }
-            // PMAPI.openDialogByIframe(
-            //     '/iframe/calendarOpenRemind/',
-            //     {
-            //         width: '1200',
-            //         height: '640',
-            //         title: '查看',
-            //         modal: true,
-            //     },{
-            //         remindTable: this.data.remindTaskItemData.tableName,
-            //         remindDateProp: this.data.remindTaskItemData.fieldName,
-            //         remindDetail: this.data.remindTaskItemData.data2show,
-            //         remindDateTime: this.data.remindTaskItemData.time,
-            //         remindTableId: this.data.remindTaskItemData.tableId,
-            //         remindDate: this.data.remindTaskItemData.time.substr(0,10),
-            //         remindTime: this.data.remindTaskItemData.time.substr(11,5),
-            //         remindRealId: this.data.remindTaskItemData.real_id.substr(2,24),
-            //     }).then(data => {
-            //         console.log(data);
-            // });
         },
 
         /**
@@ -229,14 +200,6 @@ let config = {
             this.actions.openWorkflow();
         }
 
-        // this.el.on('dragstart','.task-item',function(ev){
-        //     if(that.data.type === 'month' && that.data.remindTaskItemData['isDrag'] !== 0) {
-        //         let event = ev.originalEvent;
-        //         $(this).addClass("task-item-draggable");
-        //         event.dataTransfer.setData("Text",JSON.stringify(that.data.remindTaskItemData));
-        //         return true;
-        //     }
-        // });
         $(document).click(function(){
             that.el.parents(".calendar-main-content").find(".select-options").hide();
             that.el.parents(".calendar-main-content").find(".task-state-icon").removeClass("options-show");
@@ -244,39 +207,43 @@ let config = {
     }
 };
 
-class CalendarRemindTaskItem extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.remindTaskItemData = data['data'];
-        config.data.type = data['type'];
-        if(data['data']['data3show']) {
-            config.data.remindTaskData = data['data']['data3show'][0][0];
-        }
-        if(config.data.remindTaskItemData.tableName === "首页日历事件表"){
-            config.data.isHomeCalendar = true;
-            //config.data.isFinishedTask =  config.data.TestValue.test(config.data.remindTaskData.fieldValue);
-            if(config.data.remindTaskData['selectLabel']) {
-                let checkText = '已';
-                let uncheckText = '未';
-                if(config.data.remindTaskData['selectLabel'].indexOf(checkText) >= 0) {
-                    config.data.isFinishedTask = true;
-                }else if (config.data.remindTaskData['selectLabel'].indexOf(uncheckText) >= 0) {
-                    config.data.isFinishedTask = false
-                }
-            } else {
-                config.data.isNone = true;
-            }
-        }else{
-            if(config.data.remindTaskData === undefined) {
-                MSG.alert('undefined!该表未设置代表字段');
-            }
-            if(config.data.remindTaskData['selectLabel']) {
-                config.data.isFinishedTask = true;
-            } else {
-                config.data.isNone = true;
-            }
-        }
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarRemindTaskItem extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.remindTaskItemData = data['data'];
+//         config.data.type = data['type'];
+//         if(data['data']['data3show']) {
+//             config.data.remindTaskData = data['data']['data3show'][0][0];
+//         }
+//         if(config.data.remindTaskItemData.tableName === "首页日历事件表"){
+//             config.data.isHomeCalendar = true;
+//             //config.data.isFinishedTask =  config.data.TestValue.test(config.data.remindTaskData.fieldValue);
+//             if(config.data.remindTaskData['selectLabel']) {
+//                 let checkText = '已';
+//                 let uncheckText = '未';
+//                 if(config.data.remindTaskData['selectLabel'].indexOf(checkText) >= 0) {
+//                     config.data.isFinishedTask = true;
+//                 }else if (config.data.remindTaskData['selectLabel'].indexOf(uncheckText) >= 0) {
+//                     config.data.isFinishedTask = false
+//                 }
+//             } else {
+//                 config.data.isNone = true;
+//             }
+//         }else{
+//             if(config.data.remindTaskData === undefined) {
+//                 MSG.alert('undefined!该表未设置代表字段');
+//             }
+//             if(config.data.remindTaskData['selectLabel']) {
+//                 config.data.isFinishedTask = true;
+//             } else {
+//                 config.data.isNone = true;
+//             }
+//         }
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default CalendarRemindTaskItem;
+
+let CalendarRemindTaskItem = Component.extend(config);
 
 export default CalendarRemindTaskItem;

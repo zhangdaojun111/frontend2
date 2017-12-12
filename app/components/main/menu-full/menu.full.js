@@ -3,7 +3,7 @@ import template from './menu.full.html';
 import './menu.full.scss';
 import {FullMenuItem} from './item/item';
 
-let config = {
+let MenuComponent =  Component.extend({
     template: template,
     data: {
         list: [],
@@ -98,11 +98,11 @@ let config = {
             this.destroyChildren();
             this.data.listComp = [];
             this.data.list.forEach((data) => {
-                let component = new FullMenuItem(_.defaultsDeep({}, data, {
+                let component = new FullMenuItem({data:_.defaultsDeep({}, data, {
                     root: true,
                     offset: 0,
                     type: this.data.type
-                }));
+                })});
                 this.append(component, this.$root, 'li');
                 this.data.listComp.push(component);
             });
@@ -154,13 +154,6 @@ let config = {
     beforeDestory: () => {
         $(window).off('resize.menu')
     }
-};
-
-class MenuComponent extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
-
+});
 
 export {MenuComponent};

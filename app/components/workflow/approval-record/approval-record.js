@@ -125,8 +125,5 @@ let config={
     }
 
 };
-export default class workflowRecord extends Component{
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+let workflowRecord = Component.extend(config);
+export default workflowRecord

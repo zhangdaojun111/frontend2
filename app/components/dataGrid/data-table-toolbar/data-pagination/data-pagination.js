@@ -11,7 +11,7 @@ import msgBox from '../../../../lib/msgbox';
 import {dataTableService} from "../../../../services/dataGrid/data-table.service";
 import {HTTP} from "../../../../lib/http"
 
-let config = {
+let dataPagination = Component.extend({
     template: template,
     data: {
         tableId: '',
@@ -331,12 +331,12 @@ let config = {
             })
         }
     }
-};
-class dataPagination extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+});
+// class dataPagination extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 
 export default dataPagination;

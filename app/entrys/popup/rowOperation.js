@@ -11,13 +11,13 @@ $(document).ready(function(){
     let type = window.config.operationType;
     let com = null;
     if( type == 'bi' ){
-        com = new rowBi( {} );
+        com = new rowBi({data: {}});
     }
     if( type == 'excute' ){
-        com = new excuteOperation( {} );
+        com = new excuteOperation({data: {}});
     }
     if( type == 'lifeCycle' ){
-        com = new lifeCycle( {} );
+        com = new lifeCycle({data: {}});
     }
     if( com ){
         com.render($('#rowOperation'));

@@ -206,6 +206,9 @@ let config = {
 
         ]
     },
+    beforeRender(){
+        this.data.chart_id = this.data.id
+    },
     async afterRender() {
         if(this.data.chart_id) {
             const res = await this.actions.getChartData(this.data.chart_id);
@@ -227,11 +230,6 @@ let config = {
     }
 };
 
-class CommentEditor extends Base {
-    constructor(data,extendConfig) {
-        config.data.chart_id = data.id ? data.id : null;
-        super($.extend(true,{},config,extendConfig));
-    }
-}
+let CommentEditor = Base.extend(config);
 
 export {CommentEditor}

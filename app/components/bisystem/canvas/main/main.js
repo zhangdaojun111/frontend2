@@ -100,7 +100,11 @@ let config = {
             this.data.currentViewId = viewId && this.data.headerComponents.data.menus[viewId] ? viewId.toString() : window.config.bi_views[0] && window.config.bi_views[0].id;
             if (this.data.currentViewId) {
                 this.data.headerComponents.data.menus[this.data.currentViewId].actions.focus();
-                this.data.cells = new CanvasCellsComponent(this.data.currentViewId);
+                this.data.cells = new CanvasCellsComponent({
+                    data:{
+                        currentViewId:this.data.currentViewId
+                    }
+                });
                 this.data.cells.actions.loadChartFinish = this.actions.loadChartFinish;
                 this.data.cells.render(this.el.find('.cells-container'));
             }
@@ -117,54 +121,57 @@ let config = {
             // if (!this.data.singleMode) {
             //
             // }
-            let header = new CanvasHeaderComponent({}, {
-                selectAllCanvas: () => {
-                    this.data.cells.actions.selectAllCells();
-                },
-                cancelSelectCanvas: () => {
-                    this.data.cells.actions.cancelSelectCells();
-                },
-                reverseSelectCanvas: () => {
-                    this.data.cells.actions.reverseSelectCells();
-                },
-                onAddCell: (cell) => {
-                    this.data.cells.actions.addCell(cell);
-                },
+            let header = new CanvasHeaderComponent({
+                data:{},
+                events: {
+                    selectAllCanvas: () => {
+                        this.data.cells.actions.selectAllCells();
+                    },
+                    cancelSelectCanvas: () => {
+                        this.data.cells.actions.cancelSelectCells();
+                    },
+                    reverseSelectCanvas: () => {
+                        this.data.cells.actions.reverseSelectCells();
+                    },
+                    onAddCell: (cell) => {
+                        this.data.cells.actions.addCell(cell);
+                    },
 
-                onSaveCanvas: () => {
-                    this.data.cells.actions.saveCanvas();
-                },
-                onWhenPrintCellDataFinish: async () => {
-                    msgbox.showLoadingRoot();
-                    if (Array.isArray(this.data.views) && this.data.views.length > 0) {
-                        const res = await this.data.cells.actions.cellsDataIsFinish();
+                    onSaveCanvas: () => {
+                        this.data.cells.actions.saveCanvas();
+                    },
+                    onWhenPrintCellDataFinish: async () => {
+                        msgbox.showLoadingRoot();
+                        if (Array.isArray(this.data.views) && this.data.views.length > 0) {
+                            const res = await this.data.cells.actions.cellsDataIsFinish();
+                        }
+                        if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
+                            $('.bi-container').css({'width': 'auto', 'height': 'auto'});
+                        }
+                        window.print();
+                        msgbox.hideLoadingRoot();
+                        if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
+                            let w = $(self.frameElement).closest('.iframes').width();
+                            let h = $(self.frameElement).closest('.iframes').height();
+                            $('.bi-container').css({'width': w, 'height': h});
+                        }
+                    },
+                    doFullScreenCarousel: async () => {
+                        if (this.data.isNewWindow) {
+                            this.actions.launchFullScreen(document.documentElement);
+                        } else {
+                            msgbox.showTips('按ESC退出轮播模式');
+                        }
+                        if (this.data.firstCarousel) {
+                            this.data.cells.actions.loadSecondView();
+                            this.data.firstCarousel = false;
+                        }
+                        let res = await this.actions.getCarouselSetting();
+                        this.data.carouselInterval = res.data.carousel_time;
+                        this.data.operateInterval = res.data.stop_time;
+                        this.data.carouselFlag = true;
+                        this.actions.checkCanCarousel(this.data.carouselInterval);
                     }
-                    if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
-                        $('.bi-container').css({'width': 'auto', 'height': 'auto'});
-                    }
-                    window.print();
-                    msgbox.hideLoadingRoot();
-                    if (self.frameElement && self.frameElement.tagName == "IFRAME" && !this.data.singleMode) {
-                        let w = $(self.frameElement).closest('.iframes').width();
-                        let h = $(self.frameElement).closest('.iframes').height();
-                        $('.bi-container').css({'width': w, 'height': h});
-                    }
-                },
-                doFullScreenCarousel: async () => {
-                    if (this.data.isNewWindow) {
-                        this.actions.launchFullScreen(document.documentElement);
-                    }else{
-                        msgbox.showTips('按ESC退出轮播模式');
-                    }
-                    if(this.data.firstCarousel){
-                        this.data.cells.actions.loadSecondView();
-                        this.data.firstCarousel = false;
-                    }
-                    let res = await this.actions.getCarouselSetting();
-                    this.data.carouselInterval = res.data.carousel_time;
-                    this.data.operateInterval = res.data.stop_time;
-                    this.data.carouselFlag = true;
-                    this.actions.checkCanCarousel(this.data.carouselInterval);
                 }
             });
             this.append(header, this.el.find('.views-header'));
@@ -418,11 +425,13 @@ let config = {
     beforeDestory:function () {}
 };
 
-export class CanvasMain extends Component {
-    constructor(data, events,extendConfig) {
-        config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
-        super($.extend(true,{},config,extendConfig), data, events);
-    }
-}
+export let CanvasMain = Component.extend(config);
+
+// export class CanvasMain extends Component {
+//     constructor(data, events,extendConfig) {
+//         config.data.isViewEmpty = window.config.bi_views[0] ? false : true;
+//         super($.extend(true,{},config,extendConfig), data, events);
+//     }
+// }
 
 

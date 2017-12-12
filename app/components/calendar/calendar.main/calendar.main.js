@@ -286,7 +286,7 @@ let config = {
                 this.data.scheduleDataList.push(day);
             }
             this.el.find('.calendar-main-content').empty();
-            this.append(new CalendarSchedule({startDate: startDate, endDate: endDate, scheduleDataList: this.data.scheduleDataList}), this.el.find(".calendar-main-content"));
+            this.append(new CalendarSchedule({data: {scheduleStart: startDate, scheduleEnd: endDate, scheduleDataList: this.data.scheduleDataList}}), this.el.find(".calendar-main-content"));
         },
 
         /**
@@ -376,16 +376,21 @@ let config = {
             if(type === 'month') {
                 this.data.selectedDateShow = this.data.selectData.y +'年'+ ( this.data.selectData.m + 1 )  +'月';
                 $('.nowDate').html(this.data.selectedDateShow);
-                this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
+                this.append(new CalendarMonth({data:{monthBodyDataList: this.data.monthDataList}}), this.el.find(".calendar-main-content"));
             } else if (type === 'week') {
                 this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 this.actions.createWeekCalendar();
-                this.append(new CalendarWeek(this.data.weekDataList), this.el.find(".calendar-main-content"));
+                this.append(new CalendarWeek({
+                    data: {
+                        weekListHead: this.data.weekDataList[0],
+                        weekData: this.data.weekDataList[1],
+                    }
+                }), this.el.find(".calendar-main-content"));
                 Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
             } else if (type === 'day') {
                 this.actions.createMonthCalendar(this.data.selectData.y, this.data.selectData.m);
                 this.actions.createDayCalendar();
-                this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
+                this.append(new CalendarDay({data:{data: this.data.dayDataList}}), this.el.find(".calendar-main-content"));
                 Mediator.emit('CalendarMain: date',{from_date: this.data.from_date, to_date: this.data.to_date});
             }
         },
@@ -558,11 +563,16 @@ let config = {
             }
             this.el.find('.calendar-main-content').empty();
             if(this.data.calendarContent === 'month') {
-                this.append(new CalendarMonth(this.data.monthDataList), this.el.find(".calendar-main-content"));
+                this.append(new CalendarMonth({data:{monthBodyDataList: this.data.monthDataList}}), this.el.find(".calendar-main-content"));
             } else if(this.data.calendarContent === 'week') {
-                this.append(new CalendarWeek(this.data.weekDataList), this.el.find(".calendar-main-content"));
+                this.append(new CalendarWeek({
+                    data: {
+                        weekListHead: this.data.weekDataList[0],
+                        weekData: this.data.weekDataList[1],
+                    }
+                }), this.el.find(".calendar-main-content"));
             } else if(this.data.calendarContent === 'day') {
-                this.append(new CalendarDay(this.data.dayDataList), this.el.find(".calendar-main-content"));
+                this.append(new CalendarDay({data:{data: this.data.dayDataList}}), this.el.find(".calendar-main-content"));
             } else if(this.data.calendarContent === 'schedule') {
                 this.actions.makeScheduleData(this.data.scheduleStart, this.data.scheduleEnd);
             }
@@ -854,11 +864,14 @@ let config = {
     }
 };
 
-class CalendarMain extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.cancel_fields = data;
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarMain extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.cancel_fields = data;
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default CalendarMain;
+let CalendarMain = Component.extend(config);
 
 export default CalendarMain;

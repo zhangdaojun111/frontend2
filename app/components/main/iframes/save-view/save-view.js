@@ -12,7 +12,7 @@ import {TabService} from "../../../../services/main/tabService"
 import Mediator from "../../../../lib/mediator"
 import msgbox from "../../../../lib/msgbox";
 
-let config = {
+let SaveViewController = Component.extend({
     template:template,
     data:{
         favoriteList:[],
@@ -255,20 +255,12 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-
-class SaveViewController extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig));
-        this.data.currentIframesList = data;
-    }
-}
+});
 
 export const SaveView = {
     el:null,
     show: function (data) {
-        let component = new SaveViewController(data);
+        let component = new SaveViewController({data:{currentIframesList:data}});
         this.el = $('<div id="save-view">').appendTo(document.body);
         component.render(this.el);
         this.el.erdsDialog({

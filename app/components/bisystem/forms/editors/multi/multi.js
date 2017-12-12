@@ -1,7 +1,7 @@
 import {Base} from '../base';
 import template from './multi.html';
 
-import {chartName,theme,icon,button} from '../form.chart.common';
+import {chartName, theme, icon, button} from '../form.chart.common';
 import {ChartFormService} from '../../../../../services/bisystem/chart.form.service';
 import msgbox from "../../../../../lib/msgbox";
 import Mediator from '../../../../../lib/mediator';
@@ -16,17 +16,17 @@ let config = {
         /**
          * 初始化图表操作
          */
-       async init() {
+        async init() {
             this.formItems['customAccuracy'].trigger('onChange');
-           // 获取数据来源
-          // let p1 =  ChartFormService.getChartSource().then(res => {
-          //       if (res['success'] === 1) {
-          //           this.data.source = res['data'];
-          //          // this.formItems['source'].setList(res['data']);
-          //       } else {
-          //           msgbox.alert(res['error'])
-          //       }
-          //   });
+            // 获取数据来源
+            // let p1 =  ChartFormService.getChartSource().then(res => {
+            //       if (res['success'] === 1) {
+            //           this.data.source = res['data'];
+            //          // this.formItems['source'].setList(res['data']);
+            //       } else {
+            //           msgbox.alert(res['error'])
+            //       }
+            //   });
             const p1 = await ChartFormService.getChartSource();
             if (p1['success'] === 1) {
                 this.data.source = p1['data'];
@@ -35,19 +35,20 @@ let config = {
                 msgbox.alert(p1['error'])
             }
 
+
             // 获取图标
-          let p2 = ChartFormService.getChartIcon().then(res => {
-               if (res['success'] === 1) {
-                   let icons =[];
-                   icons = res['data'].map(icon => {
-                       return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
-                   });
-                   this.formItems['icon'].setList(icons)
-               } else {
-                   msgbox.alert(res['error'])
-               }
-           });
-          return Promise.all([p1,p2])
+            let p2 = ChartFormService.getChartIcon().then(res => {
+                if (res['success'] === 1) {
+                    let icons = [];
+                    icons = res['data'].map(icon => {
+                        return {value: icon, name: `<img src=/bi/download_icon/?file_id=${icon} />`}
+                    });
+                    this.formItems['icon'].setList(icons)
+                } else {
+                    msgbox.alert(res['error'])
+                }
+            });
+            return Promise.all([p1, p2])
         },
 
         /**
@@ -55,18 +56,18 @@ let config = {
          */
         async getChartData(id) {
             let layout = {
-                "chart_id":id,
-                "floor":0,
-                "view_id":"",
-                "layout_id":"",
-                "xOld":{},
-                "row_id":0,
-                "deep_info":{}
+                "chart_id": id,
+                "floor": 0,
+                "view_id": "",
+                "layout_id": "",
+                "xOld": {},
+                "row_id": 0,
+                "deep_info": {}
             };
             const data = {
-                layouts:[JSON.stringify(layout)],
-                query_type:'deep',
-                is_deep:1,
+                layouts: [JSON.stringify(layout)],
+                query_type: 'deep',
+                is_deep: 1,
             };
             const chart = await canvasCellService.getCellChart(data);
             return Promise.resolve(chart);
@@ -83,7 +84,7 @@ let config = {
             });
             let chart = {
                 assortment: 'multilist',
-                chartName:{id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
+                chartName: {id: this.data.chart ? this.data.chart.chartName.id : '', name: data.chartName},
                 icon: data.icon,
                 sources: sources,
                 theme: data.theme,
@@ -99,9 +100,9 @@ let config = {
                 }
             }
             //发送状态给子组件
-            Mediator.emit('bi:multi:chart',1);
+            Mediator.emit('bi:multi:chart', 1);
             //判断验证是否全部通过
-            if(pass && config.data.succ){
+            if (pass && config.data.succ) {
                 this.save(chart);
             }
             config.data.succ = true;
@@ -127,15 +128,18 @@ let config = {
         /**
          * 添加图表
          */
-        addChart(data) {
+         addChart(data) {
             let chart = new ChartEditor({
-                source: data
-            },{
-                onRemoveChart: (componentId) => {
-                    delete this.data.charts[componentId];
+                data:{
+                    source: data,
                 },
-                onChange:function (data) {
-                    config.data.succ =  data;
+                events:{
+                    onRemoveChart: (componentId) => {
+                        delete this.data.charts[componentId];
+                    },
+                    onChange: function (data) {
+                        config.data.succ = data;
+                    },
                 }
             });
             this.data.charts[chart.componentId] = chart;
@@ -155,13 +159,13 @@ let config = {
                 defaultValue: [],
                 list: [
                     {
-                        value:1, name: '自定义设置精度'
+                        value: 1, name: '自定义设置精度'
                     }
                 ],
                 type: 'checkbox',
-                class:'customAccuracy',
+                class: 'customAccuracy',
                 events: {
-                    onChange:function(value) {
+                    onChange: function (value) {
                         if (value && value[0]) {
                             this.formItems['customAccuracyNum'].el.show();
                         } else {
@@ -175,7 +179,7 @@ let config = {
                 name: 'customAccuracyNum',
                 defaultValue: '0',
                 category: 'number',
-                textTip:'请输入自定义精度：',
+                textTip: '请输入自定义精度：',
                 type: 'text',
                 class: 'customAccuracyNum',
                 events: {}
@@ -196,7 +200,7 @@ let config = {
         charts: {},
         succ: true,
     },
-    binds:[
+    binds: [
         {
             event: 'click',
             selector: '.add-chart-btn',
@@ -205,10 +209,13 @@ let config = {
             }
         }
     ],
+    beforeRender(){
+        this.data.chart_id = this.data.id
+    },
     async afterRender() {
         this.data.charts = {};
         this.data.chart_id = this.data.id;
-        if(this.data.chart_id) {
+        if (this.data.chart_id) {
             const res = await this.actions.getChartData(this.data.chart_id);
             if (res[0]['success'] === 1) {
                 this.data.chart = res[0]['data']
@@ -223,18 +230,21 @@ let config = {
 
         if (this.data.chart_id) {
             this.actions.fillChart(this.data.chart);
-        }else {
+        } else {
             this.actions.addChart(this.data.source);
         }
 
     },
-    firstAfterRender() {}
+    firstAfterRender() {
+    }
 };
 
-class MultiEditor extends Base {
-    constructor(data, event,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, event);
-    }
-}
+let MultiEditor = Base.extend(config);
 
-export {MultiEditor}
+// class MultiEditor extends Base {
+//     constructor(data, event,extendConfig) {
+//         super($.extend(true,{},config,extendConfig), data, event);
+//     }
+// }
+
+export {MultiEditor};

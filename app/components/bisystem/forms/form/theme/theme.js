@@ -80,6 +80,9 @@ let config = {
             }
         },
     ],
+    beforeRender(){
+
+    },
     afterRender(){
         //设置初始值
         this.data.value = this.data.colors;
@@ -97,8 +100,8 @@ let config = {
 };
 
 class Theme extends Base {
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig){
+        super($.extend(true,{},config,extendConfig))
     }
 
 
@@ -120,3 +123,4 @@ class Theme extends Base {
 }
 
 export {Theme}
+Theme.config = config;

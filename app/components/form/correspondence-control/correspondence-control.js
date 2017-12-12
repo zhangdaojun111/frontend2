@@ -4,6 +4,7 @@
  */
 
 import Component from '../../../lib/component'
+import Mediator from '../../../lib/mediator';
 import DataTableAgGrid from '../../dataGrid/data-table-page/data-table-agGrid/data-table-agGrid';
 import './correspondence-control.scss';
 import template from './correspondence-control.html';
@@ -38,17 +39,24 @@ let config={
             recordId:this.data.recordId || '',
             correspondenceField:this.data.dfield,
         }
-        let dataGrid=new DataTableAgGrid(config);
+        let dataGrid=new DataTableAgGrid({data: config});
         this.data.dataGrid=dataGrid;
         this.append(dataGrid,this.el.find('.correspondence-box'));
+	    Mediator.subscribe('form:correspondenceRequired:'+this.data["value"],(res)=>{
+		    if (!res) {
+			    this.el.find('#requiredLogo').removeClass().addClass('required');
+			    this.data.correspondenceHasValue=false;
+		    }else {
+			    this.el.find('#requiredLogo').removeClass().addClass('required2');
+			    this.data.correspondenceHasValue=true;
+		    }
+		    this.events.CorrespondenceRequiredChange(this.data);
+	    })
     },
 
     beforeDestory(){
         this.el.off();
     }
 }
-export default class Correspondence extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let Correspondence = Component.extend(config)
+export default Correspondence
