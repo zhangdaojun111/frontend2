@@ -309,11 +309,17 @@ let config = {
 						continue;
 					}
 				}
-				//子表必填
+				//子表必填 对应关系必填
 				for (let d in allData) {
 					if (allData[d].type == 'Songrid' && allData[d].required && allData[d].total == 0) {
 						error = true;
 						errArr.push('子表字段:' + allData[d].label + '是必填!');
+						errorMsg = Array.from(new Set(errArr)).join(' ');
+						break;
+					}
+					if(allData[d].type=='Correspondence' && allData[d].required && !allData[d].correspondenceHasValue){
+						error = true;
+						errArr.push('对应关系:' + allData[d].label + '是必填!');
 						errorMsg = Array.from(new Set(errArr)).join(' ');
 						break;
 					}
@@ -1598,9 +1604,17 @@ let config = {
 				},
 				emitDataIfInline: (data) => {
 					this.actions.emitDataIfInline(data);
+				},
+				CorrespondenceRequiredChange:(data)=>{
+					this.actions.CorrespondenceRequiredChange(data);
 				}
 			}
 			return actions;
+		},
+
+		//对应关系必填改变
+		CorrespondenceRequiredChange(data){
+			this.data.data[data.dfield].correspondenceHasValue=data.correspondenceHasValue;
 		},
 		//内联子表刷新事件
 		emitDataIfInline(data) {
@@ -1852,7 +1866,7 @@ let config = {
 			})
 		},
 		//动态创建组件
-		createFormControl() {
+		async createFormControl() {
 			let _this = this;
 			this.setData('childComponent', {});
 			let data = this.data.data;
@@ -1889,6 +1903,7 @@ let config = {
 				switch (type) {
 					case 'Correspondence':
 						data[key]['temp_id'] = data['temp_id']['value'];
+						data[key]['correspondenceHasValue']=false;
 						let correspondence = new Correspondence({data:data[key], events:actions});
 						correspondence.render(single);
 						this.data.childComponent[data[key].dfield] = correspondence;
@@ -1967,6 +1982,14 @@ let config = {
 						this.data.childComponent[data[key].dfield] = yearMonthControl;
 						break;
 					case 'Buildin':
+						if(data[key].options=='other_place'){
+							if(!this.data.buildin_options ||(this.data.buildin_options[data[key].id] && this.data.buildin_options[data[key].id].length==0)){
+								let res=await FormService.getFormStaticBuildinData(this.actions.createPostJson());
+								this.data.oldData[key].options=data[key].options=(res.data && res.data.buildin_options)?res.data.buildin_options:[{value:'',label:''}];
+							}else{
+								this.data.oldData[key].options=data[key].options=this.data.buildin_options[data[key].id];
+							}
+						}
 						let buildInControl = new BuildInControl({data:data[key], events:actions});
 						buildInControl.render(single);
 						this.data.childComponent[data[key].dfield] = buildInControl;
