@@ -57,7 +57,7 @@
             margin-right: 5px;
         }
     }
-    .printBtn {
+    .printBtn, .miniFormBtn, .draftBtn {
         height: 16px;
         width: 52px;
         line-height: 16px;
@@ -72,17 +72,10 @@
         }
     }
     .miniFormBtn{
-        height: 16px;
         width: 100px;
-        line-height: 16px;
-        cursor: pointer;
-        display: none;
-        margin-right: 3px;
-        & > i{
-            display: inline-block;
-            float: left;
-            margin-right: 5px;
-        }
+    }
+    .draftBtn {
+        width: 85px;
     }
     .place-form {
         position: relative;
