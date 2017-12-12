@@ -2541,7 +2541,7 @@ let config = {
                         msgBox.showTips('保存成功');
                         this.actions.toogleEdit();
                     } else {
-                        msgBox.alert(res.error);
+                        // msgBox.alert(res.error);
                     }
                 });
             }, 500)
