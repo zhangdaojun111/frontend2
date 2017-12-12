@@ -227,6 +227,7 @@ let config={
                 }
                 let flowId;
                 this.data.obj.is_batch == 1 ?flowId = '':flowId =obj.flow_id;
+                CreateFormServer.childForm[this.data.table_id].actions.changeValueForChildTable(formData);
                 msgBox.showLoadingSelf();
                 let postData = {
                     flow_id: flowId || '',

@@ -755,7 +755,6 @@ let config = {
 					formValue[key] = data[key].value;
 				}
 			}
-            this.actions.changeValueForChildTable(formValue);
 			if (isCheck) {
 				//外部调用需要验证表单
 				let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
@@ -1061,7 +1060,7 @@ let config = {
 			this.actions.checkDateType(formValue);
 			let obj_new = this.actions.createCacheData(formDataOld, data, true, this);
 			let obj_old = this.actions.createCacheData(formDataOld, data, false, this);
-			// this.actions.changeValueForChildTable(data);
+			this.actions.changeValueForChildTable(data);
 			if (this.data.hasOtherFields == 0) {
 				this.actions.checkOhterField(data, obj_new, obj_old);
 			}
