@@ -3901,10 +3901,8 @@ UserInfoService.getUserTheme().done((res) => {
 
 class dataTableAgGrid extends Component {
     constructor(data, newConfig) {
-        if(data.viewMode=='normal'||data.viewMode=='in_process'){
-            for (let d in data) {
-                config.data[d] = data[d];
-            }
+        for (let d in data) {
+            config.data[d] = data[d];
         }
         super($.extend(true, {}, config, newConfig, {data: data || {}}));
     }
