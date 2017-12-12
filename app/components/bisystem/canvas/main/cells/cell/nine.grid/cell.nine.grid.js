@@ -27,6 +27,14 @@ let config = {
         legend: []
     },
     actions: {},
+    beforeRender: function () {
+        let cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        let _cellChart = CellNineGridComponent.init(cellChart);
+        $.extend(true, this.data, _cellChart);
+    },
     afterRender() {
         //自定义 图表字体大小
         if(this.data.chart.customTextStyle && this.data.chart.customTextStyle.hasOwnProperty('chartSize')){
@@ -37,9 +45,8 @@ let config = {
 };
 
 export class CellNineGridComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        let cellChart = CellNineGridComponent.init(data);
-        super($.extend(true,{},config,extendConfig),cellChart,event);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
     }
 
     /**
@@ -82,6 +89,9 @@ export class CellNineGridComponent extends CellBaseComponent {
         cellChart.xAxis = xAxis;
         cellChart.yAxis = yAxis;
         cellChart.legend = legend;
+
         return cellChart;
     }
 }
+
+CellNineGridComponent.config = config;

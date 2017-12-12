@@ -13,6 +13,8 @@ import {FormService} from "../../../services/formService/formService";
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import SettingPrint from '../../form/setting-print/setting-print';
 import {CreateFormServer} from "../../../services/formService/CreateFormServer";
+import {workflowService} from '../../../services/workflow/workflow.service'
+import msgBox from '../../../lib/msgbox'
 
 let config = {
 	template: template,
@@ -23,6 +25,8 @@ let config = {
 		miniFormVal: '',
 		tableId: '',
 		btnType: '',
+        formId:'',
+        flowId:'',
 	},
 	actions: {
 		appPass() {
@@ -141,7 +145,7 @@ let config = {
 			}
 			PMAPI.openDialogByComponent(SettingPrint, {
 				width: 400,
-				height: 210,
+				height: 180,
 				title: '自定义页眉',
 				modal: true
 			})
@@ -217,6 +221,8 @@ let config = {
 		Mediator.subscribe('form:formTableId', (msg) => {
 			this.data.tableId = msg.tableId;
 			this.data.btnType = msg.btnType;
+            this.data.formId = msg.formId;
+            this.data.flowId = msg.flowId;
 			if (this.data.btnType == 'new') {
 				this.el.find('.miniFormBtn').show();
 			} else {
@@ -264,6 +270,25 @@ let config = {
 		this.el.on('click', '#miniFormBtn', () => {
 			this.actions.miniForm();
 		});
+        //发起工作流保存草稿
+        this.el.on('click','#draftBtn', () => {
+            let postData = {
+                flow_id: this.data.flowId,
+                is_draft: 1,
+                data: {}
+            };
+            this.el.parents().find('#workflow-content').hide();
+            this.el.parents('#workflow-content').siblings('.workflow-header').children('#workflow-box').show();
+            let formData = CreateFormServer.getFormValue(this.data.tableId, false);
+            postData.data = JSON.stringify(formData);
+            (async function () {
+                return workflowService.createWorkflowRecord(postData);
+            })().then(res=> {
+                if(res.success === 1){
+                    msgBox.showTips('草稿保存成功！');
+                }
+            })
+        });
 		Mediator.subscribe('workFlow:record_info', (res) => {
 			if (res.attachment.length) {
 				this.data.attachment = res.attachment;
@@ -291,13 +316,6 @@ let config = {
 	}
 }
 
-export default class WorkFlowForm extends Component {
-	// constructor(data){
-	//     config.data = data;
-	//     super(config);
-	// }
 
-	constructor(data, events, newConfig) {
-		super($.extend(true, {}, config, newConfig, {data: data || {}}), {}, events);
-	}
-}
+let WorkFlowForm = Component.extend(config);
+export default WorkFlowForm

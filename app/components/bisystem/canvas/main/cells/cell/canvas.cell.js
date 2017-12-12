@@ -24,6 +24,8 @@ import {CellCalendarComponent} from './calendar/cell.calendar';
 
 import {canvasCellService} from '../../../../../../services/bisystem/canvas.cell.service';
 import msgbox from '../../../../../../lib/msgbox';
+import 'jquery-ui/ui/widgets/draggable';
+import 'jquery-ui/ui/widgets/droppable';
 
 // cell 组件类型，通过匹配assortment渲染不同的组件
 const cellTypes = {
@@ -79,14 +81,22 @@ let config = {
                 cell: this.data.cell,
                 viewId: this.data.currentViewId,
             };
+            
             if (chart['data']['assortment']) {
                 this.cellTitle.actions.setValue(chart,this.data.currentViewId);
-                this.data.cellComponent = new cellTypes[chart['data']['assortment']](data, {
-                    onUpdateChartDeepTitle: (data) => {
-                        this.cellTitle.actions.setDeepTitle(data)
+                this.data.cellComponent = new cellTypes[chart['data']['assortment']]({
+                    data:data,
+                    events:{
+                        onUpdateChartDeepTitle: (data) => {
+                            this.cellTitle.actions.setDeepTitle(data);
+                        }
                     }
                 });
+
                 let cellContainer = this.el.find('.cell-chart');
+                if (cellContainer.length === 0) {
+
+                }
                 this.data.cellComponent.render(cellContainer);
             }
 
@@ -277,35 +287,35 @@ let config = {
                 return true;
             }
         },
-        // 从左侧导航拖拽图表渲染到画布块
-        {
-            event: 'drop',
-            selector: '',
-            callback: function (context,event) {
-                let ev = event.originalEvent;
-                let data = JSON.parse(ev.dataTransfer.getData("Text"));
-                ev.dataTransfer.clearData("Text");
-                let layout = {
-                    chart_id: data.id,
-                    floor: 0,
-                    view_id: this.data.currentViewId,
-                    layout_id: this.data.cell.layout_id,
-                    xOld: {},
-                    row_id:0,
-                    deep_info: {}
-                };
-                this.actions.dragChartData({
-                    data:{
-                        layouts:[JSON.stringify(layout)],
-                        query_type:'deep',
-                        is_deep:1,
-                    },
-                    chart_id: data.id
-                });
-                this.loadData = true;
-                return false;
-            }
-        },
+        // // 从左侧导航拖拽图表渲染到画布块
+        // {
+        //     event: 'drop',
+        //     selector: '',
+        //     callback: function (context,event) {
+        //         let ev = event.originalEvent;
+        //         let data = JSON.parse(ev.dataTransfer.getData("Text"));
+        //         ev.dataTransfer.clearData("Text");
+        //         let layout = {
+        //             chart_id: data.id,
+        //             floor: 0,
+        //             view_id: this.data.currentViewId,
+        //             layout_id: this.data.cell.layout_id,
+        //             xOld: {},
+        //             row_id:0,
+        //             deep_info: {}
+        //         };
+        //         this.actions.dragChartData({
+        //             data:{
+        //                 layouts:[JSON.stringify(layout)],
+        //                 query_type:'deep',
+        //                 is_deep:1,
+        //             },
+        //             chart_id: data.id
+        //         });
+        //         this.loadData = true;
+        //         return false;
+        //     }
+        // },
         // 返回(下穿)上一层
         {
             event: 'click',
@@ -353,6 +363,34 @@ let config = {
         this.actions.renderCell();
         if (window.config.bi_user !== 'client') {
             this.actions.cellDragandResize();
+            let __this = this;
+            this.el.find('.cell').droppable({
+                drop:function (event,ui) {
+                    if(canvasCellService.chartId == -1) {
+                        return;
+                    }
+                    let layout = {
+                        chart_id: canvasCellService.chartId,
+                        floor: 0,
+                        view_id: __this.data.currentViewId,
+                        layout_id: __this.data.cell.layout_id,
+                        xOld: {},
+                        row_id:0,
+                        deep_info: {}
+                    };
+                    __this.actions.dragChartData({
+                        data:{
+                            layouts:[JSON.stringify(layout)],
+                            query_type:'deep',
+                            is_deep:1,
+                        },
+                        chart_id: canvasCellService.chartId
+                    });
+                    __this.loadData = true;
+                    canvasCellService.chartId = -1;
+                    return false;
+                }
+            })
         } else {
             this.el.off('mousedown mouseup');
         }
@@ -370,9 +408,8 @@ let config = {
 };
 
 export class CanvasCellComponent extends Component {
-
-    constructor(data, events,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, events);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
         // config.data.biUser = window.config.bi_user === 'client' ? false : true;
         // super(config);
         // this.data.cell = data['cell'];
@@ -386,9 +423,11 @@ export class CanvasCellComponent extends Component {
             this.data.chart = chart['data'];
             this.actions.loadCellChart(chart);
         } catch (err) {
-            console.log(err)
+            console.log(err);
         } finally {
 
         }
     }
 }
+
+CanvasCellComponent.config = config;

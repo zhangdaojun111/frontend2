@@ -44,26 +44,26 @@ let config = {
 		},
 		renderTree(tree) {
 			let _this = this;
-			let treeComp2 = new TreeView(tree, {
-				callback: function (event, selectedNode) {
-					if (event === 'select') {
-						for (let k in  _this.data.staff) {
-							if (k == selectedNode.id) {
-								Mediator.publish('workflow:checkDept', _this.data.staff[k]);
-							}
-						}
-					} else {
-						for (let k in  _this.data.staff) {
-							if (k == selectedNode.id) {
-								Mediator.publish('workflow:unCheckDept', _this.data.staff[k]);
-							}
-						}
-					}
-				},
-				treeType: 'MULTI_SELECT',
-				isSearch: true,
-				withButtons: true
-			});
+			let treeComp2 = new TreeView({data:{treeNodes:tree,options:{
+                    callback: function (event, selectedNode) {
+                        if (event === 'select') {
+                            for (let k in  _this.data.staff) {
+                                if (k == selectedNode.id) {
+                                    Mediator.publish('workflow:checkDept', _this.data.staff[k]);
+                                }
+                            }
+                        } else {
+                            for (let k in  _this.data.staff) {
+                                if (k == selectedNode.id) {
+                                    Mediator.publish('workflow:unCheckDept', _this.data.staff[k]);
+                                }
+                            }
+                        }
+                    },
+                    treeType: 'MULTI_SELECT',
+                    isSearch: true,
+                    withButtons: true
+                },indent:0}});
 			treeComp2.render(this.el.find('#treeMulti'));
 		},
 		subscribe() {
@@ -97,11 +97,11 @@ let config = {
 		let focus = this.data.focus;
 		let key = workflowService.GetQueryString('key');
 		let _this=this;
-		this.data.addFollow=new WorkflowAddFollow({key: key},{
+		this.data.addFollow=new WorkflowAddFollow({data:{key},events:{
 			addFocusCb(res){
 				_this.actions.addFocusCb(res)
 			}
-		});
+		}});
 		this.data.addFollow.render(this.el);
 		if (focus.length >= 1 && focus[0].indexOf('key') === -1) {
 			let dept = [], idArr = [];
@@ -127,11 +127,5 @@ let config = {
 		this.actions.subscribe();
 	}
 }
-
-export default class AddFocus extends Component {
-	constructor(data, newConfig) {
-		super($.extend(true, {}, config, newConfig), data);
-	}
-
-
-}
+let AddFocus = Component.extend(config)
+export default AddFocus

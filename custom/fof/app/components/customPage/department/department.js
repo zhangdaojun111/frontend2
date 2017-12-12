@@ -112,7 +112,7 @@ let config = {
                     onCellClicked: this.actions.onCellClicked,
                     onRowDoubleClicked: this.actions.onRowDoubleClicked
                 }
-                this.agGrid = new agGrid(gridData);
+                this.agGrid = new agGrid({data:gridData});
                 this.append(this.agGrid , this.el.find('#data-agGrid'));
                 dgcService.calcColumnState( this.data,this.agGrid,["number","mySelectAll","myOperate","f5"] )
                 let custom = {
@@ -123,7 +123,7 @@ let config = {
                     agGrid: this.agGrid,
                     close: this.actions.calcCustomColumn,
                 }
-                this.customColumnsCom  = new customColumns(custom);
+                this.customColumnsCom  = new customColumns({data: custom});
                 this.append(this.customColumnsCom, this.el.find('.custom-columns-panel'));
                 this.actions.getDepartmentData(false);
                 this.actions.btnClick();

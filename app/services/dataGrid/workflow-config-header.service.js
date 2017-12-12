@@ -2,7 +2,8 @@
 //pageType{0:'进展中的工作',1:'已完成的工作',2:'我的工作申请中的工作',3:'我的工作已完成的工作',4:'我的工作审批过的工作',5:'工作审批',6:'我的工作已关注的工作'}
 export const wchService = {
     getWorkflowHeader ( type ){
-        return this.ordinaryHeader.concat( this['headerFor' + type] );
+        // return this.ordinaryHeader.concat( this['headerFor' + type] );
+        return this['headerFor' + type].concat( this.ordinaryHeader );
     },
     //公共的头
     ordinaryHeader: [
@@ -28,17 +29,17 @@ export const wchService = {
         }}
     ],
     headerFor1: [
-        { headerName: '完成时间', field: 'end_time',dinput_type:'5',width:150 },
         { headerName: '操作', width: 80,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             return `
                 <div style="text-align:center;">
                     <a href=javascript:void(0); class="ui-link" data-type="view">查看</a>
                 <div>
             `;
-        }}
+        }},
+        { headerName: '完成时间', field: 'end_time',dinput_type:'5',width:150 }
+
     ],
     headerFor2: [
-        { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
         { headerName: '操作', width: 180,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             let data = param["data"];
             let html = '<div style="text-align:center;">' +
@@ -52,11 +53,11 @@ export const wchService = {
             }
             html += '</div>';
             return html;
-        }}
+        }},
+        { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 }
+
     ],
     headerFor3: [
-        { headerName: '完成时间', field: 'end_time',dinput_type:'5',width:150 },
-        { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
         { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             let data = param["data"];
             let html = `
@@ -67,11 +68,12 @@ export const wchService = {
             }
             html += '</div>';
             return html;
-        }}
+        }},
+        { headerName: '完成时间', field: 'end_time',dinput_type:'5',width:150 },
+        { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 }
+
     ],
     headerFor4: [
-        { headerName: '完成时间', field: 'end_time',dinput_type:'5',width:150 },
-        { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
         { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
             let data = param["data"];
             let html = `
@@ -82,7 +84,10 @@ export const wchService = {
             }
             html += '</div>';
             return html;
-        }}
+        }},
+        { headerName: '完成时间', field: 'end_time',dinput_type:'5',width:150 },
+        { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 }
+
     ],
     headerFor5: [
         // { headerName: '紧急程度', field: 'emergency_degree', width: 100,suppressMenu: true,suppressResize: true,minWidth: 50,
@@ -98,24 +103,33 @@ export const wchService = {
         //     let title = data.emergency_degree ? obj[data.emergency_degree]["title"] : "";
         //     return '<div style="width: 100%; height: 100%; text-align: center; color:'+ color +'">'+ title +'<div/>';
         // }},
-        { headerName: '审批开始时间', field: 'approve_start_time',dinput_type:'5',width:150 },
-        { headerName: '审批结束时间', field: 'approve_over_time',dinput_type:'5',width:150 },
-        { headerName: '超时状态', field: 'approve_time_status',width:100 },
         { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,
             cellRenderer: (param)=>{
-            return `
+                return `
                 <div style="text-align:center;">
                 <a href=javascript:void(0); class="ui-link" data-type="view">查看</a>
                 <span> | </span>
                 <a href=javascript:void(0); class="ui-link" data-type="approve">审批</a>
                 <div>
             `;
-        }}
+            }},
+        { headerName: '审批开始时间', field: 'approve_start_time',dinput_type:'5',width:150 },
+        { headerName: '审批结束时间', field: 'approve_over_time',dinput_type:'5',width:150 },
+        { headerName: '超时状态', field: 'approve_time_status',width:100 }
+
     ],
     headerFor6: [
-        { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 },
-        { headerName: '操作', width: 80,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,cellRenderer: (param)=>{
-            return '<div style="text-align:center;"></span><a href=javascript:void(0); class="ui-link" data-type="focusWorkflow">查看</a></div>';
-        }}
+        { headerName: '操作', width: 100,field:'myOperate', suppressSorting: true,suppressMenu: true,suppressResize: false,minWidth: 50,
+            cellRenderer: (param)=>{
+                return `
+                <div style="text-align:center;">
+                <a href=javascript:void(0); class="ui-link" data-type="view">查看</a>
+                <span> | </span>
+                <a href=javascript:void(0); class="ui-link" data-type="approve">审批</a>
+                <div>
+            `;
+        }},
+        { headerName: '最后审批时间', field: 'last_handler_time',dinput_type:'5',width:150 }
+
     ]
 };

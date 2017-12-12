@@ -227,6 +227,8 @@ let config={
                 }
                 let flowId;
                 this.data.obj.is_batch == 1 ?flowId = '':flowId =obj.flow_id;
+                formData['parent_temp_id'] = obj.parent_temp_id || '';
+                CreateFormServer.childForm[this.data.table_id].actions.changeValueForChildTable(formData);
                 msgBox.showLoadingSelf();
                 let postData = {
                     flow_id: flowId || '',
@@ -387,9 +389,5 @@ let config={
         Mediator.removeAll('workflow:getParams');
     }
 };
-export default class AddWorkflow extends Component{
-    constructor(data,newConfig){
-        config.data.obj = data;
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+let AddWorkflow = Component.extend(config)
+export default AddWorkflow

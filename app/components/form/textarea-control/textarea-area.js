@@ -45,10 +45,5 @@ let config={
         this.el.off();
     }
 }
-class TextAreaControl extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
-
-export default TextAreaControl
+let TextAreaControl = Component.extend(config)
+export default TextAreaControl;

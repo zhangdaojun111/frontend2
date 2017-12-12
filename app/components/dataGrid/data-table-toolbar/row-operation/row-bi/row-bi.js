@@ -11,7 +11,7 @@ import {HTTP} from "../../../../../lib/http";
 
 import {dataTableService} from "../../../../../services/dataGrid/data-table.service";
 
-let config = {
+let rowBi = Component.extend({
     template: template,
     data: {
         //从aggrid传过来的数据
@@ -134,7 +134,7 @@ let config = {
         }
     ],
     afterRender: function (){
-        PMAPI.getIframeParams(window.config.key).then((res) => {
+        PMAPI.getIframeParams(window.config.key,window.parent).then((res) => {
             this.data.params = res.data;
             let json = {
                 table_id: this.data.params.parent_table_id,
@@ -150,12 +150,12 @@ let config = {
             } )
         })
     }
-}
+})
 
-class rowBi extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class rowBi extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default rowBi;

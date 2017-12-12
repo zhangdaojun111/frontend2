@@ -5,7 +5,7 @@ import {HTTP} from "../../../lib/http";
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import dataTableAgGrid from "./data-table-agGrid/data-table-agGrid";
 import {dataTableService} from "../../../services/dataGrid/data-table.service";
-let config = {
+let dataTablePage = Component.extend({
     template: template,
     data: {
         tableId:'',
@@ -62,7 +62,7 @@ let config = {
                         showTabs: this.actions.showTabs,
                         gridTips: '在途'
                     };
-                    this.inProcessGrid = new dataTableAgGrid(obj);
+                    this.inProcessGrid = new dataTableAgGrid({data: obj});
                     this.append(this.inProcessGrid, this.el.find('#data-table-in-process'));
                     this.data.isRenderIntrain = true;
                 }
@@ -80,7 +80,7 @@ let config = {
             showTabs: this.actions.showTabs,
             gridTips: '数据'
         };
-        this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
+        this.append(new dataTableAgGrid({data: json}), this.el.find('#data-table-agGrid'));
         this.actions.addClick();
         //获取在途数据
         this.actions.getInProcessNum();
@@ -110,14 +110,14 @@ let config = {
             this.el.find( '.dataTableHelp' )[0].style.display = 'flex';
         }
     }
-};
+});
 
 
-class dataTablePage extends Component {
-    constructor(data,newConfig){
-
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class dataTablePage extends Component {
+//     constructor(data,newConfig){
+//
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default dataTablePage;

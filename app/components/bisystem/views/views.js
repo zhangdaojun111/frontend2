@@ -61,12 +61,21 @@ let config = {
          * 设置轮播
          */
         async setCarousel() {
+            const data = await ViewsService.getCarouselSetting();
+            carouselConfig.data.carousel = data.data.carousel_time || 0;
+            carouselConfig.data.operate = data.data.stop_time || 0;
+
             const res = await PMAPI.openDialogByComponent(carouselConfig,{
                 width: 348,
-                height: 217,
+                height: 280,
                 title: '设置轮播'
             });
-        }
+
+            if(res){
+                // 设置轮播
+                ViewsService.saveCarouselSetting(res);
+            }
+        },
     },
     binds:[
         {
@@ -118,24 +127,27 @@ let config = {
 
         //渲染列表数据
         this.data.views.forEach((val,index) => {
-            let viewItemComponent = new ViewItemComponent(val,{
-                onDelete: (res)=>{
-                    let views = this.data.views;
-                    _.remove(views,function (val) {
-                        return res.id === val.id;
-                    });
-                    window.config.bi_views = views;
-                },
-                onUpdate: (res)=>{
-                    let views = this.data.views;
-                    _.filter(views,function (val){
-                        if(res.id === val.id){
-                            return val.name = res.name;
-                        }
-                    });
-                    window.config.bi_views = views;
+            let viewItemComponent = new ViewItemComponent({
+                data:val,
+                event:{
+                    onDelete: (res)=>{
+                        let views = this.data.views;
+                        _.remove(views,function (val) {
+                            return res.id === val.id;
+                        });
+                        window.config.bi_views = views;
+                    },
+                    onUpdate: (res)=>{
+                        let views = this.data.views;
+                        _.filter(views,function (val){
+                            if(res.id === val.id){
+                                return val.name = res.name;
+                            }
+                        });
+                        window.config.bi_views = views;
 
-                },
+                    },
+                }
             });
             this.append(viewItemComponent,this.el.find('.view-list'));
         });
@@ -144,9 +156,11 @@ let config = {
     beforeDestory() {}
 };
 
-export class ViewsEditComponent extends Component{
-    constructor(data,events,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,events)
-    }
-}
+export let ViewsEditComponent = Component.extend(config);
+
+// export class ViewsEditComponent extends Component{
+//     constructor(data,events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,events)
+//     }
+// }
 

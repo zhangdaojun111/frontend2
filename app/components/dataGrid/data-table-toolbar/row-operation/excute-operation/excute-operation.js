@@ -11,7 +11,7 @@ import {HTTP} from "../../../../../lib/http";
 
 import {dataTableService} from "../../../../../services/dataGrid/data-table.service";
 
-let config = {
+let excuteOperation = Component.extend({
     template: template,
     data: {
         rowData: [],
@@ -85,12 +85,12 @@ let config = {
             })
         }
     }
-}
+})
 
-class excuteOperation extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class excuteOperation extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default excuteOperation;

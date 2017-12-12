@@ -110,8 +110,11 @@ let config = {
     beforeDestory() {}
 };
 
-export class CanvasCellTitleComponent extends Component {
-        constructor(data,event,extendConfig) {
-            super($.extend(true,{},config,extendConfig),data,event)
-        }
-}
+export let CanvasCellTitleComponent = Component.extend(config);
+
+
+// export class CanvasCellTitleComponent extends Component {
+//     constructor(data,event,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,event)
+//     }
+// }

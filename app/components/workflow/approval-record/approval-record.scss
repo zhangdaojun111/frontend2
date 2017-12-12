@@ -43,14 +43,18 @@
 
         }
         &.comment-attachment{
-          color: #1789fc;
+          color: #2298f4;
           cursor: pointer;
         }
       }
       &:last-child{
         border-bottom: none;
       }
-
+      .approval-comment, .comment-attachment1 {
+        display: none;
+        color: #2298f4;
+        cursor: pointer;
+      }
     }
 
   }

@@ -44,7 +44,18 @@ body.orange{
                     background: url("../../images/theme/orange/icon-orange-edit.png");
                 }
             }
+            .edit-model-title {
+                background-color: #e67e18;
+                border-bottom: 1px solid #FFECD0;
+                color: #ffffff;
+                a {
+                    color: #ffffff;
+                }
+            }
             .menu{
+                &.edit {
+                    background-color: #e67e18;
+                }
                 label{
                     border-bottom: 1px solid #fff;
                 }

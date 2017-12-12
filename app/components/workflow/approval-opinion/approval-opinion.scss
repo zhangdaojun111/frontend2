@@ -31,7 +31,22 @@
         .approve-textarea{
             width: 100%;
             padding: 10px;
-        }
+            .ql-toolbar {
+                display: none;
+            }
+            .ql-editor {
+                border-top: 1px solid #E4E4E4;
+            }
+            .editor {
+                height: 150px;
+            }
+            .ql-snow {
+                border: 1px solid #E4E4E4;
+            }
+            .form-icon {
+                display: none;
+            }
+         }
     }
     .workflow-btn{
         text-align: right;

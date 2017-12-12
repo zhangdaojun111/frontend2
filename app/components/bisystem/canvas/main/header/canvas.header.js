@@ -149,6 +149,13 @@ let config = {
                 return false;
             }
         },
+        {
+            event:'click',
+            selector:'.to-do-carousel',
+            callback:function () {
+                this.trigger('doFullScreenCarousel');
+            }
+        }
     ],
     afterRender() {
         //新窗口隐藏新窗口图标
@@ -161,9 +168,12 @@ let config = {
         this.data.views = window.config.bi_views;
         // 渲染header视图列表
         this.data.views.forEach(viewData => {
-            let menu = new CanvasHeaderMenuComponent(viewData,{
-                onClearActive:()=>{
-                    this.actions.hideBrothers(viewData.id);
+            let menu = new CanvasHeaderMenuComponent({
+                data:viewData,
+                events: {
+                    onClearActive: () => {
+                        this.actions.hideBrothers(viewData.id);
+                    }
                 }
             });
             this.append(menu, this.el.find('.nav-tabs'));
@@ -180,16 +190,18 @@ let config = {
     }
 };
 export class CanvasHeaderComponent extends Component {
-    constructor(data, events,extendConfig) {
+    constructor(extendConfig) {
         let _config = $.extend(true, {}, config);
         if (extendConfig) {
             let binds = Component.mergeBinds(extendConfig.binds, config.binds);
             let _extendConfig = $.extend(true, {}, extendConfig);
             delete _config.binds;
             _extendConfig.binds = binds;
-            super($.extend(true,{},_config,_extendConfig), data, events);
+            super($.extend(true,{},_config,_extendConfig));
         } else {
-            super(_config, data, events);
+            super(_config);
         }
     }
 }
+
+CanvasHeaderComponent.config = config;

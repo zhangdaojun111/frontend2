@@ -279,6 +279,9 @@ let config = {
 
 
     },
+    beforeRender(){
+        this.actions.initNormal();
+    },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             let cellChart = _.cloneDeep(this.data);
@@ -297,6 +300,7 @@ let config = {
         });
     },
     firstAfterRender() {
+        console.log(this.data);
         // 是否显示时间字段
         if (window.config.bi_user !== 'manager') {
             this.actions.judgeDateZoom(this.data.cellChart);
@@ -310,9 +314,8 @@ let config = {
 };
 
 export class CellNormalComponent extends CellBaseComponent {
-    constructor(data, event, extendConfig) {
-        super($.extend(true, {}, config, extendConfig), data, event);
-        this.actions.initNormal();
+    constructor(extendConfig) {
+        super($.extend(true, {}, config, extendConfig));
     }
 
     /**
@@ -395,3 +398,5 @@ export class CellNormalComponent extends CellBaseComponent {
         return Promise.resolve(this.data);
     }
 }
+
+CellNormalComponent.config = config;

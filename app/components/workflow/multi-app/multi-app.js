@@ -24,7 +24,8 @@ let config={
                     msgBox.showLoadingSelf();
                     let postData={};
                     postData.action=e;
-                    postData.comment=$('#comment').val();
+                    //postData.comment=$('#comment').val();
+                    postData.comment=$('.content .editor').val();
                     postData.checkIds=this.data.checkIds;
                     (async function () {
                         return workflowService.approveManyWorkflow(postData);
@@ -70,19 +71,12 @@ let config={
     ],
     afterRender(){
         PMAPI.getIframeParams(this.data.key).then((res) => {
+        	console.log('this.data.key');
+        	console.log(this.data);
             Mediator.publish('workflow:addusers', res.data);
             this.data.checkIds=res.data;
         })
     }
 };
-class MultiApp extends Component{
-    // constructor (data){
-    //     super(config,data);
-    // }
-
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
-
-export default MultiApp;
+let MultiApp = Component.extend(config);
+export default MultiApp

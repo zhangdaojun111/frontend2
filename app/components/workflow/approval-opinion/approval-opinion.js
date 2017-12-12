@@ -5,11 +5,14 @@ import './approval-opinion.scss';
 import {PMAPI} from '../../../lib/postmsg'
 import AttachmentControl from "../../form/attachment-control/attachment-control";
 import msgbox from '../../../lib/msgbox';
+import EditorControl from '../../form/editor-control/editor';
+import Quill from 'quill';
 
 let config = {
     template: template,
     data: {
         // css: css.replace(/(\n)/g, ''),
+        comment:'',
         fileList: [],
     },
     binds:[
@@ -39,7 +42,6 @@ let config = {
                         }
                     })
                 }
-
             }
         },
         {
@@ -58,7 +60,11 @@ let config = {
     ],
     actions:{
         determine(){
-            this.data.comment = this.el.find('#comment').val();
+            let editorDom = this.el.find('.content .editor');
+            this.quill = new Quill(editorDom[0], {
+                imageDrop: true,
+            });
+            this.data.comment = this.quill.root.innerHTML;
         }
     },
     afterRender(){
@@ -69,19 +75,19 @@ let config = {
         let changeValue = (res) => {
             this.data.fileList = res.value;
         };
-        let attachmentControl = new AttachmentControl(json, {changeValue: changeValue});
+        let changeValueEdit = (res) => {
+            this.data.comment = res.value;
+        };
+        let attachmentControl = new AttachmentControl({data:json, events:{changeValue: changeValue}});
         this.append(attachmentControl, this.el.find('.workflow-attachment-box'));
         this.data.attachmentControl=attachmentControl
+        let editorControl = new EditorControl({data:{value:'', isApproval: true}, events:{changeValue: changeValueEdit }});
+        this.append(editorControl, this.el.find('.approve-textarea'));
     },
     beforeDestory(){
         this.data.style.remove();
     },
 };
 
-class approvalOpinion extends Component{
-    constructor(data,newConfig){
-        config.data = data;
-        super($.extend(true,{},config,newConfig));
-    }
-}
-export default approvalOpinion;
+let approvalOpinion = Component.extend(config);
+export default approvalOpinion

@@ -6,7 +6,7 @@ import template from './tree.html';
 import './tree.scss';
 import TreeNode from './treeNode/treeNode';
 
-let config = {
+let TreeView = Component.extend({
     template:template,
     data:{
         trees:[]
@@ -64,22 +64,14 @@ let config = {
             let data = node;
             data['options']=this.data.options;
             data['indent']=this.data.indent;
-            let comp = new TreeNode(data,this.data.options.callback);
+            data['options']['callback']=this.data.options.callback
+            let comp = new TreeNode({data:data});
             let ele = $('<li></li>');
             this.el.find('#tree1').append(ele);
             comp.render(ele);
             this.data.trees.push(comp);
         });
     }
-};
+});
 
-export default class TreeView extends Component {
-    constructor(treeNode,options){
-        let data = {
-            treeNodes:treeNode,
-            options:options,
-            indent:0
-        };
-        super(config,data,options.callback);
-    }
-}
+export default TreeView;

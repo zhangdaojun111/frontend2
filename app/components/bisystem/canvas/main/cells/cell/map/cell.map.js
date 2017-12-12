@@ -22,6 +22,7 @@ let config = {
                 this.el.find('#' + data.id).css('width',width).css('height',height);
             }
 
+            console.log(this.data);
             let echartsService = new EchartsService(this.data);
             this.myChart = echartsService.myChart;
             let that = this;
@@ -45,6 +46,13 @@ let config = {
             });
         }
     },
+    beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        this.data.id += this.componentId;
+    },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             if (this.myChart) {
@@ -57,13 +65,15 @@ let config = {
     }
 };
 
-export class CellMapComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart
-        };
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+export let CellMapComponent = CellBaseComponent.extend(config);
+
+// export class CellMapComponent extends CellBaseComponent {
+//     constructor(data,event,extendConfig) {
+//         data.cellChart = {
+//             cell: data.cell,
+//             chart: data.chart
+//         };
+//         super($.extend(true,{},config,extendConfig),data,event);
+//
+//     }
+// }

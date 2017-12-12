@@ -6,6 +6,7 @@ import msgbox from "../../../../lib/msgbox";
 import Mediator from '../../../../lib/mediator';
 
 import "./charts.scss";
+import {canvasCellService} from "../../../../services/bisystem/canvas.cell.service";
 
 let config = {
     template:template,
@@ -48,8 +49,7 @@ let config = {
                     }
                 });
             }
-        }
-
+        },
     },
     binds:[
         {   //滑上li显示提示图标
@@ -81,13 +81,21 @@ let config = {
             }
         },
     ],
+    beforeRender(){},
     afterRender() {
-        this.el.on('dragstart',(ev) =>{
-            let event = ev.originalEvent;
-            event.dataTransfer.setData("Text",JSON.stringify(this.data));
-            return true;
+        // this.el.on('dragstart',(ev) =>{
+        //     let event = ev.originalEvent;
+        //     event.dataTransfer.setData("Text",JSON.stringify(this.data));
+        //     return true;
+        // });
+        let __this = this;
+        this.el.draggable({
+            helper: "clone",
+            cursor: "move",
+            start:function () {
+                canvasCellService.chartId = __this.data.id;
+            }
         });
-
     },
     firstAfterRender() {
         //点击编辑删除隐藏
@@ -101,13 +109,10 @@ let config = {
     }
 };
 
+export let ChartsComponent = Component.extend(config);
 
-export class ChartsComponent extends Component{
-    constructor(charts,events,extendConfig) {
-        config.data = charts? charts : null;
-        config.data.imgUrl = window.config.img_url;
-        config.data.isIcon = charts['icon']? true:false;
-        config.data.userSelf = charts['self'] == 1 ? true : false;
-        super($.extend(true,{},config,extendConfig),charts,events);
-    }
-}
+// export class ChartsComponent extends Component{
+//     constructor(extendConfig) {
+//         super($.extend(true,{},config,extendConfig));
+//     }
+// }

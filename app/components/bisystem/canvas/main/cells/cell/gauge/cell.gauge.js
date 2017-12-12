@@ -22,9 +22,21 @@ let config = {
                 this.el.find('#' + data.id).css('width',width).css('height',height);
             }
 
-            let echartsService = new EchartsService(this.data);
-            this.myChart = echartsService.myChart;
-        }
+            this.echartsService = new EchartsService(this.data);
+            this.myChart = this.echartsService.myChart;
+        },
+        updateChart(data) {
+            //重新渲染echarts
+            const option = this.echartsService.mapOption(data);
+            this.myChart.setOption(option,true);
+        },
+    },
+    beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        this.data.id += this.componentId;
     },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
@@ -39,14 +51,15 @@ let config = {
     }
 };
 
-export class CellGaugeComponent extends CellBaseComponent {
+export let CellGaugeComponent = CellBaseComponent.extend(config);
 
-    constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart
-        };
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+// export class CellGaugeComponent extends CellBaseComponent {
+//
+//     constructor(extendConfig) {
+//         data.cellChart = {
+//             cell: data.cell,
+//             chart: data.chart
+//         };
+//         super($.extend(true,{},config,extendConfig),data,event);
+//     }
+// }

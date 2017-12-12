@@ -24,12 +24,15 @@ let config = {
     }
 };
 
-class CalendarTableHeader extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.headData = data['headTitle'];
-        config.data.type = data['type'];
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarTableHeader extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.headData = data['headTitle'];
+//         config.data.type = data['type'];
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default CalendarTableHeader;
+let CalendarTableHeader = Component.extend(config);
 
 export default CalendarTableHeader;

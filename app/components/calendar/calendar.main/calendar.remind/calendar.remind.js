@@ -96,17 +96,20 @@ let config = {
     }
 };
 
-class CalendarRemind extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.remindTable = data.remindTable;
-        config.data.remindDateProp = data.remindDateProp;
-        config.data.remindDetail = data.remindDetail;
-        config.data.remindDateTime = data.remindDateTime;
-        config.data.remindTableId = data.remindTableId;
-        config.data.remindDate = data.remindDate;
-        config.data.remindTime = data.remindTime;
-        config.data.remindRealId = data.remindRealId;
-        super( $.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarRemind extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.remindTable = data.remindTable;
+//         config.data.remindDateProp = data.remindDateProp;
+//         config.data.remindDetail = data.remindDetail;
+//         config.data.remindDateTime = data.remindDateTime;
+//         config.data.remindTableId = data.remindTableId;
+//         config.data.remindDate = data.remindDate;
+//         config.data.remindTime = data.remindTime;
+//         config.data.remindRealId = data.remindRealId;
+//         super( $.extend(true ,{}, config, newconfig));
+//     }
+// }
+// export default CalendarRemind;
+let CalendarRemind = Component.extend(config);
+
 export default CalendarRemind;

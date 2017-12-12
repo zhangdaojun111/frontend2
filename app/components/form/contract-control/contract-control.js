@@ -68,9 +68,5 @@ let config = {
         }
     }
 }
-
-export default class ContractControl extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let ContractControl = Component.extend(config)
+export default ContractControl

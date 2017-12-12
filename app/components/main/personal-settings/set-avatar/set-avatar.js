@@ -15,7 +15,7 @@ import msgbox from "../../../../lib/msgbox";
 
 let jcropApi = undefined;       //保存Jcrop的接口
 
-let config = {
+let SetAvatar = Component.extend({
     template:template,
     data:{
         status:true,
@@ -304,13 +304,7 @@ let config = {
     beforeDestory:function () {
         // Mediator.removeAll("personal:setAvatar");
     }
-};
-
-class SetAvatar extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const AvatarSet = {
     el:null,

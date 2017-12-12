@@ -3,7 +3,7 @@ import './autoSelect.scss';
 import Component from '../../../lib/component';
 // import {AutoSelectItem} from './item/item';
 
-let config = {
+let AutoSelect = Component.extend({
     template: template,
     data: {
         /**
@@ -408,12 +408,6 @@ let config = {
             this.cancelEvents();
         }
     }
-};
-
-class AutoSelect extends Component {
-    constructor(data, events) {
-        super(config, data, events);
-    }
-}
+})
 
 export {AutoSelect}

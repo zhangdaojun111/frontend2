@@ -6,6 +6,7 @@ let count = 0;
 
 let defaultConfig = {
     template: '',
+    replaceTemplate:[],
     data: {},
     events: {},
     actions: {},
@@ -17,6 +18,7 @@ let defaultConfig = {
      * }
      */
     binds: [],
+    beforeRender: null,
     afterRender: null,
     firstAfterRender: null,
     beforeDestory: null,
@@ -45,6 +47,7 @@ class Component {
 
     render(el) {
         if (el.length === 0) {
+            // debugger;
             console.error('component: el必须是存在于dom内的节点');
             console.dir(this);
             return;
@@ -61,9 +64,15 @@ class Component {
      */
     reload() {
         this.destroyChildren();
+        this.beforeRender && this.beforeRender();
         let compiler = Handlerbar.compile(this.template);
         let html = compiler(this.data);
         this.el.html(html);
+        if(this.replaceTemplate.length !=0){
+            for(let t of this.replaceTemplate){
+                this.el.find(t.selector).replaceWith(t.template);
+            }
+        }
         if (this.firstAfterRenderRunned === false) {
             this.bindEvents();
             this.firstAfterRender && this.firstAfterRender();
