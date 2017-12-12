@@ -31,7 +31,7 @@ let config = {
         this.el.css({"height":"100%","width":"100%"});
         this.append(new CalendarTableHeader({data:{headData: this.data.HeadList, type:'month'}}), this.el.find('.month-head'));
         this.data.monthBodyDataList.forEach((item,index) => {
-            this.append(new CalendarTableBody({item,index}), this.el.find('.month-body'));
+            this.append(new CalendarTableBody({data: {currentData: item['weekList'], index: index}}), this.el.find('.month-body'));
         });
     }
 };

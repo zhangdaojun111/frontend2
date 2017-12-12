@@ -25,9 +25,7 @@ let calendarConfig = {
             CalendarService.getCalendarTreeData().then(res => {
                 this.data.cancelFields = res['cancel_fields'];
                 this.el.find('.left-content').empty();
-                let leftContent = new LeftContent();
-                leftContent.
-                this.append(new LeftContent(res), this.el.find('.left-content'));
+                this.append(new LeftContent({data: {calendarTreeData: res}}), this.el.find('.left-content'));
                 Mediator.emit('Calendar: tool', {toolMethod: 'refresh', data: res['cancel_fields']});
                 this.hideLoading();
             });
@@ -55,8 +53,8 @@ let calendarConfig = {
         }
         CalendarService.getCalendarTreeData().then(res => {
             this.cancelFields = res['cancel_fields'];
-            this.append(new LeftContent(res), this.el.find('.left-content'));
-            this.append(new CalendarMain(res['cancel_fields']), this.el.find('.main-content'));
+            this.append(new LeftContent({data: {calendarTreeData: res}}), this.el.find('.left-content'));
+            this.append(new CalendarMain({data: {cancel_fields: res['cancel_fields']}}), this.el.find('.main-content'));
             setTimeout(() => {
                 this.hideLoading();
             },800);
