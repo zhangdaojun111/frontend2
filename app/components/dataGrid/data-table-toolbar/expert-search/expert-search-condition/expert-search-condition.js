@@ -10,7 +10,7 @@ import DateControl from "../../grid-data-control/grid-data-control";
 import {AutoSelect} from '../../../../util/autoSelect/autoSelect';
 import TimeControl from "../../../../form/time-control/time-control";
 import expertSearch from '../expert-search';
-let config = {
+let expertCondition = Component.extend({
     template: template,
     data: {
         expertItemData: [],
@@ -47,7 +47,7 @@ let config = {
                     }
                 }
             }
-            this.append(new AutoSelect({data:selectData}),this.el.find('.condition-search-box'))
+            this.append(new AutoSelect(selectData),this.el.find('.condition-search-box'))
         },
         // 下拉组件点击事件
         itemOnSelect: function(item){
@@ -87,7 +87,7 @@ let config = {
                 case "date":
                     // inputType = 'datetime-local'; break;
                     this.el.find('.condition-search-input').remove();
-                    let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:function(data){}});
+                    let dateControl = new DateControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){}}});
                     dateControl.render(this.el.find('.condition-search-value'));
                     break;
                 case "time":
@@ -170,16 +170,10 @@ let config = {
         });
         this.actions.inputSearch();
     }
-}
-class expertCondition extends Component {
-    // constructor(data) {
-    //     for (let d in data) {
-    //         config.data[d] = data[d]
-    //     }
-    //     super(config)
-    // }
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+})
+// class expertCondition extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default expertCondition

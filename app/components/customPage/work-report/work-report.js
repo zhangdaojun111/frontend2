@@ -100,11 +100,11 @@ let workReport = Component.extend({
         //获取当前日期
         getNowDate: function () {
             let date = this.data.moment().format('YYYY-MM-DD');
-            let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:(data)=>{
+            let dateControl = new DateControl({data:{value: '', isAgGrid: true},events:{changeValue:(data)=>{
                 let date = data.value;
                 this.data.selectDate = date;
                 this.actions.setDate();
-            }});
+            }}});
             dateControl.render(this.el.find('.date-control'));
             this.data.selectDate = date;
             this.data.todayDate = date;

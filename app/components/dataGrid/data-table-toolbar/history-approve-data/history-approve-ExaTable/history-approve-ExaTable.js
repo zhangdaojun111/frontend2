@@ -7,7 +7,7 @@ import examineItem from "./history-approve-ExaItem/history-approve-ExaItem";
 
 
 
-let config = {
+let examineTable = Component.extend({
     template: template,
     data: {
     },
@@ -17,18 +17,14 @@ let config = {
     afterRender: function() {
         if(this.data.approve_tip && this.data.approve_tip.length > 0){
             this.data.approve_tip.forEach((item)=>{
-                this.append(new examineItem(item), this.el.find('.history-table-body.examine'));
+                this.append(new examineItem({data:item}), this.el.find('.history-table-body.examine'));
             })
         }
     }
-}
-class examineTable extends Component {
-    // constructor(data) {
-    //     config.data = data
-    //     super(config)
-    // }
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+})
+// class examineTable extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default examineTable

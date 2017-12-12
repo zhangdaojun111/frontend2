@@ -8,7 +8,7 @@ import DateTimeControl from "../../../form/datetime-control/datetime-control";
 import DateControl from "../grid-data-control/grid-data-control";
 import TimeControl from "../../../form/time-control/time-control";
 import agGrid from "../../agGrid/agGrid";
-let config = {
+let FloatingFilter = Component.extend({
     template: template,
     data: {
     },
@@ -36,9 +36,9 @@ let config = {
                         this.eFilterInput.style.borderRadius = '2px';
                         this.eFilterInput.style.textIndent = '5px';
                     } else if( colInfo == 'date' ){ // 使用年月日插件
-                        let dateControl = new DateControl({value: '', isAgGrid: true},{changeValue:function(data){
+                        let dateControl = new DateControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
-                        }});
+                        }}});
                         dateControl.render($(this.eGui));
                         this.eFilterInput = this.eGui.querySelector('input');
                         this.eFilterInput.className += (' filter-input-' + searchFiled);
@@ -48,7 +48,7 @@ let config = {
                             }
                         },1000 ))
                     }else if( colInfo  == 'time' ){  //使用时间插件
-                        let timeControl = new TimeControl({data:{value: '', isAgGrid: true},events:{changeValue:function(data){
+                        let timeControl = new TimeControl({data:{value: '', isAgGrid: true},event:{changeValue:function(data){
                             That.actions.keyupSearch(null,data.value,searchFiled,colInfo,'change',searchOldValue,searchValue)
                         }}});
                         timeControl.render($(this.eGui));
@@ -129,10 +129,10 @@ let config = {
     },
     afterRender: function() {
     }
-}
-class FloatingFilter extends Component {
-    constructor() {
-        super(config)
-    }
-}
+})
+// class FloatingFilter extends Component {
+//     constructor() {
+//         super(config)
+//     }
+// }
 export default FloatingFilter
