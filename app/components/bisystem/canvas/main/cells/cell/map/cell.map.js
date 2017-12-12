@@ -21,9 +21,9 @@ let config = {
                 let height = data.cell.size.height - 30;
                 this.el.find('#' + data.id).css('width',width).css('height',height);
             }
-            
-            let echartsService = new EchartsService(this.data);
-            this.myChart = echartsService.myChart;
+
+            this.echartsService = new EchartsService(this.data);
+            this.myChart = this.echartsService.myChart;
             let that = this;
             //设置没有值的地区为灰色且不高亮
             this.myChart.on('mouseover', function (params) {
