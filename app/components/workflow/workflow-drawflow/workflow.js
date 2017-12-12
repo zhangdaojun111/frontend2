@@ -572,14 +572,7 @@ let config = {
 
 	}
 };
-
-
-class WF extends Component {
-	constructor(data, newConfig) {
-		super($.extend(true, {}, config, newConfig, {data: data || {}}));
-	}
-}
-
+let WF = Component.extend(config);
 let WorkFlow = {
 	show(data, elem) {
 		let workFlowData = _.defaultsDeep({}, data, {
@@ -588,7 +581,7 @@ let WorkFlow = {
 			containerheight: '100px',
 			// nodesWidth: '60px'
 		});
-		let component = new WF(workFlowData);
+		let component = new WF({data:workFlowData});
 		this.WorkFlow = component;
 		let el = $("#flow-node");
 		component.render(el);
@@ -609,7 +602,7 @@ let WorkFlow = {
 		if(this.cb){
 			this.cb(msg['data'][0])
 		}
-		let component = new WF(msg.data[0]);
+		let component = new WF({data:msg.data[0]});
 		this.WorkFlow = component;
 		let el = o.el;
 		component.render(el);

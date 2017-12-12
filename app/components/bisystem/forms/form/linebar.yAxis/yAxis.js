@@ -20,7 +20,9 @@ let config = {
          * 添加y轴
          */
         addY(data = {}) {
-            let y = new Y(data, {
+            let y = new Y({
+                data:data,
+                events:{
                 /**
                  * 增加y轴
                  * @param value
@@ -57,15 +59,15 @@ let config = {
                             checkBar = true;
                             break;
                         }
-                    };
+                    }
                     if(checkBar) {
                             this.data.areaStyle.data.value = [];
                             areaStyle.prop('checked', false);
                             areaStyle.prop('disabled', true);
                     } else {
                         areaStyle.prop('disabled', false);
-                    };
-                },
+                    }
+                },}
             });
             this.append(y, this.el.find('.form-chart-yAxis'));
             this.data.yAxis[y.componentId] = y;
@@ -99,22 +101,24 @@ let config = {
          */
         yMoreSetting() {
             this.data.label = new Checkbox({
-                value: [],
-                list: [
-                    {
-                        value:1, name: '显示折柱图值'
-                    }
-                ],
+                data: {
+                    value: [],
+                    list: [
+                        {
+                            value:1, name: '显示折柱图值'
+                        }
+                    ]
+                }
             });
             this.data.areaStyle = new Checkbox({
-                value: [],
-                list: [
-                    {
-                        value:1, name: '显示折线图面积区域<b style="color:red;">(只有Y轴全部为"折线图"时才可以勾选此项)</b>'
-                    }
-                ],
-            },{
-                onChange() {}
+                data: {
+                    value: [],
+                    list: [
+                        {
+                            value:1, name: '显示折线图面积区域<b style="color:red;">(只有Y轴全部为"折线图"时才可以勾选此项)</b>'
+                        }
+                    ]
+                }
             });
             this.append(this.data.label, this.el.find('.yAxis-setting'));
             this.append(this.data.areaStyle, this.el.find('.yAxis-setting'));
@@ -122,14 +126,15 @@ let config = {
     },
     binds: [],
     afterRender(){
+        console.log(this.data);
         this.actions.yMoreSetting();
         this.actions.addY();
     }
-}
+};
 
 class YaXis extends Base {
-    constructor(data, event,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -152,7 +157,6 @@ class YaXis extends Base {
      * @param yAxis = y轴数据
      */
     setValue(yAxis) {
-        console.log()
         if (yAxis.length === 0) return false;
 
         Object.keys(this.data.yAxis).forEach(key => {
@@ -176,5 +180,5 @@ class YaXis extends Base {
 
 
 }
-
+YaXis.config = config;
 export {YaXis}

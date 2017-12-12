@@ -10,7 +10,7 @@ import 'jquery-ui/ui/widgets/dialog.js';
 import template from './password-input.html';
 import './password-input.scss';
 
-let config = {
+let PasswordInput = Component.extend({
     template:template,
     data:{
         password_value:'',
@@ -161,7 +161,7 @@ let config = {
         sendPawToParent:function () {
             console.log('do send');
             let password = this.el.find('.set-password-input').val();
-	        this.setValue && this.setValue(password);
+            this.trigger('setValue',password);
         }
     },
     binds:[
@@ -215,7 +215,7 @@ let config = {
     beforeDestory:function () {
 
     },
-};
+});
 
 /**
  * data可传入json对象:
@@ -228,11 +228,5 @@ let config = {
  * }
  */
 
-class PasswordInput extends Component {
-    constructor(data,callback){
-        super(config,data);
-        this.setValue = callback;
-    }
-}
 
 export {PasswordInput};

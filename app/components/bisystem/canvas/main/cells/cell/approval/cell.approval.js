@@ -92,15 +92,20 @@ let config = {
             }
         },
     ],
+    beforeRender(){
+        this.data.id += this.componentId;
+    },
     afterRender() {},
     firstAfterRender() {
         this.actions.getRecord();
     }
 };
 
-export class CellApprovalComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+export let CellApprovalComponent = CellBaseComponent.extend(config);
+
+// export class CellApprovalComponent extends CellBaseComponent {
+//     constructor(data,event,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,event);
+//         this.data.id += this.componentId;
+//     }
+// }

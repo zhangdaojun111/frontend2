@@ -16,7 +16,7 @@ import '../../../../assets/scss/core/common.scss';
 import TreeView from "../../../util/tree/tree";
 
 
-let config = {
+let SetAgent = Component.extend({
     template:template,
     data:{
         selectedAgent:{},              //记录被选中的代理人
@@ -59,14 +59,14 @@ let config = {
          */
         initWorkflow:function () {
             this.actions.formatOriginData(this.data.formatData);
-            let treeView = new TreeView(this.data.formatData,{
+            let treeView = new TreeView({data:{treeNodes:this.data.formatData,options:{
                 callback:(event,node) => {
                     this.actions.selectNode(event,node);
                 },
                 treeType:"MULTI_SELECT",
                 treeName:"workflow-tree",
                 isSearch:true
-            });
+            },indent:0}});
             let $container = this.el.find("div.work-tree");
             treeView.render($container);
             this.el.find('.flex-between > .txt').html("流程搜索");
@@ -117,16 +117,16 @@ let config = {
             if( Object.keys(this.data.selectedAgent).length > 0){
                 temp.push(this.data.selectedAgent);
             }
-            let autoSelect = new AutoSelect({
+            let autoSelect = new AutoSelect({data:{
                 list: tempData,
                 multiSelect: false,
                 editable: true,
                 choosed:temp
-            }, {
+            },events: {
                 onSelect: function (choosed) {
                     that.actions.setAgentId(choosed);
                 }
-            });
+            }});
 
             this.data.atSelect = autoSelect;
             autoSelect.render($wrap);
@@ -287,13 +287,7 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-class SetAgent extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const agentSetting = {
     el: null,

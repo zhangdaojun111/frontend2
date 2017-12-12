@@ -11,10 +11,6 @@ let config = {
     afterRender() {},
 };
 
-class CalendarEditor extends Base {
-    constructor(data,extendConfig) {
-        super($.extend(true,{},config,extendConfig));
-    }
-}
+let CalendarEditor = Base.extend(config);
 
 export {CalendarEditor}

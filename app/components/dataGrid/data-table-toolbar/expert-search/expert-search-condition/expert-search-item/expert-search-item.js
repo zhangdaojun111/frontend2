@@ -5,7 +5,7 @@ import Component from "../../../../../../lib/component";
 import template from './expert-search-item.html'
 
 
-let config = {
+let expertItem = Component.extend({
     template: template,
     data: {
     },
@@ -15,11 +15,11 @@ let config = {
     afterRender: function() {
 
     }
-}
-class expertItem extends Component {
-    constructor(data) {
-        config.data = data
-        super(config)
-    }
-}
+})
+// class expertItem extends Component {
+//     constructor(data) {
+//         config.data = data
+//         super(config)
+//     }
+// }
 export default expertItem

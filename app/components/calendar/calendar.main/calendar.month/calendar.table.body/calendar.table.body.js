@@ -20,18 +20,21 @@ let config = {
         this.el.addClass('abc');
         this.el.find('#weekNum').attr("id", 'weekNum'+this.data.index);
         this.data.currentData.forEach(item => {
-            this.append(new TableGrid({bodyData:item, type: 'month'}), this.el.find('#weekNum'+this.data.index));
+            this.append(new TableGrid({data:{bodyData:item, type: 'month'}}), this.el.find('#weekNum'+this.data.index));
         });
 
     }
 };
 
-class CalendarTableBody extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.currentData = data['item']['weekList'];
-        config.data.index = data.index;
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarTableBody extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.currentData = data['item']['weekList'];
+//         config.data.index = data.index;
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default CalendarTableBody;
+let CalendarTableBody = Component.extend(config);
 
 export default CalendarTableBody;

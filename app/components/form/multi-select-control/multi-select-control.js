@@ -153,8 +153,8 @@ let config={
                     id:this.data.sDropValue,
                 })
             }
-            let oneAutoSelect=new AutoSelect(oneSelectdata);
-            let moreAutoSelect=new AutoSelect(moreSelectdata);
+            let oneAutoSelect=new AutoSelect({data:oneSelectdata});
+            let moreAutoSelect=new AutoSelect({data:moreSelectdata});
             this.data.multiBuildSelect['one']=oneAutoSelect;
             this.data.multiBuildSelect['more']=moreAutoSelect;
             this.append(oneAutoSelect,oneSelect);
@@ -274,7 +274,7 @@ let config={
                     _.debounce(function(){_this.events.changeValue(_this.data)},200)();
 
                 };
-                let autoSelect=new AutoSelect(data);
+                let autoSelect=new AutoSelect({data:data});
                 this.data.childSelect=autoSelect;
                 this.append(autoSelect,el);
             }else {
@@ -311,8 +311,5 @@ let config={
         this.el.off();
     }
 };
-export default class MultiSelectControl extends Component{
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let MultiSelectControl = Component.extend(config)
+export default MultiSelectControl

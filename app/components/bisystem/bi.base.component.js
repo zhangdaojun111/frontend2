@@ -10,8 +10,8 @@ import 'quill/dist/quill.snow.css';
 import Component from '../../lib/component';
 
 export class BiBaseComponent extends Component{
-    constructor(config,extendConfig) {
-        super($.extend(true,{},config,extendConfig))
+    constructor(extendConfig) {
+        super($.extend(true,{},extendConfig));
     }
 
     /**
@@ -19,6 +19,8 @@ export class BiBaseComponent extends Component{
      * @param name '消息标识符', data数据传递
      */
     messager(name,data) {
-        this.el.trigger(name,data)
+        this.el.trigger(name,data);
     }
 }
+
+BiBaseComponent.config = {};

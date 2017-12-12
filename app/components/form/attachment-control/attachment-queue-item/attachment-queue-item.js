@@ -238,6 +238,8 @@ let config = {
         }
     },
     afterRender:function () {
+        config.data.fileSize = config.actions.getReadableFileSize(this.data.file.size);
+        this.data.fileSize =  config.data.fileSize;
         this.data.timestamp =  new Date().getTime();
         if(this.data.file.name == undefined){
             this.data.file.name = 'file-'+this.data.timestamp+'.'+this.data.file.type.substring(this.data.file.type.lastIndexOf('/')+1,this.data.file.type.length);
@@ -247,10 +249,5 @@ let config = {
         this.actions.startUploadFile();
     }
 };
-
-export default class AttachmentQueueItem extends Component{
-    constructor(data,event,newConfig){
-        config.data.fileSize = config.actions.getReadableFileSize(data.file.size);
-        super($.extend(true,{},config,newConfig),data,event);
-    }
-}
+let AttachmentQueueItem = Component.extend(config)
+export default AttachmentQueueItem

@@ -29,6 +29,7 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     getEchartsOption(cellChart) {
+        console.log(cellChart);
         const chartType = cellChart['chart']['assortment'] || '';
         let option = {};
         switch (chartType) {

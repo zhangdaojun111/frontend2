@@ -13,7 +13,7 @@ CalendarSetService.getMenu().then(res => {
         return item['folder_id'] !== 1;
     });
     //let calendarOpenSetting = new SettingMenuComponent({list: menu});
-    let calendarOpenSetting = new CalendarSetting(menu);
+    let calendarOpenSetting = new CalendarSetting({data: {menu: menu}});
     calendarOpenSetting.render($('#calendarOpenSetting'));
 });
 

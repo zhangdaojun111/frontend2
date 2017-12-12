@@ -18,15 +18,24 @@ let config = {
     },
     afterRender: function() {
         this.el.css({"height":"100%","width":"100%"});
-        this.append(new TableGrid({bodyData: this.data['data'][0], type: 'day'}), this.el.find('.day-content'));
+        // this.append(new TableGrid({bodyData: this.data['data'][0], type: 'day'}), this.el.find('.day-content'));
+        this.append(new TableGrid({
+            data: {
+                bodyData: this.data['data'][0],
+                type: 'day'
+            }
+        }), this.el.find('.day-content'));
     }
 };
 
-class CalendarDay extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.data = data;
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarDay extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.data = data;
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default CalendarDay;
+let CalendarDay = Component.extend(config);
 
 export default CalendarDay;

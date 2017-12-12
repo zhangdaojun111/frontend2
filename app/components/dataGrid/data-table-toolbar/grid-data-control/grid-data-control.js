@@ -12,7 +12,7 @@ import template from './grid-data-control.html';
 import './grid-data-control.scss';
 import msgbox from '../../../../lib/msgbox';
 
-let config = {
+let DateControl = Component.extend({
     template: template,
     data:{
 
@@ -192,11 +192,10 @@ let config = {
     beforeDestory: function () {
         this.el.off();
     }
-}
-export default class DateControl extends Component {
-    constructor(data, events) {
-        super(config, data, events);
-    }
-}/**
- * Created by dell on 2017/9/12.
- */
+})
+// export default class DateControl extends Component {
+//     constructor(data, events) {
+//         super(config, data, events);
+//     }
+// }
+export default DateControl

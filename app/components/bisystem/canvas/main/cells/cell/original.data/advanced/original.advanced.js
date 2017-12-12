@@ -137,8 +137,11 @@ let config = {
     beforeDestory() {}
 };
 
-export class CanvasOriginalAdvancedComponent extends Component {
-    constructor(data,events,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,events);
-    }
-}
+export let CanvasOriginalAdvancedComponent = Component.extend(config);
+
+// export class CanvasOriginalAdvancedComponent extends Component {
+//     constructor(data,events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,events);
+//     }
+// }
+

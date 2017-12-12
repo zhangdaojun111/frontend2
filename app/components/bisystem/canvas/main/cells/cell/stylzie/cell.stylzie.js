@@ -32,6 +32,13 @@ let config = {
             this.stylzieChart.myChart.setOption(option,true);
         },
     },
+    beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        this.data.id += this.componentId;
+    },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             if (this.stylzieChart.myChart) {
@@ -45,19 +52,21 @@ let config = {
     }
 };
 
-export class CellStylzieComponent extends CellBaseComponent {
-    // constructor(cellChart) {
-    //     config.data.cellChart = cellChart ? cellChart : null;
-    //     super(config);
-    //     this.data.id += this.componentId
-    // }
+export let CellStylzieComponent = CellBaseComponent.extend(config);
 
-    constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart
-        };
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+// export class CellStylzieComponent extends CellBaseComponent {
+//     // constructor(cellChart) {
+//     //     config.data.cellChart = cellChart ? cellChart : null;
+//     //     super(config);
+//     //     this.data.id += this.componentId
+//     // }
+//
+//     constructor(data,event,extendConfig) {
+//         data.cellChart = {
+//             cell: data.cell,
+//             chart: data.chart
+//         };
+//         super($.extend(true,{},config,extendConfig),data,event);
+//         this.data.id += this.componentId;
+//     }
+// }

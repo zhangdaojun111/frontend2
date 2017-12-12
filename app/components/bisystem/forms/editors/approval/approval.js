@@ -98,6 +98,9 @@ let config = {
             button,
         ]
     },
+    beforeRender(){
+        this.data.chart_id = this.data.id
+    },
     async afterRender() {
         if(this.data.chart_id) {
             const res = await this.actions.getChartData(this.data.chart_id);
@@ -117,10 +120,6 @@ let config = {
     },
 };
 
-class ApprovalEditor extends Base {
-    constructor(data,extendConfig) {
-        super($.extend(true,{},config,extendConfig));
-    }
-}
+let ApprovalEditor = Base.extend(config);
 
 export {ApprovalEditor}

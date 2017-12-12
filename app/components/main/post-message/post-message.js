@@ -44,7 +44,7 @@ function formatTreeData(list) {
     return res;
 }
 
-let config = {
+let PostMessage = Component.extend({
     template: template,
     data: {
         // 用户数据
@@ -72,14 +72,14 @@ let config = {
          * 初始化部门树
          */
         initTree: function () {
-            let treeView = new TreeView(this.data.departmentData, {
+            let treeView = new TreeView({data:{treeNodes:this.data.departmentData, options:{
                 callback: (order, node) => {
                     this.actions._selectNode(order, node);
                 },
                 isSearch: true,
                 treeType: "MULTI_SELECT",
                 treeName: "post-message-depatment-tree",
-            });
+            },indent:0}});
             let $container = this.el.find(".tree");
             treeView.render($container);
         },
@@ -87,16 +87,16 @@ let config = {
          * 初始化人员选择组件
          */
         initChoosedUsers: function () {
-            this.autoSelect = new AutoSelect({
+            this.autoSelect = new AutoSelect({data:{
                 displayType: 'static',           // popup或者static popup为弹出的形式 static 为静态显示
                 selectBoxHeight: 210,           // select 框的高度
                 width: 300,                     // 为0表示显示默认宽度240
                 displayChoosed: false,
-            }, {
+            },events: {
                 onSelect: function (param) {
                     console.log(param);
                 }
-            });
+            }});
             this.autoSelect.render(this.el.find('.users'));
         },
         /**
@@ -218,13 +218,7 @@ let config = {
     beforeDestory: function () {
 
     }
-}
-
-class PostMessage extends Component {
-    constructor(newConfig) {
-        super($.extend(true,{},config,newConfig));
-    }
-}
+})
 
 let postMessageUtil = {
     el: null,

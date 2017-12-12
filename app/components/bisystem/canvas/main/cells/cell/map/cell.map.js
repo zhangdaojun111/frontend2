@@ -22,8 +22,9 @@ let config = {
                 this.el.find('#' + data.id).css('width',width).css('height',height);
             }
 
-            this.echartsService = new EchartsService(this.data);
-            this.myChart = this.echartsService.myChart;
+            console.log(this.data);
+            let echartsService = new EchartsService(this.data);
+            this.myChart = echartsService.myChart;
             let that = this;
             //设置没有值的地区为灰色且不高亮
             this.myChart.on('mouseover', function (params) {
@@ -43,12 +44,14 @@ let config = {
                     });
                 }
             });
-        },
-        updateChart(data) {
-            //重新渲染echarts
-            const option = this.echartsService.mapOption(data);
-            this.myChart.setOption(option,true);
-        },
+        }
+    },
+    beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        this.data.id += this.componentId;
     },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
@@ -62,13 +65,15 @@ let config = {
     }
 };
 
-export class CellMapComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart
-        };
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+export let CellMapComponent = CellBaseComponent.extend(config);
+
+// export class CellMapComponent extends CellBaseComponent {
+//     constructor(data,event,extendConfig) {
+//         data.cellChart = {
+//             cell: data.cell,
+//             chart: data.chart
+//         };
+//         super($.extend(true,{},config,extendConfig),data,event);
+//
+//     }
+// }

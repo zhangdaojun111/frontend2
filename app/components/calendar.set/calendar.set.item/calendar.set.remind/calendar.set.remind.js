@@ -4,8 +4,6 @@
 import Component from "../../../../lib/component";
 import template from './calendar.set.remind.html';
 import './calendar.set.remind.scss';
-import CalendarSetItemMulitSelect from '../calendar.set.item.multiselect/calendar.set.item.multiselect';
-import {CalendarService} from '../../../../services/calendar/calendar.service';
 import {AutoSelect} from '../../../util/autoSelect/autoSelect';
 import {PMAPI, PMENUM} from '../../../../lib/postmsg';
 import MSG from '../../../../lib/msgbox';
@@ -226,18 +224,18 @@ let config = {
             }
 
             // 短信收件人
-            this.data.smsReceiverAutoSelect = new AutoSelect({
+            this.data.smsReceiverAutoSelect = new AutoSelect({data:{
                 list: this.data.recipients_per,
                 choosed: this.actions.checkSelectedReciver(this.data.sms.receiver, this.data.recipients_per),
-            });
+            }});
             this.append(this.data.smsReceiverAutoSelect, this.el.find('.remind-receiver-sms'));
 
             // 短信抄送人
-            this.data.smsCopyPeopleAutoSelect = new AutoSelect({
+            this.data.smsCopyPeopleAutoSelect = new AutoSelect({data:{
                 list: this.data.copypeople,
                 //choosed: this.data.sms.cc_receiver,
                 choosed: this.actions.checkSelectedReciver(this.data.sms.cc_receiver, this.data.copypeople),
-            });
+            }});
             this.append(this.data.smsCopyPeopleAutoSelect, this.el.find('.remind-copy-for-sms'));
 
             // 发件箱
@@ -246,19 +244,19 @@ let config = {
             });
 
             // 邮件收件人
-            this.data.emailReceiverAutoSelect = new AutoSelect({
+            this.data.emailReceiverAutoSelect = new AutoSelect({data:{
                 list: this.data.recipients,
                 //choosed: this.data.email.receiver,
                 choosed: this.actions.checkSelectedReciver(this.data.email.receiver, this.data.recipients),
-            });
+            }});
             this.append(this.data.emailReceiverAutoSelect, this.el.find('.remind-receiver-email'));
 
             // 邮件抄送人
-            this.data.emailCopyPeopleAutoSelect = new AutoSelect({
+            this.data.emailCopyPeopleAutoSelect = new AutoSelect({data:{
                 list: this.data.copypeople,
                 //choosed: this.data.email.cc_receiver,
                 choosed: this.actions.checkSelectedReciver(this.data.email.cc_receiver, this.data.copypeople),
-            });
+            }});
             this.append(this.data.emailCopyPeopleAutoSelect, this.el.find('.remind-copy-for-email'));
 
             this.el.find('.remind-time-sms').val(this.data.sms.remind_time);
@@ -268,10 +266,13 @@ let config = {
 
 };
 
-class CalendarSetRemindMethod extends Component {
-    constructor(newConfig) {
-        super($.extend(true,{},config,newConfig));
-    }
-}
+// class CalendarSetRemindMethod extends Component {
+//     constructor(newConfig) {
+//         super($.extend(true,{},config,newConfig));
+//     }
+// }
+//
+// export default CalendarSetRemindMethod;
+let CalendarSetRemindMethod = Component.extend(config);
 
 export default CalendarSetRemindMethod;

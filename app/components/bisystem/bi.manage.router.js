@@ -60,7 +60,11 @@ const BiAppRouter = Backbone.Router.extend({
         if (canvasComponent) {
             canvasComponent.actions.destroyCanvasCells();
         } else {
-            canvasComponent = new CanvasMain();
+            canvasComponent = new CanvasMain({
+                data:{
+                    isViewEmpty:window.config.bi_views[0] ? false : true
+                }
+            });
             canvasComponent.render($('#route-outlet'));
         }
         canvasComponent.actions.switchViewId(id);
@@ -81,16 +85,18 @@ const BiAppRouter = Backbone.Router.extend({
     },
     routerFormDynamicComponent(type,id) {
         canvasComponent = null;
-        console.log(type);
+
         let comType = {
             assortment: type,
-            id: id
+            id: id ? id: null
         };
         if (formComponent[type]) {
             formComponent[type].reset(comType);
             formComponent[type].reload();
         } else {
-            let component = new componentsJson[type]['component'](comType);
+            let component = new componentsJson[type]['component']({
+                data: comType
+            });
             component.render($('#route-outlet'));
             formComponent[type] = component;
         }
@@ -98,3 +104,4 @@ const BiAppRouter = Backbone.Router.extend({
 });
 
 export let router = new BiAppRouter();
+

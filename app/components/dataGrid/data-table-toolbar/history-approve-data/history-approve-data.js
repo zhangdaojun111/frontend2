@@ -12,7 +12,7 @@ import strikeTable from "./history-approve-StrTable/history-approve-StrTable";
 import './history-approve-data.scss'
 import agGrid from "../../agGrid/agGrid";
 
-let config = {
+let historyApprove = Component.extend({
     template: template,
     dataShow:[],
     recordHistory:[],
@@ -28,20 +28,20 @@ let config = {
         // 渲染修改历史
         renderHisTable:function(){
             this.historyData[0]['history_data'].forEach((row) => {
-                this.append(new historyTable({history_data:row}), this.el.find('.history-table-box.history'));
+                this.append(new historyTable({data:{history_data:row}}), this.el.find('.history-table-box.history'));
             });
         },
         // 渲染审批历史
         renderExaTable:function(){
             this.recordHistory.forEach((row) => {
-                this.append(new examineTable(row), this.el.find('.history-table-box.examine'));
+                this.append(new examineTable({data:row}), this.el.find('.history-table-box.examine'));
             });
         },
         // 渲染触发历史
         renderStrTable:function(){
             // this.append(new strikeTable({trigger_work_records: this.triggerWorkRecords}), this.el.find('.history-table-box.strike'));
             this.triggerWorkRecords.forEach((row) => {
-                this.append(new strikeTable(row), this.el.find('.history-table-box.strike'));
+                this.append(new strikeTable({data:row}), this.el.find('.history-table-box.strike'));
             });
         },
         afterGetMsg:function() {
@@ -114,10 +114,10 @@ let config = {
             this.actions.afterGetMsg()
         })
     }
-}
-class historyApprove extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+})
+// class historyApprove extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 export default historyApprove

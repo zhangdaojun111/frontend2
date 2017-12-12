@@ -16,14 +16,5 @@ let config={
         Mediator.publish('workflow:pubCheckNoDel',this.data);
     }
 };
-class SelectStaffNoDel extends Component{
-    // constructor (data){
-    //     super(config,data);
-    // }
-
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
-
-export default SelectStaffNoDel;
+let SelectStaffNoDel = Component.extend(config);
+export default SelectStaffNoDel

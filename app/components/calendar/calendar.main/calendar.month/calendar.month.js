@@ -29,18 +29,21 @@ let config = {
     afterRender: function() {
         this.data.fromDate = this.data.monthBodyDataList[0]['weekList'][0]['dataTime'];
         this.el.css({"height":"100%","width":"100%"});
-        this.append(new CalendarTableHeader({headTitle: this.data.HeadList, type:'month'}), this.el.find('.month-head'));
+        this.append(new CalendarTableHeader({data:{headData: this.data.HeadList, type:'month'}}), this.el.find('.month-head'));
         this.data.monthBodyDataList.forEach((item,index) => {
-            this.append(new CalendarTableBody({item,index}), this.el.find('.month-body'));
+            this.append(new CalendarTableBody({data: {currentData: item['weekList'], index: index}}), this.el.find('.month-body'));
         });
     }
 };
 
-class CalendarMonth extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.monthBodyDataList = data;
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarMonth extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.monthBodyDataList = data;
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default CalendarMonth;
+let CalendarMonth = Component.extend(config);
 
 export default CalendarMonth;

@@ -22,6 +22,17 @@ let config={
         }
     ],
     afterRender(){
+        let myDate = new Date();
+        let myYear = myDate.getFullYear();
+        this.data.options = [];
+        for( let i=5;i>=-10;i-- ){
+            this.data.options.push( { "label": String(myYear + i),"value": String(myYear + i)} );
+        }
+        if(this.data.value == ''){
+            this.data.value = myYear;
+        }
+        this.data.options.unshift({"label":"请选择","value":"请选择"});
+
         let _this=this;
         this.data.isInit=true;
         if(this.data.history){
@@ -48,7 +59,7 @@ let config={
                 _this.data.value=data[0]['id'];
                 _.debounce(function(){_this.events.changeValue(_this.data)},200)();
             };
-            let autoSelect=new AutoSelect(data);
+            let autoSelect=new AutoSelect({data:data});
             this.append(autoSelect,el);
         }
         this.data.isInit=false;
@@ -57,18 +68,5 @@ let config={
         this.el.off();
     }
 }
-export default class YearControl extends Component{
-    constructor(data,events,newConfig){
-        let myDate = new Date();
-        let myYear = myDate.getFullYear();
-        data.options = [];
-        for( let i=5;i>=-10;i-- ){
-            data.options.push( { "label": String(myYear + i),"value": String(myYear + i)} );
-        }
-        if(data.value == ''){
-            data.value = myYear;
-        }
-        data.options.unshift({"label":"请选择","value":"请选择"});
-        super($.extend(true,{},config,newConfig),data,events);
-    }
-}
+let YearControl = Component.extend(config)
+export default YearControl;

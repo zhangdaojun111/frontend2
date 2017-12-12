@@ -35,11 +35,11 @@ let config = {
     afterRender(){
         this.actions.makeAdvancedComputeObj();
     }
-}
+};
 
 class AdvancedCompute extends Base {
-    constructor(data, event,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -68,3 +68,4 @@ class AdvancedCompute extends Base {
 }
 
 export {AdvancedCompute}
+AdvancedCompute.config = config;

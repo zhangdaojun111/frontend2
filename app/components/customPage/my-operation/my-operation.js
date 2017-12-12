@@ -14,7 +14,7 @@ import {dgcService} from "../../../services/dataGrid/data-table-control.service"
 import dataPagination from "../../dataGrid/data-table-toolbar/data-pagination/data-pagination";
 import FloatingFilter from "../../dataGrid/data-table-toolbar/floating-filter/floating-filter";
 
-let config = {
+let myOperation = Component.extend({
     template: template,
     data: {
         tableId: '',
@@ -97,7 +97,7 @@ let config = {
                 onCellClicked: this.actions.onCellClicked,
                 onRowDoubleClicked: this.actions.onRowDoubleClicked
             }
-            this.agGrid = new agGrid(gridData);
+            this.agGrid = new agGrid({data:gridData});
             this.append(this.agGrid , this.el.find('#operation-agGrid'));
             //渲染分页
             let paginationData = {
@@ -106,7 +106,7 @@ let config = {
                 tableId: this.data.tableId
             }
             //渲染分页
-            this.pagination = new dataPagination(paginationData);
+            this.pagination = new dataPagination({data: paginationData});
             this.pagination.actions.paginationChanged = this.actions.refreshData;
             this.append(this.pagination, this.el.find('.pagination'));
 
@@ -271,15 +271,15 @@ let config = {
     afterRender: function (){
         this.actions.createColumnDefs();
     }
-}
+})
 
-class myOperation extends Component {
-    constructor(data,newConfig){
-        for (let d in data) {
-            config.data[d] = data[d];
-        }
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class myOperation extends Component {
+//     constructor(data,newConfig){
+//         for (let d in data) {
+//             config.data[d] = data[d];
+//         }
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default myOperation;
