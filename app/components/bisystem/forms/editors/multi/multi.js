@@ -209,6 +209,9 @@ let config = {
             }
         }
     ],
+    beforeRender(){
+        this.data.chart_id = this.data.id
+    },
     async afterRender() {
         this.data.charts = {};
         this.data.chart_id = this.data.id;

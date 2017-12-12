@@ -729,6 +729,9 @@ let config = {
         ],
         firstDo: false, // 用于在编辑模式下 第一次加载保留数据
     },
+    beforeRender(){
+        this.data.chart_id = this.data.id
+    },
     async afterRender() {
         if(this.data.id) {
             const res = await this.actions.getChartData(this.data.id);
