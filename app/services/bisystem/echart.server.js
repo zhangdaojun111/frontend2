@@ -391,8 +391,12 @@ export class EchartsService {
         //自定义 图表字体大小
         if(cellOption['customTextStyle'] && cellOption['customTextStyle'].hasOwnProperty('chartSize')){
             linebarOption['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
-            linebarOption['xAxis'][0]['axisLabel']['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
-            linebarOption['yAxis'][0]['axisLabel']['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
+            linebarOption['xAxis'].forEach((val,index)=>{
+                val.axisLabel = {textStyle:{fontSize:cellOption['customTextStyle']['chartSize']}};
+            });
+            linebarOption['yAxis'].forEach((val,index)=>{
+                val.axisLabel = {textStyle:{fontSize:cellOption['customTextStyle']['chartSize']}};
+            });
         }
 
         return linebarOption;
