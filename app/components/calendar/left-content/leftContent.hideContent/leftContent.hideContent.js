@@ -37,6 +37,6 @@ let config = {
 // }
 //
 // export default RightContentWorkFlow;
-let RightContentWorkFlow = Component.extend(config);
+let LeftContentHide = Component.extend(config);
 
-export default RightContentWorkFlow;
+export default LeftContentHide;

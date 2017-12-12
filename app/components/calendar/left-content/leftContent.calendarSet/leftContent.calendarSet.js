@@ -162,13 +162,16 @@ let config = {
                 if (!this.data.hide_item_table.includes(data.table_id)) {
                     // this.append(new LeftContentSelect(data, this.data.calendarTreeData.cancel_fields, this.data.hide_item_table, this.data.rows,
                     //     this.events.checkBoxCheck), this.el.find('.remind-group'));
-                    let leftContentSelect = new LeftContentSelect();
-                    leftContentSelect.data.dataitem = data;
-                    // leftContentSelect.data.dataitem.searchValue = 0;
-                    leftContentSelect.data.cancel_fields = this.data.calendarTreeData.cancel_fields;
-                    leftContentSelect.data.rows = this.data.rows;
-                    leftContentSelect.events.checkbox = this.events.checkBoxCheck;
-                    this.append(leftContentSelect, this.el.find('.remind-group'));
+                    this.append(new LeftContentSelect({
+                        data: {
+                            dataitem: data,
+                            cancel_fields: this.data.calendarTreeData.cancel_fields,
+                            rows: this.data.rows,
+                        },
+                        events: {
+                            checkbox: this.events.checkBoxCheck,
+                        }
+                    }), this.el.find('.remind-group'));
                 }
             });
             this.actions.approveRemindShow();
@@ -223,8 +226,16 @@ let config = {
                     break;
                 }
             }
-            this.append(new LeftContentSelect(row, this.data.cancel_fields, this.data.hide_item_table, this.data.rows,
-                this.events.checkBoxCheck), this.el.find('.remind-group'));
+            this.append(new LeftContentSelect({
+                data: {
+                    dataitem: row,
+                    cancel_fields: this.data.cancel_fields,
+                    rows: this.data.rows,
+                },
+                events: {
+                    checkbox: this.events.checkBoxCheck,
+                }
+            }), this.el.find('.remind-group'));
             let preferenceHide = {"content": this.data.hide_item_table};
             let preference = {"content": this.data.cancel_fields, contentHide: preferenceHide};
             CalendarService.getCalendarPreference(preference);
@@ -263,11 +274,14 @@ let config = {
     }
 };
 
-class LeftcontentCalendarset extends Component {
-    constructor(data,newConfig) {
-        config.data.calendarTreeData = data;
-        super(config,$.extend(true,{},config,newConfig));
-    }
-}
+// class LeftcontentCalendarset extends Component {
+//     constructor(data,newConfig) {
+//         config.data.calendarTreeData = data;
+//         super(config,$.extend(true,{},config,newConfig));
+//     }
+// }
+//
+// export default LeftcontentCalendarset;
+let LeftcontentCalendarset = Component.extend(config);
 
 export default LeftcontentCalendarset;

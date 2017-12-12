@@ -26,12 +26,15 @@ let config = {
     }
 };
 
-class CalendarTableBody extends Component {
-    constructor(data, newconfig = {}) {
-        config.data.currentData = data['item']['weekList'];
-        config.data.index = data.index;
-        super($.extend(true ,{}, config, newconfig));
-    }
-}
+// class CalendarTableBody extends Component {
+//     constructor(data, newconfig = {}) {
+//         config.data.currentData = data['item']['weekList'];
+//         config.data.index = data.index;
+//         super($.extend(true ,{}, config, newconfig));
+//     }
+// }
+//
+// export default CalendarTableBody;
+let CalendarTableBody = Component.extend(config);
 
 export default CalendarTableBody;
