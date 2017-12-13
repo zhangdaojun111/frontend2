@@ -3271,7 +3271,7 @@ let dataTableAgGrid = Component.extend({
             let title = '查看';
             this.actions.openSelfIframe(url, title);
         },
-        gridHandleEdit: function () {
+        gridHandleEdit: function (data) {
             window.top.miniFormValRealId = data.data._id;
             console.log('编辑');
             let btnType = 'edit';
