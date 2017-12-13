@@ -20,7 +20,7 @@ import msgBox from '../../../../lib/msgbox';
 import dataTableAgGrid from '../../data-table-page/data-table-agGrid/data-table-agGrid'
 import './expert-search.scss';
 
-let config = {
+let expertSearch = Component.extend({
     template: template,
     ulChecked: true,
     inputValue: null,
@@ -506,7 +506,7 @@ let config = {
             let _this = this;
             this.el.on('click','.condition-search-add',function() {
                 // this.append(new expertCondition({expertItemData:this.data.fieldsData}), this.el.find('.condition-search-container'));
-                let epCondition = new expertCondition({data:{expertItemData:this.data.fieldsData}});
+                let epCondition = new expertCondition({data:{expertItemData:_this.data.fieldsData}});
                 let Dom = document.createElement('div');
                 Dom.className = 'condition-search-choice';
                 _this.append(epCondition, $(Dom));
@@ -608,11 +608,11 @@ let config = {
         })
     }
 
-};
-class expertSearch extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-        console.log(this.data)
-    }
-}
+});
+// class expertSearch extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//         console.log(this.data)
+//     }
+// }
 export default expertSearch

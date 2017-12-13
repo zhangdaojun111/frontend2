@@ -1271,9 +1271,6 @@ let dataTableAgGrid = Component.extend({
                 this.actions.getNewFormCountData(refresh);
                 return;
             }
-            if (this.data.viewMode != 'normal') {
-                // this.data.firstGetFooterData = false;
-            }
             let postData = this.actions.createPostData();
             let post_arr = [];
             let body = dataTableService.getTableData( postData );
@@ -1302,42 +1299,7 @@ let dataTableAgGrid = Component.extend({
                 let time = this.data.firstRender ? 100 : 0;
                 setTimeout(() => {
                     this.actions.setGridData(res);
-                    if (refresh) {
-                        this.actions.calcSelectData('set');
-                    }
-                    //内置相关查看原始数据获取footer
-                    if (this.data.viewMode == 'source_data') {
-                        let filterIds = [];
-                        for (let d of this.data.rowData) {
-                            filterIds.push(d['_id']);
-                        }
-                        let footerPostData = {
-                            table_id: postData.source_table_id,
-                            tableType: postData.tableType,
-                            filter: JSON.stringify({
-                                _id: {$in: filterIds}
-                            })
-                        };
-                        this.actions.getFooterData(footerPostData);
-                    }
-                    if (this.data.fristGetCorrespondence && this.data.viewMode == 'viewFromCorrespondence') {
-                        this.actions.checkCorrespondence();
-                        this.data.fristGetCorrespondence = false;
-                    }
-                    if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
-                        this.actions.checkCorrespondence(true);
-                    }
-	                if(this.data.correspondenceSelectedList){
-		                this.data.correspondenceSelectedList.length>0?Mediator.publish('form:correspondenceRequired:' + this.data.tableId, true):Mediator.publish('form:correspondenceRequired:' + this.data.tableId, false);
-	                }
-                    if (this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild') {
-                        Mediator.publish('form:songGridRefresh:' + this.data.tableId, this.data);
-                    }
-                    try {
-                        this.data.showTabs(1);
-                        this.hideLoading();
-                    } catch (e) {
-                    }
+                    this.actions.handleGridData(refresh,postData);
                 }, time);
                 if (refresh) {
                     msgBox.showTips('数据刷新成功。')
@@ -1352,6 +1314,44 @@ let dataTableAgGrid = Component.extend({
                 }
             });
             HTTP.flush();
+        },
+        handleGridData: function (refresh,postData) {
+            if (refresh) {
+                this.actions.calcSelectData('set');
+            }
+            //内置相关查看原始数据获取footer
+            if (this.data.viewMode == 'source_data') {
+                let filterIds = [];
+                for (let d of this.data.rowData) {
+                    filterIds.push(d['_id']);
+                }
+                let footerPostData = {
+                    table_id: postData.source_table_id,
+                    tableType: postData.tableType,
+                    filter: JSON.stringify({
+                        _id: {$in: filterIds}
+                    })
+                };
+                this.actions.getFooterData(footerPostData);
+            }
+            if (this.data.fristGetCorrespondence && this.data.viewMode == 'viewFromCorrespondence') {
+                this.actions.checkCorrespondence();
+                this.data.fristGetCorrespondence = false;
+            }
+            if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
+                this.actions.checkCorrespondence(true);
+            }
+            if(this.data.correspondenceSelectedList){
+                this.data.correspondenceSelectedList.length>0?Mediator.publish('form:correspondenceRequired:' + this.data.tableId, true):Mediator.publish('form:correspondenceRequired:' + this.data.tableId, false);
+            }
+            if (this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild') {
+                Mediator.publish('form:songGridRefresh:' + this.data.tableId, this.data);
+            }
+            try {
+                this.data.showTabs(1);
+                this.hideLoading();
+            } catch (e) {
+            }
         },
         //生命周期相关参数
         async setLifeCycleNode(){
@@ -1637,32 +1637,8 @@ let dataTableAgGrid = Component.extend({
             }
             this.actions.calcSelectData('get');
         },
-        /**
-         * 根据viewMode不同，生成不同请求数据的参数
-         * 拼装搜索的参数，排序参数
-         */
-        createPostData: function () {
-            let json = {
-                table_id: this.data.tableId,
-                first: this.data.first,
-                rows: this.data.rows,
-                parent_table_id: this.data.parentTableId,
-                parent_real_id: this.data.parentRealId,
-                parent_temp_id: this.data.parentTempId,
-                parent_record_id: this.data.parentRecordId,
-                tableType: this.data.tableType,
-                fieldId: this.data.fieldId,
-                rowId: this.data.rowId,
-                record_id: this.data.record_id,
-                is_filter: this.data.filterParam.is_filter,
-                filter: [],
-                from_approve: this.data.fromApprove || 0
-            };
-            for (let k in json) {
-                if (json[k] == 'undefined') {
-                    json[k] = '';
-                }
-            }
+        // 根据viewMode不同更改参数
+        pickPostJson: function (json) {
             if (this.data.viewMode == 'in_process') {
                 let ids = [];
                 for (let d of this.data.rowData) {
@@ -1688,10 +1664,7 @@ let dataTableAgGrid = Component.extend({
                 }
             }
             if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
-                // json['rows'] = 99999;
-                // json['first'] = 0;
                 json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
-                // json['is_temp'] = 1;
                 json['tableType'] = 'dy';
                 delete json['rowId']
             }
@@ -1729,6 +1702,9 @@ let dataTableAgGrid = Component.extend({
             if (this.data.viewMode == 'deleteHanding') {
                 json['mongo'] = this.data.deleteHandingData;
             }
+        },
+        // 拼装搜索排序
+        pickPostFilter: function (json) {
             if (this.data.filterParam.filter && this.data.filterParam.filter.length != 0) {
                 json['filter'] = _.cloneDeep(this.data.filterParam.filter) || []
             }
@@ -1742,9 +1718,6 @@ let dataTableAgGrid = Component.extend({
                 for (let i = len; i >= 0; i--) {
                     json['filter'].unshift(this.data.filterParam.expertFilter[i]);
                 }
-                // for( let a of this.data.filterParam.expertFilter ){
-                //     json['filter'].push( a );
-                // }
                 if (this.data.filterParam['common_filter_id'] != '临时高级查询') {
                     json['common_filter_id'] = this.data.filterParam['common_filter_id'] || '';
                 }
@@ -1757,10 +1730,6 @@ let dataTableAgGrid = Component.extend({
                     this.el.find('.query-tips-delete').on('click', () => {
                         this.el.find('.query-tips').css('display', 'none');
                     })
-                    // setTimeout(()=>{
-                    //     this.el.find('.query-tips').css('display','none');
-                    // },3000)
-                    // msgBox.showTips( `加载常用查询&lt;${this.data.filterParam['common_filter_name']}&gt;` );
                 } else {
                     delete json['common_filter_id'];
                     delete json['is_filter'];
@@ -1775,6 +1744,20 @@ let dataTableAgGrid = Component.extend({
             if (this.data.sortParam.sortField) {
                 json = _.defaultsDeep(json, this.data.sortParam)
             }
+            this.actions.pyFilter(json);
+            json = dgcService.returnQueryParams(json);
+            this.data.filterParam.is_filter = 1;
+            if (json.filter && json.filter != '') {
+                if (this.data.filterText != json.filter) {
+                    this.data.first = 0;
+                    json.first = 0;
+                    this.data.filterText = json.filter;
+                }
+            }
+            this.actions.departmentDiaryFilter(json);
+        },
+        // 拼音搜索验证
+        pyFilter: function (json) {
             //是否添加拼音搜索
             let addPy = false;
             if(json.filter && json.filter.length!=0){
@@ -1790,16 +1773,9 @@ let dataTableAgGrid = Component.extend({
                     }
                 }
             }
-            json = dgcService.returnQueryParams(json);
-            this.data.filterParam.is_filter = 1;
-            if (json.filter && json.filter != '') {
-                if (this.data.filterText != json.filter) {
-                    this.data.first = 0;
-                    json.first = 0;
-                    this.data.filterText = json.filter;
-                }
-            }
-
+        },
+        // 部门日报搜索
+        departmentDiaryFilter: function (json) {
             //部门日报的搜索
             if (this.data.departmentDiary && JSON.stringify(this.data.departmentFilter) != '{}') {
                 if (json.filter) {
@@ -1813,6 +1789,35 @@ let dataTableAgGrid = Component.extend({
                 }
                 json.filter = JSON.stringify(json.filter)
             }
+        },
+        /**
+         * 根据viewMode不同，生成不同请求数据的参数
+         * 拼装搜索的参数，排序参数
+         */
+        createPostData: function () {
+            let json = {
+                table_id: this.data.tableId,
+                first: this.data.first,
+                rows: this.data.rows,
+                parent_table_id: this.data.parentTableId,
+                parent_real_id: this.data.parentRealId,
+                parent_temp_id: this.data.parentTempId,
+                parent_record_id: this.data.parentRecordId,
+                tableType: this.data.tableType,
+                fieldId: this.data.fieldId,
+                rowId: this.data.rowId,
+                record_id: this.data.record_id,
+                is_filter: this.data.filterParam.is_filter,
+                filter: [],
+                from_approve: this.data.fromApprove || 0
+            };
+            for (let k in json) {
+                if (json[k] == 'undefined') {
+                    json[k] = '';
+                }
+            }
+            this.actions.pickPostJson(json);
+            this.actions.pickPostFilter(json);
             return json;
         },
         //渲染agGrid（根据存在的按钮，为按钮事件，渲染分组定制列，分页等组件）
@@ -2121,90 +2126,6 @@ let dataTableAgGrid = Component.extend({
         onBtnClick: function () {
             this.actions.customColumnClick();
             this.actions.groupBtnClick();
-
-            //宽度自适应
-            if (this.el.find('.grid-auto-width')[0]) {
-                this.el.find('.grid-auto-width').on('click', () => {
-                    if (!this.data.isAutoWidth) {
-                        this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
-                        this.agGrid.actions.autoWidth();
-                    } else {
-                        let state = this.agGrid.gridOptions.columnApi.getColumnState();
-                        for (let s of state) {
-                            for (let ls of this.data.lastGridState) {
-                                if (s.colId == ls.colId) {
-                                    s.width = ls.width;
-                                    break;
-                                }
-                            }
-                        }
-                        this.agGrid.gridOptions.columnApi.setColumnState(state);
-                    }
-                    this.el.find('.grid-auto-width').find('span').html(!this.data.isAutoWidth ? '恢复默认' : '自适宽度');
-                    this.data.isAutoWidth = !this.data.isAutoWidth;
-                })
-            }
-            //搜索
-            if (this.el.find('.float-search-btn')[0]) {
-                this.el.find('.float-search-btn').on('click', () => {
-                    if (this.data.isShowFloatingFilter && this.data.filterParam.filter.length != 0) {
-                        for (let k in this.data.searchValue) {
-                            this.data.searchValue[k] = '';
-                        }
-                        for (let k in this.data.searchOldValue) {
-                            this.data.searchOldValue[k] = '';
-                        }
-                        this.data.queryList = {};
-                        this.actions.setFloatingFilterInput();
-                        this.data.filterParam.filter = [];
-                        this.actions.getGridData();
-                    }
-                    let height = this.data.isShowFloatingFilter ? 0 : 30;
-                    this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
-                    this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
-                })
-            }
-            //删除
-            if (this.el.find('.grid-del-btn')[0]) {
-                this.el.find('.grid-del-btn').on('click', () => {
-                    this.actions.retureSelectData();
-                    if (this.data.deletedIds.length == 0) {
-                        msgBox.alert('请选择数据');
-                        return;
-                    }
-                    msgBox.confirm('确定删除？').then(res => {
-                        if (res) {
-                            this.actions.delTableData();
-                        }
-                    })
-                })
-            }
-            //导入数据
-            if (this.el.find('.grid-import-btn')[0]) {
-                this.el.find('.grid-import-btn').on('click', () => {
-                    let json = {
-                        tableId: this.data.tableId,
-                        parentTableId: this.data.parentTableId,
-                        parentRealId: this.data.parentRealId,
-                        parentTempId: this.data.parentTempId,
-                        isBatch: this.data.viewMode == 'createBatch' ? 1 : 0,
-                        isSuperUser: window.config.is_superuser || 0,
-                        viewMode: this.data.viewMode
-                    };
-                    let data = {
-                        formData: this.data.formData,
-                    };
-                    let url = dgcService.returnIframeUrl('/iframe/dataImport/', json);
-                    let winTitle = '导入数据';
-                    this.actions.openDialog(url, winTitle, 600, 650, data);
-                })
-            }
-            //导出
-            if (this.el.find('.grid-export-btn')[0]) {
-                this.el.find('.grid-export-btn').on('click', () => {
-                    this.actions.onExport()
-                })
-            }
             //全屏
             if (this.el.find('.grid-new-window')[0]) {
                 let url_obj = {
@@ -2254,97 +2175,6 @@ let dataTableAgGrid = Component.extend({
                     }else{
                         msgbox.alert('本表中没有未提交的表单');
                     }
-                })
-            }
-            //新增数据
-            if (this.el.find('.new-form-btn')[0]) {
-                this.el.find('.new-form-btn').on('click', () => {
-                    let obj = {
-                        table_id: this.data.tableId,
-                        parent_table_id: this.data.parentTableId,
-                        parent_real_id: this.data.parentRealId,
-                        parent_temp_id: this.data.parentTempId,
-                        parent_record_id: this.data.parentRecordId,
-                        btnType: 'new',
-                        form_id: this.data.formId,
-                        flow_id: this.data.flowId,
-                        tableType:this.data.tableType
-                    };
-                    let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
-
-                    let title = '新增';
-                    this.actions.openSelfIframe(url, title);
-                })
-            }
-            //在途刷新
-            if (this.el.find('.refresh-btn')[0]) {
-                this.el.find('.refresh-btn').on('click', () => {
-                    this.el.find('.icon-aggrid-refresh').addClass('refresh-rotate');
-                    this.actions.getInprocessData(true);
-                })
-            }
-            //对应关系保存
-            if (this.el.find('.correspondence-save')[0]) {
-                this.el.find('.correspondence-save').on('click', () => {
-                    this.actions.saveCorrespondence();
-                })
-            }
-            //对应关系勾选
-            if (this.el.find('.correspondence-check')[0]) {
-                this.el.find('.correspondence-check').on('click', () => {
-                    this.actions.checkCorrespondence();
-                })
-            }
-            //编辑模式
-            if (this.el.find('.edit-btn')[0]) {
-                this.el.find('.edit-btn').on('click', () => {
-                    if (this.data.firstCreateEditCol) {
-                        this.data.firstCreateEditCol = false;
-                        //创建编辑模式表头
-                        let j = {table_id: this.data.tableId};
-                        if (this.data.viewMode == 'reportTable2') {
-                            j['is_report'] = 1;
-                            j['field_id'] = this.data.fieldId;
-                        }
-                        FormService.getStaticData(j).then(res => {
-                            for (let d of res.data) {
-                                this.data.colControlData[d.dfield] = d;
-                            }
-                            this.columnDefsEdit = this.actions.createHeaderColumnDefs(true);
-                            this.actions.toogleEdit();
-                        });
-                        HTTP.flush();
-                    } else {
-                        this.actions.toogleEdit();
-                    }
-                });
-                this.el.find('.edit-btn-cancel').on('click', () => {
-                    if (this.data.viewMode == 'reportTable2') {
-                        this.actions.onEditSave2(true);
-                    } else {
-                        this.actions.onEditSave(true);
-                    }
-                });
-                this.el.find('.edit-btn-save').on('click', () => {
-                    //保存
-                    if (this.data.viewMode == 'reportTable2') {
-                        this.actions.onEditSave2();
-                    } else {
-                        this.actions.onEditSave();
-                    }
-                })
-            }
-            //点击这里
-            if (this.el.find('.showNormalGrid')[0]) {
-                this.el.find('.showNormalGrid').on('click', () => {
-                    let obj = {
-                        tableId: this.data.tableId,
-                        tableName: this.data.tableName,
-                        viewMode: 'normal'
-                    };
-                    let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
-                    let winTitle = obj.tableName;
-                    this.actions.openSourceDataGrid(url, winTitle);
                 })
             }
         },
@@ -2641,11 +2471,6 @@ let dataTableAgGrid = Component.extend({
                     }
                 })
             });
-            // this.el.find('.dataGrid-commonQuery-select').click(()=>{
-            //     if(this.data.commonQueryData.length == 0) {
-            //         msgBox.alert('您还未设置任何常用查询，请在右侧【高级查询】中设置');
-            //     }
-            // })
             this.el.bind('click', function() {
 				$(this).find('.dataGrid-commonQuery-ul').hide();
 			});
@@ -2667,7 +2492,6 @@ let dataTableAgGrid = Component.extend({
 				} else if($($event.target).html() == '临时高级查询') {
 					_this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
 				} else {
-					// $(this).find('.Temporary').remove();
 					_this.data.commonQueryData.forEach((item) => {
 						if(item.name == $($event.target).html()){
 							_this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
@@ -2683,21 +2507,6 @@ let dataTableAgGrid = Component.extend({
 					$(this).find('.dataGrid-commonQuery-ul').show();
                 }
             });
-            // this.el.find('.dataGrid-commonQuery-select').bind('change', function() {
-            //     if($(this).val() == '常用查询') {
-            //         _this.actions.postExpertSearch([],'');
-            //         _this.el.find('.query-tips').css('display','none');
-            //     } else if($(this).val() == '临时高级查询') {
-            //         _this.actions.postExpertSearch(_this.data.temporaryCommonQuery,'临时高级查询','临时高级查询');
-            //     } else {
-            //         // $(this).find('.Temporary').remove();
-            //         _this.data.commonQueryData.forEach((item) => {
-            //             if(item.name == $(this).val()){
-            //                 _this.actions.postExpertSearch(JSON.parse(item.queryParams),item.id,item.name);
-            //             }
-            //         })
-            //     }
-            // })
         },
         appendQuerySelect: function() {
             let length = this.el.find('.dataGrid-commonQuery-select li').length
@@ -3023,16 +2832,21 @@ let dataTableAgGrid = Component.extend({
         },
         onCellDoubleClicked: function (data) {
         },
-        //点击cell
-        onCellClicked: function (data) {
-            if (!data.data || data.data.myfooter || this.data.doubleClick || this.data.editMode) {
-                return;
-            }
+        preventClick: function () {
             //防止双击和单击的误操作
             this.data.doubleClick = true;
             setTimeout(() => {
                 this.data.doubleClick = false;
             }, 200);
+        },
+        groupDrawOrdinal:　function (data) {
+            //分组重新渲染序号
+            let groupValue = data.data.group;
+            if ((groupValue || Object.is(groupValue, '') || Object.is(groupValue, 0)) && data.colDef.field == 'group') {
+                this.agGrid.gridOptions.api.redrawRows();
+            }
+        },
+        handleCellclick: function (data) {
             if (this.data.viewMode == 'reportTable2') {
                 if (data.data.can_edit == 1) {
                     data.column.cellEditor = "";
@@ -3040,13 +2854,6 @@ let dataTableAgGrid = Component.extend({
                 else {
                     data.column.cellEditor = true;
                 }
-            }
-            console.log("onCellClicked数据");
-            console.log(data);
-            //分组重新渲染序号
-            let groupValue = data.data.group;
-            if ((groupValue || Object.is(groupValue, '') || Object.is(groupValue, 0)) && data.colDef.field == 'group') {
-                this.agGrid.gridOptions.api.redrawRows();
             }
             if(this.data.lifecycleGrid){
                 this.data.cycleTitle = data.data.f5 || '生命周期';
@@ -3057,313 +2864,348 @@ let dataTableAgGrid = Component.extend({
                     arr.push(obj);
                 }
             }
-
             this.col_id = data.data._id;
             this.colDef = arr;
+        },
+        videoCellClick: function (data) {
+            let json = {
+                file_ids: JSON.stringify(data.value),
+                dinput_type: data.colDef.dinput_type
+            };
+            dataTableService.getAttachmentList(json).then(res => {
+                ViewVideo.data.rows = res.rows;
+                ViewVideo.data.dinput_type = data.colDef.dinput_type;
+                ViewVideo.data.currentVideoId = data.value[0];
+                ViewVideo.data.is_view = true;
+                ViewVideo.data.videoSrc = `/download_attachment/?file_id=${data.value[0]}&download=0&dinput_type=${data.colDef.dinput_type}`;
+                PMAPI.openDialogByComponent(ViewVideo, {
+                    width: 900,
+                    height: 600,
+                    title: '视频播放器'
+                })
+            });
+            HTTP.flush();
+        },
+        imageCellClick: function (data) {
+            let json = {};
+            json["dfield"] = data.colDef.field;
+            json["table_id"] = this.data.tableId;
+            json[(data.data.action ? "temp_id" : "real_id")] = data.data._id;
+            dataTableService.getAttachmentList(json).then(res => {
+                let obj = dataTableService.setImgDataAndNum(res, {}, '');
+                PictureAttachment.data.imgData = obj.imgData;
+                PictureAttachment.data.imgSelect = obj.imgSelect;
+                PictureAttachment.data.imgTotal = obj.imgTotal;
+                PictureAttachment.data.imgNum = obj.imgNum;
+                PictureAttachment.data.rows = obj.imgData.rows;
+                PMAPI.openDialogByComponent(PictureAttachment, {
+                    title: '图片附件',
+                    width: 900,
+                    height: 600
+                })
+            });
+            HTTP.flush();
+        },
+        ueditorCellClick:　function (data) {
+            QuillAlert.data.value = data.value.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
+            PMAPI.openDialogByComponent(QuillAlert, {
+                title: '文本编辑器',
+                width: 1200,
+                height: 650,
+                modal: true,
+                maxable: true,
+            })
+        },
+        textCountCellClick: function (data) {
+            if (data.event.srcElement.className.indexOf('view-contract') != -1) {
+                let obj = {
+                    table_id: this.data.tableId,
+                    id: data.colDef.id,
+                    real_id: data.data._id,
+                    temp_id: data.data.temp_id,
+                    value: data['value'],
+                    mode: 'view'
+                };
+                //_.defaultsDeep不会替换原对象中已有key的value
+                let contractConfig = _.defaultsDeep({},{data: obj},contractEditorConfig);
+                PMAPI.openDialogByComponent(contractConfig, {
+                    width: 900,
+                    height: 600,
+                    title: '合同查看'
+                });
+            } else if (data.event.srcElement.className.indexOf('download-contract') != -1) {
+                this.actions.downloadContract(data, 0);
+            }
+        },
+        attachmentCellClick: function (data) {
+            let dinput_type = data.colDef.real_type;
+            let fileIds = data['value'];
+            if (fileIds) {
+                dataTableService.getAttachmentList({
+                    file_ids: JSON.stringify(fileIds),
+                    dinput_type: dinput_type
+                }).then(res => {
+                    let list = res["rows"];
+                    for (let data of list) {
+                        //附件名称编码转换
+                        data.file_name = data.file_name;
+                        let str = dataTableService.getFileExtension(data.file_name);
+                        if (dataTableService.preview_file.indexOf(str.toLowerCase()) != -1) {
+                            data["isPreview"] = true;
+                            if (dataTableService.preview_file.indexOf(str.toLowerCase()) < 4) {
+                                data["isImg"] = true;
+                            } else {
+                                data["isImg"] = false;
+                            }
+                        } else {
+                            data["isPreview"] = false;
+                        }
+                    }
+                    AttachmentList.data.list = list;
+                    AttachmentList.data.dinput_type = dinput_type;
+                    AttachmentList.data.is_view = true;
+                    PMAPI.openDialogByComponent(AttachmentList, {
+                        width: 900,
+                        height: 600,
+                        title: '附件列表'
+                    })
+                });
+                HTTP.flush();
+            }
+        },
+        relatedOrBuildinCellClick: function (data) {
+            if(this.actions.haveTempId(data.data)){
+                msgBox.alert('不支持查看源数据。');
+                return;
+            }
+            console.log( "内置相关穿透" );
+            console.log("内置相关穿透");
+            if (data.colDef.is_user) {
+                PersonSetting.showUserInfo({name: data.value});
+            } else {
+                let obj = {
+                    tableId: data.colDef.source_table_id,
+                    tableName: data.colDef.source_table_name || '',
+                    parentTableId: this.data.tableId,
+                    rowId: data.data._id,
+                    base_buildin_dfield: data.colDef.source_field_dfield,
+                    source_field_dfield: data.colDef.base_buildin_dfield,
+                    tableType: 'source_data',
+                    viewMode: 'source_data'
+                };
+                let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
+                let winTitle = data.colDef.tableName + '->' + obj.tableName;
+                this.actions.openSourceDataGrid(url, winTitle);
+            }
+        },
+        correspondenceCellClick: function (data) {
+            console.log('对应关系穿透');
+            let json = {
+                form_id: '',
+                table_id: this.data.tableId,
+                is_view: 1,
+                parent_table_id: this.data.parentTableId,
+                parent_real_id: this.data.parentRealId,
+                parent_temp_id: this.data.parentTempId,
+                real_id: data['data']['_id']
+            };
+            if (data['data'].temp_id) {
+                json['temp_id'] = data['data'].temp_id;
+                delete json['real_id'];
+            }
+            FormService.getDynamicData(json).then(res => {
+                let obj = {
+                    tableId: data.colDef.field_content.correspondence_table_id,
+                    tableName: data.colDef.source_table_name || '',
+                    parentTableId: this.data.tableId,
+                    parentTempId: res.data.temp_id.value,
+                    tableType: '',
+                    viewMode: 'viewFromCorrespondence',
+                    rowId: data.data._id
+                };
+                let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
+                let winTitle = data.colDef.tableName + '->' + obj.tableName;
+                this.actions.openSourceDataGrid(url, winTitle);
+            });
+            HTTP.flush();
+        },
+        countCellClick: function (data) {
+            if(this.data.form_songrid == 1 || this.data.viewMode=='in_process'){
+                msgBox.alert('不支持查看源数据。');
+                return;
+            }
+            console.log('统计穿透');
+            let obj = {
+                tableId: data.colDef.field_content.count_table,
+                tableName: data.colDef.field_content.count_table_name || '',
+                parentTableId: this.data.tableId,
+                tableType: 'count',
+                viewMode: 'count',
+                rowId: data.data._id,
+                parentRealId: data.data._id,
+                fieldId: data.colDef.id,
+                source_field_dfield: data.colDef.field_content.count_field_dfield || '',
+            };
+            if (data.data.temp_id) {
+                obj['parentTempId'] = data.data.temp_id;
+                delete obj['parentRealId']
+            }
+            let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
+            let winTitle = data.colDef.tableName + '->' + obj.tableName;
+            this.actions.openSourceDataGrid(url, winTitle);
+        },
+        childCellClick: function (data) {
+            if(this.data.form_songrid == 1){
+                msgBox.alert('不支持查看源数据。');
+                return;
+            }
+            console.log("子表穿透");
+            let obj = {
+                tableId: data.colDef.field_content.child_table,
+                tableName: data.colDef.field_content.child_table_name || '',
+                parentTableId: this.data.tableId,
+                tableType: 'child',
+                viewMode: 'child',
+                rowId: data.data._id,
+                parentRealId: data.data._id,
+                fieldId: data.colDef.id,
+                source_field_dfield: data.colDef.field_content.child_field_dfield || '',
+            };
+            if (data.data.temp_id) {
+                obj['parentTempId'] = data.data.temp_id;
+                delete obj['parentRealId']
+            }
+            let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
+            let winTitle = data.colDef.tableName + '->' + obj.tableName;
+            this.actions.openSourceDataGrid(url, winTitle);
+        },
+        reportTable2CellClick: function (data) {
+            //查找对应列的colId
+            if (data.value == 0) {
+                return
+            }
+            let ks = [];
+            if (data.colDef.field_content.update_exp) {
+                let reg = /\@f(\d+)\@/g;
+                let items = data.colDef.field_content.update_exp.match(reg);
+                for (let item of items) {
+                    item = item.replace("@", "").replace("@", "");
+                    ks.push(item);
+                }
+            }
+            let current_colId = data.colDef.colId;
+            let val = data.value;
+            let real_colId = '';
+            let project = '';
+            if (JSON.stringify(ks) == '[]') {
+                for (let k in data.data) {
+                    if (val == data.data[k] && current_colId != k) {
+                        real_colId = k;
+                        break;
+                    }
+                }
+            } else {
+                for (let k of ks) {
+                    if (val == data.data[k] && current_colId != k) {
+                        real_colId = k;
+                        break;
+
+                    }
+                }
+            }
+            //查询信息
+            let cols = data.columnApi._columnController.getAllGridColumns();
+            let break_num = 0;
+            let data_colDef;
+            for (let i = 0; i < cols.length; i++) {
+                //查找对应项目名称
+                if (cols[i].colDef.headerName == "项目名称") {
+                    project = data.data[cols[i].colId];
+                    break_num++;
+                }
+                //查找对应列所有信息
+                if (cols[i].colId == real_colId) {
+                    data_colDef = JSON.parse(JSON.stringify(cols[i]['colDef']));
+                    break_num++;
+                }
+                if (break_num == 2) {
+                    break;
+                }
+            }
+            console.log("二维表数据穿透");
+            let obj = {
+                tableId: data_colDef.source_table_id,
+                tableName: data_colDef.source_table_name,
+                parentTableId: this.data.tableId,
+                tableType: '',
+                rowId: data.data._id,
+                parentRealId: data.data._id,
+                fieldId: data_colDef.field_content.count_field,
+                project: project,
+                viewMode: 'reportTable2'
+            };
+            let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
+            let winTitle = this.data.tableName + '->' + obj.tableName;
+            this.actions.openSourceDataGrid(url, winTitle);
+        },
+        //点击cell
+        onCellClicked: function (data) {
+            if (!data.data || data.data.myfooter || this.data.doubleClick || this.data.editMode) {
+                return;
+            }
+            console.log("onCellClicked数据");
+            console.log(data);
+            this.actions.preventClick();
+            this.actions.groupDrawOrdinal(data);
+            this.actions.handleCellclick(data);
             //行选择
             if (data.colDef.headerName != "操作" && !this.data.editMode) {
                 dgcService.rowClickSelect(data)
             }
-
             //数据计算cache不可操作
             if (data["data"]["data_status"] && data["data"]["data_status"] == '0') {
                 msgBox.alert("数据计算中，请稍候");
                 return;
             }
-
             //视频字段
             if (data.colDef.real_type == fieldTypeService.VIDEO_TYPE && data.event.srcElement.id == 'file_view') {
-                let json = {
-                    file_ids: JSON.stringify(data.value),
-                    dinput_type: data.colDef.dinput_type
-                };
-                dataTableService.getAttachmentList(json).then(res => {
-                    ViewVideo.data.rows = res.rows;
-                    ViewVideo.data.dinput_type = data.colDef.dinput_type;
-                    ViewVideo.data.currentVideoId = data.value[0];
-                    ViewVideo.data.is_view = true;
-                    ViewVideo.data.videoSrc = `/download_attachment/?file_id=${data.value[0]}&download=0&dinput_type=${data.colDef.dinput_type}`;
-                    PMAPI.openDialogByComponent(ViewVideo, {
-                        width: 900,
-                        height: 600,
-                        title: '视频播放器'
-                    })
-                });
-                HTTP.flush();
+                this.actions.videoCellClick(data);
             }
             //图片查看
             if (data.colDef.real_type == fieldTypeService.IMAGE_TYPE) {
-                let json = {};
-                json["dfield"] = data.colDef.field;
-                json["table_id"] = this.data.tableId;
-                json[(data.data.action ? "temp_id" : "real_id")] = data.data._id;
-                dataTableService.getAttachmentList(json).then(res => {
-                    let obj = dataTableService.setImgDataAndNum(res, {}, '');
-                    PictureAttachment.data.imgData = obj.imgData;
-                    PictureAttachment.data.imgSelect = obj.imgSelect;
-                    PictureAttachment.data.imgTotal = obj.imgTotal;
-                    PictureAttachment.data.imgNum = obj.imgNum;
-                    PictureAttachment.data.rows = obj.imgData.rows;
-                    PMAPI.openDialogByComponent(PictureAttachment, {
-                        title: '图片附件',
-                        width: 900,
-                        height: 600
-                    })
-                });
-                HTTP.flush();
+                this.actions.imageCellClick(data);
             }
             //富文本字段
             if (data.colDef.real_type == fieldTypeService.UEDITOR) {
-                QuillAlert.data.value = data.value.replace(/(\n)/g, '').replace(/(")/ig,'\\\"');
-                PMAPI.openDialogByComponent(QuillAlert, {
-                    title: '文本编辑器',
-                    width: 1200,
-                    height: 650,
-                    modal: true,
-                    maxable: true,
-                })
+                this.actions.ueditorCellClick(data);
             }
             //合同编辑器
             if (data.colDef.real_type == fieldTypeService.TEXT_COUNT_TYPE) {
-                if (data.event.srcElement.className.indexOf('view-contract') != -1) {
-                    let obj = {
-                        table_id: this.data.tableId,
-                        id: data.colDef.id,
-                        real_id: data.data._id,
-                        temp_id: data.data.temp_id,
-                        value: data['value'],
-                        mode: 'view'
-                    };
-                    //_.defaultsDeep不会替换原对象中已有key的value
-                    let contractConfig = _.defaultsDeep({},{data: obj},contractEditorConfig);
-                    PMAPI.openDialogByComponent(contractConfig, {
-                        width: 900,
-                        height: 600,
-                        title: '合同查看'
-                    });
-                } else if (data.event.srcElement.className.indexOf('download-contract') != -1) {
-                    this.actions.downloadContract(data, 0);
-                }
+                this.actions.textCountCellClick(data);
             }
-
-
             //附件字段
             if (data.event.srcElement.id == 'file_view' && fieldTypeService.attachment(data.colDef.real_type)) {
-                let dinput_type = data.colDef.real_type;
-                let fileIds = data['value'];
-                if (fileIds) {
-                    dataTableService.getAttachmentList({
-                        file_ids: JSON.stringify(fileIds),
-                        dinput_type: dinput_type
-                    }).then(res => {
-                        let list = res["rows"];
-                        for (let data of list) {
-                            //附件名称编码转换
-                            data.file_name = data.file_name;
-                            let str = dataTableService.getFileExtension(data.file_name);
-                            if (dataTableService.preview_file.indexOf(str.toLowerCase()) != -1) {
-                                data["isPreview"] = true;
-                                if (dataTableService.preview_file.indexOf(str.toLowerCase()) < 4) {
-                                    data["isImg"] = true;
-                                } else {
-                                    data["isImg"] = false;
-                                }
-                            } else {
-                                data["isPreview"] = false;
-                            }
-                        }
-                        AttachmentList.data.list = list;
-                        AttachmentList.data.dinput_type = dinput_type;
-                        AttachmentList.data.is_view = true;
-                        PMAPI.openDialogByComponent(AttachmentList, {
-                            width: 900,
-                            height: 600,
-                            title: '附件列表'
-                        })
-                    });
-                    HTTP.flush();
-                }
+                this.actions.attachmentCellClick(data);
             }
             //内置相关查看原始数据用
             if( data.event.srcElement.id == 'relatedOrBuildin' ){
-                if(this.actions.haveTempId(data.data)){
-                    msgBox.alert('不支持查看源数据。');
-                    return;
-                }
-                console.log( "内置相关穿透" );
-                console.log("内置相关穿透");
-                if (data.colDef.is_user) {
-                    PersonSetting.showUserInfo({name: data.value});
-                } else {
-                    let obj = {
-                        tableId: data.colDef.source_table_id,
-                        tableName: data.colDef.source_table_name || '',
-                        parentTableId: this.data.tableId,
-                        rowId: data.data._id,
-                        base_buildin_dfield: data.colDef.source_field_dfield,
-                        source_field_dfield: data.colDef.base_buildin_dfield,
-                        tableType: 'source_data',
-                        viewMode: 'source_data'
-                    };
-                    let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
-                    let winTitle = data.colDef.tableName + '->' + obj.tableName;
-                    this.actions.openSourceDataGrid(url, winTitle);
-                }
+                this.actions.relatedOrBuildinCellClick(data);
             }
             //对应关系查看
             if (data.colDef.real_type == fieldTypeService.CORRESPONDENCE && data.value.toString().length && data.event.target.id == "correspondenceClick") {
-                console.log('对应关系穿透');
-                let json = {
-                    form_id: '',
-                    table_id: this.data.tableId,
-                    is_view: 1,
-                    parent_table_id: this.data.parentTableId,
-                    parent_real_id: this.data.parentRealId,
-                    parent_temp_id: this.data.parentTempId,
-                    real_id: data['data']['_id']
-                };
-                if (data['data'].temp_id) {
-                    json['temp_id'] = data['data'].temp_id;
-                    delete json['real_id'];
-                }
-
-                FormService.getDynamicData(json).then(res => {
-                    let obj = {
-                        tableId: data.colDef.field_content.correspondence_table_id,
-                        tableName: data.colDef.source_table_name || '',
-                        parentTableId: this.data.tableId,
-                        parentTempId: res.data.temp_id.value,
-                        tableType: '',
-                        viewMode: 'viewFromCorrespondence',
-                        rowId: data.data._id
-                    };
-                    let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
-                    let winTitle = data.colDef.tableName + '->' + obj.tableName;
-                    this.actions.openSourceDataGrid(url, winTitle);
-                });
-                HTTP.flush();
+                this.actions.correspondenceCellClick(data);
             }
             //统计
             if (fieldTypeService.countTable(data.colDef.dinput_type, data.colDef.real_type) && data.value.toString().length && data.event.target.id == "childOrCount") {
-                if(this.data.form_songrid == 1 || this.data.viewMode=='in_process'){
-                    msgBox.alert('不支持查看源数据。');
-                    return;
-                }
-                console.log('统计穿透');
-                let obj = {
-                    tableId: data.colDef.field_content.count_table,
-                    tableName: data.colDef.field_content.count_table_name || '',
-                    parentTableId: this.data.tableId,
-                    tableType: 'count',
-                    viewMode: 'count',
-                    rowId: data.data._id,
-                    parentRealId: data.data._id,
-                    fieldId: data.colDef.id,
-                    source_field_dfield: data.colDef.field_content.count_field_dfield || '',
-                };
-                if (data.data.temp_id) {
-                    obj['parentTempId'] = data.data.temp_id;
-                    delete obj['parentRealId']
-                }
-                let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
-                let winTitle = data.colDef.tableName + '->' + obj.tableName;
-                this.actions.openSourceDataGrid(url, winTitle);
+                this.actions.countCellClick(data);
             }
             // 子表
             if (fieldTypeService.childTable(data.colDef.dinput_type) && data.value.toString().length && data.event.target.id == "childOrCount") {
-                if(this.data.form_songrid == 1){
-                    msgBox.alert('不支持查看源数据。');
-                    return;
-                }
-                console.log("子表穿透");
-                let obj = {
-                    tableId: data.colDef.field_content.child_table,
-                    tableName: data.colDef.field_content.child_table_name || '',
-                    parentTableId: this.data.tableId,
-                    tableType: 'child',
-                    viewMode: 'child',
-                    rowId: data.data._id,
-                    parentRealId: data.data._id,
-                    fieldId: data.colDef.id,
-                    source_field_dfield: data.colDef.field_content.child_field_dfield || '',
-                };
-                if (data.data.temp_id) {
-                    obj['parentTempId'] = data.data.temp_id;
-                    delete obj['parentRealId']
-                }
-                let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
-                let winTitle = data.colDef.tableName + '->' + obj.tableName;
-                this.actions.openSourceDataGrid(url, winTitle);
+                this.actions.childCellClick(data);
             }
             //二维表数据穿透
             if (data.event.target.id == 'reportTable2') {
-                //查找对应列的colId
-                if (data.value == 0) {
-                    return
-                }
-                let ks = [];
-                if (data.colDef.field_content.update_exp) {
-                    let reg = /\@f(\d+)\@/g;
-                    let items = data.colDef.field_content.update_exp.match(reg);
-                    for (let item of items) {
-                        item = item.replace("@", "").replace("@", "");
-                        ks.push(item);
-                    }
-                }
-                let current_colId = data.colDef.colId;
-                let val = data.value;
-                let real_colId = '';
-                let project = '';
-                if (JSON.stringify(ks) == '[]') {
-                    for (let k in data.data) {
-                        if (val == data.data[k] && current_colId != k) {
-                            real_colId = k;
-                            break;
-                        }
-                    }
-                } else {
-                    for (let k of ks) {
-                        if (val == data.data[k] && current_colId != k) {
-                            real_colId = k;
-                            break;
-
-                        }
-                    }
-                }
-                //查询信息
-                let cols = data.columnApi._columnController.getAllGridColumns();
-                let break_num = 0;
-                let data_colDef;
-                for (let i = 0; i < cols.length; i++) {
-                    //查找对应项目名称
-                    if (cols[i].colDef.headerName == "项目名称") {
-                        project = data.data[cols[i].colId];
-                        break_num++;
-                    }
-                    //查找对应列所有信息
-                    if (cols[i].colId == real_colId) {
-                        data_colDef = JSON.parse(JSON.stringify(cols[i]['colDef']));
-                        break_num++;
-                    }
-                    if (break_num == 2) {
-                        break;
-                    }
-                }
-                console.log("二维表数据穿透");
-                let obj = {
-                    tableId: data_colDef.source_table_id,
-                    tableName: data_colDef.source_table_name,
-                    parentTableId: this.data.tableId,
-                    tableType: '',
-                    rowId: data.data._id,
-                    parentRealId: data.data._id,
-                    fieldId: data_colDef.field_content.count_field,
-                    project: project,
-                    viewMode: 'reportTable2'
-                };
-                let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
-                let winTitle = this.data.tableName + '->' + obj.tableName;
-                this.actions.openSourceDataGrid(url, winTitle);
+                this.actions.reportTable2CellClick(data);
             }
             //点击操作列
             if (data.colDef.headerName == "操作") {
@@ -3402,95 +3244,112 @@ let dataTableAgGrid = Component.extend({
                 return true
             }
         },
+        gridHandleView: function (data) {
+            window.top.miniFormValRealId = data.data._id;
+            console.log('查看');
+            let btnType = 'view';
+            if (this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm('view') || this.data.parent_btnType == 'none') {
+                btnType = 'none';
+            }
+            let obj = {
+                table_id: this.data.tableId,
+                parent_table_id: this.data.parentTableId,
+                parent_real_id: this.data.parentRealId,
+                parent_temp_id: this.data.parentTempId,
+                parent_record_id: this.data.parentRecordId,
+                real_id: data.data._id,
+                temp_id: data.data.temp_id || '',
+                record_id: data.data.record_id || '',
+                btnType: btnType,
+                is_view: 1,
+                in_process: this.data.viewMode == 'in_process' ? 1 : 0,
+                is_batch: (this.data.viewMode == 'createBatch' || this.data.viewMode == 'approveBatch') ? 1 : 0,
+                form_id: this.data.formId,
+                flow_id: data.data.flow_id || '',
+            };
+            let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
+            let title = '查看';
+            this.actions.openSelfIframe(url, title);
+        },
+        gridHandleEdit: function (data) {
+            window.top.miniFormValRealId = data.data._id;
+            console.log('编辑');
+            let btnType = 'edit';
+            if (this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm('edit')) {
+                btnType = 'none';
+            }
+            let obj = {
+                table_id: this.data.tableId,
+                parent_table_id: this.data.parentTableId,
+                parent_real_id: this.data.parentRealId,
+                parent_temp_id: this.data.parentTempId,
+                parent_record_id: this.data.parentRecordId,
+                real_id: data.data._id,
+                temp_id: data.data.temp_id || '',
+                btnType: btnType,
+                in_process: this.data.viewMode == 'in_process' ? 1 : 0,
+                is_batch: (this.data.viewMode == 'createBatch' || this.data.viewMode == 'approveBatch') ? 1 : 0,
+                form_id: this.data.formId,
+                flow_id: data.data.flow_id || '',
+            };
+            let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
+            let title = '编辑';
+            this.actions.openSelfIframe(url, title);
+        },
+        gridHandleHistory: function (data) {
+            console.log('历史');
+            let obj = {
+                table_id: this.data.tableId,
+                real_id: data.data._id
+            };
+            PMAPI.openDialogByIframe(`/iframe/historyApprove/`, {
+                width: 1000,
+                height: 600,
+                title: `历史`,
+                modal: true
+            }, {obj}).then(res => {
+
+            })
+        },
+        gridHandleCustomOperate: function (data) {
+            let id = data["event"]["target"]["id"];
+            for (let d of this.data.customOperateList) {
+                if (d["id"] == id) {
+                    this.actions.customOperate(d, data);
+                }
+            }
+        },
+        gridHandleCustomOperateRowOperation: function (data) {
+            let id = data["event"]["target"]["id"];
+            for (let ro of this.data.rowOperation) {
+                if (ro['row_op_id'] == id) {
+                    //在这里处理脚本
+                    //如果前端地址不为空，处理前端页面
+                    this.actions.doRowOperation(ro, data);
+                }
+            }
+        },
         //操作列点击事件
         gridHandle: function (data) {
             console.log("操作");
             console.log(data);
             console.log(this.data.namespace);
             if (data.event.srcElement.className == 'gridView') {
-                console.log('查看');
-                let btnType = 'view';
-                if (this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm('view') || this.data.parent_btnType == 'none') {
-                    btnType = 'none';
-                }
-                let obj = {
-                    table_id: this.data.tableId,
-                    parent_table_id: this.data.parentTableId,
-                    parent_real_id: this.data.parentRealId,
-                    parent_temp_id: this.data.parentTempId,
-                    parent_record_id: this.data.parentRecordId,
-                    real_id: data.data._id,
-                    temp_id: data.data.temp_id || '',
-                    record_id: data.data.record_id || '',
-                    btnType: btnType,
-                    is_view: 1,
-                    in_process: this.data.viewMode == 'in_process' ? 1 : 0,
-                    is_batch: (this.data.viewMode == 'createBatch' || this.data.viewMode == 'approveBatch') ? 1 : 0,
-                    form_id: this.data.formId,
-                    flow_id: data.data.flow_id || '',
-                };
-                let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
-                let title = '查看';
-                this.actions.openSelfIframe(url, title);
+                this.actions.gridHandleView(data);
             }
             if (data.event.srcElement.className == 'gridEdit') {
-                console.log('编辑');
-                let btnType = 'edit';
-                if (this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm('edit')) {
-                    btnType = 'none';
-                }
-                let obj = {
-                    table_id: this.data.tableId,
-                    parent_table_id: this.data.parentTableId,
-                    parent_real_id: this.data.parentRealId,
-                    parent_temp_id: this.data.parentTempId,
-                    parent_record_id: this.data.parentRecordId,
-                    real_id: data.data._id,
-                    temp_id: data.data.temp_id || '',
-                    btnType: btnType,
-                    in_process: this.data.viewMode == 'in_process' ? 1 : 0,
-                    is_batch: (this.data.viewMode == 'createBatch' || this.data.viewMode == 'approveBatch') ? 1 : 0,
-                    form_id: this.data.formId,
-                    flow_id: data.data.flow_id || '',
-                };
-                let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
-                let title = '编辑';
-                this.actions.openSelfIframe(url, title);
+                this.actions.gridHandleEdit(data);
             }
             if (data.event.srcElement.className == 'gridHistory') {
-                console.log('历史');
-                let obj = {
-                    table_id: this.data.tableId,
-                    real_id: data.data._id
-                };
-                PMAPI.openDialogByIframe(`/iframe/historyApprove/`, {
-                    width: 1000,
-                    height: 600,
-                    title: `历史`,
-                    modal: true
-                }, {obj}).then(res => {
-
-                })
+                this.actions.gridHandleHistory(data);
             }
             //半触发操作
             if (data.event.srcElement.className == 'customOperate') {
-                let id = data["event"]["target"]["id"];
-                for (let d of this.data.customOperateList) {
-                    if (d["id"] == id) {
-                        this.actions.customOperate(d, data);
-                    }
-                }
+                this.actions.gridHandleCustomOperate(data);
             }
             //行级操作
             if (data.event.srcElement.className == 'rowOperation') {
-                let id = data["event"]["target"]["id"];
-                for (let ro of this.data.rowOperation) {
-                    if (ro['row_op_id'] == id) {
-                        //在这里处理脚本
-                        //如果前端地址不为空，处理前端页面
-                        this.actions.doRowOperation(ro, data);
-                    }
-                }
+                this.actions.gridHandleCustomOperateRowOperation(data);
             }
         },
         //半触发操作
@@ -3802,53 +3661,58 @@ let dataTableAgGrid = Component.extend({
             }
         },
 
-    },
-    afterRender: function () {
-        this.showLoading();
-        window.top.hideMiniForm?'':(window.top.hideMiniForm={});
-        window.top.hideMiniForm[this.data.tableId]=()=>{
-            $('.dataTableMiniForm').hide();
-        }
-        console.time('渲染时间');
-        //发送表单tableId（订阅刷新数据用
-        if (dgcService.needRefreshMode.indexOf(this.data.viewMode) != -1 && !this.data.departmentDiary) {
-            TabService.onOpenTab(this.data.tableId).done((result) => {
-                if (result.success === 1) {
-                    // console.log("post open record success");
-                } else {
-                    console.log("post open record failed")
-                }
-            });
-        }
-        try {
-            dgcService.accuracy = window.config.sysConfig.accuracy || 1000;
-        } catch (e) {
-        }
-        let gridData = {
-            columnDefs: this.columnDefs,
-            rowData: this.data.rowData,
-            footerData: this.data.footerData,
-            floatingFilter: true,
-            fieldsData: this.data.fieldsData,
-            onColumnResized: this.actions.onColumnResized,
-            onSortChanged: this.actions.onSortChanged,
-            onDragStopped: this.actions.onDragStopped,
-            onCellClicked: this.actions.onCellClicked,
-            onCellValueChanged: this.actions.onCellValueChanged,
-            onRowDoubleClicked: this.actions.onRowDoubleClicked,
-            onCellDoubleClicked: this.actions.onCellDoubleClicked,
-            setRowStyle: this.actions.setRowStyle,
-            rowDataChanged: this.actions.rowDataChanged,
-            onRowSelected: this.actions.onRowSelected
-        };
-        this.agGrid = new agGrid({data:gridData});
-        this.append(this.agGrid, this.el.find('#data-agGrid'));
-
-        this.floatingFilterCom = new FloatingFilter();
-        this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
-
-        //渲染cache数据
-        if (window.config.data_cached == 1 && this.data.viewMode == 'normal' && this.data.cacheData) {
+        // 隐藏表单
+        hideMinform: function () {
+            window.top.hideMiniForm?'':(window.top.hideMiniForm={});
+            window.top.hideMiniForm[this.data.tableId]=()=>{
+                $('.dataTableMiniForm').hide();
+            }
+        },
+        sendTableId: function () {
+            //发送表单tableId（订阅刷新数据用
+            if (dgcService.needRefreshMode.indexOf(this.data.viewMode) != -1 && !this.data.departmentDiary) {
+                TabService.onOpenTab(this.data.tableId).done((result) => {
+                    if (result.success === 1) {
+                        // console.log("post open record success");
+                    } else {
+                        console.log("post open record failed")
+                    }
+                });
+            }
+        },
+        // 获取分位
+        getCccuracy: function () {
+            try {
+                dgcService.accuracy = window.config.sysConfig.accuracy || 1000;
+            } catch (e) {
+            }
+        },
+        // 渲染grid
+        appendGrid: function () {
+            let gridData = {
+                columnDefs: this.columnDefs,
+                rowData: this.data.rowData,
+                footerData: this.data.footerData,
+                floatingFilter: true,
+                fieldsData: this.data.fieldsData,
+                onColumnResized: this.actions.onColumnResized,
+                onSortChanged: this.actions.onSortChanged,
+                onDragStopped: this.actions.onDragStopped,
+                onCellClicked: this.actions.onCellClicked,
+                onCellValueChanged: this.actions.onCellValueChanged,
+                onRowDoubleClicked: this.actions.onRowDoubleClicked,
+                onCellDoubleClicked: this.actions.onCellDoubleClicked,
+                setRowStyle: this.actions.setRowStyle,
+                rowDataChanged: this.actions.rowDataChanged,
+                onRowSelected: this.actions.onRowSelected
+            };
+            this.agGrid = new agGrid({data:gridData});
+            this.append(this.agGrid, this.el.find('#data-agGrid'));
+            this.floatingFilterCom = new FloatingFilter();
+            this.floatingFilterCom.actions.floatingFilterPostData = this.actions.floatingFilterPostData;
+        },
+        // 渲染cache数据
+        renderCacheData: function () {
             console.log('加载cache数据');
             this.actions.renderCacheData(window.config.cached_data);
             try {
@@ -3857,10 +3721,9 @@ let dataTableAgGrid = Component.extend({
             } catch (e) {
             }
             console.timeEnd('渲染时间');
-            return;
-        }
-
-        if (this.data.viewMode == 'normal' && this.data.cacheData && window.config.cached_data) {
+        },
+        // 渲染头部cache数据
+        renderHeaderCacheData: function () {
             let data = window.config.cached_data;
             console.log("只加载Header的cache数据");
             console.log(data);
@@ -3869,25 +3732,241 @@ let dataTableAgGrid = Component.extend({
             let headerRes = [data.preferences, data.column_list, data.tab_page, data.operation, data.prepare_params];
             this.actions.setHeaderData(headerRes);
             this.actions.getGridData();
-            return;
-        }
-
-        if (this.data.viewMode == 'in_process') {
-            this.data.noNeedCustom = true;
-        }
-        if (this.data.viewMode == 'deleteHanding') {
-            PMAPI.getIframeParams(window.config.key).then((res) => {
-                this.data.deleteHandingData = res.data.obj.deleteHandingData || [];
-                this.actions.getHeaderData();
-            })
-        }
-
-        PMAPI.subscribe(PMENUM.aside_fold, () => {
-            console.log($('.ui-dialog').width());
-            $('.ui-dialog').width('calc(100% - 3px)');
-        });
-        this.actions.getHeaderData();
+        },
+        // 渲染组件
+        renderComponents: function () {
+            //渲染cache数据
+            if (window.config.data_cached == 1 && this.data.viewMode == 'normal' && this.data.cacheData) {
+                this.actions.renderCacheData();
+                return;
+            }
+            if (this.data.viewMode == 'normal' && this.data.cacheData && window.config.cached_data) {
+                this.actions.renderHeaderCacheData();
+                return;
+            }
+            if (this.data.viewMode == 'in_process') {
+                this.data.noNeedCustom = true;
+            }
+            if (this.data.viewMode == 'deleteHanding') {
+                PMAPI.getIframeParams(window.config.key).then((res) => {
+                    this.data.deleteHandingData = res.data.obj.deleteHandingData || [];
+                    this.actions.getHeaderData();
+                })
+            }
+            PMAPI.subscribe(PMENUM.aside_fold, () => {
+                console.log($('.ui-dialog').width());
+                $('.ui-dialog').width('calc(100% - 3px)');
+            });
+            this.actions.getHeaderData();
+        },
+        afterRenderFun:　function () {
+            console.time('渲染时间');
+            this.showLoading();
+            this.actions.hideMinform();
+            this.actions.sendTableId();
+            this.actions.getCccuracy();
+            this.actions.appendGrid();
+            this.actions.renderComponents();
+        },
     },
+    afterRender: function () {
+        this.actions.afterRenderFun();
+    },
+    binds: [
+        {
+            event: 'click',
+            selector: '.grid-auto-width',
+            callback: function () {
+                if (!this.data.isAutoWidth) {
+                    this.data.lastGridState = this.agGrid.gridOptions.columnApi.getColumnState();
+                    this.agGrid.actions.autoWidth();
+                } else {
+                    let state = this.agGrid.gridOptions.columnApi.getColumnState();
+                    for (let s of state) {
+                        for (let ls of this.data.lastGridState) {
+                            if (s.colId == ls.colId) {
+                                s.width = ls.width;
+                                break;
+                            }
+                        }
+                    }
+                    this.agGrid.gridOptions.columnApi.setColumnState(state);
+                }
+                this.el.find('.grid-auto-width').find('span').html(!this.data.isAutoWidth ? '恢复默认' : '自适宽度');
+                this.data.isAutoWidth = !this.data.isAutoWidth;
+            }
+        },
+        {
+            event: 'click',
+            selector: '.float-search-btn',
+            callback: function () {
+                if (this.data.isShowFloatingFilter && this.data.filterParam.filter.length != 0) {
+                    for (let k in this.data.searchValue) {
+                        this.data.searchValue[k] = '';
+                    }
+                    for (let k in this.data.searchOldValue) {
+                        this.data.searchOldValue[k] = '';
+                    }
+                    this.data.queryList = {};
+                    this.actions.setFloatingFilterInput();
+                    this.data.filterParam.filter = [];
+                    this.actions.getGridData();
+                }
+                let height = this.data.isShowFloatingFilter ? 0 : 30;
+                this.agGrid.gridOptions.api.setFloatingFiltersHeight(height);
+                this.data.isShowFloatingFilter = !this.data.isShowFloatingFilter;
+            }
+        },
+        {
+            event: 'click',
+            selector: '.grid-del-btn',
+            callback: function () {
+                this.actions.retureSelectData();
+                if (this.data.deletedIds.length == 0) {
+                    msgBox.alert('请选择数据');
+                    return;
+                }
+                msgBox.confirm('确定删除？').then(res => {
+                    if (res) {
+                        this.actions.delTableData();
+                    }
+                })
+            }
+        },
+        {
+            event: 'click',
+            selector: '.grid-import-btn',
+            callback: function () {
+                let json = {
+                    tableId: this.data.tableId,
+                    parentTableId: this.data.parentTableId,
+                    parentRealId: this.data.parentRealId,
+                    parentTempId: this.data.parentTempId,
+                    isBatch: this.data.viewMode == 'createBatch' ? 1 : 0,
+                    isSuperUser: window.config.is_superuser || 0,
+                    viewMode: this.data.viewMode
+                };
+                let data = {
+                    formData: this.data.formData,
+                };
+                let url = dgcService.returnIframeUrl('/iframe/dataImport/', json);
+                let winTitle = '导入数据';
+                this.actions.openDialog(url, winTitle, 600, 650, data);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.grid-export-btn',
+            callback: function () {
+                this.actions.onExport()
+            }
+        },
+        {
+            event: 'click',
+            selector: '.new-form-btn',
+            callback: function () {
+                let obj = {
+                    table_id: this.data.tableId,
+                    parent_table_id: this.data.parentTableId,
+                    parent_real_id: this.data.parentRealId,
+                    parent_temp_id: this.data.parentTempId,
+                    parent_record_id: this.data.parentRecordId,
+                    btnType: 'new',
+                    form_id: this.data.formId,
+                    flow_id: this.data.flowId,
+                    tableType:this.data.tableType
+                };
+                let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
+
+                let title = '新增';
+                this.actions.openSelfIframe(url, title);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.refresh-btn',
+            callback: function () {
+                this.el.find('.icon-aggrid-refresh').addClass('refresh-rotate');
+                this.actions.getInprocessData(true);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.correspondence-save',
+            callback: function () {
+                this.actions.saveCorrespondence();
+            }
+        },
+        {
+            event: 'click',
+            selector: '.correspondence-check',
+            callback: function () {
+                this.actions.checkCorrespondence();
+            }
+        },
+        {
+            event: 'click',
+            selector: '.showNormalGrid',
+            callback: function () {
+                let obj = {
+                    tableId: this.data.tableId,
+                    tableName: this.data.tableName,
+                    viewMode: 'normal'
+                };
+                let url = dgcService.returnIframeUrl('/datagrid/source_data_grid/', obj);
+                let winTitle = obj.tableName;
+                this.actions.openSourceDataGrid(url, winTitle);
+            }
+        },
+        {
+            event: 'click',
+            selector: '.edit-btn-cancel',
+            callback: function () {
+                if (this.data.viewMode == 'reportTable2') {
+                    this.actions.onEditSave2(true);
+                } else {
+                    this.actions.onEditSave(true);
+                }
+            }
+        },
+        {
+            event: 'click',
+            selector: '.edit-btn-save',
+            callback: function () {
+                //保存
+                if (this.data.viewMode == 'reportTable2') {
+                    this.actions.onEditSave2();
+                } else {
+                    this.actions.onEditSave();
+                }
+            }
+        },
+        {
+            event: 'click',
+            selector: '.edit-btn',
+            callback: function () {
+                if (this.data.firstCreateEditCol) {
+                    this.data.firstCreateEditCol = false;
+                    //创建编辑模式表头
+                    let j = {table_id: this.data.tableId};
+                    if (this.data.viewMode == 'reportTable2') {
+                        j['is_report'] = 1;
+                        j['field_id'] = this.data.fieldId;
+                    }
+                    FormService.getStaticData(j).then(res => {
+                        for (let d of res.data) {
+                            this.data.colControlData[d.dfield] = d;
+                        }
+                        this.columnDefsEdit = this.actions.createHeaderColumnDefs(true);
+                        this.actions.toogleEdit();
+                    });
+                    HTTP.flush();
+                } else {
+                    this.actions.toogleEdit();
+                }
+            }
+        },
+    ],
     beforeDestory(){
         window.top.hideMiniForm[this.data.tableId]=null;
         delete window.top.hideMiniForm[this.data.tableId];
