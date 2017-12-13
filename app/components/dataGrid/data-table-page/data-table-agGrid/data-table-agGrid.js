@@ -3638,7 +3638,7 @@ let dataTableAgGrid = Component.extend({
         rowDataChanged: function ($event) {
         },
         //渲染cache数据
-        renderCacheData: function (data) {
+        renderCache: function (data) {
             console.log("cache数据");
             console.log(data);
             console.log(window.config);
@@ -3714,7 +3714,7 @@ let dataTableAgGrid = Component.extend({
         // 渲染cache数据
         renderCacheData: function () {
             console.log('加载cache数据');
-            this.actions.renderCacheData(window.config.cached_data);
+            this.actions.renderCache(window.config.cached_data);
             try {
                 this.data.showTabs(1);
                 this.hideLoading();
