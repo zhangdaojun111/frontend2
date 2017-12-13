@@ -284,6 +284,11 @@ let config = {
         }
         //reload设置排序图标
         this.actions.setSortIcon();
+
+        //自定义 图表字体大小
+        if(this.data.chart.customTextStyle && this.data.chart.customTextStyle.hasOwnProperty('chartSize')){
+            this.el.find('.bi-table table').css('font-size',this.data.chart.customTextStyle.chartSize + 'px');
+        }
     },
 
     beforeRender: function () {
@@ -319,13 +324,24 @@ export class CellTableComponent extends CellBaseComponent {
 
     static init(cellChart) {
         //格式化数据
+        let columns = cellChart.chart.columns;
         let data = cellChart.chart.data.rows;
+
+        //遍历列类型，找出需要格式化的列
+        let formatColIndex = [];
+
+        for (let k in columns){
+            if(columns[k]['type'].toString() === '10'){
+                formatColIndex.push(k);
+            }
+        }
+
         for (let k in data){
-            for (let n in data[k]){
+            for (let n of formatColIndex){
                 let temp = data[k][n];
                 if(CellTableComponent.isNumber(temp)){
                     //自定义设置精度
-                    let acc = cellChart.chart.customAccuracy?cellChart.chart.customAccuracy:0;
+                    let acc = cellChart.chart.customAccuracy;
                     data[k][n] = CellTableComponent.numFormat(temp,acc);
                 }
             }
@@ -384,7 +400,7 @@ export class CellTableComponent extends CellBaseComponent {
     static numFormat(num,acc) {
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-        if(acc){
+        if(acc>0){
             if(num[1]){
                 num[1] = '0.' + num[1];
                 num[1] = parseFloat(num[1]).toFixed(acc);
@@ -392,8 +408,16 @@ export class CellTableComponent extends CellBaseComponent {
             }else{
                 num[1]  = new String('0').repeat(acc);
             }
+        }else if(acc==='0'){
+            if(num[1]){
+                num[1] = '';
+            }
         }
-        num = num.join(".");
+        if(acc==='0'){
+            num = num.join(" ");
+        }else{
+            num = num.join(".");
+        }
         return num;
     }
 
