@@ -62,7 +62,11 @@ function getLoginController() {
         formInit:function () {
             //初始化密码输入框组件
             let $wrap = $('.password-component');
-            this.passwordInputComp = new PasswordInput({checkChar:false},this.setPasswordValue);
+            this.passwordInputComp = new PasswordInput({data:{checkChar:false},events:{
+                setValue:event => {
+                    this.setPasswordValue(event);
+                }
+            }});
             this.passwordInputComp.render($wrap);
 
 

@@ -59,11 +59,14 @@ let config = {
     },
 };
 
-class RightContentWorkFlow extends Component {
-    constructor(data,newConfig) {
-        config.data = data;
-        super($.extend(true,{},config,newConfig));
-    }
-}
+let RightContentWorkFlow = Component.extend(config);
 
 export default RightContentWorkFlow;
+// class RightContentWorkFlow extends Component {
+//     constructor(data,newConfig) {
+//         config.data = data;
+//         super($.extend(true,{},config,newConfig));
+//     }
+// }
+//
+// export default RightContentWorkFlow;

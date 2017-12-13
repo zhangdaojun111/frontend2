@@ -33,6 +33,10 @@ let config = {
             if(window.config.bi_user === 'client'){
                 this.el.find('.title-tips').addClass('client-click');
             }
+            //自定义 标题字体大小
+            if(this.data.chart.data.customTextStyle && this.data.chart.data.customTextStyle.hasOwnProperty('titleSize')){
+                this.el.find('.title-tips').css('font-size',this.data.chart.data.customTextStyle.titleSize + 'px');
+            }
         },
         /**
          * 客户模式下允许点击画布标签打开数据源tab页
@@ -41,17 +45,15 @@ let config = {
             if(window.config.bi_user !== 'client'){
                 return;
             }
-            let sources = this.data.chart.data.source || this.data.chart.data.sources;
+
+            let sources = this.data.chart.data.table_id;
             let idArr = [];
 
             if(sources){
-                if(!$.isArray(sources) && sources.hasOwnProperty('id') && sources['id'] !== ''){
-                    idArr.push(sources.id);
-                }else{
-                    if(sources.length && sources[0].sources.id){
-                        idArr.push(sources[0].sources.id);
-                    }
+                if(!$.isArray(sources) && sources !== ''){
+                    idArr.push(sources);
                 }
+
                 PMAPI.sendToParent({
                     type:PMENUM.open_iframe_by_id,
                     id:idArr
@@ -106,8 +108,11 @@ let config = {
     beforeDestory() {}
 };
 
-export class CanvasCellTitleComponent extends Component {
-        constructor(data,event,extendConfig) {
-            super($.extend(true,{},config,extendConfig),data,event)
-        }
-}
+export let CanvasCellTitleComponent = Component.extend(config);
+
+
+// export class CanvasCellTitleComponent extends Component {
+//     constructor(data,event,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,event)
+//     }
+// }

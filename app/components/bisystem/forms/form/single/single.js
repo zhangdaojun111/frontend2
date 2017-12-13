@@ -45,8 +45,11 @@ let config = {
     afterRender() {},
 };
 
-export class TableSingle extends Base{
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
-    }
-}
+let TableSingle = Base.extend(config);
+export {TableSingle};
+// export class TableSingle extends Base{
+//     constructor(data, event,extendConfig){
+//         super($.extend(true,{},config,extendConfig), data, event)
+//     }
+// }
+

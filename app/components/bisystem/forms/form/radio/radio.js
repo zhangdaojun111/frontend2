@@ -41,8 +41,8 @@ let config = {
 };
 
 class Radio extends Base {
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig){
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -83,3 +83,4 @@ class Radio extends Base {
 }
 
 export {Radio}
+Radio.config = config;

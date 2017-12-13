@@ -128,7 +128,7 @@ const pie = {
                     // formatter: "{b} : \n {c}  ({d}%)",
                     formatter:function (param) {
                         let str = '';
-                        let name = param.data.name;
+                        let name = param.data.name.toString();
                         //判断是英文名称还是中文名称，分别处理
                         let reg = new RegExp("[\\u4E00-\\u9FFF]+","g");     //含有中文就按中文字符处理，否则按英文字符处理
                         if(reg.test(name)){
@@ -265,6 +265,9 @@ const funnel = {
 // 折线柱状图
 const linebar = {
     animation : false,
+    textStyle:{
+      fontFamily:'sans-serif'
+    },
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -543,7 +546,7 @@ const gauge = {
                 formatter:'{value}',
                 offsetCenter: [0, 44], // x, y，单位px
                 textStyle: {       // 其余属性默认使用全局文本样
-                    fontSize: '12',
+                    fontSize: '14',
                     fontWeight: 'bolder',
                     color: '#000',
                     borderWidth: '1',

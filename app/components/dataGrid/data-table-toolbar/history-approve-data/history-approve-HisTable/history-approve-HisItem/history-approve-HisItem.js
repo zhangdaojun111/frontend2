@@ -5,7 +5,7 @@ import Component from "../../../../../../lib/component";
 import template from './history-approve-HisItem.html'
 
 
-let config = {
+let historyItem = Component.extend({
     template: template,
     data: {
     },
@@ -14,11 +14,11 @@ let config = {
     },
     afterRender: function() {
     }
-}
-class historyItem extends Component {
-    constructor(data) {
-        config.data = data
-        super(config)
-    }
-}
+})
+// class historyItem extends Component {
+//     constructor(data) {
+//         config.data = data
+//         super(config)
+//     }
+// }
 export default historyItem

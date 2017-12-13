@@ -81,11 +81,6 @@ let config = {
 		Mediator.removeAll('approval:rejToAny');
 	}
 };
-class ApprovalDialog extends Component{
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
-
+let ApprovalDialog = Component.extend(config)
 export default ApprovalDialog
 

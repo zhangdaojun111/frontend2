@@ -11,7 +11,7 @@ import template from './find-pw.html';
 import {UserInfoService} from '../../services/main/userInfoService';
 import msgbox from '../../lib/msgbox';
 
-let config = {
+let FindPassword = Component.extend({
     template:template,
     data:{
         password:'',
@@ -147,12 +147,6 @@ let config = {
     beforeDestory:function () {
 
     }
-};
-
-class FindPassword extends Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export{FindPassword}

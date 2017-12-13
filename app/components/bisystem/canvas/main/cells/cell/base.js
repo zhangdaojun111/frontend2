@@ -7,8 +7,8 @@ import Component from '../../../../../../lib/component';
 import {CanvasOriginalDataComponent} from './original.data/original.data';
 
 export class CellBaseComponent extends Component {
-    constructor(config,data,event,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,event)
+    constructor(extendConfig) {
+        super($.extend(true,{},extendConfig))
     }
 
     /**
@@ -17,20 +17,22 @@ export class CellBaseComponent extends Component {
      */
     showCellDataSource(data = null,container) {
         let me = this;
-        let dataSource = new CanvasOriginalDataComponent(data, {
+        let dataSource = new CanvasOriginalDataComponent({
+            data:data,
+            events:{
+                onUpdateOriginal: (data) => {
+                    this.updateOriginal(data)
+                },
 
-            onUpdateOriginal: (data) => {
-                this.updateOriginal(data)
-            },
+                onUpdateDeepOriginal: async function(name){
+                    let res = await me.updateOriginalDeep(name);
+                    this.actions.updateOriginal(res);
+                },
 
-            onUpdateDeepOriginal: async function(name){
-                let res = await me.updateOriginalDeep(name);
-                this.actions.updateOriginal(res);
-            },
-
-            onDeepSort: async function(sort) {
-               let res = await me.deepSort(sort);
-               this.actions.updateOriginal(res);
+                onDeepSort: async function(sort) {
+                    let res = await me.deepSort(sort);
+                    this.actions.updateOriginal(res);
+                }
             }
         });
         this.append(dataSource,container);
@@ -80,4 +82,37 @@ export class CellBaseComponent extends Component {
             }
         }
     }
+
+    /**
+     * 当message服务有推送时更新
+     * @param data = 后台返回的chart data
+     */
+    updateCellDataFromMessage(res) {
+        if (res['success'] === 1) {
+            if (res['data'].assortment === 'table') {
+                if (res['data']['single'] === 1) {
+                    this.data.rows = this.actions.singleTable(res['data']);
+                } else {
+                    this.data.chart = res['data'];
+                }
+                this.reload();
+            } else if (
+                res['data'].assortment === 'normal' ||
+                res['data'].assortment === 'pie' ||
+                res['data'].assortment === 'radar' ||
+                res['data'].assortment === 'multilist' ||
+                res['data'].assortment === 'stylzie' ||
+                res['data'].assortment === 'map' ||
+                res['data'].assortment === 'gauge'
+            ) {
+                this.data.chart = this.data.cellChart.chart = res['data'];
+                this.actions.updateChart(res['data'].assortment === 'multilist' ? this.data.cellChart : {'chart':res['data']});
+            } else if (res['data'].assortment === 'nineGrid') {
+                this.data = this.actions.reassemble({'chart':res['data']});
+                this.reload();
+            }
+        }
+    }
 }
+
+CellBaseComponent.config = {};

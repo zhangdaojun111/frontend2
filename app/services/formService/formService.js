@@ -72,6 +72,14 @@ export const FormService = {
         return result;
     },
 
+
+	//获取行权限筛选内置字段options
+	getFormStaticBuildinData(json){
+		let res = HTTP.post('get_form_static_buildin_data', json);
+		HTTP.flush();
+		return res;
+	},
+
     //获取统计数据
     getCountData(json) {
         let res = HTTP.post('get_count_data', json);

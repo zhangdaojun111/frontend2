@@ -16,7 +16,7 @@ import dataPagination from "../../../components/dataGrid/data-table-toolbar/data
 import msgbox from "../../../lib/msgbox";
 // import msgbox from "../../../lib/msgbox";
 
-let config = {
+let ResearchResult = Component.extend({
     template:template,
     data:{
         searchText:'',
@@ -98,8 +98,10 @@ let config = {
         initPageController:function () {
             //初始化data页面分页控制
             this.dataPageController = new dataPagination({
-                currentPage:1,
-                rows:20,
+                data:{
+                    currentPage:1,
+                    rows:20,
+                }
             });
             let $parent1 = this.el.find('.data-page-control');
             this.dataPageController.render($parent1);
@@ -110,8 +112,10 @@ let config = {
 
             //初始化attachment页面分页控制
             this.attachmentPageController = new dataPagination({
-                currentPage:1,
-                rows:15,
+                data: {
+                    currentPage:1,
+                    rows:15,
+                }
             });
             let $parent2 = this.el.find('.attachment-page-control');
             this.attachmentPageController.render($parent2);
@@ -301,12 +305,6 @@ let config = {
     beforeDestroy:function () {
         Mediator.removeAll();
     }
-};
-
-class ResearchResult extends  Component{
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export {ResearchResult}

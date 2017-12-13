@@ -31,8 +31,8 @@ let config = {
 };
 
 class Select extends Base {
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig){
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -57,3 +57,4 @@ class Select extends Base {
 }
 
 export {Select}
+Select.config = config;

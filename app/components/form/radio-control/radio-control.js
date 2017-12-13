@@ -73,10 +73,5 @@ let config={
         this.el.off();
     }
 }
-class RadioControl extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
-
+let RadioControl = Component.extend(config)
 export default RadioControl

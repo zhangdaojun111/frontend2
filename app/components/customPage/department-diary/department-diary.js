@@ -45,7 +45,7 @@ function formatTreeData(list) {
     return res;
 }
 
-let config = {
+let departmentDiary = Component.extend({
     template: template,
     data: {
         tableId: '',
@@ -73,14 +73,14 @@ let config = {
          * 初始化部门树
          */
         initTree: function () {
-            let treeView = new TreeView(this.data.departmentData, {
+            let treeView = new TreeView({data:{treeNodes:this.data.departmentData, options:{
                 callback: (order, node) => {
                     this.actions._selectNode(order, node);
                 },
                 isSearch: true,
                 treeType: "MULTI_SELECT",
                 treeName: "post-message-depatment-tree",
-            });
+            },indent:0}});
             let $container = this.el.find(".tree");
             treeView.render($container);
         },
@@ -89,16 +89,16 @@ let config = {
          */
         initChoosedUsers: function () {
             let That = this;
-            this.autoSelect = new AutoSelect({
+            this.autoSelect = new AutoSelect({data:{
                 displayType: 'static',           // popup或者static popup为弹出的形式 static 为静态显示
                 selectBoxHeight: '100%',           // select 框的高度
                 width: 230,                     // 为0表示显示默认宽度240
                 displayChoosed: false,
-            }, {
+            },events:{
                 onSelect: function (param) {
                     That.actions.setDiaryFilter( That,param );
                 }
-            });
+            }});
             this.autoSelect.render(this.el.find('.users'));
         },
         /**
@@ -200,7 +200,7 @@ let config = {
                     getDiarySearchField: this.actions.getDiarySearchField,
                     cacheData: false
                 };
-                this.dataGrid = new dataTableAgGrid(json);
+                this.dataGrid = new dataTableAgGrid({data: json});
                 this.append(this.dataGrid, this.el.find('.diary-grid'));
                 this.actions.getDepartmentData();
             }else {
@@ -211,11 +211,11 @@ let config = {
             },700 )
         } )
     }
-};
-class departmentDiary extends Component {
-    constructor(data,newConfig){
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+});
+// class departmentDiary extends Component {
+//     constructor(data,newConfig){
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default departmentDiary;

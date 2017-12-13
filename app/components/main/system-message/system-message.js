@@ -15,7 +15,7 @@ import {dataTableService} from "../../../services/dataGrid/data-table.service"
 import Mediator from '../../../lib/mediator';
 
 let gridPref;
-let config = {
+let SystemMessage = Component.extend({
     template: template,
     data:{
         frontendSort:true,      //排序方式（前端/后端）
@@ -268,7 +268,7 @@ let config = {
                     customSize:true
                 }).then((result) => {
                     if (result.refresh === true) {
-                        this.actions.loadData(this.data.getDataParams);
+                        setTimeout(()=>{this.actions.loadData(this.data.getDataParams);},500)
                     }
                 })
             } else {
@@ -299,9 +299,11 @@ let config = {
          */
         initPagination:function () {
             this.pagination = new dataPagination({
-                currentPage: 1,
-                rows: this.data.rows,
-                tableId:this.data.tableId
+                data: {
+                    currentPage: 1,
+                    rows: this.data.rows,
+                    tableId:this.data.tableId
+                }
             });
             this.pagination.render(this.el.find('.pagination'));
             this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
@@ -315,13 +317,15 @@ let config = {
         let that = this;
         //设置表格表头信息
         gridPref = this.agGrid = new agGrid({
-            columnDefs: systemMessageService.getColumnDefs(),
-            onCellClicked: that.actions.onCellClicked,
-            noFooter: true,
-            setRowStyle: this.actions.setRowStyle,
-            onRowDoubleClicked:that.actions.onRowDoubleClicked,
-            onSortChanged: this.actions.onSortChanged,
-            footerData:[]
+            data:{
+                columnDefs: systemMessageService.getColumnDefs(),
+                onCellClicked: that.actions.onCellClicked,
+                noFooter: true,
+                setRowStyle: this.actions.setRowStyle,
+                onRowDoubleClicked:that.actions.onRowDoubleClicked,
+                onSortChanged: this.actions.onSortChanged,
+                footerData:[]
+            }
         });
         this.agGrid.render(gridDom);
         this.showLoading();
@@ -348,13 +352,7 @@ let config = {
             this.actions.batchDelete();
         });
     }
-};
-
-class SystemMessage extends Component {
-    constructor(newConfig) {
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 let systemMessageUtil = {
     el: null,

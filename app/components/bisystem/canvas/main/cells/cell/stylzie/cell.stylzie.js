@@ -24,13 +24,25 @@ let config = {
             }
 
             let echartsService = new EchartsService(this.data);
-            this.myChart = echartsService.myChart;
-        }
+            this.stylzieChart = echartsService;
+        },
+        updateChart(data) {
+            //重新渲染echarts
+            const option = this.stylzieChart.stylzieOption(data);
+            this.stylzieChart.myChart.setOption(option,true);
+        },
+    },
+    beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        this.data.id += this.componentId;
     },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
-            if (this.myChart) {
-                this.myChart.resize();
+            if (this.stylzieChart.myChart) {
+                this.stylzieChart.myChart.resize();
             }
         })
     },
@@ -40,19 +52,21 @@ let config = {
     }
 };
 
-export class CellStylzieComponent extends CellBaseComponent {
-    // constructor(cellChart) {
-    //     config.data.cellChart = cellChart ? cellChart : null;
-    //     super(config);
-    //     this.data.id += this.componentId
-    // }
+export let CellStylzieComponent = CellBaseComponent.extend(config);
 
-    constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart
-        };
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+// export class CellStylzieComponent extends CellBaseComponent {
+//     // constructor(cellChart) {
+//     //     config.data.cellChart = cellChart ? cellChart : null;
+//     //     super(config);
+//     //     this.data.id += this.componentId
+//     // }
+//
+//     constructor(data,event,extendConfig) {
+//         data.cellChart = {
+//             cell: data.cell,
+//             chart: data.chart
+//         };
+//         super($.extend(true,{},config,extendConfig),data,event);
+//         this.data.id += this.componentId;
+//     }
+// }

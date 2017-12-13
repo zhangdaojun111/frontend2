@@ -100,7 +100,7 @@ let config = {
 		        }
 	        }
             this.data.fav.rows.forEach((row)=>{
-	            this.append(new WorkFlowBtn(row,actions), this.el.find('.J_workflow-content'));
+	            this.append(new WorkFlowBtn({data:row,events:actions}), this.el.find('.J_workflow-content'));
             });
             this.actions.init();
         },
@@ -156,11 +156,11 @@ let config = {
 			    _this.events.chooseCb(msg);
 		    }
 	    }
-	    this.data.workTree=new WorkFlowTree(this.data.tree,actions)
+	    this.data.workTree=new WorkFlowTree({data:this.data.tree,events:actions})
 	    this.append(this.data.workTree, this.el.find('.J_select-container'));
         //添加常用工作流组件
         this.data.fav.rows.forEach((row)=>{
-            this.append(new WorkFlowBtn(row,actions), this.el.find('.J_workflow-content'));
+            this.append(new WorkFlowBtn({data:row,events:actions}), this.el.find('.J_workflow-content'));
         });
         //订阅 select list click
         Mediator.subscribe('workflow:gotWorkflowInfo', (msg)=> {
@@ -172,9 +172,5 @@ let config = {
     }
 };
 
-export default class WorkFlowCreate extends Component{
-
-	constructor(data,events,newConfig){
-		super($.extend(true,{},config,newConfig,{data:data||{}}),{},events);
-    }
-}
+let WorkFlowCreate = Component.extend(config);
+export default WorkFlowCreate

@@ -59,8 +59,8 @@ let config = {
     }
 }
 class Deep extends Base {
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig){
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -75,3 +75,4 @@ class Deep extends Base {
 }
 
 export {Deep}
+Deep.config = config;

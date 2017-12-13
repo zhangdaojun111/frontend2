@@ -6,7 +6,7 @@ import TreeView from '../../util/tree/tree';
 import {HTTP} from '../../../lib/http';
 import Mediator from '../../../lib/mediator';
 
-let config = {
+let CommonUse = Component.extend({
     template: template,
     data: {
         selected: []
@@ -114,27 +114,21 @@ let config = {
         this.data.selected = originData.commonUse;
         this.data.menu = originData.menu;
 
-        let treeView = new TreeView(this.data.menu, {
+        let treeView = new TreeView({data:{treeNodes:this.data.menu, options:{
             callback: (event, node) => {
                 this.actions.handle(event, node);
                 console.log(this.data.selected)
             },
             treeType: "MULTI_SELECT",
             treeName: "menu-tree"
-        });
+        },indent:0}});
         let $container = this.el.find("div.menu-tree");
         treeView.render($container);
         this.el.on('click', '.save button', () => {
             this.actions.save();
         })
     }
-}
-
-class CommonUse extends Component {
-    constructor(newConfig,data) {
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export const commonuse = {
     el: null,

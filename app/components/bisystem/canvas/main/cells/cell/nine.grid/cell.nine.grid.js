@@ -26,15 +26,62 @@ let config = {
         grids: [], // 九宫图数据
         legend: []
     },
-    actions: {},
-    afterRender() {},
+    actions: {
+
+        // 当message服务更新时，重绘数据
+        reassemble(cellChart) {
+            if (cellChart['chart']['data']['rows'].length === 0) {
+                return false;
+            }
+            let nineType = parseInt(cellChart['chart']['type']);
+            let grids = cellChart['chart']['data']['rows'][0];
+            let types = [];
+            let xAxis = [];
+            let yAxis = [];
+            let legend = [];
+            // 合并九宫格数据为[[],[],[]]
+            new Array(nineType).fill('').forEach((val, index) => {
+                val = grids.slice(index * nineType, index * nineType + nineType);
+                types.push(val);
+            });
+
+            Object.keys(cellChart['chart']['xAxis']).sort().forEach((keys,index) => {
+                xAxis.push(cellChart['chart']['xAxis'][keys]);
+            });
+
+            Object.keys(cellChart['chart']['yAxis']).sort().forEach((keys,index) => {
+                yAxis.push(cellChart['chart']['yAxis'][keys]);
+                xAxis.forEach((val,xAxisindex) =>{
+                    legend.push(cellChart['chart']['yAxis'][keys]+val);
+                })
+            });
+            cellChart.grids = types;
+            cellChart.xAxis = xAxis;
+            cellChart.yAxis = yAxis;
+            cellChart.legend = legend;
+            return cellChart;
+        }
+    },
+    beforeRender: function () {
+        let cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        let _cellChart = CellNineGridComponent.init(cellChart);
+        $.extend(true, this.data, _cellChart);
+    },
+    afterRender() {
+        //自定义 图表字体大小
+        if(this.data.chart.customTextStyle && this.data.chart.customTextStyle.hasOwnProperty('chartSize')){
+            this.el.find('.bi-nine-grid').css('font-size',this.data.chart.customTextStyle.chartSize + 'px');
+        }
+    },
     firstAfterRender() {}
 };
 
 export class CellNineGridComponent extends CellBaseComponent {
-    constructor(data,event,extendConfig) {
-        let cellChart = CellNineGridComponent.init(data);
-        super($.extend(true,{},config,extendConfig),cellChart,event);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
     }
 
     /**
@@ -77,6 +124,9 @@ export class CellNineGridComponent extends CellBaseComponent {
         cellChart.xAxis = xAxis;
         cellChart.yAxis = yAxis;
         cellChart.legend = legend;
+
         return cellChart;
     }
 }
+
+CellNineGridComponent.config = config;

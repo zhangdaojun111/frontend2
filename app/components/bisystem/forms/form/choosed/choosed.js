@@ -34,9 +34,9 @@ let config = {
     beforeDestory() {}
 };
 
-export class Choosed extends Base{
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
+class Choosed extends Base{
+    constructor(extendConfig){
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -47,3 +47,6 @@ export class Choosed extends Base{
         this.actions.update(choosed);
     }
 }
+export {Choosed}
+Choosed.config = config;
+

@@ -95,20 +95,23 @@ let config = {
          * 新增高级字段
          */
         addAdvancedList(){
-            let originForm = new CanvasOriginalAdvancedComponent(this.data.chart, {
-                // 返回高级计算列表tab
-                onBackAdvancedList: ()=> {
-                    this.actions.backAdvancedList(1);
-                },
+            let originForm = new CanvasOriginalAdvancedComponent({
+                data:this.data.chart,
+                events: {
+                    // 返回高级计算列表tab
+                    onBackAdvancedList: () => {
+                        this.actions.backAdvancedList(1);
+                    },
 
-                // 保存高级计算数据
-                onSaveAdvancedData: (data) => {
-                    canvasCellService.saveAdvancedData(data).then(res => {
-                        if (res['success'] === 1) {
-                            this.actions.backAdvancedList(1);
-                            this.actions.makeAdvancedItem(res['data'], data.id ? true : false);
-                        }
-                    })
+                    // 保存高级计算数据
+                    onSaveAdvancedData: (data) => {
+                        canvasCellService.saveAdvancedData(data).then(res => {
+                            if (res['success'] === 1) {
+                                this.actions.backAdvancedList(1);
+                                this.actions.makeAdvancedItem(res['data'], data.id ? true : false);
+                            }
+                        })
+                    }
                 }
             });
             this.append(originForm,this.el.find('.origin-data'));
@@ -139,16 +142,19 @@ let config = {
             if (editMode) {
                 this.data.originalAdvancedItems[itemData['itemId']].actions.update(itemData);
             } else {
-                let comp = new CanvasOriginalAdvancedItemComponent(Object.assign(itemData,this.data), {
-                    onEditItem: (data) => {
-                        let item = {
-                            itemId: data.itemId,
-                            name: data.name,
-                            compute_model:data.compute_model,
-                            content:data.content
-                        };
-                        this.data.originalAdvancedSetting.actions.setValue(item);
-                        this.actions.backAdvancedList(2, true);
+                let comp = new CanvasOriginalAdvancedItemComponent({
+                    data:Object.assign(itemData,this.data),
+                    events: {
+                        onEditItem: (data) => {
+                            let item = {
+                                itemId: data.itemId,
+                                name: data.name,
+                                compute_model: data.compute_model,
+                                content: data.content
+                            };
+                            this.data.originalAdvancedSetting.actions.setValue(item);
+                            this.actions.backAdvancedList(2, true);
+                        }
                     }
                 });
                 this.append(comp, this.el.find('.advanced-list table tbody'), 'tr');
@@ -334,6 +340,18 @@ let config = {
             }
         },
     ],
+    beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        console.log(this.data);
+        let originalData = CanvasOriginalDataComponent.handleOriginalData(this.data);
+        console.log(originalData);
+        $.extend(true, this.data, originalData);
+        this.template = originalData.template ? originalData.template : template;
+
+    },
     afterRender() {
         if (this.data.cellChart.chart.chartGroup && this.data.cellChart.chart.chartGroup['id']) {
             // 新增高级字段
@@ -346,10 +364,8 @@ let config = {
 };
 
 export class CanvasOriginalDataComponent extends Component {
-    constructor(data,events,extendConfig) {
-        let originalData = CanvasOriginalDataComponent.handleOriginalData(data);
-        config.template = originalData.template ? originalData.template : template;
-        super($.extend(true,{},config,extendConfig),originalData,events);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
     }
     /**
      * 处理初始化数据 用于组装需要的数据格式
@@ -379,7 +395,6 @@ export class CanvasOriginalDataComponent extends Component {
      * 处理折线柱状图的原始数据
      */
     static handleLineBarOriginalData(data) {
-
         //　如果是分组　使用分组模版
         if (data.cellChart.chart.chartGroup['id']) {
             CanvasOriginalDataComponent.handleLineBarGroupOriginalData(data);
@@ -391,12 +406,25 @@ export class CanvasOriginalDataComponent extends Component {
                 return {'name': name, 'select': true}
             });
         } else {
-            data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
-                let value = JSON.parse(item);
-                if (!value.select) {
-                    data.selectAllX = false;
-                }
-                return value;
+            // data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
+            //     let value = JSON.parse(item);
+            //     if (!value.select) {
+            //         data.selectAllX = false;
+            //     }
+            //     return value;
+            // });
+            data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
+                return {'name': name, 'select': data.cellChart.cell.select.map(item => {
+                    let value;
+                    if(typeof item === 'string'){
+                        value = JSON.parse(item);
+                    }else{
+                        value = item;
+                    }
+                    if (value.name === name) {
+                        return value.select;
+                    }
+                })}
             });
         }
         // 如果attribute有数据就用attribute的数据 attribute = yAxis
@@ -407,7 +435,11 @@ export class CanvasOriginalDataComponent extends Component {
         } else {
             let attribute = data.cellChart.chart.yAxis.map((item,index) => {
                 let selected = data.cellChart.cell.attribute[index];
-                return {'selected':JSON.parse(selected).selected, 'name': item.field.name}
+                if(typeof selected === 'string'){
+                    return {'selected':JSON.parse(selected).selected, 'name': item.field.name}
+                }else{
+                    return {'selected':selected.selected, 'name': item.field.name}
+                }
             });
             data.cellChart.cell.attribute = attribute;
         }
@@ -439,7 +471,6 @@ export class CanvasOriginalDataComponent extends Component {
                     data.selectAllX = false;
                 }
             })
-
         }
 
         data.cellChart.cell.select = groups;
@@ -461,7 +492,13 @@ export class CanvasOriginalDataComponent extends Component {
             });
         } else {
             data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
-                let value = JSON.parse(item);
+                let value;
+                if(typeof item === 'string'){
+                    value = JSON.parse(item);
+                }else{
+                    value = item;
+                }
+
                 if (!value.select) {
                     data.selectAllX = false;
                 }
@@ -476,3 +513,5 @@ export class CanvasOriginalDataComponent extends Component {
         }
     }
 }
+
+CanvasOriginalDataComponent.config = config;

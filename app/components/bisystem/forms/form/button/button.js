@@ -37,12 +37,13 @@ let config = {
         }
     ],
     afterRender(){}
-}
+};
 
 class Button extends Base {
-    constructor(data, event,extendConfig){
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig){
+        super($.extend(true,{},config,extendConfig))
     }
 }
 
 export {Button}
+Button.config = config;

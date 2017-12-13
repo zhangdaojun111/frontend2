@@ -7,6 +7,6 @@ $(document).ready(function(){
     let obj = {
         key: window.config.key
     }
-    let jdiction = new jurisdiction(obj);
+    let jdiction = new jurisdiction({data: obj});
     jdiction.render($('#jurisdiction'));
 })

@@ -6,6 +6,6 @@ $(document).ready(function(){
         isNewWindow: isNewWindow
     }
     $( 'title' ).html( window.config.tableName || 'ERDS' );
-    let WorkflowPage=new workflowPage( json );
+    let WorkflowPage=new workflowPage( {data: json} );
     WorkflowPage.render($('#workflowPage'));
 });

@@ -5,7 +5,7 @@ import {HTTP} from "../../../lib/http";
 import {PMAPI,PMENUM} from '../../../lib/postmsg';
 import dataTableAgGrid from "./data-table-agGrid/data-table-agGrid";
 import {dataTableService} from "../../../services/dataGrid/data-table.service";
-let config = {
+let dataTablePage = Component.extend({
     template: template,
     data: {
         tableId:'',
@@ -62,7 +62,7 @@ let config = {
                         showTabs: this.actions.showTabs,
                         gridTips: '在途'
                     };
-                    this.inProcessGrid = new dataTableAgGrid(obj);
+                    this.inProcessGrid = new dataTableAgGrid({data: obj});
                     this.append(this.inProcessGrid, this.el.find('#data-table-in-process'));
                     this.data.isRenderIntrain = true;
                 }
@@ -71,53 +71,60 @@ let config = {
         //显示tabs
         showTabs: function (opacity) {
             this.el.find( '.page-tab' )[0].style.opacity = opacity;
-        }
+        },
+        //渲染数据
+        renderComponent: function () {
+            let json = {
+                tableId: this.data.tableId,
+                tableName: this.data.tableName,
+                showTabs: this.actions.showTabs,
+                gridTips: '数据'
+            };
+            this.append(new dataTableAgGrid({data: json}), this.el.find('#data-table-agGrid'));
+            this.actions.addClick();
+            //获取在途数据
+            this.actions.getInProcessNum();
+            this.el.find('.tabTitle .dataTableMiniForm').hover(function () {
+                $( '.dataTableMiniForm a i' ).addClass( 'icon-aggrid-miniForm-hover' ).removeClass('icon-aggrid-miniForm');
+            },function () {
+                $( '.dataTableMiniForm a i' ).addClass( 'icon-aggrid-miniForm' ).removeClass('icon-aggrid-miniForm-hover');
+            });
+            this.actions.oneTheWayInvalid();
+            //是否显示帮助
+            let help = window.config.sysConfig.logic_config.use_help || '0';
+            if( help == 1 ){
+                this.el.find( '.dataTableHelp' )[0].style.display = 'flex';
+            }
+        },
+        oneTheWayInvalid: function () {
+            //订阅数据失效
+            PMAPI.subscribe(PMENUM.one_the_way_invalid, (info) => {
+                let tableId = info.data.table_id;
+                if( this.data.tableId == tableId ){
+                    console.log( '在途数量失效刷新' );
+                    if( this.data.refreshOnTheWay ){
+                        this.actions.getInProcessNum();
+                        this.data.refreshOnTheWay = false;
+                        // msgBox.showTips( '表：《' + this.data.tableName + '》在途数据失效。'  );
+                        setTimeout( ()=>{
+                            this.data.refreshOnTheWay = true;
+                        },200 )
+                    }
+                }
+            });
+        },
     },
     afterRender: function (){
-        let json = {
-            tableId: this.data.tableId,
-            tableName: this.data.tableName,
-            showTabs: this.actions.showTabs,
-            gridTips: '数据'
-        };
-        this.append(new dataTableAgGrid(json), this.el.find('#data-table-agGrid'));
-        this.actions.addClick();
-        //获取在途数据
-        this.actions.getInProcessNum();
-        this.el.find('.tabTitle .dataTableMiniForm').hover(function () {
-            $( '.dataTableMiniForm a i' ).addClass( 'icon-aggrid-miniForm-hover' ).removeClass('icon-aggrid-miniForm');
-        },function () {
-            $( '.dataTableMiniForm a i' ).addClass( 'icon-aggrid-miniForm' ).removeClass('icon-aggrid-miniForm-hover');
-        });
-        //订阅数据失效
-        PMAPI.subscribe(PMENUM.one_the_way_invalid, (info) => {
-            let tableId = info.data.table_id;
-            if( this.data.tableId == tableId ){
-                console.log( '在途数量失效刷新' );
-                if( this.data.refreshOnTheWay ){
-                    this.actions.getInProcessNum();
-                    this.data.refreshOnTheWay = false;
-                    // msgBox.showTips( '表：《' + this.data.tableName + '》在途数据失效。'  );
-                    setTimeout( ()=>{
-                        this.data.refreshOnTheWay = true;
-                    },200 )
-                }
-            }
-        });
-        //是否显示帮助
-        let help = window.config.sysConfig.logic_config.use_help || '0';
-        if( help == 1 ){
-            this.el.find( '.dataTableHelp' )[0].style.display = 'flex';
-        }
+        this.actions.renderComponent();
     }
-};
+});
 
 
-class dataTablePage extends Component {
-    constructor(data,newConfig){
-
-        super($.extend(true,{},config,newConfig,{data:data||{}}));
-    }
-}
+// class dataTablePage extends Component {
+//     constructor(data,newConfig){
+//
+//         super($.extend(true,{},config,newConfig,{data:data||{}}));
+//     }
+// }
 
 export default dataTablePage;

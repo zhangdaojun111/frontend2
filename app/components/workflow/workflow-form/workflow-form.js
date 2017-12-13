@@ -13,6 +13,8 @@ import {FormService} from "../../../services/formService/formService";
 import {PMAPI, PMENUM} from '../../../lib/postmsg';
 import SettingPrint from '../../form/setting-print/setting-print';
 import {CreateFormServer} from "../../../services/formService/CreateFormServer";
+import {workflowService} from '../../../services/workflow/workflow.service'
+import msgBox from '../../../lib/msgbox'
 
 let config = {
 	template: template,
@@ -21,8 +23,7 @@ let config = {
 		isshowprintbtn: false, //是否显示打印附件按钮
 		isshowfjbtn: false,
 		miniFormVal: '',
-		tableId: '',
-		btnType: '',
+        obj:'',
 	},
 	actions: {
 		appPass() {
@@ -182,12 +183,13 @@ let config = {
 		},
 		//表单最小化
 		miniForm() {
-			this.data.miniFormVal = CreateFormServer.getFormValue(this.data.tableId, false)
+            this.data.miniFormVal = CreateFormServer.getFormValue(this.data.obj.tableId, false)
 			if (!window.top.miniFormVal) {
 				window.top.miniFormVal = {};
 			}
-			window.top.miniFormVal[this.data.tableId] = this.data.miniFormVal;
-			window.top.miniFormValTableId = this.data.tableId;
+            window.top.miniFormVal[this.data.obj.tableId] = this.data.miniFormVal;
+            window.top.miniFormValTableId = this.data.obj.tableId;
+            window.top.miniFormValRealId = this.data.obj.realId;
 			PMAPI.sendToRealParent({
 				type: PMENUM.close_dialog,
 				key: this.data.key,
@@ -215,13 +217,7 @@ let config = {
 	afterRender: function () {
 		// this.showLoading();
 		Mediator.subscribe('form:formTableId', (msg) => {
-			this.data.tableId = msg.tableId;
-			this.data.btnType = msg.btnType;
-			if (this.data.btnType == 'new') {
-				this.el.find('.miniFormBtn').show();
-			} else {
-				this.el.find('.miniFormBtn').hide();
-			}
+            this.data.obj = msg;
 		});
 		let serchStr = location.search.slice(1), obj = {};
 		serchStr.split('&').forEach(res => {
@@ -264,6 +260,25 @@ let config = {
 		this.el.on('click', '#miniFormBtn', () => {
 			this.actions.miniForm();
 		});
+        //发起工作流保存草稿
+        this.el.on('click','#draftBtn', () => {
+            let postData = {
+                flow_id: this.data.obj.flowId,
+                is_draft: 1,
+                data: {}
+            };
+            this.el.parents().find('#workflow-content').hide();
+            this.el.parents('#workflow-content').siblings('.workflow-header').children('#workflow-box').show();
+            let formData = CreateFormServer.getFormValue(this.data.obj.tableId, false);
+            postData.data = JSON.stringify(formData);
+            (async function () {
+                return workflowService.createWorkflowRecord(postData);
+            })().then(res=> {
+                if(res.success === 1){
+                    msgBox.showTips('草稿保存成功！');
+                }
+            })
+        });
 		Mediator.subscribe('workFlow:record_info', (res) => {
 			if (res.attachment.length) {
 				this.data.attachment = res.attachment;
@@ -291,13 +306,6 @@ let config = {
 	}
 }
 
-export default class WorkFlowForm extends Component {
-	// constructor(data){
-	//     config.data = data;
-	//     super(config);
-	// }
 
-	constructor(data, events, newConfig) {
-		super($.extend(true, {}, config, newConfig, {data: data || {}}), {}, events);
-	}
-}
+let WorkFlowForm = Component.extend(config);
+export default WorkFlowForm

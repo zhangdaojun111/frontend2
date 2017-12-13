@@ -47,15 +47,22 @@ let config = {
     afterRender() {
         //加载左侧导航数据
         this.data.charts.forEach((val,index) => {
-            let chartsComponent = new ChartsComponent(val,{
+            let data = val ? val : null;
+            data.imgUrl = window.config.img_url;
+            data.isIcon = val['icon']? true:false;
+            data.userSelf = val['self'] == 1 ? true : false;
+
+            let chartsComponent = new ChartsComponent({
+                data,
                 onDelete: (res)=>{
                     let charts = this.data.charts;
                     _.remove(charts,function (val) {
                         return res.id === val.id;
                     });
                     window.config.charts = charts;
-                },
+                }
             });
+
             this.append(chartsComponent,this.el.find('.charts-items'));
         });
     },
@@ -79,10 +86,12 @@ let config = {
     }
 };
 
-class AsideNavComponent extends Component{
-    constructor(data,events,extendConfig) {
-        super($.extend(true,{},config,extendConfig),data,events)
-    }
-}
+let AsideNavComponent = Component.extend(config);
+
+// class AsideNavComponent extends Component{
+//     constructor(data,events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig),data,events)
+//     }
+// }
 
 export default AsideNavComponent;

@@ -23,14 +23,27 @@ let config = {
             }
 
             let echartsService = new EchartsService(this.data);
-            this.myChart = echartsService;
-        }
+            this.multiChart = echartsService;
+        },
+
+        updateChart(data) {
+            //重新渲染echarts
+            const option = this.multiChart.multiChartOption(data);
+            this.multiChart.myChart.setOption(option,true);
+        },
+    },
+    beforeRender(){
+        this.data.cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        this.data.id += this.componentId;
     },
     afterRender() {
         Mediator.subscribe(`bi:cell${this.componentId}:resize`, (data) => {
             this.data.cellChart.cell.size = data;
-            const option = this.myChart.multiChartOption(this.data.cellChart);
-            const myChart = this.myChart.myChart;
+            const option = this.multiChart.multiChartOption(this.data.cellChart);
+            const myChart = this.multiChart.myChart;
             myChart.setOption(option);
             myChart.resize();
         });
@@ -40,18 +53,20 @@ let config = {
     }
 };
 
-export class CellMultiChartComponent extends CellBaseComponent {
-    // constructor(cellChart) {
-    //     config.data.cellChart = cellChart ? cellChart : null;
-    //     super(config);
-    //     this.data.id += this.componentId;
-    // }
-    constructor(data,event,extendConfig) {
-        data.cellChart = {
-            cell: data.cell,
-            chart: data.chart
-        };
-        super($.extend(true,{},config,extendConfig),data,event);
-        this.data.id += this.componentId;
-    }
-}
+export let CellMultiChartComponent = CellBaseComponent.extend(config);
+
+
+// export class CellMultiChartComponent extends CellBaseComponent {
+//     // constructor(cellChart) {
+//     //     config.data.cellChart = cellChart ? cellChart : null;
+//     //     super(config);
+//     //     this.data.id += this.componentId;
+//     // }
+//     constructor(data,event,extendConfig) {
+//         data.cellChart = {
+//             cell: data.cell,
+//             chart: data.chart
+//         };
+//         super($.extend(true,{},config,extendConfig),data,event);
+//     }
+// }

@@ -14,22 +14,22 @@ let config ={
 					this.data.addWf.hideLoading();
 					this.data.isshow = false;
 				}
+                if(this.data.obj.tableType !== 'child' && this.data.obj.btnType === 'new' && !this.data.obj.isCalendar && !this.data.obj.isAddBuild){
+                    this.el.find('#miniFormBtn').show();
+                }else{
+                    this.el.find('#miniFormBtn').hide();
+                }
 			});
 		}
 	},
 	afterRender(){
-		this.data.addWf=new AddWf(this.data.obj);
+		this.data.addWf=new AddWf({data:{obj:this.data.obj}});
 		this.data.addWf.render(this.el);
 		this.data.workFlowForm=new WorkFlowForm();
 		this.data.workFlowForm.render(this.el.find('#workflow-form'));
 		this.actions.subscribe();
-
 	}
-}
+};
 
-export default class AddWfInit extends Component{
-	constructor(data, newConfig) {
-		super($.extend(true, {}, config, newConfig), data);
-	}
-
-}
+let AddWfInit = Component.extend(config);
+export default AddWfInit

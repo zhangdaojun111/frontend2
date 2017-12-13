@@ -64,8 +64,8 @@ let config = {
 }
 
 class AdvancedComputeItem extends Base {
-    constructor(data, event,extendConfig) {
-        super($.extend(true,{},config,extendConfig), data, event)
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig))
     }
 
     /**
@@ -94,3 +94,4 @@ class AdvancedComputeItem extends Base {
 }
 
 export {AdvancedComputeItem}
+AdvancedComputeItem.config = config;

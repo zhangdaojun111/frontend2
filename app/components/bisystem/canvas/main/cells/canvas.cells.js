@@ -41,6 +41,8 @@ let config = {
                     msgbox.alert(res['error']);
                     return false;
                 }
+
+                // 当返回成功时，通知各个cell渲染chart数据
                 cells.map((item,index) => {
                     item.setChartData(res[index]);
                 })
@@ -155,26 +157,30 @@ let config = {
                 }
             }
 
-            let cell = new CanvasCellComponent(data,{
-                onDrag: (componentId) => {
-                    let comp = this.data.cells[componentId];
-                    this.data.cellMaxZindex++;
-                    comp.data.cellMaxZindex = comp.data.cell.size.zIndex = this.data.cellMaxZindex;
-                },
+            let cell = new CanvasCellComponent({
+                data:data,
+                events:{
+                    onDrag: (componentId) => {
+                        let comp = this.data.cells[componentId];
+                        this.data.cellMaxZindex++;
+                        comp.data.cellMaxZindex = comp.data.cell.size.zIndex = this.data.cellMaxZindex;
+                    },
 
-                onUpdateLayout:(data) => {
-                    this.data.cells[data.componentId].data.cell = data.cell;
-                    if (data['deep_clear']) {
-                        this.data.cells[data.componentId].data.cell.deep_clear = data.deep_clear;
-                    }
-                },
+                    onUpdateLayout:(data) => {
+                        this.data.cells[data.componentId].data.cell = data.cell;
+                        if (data['deep_clear']) {
+                            this.data.cells[data.componentId].data.cell.deep_clear = data.deep_clear;
+                        }
+                    },
 
-                onRemoveLayout:(componentId) => {
-                    delete this.data.cells[componentId];
-                },
+                    onRemoveLayout:(componentId) => {
+                        console.log(this.data);
+                        delete this.data.cells[componentId];
+                    },
+                }
             });
             let $wrap;
-            console.log(this.data.firstView);
+
             if(this.data.firstView === true){
                 $wrap = this.el.find('.current');
                 this.data.deleteComponentArr.push(cell);
@@ -295,6 +301,7 @@ let config = {
          * 保存画布布局
          */
         saveCanvas() {
+            console.log(this.data.cells,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
             let cells = Object.values(this.data.cells).map(cell => cell.data.cell);
             const data = {
                 view_id: this.data.currentViewId,
@@ -329,6 +336,29 @@ let config = {
             // 获取画布块的chart数据
             if (layouts.length > 0) {
                 this.actions.getCellChartData(layouts,cells);
+            }
+        },
+
+        /*
+        * 更新可见画布块数据
+        * */
+        async updateCells(info) {
+            let sourceTableId = info.data.table_id;
+            let [layouts,cells] = [[],[]];
+            Object.keys(this.data.cells).forEach(key => {
+                if (this.data.cells[key].data.chart) {
+                    layouts.push(this.data.cells[key].data.layout);
+                    cells.push(this.data.cells[key]);
+                }
+            });
+
+            if (layouts.length > 0) {
+                const res = await canvasCellService.getCellChart({layouts: layouts, query_type: 'deep', is_deep: 1},false);
+                cells.map((item,index) => {
+                    if(res[index].data.table_id === sourceTableId){
+                        item.data.cellComponent.updateCellDataFromMessage(res[index]);
+                    }
+                })
             }
         },
         /**
@@ -414,13 +444,14 @@ let config = {
             this.el.find('.ui-draggable.ui-draggable-handle.ui-resizable').css({'position':'absolute'});
         }
     },
-    firstAfterRender() {},
     beforeDestory() {}
 };
 
-export class CanvasCellsComponent extends Component {
-    constructor(id, events,extendConfig) {
-        super($.extend(true,{},config,extendConfig), {currentViewId: id});
-    }
-}
+export let CanvasCellsComponent = Component.extend(config);
+
+// export class CanvasCellsComponent extends Component {
+//     constructor(id, events,extendConfig) {
+//         super($.extend(true,{},config,extendConfig), {currentViewId: id});
+//     }
+// }
 

@@ -150,6 +150,49 @@ let config = {
             return HTTP.post('prepare_params',data )
         },
 
+        /**
+         * 用于组装单行表格所需数据
+         * @param cellChart = 表格的原始数据
+         */
+        singleTable(cellChart) {
+            let cellData = cellChart['chart'];
+            const columnNum = cellData['columnNum']; // 显示多少列
+            let rows = Math.ceil(cellData['columns'].length / columnNum); // 计算出显示多少行
+            let list = []; // 组合 字段的name 和 value 成一个列表
+            let columnList = []; // 获取每列字段
+            let tableRows = []; // 单行表格每行的数据
+
+            // 组装列字段和列数据
+            cellData['columns'].forEach((title, index) => {
+                list.push(title['name']);
+                list.push(cellData['data']['rows'][0][index]);
+            });
+
+            // 显示每列的数据
+            for (let i = 0; i < columnNum; i++) {
+                columnList.push(list.slice(i * rows * 2, (i * rows + rows) * 2));
+            }
+
+            // 把每列的数据转化为行
+            for (let i = 0; i < rows ; i++) {
+                let row = [];
+                columnList.forEach((val, index, items) => {
+                    if (index === items.length - 1) {
+                        if (val.length < rows * 2) {
+                            for (let i = 0; i < (rows * 2 - val.length); i++) {
+                                val.push(' ');
+                            }
+                        }
+                    }
+                    val.slice(i * 2, i * 2 + 2).map(v => {
+                        row.push(v);
+                    });
+                });
+                tableRows.push(row);
+            }
+            return tableRows;
+        }
+
     },
     afterRender() {
         // 向agid服务器获取数据 flow_id，form_id
@@ -170,6 +213,21 @@ let config = {
         if(window.config.pdf){
             this.el.find('.bi-table').addClass('download-pdf');
         }
+
+        //自定义 图表字体大小
+        if(this.data.chart.customTextStyle && this.data.chart.customTextStyle.hasOwnProperty('chartSize')){
+            this.el.find('.bi-table table').css('font-size',this.data.chart.customTextStyle.chartSize + 'px');
+        }
+    },
+
+    beforeRender: function () {
+        let data = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        console.log(this.data.chart);
+        let cellChart = CellTableComponent.init(data);
+        $.extend(true, this.data, cellChart);
     }
 };
 
@@ -180,20 +238,30 @@ export class CellTableComponent extends CellBaseComponent {
     //     config.actions.init(cellChart);
     //     super(config);
     // }
-    constructor(data,event,extendConfig) {
-        let cellChart = CellTableComponent.init(data);
-        super($.extend(true,{},config,extendConfig),cellChart,event);
+    constructor(extendConfig) {
+        super($.extend(true,{},config,extendConfig));
     }
 
     static init(cellChart) {
         //格式化数据
+        let columns = cellChart.chart.columns;
         let data = cellChart.chart.data.rows;
+
+        //遍历列类型，找出需要格式化的列
+        let formatColIndex = [];
+
+        for (let k in columns){
+            if(columns[k]['type'].toString() === '10'){
+                formatColIndex.push(k);
+            }
+        }
+
         for (let k in data){
-            for (let n in data[k]){
+            for (let n of formatColIndex){
                 let temp = data[k][n];
                 if(CellTableComponent.isNumber(temp)){
                     //自定义设置精度
-                    let acc = cellChart.chart.customAccuracy?cellChart.chart.customAccuracy:0;
+                    let acc = cellChart.chart.customAccuracy;
                     data[k][n] = CellTableComponent.numFormat(temp,acc);
                 }
             }
@@ -204,7 +272,7 @@ export class CellTableComponent extends CellBaseComponent {
                 CellTableComponent.singleTable(cellChart);
             }
         }
-        return cellChart
+        return cellChart;
     }
 
     /**
@@ -250,10 +318,28 @@ export class CellTableComponent extends CellBaseComponent {
         cellChart.rows = tableRows;
     }
     static numFormat(num,acc) {
+        console.log(acc);
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-        num = num.join(".");
-        return parseFloat(num).toFixed(acc);
+        if(acc>0){
+            if(num[1]){
+                num[1] = '0.' + num[1];
+                num[1] = parseFloat(num[1]).toFixed(acc);
+                num[1] = num[1].replace('0.','');
+            }else{
+                num[1]  = new String('0').repeat(acc);
+            }
+        }else if(acc==='0'){
+            if(num[1]){
+                num[1] = '';
+            }
+        }
+        if(acc==='0'){
+            num = num.join(" ");
+        }else{
+            num = num.join(".");
+        }
+        return num;
     }
 
     static isNumber(value) {         //验证是否为数字
@@ -261,3 +347,5 @@ export class CellTableComponent extends CellBaseComponent {
         return !(patrn.exec(value) === null || value === "");
     }
 }
+
+CellTableComponent.config = config;

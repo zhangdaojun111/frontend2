@@ -18,6 +18,7 @@ let defaultConfig = {
      * }
      */
     binds: [],
+    beforeRender: null,
     afterRender: null,
     firstAfterRender: null,
     beforeDestory: null,
@@ -63,6 +64,7 @@ class Component {
      */
     reload() {
         this.destroyChildren();
+        this.beforeRender && this.beforeRender();
         let compiler = Handlerbar.compile(this.template);
         let html = compiler(this.data);
         this.el.html(html);

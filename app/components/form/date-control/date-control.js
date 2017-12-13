@@ -240,8 +240,5 @@ let config = {
         this.el.off();
     }
 }
-export default class DateControl extends Component {
-    constructor(data,events,newConfig){
-        super($.extend(true,{},config,newConfig),data,events)
-    }
-}
+let DateControl = Component.extend(config)
+export default DateControl
