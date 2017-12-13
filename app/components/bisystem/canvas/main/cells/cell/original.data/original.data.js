@@ -471,7 +471,6 @@ export class CanvasOriginalDataComponent extends Component {
                     data.selectAllX = false;
                 }
             })
-
         }
 
         data.cellChart.cell.select = groups;
@@ -493,7 +492,13 @@ export class CanvasOriginalDataComponent extends Component {
             });
         } else {
             data.cellChart.cell.select = data.cellChart.cell.select.map(item => {
-                let value = JSON.parse(item);
+                let value;
+                if(typeof item === 'string'){
+                    value = JSON.parse(item);
+                }else{
+                    value = item;
+                }
+
                 if (!value.select) {
                     data.selectAllX = false;
                 }
