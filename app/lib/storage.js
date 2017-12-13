@@ -85,7 +85,7 @@ export const Storage = {
                 delete obj[section][key];
             }
         }
-        window.localStorage[section] = JSON.stringify(obj);
+        window.localStorage[Storage['iframe_key']] = JSON.stringify(obj);
     },
 
     /**
