@@ -23,13 +23,15 @@ let config = {
     data: {
         rows: [],
         chart: {},
+        firstLoad:true,      //第一次load后备份数据
+        sortIndex:'',    //排序列序号
+        sortMode:'normal',    //排序模式（升序，降序，还原）
     },
     binds: [
         {   // 查看 编辑 历史
             event:'click',
             selector:'.table-operate a',
             callback:function (context,event) {
-                console.log(this.data,'.............................................');
                 let data = {
                     table_id: this.data.chart.table_id,
                     real_id:this.data.chart.data.rows[$(context).attr('data-index')][this.data.chart.data.rows[0].length - 1]
@@ -38,12 +40,17 @@ let config = {
                 this.actions.gridHandle($(context).attr('class'), data);
             }
         },
+        {   //列排序
+            event:'click',
+            selector:'.sort-column',
+            callback:function (context,event) {
+                this.actions.sortColumn(context,event);
+            }
+        }
     ],
     actions: {
         //操作列点击事件
         gridHandle: function (type,data) {
-            console.log(type);
-            console.log(data);
                 if (type == 'table-view') {
                     let obj = {
                         table_id: data.table_id,
@@ -145,7 +152,7 @@ let config = {
             }).then((data) => {
                 if (title === '编辑') {
                     window.location.reload()
-                };
+                }
             })
         },
 
@@ -195,8 +202,59 @@ let config = {
                 tableRows.push(row);
             }
             return tableRows;
-        }
+        },
+        /**
+         * 点击表头进行列排序
+         * @param context
+         * @param event
+         */
+        sortColumn:function (context,event) {
+            this.actions.setSortParam(context,event);
+        },
+        /**
+         * 监听排序点击，记录排序参数
+         * @param context
+         * @param event
+         */
+        setSortParam:function (context,event) {
+            let $icon = $(context).find('i');
+            if($icon[0].className === 'normal' || ''){
+                this.data.sortMode = 'asc';
+            }else if($icon[0].className.includes('asc')){
+                this.data.sortMode = 'desc';
+            }else if($icon[0].className.includes('desc')){
+                this.data.sortMode = 'normal';
+            }else{
+                console.log('error');
+            }
+            this.data.sortIndex = $(context)[0].cellIndex;
+            //使用排序后的数据刷新表格
+            this.reload();
+        },
+        sortTableData:function (data) {
+            console.log(data.chart);
+            if(this.data.sortMode === 'normal'){
+                //直接使用原始数据刷新表格
+                return data;
+            }else{
+                //需要进行排序
+                let sortIndex = this.data.sortIndex;
+                let sortData = data.chart.data.rows;
 
+                if(this.data.sortMode === 'asc'){
+                    sortData.sort(function (a,b) {
+                        return a[sortIndex] - b[sortIndex];
+                    })
+                }else{
+                    sortData.sort(function (a,b) {
+                        return b[sortIndex] - a[sortIndex];
+                    })
+                }
+            }
+        },
+        setSortIcon:function () {
+            this.el.find(`thead tr th:eq(${this.data.sortIndex}) i`).attr('class',`${this.data.sortMode}`);
+        }
     },
     afterRender() {
         // 向agid服务器获取数据 flow_id，form_id
@@ -217,14 +275,25 @@ let config = {
         if(window.config.pdf){
             this.el.find('.bi-table').addClass('download-pdf');
         }
+        //reload设置排序图标
+        this.actions.setSortIcon();
     },
 
     beforeRender: function () {
-        let data = {
-            cell:this.data.cell,
-            chart:this.data.chart
-        };
-        console.log(this.data.chart);
+        let data;
+        //备份数据（仅一次），用于展示最初顺序
+        if(this.data.firstLoad){
+            this.data.firstLoad = false;
+            data = {
+                cell:this.data.cell,
+                chart:this.data.chart
+            };
+            this.backupData = $.extend(true,{},data);
+        }else{
+            //对data进行排序后，执行init
+            data = $.extend(true,{},this.backupData);
+            this.actions.sortTableData(data);
+        }
         let cellChart = CellTableComponent.init(data);
         $.extend(true, this.data, cellChart);
     }
