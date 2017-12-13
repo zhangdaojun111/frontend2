@@ -33,6 +33,10 @@ let config = {
             if(window.config.bi_user === 'client'){
                 this.el.find('.title-tips').addClass('client-click');
             }
+            //自定义 标题字体大小
+            if(this.data.chart.data.customTextStyle && this.data.chart.data.customTextStyle.hasOwnProperty('titleSize')){
+                this.el.find('.title-tips').css('font-size',this.data.chart.data.customTextStyle.titleSize + 'px');
+            }
         },
         /**
          * 客户模式下允许点击画布标签打开数据源tab页
