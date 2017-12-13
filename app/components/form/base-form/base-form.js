@@ -2261,7 +2261,7 @@ let config = {
 						this.actions.createRadioControl(data,key,single,actions);
 						break;
 					case 'Input':
-						this.actions.createInputControl(data,key,single,'Input',actions)
+						this.actions.createInputControl(data,key,single,actions);
 						break;
 					case 'Textarea':
 						this.actions.createTextareaControl(data,key,single,actions);
