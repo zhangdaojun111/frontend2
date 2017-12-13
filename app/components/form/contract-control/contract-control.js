@@ -30,8 +30,9 @@ let config = {
     actions:{
         openEditor:function(title){
             let contractConfig = _.defaultsDeep({data:this.data},contractEditorConfig);
+            debugger
             PMAPI.openDialogByComponent(contractConfig,{
-                width:900,
+                width:1250,
                 height:600,
                 title:title
             }).then(res=>{

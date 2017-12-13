@@ -22,7 +22,7 @@ import template from './contract-editor.html';
 
 let css = `
    .contract-editor{       
-        width: 880px;
+        width: 1230px;
         height: 550px;
         position: relative;
         display: flex;
@@ -32,11 +32,10 @@ let css = `
     } 
     .contract-editor-widget{
         margin: 0 auto;
-        width: 850px;
+        width: 1200px;
         height: 510px;
         display: flex;
         flex: 1;
-        border: 1px solid #e4e4e4;  
     }
   .contract-tabs {
     display: inline-block;
@@ -54,12 +53,67 @@ let css = `
     border-right: 1px solid #D7D7D7;
   }
   .contract-container{
-      border: 1px solid #D7D7D7;     
-      width: 100%;
-      margin: 4px;
+      border: 1px solid #D7D7D7; 
+      border-left: none;
+      width: 961px;
+      margin: 4px 0px;
   }
-  .select-template{
-    margin-bottom: 20px;
+  .history-template-list {
+      padding: 5px;
+  } 
+  .history-template-list p{
+      line-height: 20px;
+      cursor: pointer;
+  }
+  .history-template-list p:hover{
+       background-color: #d7d7d7d7;
+  }
+  .select-template,.data-source-template{
+       margin-bottom: 40px;
+  }
+  .instrument-template-item{
+       padding: 10px;
+  }
+  .instrument-template-item-title,.instrument-template-input{
+       display: inline-block;
+       margin-right: 15px;
+  }
+  .instrument-template-input input{
+       position: relative;
+       top: 0px;
+       width: 10px;
+       height: 10px;
+  }
+  .instrument-template-input input:before{
+       position: absolute;
+       width: 10px;
+       content: ' ';
+       height: 10px;
+       left: 0px;
+       top: 0px;
+       background-color: #fff;
+       border: 1px solid #d7d7d7;
+       cursor: pointer;  
+  }
+  .instrument-template-input input.active:after{
+       position: absolute;
+       width: 8px;
+       content: ' ';
+       height: 8px;
+       left: 2px;
+       top: 2px;
+       background-color: #0088ff;
+       cursor: pointer;
+  }
+  .instrument-template-btn {
+       display: inline-block;
+       width: 55px;
+       text-align: center;
+       height: 18px;
+       line-height: 20px;
+       border: solid 1px #797979;
+       border-radius: 4px;
+       margin-right: 8px;
   }
   .contract-container-title{
     border-bottom: 1px solid #D7D7D7;
@@ -70,7 +124,7 @@ let css = `
   }
   .contract-settings {
      border: 1px solid #D7D7D7;     
-      width: 30%;
+      width: 250px;
       margin-top: 4px;
       margin-bottom: 4px;
       margin-left: 4px;
@@ -79,7 +133,8 @@ let css = `
     border-bottom: 1px solid #D7D7D7;
     color: #999999;
     display: inline-block;
-    background: #F2F2F2;
+    text-align: center;
+    background: #ebebeb;
     height: 30px;
     line-height: 30px;
     width: 100%;
@@ -256,7 +311,7 @@ export const contractEditorConfig = {
                 let dataSourcesEle = this.el.find('.contract-data-source-anchor');
 
                 elements.forEach(element => {
-                    let select = $('<select class="data-source" id="'+element.table.table_id+'" style="width: 200px;margin-top: 5px;"><option value="0">请选择</option></select>');
+                    let select = $('<select class="data-source" id="'+element.table.table_id+'" style="width: 240px;height: 30px ;margin-top: 5px;"><option value="0">请选择</option></select>');
                     this.data.elementKeys.push(element.table.table_id);
                     element.values.forEach(value => {
                         let option = $('<option value="'+value.id+'">'+value.name+'</option>');
