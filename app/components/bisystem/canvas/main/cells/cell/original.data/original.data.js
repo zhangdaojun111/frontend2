@@ -345,6 +345,7 @@ let config = {
             cell:this.data.cell,
             chart:this.data.chart
         };
+        console.log(this.data);
         let originalData = CanvasOriginalDataComponent.handleOriginalData(this.data);
         console.log(originalData);
         $.extend(true, this.data, originalData);
@@ -394,7 +395,6 @@ export class CanvasOriginalDataComponent extends Component {
      * 处理折线柱状图的原始数据
      */
     static handleLineBarOriginalData(data) {
-
         //　如果是分组　使用分组模版
         if (data.cellChart.chart.chartGroup['id']) {
             CanvasOriginalDataComponent.handleLineBarGroupOriginalData(data);
@@ -415,7 +415,12 @@ export class CanvasOriginalDataComponent extends Component {
             // });
             data.cellChart.cell.select = data.cellChart.chart.data.xAxis.map(name => {
                 return {'name': name, 'select': data.cellChart.cell.select.map(item => {
-                    let value = JSON.parse(item);
+                    let value;
+                    if(typeof item === 'string'){
+                        value = JSON.parse(item);
+                    }else{
+                        value = item;
+                    }
                     if (value.name === name) {
                         return value.select;
                     }
@@ -430,6 +435,7 @@ export class CanvasOriginalDataComponent extends Component {
         } else {
             let attribute = data.cellChart.chart.yAxis.map((item,index) => {
                 let selected = data.cellChart.cell.attribute[index];
+
                 return {'selected':JSON.parse(selected).selected, 'name': item.field.name}
             });
             data.cellChart.cell.attribute = attribute;
