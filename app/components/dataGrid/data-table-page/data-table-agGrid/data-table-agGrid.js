@@ -3245,6 +3245,7 @@ let dataTableAgGrid = Component.extend({
             }
         },
         gridHandleView: function (data) {
+            window.top.miniFormValRealId = data.data._id;
             console.log('查看');
             let btnType = 'view';
             if (this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm('view') || this.data.parent_btnType == 'none') {
@@ -3271,6 +3272,7 @@ let dataTableAgGrid = Component.extend({
             this.actions.openSelfIframe(url, title);
         },
         gridHandleEdit: function () {
+            window.top.miniFormValRealId = data.data._id;
             console.log('编辑');
             let btnType = 'edit';
             if (this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm('edit')) {

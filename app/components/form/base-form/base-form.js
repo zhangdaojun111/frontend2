@@ -1179,8 +1179,10 @@ let config = {
 		},
 		//提交表单数据
 		async onSubmit() {
-            if( window.top.miniFormVal){
+            if(!this.data.data['real_id']['value']){
                 delete window.top.miniFormVal[this.data.data['table_id']['value']];
+            }else {
+                window.top.miniFormValRealId = '';
             }
 			let formValue = this.actions.createFormValue(this.data.data);
 			let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
@@ -2440,7 +2442,7 @@ let config = {
 			if (this.data.btnType != 'none') {
 				this.actions.addBtn();
 			}
-			if(window.top.miniFormVal){
+            if(window.top.miniFormVal && !this.data.data['real_id']['value']){
 				let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
 				for(let k in miniFormVal){
 					let val = miniFormVal[k];

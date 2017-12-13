@@ -14,6 +14,11 @@ let config ={
 					this.data.addWf.hideLoading();
 					this.data.isshow = false;
 				}
+                if(this.data.obj.tableType !== 'child' && this.data.obj.btnType === 'new' && !this.data.obj.isCalendar && !this.data.obj.isAddBuild){
+                    this.el.find('#miniFormBtn').show();
+                }else{
+                    this.el.find('#miniFormBtn').hide();
+                }
 			});
 		}
 	},
