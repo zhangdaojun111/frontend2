@@ -1942,7 +1942,7 @@ let config = {
 			let type = data["popup"];
 			let isView = data["is_view"];
 			if (type == 1) {
-				this.actions.openType1SongGrid(_this,data);
+				this.actions.openType1SongGrid(_this,data,isView);
 			} else {
 				_this.data.sonTableId = data["value"];
 				if (isView == '0') {
@@ -1952,7 +1952,7 @@ let config = {
 			window.top.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
 		},
 
-		openType1SongGrid(_this,data){
+		openType1SongGrid(_this,data,isView){
 			_this.data.sonTableId = data["value"];
 			if (isView == '0') {
 				_this.data.viewMode = 'EditChild';
