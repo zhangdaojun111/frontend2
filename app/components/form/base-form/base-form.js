@@ -687,7 +687,7 @@ let config = {
 				if (!_.isEmpty(data['linkage'])) {
 					let j = 0;
 					let arr = [];
-					this.actions.checkHasChangeOptions(data,arr,j);
+					j=this.actions.checkHasChangeOptions(data,arr,j);
 					if (j == 0) {
 						this.actions.notHaveChangeOptions(arr,obj);
 					}
@@ -716,6 +716,7 @@ let config = {
 					this.actions.changeOptionOfSelect(data, data['linkage'][value]);
 				}
 			}
+			return j;
 		},
 
 		saveChangeOptions(){
@@ -1088,6 +1089,7 @@ let config = {
 
 		setValueFromDataForForm(res){
 			for (let k in res["data"]) {
+				console.log('k:'+k);
 				let data = this.data.data;
 				//如果是周期规则
 				if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
@@ -1380,8 +1382,10 @@ let config = {
 			} else {
 				data["be_control_condition"] = (key == value) ? 0 : 1;
 			}
-			if (data["be_control_condition"] == 0) {
-				arr.push(dfield);
+			if (this.data.data[data.dfield]) {
+				console.log('checkValue data.data');
+				console.dir(data);
+				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
 		},
 
@@ -1514,6 +1518,7 @@ let config = {
 				window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
 			}
 			if (!this.data.isInit && !noCount) {
+				console.log('getDataForForm');
 				this.actions.getDataForForm();
 			}
 		},
