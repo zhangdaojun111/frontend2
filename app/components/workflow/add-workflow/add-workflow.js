@@ -207,8 +207,10 @@ let config={
          */
 
         submitAddWorkflow() {
-            if( window.top.miniFormVal){
+            if(!this.data.obj.real_id){
                 delete window.top.miniFormVal[this.data.obj.table_id];
+            }else {
+                window.top.miniFormValRealId = '';
             }
             let obj = this.data.obj;
             let formData = CreateFormServer.getFormValue(obj.table_id,true);

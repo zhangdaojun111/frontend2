@@ -1180,8 +1180,10 @@ let config = {
 		},
 		//提交表单数据
 		async onSubmit() {
-            if( window.top.miniFormVal){
+            if(!this.data.data['real_id']['value']){
                 delete window.top.miniFormVal[this.data.data['table_id']['value']];
+            }else {
+                window.top.miniFormValRealId = '';
             }
 			let formValue = this.actions.createFormValue(this.data.data);
 			let {error, errorMsg} = this.actions.validForm(this.data.data, formValue);
@@ -2441,7 +2443,7 @@ let config = {
 			if (this.data.btnType != 'none') {
 				this.actions.addBtn();
 			}
-			if(window.top.miniFormVal){
+            if(window.top.miniFormVal && !this.data.data['real_id']['value']){
 				let miniFormVal =  window.top.miniFormVal[this.data.data['table_id']['value']]
 				for(let k in miniFormVal){
 					let val = miniFormVal[k];
@@ -2469,34 +2471,5 @@ let config = {
 	}
 }
 
-// class BaseForm extends Component {
-// 	// constructor(formData, newConfig) {
-// 	// 	config.template = formData.template;
-// 	// 	//存父子表关系
-// 	// 	if (!window.top.frontendRelation) {
-// 	// 		window.top.frontendRelation = {};
-// 	// 	}
-// 	// 	if (!window.top.frontendParentNewData) {
-// 	// 		window.top.frontendParentNewData = {};
-// 	// 	}
-// 	// 	if (!window.top.isSonGridDataNeedParentTepmId) {
-// 	// 		window.top.isSonGridDataNeedParentTepmId = '';
-// 	// 	}
-// 	// 	if (!window.top.idsInChildTableToParent) {
-// 	// 		window.top.idsInChildTableToParent = {};
-// 	// 	}
-// 	// 	if (!window.top.frontendParentFormValue) {
-// 	// 		window.top.frontendParentFormValue = {};
-// 	// 	}
-// 	// 	window.top.frontendRelation[formData.data.tableId] = formData.data["frontend_cal_parent_2_child"];
-// 	// 	//存父表的newData
-// 	// 	window.top.frontendParentNewData[formData.data.tableId] = _.defaultsDeep({},formData.data.data);
-// 	// 	window.top.isSonGridDataNeedParentTepmId = formData.data.data['temp_id'] && formData.data.data['temp_id']['value']?formData.data.data['temp_id']['value'] : '';
-// 	// 	super($.extend(true, {}, config, newConfig), formData.data);
-// 	// }
-//     constructor(extendConfig){
-//         super($.extend(true, {}, config, extendConfig));
-//     }
-// }
 let BaseForm = Component.extend(config)
 export default BaseForm
