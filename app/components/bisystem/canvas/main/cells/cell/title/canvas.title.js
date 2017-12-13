@@ -45,17 +45,15 @@ let config = {
             if(window.config.bi_user !== 'client'){
                 return;
             }
-            let sources = this.data.chart.data.source || this.data.chart.data.sources;
+
+            let sources = this.data.chart.data.table_id;
             let idArr = [];
 
             if(sources){
-                if(!$.isArray(sources) && sources.hasOwnProperty('id') && sources['id'] !== ''){
-                    idArr.push(sources.id);
-                }else{
-                    if(sources.length && sources[0].sources.id){
-                        idArr.push(sources[0].sources.id);
-                    }
+                if(!$.isArray(sources) && sources !== ''){
+                    idArr.push(sources);
                 }
+
                 PMAPI.sendToParent({
                     type:PMENUM.open_iframe_by_id,
                     id:idArr

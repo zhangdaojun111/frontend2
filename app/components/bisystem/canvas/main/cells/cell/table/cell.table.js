@@ -244,9 +244,20 @@ export class CellTableComponent extends CellBaseComponent {
 
     static init(cellChart) {
         //格式化数据
+        let columns = cellChart.chart.columns;
         let data = cellChart.chart.data.rows;
+
+        //遍历列类型，找出需要格式化的列
+        let formatColIndex = [];
+
+        for (let k in columns){
+            if(columns[k]['type'].toString() === '10'){
+                formatColIndex.push(k);
+            }
+        }
+
         for (let k in data){
-            for (let n in data[k]){
+            for (let n of formatColIndex){
                 let temp = data[k][n];
                 if(CellTableComponent.isNumber(temp)){
                     //自定义设置精度
