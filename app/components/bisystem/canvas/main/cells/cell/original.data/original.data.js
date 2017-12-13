@@ -435,8 +435,11 @@ export class CanvasOriginalDataComponent extends Component {
         } else {
             let attribute = data.cellChart.chart.yAxis.map((item,index) => {
                 let selected = data.cellChart.cell.attribute[index];
-
-                return {'selected':JSON.parse(selected).selected, 'name': item.field.name}
+                if(typeof selected === 'string'){
+                    return {'selected':JSON.parse(selected).selected, 'name': item.field.name}
+                }else{
+                    return {'selected':selected.selected, 'name': item.field.name}
+                }
             });
             data.cellChart.cell.attribute = attribute;
         }
