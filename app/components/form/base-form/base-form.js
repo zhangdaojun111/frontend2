@@ -69,6 +69,7 @@ let config = {
 		postData: [],
 		isSongCount: false,
 		webCalc: {},
+		SongridRef:false,
 	},
 	binds: [{
 		event: 'click',
@@ -1368,7 +1369,7 @@ let config = {
 				//如果有字段的负责性，再开始下面的逻辑
 				let data = this.data.data[dfield];
 				if (this.data.data[dfield]["required_perm"] == 1) {
-					this.actions.selectReviseCondition(data,value,arr,dfield,key);
+					this.actions.selectReviseCondition(data,value,key,arr,dfield);
 				}
 				if (this.data.childComponent[dfield]) {
 					this.data.childComponent[dfield].data = data;
@@ -1377,7 +1378,7 @@ let config = {
 			}
 		},
 
-		selectReviseCondition(data,value,arr,dfield,key){
+		selectReviseCondition(data,value,key,arr,dfield){
 			//针对多选下拉框，只要包含就可以
 			if (value instanceof Array) {
 				data["be_control_condition"] = value.indexOf(key) != -1 ? 0 : 1;
