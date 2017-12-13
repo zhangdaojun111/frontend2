@@ -69,6 +69,7 @@ let config = {
 		postData: [],
 		isSongCount: false,
 		webCalc: {},
+		SongridRef:false,
 	},
 	binds: [{
 		event: 'click',
