@@ -95,20 +95,23 @@ let config = {
          * 新增高级字段
          */
         addAdvancedList(){
-            let originForm = new CanvasOriginalAdvancedComponent(this.data.chart, {
-                // 返回高级计算列表tab
-                onBackAdvancedList: ()=> {
-                    this.actions.backAdvancedList(1);
-                },
+            let originForm = new CanvasOriginalAdvancedComponent({
+                data:this.data.chart,
+                events: {
+                    // 返回高级计算列表tab
+                    onBackAdvancedList: () => {
+                        this.actions.backAdvancedList(1);
+                    },
 
-                // 保存高级计算数据
-                onSaveAdvancedData: (data) => {
-                    canvasCellService.saveAdvancedData(data).then(res => {
-                        if (res['success'] === 1) {
-                            this.actions.backAdvancedList(1);
-                            this.actions.makeAdvancedItem(res['data'], data.id ? true : false);
-                        }
-                    })
+                    // 保存高级计算数据
+                    onSaveAdvancedData: (data) => {
+                        canvasCellService.saveAdvancedData(data).then(res => {
+                            if (res['success'] === 1) {
+                                this.actions.backAdvancedList(1);
+                                this.actions.makeAdvancedItem(res['data'], data.id ? true : false);
+                            }
+                        })
+                    }
                 }
             });
             this.append(originForm,this.el.find('.origin-data'));
@@ -139,16 +142,19 @@ let config = {
             if (editMode) {
                 this.data.originalAdvancedItems[itemData['itemId']].actions.update(itemData);
             } else {
-                let comp = new CanvasOriginalAdvancedItemComponent(Object.assign(itemData,this.data), {
-                    onEditItem: (data) => {
-                        let item = {
-                            itemId: data.itemId,
-                            name: data.name,
-                            compute_model:data.compute_model,
-                            content:data.content
-                        };
-                        this.data.originalAdvancedSetting.actions.setValue(item);
-                        this.actions.backAdvancedList(2, true);
+                let comp = new CanvasOriginalAdvancedItemComponent({
+                    data:Object.assign(itemData,this.data),
+                    events: {
+                        onEditItem: (data) => {
+                            let item = {
+                                itemId: data.itemId,
+                                name: data.name,
+                                compute_model: data.compute_model,
+                                content: data.content
+                            };
+                            this.data.originalAdvancedSetting.actions.setValue(item);
+                            this.actions.backAdvancedList(2, true);
+                        }
                     }
                 });
                 this.append(comp, this.el.find('.advanced-list table tbody'), 'tr');
@@ -335,11 +341,13 @@ let config = {
         },
     ],
     beforeRender(){
-        let cellChart = {
+        this.data.cellChart = {
             cell:this.data.cell,
             chart:this.data.chart
         };
-        let originalData = CanvasOriginalDataComponent.handleOriginalData(cellChart);
+        let originalData = CanvasOriginalDataComponent.handleOriginalData(this.data);
+        console.log(originalData);
+        $.extend(true, this.data, originalData);
         this.template = originalData.template ? originalData.template : template;
 
     },
@@ -380,7 +388,7 @@ export class CanvasOriginalDataComponent extends Component {
                 }
             });
         }
-        $.extend(true, this.data, data);
+        return data;
     }
     /**
      * 处理折线柱状图的原始数据
