@@ -62,6 +62,14 @@ let config = {
             return cellChart;
         }
     },
+    beforeRender: function () {
+        let cellChart = {
+            cell:this.data.cell,
+            chart:this.data.chart
+        };
+        let _cellChart = CellNineGridComponent.init(cellChart);
+        $.extend(true, this.data, _cellChart);
+    },
     afterRender() {},
     firstAfterRender() {}
 };

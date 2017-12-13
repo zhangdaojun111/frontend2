@@ -17,20 +17,22 @@ export class CellBaseComponent extends Component {
      */
     showCellDataSource(data = null,container) {
         let me = this;
-        let dataSource = new CanvasOriginalDataComponent(data, {
+        let dataSource = new CanvasOriginalDataComponent({
+            data:data,
+            events:{
+                onUpdateOriginal: (data) => {
+                    this.updateOriginal(data)
+                },
 
-            onUpdateOriginal: (data) => {
-                this.updateOriginal(data)
-            },
+                onUpdateDeepOriginal: async function(name){
+                    let res = await me.updateOriginalDeep(name);
+                    this.actions.updateOriginal(res);
+                },
 
-            onUpdateDeepOriginal: async function(name){
-                let res = await me.updateOriginalDeep(name);
-                this.actions.updateOriginal(res);
-            },
-
-            onDeepSort: async function(sort) {
-               let res = await me.deepSort(sort);
-               this.actions.updateOriginal(res);
+                onDeepSort: async function(sort) {
+                    let res = await me.deepSort(sort);
+                    this.actions.updateOriginal(res);
+                }
             }
         });
         this.append(dataSource,container);

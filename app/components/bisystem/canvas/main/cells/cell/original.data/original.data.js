@@ -491,3 +491,5 @@ export class CanvasOriginalDataComponent extends Component {
         }
     }
 }
+
+CanvasOriginalDataComponent.config = config;
