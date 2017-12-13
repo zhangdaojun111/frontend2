@@ -55,8 +55,8 @@ let config={
         if(window.location.href.indexOf('btnType=view' !=-1)){
             config['parent_btnType'] = 'none';
         }
-        let dataGrid=new DataTableAgGrid({data: config});
-        this.append(dataGrid,this.el.find('.songGrid'));
+        this.dataGrid=new DataTableAgGrid({data: config});
+        this.append(this.dataGrid,this.el.find('.songGrid'));
     },
 	firstAfterRender(){
 		Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
