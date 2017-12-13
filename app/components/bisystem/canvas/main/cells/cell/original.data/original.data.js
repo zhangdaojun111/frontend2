@@ -346,7 +346,6 @@ let config = {
             chart:this.data.chart
         };
         let originalData = CanvasOriginalDataComponent.handleOriginalData(this.data);
-        console.log(originalData);
         $.extend(true, this.data, originalData);
         this.template = originalData.template ? originalData.template : template;
 
@@ -418,7 +417,7 @@ export class CanvasOriginalDataComponent extends Component {
                     let value = JSON.parse(item);
                     if (value.name === name) {
                         return value.select;
-                    };
+                    }
                 })}
             });
         }
