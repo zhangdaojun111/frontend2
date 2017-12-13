@@ -36,7 +36,6 @@ let config = {
                     table_id: this.data.chart.table_id,
                     real_id:this.data.chart.data.rows[$(context).attr('data-index')][this.data.chart.data.rows[0].length - 1]
                 };
-                console.log(data);
                 this.actions.gridHandle($(context).attr('class'), data);
             }
         },
@@ -232,7 +231,6 @@ let config = {
             this.reload();
         },
         sortTableData:function (data) {
-            console.log(data.chart);
             if(this.data.sortMode === 'normal'){
                 //直接使用原始数据刷新表格
                 return data;
@@ -240,14 +238,23 @@ let config = {
                 //需要进行排序
                 let sortIndex = this.data.sortIndex;
                 let sortData = data.chart.data.rows;
+                let sortType = data.chart.columns[sortIndex].type === '10' ? 'number' : 'string';
 
                 if(this.data.sortMode === 'asc'){
                     sortData.sort(function (a,b) {
-                        return a[sortIndex] - b[sortIndex];
+                        if(sortType === 'number'){
+                            return Number(a[sortIndex]) > Number(b[sortIndex]);
+                        }else{
+                            return (a[sortIndex]).toString() > (b[sortIndex]).toString();
+                        }
                     })
                 }else{
                     sortData.sort(function (a,b) {
-                        return b[sortIndex] - a[sortIndex];
+                        if(sortType === 'number'){
+                            return Number(a[sortIndex]) < Number(b[sortIndex]);
+                        }else{
+                            return (a[sortIndex]).toString() < (b[sortIndex]).toString();
+                        }
                     })
                 }
             }
