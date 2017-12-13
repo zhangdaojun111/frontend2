@@ -42,17 +42,20 @@ let config={
         let dataGrid=new DataTableAgGrid({data: config});
         this.data.dataGrid=dataGrid;
         this.append(dataGrid,this.el.find('.correspondence-box'));
-	    Mediator.subscribe('form:correspondenceRequired:'+this.data["value"],(res)=>{
-		    if (!res) {
-			    this.el.find('#requiredLogo').removeClass().addClass('required');
-			    this.data.correspondenceHasValue=false;
-		    }else {
-			    this.el.find('#requiredLogo').removeClass().addClass('required2');
-			    this.data.correspondenceHasValue=true;
-		    }
-		    this.events.CorrespondenceRequiredChange(this.data);
-	    })
     },
+
+	firstAfterRender(){
+		Mediator.subscribe('form:correspondenceRequired:'+this.data["value"],(res)=>{
+			if (!res) {
+				this.el.find('#requiredLogo').removeClass().addClass('required');
+				this.data.correspondenceHasValue=false;
+			}else {
+				this.el.find('#requiredLogo').removeClass().addClass('required2');
+				this.data.correspondenceHasValue=true;
+			}
+			this.events.CorrespondenceRequiredChange(this.data);
+		})
+	},
 
     beforeDestory(){
         this.el.off();
