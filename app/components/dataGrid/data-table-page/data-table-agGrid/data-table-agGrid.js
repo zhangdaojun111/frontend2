@@ -3270,7 +3270,7 @@ let dataTableAgGrid = Component.extend({
             let title = '查看';
             this.actions.openSelfIframe(url, title);
         },
-        gridHandleEdit: function () {
+        gridHandleEdit: function (data) {
             console.log('编辑');
             let btnType = 'edit';
             if (this.data.viewMode == 'in_process' || data["data"]["status"] == 2 || this.data.permission.edit == 0 || this.actions.viewOrEditPerm('edit')) {
