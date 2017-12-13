@@ -120,7 +120,7 @@ let config = {
             this.formItems['theme'].setValue(chart['theme']);
             this.formItems['icon'].setValue(chart['icon']);
             this.formItems['customAccuracy'].setValue(chart['customAccuracy'] ? 1 : 0);
-            this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 0);
+            this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 1);
             chart['sources'].forEach(item => {
                 let comp = this.actions.addChart(this.data.source);
                 comp.setValue(item);
@@ -182,7 +182,7 @@ let config = {
             {
                 label: '',
                 name: 'customAccuracyNum',
-                defaultValue: '0',
+                defaultValue: '1',
                 category: 'number',
                 textTip: '请输入自定义精度：',
                 type: 'text',

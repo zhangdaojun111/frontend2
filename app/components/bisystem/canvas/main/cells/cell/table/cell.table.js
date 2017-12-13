@@ -250,7 +250,7 @@ export class CellTableComponent extends CellBaseComponent {
                 let temp = data[k][n];
                 if(CellTableComponent.isNumber(temp)){
                     //自定义设置精度
-                    let acc = cellChart.chart.customAccuracy?cellChart.chart.customAccuracy:0;
+                    let acc = cellChart.chart.customAccuracy;
                     data[k][n] = CellTableComponent.numFormat(temp,acc);
                 }
             }
@@ -307,9 +307,10 @@ export class CellTableComponent extends CellBaseComponent {
         cellChart.rows = tableRows;
     }
     static numFormat(num,acc) {
+        console.log(acc);
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-        if(acc){
+        if(acc>0){
             if(num[1]){
                 num[1] = '0.' + num[1];
                 num[1] = parseFloat(num[1]).toFixed(acc);
@@ -317,8 +318,16 @@ export class CellTableComponent extends CellBaseComponent {
             }else{
                 num[1]  = new String('0').repeat(acc);
             }
+        }else if(acc==='0'){
+            if(num[1]){
+                num[1] = '';
+            }
         }
-        num = num.join(".");
+        if(acc==='0'){
+            num = num.join(" ");
+        }else{
+            num = num.join(".");
+        }
         return num;
     }
 

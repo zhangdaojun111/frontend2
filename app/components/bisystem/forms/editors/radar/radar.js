@@ -161,7 +161,7 @@ let config = {
             this.formItems['columns'].setValue(chart['columns']);
             this.formItems['product'].setValue(chart['product']);
             this.formItems['customAccuracy'].setValue(chart['customAccuracy'] ? 1 : 0);
-            this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 0);
+            this.formItems['customAccuracyNum'].setValue(chart['customAccuracy'] ? chart['customAccuracy'] : 1);
             this.formItems['customTextStyle'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? 1 : 0);
             this.formItems['titleSize'].setValue(chart['customTextStyle'].hasOwnProperty('titleSize') ? chart['customTextStyle']['titleSize'] : 14);
             this.formItems['chartSize'].setValue(chart['customTextStyle'].hasOwnProperty('chartSize') ? chart['customTextStyle']['chartSize'] : 12);
@@ -301,7 +301,7 @@ let config = {
             {
                 label: '',
                 name: 'customAccuracyNum',
-                defaultValue: '0',
+                defaultValue: '1',
                 category: 'number',
                 textTip:'请输入自定义精度：',
                 type: 'text',
