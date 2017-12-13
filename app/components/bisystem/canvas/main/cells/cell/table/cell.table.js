@@ -8,6 +8,7 @@ import "./cell.table.scss";
 import handlebars from 'handlebars';
 import {PMAPI} from '../../../../../../../lib/postmsg';
 import {HTTP} from "../../../../../../../lib/http";
+import "../../../../../../../assets/scss/dataGrid/dataGrid-icon.scss";
 
 handlebars.registerHelper('ifLast', function (index,row, options) {
     let lastIndex = row[0].length - 1 ;
@@ -216,12 +217,16 @@ let config = {
          * @param event
          */
         setSortParam:function (context,event) {
-            let $icon = $(context).find('i');
-            if($icon[0].className === 'normal' || ''){
+            let icon = $(context).find('i');
+            console.log(icon);
+            console.log($(icon));
+            console.log($(icon)[0].classList);
+            console.log($.inArray('asc',$(icon)[0].classList));
+            if(icon[0].className === 'normal' || $.inArray('normal',$(icon)[0].classList) > -1){
                 this.data.sortMode = 'asc';
-            }else if($icon[0].className.includes('asc')){
+            }else if($.inArray('asc',$(icon)[0].classList) > -1){
                 this.data.sortMode = 'desc';
-            }else if($icon[0].className.includes('desc')){
+            }else if($.inArray('desc',$(icon)[0].classList) > -1){
                 this.data.sortMode = 'normal';
             }else{
                 console.log('error');
@@ -260,7 +265,7 @@ let config = {
             }
         },
         setSortIcon:function () {
-            this.el.find(`thead tr th:eq(${this.data.sortIndex}) i`).attr('class',`${this.data.sortMode}`);
+            this.el.find(`thead tr th:eq(${this.data.sortIndex}) i`).attr('class',`${this.data.sortMode} icon-aggrid-cus`);
         }
     },
     afterRender() {
