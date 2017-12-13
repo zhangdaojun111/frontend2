@@ -210,7 +210,7 @@ let config={
          */
 
         submitAddWorkflow() {
-            if(!this.data.obj.real_id){
+            if(!this.data.obj.real_id &&  window.top.miniFormVal){
                 delete window.top.miniFormVal[this.data.obj.table_id];
             }else {
                 window.top.miniFormValRealId = '';
