@@ -1180,7 +1180,7 @@ let config = {
 		},
 		//提交表单数据
 		async onSubmit() {
-            if(!this.data.data['real_id']['value']){
+            if(!this.data.data['real_id']['value'] && window.top.miniFormVal){
                 delete window.top.miniFormVal[this.data.data['table_id']['value']];
             }else {
                 window.top.miniFormValRealId = '';
