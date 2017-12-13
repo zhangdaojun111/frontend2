@@ -3,7 +3,9 @@
         clear: both;
     }
     .form-group {
-        .customAccuracyNum {
+        .customAccuracyNum,
+        .titleSize,
+        .chartSize {
             .form-chart-wrapper {
                 span {
                     margin-left: 16px;

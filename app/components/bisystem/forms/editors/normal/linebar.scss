@@ -25,7 +25,10 @@
         .limitNum,
         .endLimitNum,
         .customTopNum,
-        .customAccuracyNum {
+        .customAccuracyNum,
+        .titleSize,
+        .chartSize
+        {
             .form-chart-wrapper {
                 span {
                     margin-left: 16px;
