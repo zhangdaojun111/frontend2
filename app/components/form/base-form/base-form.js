@@ -1146,7 +1146,7 @@ let config = {
 			this.data.childComponent[psField].actions.hasChangeValue(this.data.data[psField]);
 		},
 
-		createSubmitPostJson(){
+		createSubmitPostJson(formValue){
 			let data = this.actions.handleFormData(formValue);
 			let formDataOld = this.data.oldData;
 			//如果有其他字段的数据，这里是拼approvedFormData
@@ -1192,7 +1192,7 @@ let config = {
 				this.data.isBtnClick = false;
 				return;
 			}
-			let json=this.actions.createSubmitPostJson();
+			let json=this.actions.createSubmitPostJson(formValue);
 			let res = await FormService.saveAddpageData(json);
 			if (res.succ == 1) {
 				this.actions.submitSuccessCb(res);
