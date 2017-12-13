@@ -218,10 +218,6 @@ let config = {
          */
         setSortParam:function (context,event) {
             let icon = $(context).find('i');
-            console.log(icon);
-            console.log($(icon));
-            console.log($(icon)[0].classList);
-            console.log($.inArray('asc',$(icon)[0].classList));
             if(icon[0].className === 'normal' || $.inArray('normal',$(icon)[0].classList) > -1){
                 this.data.sortMode = 'asc';
             }else if($.inArray('asc',$(icon)[0].classList) > -1){
