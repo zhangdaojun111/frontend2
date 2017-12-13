@@ -466,9 +466,11 @@ let config = {
             button,
         ]
     },
+
     beforeRender(){
         this.data.chart_id = this.data.id
     },
+
     async afterRender() {
         if (this.data.chart_id) {
             const res = await this.actions.getChartData(this.data.chart_id);
