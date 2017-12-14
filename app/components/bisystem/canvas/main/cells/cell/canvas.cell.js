@@ -57,13 +57,17 @@ let config = {
                 this.data.cell.size.width = 'auto';
             }
             this.el.find('.cell').css(this.data.cell.size);
-            this.cellTitle = new CanvasCellTitleComponent({},{
-                /**
-                 * 显示原始数据
-                 */
-                onShowOriginal: () => {
-                    let originalData = this.data.cellComponent.data;
-                    this.data.cellComponent.showCellDataSource(originalData,this.el.find('.cell-chart'))
+            this.cellTitle = new CanvasCellTitleComponent({
+                data:{},
+                events: {
+                    /**
+                     * 显示原始数据
+                     */
+                    onShowOriginal: () => {
+                        console.log('dododdodod');
+                        let originalData = this.data.cellComponent.data;
+                        this.data.cellComponent.showCellDataSource(originalData, this.el.find('.cell-chart'))
+                    }
                 }
             });
             this.append(this.cellTitle, this.el.find('.bread-crumb-nav'));

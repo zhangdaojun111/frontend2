@@ -361,7 +361,13 @@ let config = {
         downloadPDF(){
             //计算实际内容高度
             let width = 0;
-            let height = this.el.find('.cells-container')[0].scrollHeight;
+            let height = -300;
+            // let height = this.el.find('.cells-container')[0].scrollHeight;
+
+            //逐个计算画布块高度
+            this.el.find('.current').find('.cell').each(function () {
+                height = height + $(this).height() + 20;
+            });
             //计算内容高度
             this.el.find('.bi-table').each(function () {
                 height = height - $(this).height() + $(this)[0].scrollHeight;
@@ -386,7 +392,7 @@ let config = {
             let folder_id = window.config.folder_id || '';
 
             let url = origin + `/bi/download_pdf/?view_id=${this.data.currentViewId}&page_width=${widthIn}in&page_height=${heightIn}in&parent_table_id=${parent_table_id}&row_id=${row_id}&query_mark=${query_mark}&operation_id=${operation_id}&folder_id=${folder_id}`;
-            console.log(url);
+
             window.open(url);
         }
     },

@@ -8,6 +8,7 @@ import "./cell.table.scss";
 import handlebars from 'handlebars';
 import {PMAPI} from '../../../../../../../lib/postmsg';
 import {HTTP} from "../../../../../../../lib/http";
+import "../../../../../../../assets/scss/dataGrid/dataGrid-icon.scss";
 
 handlebars.registerHelper('ifLast', function (index,row, options) {
     let lastIndex = row[0].length - 1 ;
@@ -23,27 +24,33 @@ let config = {
     data: {
         rows: [],
         chart: {},
+        firstLoad:true,      //第一次load后备份数据
+        sortIndex:'',    //排序列序号
+        sortMode:'normal',    //排序模式（升序，降序，还原）
     },
     binds: [
         {   // 查看 编辑 历史
             event:'click',
             selector:'.table-operate a',
             callback:function (context,event) {
-                console.log(this.data,'.............................................');
                 let data = {
                     table_id: this.data.chart.table_id,
                     real_id:this.data.chart.data.rows[$(context).attr('data-index')][this.data.chart.data.rows[0].length - 1]
                 };
-                console.log(data);
                 this.actions.gridHandle($(context).attr('class'), data);
             }
         },
+        {   //列排序
+            event:'click',
+            selector:'.sort-column',
+            callback:function (context,event) {
+                this.actions.sortColumn(context,event);
+            }
+        }
     ],
     actions: {
         //操作列点击事件
         gridHandle: function (type,data) {
-            console.log(type);
-            console.log(data);
                 if (type == 'table-view') {
                     let obj = {
                         table_id: data.table_id,
@@ -145,7 +152,7 @@ let config = {
             }).then((data) => {
                 if (title === '编辑') {
                     window.location.reload()
-                };
+                }
             })
         },
 
@@ -195,8 +202,67 @@ let config = {
                 tableRows.push(row);
             }
             return tableRows;
-        }
+        },
+        /**
+         * 点击表头进行列排序
+         * @param context
+         * @param event
+         */
+        sortColumn:function (context,event) {
+            this.actions.setSortParam(context,event);
+        },
+        /**
+         * 监听排序点击，记录排序参数
+         * @param context
+         * @param event
+         */
+        setSortParam:function (context,event) {
+            let icon = $(context).find('i');
+            if(icon[0].className === 'normal' || $.inArray('normal',$(icon)[0].classList) > -1){
+                this.data.sortMode = 'asc';
+            }else if($.inArray('asc',$(icon)[0].classList) > -1){
+                this.data.sortMode = 'desc';
+            }else if($.inArray('desc',$(icon)[0].classList) > -1){
+                this.data.sortMode = 'normal';
+            }else{
+                console.log('error');
+            }
+            this.data.sortIndex = $(context)[0].cellIndex;
+            //使用排序后的数据刷新表格
+            this.reload();
+        },
+        sortTableData:function (data) {
+            if(this.data.sortMode === 'normal'){
+                //直接使用原始数据刷新表格
+                return data;
+            }else{
+                //需要进行排序
+                let sortIndex = this.data.sortIndex;
+                let sortData = data.chart.data.rows;
+                let sortType = data.chart.columns[sortIndex].type === '10' ? 'number' : 'string';
 
+                if(this.data.sortMode === 'asc'){
+                    sortData.sort(function (a,b) {
+                        if(sortType === 'number'){
+                            return Number(a[sortIndex]) > Number(b[sortIndex]);
+                        }else{
+                            return (a[sortIndex]).toString() > (b[sortIndex]).toString();
+                        }
+                    })
+                }else{
+                    sortData.sort(function (a,b) {
+                        if(sortType === 'number'){
+                            return Number(a[sortIndex]) < Number(b[sortIndex]);
+                        }else{
+                            return (a[sortIndex]).toString() < (b[sortIndex]).toString();
+                        }
+                    })
+                }
+            }
+        },
+        setSortIcon:function () {
+            this.el.find(`thead tr th:eq(${this.data.sortIndex}) i`).attr('class',`${this.data.sortMode} icon-aggrid-cus`);
+        }
     },
     afterRender() {
         // 向agid服务器获取数据 flow_id，form_id
@@ -217,14 +283,30 @@ let config = {
         if(window.config.pdf){
             this.el.find('.bi-table').addClass('download-pdf');
         }
+        //reload设置排序图标
+        this.actions.setSortIcon();
+
+        //自定义 图表字体大小
+        if(this.data.chart.customTextStyle && this.data.chart.customTextStyle.hasOwnProperty('chartSize')){
+            this.el.find('.bi-table table').css('font-size',this.data.chart.customTextStyle.chartSize + 'px');
+        }
     },
 
     beforeRender: function () {
-        let data = {
-            cell:this.data.cell,
-            chart:this.data.chart
-        };
-        console.log(this.data.chart);
+        let data;
+        //备份数据（仅一次），用于展示最初顺序
+        if(this.data.firstLoad){
+            this.data.firstLoad = false;
+            data = {
+                cell:this.data.cell,
+                chart:this.data.chart
+            };
+            this.backupData = $.extend(true,{},data);
+        }else{
+            //对data进行排序后，执行init
+            data = $.extend(true,{},this.backupData);
+            this.actions.sortTableData(data);
+        }
         let cellChart = CellTableComponent.init(data);
         $.extend(true, this.data, cellChart);
     }
@@ -243,13 +325,24 @@ export class CellTableComponent extends CellBaseComponent {
 
     static init(cellChart) {
         //格式化数据
+        let columns = cellChart.chart.columns;
         let data = cellChart.chart.data.rows;
+
+        //遍历列类型，找出需要格式化的列
+        let formatColIndex = [];
+
+        for (let k in columns){
+            if(columns[k]['type'].toString() === '10'){
+                formatColIndex.push(k);
+            }
+        }
+
         for (let k in data){
-            for (let n in data[k]){
+            for (let n of formatColIndex){
                 let temp = data[k][n];
                 if(CellTableComponent.isNumber(temp)){
                     //自定义设置精度
-                    let acc = cellChart.chart.customAccuracy?cellChart.chart.customAccuracy:0;
+                    let acc = cellChart.chart.customAccuracy;
                     data[k][n] = CellTableComponent.numFormat(temp,acc);
                 }
             }
@@ -308,7 +401,7 @@ export class CellTableComponent extends CellBaseComponent {
     static numFormat(num,acc) {
         num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-        if(acc){
+        if(acc>0){
             if(num[1]){
                 num[1] = '0.' + num[1];
                 num[1] = parseFloat(num[1]).toFixed(acc);
@@ -316,8 +409,16 @@ export class CellTableComponent extends CellBaseComponent {
             }else{
                 num[1]  = new String('0').repeat(acc);
             }
+        }else if(acc==='0'){
+            if(num[1]){
+                num[1] = '';
+            }
         }
-        num = num.join(".");
+        if(acc==='0'){
+            num = num.join(" ");
+        }else{
+            num = num.join(".");
+        }
         return num;
     }
 

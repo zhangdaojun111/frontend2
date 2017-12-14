@@ -25,8 +25,7 @@ let config = {
 		miniFormVal: '',
 		tableId: '',
 		btnType: '',
-        formId:'',
-        flowId:'',
+        obj:'',
 	},
 	actions: {
 		appPass() {
@@ -187,11 +186,15 @@ let config = {
 		//表单最小化
 		miniForm() {
 			this.data.miniFormVal = CreateFormServer.getFormValue(this.data.tableId, false)
+            this.data.miniFormVal = CreateFormServer.getFormValue(this.data.obj.tableId, false)
 			if (!window.top.miniFormVal) {
 				window.top.miniFormVal = {};
 			}
 			window.top.miniFormVal[this.data.tableId] = this.data.miniFormVal;
 			window.top.miniFormValTableId = this.data.tableId;
+            window.top.miniFormVal[this.data.obj.tableId] = this.data.miniFormVal;
+            window.top.miniFormValTableId = this.data.obj.tableId;
+            window.top.miniFormValRealId = this.data.obj.realId;
 			PMAPI.sendToRealParent({
 				type: PMENUM.close_dialog,
 				key: this.data.key,
@@ -221,13 +224,20 @@ let config = {
 		Mediator.subscribe('form:formTableId', (msg) => {
 			this.data.tableId = msg.tableId;
 			this.data.btnType = msg.btnType;
-            this.data.formId = msg.formId;
-            this.data.flowId = msg.flowId;
 			if (this.data.btnType == 'new') {
 				this.el.find('.miniFormBtn').show();
 			} else {
 				this.el.find('.miniFormBtn').hide();
 			}
+            this.data.obj = msg;
+
+
+
+
+
+
+
+
 		});
 		let serchStr = location.search.slice(1), obj = {};
 		serchStr.split('&').forEach(res => {
@@ -270,16 +280,19 @@ let config = {
 		this.el.on('click', '#miniFormBtn', () => {
 			this.actions.miniForm();
 		});
+
+
+
         //发起工作流保存草稿
         this.el.on('click','#draftBtn', () => {
             let postData = {
-                flow_id: this.data.flowId,
+                flow_id: this.data.obj.flowId,
                 is_draft: 1,
                 data: {}
             };
             this.el.parents().find('#workflow-content').hide();
             this.el.parents('#workflow-content').siblings('.workflow-header').children('#workflow-box').show();
-            let formData = CreateFormServer.getFormValue(this.data.tableId, false);
+            let formData = CreateFormServer.getFormValue(this.data.obj.tableId, false);
             postData.data = JSON.stringify(formData);
             (async function () {
                 return workflowService.createWorkflowRecord(postData);

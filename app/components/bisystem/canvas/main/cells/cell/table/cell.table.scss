@@ -1,3 +1,5 @@
+
+
 $font-color: #e4e4e4;
 
 .bi-table {
@@ -18,11 +20,31 @@ $font-color: #e4e4e4;
                 vertical-align: middle;
                 color: #333333;
                 font-weight: bold;
-                font-size: 14px;
                 padding: 10px;
                 background-color: #f2f2f2;
                 border-right: solid 1px #e4e4e4;
                 white-space: nowrap;
+                cursor: pointer;
+                i{
+                    display: inline-block;
+                    &.asc {
+                        background-position: -52px -26px;
+                        width: 16px;
+                        height: 16px;
+                        vertical-align: sub;
+                        display: inline-block;
+                    }
+                    &.desc {
+                        background-position: 0px -52px;
+                        width: 16px;
+                        height: 16px;
+                        vertical-align: sub;
+                        display: inline-block;
+                    }
+                    &.normal{
+                        display: none;
+                    }
+                }
             }
             th:last-child {
                 border-right: none;

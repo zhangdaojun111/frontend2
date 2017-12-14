@@ -47,7 +47,7 @@ let expertCondition = Component.extend({
                     }
                 }
             }
-            this.append(new AutoSelect(selectData),this.el.find('.condition-search-box'))
+            this.append(new AutoSelect({data:selectData}),this.el.find('.condition-search-box'))
         },
         // 下拉组件点击事件
         itemOnSelect: function(item){
