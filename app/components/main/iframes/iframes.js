@@ -693,8 +693,6 @@ let IframeComponent = Component.extend({
         },
         _startLoadingIframe:function () {
             let iframe = this.data.iframes.find('iframe[_src]:last');
-            console.log('iframe');
-            console.dir(iframe);
             if (iframe.length) {
                 this.actions._loadIframe(iframe);
             }
@@ -704,7 +702,6 @@ let IframeComponent = Component.extend({
             iframe.removeAttr('_src');
             let that = this;
             iframe.on('load', function(){
-                console.log('loaded');
                 that.actions._startLoadingIframe();
                 let item = $(this).parent();
                 item.attr('load', 'complete');

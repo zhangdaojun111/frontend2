@@ -215,12 +215,11 @@ let HeaderComponent = Component.extend({
         });
     },
     firstAfterRender: function () {
-        let that = this;
-        Mediator.on('socket:online_user_num', that.actions.refreshOnlineNum);
+        Mediator.on('socket:online_user_num', this.actions.refreshOnlineNum);
         Mediator.on('socket:personal_message', this.actions.displayMessageUnread);
         Mediator.on('socket:notice', this.actions.onSocketNotice);
         Mediator.on('sysmsg:refresh_unread',(data) => {
-            that.actions.displayMessageUnread({
+            this.actions.displayMessageUnread({
                 badge: window.config.sysConfig.unread_msg_count
             })
         });
