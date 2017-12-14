@@ -107,6 +107,7 @@ const pie = {
     tooltip: {
         trigger: 'item',
         formatter: '{b} : {c} ({d}%)'
+
     },
     legend: {
         show: true,
