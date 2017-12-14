@@ -3,61 +3,20 @@
 
     <div class="contract-editor-widget">
 
-        <div class="contract-settings"      >
-            <div class="history-template">
-                <div class="contract-settings-title">最近使用</div>
-                <div class="history-template-list">
-
-                </div>
-            </div>
-                <div class="select-template ">
-                <div class="contract-settings-title">请选择模板</div>
-                <select name="选择模板" class="contract-model">
+        <div class="contract-settings">
+            <div class="select-template ">
+                <div class="contract-settings-title">&nbsp;&nbsp;请选择模板</div>
+                <select name="选择模板" class="contract-model" style="width: 200px; margin-top: 5px;margin-left: 5px;">
                     <option value="0">请选择</option>
                 </select>
             </div>
-            <div class="data-source-template">
-                <div class="contract-settings-title">请选择数据源</div>
+            <div>
+                <div class="contract-settings-title">&nbsp;&nbsp;请选择数据源</div>
                 <div class="contract-data-source-anchor"></div>
-            </div>
-            <div class="instrument-template">
-                <div class="contract-settings-title">辅助工具</div>
-                <div class="instrument-template-item">
-                    <span class="instrument-template-item-title">行间距</span>
-                    <span class="instrument-template-input">
-                        <input class="active" type="checkbox">
-                        <lable>默认</lable>
-                    </span>
-                    <span class="instrument-template-input">
-                        <input  type="checkbox">
-                        <lable>大</lable>
-                    </span>
-                </div>
-                <div class="instrument-template-item">
-                    <span class="instrument-template-item-title">字号</span>
-                    <span class="instrument-template-input">
-                        <input class="active" type="checkbox">
-                        <lable>默认</lable>
-                    </span>
-                    <span class="instrument-template-input">
-                        <input  type="checkbox">
-                        <lable>大</lable>
-                    </span>
-                    <span class="instrument-template-input">
-                        <input  type="checkbox">
-                        <lable>中</lable>
-                    </span>
-                </div>
-                <div class="instrument-template-item">
-                    <span class="instrument-template-item-title">背景色</span>
-                    <span class="instrument-template-btn">默认色</span>
-                    <span class="instrument-template-btn brown">浅褐色</span>
-                </div>
             </div>
         </div>
         <!--添加 <div class="contract-container"></div>-->
         <div class="contract-container">
-            <div class="contract-settings-title">合同预览</div>
             <!--添加  <div class="contract-container-content"></div>-->
             <div class="contract-container-content">
                 <div class="contract-tab-container">
@@ -78,7 +37,7 @@
             <button type="button" class="save_n_close">保存并关闭窗口</button>
             <button type="button" class="download_all">下载所有文档</button>
             <button type="button" class="download_current">下载当前文档</button>
-            <button type="button" class="edit_or_save">临时编辑</button>
+            <button type="button" class="edit_or_save" style="display: none;">编辑</button>
         </div>
     </div>
 

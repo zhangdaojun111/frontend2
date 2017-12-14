@@ -23,8 +23,6 @@ let config = {
 		isshowprintbtn: false, //是否显示打印附件按钮
 		isshowfjbtn: false,
 		miniFormVal: '',
-		tableId: '',
-		btnType: '',
         obj:'',
 	},
 	actions: {
@@ -185,13 +183,10 @@ let config = {
 		},
 		//表单最小化
 		miniForm() {
-			this.data.miniFormVal = CreateFormServer.getFormValue(this.data.tableId, false)
             this.data.miniFormVal = CreateFormServer.getFormValue(this.data.obj.tableId, false)
 			if (!window.top.miniFormVal) {
 				window.top.miniFormVal = {};
 			}
-			window.top.miniFormVal[this.data.tableId] = this.data.miniFormVal;
-			window.top.miniFormValTableId = this.data.tableId;
             window.top.miniFormVal[this.data.obj.tableId] = this.data.miniFormVal;
             window.top.miniFormValTableId = this.data.obj.tableId;
             window.top.miniFormValRealId = this.data.obj.realId;
@@ -222,22 +217,7 @@ let config = {
 	afterRender: function () {
 		// this.showLoading();
 		Mediator.subscribe('form:formTableId', (msg) => {
-			this.data.tableId = msg.tableId;
-			this.data.btnType = msg.btnType;
-			if (this.data.btnType == 'new') {
-				this.el.find('.miniFormBtn').show();
-			} else {
-				this.el.find('.miniFormBtn').hide();
-			}
             this.data.obj = msg;
-
-
-
-
-
-
-
-
 		});
 		let serchStr = location.search.slice(1), obj = {};
 		serchStr.split('&').forEach(res => {
@@ -280,9 +260,6 @@ let config = {
 		this.el.on('click', '#miniFormBtn', () => {
 			this.actions.miniForm();
 		});
-
-
-
         //发起工作流保存草稿
         this.el.on('click','#draftBtn', () => {
             let postData = {
