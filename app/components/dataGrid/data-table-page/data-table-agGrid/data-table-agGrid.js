@@ -54,7 +54,7 @@ let dataTableAgGrid = Component.extend({
         rowId: '',
         fieldId: '',
         flowId: '',
-        recordId: '',
+        record_id: '',
         source_field_dfield: '',
         base_buildin_dfield: '',
         fieldContent: null,
@@ -1031,6 +1031,7 @@ let dataTableAgGrid = Component.extend({
                     }
                     html += btn.outerHTML;
                 }
+
             }
             let con = this.el.find('.dataGrid-btn-group')[0];
             con.innerHTML = html;
@@ -1326,6 +1327,9 @@ let dataTableAgGrid = Component.extend({
                     if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                         this.actions.checkCorrespondence(true);
                     }
+	                if(this.data.correspondenceSelectedList){
+		                this.data.correspondenceSelectedList.length>0?Mediator.publish('form:correspondenceRequired:' + this.data.tableId, true):Mediator.publish('form:correspondenceRequired:' + this.data.tableId, false);
+	                }
                     if (this.data.viewMode == 'ViewChild' || this.data.viewMode == 'EditChild') {
                         Mediator.publish('form:songGridRefresh:' + this.data.tableId, this.data);
                     }
@@ -1645,10 +1649,11 @@ let dataTableAgGrid = Component.extend({
                 parent_table_id: this.data.parentTableId,
                 parent_real_id: this.data.parentRealId,
                 parent_temp_id: this.data.parentTempId,
+                parent_record_id: this.data.parentRecordId,
                 tableType: this.data.tableType,
                 fieldId: this.data.fieldId,
                 rowId: this.data.rowId,
-                record_id: this.data.recordId,
+                record_id: this.data.record_id,
                 is_filter: this.data.filterParam.is_filter,
                 filter: [],
                 from_approve: this.data.fromApprove || 0
@@ -1685,8 +1690,8 @@ let dataTableAgGrid = Component.extend({
             if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
                 // json['rows'] = 99999;
                 // json['first'] = 0;
-                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
-                json['is_temp'] = 1;
+                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                // json['is_temp'] = 1;
                 json['tableType'] = 'dy';
                 delete json['rowId']
             }

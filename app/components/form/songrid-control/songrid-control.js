@@ -41,9 +41,9 @@ let config={
             tableId:this.data.value,
             parentTableId:this.data.parent_table_id,
             rowId:this.data.parent_temp_id || '',
-            recordId:this.data.recordId || '',
+            record_id:this.data.recordId || '',
             parentRealId:this.data.parent_real_id || '',
-            parentRecordId:this.data.parent_record_id || '',
+            // parentRecordId:this.data.recordId || '',
             parentTempId:this.data.parent_temp_id || '',
             tableType:'child',
             viewMode:this.data.is_view==0?'EditChild':'ViewChild',
@@ -57,21 +57,21 @@ let config={
         }
         let dataGrid=new DataTableAgGrid({data: config});
         this.append(dataGrid,this.el.find('.songGrid'));
-        Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
-            if(res && this.data &&  res.tableId == this.data["value"]){
-                this.data["total"] = res.total;
-                if (this.data.total == 0) {
-                    this.el.find('#requiredLogo').removeClass().addClass('required');
-                }else {
-                    this.el.find('#requiredLogo').removeClass().addClass('required2');
-                }
-                this.events.emitDataIfInline(this.data);
-	            this.data.isInit=false;
-            }
-        })
-
-
     },
+	firstAfterRender(){
+		Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{
+			if(res && this.data &&  res.tableId == this.data["value"]){
+				this.data["total"] = res.total;
+				if (this.data.total == 0) {
+					this.el.find('#requiredLogo').removeClass().addClass('required');
+				}else {
+					this.el.find('#requiredLogo').removeClass().addClass('required2');
+				}
+				this.events.emitDataIfInline(this.data);
+				this.data.isInit=false;
+			}
+		})
+	},
     beforeDestory(){
         this.el.off();
     }

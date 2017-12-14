@@ -1,0 +1,197 @@
+@import "../../../../assets/scss/core/base";
+.contract-editor{
+  height: 100%;
+  //position: relative;
+  display: flex;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 10px;
+  font-size:12px;
+  .contract-editor-widget{
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex: 1;
+    .contract-settings-title{
+      border-bottom: 1px solid #D7D7D7;
+      color: #999999;
+      display: inline-block;
+      text-align: center;
+      background: #ebebeb;
+      height: 30px;
+      line-height: 30px;
+      width: 100%;
+    }
+    .contract-settings {
+      border: 1px solid #D7D7D7;
+      width: 250px;
+      .history-template-list {
+        padding: 5px;
+        & p{
+          line-height: 20px;
+          cursor: pointer;
+          &:hover {
+            background-color: #d7d7d7d7;
+          }
+        }
+      }
+      .select-template,.data-source-template{
+        margin-bottom: 30px;
+      }
+      .contract-model {
+        width: 240px;
+        height: 30px;
+        margin-top: 5px;
+        margin-left: 5px;
+      }
+      .instrument-template-item{
+        padding: 10px;
+        .instrument-template-item-title{
+          display: inline-block;
+          margin-right: 15px;
+        }
+        .instrument-template-input{
+          display: inline-block;
+          margin-right: 15px;
+          & input{
+            position: relative;
+            top: 0px;
+            width: 10px;
+            height: 10px;
+            &:before {
+              position: absolute;
+              width: 10px;
+              content: ' ';
+              height: 10px;
+              left: 0px;
+              top: 0px;
+              background-color: #fff;
+              border: 1px solid #d7d7d7;
+              cursor: pointer;
+            }
+            &.active{
+              &:after {
+                position: absolute;
+                width: 8px;
+                content: ' ';
+                height: 8px;
+                left: 2px;
+                top: 2px;
+                background-color: #0088ff;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+        .instrument-template-btn {
+          display: inline-block;
+          width: 55px;
+          text-align: center;
+          height: 18px;
+          line-height: 20px;
+          border: solid 1px #797979;
+          border-radius: 4px;
+          margin-right: 8px;
+          &.brown{
+            background-color: #fbf0d9
+          }
+        }
+      }
+
+    }
+    .contract-container{
+      border: 1px solid #D7D7D7;
+      border-left: none;
+      width: calc(100% - 250px);
+      .contract-container-title{
+        border-bottom: 1px solid #D7D7D7;
+        color: #999999;
+        height: 30px;
+        line-height: 30px;
+        background: #F2F2F2;
+      }
+      .contract-container-content{
+        overflow: auto;
+        height: 460px;
+        border: 1px solid #D7D7D7;
+        margin: 4px;
+        .contract-tab-container {
+          height: 30px;
+          line-height: 30px;
+          background: #F2F2F2;
+          width: 100%;
+          border-bottom: 1px solid #D7D7D7;
+          .contract-tabs {
+            display: inline-block;
+            max-width: 560px;
+            max-height:30px;
+            overflow-x:auto;
+            overflow-y:hidden;
+            white-space:nowrap;
+          }
+          .contract-tab {
+            display: inline-block;
+            padding: 0 15px;
+            border-left: 1px solid #D7D7D7;
+            border-right: 1px solid #D7D7D7;
+            cursor: pointer;
+            &.active {
+              color:#0088FF;
+            }
+          }
+          .add-tab-button {
+            display:inline-block;
+            width: 10px;
+            height: 10px;
+            background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAMNJREFUGBmNUDkOwkAQ8yQLFc+gQ0hpeQgNP6FLF15Cw2do0vGM0CRaBnuWQEpW2h3L9hw7gM7R64gX36PzZ1zhhZbCtEONGzIqxhdWYRDWkQZHws1ymERmDDCyM1ZsbVRIUAtly1ShIWcS+DYcAVQ27JKNxoH0mtcpql5pbZiIVV2JY8Xnr5PoOnxbq53h+sk8sd7913pZr/MtjX1Qzv+e7THLVayndc1YBi8zWVQSJ417LuuJmUnyd4ST9MCKPTmu8A2pxEh6XTDHawAAAABJRU5ErkJggg==') no-repeat;
+            margin: 10px 10px;
+            cursor: pointer;
+          }
+          .delete-tab-button {
+            display:inline-block;
+            width: 10px;
+            height: 10px;
+            background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAAGKAAABigEzlzBYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgpMwidZAAABBUlEQVQYGVWQ3U7CQBSEv1OkSBXfrKAmJMolxkcQXgE08QVQL9XYRI3c+Vb+Fasp65y1N+xm09np7JlzxrgMXSquabFkYncMQwtfhdXMwkgoJ2W8xQ9X7HLMFwPmoWJqj1E4D4cEFuyQURKM8zBkzQ3bkn+rNhxEITyJ64j7JGFskbwIOTX3ssjk8BG5lJ5wicltai8JD+rpzJbqcaAfb3rdi8excxK5JqFojGraQklz808iF+c0GCrs67/xW1l3VPU9cil7wpUUIx/QmggWajxT4yvV2Y/CNc/iuuJK3U/dKo8RrDSdcaQsX+Nx7BNn2oG+xcB/FbgpjokVG4F7dEFxtTn5AzxdXK/Y1PcdAAAAAElFTkSuQmCC') no-repeat;
+            margin: 10px 16px;
+            cursor: pointer;
+          }
+          .contract-template-anchor {
+            & span {
+              color: #0088FF;
+              background-color: yellow;
+            }
+          }
+        }
+      }
+    }
+    .contract-editor-button{
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      & button{
+        margin-left: 10px;
+        width: 100px;
+        height: 31px;
+        background: inherit;
+        background-color: #08f;
+        border: none;
+        border-radius: 4px;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 12px;
+        color: #fff;
+        cursor: pointer;
+        &.edit_or_save{
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+
+
