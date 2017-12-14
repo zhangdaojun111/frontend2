@@ -5,7 +5,10 @@
             <thead>
             <tr>
                 {{#each chart.columns}}
-                <th>{{name}}</th>
+                <th class="sort-column">
+                    <i class="normal"></i>
+                    {{name}}
+                </th>
                 {{/each}}
                 <th class="edit-operate">操作</th>
             </tr>
