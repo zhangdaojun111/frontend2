@@ -17,7 +17,6 @@ let config = {
     },
     actions: {
         dateVaild: function (val) {
-            // let $events = $._data($('.ui-datepicker-trigger')[0], 'events')
             let _this = this;
             let  re =/^(\d{4})-(\d{2})-(\d{2})$/;
             if(!this.data.isClick){
