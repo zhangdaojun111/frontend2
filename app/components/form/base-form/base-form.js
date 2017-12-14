@@ -2320,9 +2320,6 @@ let config = {
 						break;
 				}
 			}
-			$(function () {
-				$("#form-paging-tabs-control").tabs();
-			});
 		},
 
 		//改变人员信息表主岗选项
@@ -2454,9 +2451,15 @@ let config = {
 			this.actions.formStyle();
 			this.data.isInit = false;
 		},
+		//生成表单分页
+		createFormTabs(){
+			this.el.find("#form-paging-tabs-control").tabs();
+		}
 	},
 	afterRender() {
         this.actions.initForm();
+        //生成表单分页
+		this.actions.createFormTabs();
 	},
 
 	firstAfterRender(){
