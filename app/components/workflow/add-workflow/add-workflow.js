@@ -32,6 +32,7 @@ let config={
         allUsersInfo: {},
         focusUsersId: [],
         focusUsers: {},
+        edit: '',
     },
     actions:{
         openAddFollower() {
@@ -67,8 +68,10 @@ let config={
                 return workflowService.getPrepareParams({table_id: _this.data.obj.table_id});
             })().then(res => {
                 if (res.data.flow_data.length === 0) {
+                    if(this.data.edit.permission.add != 1){
+                        this.el.find('.workflow-flex').hide();
+                    }
                     this.el.find('.workflow-foot').hide();
-                    this.el.find('.workflow-flex').hide();
                     this.el.find('#place-form').html('');
                     FormEntrys.initForm({
                         el: this.el.find('#place-form'),
@@ -318,7 +321,8 @@ let config={
         _this.showLoading();
         this.data.key = this.data.obj.key;
         let edit = await FormService.getColumnList(this.data.obj.table_id);
-        if(edit.permission.edit == 0){
+        this.data.edit = edit;
+        if(edit.permission.edit == 0 && edit.permission.add != 1){
             this.data.obj.btnType = "none"
         }
         if (this.data.obj.btnType === 'view'||this.data.obj.btnType ==="none") {
