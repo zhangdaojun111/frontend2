@@ -90,6 +90,7 @@ export class CellBaseComponent extends Component {
     updateCellDataFromMessage(res) {
         if (res['success'] === 1) {
             if (res['data'].assortment === 'table') {
+                this.data.firstLoad = true;// 主要用于表格前端默认渲染后 firstLoad = false,会用老数据渲染
                 if (res['data']['single'] === 1) {
                     this.data.rows = this.actions.singleTable(res['data']);
                 } else {
@@ -106,7 +107,7 @@ export class CellBaseComponent extends Component {
                 res['data'].assortment === 'gauge'
             ) {
                 this.data.chart = this.data.cellChart.chart = res['data'];
-                this.actions.updateChart(res['data'].assortment === 'multilist' ? this.data.cellChart : {'chart':res['data']});
+                this.actions.updateChart(this.data.cellChart);
             } else if (res['data'].assortment === 'nineGrid') {
                 this.data = this.actions.reassemble({'chart':res['data']});
                 this.reload();

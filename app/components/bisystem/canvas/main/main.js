@@ -412,6 +412,7 @@ let config = {
         //根据判断是否单行模式加载header
         this.actions.headLoad();
 
+
         if(window.hasOwnProperty("parent") && window.parent === window){
             //监听浏览器大小变化，判断是否停止轮播
             $(window).resize(function () {
