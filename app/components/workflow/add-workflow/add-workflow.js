@@ -67,7 +67,9 @@ let config={
                 return workflowService.getPrepareParams({table_id: _this.data.obj.table_id});
             })().then(res => {
                 if (res.data.flow_data.length === 0) {
-                    this.el.find('.workflow-flex').hide();
+                    if(this.data.obj.btnType != 'new'){
+                        this.el.find('.workflow-flex').hide();
+                    }
                     this.el.find('.workflow-foot').hide();
                     this.el.find('#place-form').html('');
                     FormEntrys.initForm({
