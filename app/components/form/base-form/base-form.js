@@ -2429,10 +2429,10 @@ let config = {
 				$(this).css('background','#ffffff').siblings().css('background','#F2F2F2');
 			})
 		},
-		initForm(){
+		async initForm(){
 			this.actions.saveParentRelation();
 			this.data.isInit = true;
-			this.actions.createFormControl();
+			await this.actions.createFormControl();
 			if (this.data.is_view == 1) {
 				this.actions.checkCustomTable();
 			}
