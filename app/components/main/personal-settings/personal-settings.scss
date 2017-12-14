@@ -7,6 +7,8 @@ $sub_color: #0088ff;
         background-color: $background_color;
         width: 100%;
         height: 100%;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
         .personal-setting-header{
             height: 130px;
             .login-group{
