@@ -84,6 +84,7 @@ let OnlineUser = Component.extend({
             data: {
                 columnDefs: GlobalService.getOnlineColumnDefs(),
                 footerData:[],
+                noFooter: true,
                 onSortChanged: this.actions.onSortChanged,
             }
         });
