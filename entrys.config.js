@@ -18,6 +18,7 @@ module.exports = {
     customDataGrid: path.resolve(APP_PATH, 'entrys/popup/customDataGrid.js'),
     dataImport: path.resolve(APP_PATH, 'entrys/popup/dataImport.js'),
     expertSearch: path.resolve(APP_PATH, 'entrys/popup/expertSearch.js'),
+    contractEditor: path.resolve(APP_PATH, 'entrys/popup/contractEditor.js'),
     searchImport: path.resolve(APP_PATH, 'entrys/popup/searchImport.js'),
     historyApprove: path.resolve(APP_PATH, 'entrys/popup/historyApprove.js'),
     operationDetails: path.resolve(APP_PATH, 'entrys/popup/operationDetails.js'),

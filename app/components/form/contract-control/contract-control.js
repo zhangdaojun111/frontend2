@@ -39,61 +39,32 @@ let config = {
                 title: title,
                 modal: true,
             }, {data:this.data}).then(res => {
-                // if(res.onlyclose){
-                //         if((new URL(document.URL)).searchParams!=undefined){
-                //             Storage.init((new URL(document.URL)).searchParams.get('key'));
-                //         } else {
-                //             let params = (new URL(document.URL)).search.split("&");
-                //             params.forEach((param)=>{
-                //                 if(param.indexOf('key')!=-1){
-                //                     Storage.init(param.replace('key=',''));
-                //                 }
-                //             })
-                //         }
-                //         let obj = Storage.getItem('contractCache-'+this.data.id,Storage.SECTION.FORM);
-                //         if(obj == undefined){
-                //             return;
-                //         }
-                //         for (let data of obj) {
-                //             delete data['content'];
-                //             delete data['mode'];
-                //         }
-                //         this.data.value = obj;
-                //     } else {
-                //         this.data.value = res;
-                //     }
-                //     this.trigger('changeValue',this.data);
+                if(res.onlyclose){
+                    if((new URL(document.URL)).searchParams!=undefined){
+                        Storage.init((new URL(document.URL)).searchParams.get('key'));
+                    } else {
+                        let params = (new URL(document.URL)).search.split("&");
+                        params.forEach((param)=>{
+                            if(param.indexOf('key')!=-1){
+                                Storage.init(param.replace('key=',''));
+                            }
+                        })
+                    }
+                    let obj = Storage.getItem('contractCache-'+this.data.id,Storage.SECTION.FORM);
+                    if(obj == undefined){
+                        return;
+                    }
+                    for (let data of obj) {
+                        delete data['content'];
+                        delete data['mode'];
+                    }
+                    this.data.value = obj;
+                } else {
+                    this.data.value = res;
+                }
+                this.trigger('changeValue',this.data);
             })
-            // PMAPI.openDialogByComponent(contractConfig,{
-            //     width:1250,
-            //     height:600,
-            //     title:title
-            // }).then(res=>{
-            //     if(res.onlyclose){
-            //         if((new URL(document.URL)).searchParams!=undefined){
-            //             Storage.init((new URL(document.URL)).searchParams.get('key'));
-            //         } else {
-            //             let params = (new URL(document.URL)).search.split("&");
-            //             params.forEach((param)=>{
-            //                 if(param.indexOf('key')!=-1){
-            //                     Storage.init(param.replace('key=',''));
-            //                 }
-            //             })
-            //         }
-            //         let obj = Storage.getItem('contractCache-'+this.data.id,Storage.SECTION.FORM);
-            //         if(obj == undefined){
-            //             return;
-            //         }
-            //         for (let data of obj) {
-            //             delete data['content'];
-            //             delete data['mode'];
-            //         }
-            //         this.data.value = obj;
-            //     } else {
-            //         this.data.value = res;
-            //     }
-            //     this.trigger('changeValue',this.data);
-            // })
+
         },
         getHistoryModel: function (json) {
             return HTTP.postImmediately('/customize/rzrk/show_lastest_history/', json);

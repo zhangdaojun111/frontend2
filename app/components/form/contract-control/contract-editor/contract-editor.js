@@ -57,7 +57,7 @@ let contractEditor = Component.extend({
             event: 'click',
             selector: '.edit_or_save',
             callback: function () {
-                if (this.el.find('.edit_or_save').text() == '编辑') {
+                if (this.el.find('.edit_or_save').text() == '临时编辑') {
                     let butStates = this.data.buttonStates[this.data['current_tab']];
                     butStates.edit_or_save_text = '确定';
                     butStates.display.save_n_close = 'none';
@@ -69,7 +69,7 @@ let contractEditor = Component.extend({
                 } else {
                     this.el.find('.contract-template-anchor').find('span').removeAttr('contenteditable');
                     let butStates = this.data.buttonStates[this.data['current_tab']];
-                    butStates.edit_or_save_text = '编辑';
+                    butStates.edit_or_save_text = '临时编辑';
                     butStates.display.save_n_close = 'inline';
                     butStates.display.download_all = 'inline';
                     butStates.display.download_current = 'inline';
@@ -118,6 +118,33 @@ let contractEditor = Component.extend({
             callback:function () {
                 this.el.find('.contract-tabs').css('overflow-x','hidden');
             }
+        },{
+            event:'click',
+            selector:'.instrument-line-height',
+            callback:function (event) {
+                this.el.find('.instrument-line-height input').removeClass('active');
+                $(event).find('input').addClass('active');
+                let size = $(event).find('input').attr('title');
+                this.actions.changeStyle('line-height', size)
+            }
+        },{
+            event:'click',
+            selector:'.instrument-font-size',
+            callback:function (event) {
+                this.el.find('.instrument-font-size input').removeClass('active');
+                $(event).find('input').addClass('active');
+                let size = $(event).find('input').attr('title');
+                this.actions.changeStyle('font-size', size)
+            }
+        },{
+            event:'click',
+            selector:'.instrument-template-btn',
+            callback:function (event) {
+                this.el.find('.instrument-template-btn').removeClass('active');
+                $(event).addClass('active');
+                let size = $(event).attr('title');
+                this.actions.changeStyle('back-ground', size)
+            }
         }
     ],
     data: {
@@ -134,7 +161,7 @@ let contractEditor = Component.extend({
                 let dataSourcesEle = this.el.find('.contract-data-source-anchor');
 
                 elements.forEach(element => {
-                    let select = $('<select class="data-source" id="'+element.table.table_id+'" style="width: 240px;height: 30px ;margin-top: 5px;"><option value="0">请选择</option></select>');
+                    let select = $('<select class="data-source" disabled="disabled" id="'+element.table.table_id+'" style="width: 240px;height: 30px ;margin-top: 5px;"><option value="0">请选择</option></select>');
                     this.data.elementKeys.push(element.table.table_id);
                     element.values.forEach(value => {
                         let option = $('<option value="'+value.id+'">'+value.name+'</option>');
@@ -172,6 +199,9 @@ let contractEditor = Component.extend({
                 options.on('change', (event) => {
                     this.data.local_data[this.data['current_tab']]['model_id'] = event.target.value;
                     this.actions._loadTemplateByIndex(this.data['current_tab']);
+                    // if(this.el.find('.contract-model').val() != 0){
+                    //     this.el.find('.data-source').removeAttr('disabled');
+                    // }
                 });
             }
         },
@@ -185,7 +215,7 @@ let contractEditor = Component.extend({
             let length = this.el.find('.contract-tab').length;
             this.el.find('.contract-tabs').append(tabEle);
             this.el.find('.contract-model').val(0).removeAttr('disabled');
-            this.el.find('.data-source').val(0).removeAttr('disabled');
+            // this.el.find('.data-source').val(0).removeAttr('disabled');
             this.data.local_data.push({name: '新建', elements: {}, model_id: '', mode: 'edit'});
             this.data['current_tab'] = length;
             this.actions.initButtonStates(this.data['current_tab']);
@@ -216,7 +246,7 @@ let contractEditor = Component.extend({
                         download_current:'inline',
                         edit_or_save:'none',
                     },
-                    edit_or_save_text:'编辑'
+                    edit_or_save_text:'临时编辑'
                 });
             } else {
                 this.data.buttonStates.push({
@@ -226,7 +256,7 @@ let contractEditor = Component.extend({
                         download_current:'inline',
                         edit_or_save:'none',
                     },
-                    edit_or_save_text:'编辑'
+                    edit_or_save_text:'临时编辑'
                 });
             }
         },
@@ -265,6 +295,9 @@ let contractEditor = Component.extend({
                 } else {
                     this.el.find('#' + key).removeAttr('disabled');
                 }
+            }
+            if(this.el.find('.contract-model').val() == 0) {
+                this.el.find('.data-source').attr('disabled','disabled');
             }
 
             if (!hasModelId) {
@@ -350,21 +383,33 @@ let contractEditor = Component.extend({
         },
         showHistoryList: function(){
             this.data.historyList.forEach((item) => {
-                let html = `<p value="${item.id}">${item.name}</p>`
+                let html = `<p class="history-template-list-item" value="${item.id}">${item.name}</p>`
                 this.el.find('.history-template-list').append(html);
+            })
+        },
+        historyListClick: function() {
+            let _this = this;
+            this.el.on('click','.history-template-list-item',function() {
+                _this.el.find('.contract-model').val($(this).html());
+                _this.data.local_data[_this.data['current_tab']]['model_id'] = $(this).attr('value')
+                _this.actions._loadTemplateByIndex(_this.data['current_tab']);
             })
         },
         editContract: function (k2v) {
             this.el.find('.contract-template-anchor').find('span').attr('contenteditable', 'true');
             this.el.find('.contract-template-anchor').find('span').on('input', _.debounce(event => {
-                let changedColor = 'pink';
+                let changedColor = '#ff9933';
                 let changedValue = event.target.innerHTML;
                 let title = event.target.title;
+                if(k2v["##"+title+"##"] != changedValue){
+                    this.data.local_data[this.data['current_tab']]['field'] = [];
+                    this.data.local_data[this.data['current_tab']]['field'].push('##'+ title +'##');
+                }
                 k2v["##"+title+"##"]=changedValue;
                 if(changedValue == ''){
                     changedValue = ' ';
                     $(event.target).text(changedValue);
-                    changedColor = 'yellow'
+                    changedColor = '#99FF33'
                 }
                 let eles = this.el.find('span[title="'+title+'"]');
                 for(let i=0;i<eles.length;i++){
@@ -377,13 +422,46 @@ let contractEditor = Component.extend({
             },500));
         },
         closeMe: function () {
-            window.parent.postMessage({
-                type: PMENUM.close_dialog,
-                key: this.key,
+            // window.parent.postMessage({
+            //     type: PMENUM.close_dialog,
+            //     key: this.key,
+            //     data: this.data.value
+            // }, location.origin);
+            PMAPI.closeIframeDialog(window.config.key, {
                 data: this.data.value
-            }, location.origin);
+            });
+        },
+        changeStyle: function (name, size) {
+            switch (name) {
+                case 'line-height':
+                    if(size == 'big') {
+                        this.el.find('.contract-template-anchor').css({'line-height':'20px'});
+                    } else if( size == 'normal') {
+                        this.el.find('.contract-template-anchor').css({'line-height':'15px'});
+                    }
+                    break;
+                case 'font-size':
+                    if(size == 'mid') {
+                        this.el.find('.contract-template-anchor').css({'font-size':'14px'});
+                    } else if( size == 'big') {
+                        this.el.find('.contract-template-anchor').css({'font-size':'16px'});
+                    } else if( size == 'normal') {
+                        this.el.find('.contract-template-anchor').css({'font-size':'12px'});
+                    }
+                    break;
+                case 'back-ground':
+                    if(size == 'brown') {
+                        this.el.find('.contract-template-anchor').css({'background-color':'#FBF0D9'});
+                    } else if( size == 'normal') {
+                        this.el.find('.contract-template-anchor').css({'background-color':'#ffffff'});
+                    }
+                    break;
+            }
         },
         afterGetMsg: function () {
+            if(this.data.mode == 'view') {
+                this.el.find('.contract-container').css({'width':'100%'});
+            }
             this.actions.showHistoryList();
             if(this.data['mode']=='view'){
                 this.el.find('.contract-settings').css('display','none');
@@ -406,6 +484,7 @@ let contractEditor = Component.extend({
                 if (res.success) {
                     this.actions._loadDataSource(res.data.elements);
                     this.actions._loadTmplOptions(res.data.model_files);
+                    this.actions.historyListClick();
                     if (this.data.local_data == '') {
                         this.data.local_data = [];
                         this.actions.addTab();

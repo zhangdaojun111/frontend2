@@ -25,6 +25,7 @@
         }
         .contract-settings {
             border: 1px solid #D7D7D7;
+            border-right: none;
             width: 250px;
             .history-template-list {
                 padding: 5px;
@@ -54,6 +55,7 @@
                 .instrument-template-input{
                     display: inline-block;
                     margin-right: 15px;
+                    cursor: pointer;
                     & input{
                         position: relative;
                         top: 0px;
@@ -85,6 +87,7 @@
                     }
                 }
                 .instrument-template-btn {
+                    cursor: pointer;
                     display: inline-block;
                     width: 55px;
                     text-align: center;
@@ -93,7 +96,7 @@
                     border: solid 1px #797979;
                     border-radius: 4px;
                     margin-right: 8px;
-                    &.brown{
+                    &.active{
                         background-color: #fbf0d9
                     }
                 }
@@ -102,7 +105,6 @@
         }
         .contract-container{
             border: 1px solid #D7D7D7;
-            border-left: none;
             width: calc(100% - 250px);
             .contract-container-title{
                 border-bottom: 1px solid #D7D7D7;
@@ -112,8 +114,7 @@
                 background: #F2F2F2;
             }
             .contract-container-content{
-                overflow: auto;
-                height: 460px;
+                height: 501px;
                 border: 1px solid #D7D7D7;
                 margin: 4px;
                 .contract-tab-container {
@@ -156,19 +157,23 @@
                         margin: 10px 16px;
                         cursor: pointer;
                     }
-                    .contract-template-anchor {
-                        & span {
-                            color: #0088FF;
-                            background-color: yellow;
-                        }
+                }
+                .contract-template-anchor {
+                    line-height: 15px;
+                    font-size: 12px;
+                    overflow-y: auto;
+                    height: 470px;
+                    & span {
+                        color: #0088FF;
+                        background-color: yellow;
                     }
                 }
             }
         }
         .contract-editor-button{
             position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: 8px;
+            right: 10px;
             & button{
                 margin-left: 10px;
                 width: 100px;
