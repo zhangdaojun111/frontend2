@@ -22,7 +22,7 @@ import './contract-editor.scss';
  *        上述七个参数均填对即可获得带有内容的合同数据
  *
  *  如果修改了合同中的数据，在向上提数据的时候一定加上k2v用于存已修改的数据
- *  
+ *
  **/
 let contractEditor = Component.extend({
     template: template,
@@ -89,9 +89,11 @@ let contractEditor = Component.extend({
             }
         }, {
             event: 'click',
-            selector: '.delete-tab-button',
-            callback: function () {
+            selector: '.delete-tab-btn',
+            callback: function (event) {
+                console.log($(event).parent('.contract-tab').index())
                 let currentIndex = this.data['current_tab'];
+                // let currentIndex = $(event).parent('.contract-tab').index();
                 this.data.local_data.splice(currentIndex, 1);
                 //删除标签
                 this.el.find('.contract-tab').get(currentIndex).remove();
@@ -210,7 +212,7 @@ let contractEditor = Component.extend({
             return HTTP.postImmediately('/customize/rzrk/get_element/', json);
         },
         addTab: function () {
-            let tabEle = $('<li class="contract-tab active">新建</li>');
+            let tabEle = $(`<li class="contract-tab active"><span>新建</span><span class="delete-tab-btn"></span></li>`);
             $(this.el.find('.contract-tab').get(this.data['current_tab'])).removeClass('active');
             let length = this.el.find('.contract-tab').length;
             this.el.find('.contract-tabs').append(tabEle);
@@ -310,7 +312,8 @@ let contractEditor = Component.extend({
             }
 
             if (isLoadCache && tab['content']) {
-                $(this.el.find('.contract-tab').get(i)).text(tab['name']);
+                // $(this.el.find('.contract-tab').get(i)).text(tab['name']);
+                $(this.el.find('.contract-tab').get(i)).html(`<span>${tab['name']}</span><span class="delete-tab-btn"></span>`);
                 this.el.find('.contract-template-anchor').html(tab['content']);
                 if (this.data.mode == 'edit' && Object.keys(tab['elements']).length != 0) {
                     this.el.find('.edit_or_save').css('display', 'inline');
@@ -345,7 +348,8 @@ let contractEditor = Component.extend({
                             tabName.push(selectEle.selectedOptions[0].label);
                         }
                         tab['name'] = tabName.join(' ');
-                        $(this.el.find('.contract-tab').get(i)).text(tab['name']);
+                        // $(this.el.find('.contract-tab').get(i)).text(tab['name']);
+                        $(this.el.find('.contract-tab').get(i)).html(`<span>${tab['name']}</span><span class="delete-tab-btn"></span>`);
                     }
                 }
             })
@@ -492,11 +496,10 @@ let contractEditor = Component.extend({
                     this.actions._loadTemplateByIndex(0,true,false);
                 }
             });
-
             //加载tab
             let tabsEle = this.el.find('.contract-tabs');
             for (let i = 0, length = this.data.local_data.length; i < length; i++) {
-                let tabEle = $('<li class="contract-tab">'+this.data.local_data[i].name+'</li>');
+                let tabEle = $(`<li class="contract-tab"><span>${this.data.local_data[i].name}</span><span class="delete-tab-btn"></span></li>`);
                 tabsEle.append(tabEle);
                 this.actions.initButtonStates(i);
                 this.actions.loadButtons(0);
