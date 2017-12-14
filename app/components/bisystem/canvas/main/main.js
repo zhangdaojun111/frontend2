@@ -406,6 +406,7 @@ let config = {
 
         //订阅数据失效
         PMAPI.subscribe(this.data.PMENUM.data_invalid, (info) => {
+            alert('message服务更新了');
             this.data.cells.actions.updateCells(info);
         });
 
