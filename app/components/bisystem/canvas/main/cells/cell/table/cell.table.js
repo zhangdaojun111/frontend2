@@ -150,7 +150,7 @@ let config = {
                 defaultMax: true,
                 // customSize: true
             }).then((data) => {
-                if (title === '编辑') {
+                if (title === '编辑' || data === 'success') {
                     window.location.reload()
                 }
             })
