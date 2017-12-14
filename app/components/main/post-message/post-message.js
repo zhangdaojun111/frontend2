@@ -180,6 +180,28 @@ let PostMessage = Component.extend({
             choosedUsers = choosedUsers.map((item) => {
                 return item.id;
             });
+            let user=window.config.sysConfig.userInfo;
+            if(!user.is_superuser){
+            	if(!user.send_msg_perm){
+		            msgbox.alert('您没有发送权限');
+		            return;
+	            }
+            	let depIDs=[];
+            	let uData=this.data.userData;
+            	for(let key in uData){
+            		if(user.ID in uData[key]){
+            			for(let key1 in uData[key]){
+            				depIDs.push(key1);
+			            }
+		            }
+	            }
+	            for(let id of choosedUsers){
+            		if(!(id in depIDs)){
+            			msgbox.alert('请选择同部门人员');
+            			return;
+		            }
+	            }
+            }
             if (form.checkValidity()) {
                 let formData = Form.getValue(form);
                 if (choosedUsers.length === 0) {
