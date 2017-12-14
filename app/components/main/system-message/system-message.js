@@ -28,6 +28,25 @@ let SystemMessage = Component.extend({
         },
         tableId:'user-message'
     },
+    binds:[{
+        event:'click',
+        selector:'.markRead',
+        callback:function () {
+            this.actions.markRead();
+        }
+    },{
+        event:'click',
+        selector:'.batchApprove',
+        callback:function () {
+            this.actions.batchApprove();
+        }
+    },{
+        event:'click',
+        selector:'.batchDelete',
+        callback:function () {
+            this.actions.batchDelete();
+        }
+    }],
     actions: {
         /**
          * 根据参数（页码）向后台发送请求，获取渲染该页所需数据
@@ -116,10 +135,7 @@ let SystemMessage = Component.extend({
          */
         batchApprove: function () {
             let rows = this.agGrid.gridOptions.api.getSelectedRows();
-
-            let checkIds = rows.map((item) => {
-                return item.id;
-            });
+            let checkIds = this.actions._getCheckId(rows);
 
             if(checkIds.length === 0){
                 msgbox.alert('请选择至少一条“待审批”消息进行审批');
@@ -133,17 +149,22 @@ let SystemMessage = Component.extend({
                     return;
                 }
             }
-            let url = '/iframe/multiapp';
-            let data = JSON.stringify(checkIds);
-            let that = this;
-            PMAPI.openDialogByIframe(url,{
+            this.actions._openApproveDialog(JSON.stringify(checkIds));
+        },
+        _getCheckId:function (rows) {
+             return rows.map((item) => {
+                return item.id;
+            });
+        },
+        _openApproveDialog:function(data){
+            PMAPI.openDialogByIframe('/iframe/multiapp',{
                 width: 450,
                 height: 310,
                 title: '批量审批',
                 // customSize:true
             },data).then(res => {
                 if(res.refresh === true){
-                    that.actions.loadData(this.data.getDataParams);
+                    this.actions.loadData(this.data.getDataParams);
                 }
             });
         },
@@ -153,10 +174,7 @@ let SystemMessage = Component.extend({
         batchDelete: function () {
             msgbox.confirm('是否批量删除选中的消息？').then((res) => {
                 if (res) {
-                    let rows = this.agGrid.gridOptions.api.getSelectedRows();
-                    let checkIds = rows.map((item) => {
-                        return item.id;
-                    });
+                    let checkIds = this.actions._getCheckId(this.agGrid.gridOptions.api.getSelectedRows());
 
                     HTTP.postImmediately('/remark_or_del_msg/', {
                         checkIds: JSON.stringify(checkIds),
@@ -188,28 +206,15 @@ let SystemMessage = Component.extend({
                 //后端排序
                 console.log('启用后端排序');
                 let data = this.agGrid.gridOptions.api.getSortModel()[0];
+                this.data.getDataParams = {
+                    rows: this.pagination.data.rows,
+                    currentPage: this.pagination.data.currentPage,
+                    first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
+                };
                 if( data && data.sort === "asc" ){
-                    this.data.getDataParams = {
-                        rows: this.pagination.data.rows,
-                        currentPage: this.pagination.data.currentPage,
-                        first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
-                        sortField: data.colId,
-                        sortOrder: 1
-                    };
+                    this.data.getDataParams['sortOrder'] = 1;
                 }else if(data && data.sort === "desc"){
-                    this.data.getDataParams = {
-                        rows: this.pagination.data.rows,
-                        currentPage: this.pagination.data.currentPage,
-                        first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
-                        sortField: data.colId,
-                        sortOrder: -1
-                    };
-                }else{
-                    this.data.getDataParams = {
-                        rows: this.pagination.data.rows,
-                        currentPage: this.pagination.data.currentPage,
-                        first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
-                    };
+                    this.data.getDataParams['sortOrder'] = -1;
                 }
                 this.actions.loadData(this.data.getDataParams);
             }else{
@@ -248,41 +253,48 @@ let SystemMessage = Component.extend({
          */
         openDialog:function ($event) {
         	console.log('查看操作');
-        	console.log($event);
             let data = $event.data;
             // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
             //     data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') || data.msg_type === '关注消息') {
+            this.actions._calUrl(data);
+            this.actions._openView(data);
+            // 查看操作通过前端自己刷新未读，审批通过loadData刷新
+            this.actions._freshUnread($event);
+        },
+        _calUrl:function (data) {
             if (data.msg_type === '审批消息' || data.msg_type === '关注消息') {
                 if(data.handle_status_text === '待审批'){
                     data.url += "&btnType=edit";
                 }else if(data.handle_status_text === '已取消'){
                     data.url += "&btnType=view";
                 }else if(data.handle_status_text === '已被通过' || data.handle_status_text === '已通过' || data.handle_status_text === '其他'|| data.handle_status_text === '已驳回'){
-	                data.url += "&btnType=view";
+                    data.url += "&btnType=view";
                 }
 
-                PMAPI.openDialogByIframe(data.url, {
-                    width: 1200,
-                    height: 500,
-                    title: data.msg_type_text,
-                    customSize:true
-                }).then((result) => {
-                    if (result.refresh === true) {
-                        setTimeout(()=>{this.actions.loadData(this.data.getDataParams);},500)
-                    }
-                })
             } else {
                 systemMessageUtil.showMessageDetail(data.msg_type_text, data);
             }
-
-            // 查看操作通过前端自己刷新未读，审批通过loadData刷新
+        },
+        _openView:function (data) {
+            PMAPI.openDialogByIframe(data.url, {
+                width: 1200,
+                height: 500,
+                title: data.msg_type_text,
+                customSize:true
+            }).then((result) => {
+                if (result.refresh === true) {
+                    setTimeout(()=>{this.actions.loadData(this.data.getDataParams);},500)
+                }
+            })
+        },
+        _freshUnread:function ($event) {
             if($event.data.handle_status_text !== '待审批'){
                 if($event.node.data.is_read === 0){
                     $event.node.data.is_read = 1;
                     this.agGrid.actions.refreshView();
                     window.config.sysConfig.unread_msg_count--;
                     Mediator.emit("sysmsg:refresh_unread");
-                    this.actions._justPostReadData(JSON.stringify([data.id]));
+                    this.actions._justPostReadData(JSON.stringify([$event.data.id]));
                 }
             }else{
                 if($event.node.data.is_read === 0){
@@ -311,6 +323,20 @@ let SystemMessage = Component.extend({
             this.actions.loadData(this.data.getDataParams);
             this.hideLoading();
         },
+        _getPreferences:function () {
+            let tempData = {
+                actions:JSON.stringify(['pageSize']),
+                table_id:this.data.tableId
+            };
+
+            dataTableService.getPreferences(tempData).then((result) => {
+                if(result.success === 1 && result.pageSize !== null){
+                    this.data.rows = result.pageSize.pageSize;
+                }
+                this.actions.initPagination();
+            });
+            HTTP.flush();
+        }
     },
     afterRender: function () {
         let gridDom = this.el.find('.grid');
@@ -330,27 +356,7 @@ let SystemMessage = Component.extend({
         this.agGrid.render(gridDom);
         this.showLoading();
         //请求页显示数量偏好
-        let tempData = {
-            actions:JSON.stringify(['pageSize']),
-            table_id:this.data.tableId
-        };
-
-        dataTableService.getPreferences(tempData).then((result) => {
-            if(result.success === 1 && result.pageSize !== null){
-                that.data.rows = result.pageSize.pageSize;
-            }
-            that.actions.initPagination();
-        });
-        HTTP.flush();
-    },
-    firstAfterRender: function () {
-        this.el.on('click', '.markRead', () => {
-            this.actions.markRead();
-        }).on('click', '.batchApprove', () => {
-            this.actions.batchApprove();
-        }).on('click', '.batchDelete', () => {
-            this.actions.batchDelete();
-        });
+        this.actions._getPreferences();
     }
 });
 
@@ -370,19 +376,11 @@ let systemMessageUtil = {
             title: '消息提醒',
             resizeMax:function () {
                 sysDom.addClass('maximize-model');
-                systemMessage.showLoading();
-                setTimeout(function () {
-                    gridPref.gridOptions.api.sizeColumnsToFit();
-                    systemMessage.hideLoading();
-                },500);
+                systemMessage._resizeColumns(systemMessage);
             },
             resizeMin:function () {
                 sysDom.removeClass('maximize-model');
-                systemMessage.showLoading();
-                setTimeout(function () {
-                    gridPref.gridOptions.api.sizeColumnsToFit();
-                    systemMessage.hideLoading();
-                },500);
+                systemMessageUtil._resizeColumns(systemMessage);
             },
             close: function () {
                 $(this).erdsDialog('destroy');
@@ -393,6 +391,13 @@ let systemMessageUtil = {
     hide: function () {
 
     },
+    _resizeColumns:function (systemMessage) {
+        systemMessage.showLoading();
+        setTimeout(function () {
+            gridPref.gridOptions.api.sizeColumnsToFit();
+            systemMessage.hideLoading();
+        },500);
+    },
     /**
      * 传入单条消息或消息数组，进行显示和朗读
      * @param dialogTitle
@@ -400,38 +405,9 @@ let systemMessageUtil = {
      * @param speak
      */
     showMessageDetail: function (dialogTitle, data, speak = false) {
-        let html = '<div class="component-msg-detail">';
-        let readMsg = '';
-        if($.isArray(data) === false){
-            if(data.content){
-                data.msg_content = data.content;
-            }
-            html += `
-                <h3 class="msg-title">${data.title}</h3>
-                <pre class="text">${data.msg_content}</pre>
-            </div>
-        `;
-            readMsg = data.title.toString() + data.msg_content.toString();
-        }else{
-            for(let msg of data){
-                html += `
-                    <h3 class="msg-title">${msg.title}</h3>
-                    <pre class="text">${msg.content}</pre>                
-            `;
-                readMsg += msg.title.toString() + msg.content.toString();
-            }
-            html += `</div>`;
-        }
-
-        if (speak) {
-            let msg = new SpeechSynthesisUtterance(readMsg);
-            msg.lang = 'zh';
-            msg.voice = speechSynthesis.getVoices().filter(function(voice) {
-                return voice.name == 'Whisper';
-            })[0];
-            speechSynthesis.speak(msg);
-        }
-        this.el = $(html).appendTo('body');
+        let obj = systemMessageUtil._getHtmlAndMsg(data);
+        systemMessageUtil._speak(speak,obj.readMsg);
+        this.el = $(obj.html).appendTo('body');
         let that = this;
         this.el.erdsDialog({
             width: 800,
@@ -445,6 +421,38 @@ let systemMessageUtil = {
                 that.el.remove();
             }
         })
+    },
+    _getHtmlAndMsg:function(data){
+        let html = '<div class="component-msg-detail">';
+        let readMsg = '';
+        if($.isArray(data) === false){
+            if(data.content){
+                data.msg_content = data.content;
+            }
+            html += systemMessageUtil._getHtml(data)+`</div>`;
+            readMsg = data.title.toString() + data.msg_content.toString();
+        }else{
+            for(let msg of data){
+                html += systemMessageUtil._getHtml(msg);
+                readMsg += msg.title.toString() + msg.content.toString();
+            }
+            html += `</div>`;
+        }
+        return {html:html,readMsg:readMsg};
+    },
+    _getHtml:function (data) {
+        return `<h3 class="msg-title">${data.title}</h3>
+                <pre class="text">${data.msg_content}</pre>`;
+    },
+    _speak:function (speak,readMsg) {
+        if (speak) {
+            let msg = new SpeechSynthesisUtterance(readMsg);
+            msg.lang = 'zh';
+            msg.voice = speechSynthesis.getVoices().filter(function(voice) {
+                return voice.name == 'Whisper';
+            })[0];
+            speechSynthesis.speak(msg);
+        }
     }
 };
 

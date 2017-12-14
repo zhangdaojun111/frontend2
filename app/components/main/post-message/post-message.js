@@ -54,6 +54,19 @@ let PostMessage = Component.extend({
         // 选中的部门
         choosedDepart: []
     },
+    binds:[{
+        event:'change',
+        selector:'input[name=sendType]',
+        callback:function () {
+            this.actions.onSendTypeChange($(this).val());
+        }
+    },{
+        event:'click',
+        selector:'.submit',
+        callback:function () {
+            this.actions.submit();
+        }
+    }],
     actions: {
         /**
          * 获取部门数据，并初始化部门树和人员选择组件
@@ -121,6 +134,12 @@ let PostMessage = Component.extend({
          * 将选中的人员渲染到组件内
          */
         renderUsers: _.debounce(function (context) {
+            let users = this.aciotns._getUsers(context);
+            this.autoSelect.data.list = users;
+            this.autoSelect.data.choosed = users;
+            this.autoSelect.reload();
+        }, 500),
+        _getUsers:function (context) {
             let hash = {};
             let userData = context.data.userData;
             let choosedDepart = context.data.choosedDepart;
@@ -139,10 +158,8 @@ let PostMessage = Component.extend({
                     py: hash[userId]['username']
                 });
             }
-            this.autoSelect.data.list = users;
-            this.autoSelect.data.choosed = users;
-            this.autoSelect.reload();
-        }, 500),
+            return users;
+        },
         /**
          * 当发送规则改变触发此方法
          * @param value
@@ -151,8 +168,14 @@ let PostMessage = Component.extend({
             let dom = this.el.find('.prepare-time');
             if (value === '0') {
                 dom.css('display', 'flex');
-                dom.html(`
-                    <label class="label-out">预计时间</label>
+                dom.html(this.actions._getHtml());
+            } else {
+                this.el.find('.prepare-time').hide();
+                this.el.find('.prepare-time').html('');
+            }
+        },
+        _getHtml:function () {
+            return `<label class="label-out">预计时间</label>
                     <div class="inputs clearfix">
                         <input type="datetime-local" name="deadline" required="required" formnovalidate="formnovalidate">
                         <p>审批超预计时间是否仍发送：</p>
@@ -164,12 +187,7 @@ let PostMessage = Component.extend({
                             <input type="radio" name="outTimeSend" value="0">
                             否
                         </label>
-                    </div>
-                `);
-            } else {
-                this.el.find('.prepare-time').hide();
-                this.el.find('.prepare-time').html('');
-            }
+                    </div>`;
         },
         /**
          * 提交数据
@@ -205,18 +223,6 @@ let PostMessage = Component.extend({
     },
     afterRender: function () {
         this.actions.getDepartmentData();
-        let that = this;
-        this.el.on('change', 'input[name=sendType]', function () {
-            that.actions.onSendTypeChange($(this).val());
-        }).on('click', '.submit', () => {
-            this.actions.submit();
-        });
-    },
-    firstAfterRender: function () {
-
-    },
-    beforeDestory: function () {
-
     }
 })
 

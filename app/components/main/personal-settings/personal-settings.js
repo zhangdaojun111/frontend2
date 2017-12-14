@@ -123,13 +123,16 @@ let PersonalSetting = Component.extend({
          * 保存编辑结果
          */
         saveEdit:function () {
-            this.data.user_email = this.el.find("input.email-info").val();
-            this.data.user_phone = this.el.find("input.phone-info").val();
             this.el.find("input.email-info").attr("disabled",true);
             this.el.find("input.phone-info").attr("disabled",true);
             this.el.find("div.personal-foot").show();
             this.el.find("div.cancel-save").hide();
             //修改结果传给后台
+            this.actions._saveInfo();
+        },
+        _saveInfo:function () {
+            this.data.user_email = this.el.find("input.email-info").val();
+            this.data.user_phone = this.el.find("input.phone-info").val();
             let data = {
                 username:this.data.username,
                 useremail: this.data.user_email,
@@ -153,28 +156,30 @@ let PersonalSetting = Component.extend({
             let confirmNewPw = this.confirm_new_pswInput.data.password_value;
             let result = this.actions.checkPasswordLegal(originPw,newPw,confirmNewPw);
             if(result === true){
-                let data = {
-                    username:this.data.username,
-                    originalpwd: originPw,
-                    newpwd: newPw,
-                    newpwdagain:confirmNewPw
-                };
-
-                UserInfoService.modifyPassword(data).done((result) => {
-                    if(result.success === 1){
-                        msgbox.alert("密码修改成功！");
-                        PersonSetting.hide();
-                    }else{
-                        msgbox.alert(result.error);
-                    }
-                }).fail((err) => {
-                    console.log(err);
-                })
+                this.actions._savePassword(originPw,newPw,confirmNewPw);
             }else{
 
             }
         },
-        /**
+        _savePassword:function (originPw,newPw,confirmNewPw) {
+            let data = {
+                username:this.data.username,
+                originalpwd: originPw,
+                newpwd: newPw,
+                newpwdagain:confirmNewPw
+            };
+            UserInfoService.modifyPassword(data).done((result) => {
+                if(result.success === 1){
+                    msgbox.alert("密码修改成功！");
+                    PersonSetting.hide();
+                }else{
+                    msgbox.alert(result.error);
+                }
+            }).fail((err) => {
+                console.log(err);
+            })
+        },
+         /**
          * 显示他人登录界面
          */
         otherLogin:function () {
