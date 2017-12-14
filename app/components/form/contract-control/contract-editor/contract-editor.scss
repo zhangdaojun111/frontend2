@@ -115,14 +115,12 @@
             }
             .contract-container-content{
                 height: 501px;
-                border: 1px solid #D7D7D7;
                 margin: 4px;
                 .contract-tab-container {
                     height: 30px;
                     line-height: 30px;
                     background: #F2F2F2;
                     width: 100%;
-                    border-bottom: 1px solid #D7D7D7;
                     .contract-tabs {
                         display: inline-block;
                         max-width: 560px;
@@ -130,24 +128,39 @@
                         overflow-x:auto;
                         overflow-y:hidden;
                         white-space:nowrap;
+                        position: relative;
+                        left: -4px;
                     }
                     .contract-tab {
+                        position: relative;
                         display: inline-block;
-                        padding: 0 15px;
-                        border-left: 1px solid #D7D7D7;
-                        border-right: 1px solid #D7D7D7;
+                        padding: 0 35px;
+                        border: 1px solid #D7D7D7;
+                        border-bottom: none;
                         cursor: pointer;
+                        .delete-tab-btn {
+                            position: absolute;
+                            display: inline-block;
+                            color: #999;
+                            width: 16px;
+                            height: 16px;
+                            top: 0px;
+                            right: 0px;
+                            cursor: pointer;
+                            background: url(../../../../assets/images/framework/close.png) no-repeat scroll center center transparent;
+                        }
                         &.active {
-                            color:#0088FF;
+                            background-color: #ffffff;
                         }
                     }
                     .add-tab-button {
                         display:inline-block;
-                        width: 10px;
-                        height: 10px;
-                        background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAMNJREFUGBmNUDkOwkAQ8yQLFc+gQ0hpeQgNP6FLF15Cw2do0vGM0CRaBnuWQEpW2h3L9hw7gM7R64gX36PzZ1zhhZbCtEONGzIqxhdWYRDWkQZHws1ymERmDDCyM1ZsbVRIUAtly1ShIWcS+DYcAVQ27JKNxoH0mtcpql5pbZiIVV2JY8Xnr5PoOnxbq53h+sk8sd7913pZr/MtjX1Qzv+e7THLVayndc1YBi8zWVQSJ417LuuJmUnyd4ST9MCKPTmu8A2pxEh6XTDHawAAAABJRU5ErkJggg==') no-repeat;
-                        margin: 10px 10px;
+                        width: 30px;
+                        height: 29px;
+                        background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAMNJREFUGBmNUDkOwkAQ8yQLFc+gQ0hpeQgNP6FLF15Cw2do0vGM0CRaBnuWQEpW2h3L9hw7gM7R64gX36PzZ1zhhZbCtEONGzIqxhdWYRDWkQZHws1ymERmDDCyM1ZsbVRIUAtly1ShIWcS+DYcAVQ27JKNxoH0mtcpql5pbZiIVV2JY8Xnr5PoOnxbq53h+sk8sd7913pZr/MtjX1Qzv+e7THLVayndc1YBi8zWVQSJ417LuuJmUnyd4ST9MCKPTmu8A2pxEh6XTDHawAAAABJRU5ErkJggg==') center no-repeat;
+                        background-color: #ffffff;
                         cursor: pointer;
+                        border-bottom: 1px solid #D7D7D7;
                     }
                     .delete-tab-button {
                         display:inline-block;
@@ -159,10 +172,13 @@
                     }
                 }
                 .contract-template-anchor {
+                    padding: 5px;
                     line-height: 15px;
                     font-size: 12px;
                     overflow-y: auto;
                     height: 470px;
+                    border: 1px solid #D7D7D7;
+                    border-top: none;
                     & span {
                         color: #0088FF;
                         background-color: yellow;
