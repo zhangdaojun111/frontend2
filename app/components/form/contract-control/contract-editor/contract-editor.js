@@ -6,6 +6,7 @@ import Component from "../../../../lib/component";
 import {PMAPI,PMENUM} from '../../../../lib/postmsg';
 import {Storage} from "../../../../lib/storage";
 import {HTTP} from "../../../../lib/http";
+import History from '../../history/history';
 import './contract-editor.scss';
 
 /**
@@ -58,6 +59,7 @@ let contractEditor = Component.extend({
             selector: '.edit_or_save',
             callback: function () {
                 if (this.el.find('.edit_or_save').text() == '临时编辑') {
+                    this.el.find('.contract-template-anchor span').css({'cursor':'text'})
                     let butStates = this.data.buttonStates[this.data['current_tab']];
                     butStates.edit_or_save_text = '确定';
                     butStates.display.save_n_close = 'none';
@@ -67,7 +69,7 @@ let contractEditor = Component.extend({
                     this.data.editingK2v = JSON.parse(JSON.stringify(this.data.local_data[this.data['current_tab']].k2v));
                     this.actions.editContract(this.data.editingK2v);
                 } else {
-                    this.el.find('.contract-template-anchor').find('span').removeAttr('contenteditable');
+                    this.el.find('.contract-template-anchor').find('span').removeAttr('contenteditable').css({'cursor':'pointer'});
                     let butStates = this.data.buttonStates[this.data['current_tab']];
                     butStates.edit_or_save_text = '临时编辑';
                     butStates.display.save_n_close = 'inline';
@@ -516,11 +518,30 @@ let contractEditor = Component.extend({
                         table_id: _this.data.table_id,
                         real_id: _this.data.real_id,
                         field_id: _this.data.id,
-                        k2v: `##${name}##`,
+                        k2v: `##${event.target.title}##`,
                         is_save: 'search'
                     }
                     _this.actions.getEditorHistory(obj).then(res => {
-                        debugger
+                        if(res.data && res.data.length != 0) {
+                            let historyAry = []
+                            for(let i = 0; i<res.data.length; i++) {
+                                let obj = {};
+                                obj['index'] = i;
+                                obj['old_value'] = res.data[i]['historyValue'];
+                                obj['new_value'] = res.data[i]['editValue'];
+                                obj['update_user'] = res.data[i]['editor'];
+                                obj['update_time'] = res.data[i]['time'];
+                                obj['update_ip'] = res.data[i]['ip'];
+                                historyAry.push(obj)
+                            }
+                            History.data.history_data = historyAry;
+                            PMAPI.openDialogByComponent(History, {
+                                width: 800,
+                                height: 600,
+                                title: `${name}历史修改记录`,
+                                modal: true
+                            })
+                        }
                     })
                 }
             })
