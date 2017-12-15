@@ -66,9 +66,9 @@ let config = {
             })
 
         },
-        getHistoryModel: function (json) {
-            return HTTP.postImmediately('/customize/rzrk/show_lastest_history/', json);
-        }
+        // getHistoryModel: function (json) {
+        //     return HTTP.postImmediately('/customize/rzrk/show_lastest_history/', json);
+        // }
 
     },
 
@@ -76,21 +76,20 @@ let config = {
         if(this.data['is_view']){
             this.el.find('.contract-edit').css('display','none');
         }
-        console.log(this.data);
-        let obj = {
-            dfield: this.data.dfield,
-            table_id: this.data.table_id
-        }
-        this.actions.getHistoryModel(obj).then(res=> {
-            for(let item of res.data) {
-                for(let i in item) {
-                    let json = {}
-                    json['id'] = i;
-                    json['name'] = item[i].substring(0,item[i].length-5)
-                    this.data.historyList.push(json)
-                }
-            }
-        })
+        // let obj = {
+        //     dfield: this.data.dfield,
+        //     table_id: this.data.table_id
+        // }
+        // this.actions.getHistoryModel(obj).then(res=> {
+        //     for(let item of res.data) {
+        //         for(let i in item) {
+        //             let json = {}
+        //             json['id'] = i;
+        //             json['name'] = item[i].substring(0,item[i].length-5)
+        //             this.data.historyList.push(json)
+        //         }
+        //     }
+        // })
 
     }
 }

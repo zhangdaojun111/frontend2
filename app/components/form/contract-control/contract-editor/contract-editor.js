@@ -92,21 +92,30 @@ let contractEditor = Component.extend({
             selector: '.delete-tab-btn',
             callback: function (event) {
                 console.log($(event).parent('.contract-tab').index())
-                let currentIndex = this.data['current_tab'];
-                // let currentIndex = $(event).parent('.contract-tab').index();
+                // let currentIndex = this.data['current_tab'];
+                let currentIndex = $(event).parent('.contract-tab').index();
                 this.data.local_data.splice(currentIndex, 1);
                 //删除标签
                 this.el.find('.contract-tab').get(currentIndex).remove();
-                //如果右边有标签，当前标签向右移，没有则向左移
-                currentIndex = currentIndex == this.data.local_data.length ? currentIndex - 1 : currentIndex;
-                if (currentIndex == -1) {
-                    this.actions.addTab();
-                } else {
-                    this.actions._loadTemplateByIndex(currentIndex,true,false);
-                }
+                // //如果右边有标签，当前标签向右移，没有则向左移
+                // currentIndex = currentIndex == this.data.local_data.length ? currentIndex - 1 : currentIndex;
+                // if (currentIndex == -1) {
+                //     this.actions.addTab();
+                // } else {
+                //     this.actions._loadTemplateByIndex(currentIndex,true,false);
+                // }
                 if(this.el.find('.contract-tab').length < 10){//仅允许最多有五个标签
                     this.el.find('.add-tab-button').show();
                 }
+                this.el.find('.contract-tab').removeClass('active')
+                if(this.data['current_tab'] == currentIndex) {
+                    this.el.find('.contract-tab').eq(0).addClass('active');
+                    this.actions.loadTab(0, true);
+                    this.data['current_tab'] = 0;
+                } else {
+                    this.el.find('.contract-tab').eq(this.data['current_tab']).addClass('active');
+                }
+                return false;
             }
         },{
             event:'mouseover',
@@ -124,28 +133,41 @@ let contractEditor = Component.extend({
             event:'click',
             selector:'.instrument-line-height',
             callback:function (event) {
-                this.el.find('.instrument-line-height input').removeClass('active');
-                $(event).find('input').addClass('active');
-                let size = $(event).find('input').attr('title');
-                this.actions.changeStyle('line-height', size)
+                if(this.data['mode'] =='edit') {
+                    this.el.find('.instrument-line-height input').removeClass('active');
+                    $(event).find('input').addClass('active');
+                    let size = $(event).find('input').attr('title');
+                    this.actions.changeStyle('line-height', size)
+                }
             }
         },{
             event:'click',
             selector:'.instrument-font-size',
             callback:function (event) {
-                this.el.find('.instrument-font-size input').removeClass('active');
-                $(event).find('input').addClass('active');
-                let size = $(event).find('input').attr('title');
-                this.actions.changeStyle('font-size', size)
+                if(this.data['mode'] =='edit') {
+                    this.el.find('.instrument-font-size input').removeClass('active');
+                    $(event).find('input').addClass('active');
+                    let size = $(event).find('input').attr('title');
+                    this.actions.changeStyle('font-size', size)
+                }
             }
         },{
             event:'click',
             selector:'.instrument-template-btn',
             callback:function (event) {
-                this.el.find('.instrument-template-btn').removeClass('active');
-                $(event).addClass('active');
-                let size = $(event).attr('title');
-                this.actions.changeStyle('back-ground', size)
+                if(this.data['mode'] =='edit') {
+                    this.el.find('.instrument-template-btn').removeClass('active');
+                    $(event).addClass('active');
+                    let size = $(event).attr('title');
+                    this.actions.changeStyle('back-ground', size)
+                }
+            }
+        },{
+            event:'click',
+            selector:'.change_edit',
+            callback:function () {
+                this.data['mode'] ='edit';
+                this.actions.showDifPattern()
             }
         }
     ],
@@ -211,7 +233,11 @@ let contractEditor = Component.extend({
             //在componentDialog中使用HTTP则报找不到_http的错误
             return HTTP.postImmediately('/customize/rzrk/get_element/', json);
         },
+        getHistoryModel: function (json) {
+            return HTTP.postImmediately('/customize/rzrk/show_lastest_history/', json);
+        },
         addTab: function () {
+            let _this = this;
             let tabEle = $(`<li class="contract-tab active"><span>新建</span><span class="delete-tab-btn"></span></li>`);
             $(this.el.find('.contract-tab').get(this.data['current_tab'])).removeClass('active');
             let length = this.el.find('.contract-tab').length;
@@ -224,9 +250,13 @@ let contractEditor = Component.extend({
             this.actions.loadButtons(this.data['current_tab']);
             this.el.find('.contract-template-anchor').html('<p>请选择模板和数据源。</p>');
             //监听tab
-            tabEle.on('click', () => {
-                this.actions.loadTab(length, true);
+            this.el.on('click','.contract-tab',function(){
+                _this.actions.loadTab($(this).index(), true);
             })
+            // tabEle.on('click', () => {
+            //     debugger
+            //     this.actions.loadTab(length, true);
+            // })
             if(this.el.find('.contract-tab').length >= 10){//仅允许最多有十个标签
                 this.el.find('.add-tab-button').hide();
             }
@@ -235,7 +265,7 @@ let contractEditor = Component.extend({
             if (i == this.data['current_tab']) {
                 return;
             }
-            $(this.el.find('.contract-tab').get(this.data['current_tab'])).removeClass('active');
+            this.el.find('.contract-tab').removeClass('active');
             $(this.el.find('.contract-tab').get(i)).addClass('active');
             this.actions._loadTemplateByIndex(i, isLoadCache,disabled);
         },
@@ -351,6 +381,8 @@ let contractEditor = Component.extend({
                         // $(this.el.find('.contract-tab').get(i)).text(tab['name']);
                         $(this.el.find('.contract-tab').get(i)).html(`<span>${tab['name']}</span><span class="delete-tab-btn"></span>`);
                     }
+                    this.actions.showDifPattern();
+                    this.hideLoading();
                 }
             })
         },
@@ -386,9 +418,17 @@ let contractEditor = Component.extend({
             })
         },
         showHistoryList: function(){
-            this.data.historyList.forEach((item) => {
-                let html = `<p class="history-template-list-item" value="${item.id}">${item.name}</p>`
-                this.el.find('.history-template-list').append(html);
+            let obj = {
+                dfield: this.data.dfield,
+                table_id: this.data.table_id
+            }
+            this.actions.getHistoryModel(obj).then(res=> {
+                for(let item of res.data) {
+                    for(let i in item) {
+                        let html = `<p class="history-template-list-item" value="${i}">${item[i]}</p>`
+                        this.el.find('.history-template-list').append(html);
+                    }
+                }
             })
         },
         historyListClick: function() {
@@ -461,18 +501,33 @@ let contractEditor = Component.extend({
                     }
                     break;
             }
+
         },
-        afterGetMsg: function () {
-            if(this.data.mode == 'view') {
-                this.el.find('.contract-container').css({'width':'100%'});
-            }
-            this.actions.showHistoryList();
+        showDifPattern: function () {
             if(this.data['mode']=='view'){
-                this.el.find('.contract-settings').css('display','none');
+                // this.el.find('.contract-container').css({'width':'100%'});
                 this.el.find('.add-tab-button').css('display','none');
                 this.el.find('.delete-tab-button').css('display','none');
+                this.el.find('.history-template').css({'height':'150px'});
+                this.el.find('.change_edit').css({'display':'inline-block'});
+                this.el.find('.contract-model').attr('disabled','disabled');
+                this.el.find('.data-source').attr('disabled','disabled');
+                this.el.find('.contract-tabs').css({'left':'0px'});
+            } else {
+                this.actions.showHistoryList();
+                this.el.find('.add-tab-button').css('display','inline-block');
+                this.el.find('.delete-tab-button').css('display','inline-block');
+                this.el.find('.save_n_close').css('display','inline-block');
+                this.el.find('.edit_or_save').css('display','inline-block');
+                this.el.find('.history-template').css({'height':'auto'});
+                this.el.find('.change_edit').css({'display':'none'});
+                this.el.find('.contract-model').removeAttr('disabled','disabled');
+                this.el.find('.data-source').removeAttr('disabled','disabled');
+                this.el.find('.contract-tabs').css({'left':'-5px'});
             }
-
+        },
+        afterGetMsg: function () {
+            this.showLoading()
             //初始化各控件
             let obj = {
                 table_id: this.data.table_id,

@@ -114,7 +114,7 @@
                 background: #F2F2F2;
             }
             .contract-container-content{
-                height: 501px;
+                height: 511px;
                 margin: 4px;
                 .contract-tab-container {
                     height: 30px;
@@ -123,7 +123,7 @@
                     width: 100%;
                     .contract-tabs {
                         display: inline-block;
-                        max-width: 560px;
+                        //max-width: 560px;
                         max-height:30px;
                         overflow-x:auto;
                         overflow-y:hidden;
@@ -203,9 +203,10 @@
                 font-size: 12px;
                 color: #fff;
                 cursor: pointer;
-                &.edit_or_save{
+                &.edit_or_save,&.change_edit{
                     display: none;
                 }
+
             }
         }
     }
