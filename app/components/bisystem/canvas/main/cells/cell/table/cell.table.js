@@ -399,7 +399,9 @@ export class CellTableComponent extends CellBaseComponent {
         cellChart.rows = tableRows;
     }
     static numFormat(num,acc) {
-        num = num.toFixed(acc);
+       if(acc!==''){
+           num = num.toFixed(acc);
+       }
         num = num + '';
         num = num.split('.');
         // num = parseFloat(Number(num)).toString().split(".");

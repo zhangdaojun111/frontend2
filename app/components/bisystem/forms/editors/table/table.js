@@ -138,7 +138,7 @@ let config = {
                 alignment: data.alignment,
                 columnNum: data.columnNum,
                 editInterface: data.editInterface,
-                customAccuracy: data.customAccuracy[0] && data.customAccuracyNum ? data.customAccuracyNum : 0,
+                customAccuracy: data.customAccuracy[0] && data.customAccuracyNum ? data.customAccuracyNum : '',
                 customTextStyle: data.customTextStyle[0] ? {titleSize: data.titleSize,chartSize: data.chartSize} : {},
             };
             let pass = true; // 判断表单是否验证通过
