@@ -61,6 +61,9 @@ let SystemMessage = Component.extend({
             // });
             // this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
+                if(this.data == undefined || data == undefined){
+                    return;
+                }
                 this.data.total = data.total;
                 this.actions.setSortModel();
                 this.agGrid.actions.setGridData({
@@ -331,6 +334,9 @@ let SystemMessage = Component.extend({
             dataTableService.getPreferences(tempData).then((result) => {
                 if(result.success === 1 && result.pageSize !== null){
                     this.data.rows = result.pageSize.pageSize;
+                }
+                if(this.actions == undefined){
+                    return;
                 }
                 this.actions.initPagination();
             });
