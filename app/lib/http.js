@@ -1,3 +1,5 @@
+import xss from 'xss';
+
 
 $.ajaxSetup({
     dataType: 'json'
@@ -14,6 +16,29 @@ function getKey() {
     return prefix + counter ++;
 }
 
+function xssObj(target) {
+    if (target) {
+        if (_.isString(target)) {
+            return xss(target);
+        } else if (_.isArray(target)) {
+            target.forEach((item, index) => {
+                target[index] = xssObj(item);
+            });
+            return target;
+        } else if (_.isPlainObject(target)) {
+            _.forEach(target, function(value, key) {
+                target[key] = xssObj(value);
+            });
+            return target;
+        } else {
+            return target;
+        }
+    } else {
+        return target;
+    }
+
+}
+
 export const HTTP = {
 
     /**
@@ -27,7 +52,7 @@ export const HTTP = {
         GetSet.add({
             url: url,
             key: key,
-            params: params
+            params: xssObj(params)
         });
         const promise = new Promise((resolve) => {
             Hash[key] = resolve;
@@ -46,7 +71,7 @@ export const HTTP = {
         PostSet.add({
             url: url,
             key: key,
-            params: params
+            params: xssObj(params)
         });
         const promise = new Promise((resolve) => {
             Hash[key] = resolve;
@@ -63,7 +88,7 @@ export const HTTP = {
             let array = [...GetSet];
             $.get('/pipe/', {actions: JSON.stringify(array)})
             .then((response) => {
-                this._dealResponse(response);
+                this._dealResponse(xssObj(response));
             }).fail(() => {
                 this._dealResponseError(array);
             });
@@ -74,7 +99,7 @@ export const HTTP = {
             let array = [...PostSet];
             $.post('/pipe/', {actions: JSON.stringify(array)})
             .then((response) => {
-                this._dealResponse(response);
+                this._dealResponse(xssObj(response));
             }).fail(() => {
                 this._dealResponseError(array);
             });
@@ -118,7 +143,11 @@ export const HTTP = {
      * @returns Deffered
      */
     getImmediately: function() {
-        return $.get.apply($, arguments);
+        let args = _.toArray(arguments);
+        args = xssObj(args);
+        return $.get.apply($, args).done((response) => {
+            xssObj(response);
+        });
     },
 
     /**
@@ -126,7 +155,11 @@ export const HTTP = {
      * @returns Deffered
      */
     postImmediately: function() {
-        return $.post.apply($, arguments);
+        let args = _.toArray(arguments);
+        args = xssObj(args);
+        return $.post.apply($, args).done((response) => {
+            xssObj(response);
+        });
     },
 
     /**
@@ -134,7 +167,11 @@ export const HTTP = {
      * @returns Deffered
      */
     ajaxImmediately: function() {
-        return $.ajax.apply($, arguments);
+        let args = _.toArray(arguments);
+        args = xssObj(args);
+        return $.ajax.apply($, args).done((response) => {
+            xssObj(response);
+        });
     }
 
 }
