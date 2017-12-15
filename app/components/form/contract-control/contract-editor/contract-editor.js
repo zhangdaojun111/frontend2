@@ -236,6 +236,9 @@ let contractEditor = Component.extend({
         getHistoryModel: function (json) {
             return HTTP.postImmediately('/customize/rzrk/show_lastest_history/', json);
         },
+        getEditorHistory: function (json) {
+            return HTTP.postImmediately('/customize/rzrk/contract_history/', json);
+        },
         addTab: function () {
             let _this = this;
             let tabEle = $(`<li class="contract-tab active"><span>新建</span><span class="delete-tab-btn"></span></li>`);
@@ -381,6 +384,7 @@ let contractEditor = Component.extend({
                         // $(this.el.find('.contract-tab').get(i)).text(tab['name']);
                         $(this.el.find('.contract-tab').get(i)).html(`<span>${tab['name']}</span><span class="delete-tab-btn"></span>`);
                     }
+                    this.actions.textClick();
                     this.actions.showDifPattern();
                     this.hideLoading();
                 }
@@ -502,6 +506,24 @@ let contractEditor = Component.extend({
                     break;
             }
 
+        },
+        textClick: function () {
+            let _this = this;
+            this.el.find('.contract-template-anchor span').on('click', (event) => {
+                if(event.type == 'click' && this.el.find('.edit_or_save').text() == '临时编辑') {
+                    let name = JSON.parse(JSON.stringify(this.data.local_data[this.data['current_tab']].k2v))[`##${event.target.title}##`];
+                    let obj = {
+                        table_id: _this.data.table_id,
+                        real_id: _this.data.real_id,
+                        field_id: _this.data.id,
+                        k2v: `##${name}##`,
+                        is_save: 'search'
+                    }
+                    _this.actions.getEditorHistory(obj).then(res => {
+                        debugger
+                    })
+                }
+            })
         },
         showDifPattern: function () {
             if(this.data['mode']=='view'){
