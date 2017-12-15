@@ -406,7 +406,9 @@ let config = {
 
         //订阅数据失效
         PMAPI.subscribe(this.data.PMENUM.data_invalid, (info) => {
-            this.data.cells.actions.updateCells(info);
+            if(this.data.cells){
+                this.data.cells.actions.updateCells(info);
+            }
         });
 
         //根据判断是否单行模式加载header
