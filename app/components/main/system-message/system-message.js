@@ -425,11 +425,11 @@ let systemMessageUtil = {
         let html = '<div class="component-msg-detail">';
         let readMsg = '';
         if($.isArray(data) === false){
-            if(data.content){
-                data.msg_content = data.content;
+            if(!data.content){
+                data.content = data.msg_content;
             }
-            html += systemMessageUtil._getHtml(data)+`</div>`;
-            readMsg = data.title.toString() + data.msg_content.toString();
+            html += systemMessageUtil._getHtml(data) + `</div>`;
+            readMsg = data.title.toString() + data.content.toString();
         }else{
             for(let msg of data){
                 html += systemMessageUtil._getHtml(msg);
@@ -441,7 +441,7 @@ let systemMessageUtil = {
     },
     _getHtml:function (data) {
         return `<h3 class="msg-title">${data.title}</h3>
-                <pre class="text">${data.msg_content}</pre>`;
+                <pre class="text">${data.content}</pre>`;
     },
     _speak:function (speak,readMsg) {
         if (speak) {
