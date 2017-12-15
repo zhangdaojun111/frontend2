@@ -399,6 +399,7 @@ export class CellTableComponent extends CellBaseComponent {
         cellChart.rows = tableRows;
     }
     static numFormat(num,acc) {
+
        if(acc!==''){
            num = num.toFixed(acc);
        }
