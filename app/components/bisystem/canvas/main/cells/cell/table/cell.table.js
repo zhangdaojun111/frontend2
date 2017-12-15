@@ -399,25 +399,14 @@ export class CellTableComponent extends CellBaseComponent {
         cellChart.rows = tableRows;
     }
     static numFormat(num,acc) {
-        num = parseFloat(Number(num)).toString().split(".");
+        num = num.toFixed(acc);
+        num = num + '';
+        num = num.split('.');
+        // num = parseFloat(Number(num)).toString().split(".");
         num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-        if(acc>0){
-            if(num[1]){
-                num[1] = '0.' + num[1];
-                num[1] = parseFloat(num[1]).toFixed(acc);
-                num[1] = num[1].replace('0.','');
-            }else{
-                num[1]  = new String('0').repeat(acc);
-            }
-        }else if(acc==='0'){
-            if(num[1]){
-                num[1] = '';
-            }
-        }
-        if(acc==='0'){
-            num = num.join(" ");
-        }else{
-            num = num.join(".");
+        num = num.join('.');
+        if(num==0){
+            num = 0;
         }
         return num;
     }

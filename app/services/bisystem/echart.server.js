@@ -438,6 +438,10 @@ export class EchartsService {
             }
         }
 
+        //自定义 图表字体大小
+        if(cellOption['customTextStyle'] && cellOption['customTextStyle'].hasOwnProperty('chartSize')){
+            pieOption['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
+        }
 
         return pieOption;
     }
@@ -533,6 +537,17 @@ export class EchartsService {
             });
         });
         mutiListOption['legend']['data'] = legend;
+
+        //自定义 图表字体大小
+        if(cellOption['customTextStyle'] && cellOption['customTextStyle'].hasOwnProperty('chartSize')){
+            mutiListOption['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
+            mutiListOption['xAxis'].forEach((val,index)=>{
+                val.axisLabel = {textStyle:{fontSize:cellOption['customTextStyle']['chartSize']}};
+            });
+            mutiListOption['yAxis'].forEach((val,index)=>{
+                val.axisLabel = {textStyle:{fontSize:cellOption['customTextStyle']['chartSize']}};
+            });
+        }
         return mutiListOption;
     }
     /**
@@ -584,6 +599,11 @@ export class EchartsService {
             });
         });
         radarOption['color'] = Array.isArray(cellOption['theme']) && cellOption['theme'].length > 0 ? cellOption['theme'] : EchartsOption['blue'];
+
+        //自定义 图表字体大小
+        if(cellOption['customTextStyle'] && cellOption['customTextStyle'].hasOwnProperty('chartSize')){
+            radarOption['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
+        }
         return radarOption;
     }
 
@@ -631,6 +651,14 @@ export class EchartsService {
         links.pop();
         stylzieOption.series[0].links = links;
         stylzieOption.series[0].data = data;
+
+        //自定义 图表字体大小
+        if(cellOption['customTextStyle'] && cellOption['customTextStyle'].hasOwnProperty('chartSize')){
+            stylzieOption['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
+            stylzieOption['xAxis']['axisLabel']['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
+            stylzieOption['yAxis']['axisLabel']['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
+        }
+
         return stylzieOption;
     }
 
@@ -679,6 +707,11 @@ export class EchartsService {
                 return params.seriesName+'<br/>' + params.data.name + ' : ' + parseFloat(params.data.value).toFixed(parseInt(cellOption['customAccuracy']));
             };
         }
+
+        //自定义 图表字体大小
+        if(cellOption['customTextStyle'] && cellOption['customTextStyle'].hasOwnProperty('chartSize')){
+            mapOption['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
+        }
         return mapOption;
     }
 
@@ -715,6 +748,12 @@ export class EchartsService {
             gaugeOption.series[0]['detail']['formatter'] = function(value){
                 return value.toFixed(parseInt(cellOption['customAccuracy']));
             };
+        }
+
+        //自定义 图表字体大小
+        if(cellOption['customTextStyle'] && cellOption['customTextStyle'].hasOwnProperty('chartSize')){
+            gaugeOption['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
+            gaugeOption.series[0]['detail']['textStyle']['fontSize'] = cellOption['customTextStyle']['chartSize'];
         }
         return gaugeOption;
     }
