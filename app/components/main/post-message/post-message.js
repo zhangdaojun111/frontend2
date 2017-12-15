@@ -134,7 +134,7 @@ let PostMessage = Component.extend({
          * 将选中的人员渲染到组件内
          */
         renderUsers: _.debounce(function (context) {
-            let users = this.aciotns._getUsers(context);
+            let users = this.actions._getUsers(context);
             this.autoSelect.data.list = users;
             this.autoSelect.data.choosed = users;
             this.autoSelect.reload();

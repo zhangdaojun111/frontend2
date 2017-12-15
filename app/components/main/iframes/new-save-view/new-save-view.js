@@ -128,7 +128,7 @@ let SaveView = Component.extend({
             }
 
             //获取被点击的视图名称
-            let tabIdList = this.actions._getFavoriteView();
+            let tabIdList = this.actions._getFavoriteView(event);
 
             if(tabIdList && tabIdList.length > 0){
                 let menu = window.config.menu;
@@ -160,7 +160,7 @@ let SaveView = Component.extend({
                 Mediator.emit('saveview:displayview',this.data.newHash);
             }
         },
-        _getFavoriteView:function () {
+        _getFavoriteView:function (event) {
             let name = event.currentTarget.attributes.view_id.value;
             let tabIdList = [];
             for ( let k of this.data.favoriteList){
@@ -321,7 +321,6 @@ let SaveView = Component.extend({
         }
     ],
     afterRender:function () {
-        console.log('new save view');
         this.actions.getUserViewList();
         // this.el.on("click",".save-btn",_.debounce(() => {
         //     this.actions.saveFavorite();

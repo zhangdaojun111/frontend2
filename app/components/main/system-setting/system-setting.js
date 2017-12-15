@@ -296,14 +296,14 @@ let SettingPage = Component.extend({
                 content:homeflag
             };
 
-            this.actions.saveUserConfig(json,json2,json3);
+            this.actions.saveUserConfig(json,json2,json3,refresh);
         },
         _calFlag:function(originVal,flag){
             return originVal + ((flag === true)?'1':'0');
         },
-        saveUserConfig:function (json,json2,json3) {
+        saveUserConfig:function (json,json2,json3,refresh) {
             UserInfoService.saveUserConfig(json,json2,json3).then((result) => {
-                that.hideLoading();
+                this.hideLoading();
                 if(result[0].succ === 1 && result[1].succ === 1 && result[2].succ === 1){
                     window.config.sysConfig.logic_config.client_login_show_bi = result[0].data.toString();
                     window.config.sysConfig.logic_config.client_login_show_calendar = result[1].data.toString();
