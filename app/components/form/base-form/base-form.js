@@ -2418,6 +2418,11 @@ let config = {
 			window.top.isSonGridDataNeedParentTepmId = this.data.data['temp_id'] && this.data.data['temp_id']['value']?this.data.data['temp_id']['value'] : '';
 		},
 		formStyle(){
+			if(this.data.userInfoDfields){
+				for(let dfiled of this.data.userInfoDfields){
+					this.el.find(`[data-dfield=${dfiled}]`).parent().parent().remove();
+				}
+			}
 			//默认表单样式
 			if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
 				this.el.find('table').parents('.form-print-position').css("margin-bottom","40px");
