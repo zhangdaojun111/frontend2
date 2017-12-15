@@ -58,23 +58,7 @@ let RegisterComponent =Component.extend({
          * 获取注册验证码
          */
         getVerificationCode:function (event) {
-            if(this.data.timer === 60){
-                let json = {
-                    action:'send_code',
-                    phone:this.data.telephone,
-                };
-                UserInfoService.register(json).done((result) => {
-                    if(result.success === 1){
-                        //验证码发送成功
-                        // console.log("验证码发送成功");
-                    }else{
-                        msgbox.alert("验证码获取失败");
-                    }
-                }).fail((err) => {
-                    msgbox.alert("验证码获取失败");
-                    // console.log("验证码获取失败",err);
-                })
-            }
+            this.actions.sendRegister();
 
             let $btn = this.el.find('.get-code');
             let that = this;
@@ -92,6 +76,25 @@ let RegisterComponent =Component.extend({
                 that.actions.getVerificationCode(event);
             },1000)
         },
+        sendRegister:function () {
+            if(this.data.timer === 60){
+                let json = {
+                    action:'send_code',
+                    phone:this.data.telephone,
+                };
+                UserInfoService.register(json).done((result) => {
+                    if(result.success === 1){
+                        //验证码发送成功
+                        // console.log("验证码发送成功");
+                    }else{
+                        msgbox.alert("验证码获取失败");
+                    }
+                }).fail((err) => {
+                    msgbox.alert("验证码获取失败");
+                    // console.log("验证码获取失败",err);
+                })
+            }
+        },
         /**
          * 进行投资人注册，验证注册信息后向后台发送注册数据
          */
@@ -102,7 +105,34 @@ let RegisterComponent =Component.extend({
             let email = this.el.find('input.email').val();
             let tel = this.el.find('input.tel').val();
             let verificationCode = this.el.find('input.verification-code').val();
-
+            this.actions.checkIsEmpty(username,password,name,email,tel,verificationCode);
+            this.showLoading();
+            this.actions.submitRegister({
+                action:'investor',
+                phone:tel,
+                username:username,
+                name:name,
+                code:verificationCode,
+                email:email,
+                password:password
+            });
+        },
+        submitRegister:function (json) {
+            let that = this;
+            UserInfoService.register(json).done((result) => {
+                that.hideLoading();
+                if(result.success === 1){
+                    msgbox.alert("注册成功，即将跳转到登录界面");
+                    $(window).attr('location','/login');
+                }else{
+                    msgbox.alert("注册失败");
+                }
+            }).fail((err) => {
+                that.hideLoading();
+                msgbox.alert("注册失败");
+            })
+        },
+        checkIsEmpty:function (username,password,name,email,tel,verificationCode) {
             if(!username || username.trim() === ''){
                 msgbox.alert('请填写用户名');
                 return;
@@ -122,29 +152,6 @@ let RegisterComponent =Component.extend({
                 msgbox.alert('请填写验证码');
                 return;
             }
-            this.showLoading();
-            let json = {
-                action:'investor',
-                phone:tel,
-                username:username,
-                name:name,
-                code:verificationCode,
-                email:email,
-                password:password
-            };
-            let that = this;
-            UserInfoService.register(json).done((result) => {
-                that.hideLoading();
-                if(result.success === 1){
-                    msgbox.alert("注册成功，即将跳转到登录界面");
-                    $(window).attr('location','/login');
-                }else{
-                    msgbox.alert("注册失败");
-                }
-            }).fail((err) => {
-                that.hideLoading();
-                msgbox.alert("注册失败");
-            })
         },
         /**
          * 用户输入时对表格内容进行检查
@@ -155,85 +162,106 @@ let RegisterComponent =Component.extend({
                 event.target.nextElementSibling.textContent = '';
                 return;
             }
+            this.actions.verifyInput(event,tip,type);
 
+        },
+        verifyInput:function (event,type) {
             let value = event.target.value.trim();
             if(value === ''){
                 event.target.style.borderColor = 'red';
                 event.target.nextElementSibling.textContent = tip;
             }else{
                 if(type){
-                    let json = {
-                        action:'check'
-                    };
-
                     switch(type) {
                         case 'username':
-                            json["username"] = value;
-                            UserInfoService.register(json).done((result) => {
-                                console.log("post require");
-                                console.log(result);
-                                if(result.success === 1){
-                                    //检测用户名未注册
-                                    event.target.style.borderColor = 'green';
-                                    event.target.nextElementSibling.textContent = '';
-                                }else{
-                                    event.target.style.borderColor = 'red';
-                                    event.target.nextElementSibling.textContent = result.error;
-                                }
-                            });
+                            this.actions.verifyUsername(value);
                             break;
                         case 'password':
-                            if (value !== ''){
-                                event.target.style.borderColor = 'green';
-                                event.target.nextElementSibling.textContent = '';
-                            }
+                            this.actions.verifyPassword(value);
                             break;
                         case 'name':
-                            json["name"] = value;
-                            UserInfoService.register(json).done((result) => {
-                                if(result.success === 1){
-                                    //检测姓名合法
-                                    event.target.style.borderColor = 'green';
-                                    event.target.nextElementSibling.textContent = '';
-                                }else{
-                                    event.target.style.borderColor = 'red';
-                                    event.target.nextElementSibling.textContent = result.error;
-                                }
-                            });
+                            this.actions.verifyName(value);
                             break;
                         case 'tel':
-                            if (this.actions.checkTel(value)) {
-                                json["tel"] = value;
-                                let that = this;
-                                UserInfoService.register(json).done((result)=> {
-                                    if(result.success === 1){
-                                        //检测手机号未注册
-                                        event.target.style.borderColor = 'green';
-                                        event.target.nextElementSibling.textContent = '';
-                                        this.el.find('button.get-code').removeAttr('disabled');
-                                    }else{
-                                        event.target.style.borderColor = 'red';
-                                        event.target.nextElementSibling.textContent = result.error;
-                                        that.el.find('button.get-code').attr('disabled',true);
-                                    }
-                                })
-                            }else{
-                                event.target.style.borderColor = 'red';
-                                event.target.nextElementSibling.textContent = '手机号格式不正确';
-                                this.el.find('button.get-code').attr('disabled',true);
-                            }
+                            this.actions.verifyTel(value);
                             break;
                         case 'email':
-                            if (this.actions.checkEmail(value)) {
-                                event.target.style.borderColor = 'green';
-                                event.target.nextElementSibling.textContent = '';
-                            }else{
-                                event.target.style.borderColor = 'red';
-                                event.target.nextElementSibling.textContent = '邮箱格式不正确';
-                            }
+                            this.actions.verifyEmail(value);
                             break;
                     }
                 }
+            }
+        },
+        verifyUsername:function (value) {
+            let json = {
+                action:'check',
+                username: value
+            };
+            UserInfoService.register(json).done((result) => {
+                if(result.success === 1){
+                    //检测用户名未注册
+                    event.target.style.borderColor = 'green';
+                    event.target.nextElementSibling.textContent = '';
+                }else{
+                    event.target.style.borderColor = 'red';
+                    event.target.nextElementSibling.textContent = result.error;
+                }
+            });
+        },
+        verifyPassword:function (value) {
+            if (value !== ''){
+                event.target.style.borderColor = 'green';
+                event.target.nextElementSibling.textContent = '';
+            }
+        },
+        verifyName:function (value) {
+            let json = {
+                action:'check',
+                name:value
+            };
+            UserInfoService.register(json).done((result) => {
+                if(result.success === 1){
+                    //检测姓名合法
+                    event.target.style.borderColor = 'green';
+                    event.target.nextElementSibling.textContent = '';
+                }else{
+                    event.target.style.borderColor = 'red';
+                    event.target.nextElementSibling.textContent = result.error;
+                }
+            });
+        },
+        verifyTel:function (value) {
+            if (this.actions.checkTel(value)) {
+                let json = {
+                    action:'check',
+                    tel:value
+                };
+                let that = this;
+                UserInfoService.register(json).done((result)=> {
+                    if(result.success === 1){
+                        //检测手机号未注册
+                        event.target.style.borderColor = 'green';
+                        event.target.nextElementSibling.textContent = '';
+                        this.el.find('button.get-code').removeAttr('disabled');
+                    }else{
+                        event.target.style.borderColor = 'red';
+                        event.target.nextElementSibling.textContent = result.error;
+                        that.el.find('button.get-code').attr('disabled',true);
+                    }
+                })
+            }else{
+                event.target.style.borderColor = 'red';
+                event.target.nextElementSibling.textContent = '手机号格式不正确';
+                this.el.find('button.get-code').attr('disabled',true);
+            }
+        },
+        verifyEmail:function(value){
+            if (this.actions.checkEmail(value)) {
+                event.target.style.borderColor = 'green';
+                event.target.nextElementSibling.textContent = '';
+            }else{
+                event.target.style.borderColor = 'red';
+                event.target.nextElementSibling.textContent = '邮箱格式不正确';
             }
         },
         /**

@@ -109,11 +109,9 @@ let CommonUse = Component.extend({
         }
     },
     firstAfterRender: function () {
-
         let originData = this.actions.formatOriginData();
         this.data.selected = originData.commonUse;
         this.data.menu = originData.menu;
-
         let treeView = new TreeView({data:{treeNodes:this.data.menu, options:{
             callback: (event, node) => {
                 this.actions.handle(event, node);

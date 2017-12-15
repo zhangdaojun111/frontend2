@@ -6,7 +6,7 @@ import template from './login.html';
 
 import msgbox from '../../lib/msgbox';
 
-let config = {
+let Login = Component.extend({
     template: template,
     data: {
         defaultName: 'tom',
@@ -28,13 +28,7 @@ let config = {
     beforeDestory: function(){
         msgbox.alert('组件要被销毁了');
     }
-}
-
-class Login extends Component {
-    constructor(newConfig){
-        super($.extend(true,{},config,newConfig));
-    }
-}
+});
 
 export default {
     show: function() {

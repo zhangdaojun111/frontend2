@@ -99,6 +99,11 @@ let SettingPage = Component.extend({
          */
         addCheckbox:function () {
             let $parent = this.el.find('.sortable-box');
+            this.actions.addCalendarCheck($parent);
+            this.actions.addHomeCheck($parent);
+            this.actions.setCheckboxStatus();
+        },
+        addCalendarCheck:function ($parent) {
             let $ul = $(`
                 <li class='isShow-calendar sort-item' title='拖动调整顺序'>
                     <label class='custom-checkbox' style='display: inline'>
@@ -112,7 +117,8 @@ let SettingPage = Component.extend({
             }else{
                 $parent.prepend($ul);
             }
-
+        },
+        addHomeCheck:function ($parent) {
             let home = $(`
                 <li class="isShow-home" title="不可拖动" draggable="false">
                     <label class="custom-checkbox" style="display: inline">
@@ -121,9 +127,7 @@ let SettingPage = Component.extend({
                     <span>登录时自动开启首页</span>
                     <i class="drag-icon icon-framework-drag" style="display: none"></i>
                 </li>`);
-
             $parent.prepend(home);
-            this.actions.setCheckboxStatus();
         },
         /**
          * 获取用户首页bi视图列表
@@ -134,31 +138,19 @@ let SettingPage = Component.extend({
                 displaySty = 'inline-block'
             }
             UserInfoService.getHomePageList().then(res=>{
-                console.log(res)
                 let li = '';
                 if(this.data.bi_view == "00"){
                     res.data.bi_view[0] && (this.data.bi_view = res.data.bi_view[0].id)
                 }
                 res.data.bi_view.forEach((item,index)=>{
-                    if(this.data.bi_view == item.id) {
-                        li += `
-                            <li class="bi-view">
+                    let checked = this.data.bi_view == item.id?'checked':'';
+                    li += `<li class="bi-view">
                                 <label style="display: inline" class="custom-checkbox">
-                                    <input type="checkbox" title="${item.id}" name="home-page-checkbox" class="check-box" checked>
+                                    <input type="checkbox" title="${item.id}" name="home-page-checkbox" class="check-box" ${checked}>
                                 </label>
                                 <span class="set-home-page" title="${item.id}">${item.name}</span>
                                 <i class="home-page-delete" style="display: ${displaySty};" title="${item.id}">×</i>
-                            </li>`
-                    }else{
-                        li += `
-                            <li class="bi-view">
-                                <label style="display: inline" class="custom-checkbox">
-                                    <input type="checkbox" title="${item.id}" name="home-page-checkbox" class="check-box">
-                                </label>
-                                <span class="set-home-page" title="${item.id}">${item.name}</span>
-                                <i class="home-page-delete" style="display: ${displaySty};" title="${item.id}">×</i>
-                            </li>`
-                    }
+                            </li>`;
                 });
                 $('#home-page-ul').html(li);
             })
@@ -200,16 +192,19 @@ let SettingPage = Component.extend({
                 title: '新建视图'
             });
             if (res['name']) {
-                ViewsService.update(res).then((res) => {
-                    if (res['success'] === 1) {
-                        msgbox.showTips('添加成功');
-                        this.actions.getHomePageData();
-                    } else {
-                        msgbox.alert(res['error']);
-                    }
-                })
+                this.actions.updateViews(res);
             }
             return false;
+        },
+        updateViews:function (r) {
+            ViewsService.update(r).then((res) => {
+                if (res['success'] === 1) {
+                    msgbox.showTips('添加成功');
+                    this.actions.getHomePageData();
+                } else {
+                    msgbox.alert(res['error']);
+                }
+            })
         },
         /**
          * 选择首页
@@ -227,13 +222,8 @@ let SettingPage = Component.extend({
          * 切换首页保存
          * */
         saveHomePage:function () {
-            let homeflag = '';
             let homeValue = this.el.find('input.home-Show').prop("checked");
-            if(homeValue === true){
-                homeflag = this.data.bi_view + "1";
-            }else{
-                homeflag = this.data.bi_view + "0";
-            }
+            let homeflag = this.data.bi_view + ((homeValue === true)? "1" : "0");
             let json3 = {
                 action:'save',
                 pre_type:10,
@@ -284,27 +274,9 @@ let SettingPage = Component.extend({
          */
         saveSetting:function (refresh) {
             this.showLoading();
-            let biflag = 10;
-            let calendarflag = 20;
-            let homeflag = '';
-            let biValue = this.el.find('input.bi-Show').prop("checked");
-            let calendarValue = this.el.find('input.calendar-Show').prop("checked");
-            let homeValue = this.el.find('input.home-Show').prop("checked");
-            if(biValue === true){
-                biflag = this.data.biSort + "1";
-            }else{
-                biflag = this.data.biSort + "0";
-            }
-            if(calendarValue === true){
-                calendarflag = this.data.calendarSort + "1";
-            }else{
-                calendarflag = this.data.calendarSort + "0";
-            }
-            if(homeValue === true){
-                homeflag = this.data.bi_view + "1";
-            }else{
-                homeflag = this.data.bi_view + "0";
-            }
+            let biflag = this.actions._calFlag(this.data.biSort,this.el.find('input.bi-Show').prop("checked"));
+            let calendarflag = this.actions._calFlag(this.data.calendarSort,this.el.find('input.calendar-Show').prop("checked"));
+            let homeflag = this.actions._calFlag(this.data.bi_view,this.el.find('input.home-Show').prop("checked"));
             //以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
             let json = {
                 action:'save',
@@ -324,9 +296,14 @@ let SettingPage = Component.extend({
                 content:homeflag
             };
 
-            let that = this;
+            this.actions.saveUserConfig(json,json2,json3,refresh);
+        },
+        _calFlag:function(originVal,flag){
+            return originVal + ((flag === true)?'1':'0');
+        },
+        saveUserConfig:function (json,json2,json3,refresh) {
             UserInfoService.saveUserConfig(json,json2,json3).then((result) => {
-                that.hideLoading();
+                this.hideLoading();
                 if(result[0].succ === 1 && result[1].succ === 1 && result[2].succ === 1){
                     window.config.sysConfig.logic_config.client_login_show_bi = result[0].data.toString();
                     window.config.sysConfig.logic_config.client_login_show_calendar = result[1].data.toString();
@@ -337,11 +314,11 @@ let SettingPage = Component.extend({
                     SysSetting.hide();
                     if(refresh){
                         // _.debounce(()=>{
-                            Mediator.emit('menu:homePageRefresh',{
-                                id: 'home',
-                                name: '首页',
-                                url: window.config.sysConfig.home_index
-                            })
+                        Mediator.emit('menu:homePageRefresh',{
+                            id: 'home',
+                            name: '首页',
+                            url: window.config.sysConfig.home_index
+                        })
                         // },200)
                     }
                 }else{
@@ -375,14 +352,13 @@ let SettingPage = Component.extend({
                 accept:".sort-item",
             });
 
-            if(this.data.biStatus === '1'){
-                this.el.find('input.bi-Show').attr("checked",true);
-            }
-            if(this.data.calendarStatus === '1'){
-                this.el.find('input.calendar-Show').attr("checked",true);
-            }
-            if(this.data.homeStatus === '1'){
-                this.el.find('input.home-Show').attr("checked",true);
+            this.actions.setCheck('input.bi-Show',this.data.biStatus);
+            this.actions.setCheck('input.calendar-Show',this.data.calendarStatus);
+            this.actions.setCheck('input.home-Show',this.data.homeStatus);
+        },
+        setCheck(selector,flag){
+            if(flag === '1'){
+                this.el.find(selector).attr("checked",true);
             }
         },
         /**

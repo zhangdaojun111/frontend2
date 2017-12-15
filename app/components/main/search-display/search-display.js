@@ -97,32 +97,24 @@ let ResearchResult = Component.extend({
          */
         initPageController:function () {
             //初始化data页面分页控制
-            this.dataPageController = new dataPagination({
+            this.data.dataPageController = this.actions._initController(20,'data',this.data.dataCount,this.actions.dataPageChanged);
+            //初始化attachment页面分页控制
+            this.data.attachmentPageController = this.actions._initController(15,'attachment',this.data.attachmentCount,this.actions.attachmentPageChanged);
+        },
+        _initController:function (rowCount,selector,dataCount,pageChanged) {
+            let controller = new dataPagination({
                 data:{
                     currentPage:1,
-                    rows:20,
+                    rows:rowCount,
                 }
             });
-            let $parent1 = this.el.find('.data-page-control');
-            this.dataPageController.render($parent1);
+            let $parent = this.el.find(`.${selector}-page-control`);
+            controller.render($parent);
             let str = '"' + this.data.searchText + '"';
-            this.el.find('.data-num').html(this.data.dataCount);
-            this.el.find('.data-name').html(str);
-            this.dataPageController.actions.paginationChanged = this.actions.dataPageChanged;
-
-            //初始化attachment页面分页控制
-            this.attachmentPageController = new dataPagination({
-                data: {
-                    currentPage:1,
-                    rows:15,
-                }
-            });
-            let $parent2 = this.el.find('.attachment-page-control');
-            this.attachmentPageController.render($parent2);
-            let str2 = '"' + this.data.searchText + '"';
-            this.el.find('.attachment-num').html(this.data.attachmentCount);
-            this.el.find('.attachment-name').html(str2);
-            this.attachmentPageController.actions.paginationChanged = this.actions.attachmentPageChanged;
+            this.el.find(`.${selector}-num`).html(dataCount);
+            this.el.find(`.${selector}-name`).html(str);
+            controller.actions.paginationChanged = pageChanged;
+            return controller;
         },
         /**
          * 数据页面的页码改变，按页码进行搜索并更新显示内容
@@ -138,26 +130,7 @@ let ResearchResult = Component.extend({
             };
 
             //发起搜索请求，仅查询数据
-            let that = this;
-            GlobalService.sendSearch(searchData).done((result) => {
-                if(result.success === 1){
-                    let tempData = result;       //开全局搜索接口后使用
-                    // let tempData = this.data.test_data_result;      //测试使用
-                    that.data.dataCount = tempData.total;
-                    let str = '"' + this.data.searchText + '"';
-                    that.el.find('.data-num').html(this.data.dataCount);
-                    that.el.find('.data-name').html(str);
-                    that.actions.displayDataResult(tempData);
-                    that.dataPageController.setPagination(tempData.total,data.currentPage);
-                    that.hideLoading();
-                }else{
-                    console.log("查询失败",result);
-                    that.hideLoading();
-                }
-            }).fail((err) => {
-                console.log("查询失败",err);
-                that.hideLoading();
-            });
+            this.actions._sendSearch(searchData,this.data.dataCount,this.data.dataPageController,'data',data.currentPage);
         },
         /**
          * 附件页面的页码改变，按页码进行搜索并更新显示内容
@@ -176,23 +149,28 @@ let ResearchResult = Component.extend({
              * 发起搜索请求，仅搜索附件
              * @type {config}
              */
-            let that = this;
+            this.actions._sendSearch(searchData,this.data.attachmentCount,this.data.attachmentPageController,'attachment',data.currentPage);
+        },
+        _sendSearch:function (searchData,dataCount,controller,selector,page) {
             GlobalService.sendSearch(searchData).done((result) => {
                 if (result.success === 1) {
                     let tempData = result;                           //开全局搜索接口后使用
                     // let tempData = this.data.test_attachment_result;    //测试使用
-                    that.data.attachmentCount = tempData.total;
+                    dataCount = tempData.total;
                     let str2 = '"' + this.data.searchText + '"';
-                    that.el.find('.attachment-num').html(this.data.attachmentCount);
-                    that.el.find('.attachment-name').html(str2);
-                    that.actions.displayAttachmentResult(tempData);
-                    that.attachmentPageController.actions.setPagination(tempData.total, data.currentPage);
-                    that.hideLoading();
+                    this.el.find(`.${selector}-num`).html(dataCount);
+                    this.el.find(`.${selector}-name`).html(str2);
+                    this.actions.displayAttachmentResult(tempData);
+                    controller.actions.setPagination(tempData.total, page);
+                    this.hideLoading();
                 } else {
-                    console.log("查询数据失败");
+                    console.log("查询失败");
                     that.hideLoading();
                 }
-            })
+            }).fail((err) => {
+                console.log("查询失败",err);
+                that.hideLoading();
+            });
         },
         /**
          * 向后台请求第一轮搜索，数据和附件均搜索
@@ -242,7 +220,7 @@ let ResearchResult = Component.extend({
                         that.el.find('.data-num').html(this.data.dataCount);
                         that.el.find('.data-name').html(str);
                         that.actions.displayDataResult(tempData);
-                        that.dataPageController.actions.setPagination(tempData.total,1);
+                        that.data.dataPageController.actions.setPagination(tempData.total,1);
                     }
                 }else{
                     console.log("查询失败",result);
@@ -256,25 +234,7 @@ let ResearchResult = Component.extend({
 
             //发起第二次搜索请求，搜索附件
 
-            GlobalService.sendSearch(searchData).done((result) => {
-                if(result.success === 1){
-                    let tempData = result;                           //开全局搜索接口后使用
-                    // let tempData = that.data.test_attachment_result;    //测试使用
-                    that.data.attachmentCount = tempData.total;
-                    let str2 = '"' + this.data.searchText + '"';
-                    that.el.find('.attachment-num').html(this.data.attachmentCount);
-                    that.el.find('.attachment-name').html(str2);
-                    that.actions.displayAttachmentResult(tempData);
-                    that.attachmentPageController.actions.setPagination(tempData.total,1);
-                    that.hideLoading();
-                }else{
-                    console.log("查询失败",result);
-                    that.hideLoading();
-                }
-            }).fail((err) => {
-                console.log("查询失败",err);
-                that.hideLoading();
-            });
+            this.actions._sendSearch(searchData,this.data.attachmentCount,this.data.attachmentPageController,'attachment',1);
         }
     },
     binds:[
@@ -296,11 +256,6 @@ let ResearchResult = Component.extend({
     afterRender:function () {
         this.actions.initPageController();
         this.actions.setSearchContent();
-        // this.el.on('click','.data-btn',() => {
-        //     this.actions.showDataPage();
-        // }).on('click','.attachment-btn',() => {
-        //     this.actions.showAttachmentPage();
-        // });
     },
     beforeDestroy:function () {
         Mediator.removeAll();
