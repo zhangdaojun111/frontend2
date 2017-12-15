@@ -4,7 +4,8 @@ import {PMAPI,PMENUM} from './postmsg';
 $.widget("custom.erdsDialog", $.ui.dialog, {
     options: {
         closeText: "关闭",
-        classes:{'ui-dialog':'ui-dialog-shadow'}
+        classes:{'ui-dialog':'ui-dialog-shadow'},
+        resizable: false,
     },
     open: function () {
         this._super();
