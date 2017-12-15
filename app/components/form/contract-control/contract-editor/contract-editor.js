@@ -562,7 +562,7 @@ let contractEditor = Component.extend({
                 this.el.find('.delete-tab-button').css('display','inline-block');
                 this.el.find('.save_n_close').css('display','inline-block');
                 this.el.find('.edit_or_save').css('display','inline-block');
-                this.el.find('.history-template').css({'height':'auto'});
+                this.el.find('.history-template').css({'height':'150px'});
                 this.el.find('.change_edit').css({'display':'none'});
                 this.el.find('.contract-model').removeAttr('disabled','disabled');
                 this.el.find('.data-source').removeAttr('disabled','disabled');

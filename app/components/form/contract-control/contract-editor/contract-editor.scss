@@ -7,6 +7,7 @@
     margin: 0 auto;
     padding: 10px;
     font-size:12px;
+    min-height: 450px;
     .contract-editor-widget{
         margin: 0 auto;
         width: 100%;
@@ -106,6 +107,7 @@
         .contract-container{
             border: 1px solid #D7D7D7;
             width: calc(100% - 250px);
+            min-width: 600px;
             .contract-container-title{
                 border-bottom: 1px solid #D7D7D7;
                 color: #999999;
