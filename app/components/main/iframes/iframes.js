@@ -901,6 +901,9 @@ let IframeComponent = Component.extend({
         });
 
         Mediator.subscribe('menu:homePageRefresh', (data) => {
+            if(this.data.hash['home'] === undefined){
+                return;
+            }
             this.actions.closeIframe('home');
             this.actions.openIframe(data.id, data.url, data.name, data.flag);
             this.actions.focusIframe(data.id);
