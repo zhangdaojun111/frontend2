@@ -257,7 +257,6 @@ let SystemMessage = Component.extend({
             // if ((data.handle_status_text === '待审批' || data.handle_status_text === '已通过' || data.handle_status_text === '已取消' ||
             //     data.handle_status_text === '已驳回' || data.handle_status_text === '已完成') || data.msg_type === '关注消息') {
             this.actions._calUrl(data);
-            this.actions._openView(data);
             // 查看操作通过前端自己刷新未读，审批通过loadData刷新
             this.actions._freshUnread($event);
         },
@@ -270,7 +269,7 @@ let SystemMessage = Component.extend({
                 }else if(data.handle_status_text === '已被通过' || data.handle_status_text === '已通过' || data.handle_status_text === '其他'|| data.handle_status_text === '已驳回'){
                     data.url += "&btnType=view";
                 }
-
+                this.actions._openView(data);
             } else {
                 systemMessageUtil.showMessageDetail(data.msg_type_text, data);
             }

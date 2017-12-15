@@ -57,8 +57,8 @@ let PostMessage = Component.extend({
     binds:[{
         event:'change',
         selector:'input[name=sendType]',
-        callback:function () {
-            this.actions.onSendTypeChange($(this).val());
+        callback:function (content) {
+            this.actions.onSendTypeChange($(content).val());
         }
     },{
         event:'click',

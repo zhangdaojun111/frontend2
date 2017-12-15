@@ -183,6 +183,9 @@ let IframeComponent = Component.extend({
             }
             this.actions.sendCloseRequest(id);
             let item = this.data.hash[id];
+            if(item == undefined){
+                return;
+            }
             //关闭的item放入关闭历史数组，数组大于5则清除最后一项
             this.actions.setCloseHistory(item);
             // IframeOnClick.retrack(item.iframe.find('iframe')[0]);
