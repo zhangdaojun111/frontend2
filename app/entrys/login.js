@@ -419,16 +419,18 @@ function resetLoginBoxInfo(result) {
     if(result.login_open_animation && result.login_open_animation.toString() === "1"){
         showLoginAnimation = true;
     }
-    if(result.show_mobile_download && result.show_mobile_download.toString() === "1")
-        if(result.verify_code && result.verify_code.toString() === "1") {
-            let obj = {
-                id: 'verify-container',
-                width: "160",
-                height: "40",
-            };
-            controller.verifyCode = new verify(obj);
-            controller.verifyShow = 1;
-        }
+    if(result.show_mobile_download && result.show_mobile_download.toString() === "1") {
+        $('.mobile-download-btn').show();
+    }
+    if(result.verify_code && result.verify_code.toString() === "1") {
+        let obj = {
+            id: 'verify-container',
+            width: "160",
+            height: "40",
+        };
+        controller.verifyCode = new verify(obj);
+        controller.verifyShow = 1;
+    }
     controller.versionInfo = result;
     controller.sysNameInit();   //初始化公司名称
     controller.versionInit();   //初始化版本table
