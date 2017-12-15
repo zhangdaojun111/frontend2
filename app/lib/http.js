@@ -88,7 +88,7 @@ export const HTTP = {
             let array = [...GetSet];
             $.get('/pipe/', {actions: JSON.stringify(array)})
             .then((response) => {
-                this._dealResponse(xssObj(response));
+                this._dealResponse(response);
             }).fail(() => {
                 this._dealResponseError(array);
             });
@@ -99,7 +99,7 @@ export const HTTP = {
             let array = [...PostSet];
             $.post('/pipe/', {actions: JSON.stringify(array)})
             .then((response) => {
-                this._dealResponse(xssObj(response));
+                this._dealResponse(response);
             }).fail(() => {
                 this._dealResponseError(array);
             });
@@ -145,9 +145,7 @@ export const HTTP = {
     getImmediately: function() {
         let args = _.toArray(arguments);
         args = xssObj(args);
-        return $.get.apply($, args).done((response) => {
-            xssObj(response);
-        });
+        return $.get.apply($, args);
     },
 
     /**
@@ -157,9 +155,7 @@ export const HTTP = {
     postImmediately: function() {
         let args = _.toArray(arguments);
         args = xssObj(args);
-        return $.post.apply($, args).done((response) => {
-            xssObj(response);
-        });
+        return $.post.apply($, args);
     },
 
     /**
@@ -169,9 +165,7 @@ export const HTTP = {
     ajaxImmediately: function() {
         let args = _.toArray(arguments);
         args = xssObj(args);
-        return $.ajax.apply($, args).done((response) => {
-            xssObj(response);
-        });
+        return $.ajax.apply($, args);
     }
 
 }
