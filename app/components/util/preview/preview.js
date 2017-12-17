@@ -12,7 +12,9 @@ let Preview = Component.extend({
     template:template,
     data:{
         firstPreviewableIndex:0,
-        lastPreviewableIndex:0
+        lastPreviewableIndex:0,
+        isFirst:false,
+        isLast:false
     },
     binds:[
         {
@@ -122,18 +124,23 @@ let Preview = Component.extend({
             event: 'click',
             selector:'.previous',
             callback:function () {
+                if(this.data.isFirst){
+                    return;
+                }
                 let fileId;
                 if(this.data.list[0].file_name){//兼容附件浏览的情况
                     //找到前一个可浏览的文件的索引
                     let i = this.data.currentIndex - 1;
                     for(;i >=0; i--){
-                        if(preview_file.includes(this.data.list[i].file_name.split('.').pop())){
+                        let type = this.data.list[i].file_name.split('.').pop();
+                        if(preview_file.includes(type.toLowerCase())){
                             break;
                         }
                     }
-                    if(i < 0 ){ //前面没有可浏览文件
-                        this.el.find('.previous').hide();
+                    console.log('i:'+i);
+                    if(i < 0){ //前面没有可浏览文件
                         this.data.firstPreviewableIndex = this.data.currentIndex;
+                        this.actions._updateSwiftButtons(this.data.currentIndex);
                         return;
                     } else {
                         this.data.currentIndex--;
@@ -149,19 +156,23 @@ let Preview = Component.extend({
             event: 'click',
             selector:'.next',
             callback:function () {
+                if(this.data.isLast){
+                    return;
+                }
                 let fileId;
                 if(this.data.list[0].file_name) {//兼容附件浏览的情况
                     //找到前一个可浏览的文件的索引
                     let i = this.data.currentIndex + 1;
                     let length = this.data.list.length;
                     for (; i < length; i++) {
-                        if (preview_file.includes(this.data.list[i].file_name.split('.').pop())) {
+                        let type = this.data.list[i].file_name.split('.').pop();
+                        if (preview_file.includes(type.toLowerCase())) {
                             break;
                         }
                     }
                     if (i >= length) { //后面没有可浏览文件
-                        this.el.find('.next').hide();
                         this.data.lastPreviewableIndex = this.data.currentIndex;
+                        this.actions._updateSwiftButtons(this.data.currentIndex);
                         return;
                     } else {
                         this.data.currentIndex++;
@@ -217,13 +228,17 @@ let Preview = Component.extend({
         _updateSwiftButtons(i){
             if(i == this.data.firstPreviewableIndex){
                 this.el.find('.previous').hide();
+                this.data.isFirst = true;
             } else {
                 this.el.find('.previous').show();
+                this.data.isFirst = false;
             }
             if(i == this.data.lastPreviewableIndex){
                 this.el.find('.next').hide();
+                this.data.isLast = true;
             } else {
                 this.el.find('.next').show();
+                this.data.isLast = false;
             }
         }
     },
