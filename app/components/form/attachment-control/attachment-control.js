@@ -326,6 +326,9 @@ let config = {
                 }
                 this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
                 this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+                if(this.data.value.length <= 3){
+                    this.el.find('.ellipses').hide();
+                }
                 this.actions._deleteItemFromThumbnailList(event.data.fileId);
                 this.events.changeValue(this.data);
                 this.actions._playQueueItems();
