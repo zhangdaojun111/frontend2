@@ -39,13 +39,12 @@ let OnlineUser = Component.extend({
                 currentPage:this.pagination.data.currentPage
             });
 
-            let that = this;
             GlobalService.getOnlineUserData(param).done((data) => {
                 if(data.success === 1){
-                    that.agGrid.actions.setGridData({
+                    this.agGrid.actions.setGridData({
                         rowData: data.rows
                     });
-                    that.pagination.actions.setPagination(data.total, param.currentPage);
+                    this.pagination.actions.setPagination(data.total, param.currentPage);
                     component.hideLoading();
                 }else{
                     component.hideLoading();
@@ -74,34 +73,37 @@ let OnlineUser = Component.extend({
             this.pagination.render(this.el.find('.user-pagination'));
             this.pagination.actions.paginationChanged = this.actions.onPaginationChanged;
             this.actions.loadData();
+        },
+        _getPreferences:function () {
+            let tempData = {
+                actions:JSON.stringify(['pageSize']),
+                table_id:this.data.tableId
+            };
+
+            dataTableService.getPreferences(tempData).then((result) => {
+                if(result.success === 1 && result.pageSize !== null){
+                    this.data.rows = result.pageSize.pageSize;
+                }
+                this.actions.initPagination();
+            });
+            HTTP.flush();
         }
     },
     afterRender:function () {
-        let that = this;
         let gridRoot = this.el.find('.user-grid');
         //设置表头
         this.agGrid = new agGrid({
             data: {
                 columnDefs: GlobalService.getOnlineColumnDefs(),
                 footerData:[],
+                noFooter: true,
                 onSortChanged: this.actions.onSortChanged,
             }
         });
         this.agGrid.render(gridRoot);
         this.showLoading();
         //请求页显示数量偏好
-        let tempData = {
-            actions:JSON.stringify(['pageSize']),
-            table_id:this.data.tableId
-        };
-
-        dataTableService.getPreferences(tempData).then((result) => {
-            if(result.success === 1 && result.pageSize !== null){
-                that.data.rows = result.pageSize.pageSize;
-            }
-            that.actions.initPagination();
-        });
-        HTTP.flush();
+        this.actions._getPreferences();
     },
     beforeDestory:function () {
         

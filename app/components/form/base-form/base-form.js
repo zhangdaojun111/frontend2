@@ -123,16 +123,15 @@ let config = {
 				if (newDataFromSongrid.hasOwnProperty(songridDfield)) {
 					this.data.idsOfSonDataByParent.push(songridDfield);
 					let dinput_type = newDataFromSongrid[songridDfield]["dinput_type"] || "";
-					let options = [{value: val, label: val}];
 					if (FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
-						let options = [{value: val, label: val}];
+						let options = [$.type(val)=='object' ?{value:val.value,label:val.label}:{value: val, label: val}];
 						this.data.data[songridDfield]["options"] = options;
 						if (this.data.childComponent[songridDfield]) {
 							this.data.childComponent[songridDfield].data["options"] = options;
 						}
 					}
 					if (val || val == '') {
-						this.actions.setFormValue(songridDfield, val);
+						this.actions.setFormValue(songridDfield, $.type(val)=='object' ?val.value:val);
 					}
 					// this.actions.triggerSingleControl(songridDfield);
 				}
@@ -1518,7 +1517,7 @@ let config = {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
 			}
 			if (this.data["frontend_cal_parent_2_child"]) {
-				window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
+				this.actions.saveParentFormValue();
 			}
 			if (!this.data.isInit && !noCount) {
 				console.log('getDataForForm');
@@ -1791,7 +1790,7 @@ let config = {
 			}
 			//保存父表数据
 			this.data.data[data['dfield']].total = data['total'];
-			window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
+			this.actions.saveParentFormValue();
 		},
 		//打开统计穿透
 		openCount(data) {
@@ -1949,7 +1948,7 @@ let config = {
 					_this.actions.setCountData(data.dfield);
 				}
 			}
-			window.top.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
+			this.actions.saveParentFormValue();
 		},
 
 		openType1SongGrid(_this,data,isView){
@@ -2320,9 +2319,6 @@ let config = {
 						break;
 				}
 			}
-			$(function () {
-				$("#form-paging-tabs-control").tabs();
-			});
 		},
 
 		//改变人员信息表主岗选项
@@ -2421,6 +2417,11 @@ let config = {
 			window.top.isSonGridDataNeedParentTepmId = this.data.data['temp_id'] && this.data.data['temp_id']['value']?this.data.data['temp_id']['value'] : '';
 		},
 		formStyle(){
+			if(this.data.userInfoDfields){
+				for(let dfiled of this.data.userInfoDfields){
+					this.el.find(`[data-dfield=${dfiled}]`).parent().parent().remove();
+				}
+			}
 			//默认表单样式
 			if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
 				this.el.find('table').parents('.form-print-position').css("margin-bottom","40px");
@@ -2450,13 +2451,30 @@ let config = {
 					this.actions.setFormValue(k,val)
 				}
 			}
-			window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
+			this.actions.saveParentFormValue();
 			this.actions.formStyle();
 			this.data.isInit = false;
 		},
+		saveParentFormValue(){
+			let formValue=this.actions.createFormValue(this.data.data);
+			for(let dfield in formValue){
+				let data=this.data.data[dfield];
+				if (data.type == 'Buildin' || data.type == 'Select' || data.type=='Radio') {
+					formValue[dfield]={value:formValue[dfield]};
+					formValue[dfield].label = this.actions.getTextByOptionID(data.dfield, formValue[dfield].value);
+				}
+			}
+			window.top.frontendParentFormValue[this.data.tableId] = formValue;
+		},
+		//生成表单分页
+		createFormTabs(){
+			this.el.find("#form-paging-tabs-control").tabs();
+		}
 	},
 	afterRender() {
         this.actions.initForm();
+        //生成表单分页
+		this.actions.createFormTabs();
 	},
 
 	firstAfterRender(){

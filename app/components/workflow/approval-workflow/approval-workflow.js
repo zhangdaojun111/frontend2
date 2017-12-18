@@ -308,7 +308,7 @@ let config={
 			let _this=this;
 			PMAPI.openDialogByIframe(`/iframe/addSigner/`,{
 				width:1000,
-				height:800,
+				height:600,
 				title:`加签节点`,
 				modal:true
 			}).then(res=>{

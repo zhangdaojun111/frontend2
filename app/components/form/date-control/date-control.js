@@ -13,40 +13,30 @@ import msgbox from '../../../lib/msgbox';
 let config = {
     template: template,
     data:{
+        isClick : false,
     },
     actions: {
-        //时间日期输入错误提示，暂时先去掉
-        // keyup: function () {
-        //     let _this = this;
-        //     //YYYY-MM-DD
-        //     let strDate = this.el.find(".date_yy-mm-dd").val();
-        //
-        //     let  re =/^(\d{4})-(\d{2})-(\d{2})$/;
-        //     if(re.test(strDate))//判断日期格式符合YYYY-MM-DD标准
-        //     {
-        //         let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
-        //         console.log(dateElement);
-        //
-        //         if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3))))//判断日期逻辑
-        //         {
-        //             //   this.el.find("#errorMessage").css("display","inline-block").innerText = "时间格式不正确,正确格式为: 2017-09-01";
-        //         } else{
-        //             this.el.find("#errorMessage").css("display","none");
-        //
-        //             if(!_this.data.isAgGrid){
-        //                 _this.data.value = strDate;
-        //                 _.debounce(function () {
-        //                     _this.events.changeValue(_this.data)
-        //                 }, 200)();
-        //             }
-        //
-        //         }
-        //     }
-        //     else{
-        //
-        //         // this.el.find("#errorMessage").css("display","inline-block").text("时间格式不正确,正确格式为: 2017-09-01") ;
-        //     }
-        // }
+        dateVaild: function (val) {
+            let _this = this;
+            let  re =/^(\d{4})-(\d{2})-(\d{2})$/;
+            if(!this.data.isClick){
+                if(re.test(val)){
+                    let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
+                    if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3)))){//判断日期逻辑
+                        msgbox.alert('日期的标准格式为yyyy-mm-dd，请修改')
+                    } else{
+                        if(!_this.data.isAgGrid){
+                            _this.data.value = val;
+                            _.debounce(function () {
+                                _this.events.changeValue(_this.data)
+                            }, 200)();
+                        }
+                    }
+                }else{
+                    msgbox.alert('日期的标准格式为yyyy-mm-dd，请修改')
+                }
+            }
+        }
     },
     binds: [
         {
@@ -57,16 +47,31 @@ let config = {
             }
         },
         {
+            event: 'blur',
+            selector: '.date-control',
+            callback: function () {
+                let val = this.el.find(".date_yy-mm-dd").val();
+                this.actions.dateVaild(val);
+            }
+        },
+        {
             event: 'click',
             selector: '.date_yy-mm-dd',
             callback: function () {
+                let _this = this;
                 let e = new Date();
                 let year = e.getFullYear();
                 let month = (e.getMonth() + 101 + "").slice(1);
                 let day = (e.getDate() + 100 + "").slice(1);
                 let str = year + "-" + month + "-" + day;
-                if (!this.data.value || (this.data.value == '请选择')) {
-                    this.el.find(".date_yy-mm-dd").val(str);
+                if (!_this.data.value || (_this.data.value == '请选择')) {
+                    _this.el.find(".date_yy-mm-dd").val(str);
+                    if(!_this.data.isAgGrid){
+                        _this.data.value = str;
+                        _.debounce(function () {
+                            _this.events.changeValue(_this.data)
+                        }, 200)();
+                    }
                 }
             }
         },
@@ -115,11 +120,14 @@ let config = {
             dateFormat: "yy-mm-dd",
             yearRange:"1900:2999",
             defaultDate: new Date(_this.data.value),
-            showOn: 'both',//设置触发选择器为button/focus
+            showOn: 'button',//设置触发选择器为button/focus
             //buttonImage:"../../../assets/images/form/icon-rili.png",
             buttonImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsSAAALEgHS3X78AAAAbElEQVQ4y6VT0QoAIQibR9/qP+XP7p68h7C0cxDEYsrYEpLo4IlIM2OFA4CxPqqqrKKIc35Ewgrng0IL1WGfhZPHDCPbsMPRQitGM6NP393THlyBJOacJImb45qyhasq/4oxirMSbbtI0v3OL3+8d/U3+COTAAAAAElFTkSuQmCC",
             buttonImageOnly: true,
             showOtherMonths: true, //填充没有显示的单元格，但无法使用
+            beforeShow : function(){
+                _this.data.isClick = true;
+            },
             //向外弹射操作后的值
             onSelect: function (selectTime, text) {
                 _this.el.find("#errorMessage").css("display","none");
@@ -164,6 +172,7 @@ let config = {
                 } else {
                     console.error('数据错误，该项应该有名为isAllowChooseBefore的属性！', 'date-control');
                 }
+                _this.data.isClick = false;
             },
             onClose: function(selectTime) {
                 let _selectTime = $.trim(selectTime);
@@ -232,9 +241,6 @@ let config = {
                 }
             },
         });
-        // _this.el.find('.date_yy-mm-dd').on('input', _.debounce(function () {
-        //     _this.actions.keyup();
-        // }, 200));
     },
     beforeDestory: function () {
         this.el.off();

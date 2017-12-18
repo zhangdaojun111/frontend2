@@ -29,7 +29,6 @@ export class EchartsService {
      * @param chart = cellChart['chart']数据
      */
     getEchartsOption(cellChart) {
-        console.log(cellChart);
         const chartType = cellChart['chart']['assortment'] || '';
         let option = {};
         switch (chartType) {
@@ -96,10 +95,10 @@ export class EchartsService {
         let isStack = false; // 判断是否堆叠
 
         yAxis.forEach((y,i) => {
-           // 判断是否是堆叠情况
-           if (cellOption.yAxis[i] && cellOption.yAxis[i]['group']) {
-               isStack = true;
-           }
+            // 判断是否是堆叠情况
+            if (cellOption.yAxis[i] && cellOption.yAxis[i]['group']) {
+                isStack = true;
+            }
             legend.push(y[nameType]);
             if (nameType === 'new_name') {
                 if (Array.isArray(ySelectedGroup) && ySelectedGroup.length > 0) {
@@ -135,7 +134,7 @@ export class EchartsService {
                         width: 1
                     }
                 },
-                areaStyle:(cellOption.yAxis[i] && cellOption.yAxis[i].areaStyle==1)?{normal: {}}:{},
+                areaStyle:(cellOption.chartAssignment && cellOption.chartAssignment.val)? {normal: {}} : (cellOption.yAxis[i] && cellOption.yAxis[i].areaStyle==1)?{normal: {}}:{},
                 stack:cellOption.yAxis[i] && cellOption.yAxis[i]['group'] || '',
                 label: (cellOption.yAxis[i] && cellOption.yAxis[i]['label']==1)?
                     {normal: {
@@ -253,7 +252,7 @@ export class EchartsService {
                 }
             } else {
                 linebarOption['yAxis'][0]['max'] = isStack ? null : firstMax;
-                linebarOption['yAxis'][0]['min'] = isStack ? null : 0;
+                linebarOption['yAxis'][0]['min'] = isStack && firstMin < 0 ? null : 0;
                 linebarOption['yAxis'].push({
                     type: 'value',
                     inverse: false,

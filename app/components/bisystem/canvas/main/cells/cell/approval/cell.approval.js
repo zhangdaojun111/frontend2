@@ -35,7 +35,7 @@ let config = {
                     data-tableId="${item.table_id}" 
                     data-recordId="${item.id}" 
                     data-formId="${item.form_id}"
-                    data-flowId="${item.flow_id}">${item.name}</li><br>`
+                    data-flowId="${item.flow_id}"><div style="width: ${item.record_progress*100 + '%'}">${item.name}</div></li><br>`
             })
             html += `</ul>`;
             this.el.find('#'+this.data.id).html(html);

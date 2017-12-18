@@ -75,13 +75,7 @@ export const progressConfig = {
                     }
                 });
                 if($(this.el.find('.process-item')).length == 0){
-                    PMAPI.sendToSelf({
-                        type: PMENUM.close_dialog,
-                        key: this.key,
-                        data: {
-                            confirm: true
-                        }
-                    })
+                    this.actions.closeDialog();
                 }
             }
         }
@@ -120,15 +114,18 @@ export const progressConfig = {
         closeDialogDelay:function () {
             setTimeout(()=>{
                 if($(this.el.find('.process-bottle')).length == 0){
-                PMAPI.sendToSelf({
-                    type: PMENUM.close_dialog,
-                    key: this.key,
-                    data: {
-                        confirm: true
-                    }
-                })
-            }
-        },2000);
+                    this.actions.closeDialog();
+                }
+            },2000);
+        },
+        closeDialog:function () {
+            PMAPI.sendToSelf({
+                type: PMENUM.close_dialog,
+                key: this.key,
+                data: {
+                    confirm: true
+                }
+            });
         }
     },
     afterRender:function () {

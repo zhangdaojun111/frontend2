@@ -45,18 +45,18 @@ let TreeView = Component.extend({
                 })
             },500)
     }],
-    actions:{},
+    actions:{
+        _showOrHide(flag,selector){
+            if(!flag){
+                this.el.find(selector).hide();
+            } else {
+                this.el.find(selector).show();
+            }
+        }
+    },
     afterRender:function () {
-        if(!this.data.options.isSearch){
-            this.el.find('.search-in-tree-box').hide();
-        } else {
-            this.el.find('.search-in-tree-box').show();
-        }
-        if(!this.data.options.withButtons){
-            this.el.find('.buttons-in-tree').hide();
-        } else {
-            this.el.find('.buttons-in-tree').show();
-        }
+        this.actions._showOrHide(this.data.options.isSearch,'.search-in-tree-box');
+        this.actions._showOrHide(this.data.options.withButtons,'.buttons-in-tree');
         if(this.data.options.treeName){
             this.el.addClass(this.data.options.treeName);
         }
