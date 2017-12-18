@@ -28,11 +28,10 @@ let GlobalSearch =Component.extend({
          * 获取用户历史搜索记录数据，初始化记录列表
          */
         getData:function () {
-            let that = this;
             UserInfoService.getSearchHistory().done((result) => {
                 if(result.success === 1){
-                    that.data.historyList = $.parseJSON(result.data);
-                    that.actions.initList();
+                    this.data.historyList = $.parseJSON(result.data);
+                    this.actions.initList();
                 }else{
                     console.log("get search history failed");
                 }
@@ -49,16 +48,13 @@ let GlobalSearch =Component.extend({
             $listParent.empty();
             for( let k of temp){
                 let $li = $("<li class='record-item'>");
-                $li.attr('data_content',k.content)
-                    .attr('data_index',k.index);
+                $li.attr('data_content',k.content).attr('data_index',k.index);
 
                 let $content = $("<span class='record-content'>");
-                $content.attr("operate","search");
-                $content.html(k.content);
+                $content.attr("operate","search").html(k.content);
 
                 let $delete = $("<span class='delete-icon'>");
-                $delete.attr("operate","delete");
-                $delete.html('×');
+                $delete.attr("operate","delete").html('×');
 
                 $li.append($content);
                 $li.append($delete);
@@ -115,6 +111,15 @@ let GlobalSearch =Component.extend({
          * 添加搜索记录
          */
         addSearchHistory(){
+            this.actions._calHistoryList();
+            this.actions.initList();
+            //向后台更新历史搜索记录
+            UserInfoService.saveGlobalSearchHistory(this.data.historyList).done((result) => {
+            }).fail((err) => {
+                console.log("historyList save failed",err);
+            })
+        },
+        _calHistoryList:function () {
             let content = this.data.searchContent;
             if(content && content !== ""){
                 //删除重复历史记录，保证新查询的记录在最前面
@@ -134,12 +139,6 @@ let GlobalSearch =Component.extend({
                     this.data.historyList[i].index = i;
                 }
             }
-            this.actions.initList();
-            //向后台更新历史搜索记录
-            UserInfoService.saveGlobalSearchHistory(this.data.historyList).done((result) => {
-            }).fail((err) => {
-                console.log("historyList save failed",err);
-            })
         },
         /**
          * 手动删除一条历史记录
@@ -224,37 +223,46 @@ let GlobalSearch =Component.extend({
          */
         myKeyDown:function (event) {
             if(event.keyCode === 13){       //回车，进行搜索
-                let content_first = this.el.find('.search-content').val();
-                if(content_first){
-                    this.data.searchContent = content_first
-                }else if(this.data.selectNum >= 0){
-                    this.data.searchContent = this.data.historyList[this.data.selectNum].content;
-                }else{
-                    this.data.searchContent = "";
-                }
-                this.actions.doSearch();
-                this.data.selectNum = -1;
+                this.actions._search();
             }else if(event.keyCode === 40){
-                this.data.selectNum++;
-                let $list = this.el.find('.history-list');
-                $list.find('.record-item').removeClass('item-selected');
-                if(this.data.selectNum === this.data.historyList.length){
-                    this.data.selectNum = 0;
-                }
-                let selected_content = this.data.historyList[this.data.selectNum].content;
-                $list.find(`li[data_content = ${selected_content}]`).addClass('item-selected');
+                this.actions._next();
             }else if(event.keyCode === 38){
-                this.data.selectNum--;
-                let $list = this.el.find('.history-list');
-                $list.find('.record-item').removeClass('item-selected');
-                if(this.data.selectNum < 0){
-                    this.data.selectNum = this.data.historyList.length - 1 ;
-                }
-                let selected_content = this.data.historyList[this.data.selectNum].content;
-                $list.find(`li[data_content = ${selected_content}]`).addClass('item-selected');
+                this.actions._preview();
             }else{
 
             }
+        },
+        _search:function () {
+            let content_first = this.el.find('.search-content').val();
+            if(content_first){
+                this.data.searchContent = content_first
+            }else if(this.data.selectNum >= 0){
+                this.data.searchContent = this.data.historyList[this.data.selectNum].content;
+            }else{
+                this.data.searchContent = "";
+            }
+            this.actions.doSearch();
+            this.data.selectNum = -1;
+        },
+        _next:function () {
+            this.data.selectNum++;
+            let $list = this.el.find('.history-list');
+            $list.find('.record-item').removeClass('item-selected');
+            if(this.data.selectNum === this.data.historyList.length){
+                this.data.selectNum = 0;
+            }
+            let selected_content = this.data.historyList[this.data.selectNum].content;
+            $list.find(`li[data_content = ${selected_content}]`).addClass('item-selected');
+        },
+        _preview:function () {
+            this.data.selectNum--;
+            let $list = this.el.find('.history-list');
+            $list.find('.record-item').removeClass('item-selected');
+            if(this.data.selectNum < 0){
+                this.data.selectNum = this.data.historyList.length - 1 ;
+            }
+            let selected_content = this.data.historyList[this.data.selectNum].content;
+            $list.find(`li[data_content = ${selected_content}]`).addClass('item-selected');
         },
         /**
          * 指向清除所有历史记录时，取消所有历史记录样式
@@ -331,23 +339,6 @@ let GlobalSearch =Component.extend({
     afterRender:function () {
         this.actions.getData();
         this.data.globalSearchOpen = window.config.sysConfig.logic_config.use_search.toString();        //设置用户权限
-        // this.el.on("click","i.search-icon", _.debounce(() => {
-        //     this.actions.doSearch();
-        // },500)).on('input','.search-content',(event) => {
-        //     this.actions.setSearchContent(event);
-        // }).on('mousedown','.record-item',(event) => {
-        //     this.actions.dealRecordClick(event);
-        // }).on("click",".delete-all-history", () => {
-        //     this.actions.isDeleteAllHistory();
-        // }).on('focus','.search-content',() => {
-        //     this.actions.showHistoryList();
-        // }).on('blur','.global-search-main',(event) => {
-        //     this.actions.hideHistoryList(event);
-        // }).on('keydown','.search-content',(event) => {
-        //     this.actions.myKeyDown(event);
-        // }).on('mouseenter','li.record-item',(event) => {
-        //     this.actions.setItemHover(event);
-        // })
     },
     beforeDestroy:function () {
 

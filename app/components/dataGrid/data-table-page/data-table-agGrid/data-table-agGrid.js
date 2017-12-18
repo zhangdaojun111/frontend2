@@ -1483,7 +1483,8 @@ let dataTableAgGrid = Component.extend({
                 for(let j of this.data.rowData){
                     for(let k in this.data.parentBuiltinData){
                         if(!j[this.data.parentBuiltinData[k]]&&k!='temp_id'&&window.top.frontendParentFormValue[this.data.parentTableId]){
-                            j[this.data.parentBuiltinData[k]] = window.top.frontendParentFormValue[this.data.parentTableId][k];
+                            // j[this.data.parentBuiltinData[k]] = window.top.frontendParentFormValue[this.data.parentTableId][k];
+                            j[this.data.parentBuiltinData[k]] = window.top.frontendParentFormValue[this.data.tableId][this.data.parentBuiltinData[k]];
                         }
                     }
                 }

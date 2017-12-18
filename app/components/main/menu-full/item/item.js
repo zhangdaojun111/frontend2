@@ -40,44 +40,50 @@ let FullMenuItem = Component.extend({
          */
         onItemClickAtFull: function (event) {
             if (this.data.items && this.data.items.length) {
-                if (this.data.type === 'full') {
-                    if (this.data.display === true) {
-                        this.actions.hideChildrenAtFull();
-                    } else {
-                        this.actions.showChildrenAtFull();
-                    }
-                }
-                if (this.data.ts_name == '' && this.data.table_id == "0") {
-                    return;
-                }
-                if (this.data.url && this.data.url !== ''){
-                    Mediator.emit('menu:item:openiframe', {
-                        id: this.data.namespace,
-                        name: this.data.label,
-                        url: this.data.url,
-                        flag:false,
-                    });
-                }
+                this.actions._expandItems();
             } else {
-                //编辑模式下不再打开tab
-                if(event.currentTarget.className.indexOf('edit') > 0){
-                    return;
+                this.actions._loadIframe();
+            }
+        },
+        _expandItems:function () {
+            if (this.data.type === 'full') {
+                if (this.data.display === true) {
+                    this.actions.hideChildrenAtFull();
+                } else {
+                    this.actions.showChildrenAtFull();
                 }
-                if (this.data.ts_name == '' && this.data.table_id == "0") {
-                    return;
-                }
-                let key;
-                if (this.data.table_id && this.data.table_id !== '' && this.data.table_id !== "0") {
-                    key = this.data.table_id;
-                }else{
-                    key = this.data.ts_name;
-                }
+            }
+            if (this.data.ts_name == '' && this.data.table_id == "0") {
+                return;
+            }
+            if (this.data.url && this.data.url !== ''){
                 Mediator.emit('menu:item:openiframe', {
-                    id: key,
+                    id: this.data.namespace,
                     name: this.data.label,
-                    url: this.data.url
+                    url: this.data.url,
+                    flag:false,
                 });
             }
+        },
+        _loadIframe:function () {
+            //编辑模式下不再打开tab
+            if(event.currentTarget.className.indexOf('edit') > 0){
+                return;
+            }
+            if (this.data.ts_name == '' && this.data.table_id == "0") {
+                return;
+            }
+            let key;
+            if (this.data.table_id && this.data.table_id !== '' && this.data.table_id !== "0") {
+                key = this.data.table_id;
+            }else{
+                key = this.data.ts_name;
+            }
+            Mediator.emit('menu:item:openiframe', {
+                id: key,
+                name: this.data.label,
+                url: this.data.url
+            });
         },
         /**
          * 迷你菜单模式下
@@ -89,7 +95,6 @@ let FullMenuItem = Component.extend({
                 //获取文档高度
                 let documentHeight= $(document).height();
 				let position = $(event).position();
-                let screenHeight = $('body').height();
                 let parentPos = $(event).parent().css('position') == 'fixed'?($(event).parent().position()):{top:0,left:0};
                 let top = position.top + parentPos.top;
 				let left = position.left + parentPos.left + Math.ceil($(event).outerWidth());
@@ -224,6 +229,22 @@ let FullMenuItem = Component.extend({
                 || this.data.name_py.indexOf(inputWithoutSpace)!=-1);
         },
         filter: function (input,isParentFiltered,isSiblingsFiltered) {
+            let isFiltered = this.actions._hideOrShowNode(input,isParentFiltered,isSiblingsFiltered);
+            let isChildFiltered = false;
+            this.data.listComp.forEach(childNode=>{
+                isChildFiltered = isChildFiltered || childNode.actions.isFilteredNode(input);
+            });
+            let isOffspringsFiltered = false;
+            this.data.listComp.forEach(childNode=>{
+                isOffspringsFiltered = childNode.actions.filter(input,isFiltered,isChildFiltered) || isOffspringsFiltered;
+            });
+            if(isOffspringsFiltered){//如果子孙中有节点选中，则父节点也需显示
+                this.el.show();
+                this.el.find('> .childlist').show();
+            }
+            return isFiltered||isOffspringsFiltered;
+        },
+        _hideOrShowNode:function (input,isParentFiltered,isSiblingsFiltered) {
             let isFiltered = false;
             if(input.replace(/\s/g, '')==''){
                 this.el.show();
@@ -239,19 +260,53 @@ let FullMenuItem = Component.extend({
                     this.el.hide();
                 }
             }
-            let isChildFiltered = false;
-            this.data.listComp.forEach(childNode=>{
-                isChildFiltered = isChildFiltered || childNode.actions.isFilteredNode(input);
-            });
-            let isOffspringsFiltered = false;
-            this.data.listComp.forEach(childNode=>{
-                isOffspringsFiltered = childNode.actions.filter(input,isFiltered,isChildFiltered) || isOffspringsFiltered;
-            });
-            if(isOffspringsFiltered){//如果子孙中有节点选中，则父节点也需显示
-                this.el.show();
-                this.el.find('> .childlist').show();
+            return isFiltered;
+        },
+        _loadChild:function () {
+            if (this.data.items) {
+                this.data.items.forEach((data) => {
+                    let newData = _.defaultsDeep({}, data, {
+                        root: false,
+                        offset: this.data.offset + 20,
+                        type: this.data.type
+                    });
+
+                    let component = new FullMenuItem({data:newData,events:{
+                            onSubCheckboxChange: (value) => {
+                                this.actions.checkChildrenChecked();
+                            }
+                        }});
+                    this.append(component, this.childlist, 'li');
+                    this.data.listComp.push(component);
+                });
             }
-            return isFiltered||isOffspringsFiltered;
+        },
+        _calOffset:function () {
+            if (this.data.root !== true) {
+                if (this.data.type === 'full') {
+                    let offset = this.data.offset;
+                    if (this.data.items) {
+                        offset = this.data.offset - 20;
+                    }
+                    this.data.fullOffsetLeft = offset + 20;
+                    this.row.css({
+                        'padding-left':  this.data.fullOffsetLeft + 'px'
+                    })
+                }
+            }
+        },
+        _setLeaf:function () {
+            if (_.isUndefined(this.data.items)) {
+                if (this.data.table_id && this.data.table_id !== '' && this.data.table_id !== "0") {
+                    this.data.key = this.data.table_id;
+                }else{
+                    this.data.key = this.data.ts_name;
+                }
+                if (window.config.commonUse.data.indexOf(this.data.key) !== -1) {
+                    this.actions.onCheckboxChange({checked: true});
+                }
+                this.ownCheckbox.addClass('leaf').attr('key', this.data.key);
+            }
         }
     },
     binds: [
@@ -298,52 +353,13 @@ let FullMenuItem = Component.extend({
         this.iconWrap = this.el.find('> .menu-full-item > .row > .icon');
         this.icon = this.iconWrap.find('> .ui-icon');
         this.row.addClass(this.data.type);
-        let that = this;
         if (this.data.type === 'full') {
             this.el.off('mouseenter');
             this.el.off('mouseleave');
         }
-
-        if (_.isUndefined(this.data.items)) {
-            if (this.data.table_id && this.data.table_id !== '' && this.data.table_id !== "0") {
-                this.data.key = this.data.table_id;
-            }else{
-                this.data.key = this.data.ts_name;
-            }
-            if (window.config.commonUse.data.indexOf(this.data.key) !== -1) {
-                this.actions.onCheckboxChange({checked: true});
-            }
-            this.ownCheckbox.addClass('leaf').attr('key', this.data.key);
-        }
-        if (this.data.items) {
-            this.data.items.forEach((data) => {
-                let newData = _.defaultsDeep({}, data, {
-                    root: false,
-                    offset: this.data.offset + 20,
-                    type: this.data.type
-                });
-
-                let component = new FullMenuItem({data:newData,events:{
-                    onSubCheckboxChange: function (value) {
-                        that.actions.checkChildrenChecked();
-                    }
-                }});
-                this.append(component, this.childlist, 'li');
-                this.data.listComp.push(component);
-            });
-        }
-        if (this.data.root !== true) {
-            if (this.data.type === 'full') {
-                let offset = this.data.offset;
-                if (this.data.items) {
-                    offset = this.data.offset - 20;
-                }
-                this.data.fullOffsetLeft = offset + 20;
-                this.row.css({
-                    'padding-left':  this.data.fullOffsetLeft + 'px'
-                })
-            }
-        }
+        this.actions._setLeaf();
+        this.actions._loadChild();
+        this.actions._calOffset();
         if (this.data.expandChild) {
             // this.data.expandChild = true;
             this.childlist.show();

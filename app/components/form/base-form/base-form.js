@@ -2418,6 +2418,11 @@ let config = {
 			window.top.isSonGridDataNeedParentTepmId = this.data.data['temp_id'] && this.data.data['temp_id']['value']?this.data.data['temp_id']['value'] : '';
 		},
 		formStyle(){
+			if(this.data.userInfoDfields){
+				for(let dfiled of this.data.userInfoDfields){
+					this.el.find(`[data-dfield=${dfiled}]`).parent().parent().remove();
+				}
+			}
 			//默认表单样式
 			if (this.el.find('table').hasClass('form-version-table-user') || this.el.find('table').hasClass('form-version-table-department')){
 				this.el.find('table').parents('.form-print-position').css("margin-bottom","40px");
@@ -2447,7 +2452,14 @@ let config = {
 					this.actions.setFormValue(k,val)
 				}
 			}
-			window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
+			let formValue=this.actions.createFormValue(this.data.data);
+			for(let dfield in formValue){
+				let data=this.data.data[dfield];
+				if (data.type == 'Buildin' || data.type == 'Select' || data.type=='Radio') {
+					formValue[dfield] = this.actions.getTextByOptionID(data.dfield, formValue[dfield]);
+				}
+			}
+			window.top.frontendParentFormValue[this.data.tableId] = formValue;
 			this.actions.formStyle();
 			this.data.isInit = false;
 		},

@@ -44,7 +44,6 @@ let PasswordInput = Component.extend({
             let $capitalTip = this.el.find('.caps-lock-tips');
             let keyCode = e.keyCode;
             let isShift = e.shiftKey || (keyCode === 16 ) || false;
-
             if((( keyCode >= 65 && keyCode <= 90 ) && !isShift ) || (( keyCode >= 97 && keyCode <= 122 ) && isShift )){
                 $capitalTip.show();
                 this.data.isCapsLockOpen = true;
@@ -78,28 +77,26 @@ let PasswordInput = Component.extend({
         checkPswLegal:function () {
             this.data.password_value = this.el.find('.set-password-input').val();
             this.el.find('.caps-lock-tips').hide();
-
             //密码不能为空
             if(this.data.password_value === ''){
-                this.el.find('.input-password-warning').html('密码不能为空，请修改');
-                this.data.isLegal = false;
+                this.actions.setWarning('密码不能为空，请修改');
                 return;
             }
             //非法字符检测
-            if(this.data.checkChar === true){
-                if(this.actions.checkLegalChar(this.data.password_value) === false){
-                    this.el.find('.input-password-warning').html('密码中不能含有特殊字符，请修改');
-                    this.data.isLegal = false;
-                    return;
-                }
+            if(this.data.checkChar === true && this.actions.checkLegalChar(this.data.password_value) === false){
+                this.actions.setWarning('密码中不能含有特殊字符，请修改');
+                return;
             }
-
             if(this.actions.checkPwLength(this.data.password_value) === false){
-                this.el.find('.input-password-warning').html('密码长度必须为6-20位，请修改');
-                this.data.isLegal = false;
+                this.actions.setWarning('密码长度必须为6-20位，请修改');
                 return;
             }
             this.data.isLegal = true;
+        },
+        setWarning(msg){
+            console.log('here');
+            this.el.find('.input-password-warning').html(msg);
+            this.data.isLegal = false;
         },
         /**
          * 验证密码合法性0-9 a-z A-Z

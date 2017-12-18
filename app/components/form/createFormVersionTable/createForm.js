@@ -117,7 +117,7 @@ export const CreateForm={
         allData.data[form_data.department_whole]['main_depart']=_.defaultsDeep({},this.main_depart);
         allData.data[form_data.department_whole]['department']=_.defaultsDeep({},this.department);
         allData.data[form_data.department_whole]['form_department']=form_data['department'];
-
+	    let userInfoDfields=['f3','f6','f7','f9','f16','f11','f12','f14','f13','f15','f10'];
 
         for(let key in otherData){
             if(otherData[key].type !='Hidden'){
@@ -127,7 +127,15 @@ export const CreateForm={
                     <div data-dfield="${otherData[key].dfield}" data-type="${otherData[key].type}"></div>
                 </td></tr>`
             }
+            userInfoDfields.push(otherData[key].dfield);
         }
+
+        for(let key in allData.data){
+        	let index = userInfoDfields.indexOf(key);
+        	index!=-1?userInfoDfields.splice(index,1):'';
+        }
+        allData.userInfoDfields=userInfoDfields;
+
         html+=`</tbody>
             </table>
             <div data-dfield="temp_id" data-type="Hidden"></div>

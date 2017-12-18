@@ -39,50 +39,63 @@ let AsideComponent = Component.extend({
         presetCommonMenuData: function(menu, commonData) {
             let menuData = _.defaultsDeep([], menu);
             let commonKeys = commonData.data;
-            //递归设置该选项及其所有祖宗选项为常用
-            function setUsed(item) {
-                item.commonUsed = true;
-                if (item.parent) {
-                    setUsed(item.parent);
+            this.actions._step_one(menuData,commonKeys);
+            return this.actions._setp_two(menuData);
+        },
+        /**
+         * 递归设置该选项及其所有祖宗选项为常用
+         * @param item
+         * @private
+         */
+        _setUsed:function (item) {
+            item.commonUsed = true;
+            if (item.parent) {
+                this.actions._setUsed(item.parent);
+            }
+        },
+        /**
+         * 遍历全部菜单，为每个选项设置父节点引用，根据commonKeys将常用选项及其父节点设置常用属性为true
+         * @param menu
+         * @param parent
+         * @private
+         */
+        _step_one:function (menu,commonKeys,parent) {
+            menu.forEach((item) => {
+                item.parent = parent;
+                // let key = item.ts_name || item.table_id;
+                let key;
+                if (item.table_id && item.table_id !== '' && item.table_id !== "0") {
+                    key = item.table_id;
+                }else{
+                    key = item.ts_name || "0";
                 }
-            }
-            //遍历全部菜单，为每个选项设置父节点引用，根据commonKeys将常用选项及其父节点设置常用属性为true
-            function step_one(menu, parent) {
-                menu.forEach((item) => {
-                    item.parent = parent;
-                    // let key = item.ts_name || item.table_id;
-                    let key;
-                    if (item.table_id && item.table_id !== '' && item.table_id !== "0") {
-                        key = item.table_id;
-                    }else{
-                        key = item.ts_name || "0";
-                    }
-
-                    item.commonUsed = false;
-                    if (commonKeys.indexOf(key) !== -1) {
-                        setUsed(item);
-                    }
-                    if (item.items) {
-                        step_one(item.items, item);
-                    }
-                })
-            }
-            //遍历全部菜单，删除父节点引用，被设为常用的选项加入res，用于生成常用菜单
-            function setp_two(menu) {
-                let res = [];
-                menu.forEach((item) => {
-                    delete item.parent;
-                    if (item.commonUsed) {
-                        res.push(item);
-                    }
-                    if (item.items) {
-                        item.items = setp_two(item.items);
-                    }
-                });
-                return res;
-            }
-            step_one(menuData);
-            return setp_two(menuData);
+                item.commonUsed = false;
+                if (commonKeys.indexOf(key) !== -1) {
+                    this.actions._setUsed(item);
+                }
+                if (item.items) {
+                    this.actions._step_one(item.items,commonKeys,item);
+                }
+            })
+        },
+        /**
+         * 遍历全部菜单，删除父节点引用，被设为常用的选项加入res，用于生成常用菜单
+         * @param menu
+         * @returns {Array}
+         * @private
+         */
+        _setp_two:function(menu){
+            let res = [];
+            menu.forEach((item) => {
+                delete item.parent;
+                if (item.commonUsed) {
+                    res.push(item);
+                }
+                if (item.items) {
+                    item.items = this.actions._setp_two(item.items);
+                }
+            });
+            return res;
         },
         /**
          * 正常模式显示菜单
@@ -147,7 +160,9 @@ let AsideComponent = Component.extend({
             this.allBtn.removeClass('active');
             this.commonBtn.addClass('active');
             this.data.menuType = 'common';
-
+            this.actions._sendUserPreference();
+        },
+        _sendUserPreference:function () {
             if (window.config.commonUse.data.length > 0) {
                 HTTP.postImmediately('/user_preference/', {
                     action: "save",
@@ -181,10 +196,9 @@ let AsideComponent = Component.extend({
                 let $img = $("<img>").addClass("set-info");
                 $img.attr('src', src);
                 this.el.find("div.avatar").append($img);
-                let that = this;
-                $img.on('error', function () {
+                $img.on('error', () => {
                     $img.remove();
-                    that.el.find('.avatar').addClass('default-avatar');
+                    this.el.find('.avatar').addClass('default-avatar');
                 });
             }else{
                 this.el.find('.avatar').addClass('default-avatar');
