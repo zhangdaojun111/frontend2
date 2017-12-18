@@ -2236,6 +2236,11 @@ let config = {
 		},
 
 		createeditControlControl(data,key,single,actions){
+			if(this.data.btnType == 'new') {
+                data[key]['isAdd'] = true;
+			} else {
+                data[key]['isAdd'] = false;
+			}
 			data[key]['real_id'] = data['real_id']['value'];
 			data[key]['table_id'] = data['table_id']['value'];
 			data[key]['temp_id'] = data['temp_id']['value'];

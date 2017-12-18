@@ -11,15 +11,17 @@ import {Storage} from '../../../lib/storage';
 let config = {
     template:template,
     data: {
-        historyList:[]
+        historyList:[],
     },
     binds:[
         {
             event:'click',
             selector:'.contract-view',
             callback:function () {
-                this.data['mode']='view';
-                this.actions.openEditor('合同模板预览');
+                if(!this.data.isAdd) {
+                    this.data['mode'] = 'view';
+                    this.actions.openEditor('合同模板预览');
+                }
             }
         },{
             event:'click',
@@ -35,7 +37,7 @@ let config = {
             // let contractConfig = _.defaultsDeep({data:this.data},contractEditorConfig);
             PMAPI.openDialogByIframe(`/iframe/contractEditor/`, {
                 width: 1400,
-                height: 800,
+                height: 810,
                 title: title,
                 modal: true,
             }, {data:this.data}).then(res => {
@@ -75,6 +77,9 @@ let config = {
     afterRender:function () {
         if(this.data['is_view']){
             this.el.find('.contract-edit').css('display','none');
+        }
+        if(this.data.isAdd) {
+            this.el.find('.contract-view').eq(0).css({'color':'#999999'});
         }
         // let obj = {
         //     dfield: this.data.dfield,

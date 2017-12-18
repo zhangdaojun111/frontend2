@@ -1,6 +1,6 @@
 @import "../../../../assets/scss/core/base";
 .contract-editor{
-    height: 100%;
+    height: calc(100% - 61px);
     //position: relative;
     display: flex;
     overflow: hidden;
@@ -28,10 +28,11 @@
             border: 1px solid #D7D7D7;
             border-right: none;
             width: 250px;
+            position: relative;
             .history-template-list {
                 padding: 5px;
                 min-height: 150px;
-                & p{
+                & p {
                     line-height: 20px;
                     cursor: pointer;
                     &:hover {
@@ -39,7 +40,7 @@
                     }
                 }
             }
-            .select-template,.data-source-template{
+            .select-template, .data-source-template {
                 margin-bottom: 30px;
             }
             .contract-model {
@@ -48,67 +49,73 @@
                 margin-top: 5px;
                 margin-left: 5px;
             }
-            .instrument-template-item{
-                padding: 10px;
-                .instrument-template-item-title{
-                    display: inline-block;
-                    margin-right: 15px;
-                }
-                .instrument-template-input{
-                    display: inline-block;
-                    margin-right: 15px;
-                    cursor: pointer;
-                    & input{
-                        position: relative;
-                        top: 0px;
-                        width: 10px;
-                        height: 10px;
-                        &:before {
-                            position: absolute;
-                            width: 10px;
-                            content: ' ';
-                            height: 10px;
-                            left: 0px;
+            .instrument-template {
+                position: absolute;
+                bottom: 0px;
+                height: 150px;
+                width: 100%;
+                .instrument-template-item {
+                    padding: 10px;
+                    .instrument-template-item-title {
+                        display: inline-block;
+                        margin-right: 15px;
+                    }
+                    .instrument-template-input {
+                        display: inline-block;
+                        margin-right: 15px;
+                        cursor: pointer;
+                        & input {
+                            position: relative;
                             top: 0px;
-                            background-color: #fff;
-                            border: 1px solid #d7d7d7;
-                            cursor: pointer;
-                        }
-                        &.active{
-                            &:after {
+                            width: 10px;
+                            height: 10px;
+                            &:before {
                                 position: absolute;
-                                width: 8px;
+                                width: 10px;
                                 content: ' ';
-                                height: 8px;
-                                left: 2px;
-                                top: 2px;
-                                background-color: #0088ff;
+                                height: 10px;
+                                left: 0px;
+                                top: 0px;
+                                background-color: #fff;
+                                border: 1px solid #d7d7d7;
                                 cursor: pointer;
+                            }
+                            &.active {
+                                &:after {
+                                    position: absolute;
+                                    width: 8px;
+                                    content: ' ';
+                                    height: 8px;
+                                    left: 2px;
+                                    top: 2px;
+                                    background-color: #0088ff;
+                                    cursor: pointer;
+                                }
                             }
                         }
                     }
-                }
-                .instrument-template-btn {
-                    cursor: pointer;
-                    display: inline-block;
-                    width: 55px;
-                    text-align: center;
-                    height: 18px;
-                    line-height: 20px;
-                    border: solid 1px #797979;
-                    border-radius: 4px;
-                    margin-right: 8px;
-                    &.active{
-                        background-color: #fbf0d9
+                    .instrument-template-btn {
+                        cursor: pointer;
+                        display: inline-block;
+                        width: 55px;
+                        text-align: center;
+                        height: 18px;
+                        line-height: 20px;
+                        border: solid 1px #797979;
+                        border-radius: 4px;
+                        margin-right: 8px;
+                        &.active {
+                            background-color: #fbf0d9
+                        }
                     }
                 }
             }
-
         }
         .contract-container{
             border: 1px solid #D7D7D7;
             width: calc(100% - 250px);
             min-width: 600px;
+            height: calc(100% - 2px);
             .contract-container-title{
                 border-bottom: 1px solid #D7D7D7;
                 color: #999999;
@@ -117,7 +124,7 @@
                 background: #F2F2F2;
             }
             .contract-container-content{
-                height: 655px;
+                height: calc(100% - 7px);
                 margin: 4px;
                 .contract-tab-container {
                     height: 30px;
@@ -182,7 +189,7 @@
                     line-height: 15px;
                     font-size: 12px;
                     overflow-y: auto;
-                    height: 614px;
+                    height: calc(100% - 44px);
                     border: 1px solid #D7D7D7;
                     border-top: none;
                     & span {

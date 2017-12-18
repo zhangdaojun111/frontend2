@@ -2936,7 +2936,7 @@ let dataTableAgGrid = Component.extend({
                 // });
                 PMAPI.openDialogByIframe(`/iframe/contractEditor/`, {
                     width: 1400,
-                    height: 800,
+                    height: 810,
                     title: '合同查看',
                     modal: true,
                 }, {data:obj}).then(res => {

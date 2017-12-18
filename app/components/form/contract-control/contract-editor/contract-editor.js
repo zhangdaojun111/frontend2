@@ -176,6 +176,8 @@ let contractEditor = Component.extend({
         elementKeys: [],
         editingk2v: {},
         first: 1,
+        fontSize: 12,
+        lineHeight:3,
     },
     actions: {
         //加载各数据源选项
@@ -389,6 +391,8 @@ let contractEditor = Component.extend({
                         this.actions.showDifPattern();
                     }
                     this.data.first = 0;
+                }
+                if(!this.data.isAdd) {
                     this.hideLoading();
                 }
             })
@@ -425,7 +429,6 @@ let contractEditor = Component.extend({
             })
         },
         showHistoryList: function(){
-            debugger
             let obj = {
                 dfield: this.data.dfield,
                 table_id: this.data.table_id
@@ -501,18 +504,26 @@ let contractEditor = Component.extend({
             switch (name) {
                 case 'line-height':
                     if(size == 'big') {
-                        this.el.find('.contract-template-anchor').css({'line-height':'20px'});
+                        this.data.lineHeight = 8;
+                        this.el.find('.contract-template-anchor').css({'line-height':`${this.data.fontSize + this.data.lineHeight}px`});
                     } else if( size == 'normal') {
-                        this.el.find('.contract-template-anchor').css({'line-height':'15px'});
+                        this.data.lineHeight = 3;
+                        this.el.find('.contract-template-anchor').css({'line-height':`${this.data.fontSize + this.data.lineHeight}px`});
                     }
                     break;
                 case 'font-size':
                     if(size == 'mid') {
+                        this.data.fontSize = 14;
                         this.el.find('.contract-template-anchor').css({'font-size':'14px'});
+                        this.el.find('.contract-template-anchor').css({'line-height':`${this.data.fontSize + this.data.lineHeight}px`});
                     } else if( size == 'big') {
+                        this.data.fontSize = 16;
                         this.el.find('.contract-template-anchor').css({'font-size':'16px'});
+                        this.el.find('.contract-template-anchor').css({'line-height':`${this.data.fontSize + this.data.lineHeight}px`});
                     } else if( size == 'normal') {
+                        this.data.fontSize = 12;
                         this.el.find('.contract-template-anchor').css({'font-size':'12px'});
+                        this.el.find('.contract-template-anchor').css({'line-height':`${this.data.fontSize + this.data.lineHeight}px`});
                     }
                     break;
                 case 'back-ground':
@@ -606,6 +617,9 @@ let contractEditor = Component.extend({
                         this.actions.addTab();
                     }
                     this.actions._loadTemplateByIndex(0,true,false);
+                }
+                if(this.data.isAdd) {
+                    this.hideLoading();
                 }
             });
             //加载tab

@@ -1,16 +1,16 @@
 {% load client_version %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%">
 <head>
     <meta charset="UTF-8">
     <title>ERDS</title>
 </head>
-<body>
+<body style="height: 100%">
 <script>
     window.config = {{window_config|safe}}
 </script>
 
-<div id="contractEditor"></div>
+<div id="contractEditor" style="height: 100%"></div>
 
 {% ifequal window_type 'develop'%}
 <script type="text/javascript" src="http://localhost:8080/scripts/vendors.js"></script>
