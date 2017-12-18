@@ -943,7 +943,7 @@ let IframeComponent = Component.extend({
             this.actions.closeIframe('home');
             this.actions.openIframe(data.id, data.url, data.name, data.flag);
             this.actions.focusIframe(data.id);
-        })
+        });
 
         this.actions.loadHidingIframes();
 
