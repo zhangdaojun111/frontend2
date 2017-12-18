@@ -338,6 +338,8 @@ let config = {
     afterRender: function () {
         if(this.data.read_only){
             this.el.find('.file-btns').hide();
+            this.el.find('.upload-file').hide();
+            this.el.find('.shot-screen').hide();
             this.data.is_view = 1;
         }
         if (this.data.real_type == 33) {
