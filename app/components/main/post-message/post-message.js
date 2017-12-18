@@ -200,7 +200,7 @@ let PostMessage = Component.extend({
             });
             let user=window.config.sysConfig.userInfo;
             if(!user.is_superuser){
-            	if(!user.send_msg_perm){
+            	if(!window.config.send_msg_perm){
 		            msgbox.alert('您没有发送权限');
 		            return;
 	            }
@@ -211,10 +211,11 @@ let PostMessage = Component.extend({
             			for(let key1 in uData[key]){
             				depIDs.push(key1);
 			            }
+			            break;
 		            }
 	            }
 	            for(let id of choosedUsers){
-            		if(!(id in depIDs)){
+            		if(!(~depIDs.indexOf(id))){
             			msgbox.alert('请选择同部门人员');
             			return;
 		            }
