@@ -57,21 +57,16 @@ export const TabService = {
     },
 
     getOpeningTabs:function () {
-
+        //commonTabs获取未关闭tabs
         let url1 = 'get_opening_tabs';
-        let p1 = HTTP.get(url1);
+        let commonTabs = HTTP.get(url1);
 
-        // let url2 = 'user_preference';
-        // let json = {action:'get', pre_type:4};
-        // let p2 = HTTP.get(url2,json);
-        //
-        // let json2 = {action:'get', pre_type:5};
-        // let p3 = HTTP.get(url2,json2);
-        //
-        // let json3 = {action:'get', pre_type:10};
-        // let p4 = HTTP.get(url2,json3);
+        //specialTabs获取bi、日历、home的设置偏好，返回数组
+        let url2 = 'user_preference';
+        let json = {action:'get', pre_type:4};
+        let specialTabs = HTTP.get(url2,json);
 
-        let res = Promise.all([p1,p2,p3,p4]);
+        let res = Promise.all([commonTabs,specialTabs]);
         HTTP.flush();
         return res;
     }

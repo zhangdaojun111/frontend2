@@ -454,78 +454,78 @@ let IframeComponent = Component.extend({
                 console.log("get tabs failed", result.err);
             }
         },
-        _getBiList(result){
-            let biConfig;
-            if (result.succ === 1) {
-                biConfig = result;
-                //检测数据biConfig.data是否为两位数，如果不是（ng系统为1位数），给用户设置默认值10
-                if (biConfig.data !== "10" && biConfig.data !== "11" && biConfig.data !== "20" && biConfig.data !== "21") {
-                    biConfig.data = "10";
-                }
-                if ((biConfig.data && biConfig.data.toString() !== "10" && biConfig.data.toString() !== "20")) {
-                    this.data.biCalendarList.push({
-                        id: 'bi',
-                        name: 'BI',
-                        url: window.config.sysConfig.bi_index
-                    });
-                }
-                window.config.sysConfig.logic_config.client_login_show_bi = biConfig.data.toString();
-            } else {
-                console.log("get tabs failed", result.err);
-            }
-            return biConfig;
-        },
-        _getCalendarList(result){
-            let calendarConfig;
-            if (result.succ === 1) {
-                calendarConfig = result;
-                //检测数据calendarConfig.data是否为两位数，如果不是，给用户设置默认值20
-                if (calendarConfig.data !== "10" && calendarConfig.data !== "11" && calendarConfig.data !== "20" && calendarConfig.data !== "21") {
-                    calendarConfig.data = "20";
-                }
-                window.config.sysConfig.logic_config.client_login_show_calendar = calendarConfig.data.toString();
-                if ((calendarConfig.data && calendarConfig.data.toString() === "11")) {
-                    this.data.biCalendarList.unshift({
-                        id: 'calendar',
-                        name: '日历',
-                        url: window.config.sysConfig.calendar_index
-                    });
-                } else if ((calendarConfig.data && calendarConfig.data.toString() === "21")) {
-                    this.data.biCalendarList.push({
-                        id: 'calendar',
-                        name: '日历',
-                        url: window.config.sysConfig.calendar_index
-                    });
-                }
-            }
-            return calendarConfig;
-        },
-        _getBiCalendarFromConfig(biConfig,calendarConfig){
-            if ((biConfig.data === "10" || biConfig.data === "20") && (calendarConfig.data === "10" || calendarConfig.data === "20")) {
-                if (window.config.sysConfig.logic_config.login_show_bi === "1") {
-                    this.data.biCalendarList.push({
-                        id: 'bi',
-                        name: 'BI',
-                        url: window.config.sysConfig.bi_index
-                    });
-                }
-                if (window.config.sysConfig.logic_config.login_show_calendar === "1") {
-                    if ((calendarConfig.data && calendarConfig.data.toString() === "10")) {
-                        this.data.biCalendarList.unshift({
-                            id: 'calendar',
-                            name: '日历',
-                            url: window.config.sysConfig.calendar_index
-                        });
-                    } else if ((calendarConfig.data && calendarConfig.data.toString() === "20")) {
-                        this.data.biCalendarList.push({
-                            id: 'calendar',
-                            name: '日历',
-                            url: window.config.sysConfig.calendar_index
-                        });
-                    }
-                }
-            }
-        },
+        // _getBiList(result){
+        //     let biConfig;
+        //     if (result.succ === 1) {
+        //         biConfig = result;
+        //         //检测数据biConfig.data是否为两位数，如果不是（ng系统为1位数），给用户设置默认值10
+        //         if (biConfig.data !== "10" && biConfig.data !== "11" && biConfig.data !== "20" && biConfig.data !== "21") {
+        //             biConfig.data = "10";
+        //         }
+        //         if ((biConfig.data && biConfig.data.toString() !== "10" && biConfig.data.toString() !== "20")) {
+        //             this.data.biCalendarList.push({
+        //                 id: 'bi',
+        //                 name: 'BI',
+        //                 url: window.config.sysConfig.bi_index
+        //             });
+        //         }
+        //         window.config.sysConfig.logic_config.client_login_show_bi = biConfig.data.toString();
+        //     } else {
+        //         console.log("get tabs failed", result.err);
+        //     }
+        //     return biConfig;
+        // },
+        // _getCalendarList(result){
+        //     let calendarConfig;
+        //     if (result.succ === 1) {
+        //         calendarConfig = result;
+        //         //检测数据calendarConfig.data是否为两位数，如果不是，给用户设置默认值20
+        //         if (calendarConfig.data !== "10" && calendarConfig.data !== "11" && calendarConfig.data !== "20" && calendarConfig.data !== "21") {
+        //             calendarConfig.data = "20";
+        //         }
+        //         window.config.sysConfig.logic_config.client_login_show_calendar = calendarConfig.data.toString();
+        //         if ((calendarConfig.data && calendarConfig.data.toString() === "11")) {
+        //             this.data.biCalendarList.unshift({
+        //                 id: 'calendar',
+        //                 name: '日历',
+        //                 url: window.config.sysConfig.calendar_index
+        //             });
+        //         } else if ((calendarConfig.data && calendarConfig.data.toString() === "21")) {
+        //             this.data.biCalendarList.push({
+        //                 id: 'calendar',
+        //                 name: '日历',
+        //                 url: window.config.sysConfig.calendar_index
+        //             });
+        //         }
+        //     }
+        //     return calendarConfig;
+        // },
+        // _getBiCalendarFromConfig(biConfig,calendarConfig){
+        //     if ((biConfig.data === "10" || biConfig.data === "20") && (calendarConfig.data === "10" || calendarConfig.data === "20")) {
+        //         if (window.config.sysConfig.logic_config.login_show_bi === "1") {
+        //             this.data.biCalendarList.push({
+        //                 id: 'bi',
+        //                 name: 'BI',
+        //                 url: window.config.sysConfig.bi_index
+        //             });
+        //         }
+        //         if (window.config.sysConfig.logic_config.login_show_calendar === "1") {
+        //             if ((calendarConfig.data && calendarConfig.data.toString() === "10")) {
+        //                 this.data.biCalendarList.unshift({
+        //                     id: 'calendar',
+        //                     name: '日历',
+        //                     url: window.config.sysConfig.calendar_index
+        //                 });
+        //             } else if ((calendarConfig.data && calendarConfig.data.toString() === "20")) {
+        //                 this.data.biCalendarList.push({
+        //                     id: 'calendar',
+        //                     name: '日历',
+        //                     url: window.config.sysConfig.calendar_index
+        //                 });
+        //             }
+        //         }
+        //     }
+        // },
         _getHomeConfig(result){
             if (result.succ === 1) {
                 let homeConfig = result;
