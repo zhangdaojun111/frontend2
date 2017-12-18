@@ -76,6 +76,9 @@
                     padding: 16px 0px;
                     cursor: default;
                 }
+                .mini-form-btn i {
+                    margin: 0px 4px;
+                }
                 a {
                     display: flex;
                     align-items: center;
@@ -85,7 +88,7 @@
                     text-decoration: none;
                     color: #666;
                     margin-top: 4px;
-                    .icon-aggrid-new{
+                    .icon-aggrid-new {
                         margin: 0px 4px;
                     }
 
@@ -167,6 +170,20 @@
                 }
             }
         }
+    }
+    .miniFormAnim {
+        border: 1px solid #333333;
+        position: fixed;
+        top: 0;
+        z-index: 99;
+        animation:miniFormAnim 0.3s;
+        animation-fill-mode:forwards;
+    }
+    @keyframes miniFormAnim
+    {
+        0% { left:0px; width:1700px; height: 870px}
+        20%,90% {left:200px;top:10px; width:100px; height: 30px}
+        100% {left:200px;top:10px; width:0; height: 0; z-index: 0}
     }
 }
 
