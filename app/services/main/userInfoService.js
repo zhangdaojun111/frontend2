@@ -172,19 +172,16 @@ export const UserInfoService = {
         })
     },
     /**
-     * 保存用户快捷设置（快捷打开bi/日历/home）
+     * 保存用户快捷设置（快捷打开bi/日历/home）,以数组形式储存
      * @param json
      * @param json2
      * @returns {Promise.<*[]>|Promise<[any , any , any , any , any , any , any , any , any , any]>}
      */
     saveUserConfig:function (json) {
         let url = 'user_preference';
-
         let res = HTTP.post(url,json);
-        // let p2 = HTTP.post(url,json2);
-        // let p3 = HTTP.post(url,json3);
-
         HTTP.flush();
+
         return res;
     },
     /**

@@ -433,9 +433,8 @@ let IframeComponent = Component.extend({
                 this.actions._getOpenTabList(commonTabs);
                 //特殊标签（首页、日历、Bi）处理
                 let specialTabs = result[1];
-                specialTabs = this.data.defaultUserConfig;
                 this.actions._addSpecialTabs(specialTabs);
-                debugger;
+
                 //如果bi、calendar均未勾选，则参考后台bi、calendar自动开启设置
                 this.actions._getBiCalendarFromConfig();
 

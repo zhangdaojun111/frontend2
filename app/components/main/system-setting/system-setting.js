@@ -16,6 +16,8 @@ import Mediator from "../../../lib/mediator";
 import {ViewsService} from "../../../services/bisystem/views.service";
 import {config as viewDialogConfig} from "../../../components/bisystem/views/dialog/edit/dialog.edit";
 import {PMAPI} from '../../../lib/postmsg';
+import {dragBar} from "./drag-bar/drag-bar";
+import {TabService} from "../../../services/main/tabService";
 
 let SettingPage = Component.extend({
     template:template,
@@ -80,55 +82,91 @@ let SettingPage = Component.extend({
          * 获取用户快捷设置参数并解析
          */
         getItemData:function () {
-            let biStatus = window.config.sysConfig.logic_config.client_login_show_bi || "10";
-            this.data.biSort = biStatus.split('')[0];
-            this.data.biStatus = biStatus.split('')[1];
-
-            let calendarStatus = window.config.sysConfig.logic_config.client_login_show_calendar || "20";
-            this.data.calendarSort = calendarStatus.split('')[0];
-            this.data.calendarStatus = calendarStatus.split('')[1];
-
-            let homeStatus = window.config.sysConfig.logic_config.client_login_show_home || "000";
-            this.data.bi_view = homeStatus.substring(0,homeStatus.length - 1);
-            this.data.homeStatus = homeStatus.substring(homeStatus.length - 1);
-
-            this.actions.addCheckbox();
+            // let biStatus = window.config.sysConfig.logic_config.client_login_show_bi || "10";
+            // this.data.biSort = biStatus.split('')[0];
+            // this.data.biStatus = biStatus.split('')[1];
+            //
+            // let calendarStatus = window.config.sysConfig.logic_config.client_login_show_calendar || "20";
+            // this.data.calendarSort = calendarStatus.split('')[0];
+            // this.data.calendarStatus = calendarStatus.split('')[1];
+            //
+            // let homeStatus = window.config.sysConfig.logic_config.client_login_show_home || "000";
+            // this.data.bi_view = homeStatus.substring(0,homeStatus.length - 1);
+            // this.data.homeStatus = homeStatus.substring(homeStatus.length - 1);
+            //
+            // this.actions.addCheckbox();
+            let that = this;
+            TabService.getOpeningTabs().then((result) => {
+                //特殊标签（首页、日历、Bi）处理
+                that.data.config = result[1];
+                that.data.config = [         //默认快捷设置，用于兼容老用户或未设置快捷设置的用户
+                    {
+                        id: 'home',
+                        name: '首页',
+                        url: window.config.sysConfig.home_index,
+                        status:'000'
+                    },
+                    {
+                        id: 'bi',
+                        name: 'BI',
+                        url: window.config.sysConfig.bi_index,
+                        status:'1'
+                    },
+                    {
+                        id: 'calendar',
+                        name: '日历',
+                        url: window.config.sysConfig.calendar_index,
+                        status:'1'
+                    }
+                ];
+                that.actions.addDragBar(that.data.config);
+            });
         },
         /**
          * 根据用户设置的参数在bi前或后添加日历拖动框
          */
-        addCheckbox:function () {
-            let $parent = this.el.find('.sortable-box');
-            this.actions.addCalendarCheck($parent);
-            this.actions.addHomeCheck($parent);
-            this.actions.setCheckboxStatus();
-        },
-        addCalendarCheck:function ($parent) {
-            let $ul = $(`
-                <li class='isShow-calendar sort-item' title='拖动调整顺序'>
-                    <label class='custom-checkbox' style='display: inline'>
-                        <input class='calendar-Show' title='点击设置此功能' type='checkbox'>
-                    </label>
-                    <span>登录时自动开启日历</span>
-                    <i class='drag-icon icon-framework-drag'></i>
-                </li>`);
-            if(this.data.calendarSort === "1"){
-                $parent.append($ul);
-            }else{
-                $parent.prepend($ul);
+        addDragBar:function (specialTabs) {
+            let parent = this.el.find('.sortable-box');
+            console.log(specialTabs);
+            for(let config of specialTabs){
+                let comp = new dragBar({
+                    data:{
+                        name:config.name,
+                        status:config.status,
+                        id:config.id
+                    }
+                });
+                let container = $(`<li class="sort-item isShow-${config.id}" title="拖动调整顺序">`).appendTo(parent);
+                comp.render(container);
             }
+            this.actions.setBarsSortable();
         },
-        addHomeCheck:function ($parent) {
-            let home = $(`
-                <li class="isShow-home" title="不可拖动" draggable="false">
-                    <label class="custom-checkbox" style="display: inline">
-                        <input class="home-Show" title="点击设置此功能" type="checkbox" >
-                    </label>
-                    <span>登录时自动开启首页</span>
-                    <i class="drag-icon icon-framework-drag" style="display: none"></i>
-                </li>`);
-            $parent.prepend(home);
-        },
+        // addCalendarCheck:function ($parent) {
+        //     let $ul = $(`
+        //         <li class='isShow-calendar sort-item' title='拖动调整顺序'>
+        //             <label class='custom-checkbox' style='display: inline'>
+        //                 <input class='calendar-Show' title='点击设置此功能' type='checkbox'>
+        //             </label>
+        //             <span>登录时自动开启日历</span>
+        //             <i class='drag-icon icon-framework-drag'></i>
+        //         </li>`);
+        //     if(this.data.calendarSort === "1"){
+        //         $parent.append($ul);
+        //     }else{
+        //         $parent.prepend($ul);
+        //     }
+        // },
+        // addHomeCheck:function ($parent) {
+        //     let home = $(`
+        //         <li class="isShow-home" title="不可拖动" draggable="false">
+        //             <label class="custom-checkbox" style="display: inline">
+        //                 <input class="home-Show" title="点击设置此功能" type="checkbox" >
+        //             </label>
+        //             <span>登录时自动开启首页</span>
+        //             <i class="drag-icon icon-framework-drag" style="display: none"></i>
+        //         </li>`);
+        //     $parent.prepend(home);
+        // },
         /**
          * 获取用户首页bi视图列表
          */
@@ -231,7 +269,7 @@ let SettingPage = Component.extend({
             };
             UserInfoService.saveHomePageConfig(json3).then((res)=>{
                 if(res.success === 1){
-                    msgbox.showTips("设置成功")
+                    msgbox.showTips("设置成功");
                     window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + this.data.bi_view;
                     window.config.sysConfig.logic_config.client_login_show_home = res.data.toString();
                 }else{
@@ -339,22 +377,18 @@ let SettingPage = Component.extend({
         /**
          * 设置bi/日历li可拖动以及checkbox初始状态
          */
-        setCheckboxStatus:function () {
-            let that = this;
+        setBarsSortable:function () {
             this.el.find('.sortable-box').sortable({
                 containment:'.sortable-box',
-                update:function (event,ui) {
-                    that.actions.saveSortResult();
-                }
             }).disableSelection();
 
             this.el.find('.sortable-box:first').droppable({
                 accept:".sort-item",
             });
 
-            this.actions.setCheck('input.bi-Show',this.data.biStatus);
-            this.actions.setCheck('input.calendar-Show',this.data.calendarStatus);
-            this.actions.setCheck('input.home-Show',this.data.homeStatus);
+            // this.actions.setCheck('input.bi-Show',this.data.biStatus);
+            // this.actions.setCheck('input.calendar-Show',this.data.calendarStatus);
+            // this.actions.setCheck('input.home-Show',this.data.homeStatus);
         },
         setCheck(selector,flag){
             if(flag === '1'){
