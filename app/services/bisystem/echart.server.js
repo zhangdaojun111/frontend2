@@ -118,10 +118,6 @@ export class EchartsService {
                 firstMaxYnum.push(maxNumber);
                 firstMinYnum.push(minNumber);
             }
-            console.log('--------------------------------');
-            console.log(cellOption.yAxis[y['yAxisIndex']]);
-            console.log(cellOption.yAxis[y['yAxisIndex']].areaStyle===1)
-
             series.push({
                 name: y[nameType],
                 type: y['type'] && y['type']['type'],
