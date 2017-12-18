@@ -301,7 +301,6 @@ let config = {
          * 保存画布布局
          */
         saveCanvas() {
-            console.log(this.data.cells,'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
             let cells = Object.values(this.data.cells).map(cell => cell.data.cell);
             const data = {
                 view_id: this.data.currentViewId,
