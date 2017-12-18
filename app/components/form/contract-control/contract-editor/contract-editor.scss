@@ -30,6 +30,7 @@
             width: 250px;
             .history-template-list {
                 padding: 5px;
+                min-height: 150px;
                 & p{
                     line-height: 20px;
                     cursor: pointer;
@@ -116,7 +117,7 @@
                 background: #F2F2F2;
             }
             .contract-container-content{
-                height: 511px;
+                height: 655px;
                 margin: 4px;
                 .contract-tab-container {
                     height: 30px;
@@ -125,6 +126,7 @@
                     width: 100%;
                     .contract-tabs {
                         display: inline-block;
+
                         //max-width: 560px;
                         max-height:30px;
                         overflow-x:auto;
@@ -159,10 +161,12 @@
                         display:inline-block;
                         width: 30px;
                         height: 29px;
-                        background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAMNJREFUGBmNUDkOwkAQ8yQLFc+gQ0hpeQgNP6FLF15Cw2do0vGM0CRaBnuWQEpW2h3L9hw7gM7R64gX36PzZ1zhhZbCtEONGzIqxhdWYRDWkQZHws1ymERmDDCyM1ZsbVRIUAtly1ShIWcS+DYcAVQ27JKNxoH0mtcpql5pbZiIVV2JY8Xnr5PoOnxbq53h+sk8sd7913pZr/MtjX1Qzv+e7THLVayndc1YBi8zWVQSJ417LuuJmUnyd4ST9MCKPTmu8A2pxEh6XTDHawAAAABJRU5ErkJggg==') center no-repeat;
                         background-color: #ffffff;
                         cursor: pointer;
                         border-bottom: 1px solid #D7D7D7;
+                        &.active {
+                            background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAVlpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDUuNC4wIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KTMInWQAAAMNJREFUGBmNUDkOwkAQ8yQLFc+gQ0hpeQgNP6FLF15Cw2do0vGM0CRaBnuWQEpW2h3L9hw7gM7R64gX36PzZ1zhhZbCtEONGzIqxhdWYRDWkQZHws1ymERmDDCyM1ZsbVRIUAtly1ShIWcS+DYcAVQ27JKNxoH0mtcpql5pbZiIVV2JY8Xnr5PoOnxbq53h+sk8sd7913pZr/MtjX1Qzv+e7THLVayndc1YBi8zWVQSJ417LuuJmUnyd4ST9MCKPTmu8A2pxEh6XTDHawAAAABJRU5ErkJggg==') center no-repeat;
+                        }
                     }
                     .delete-tab-button {
                         display:inline-block;
@@ -178,7 +182,7 @@
                     line-height: 15px;
                     font-size: 12px;
                     overflow-y: auto;
-                    height: 470px;
+                    height: 614px;
                     border: 1px solid #D7D7D7;
                     border-top: none;
                     & span {

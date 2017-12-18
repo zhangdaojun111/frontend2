@@ -34,8 +34,8 @@ let config = {
         openEditor:function(title){
             // let contractConfig = _.defaultsDeep({data:this.data},contractEditorConfig);
             PMAPI.openDialogByIframe(`/iframe/contractEditor/`, {
-                width: 1250,
-                height: 650,
+                width: 1400,
+                height: 800,
                 title: title,
                 modal: true,
             }, {data:this.data}).then(res => {

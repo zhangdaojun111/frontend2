@@ -87,37 +87,41 @@ let contractEditor = Component.extend({
             event: 'click',
             selector: '.add-tab-button',
             callback: function () {
-                this.actions.addTab();
+                if(this.data['mode'] =='edit') {
+                    this.actions.addTab();
+                }
             }
         }, {
             event: 'click',
             selector: '.delete-tab-btn',
             callback: function (event) {
-                console.log($(event).parent('.contract-tab').index())
-                // let currentIndex = this.data['current_tab'];
-                let currentIndex = $(event).parent('.contract-tab').index();
-                this.data.local_data.splice(currentIndex, 1);
-                //删除标签
-                this.el.find('.contract-tab').get(currentIndex).remove();
-                // //如果右边有标签，当前标签向右移，没有则向左移
-                // currentIndex = currentIndex == this.data.local_data.length ? currentIndex - 1 : currentIndex;
-                // if (currentIndex == -1) {
-                //     this.actions.addTab();
-                // } else {
-                //     this.actions._loadTemplateByIndex(currentIndex,true,false);
-                // }
-                if(this.el.find('.contract-tab').length < 10){//仅允许最多有五个标签
-                    this.el.find('.add-tab-button').show();
+                if (this.data['mode'] == 'edit') {
+                    console.log($(event).parent('.contract-tab').index())
+                    // let currentIndex = this.data['current_tab'];
+                    let currentIndex = $(event).parent('.contract-tab').index();
+                    this.data.local_data.splice(currentIndex, 1);
+                    //删除标签
+                    this.el.find('.contract-tab').get(currentIndex).remove();
+                    // //如果右边有标签，当前标签向右移，没有则向左移
+                    // currentIndex = currentIndex == this.data.local_data.length ? currentIndex - 1 : currentIndex;
+                    // if (currentIndex == -1) {
+                    //     this.actions.addTab();
+                    // } else {
+                    //     this.actions._loadTemplateByIndex(currentIndex,true,false);
+                    // }
+                    if (this.el.find('.contract-tab').length < 10) {//仅允许最多有五个标签
+                        this.el.find('.add-tab-button').show();
+                    }
+                    this.el.find('.contract-tab').removeClass('active')
+                    if (this.data['current_tab'] == currentIndex) {
+                        this.el.find('.contract-tab').eq(0).addClass('active');
+                        this.actions.loadTab(0, true);
+                        this.data['current_tab'] = 0;
+                    } else {
+                        this.el.find('.contract-tab').eq(this.data['current_tab']).addClass('active');
+                    }
+                    return false;
                 }
-                this.el.find('.contract-tab').removeClass('active')
-                if(this.data['current_tab'] == currentIndex) {
-                    this.el.find('.contract-tab').eq(0).addClass('active');
-                    this.actions.loadTab(0, true);
-                    this.data['current_tab'] = 0;
-                } else {
-                    this.el.find('.contract-tab').eq(this.data['current_tab']).addClass('active');
-                }
-                return false;
             }
         },{
             event:'mouseover',
@@ -135,40 +139,33 @@ let contractEditor = Component.extend({
             event:'click',
             selector:'.instrument-line-height',
             callback:function (event) {
-                if(this.data['mode'] =='edit') {
-                    this.el.find('.instrument-line-height input').removeClass('active');
-                    $(event).find('input').addClass('active');
-                    let size = $(event).find('input').attr('title');
-                    this.actions.changeStyle('line-height', size)
-                }
+                this.el.find('.instrument-line-height input').removeClass('active');
+                $(event).find('input').addClass('active');
+                let size = $(event).find('input').attr('title');
+                this.actions.changeStyle('line-height', size)
             }
         },{
             event:'click',
             selector:'.instrument-font-size',
             callback:function (event) {
-                if(this.data['mode'] =='edit') {
-                    this.el.find('.instrument-font-size input').removeClass('active');
-                    $(event).find('input').addClass('active');
-                    let size = $(event).find('input').attr('title');
-                    this.actions.changeStyle('font-size', size)
-                }
+                this.el.find('.instrument-font-size input').removeClass('active');
+                $(event).find('input').addClass('active');
+                let size = $(event).find('input').attr('title');
+                this.actions.changeStyle('font-size', size)
             }
         },{
             event:'click',
             selector:'.instrument-template-btn',
             callback:function (event) {
-                if(this.data['mode'] =='edit') {
-                    this.el.find('.instrument-template-btn').removeClass('active');
-                    $(event).addClass('active');
-                    let size = $(event).attr('title');
-                    this.actions.changeStyle('back-ground', size)
-                }
+                let size = $(event).attr('title');
+                this.actions.changeStyle('back-ground', size)
             }
         },{
             event:'click',
             selector:'.change_edit',
             callback:function () {
                 this.data['mode'] ='edit';
+                // this.data.first = 1;
                 this.actions.showDifPattern()
             }
         }
@@ -178,6 +175,7 @@ let contractEditor = Component.extend({
         buttonStates:[],
         elementKeys: [],
         editingk2v: {},
+        first: 1,
     },
     actions: {
         //加载各数据源选项
@@ -387,7 +385,10 @@ let contractEditor = Component.extend({
                         $(this.el.find('.contract-tab').get(i)).html(`<span>${tab['name']}</span><span class="delete-tab-btn"></span>`);
                     }
                     this.actions.textClick();
-                    this.actions.showDifPattern();
+                    if(this.data.first) {
+                        this.actions.showDifPattern();
+                    }
+                    this.data.first = 0;
                     this.hideLoading();
                 }
             })
@@ -424,10 +425,25 @@ let contractEditor = Component.extend({
             })
         },
         showHistoryList: function(){
+            debugger
             let obj = {
                 dfield: this.data.dfield,
                 table_id: this.data.table_id
             }
+            // obj = [
+            //     {'5a177b18d8e9e4419a03114f':'上海银行基金合同模版-0623'},
+            //     {'5a177adfd8e9e44197031134':'招商银行基金合同模板-0623'},
+            //     {'5a177b84d8e9e4419a031151':'恒泰证券基金合同模板-0623 (2)'},
+            //     {'5a177c32d8e9e4418d031128':'东方证券基金合同模版-0623 (1)'},
+            //     {'5a1783cdd8e9e4419a031153':'恒泰证券基金合同模板-0623 (1) (1)'},
+            //     {'5a25da23d8e9e454ff19c3d0':'投资者类型及风险匹配告知书及投资者确认函（普通自然人投资者适用） (3) (1)'}
+            // ]
+            // for(let item of obj) {
+            //     for(let i in item) {
+            //         let html = `<p class="history-template-list-item" value="${i}">${item[i]}</p>`
+            //         this.el.find('.history-template-list').append(html);
+            //     }
+            // }
             this.actions.getHistoryModel(obj).then(res=> {
                 for(let item of res.data) {
                     for(let i in item) {
@@ -549,24 +565,22 @@ let contractEditor = Component.extend({
         showDifPattern: function () {
             if(this.data['mode']=='view'){
                 // this.el.find('.contract-container').css({'width':'100%'});
-                this.el.find('.add-tab-button').css('display','none');
-                this.el.find('.delete-tab-button').css('display','none');
+                this.el.find('.add-tab-button').removeClass('active');
+                this.el.find('.delete-tab-btn').css('display','none');
                 this.el.find('.history-template').css({'height':'150px'});
                 this.el.find('.change_edit').css({'display':'inline-block'});
                 this.el.find('.contract-model').attr('disabled','disabled');
                 this.el.find('.data-source').attr('disabled','disabled');
-                this.el.find('.contract-tabs').css({'left':'0px'});
             } else {
                 this.actions.showHistoryList();
-                this.el.find('.add-tab-button').css('display','inline-block');
-                this.el.find('.delete-tab-button').css('display','inline-block');
+                this.el.find('.add-tab-button').addClass('active');
+                this.el.find('.delete-tab-btn').css('display','inline-block');
                 this.el.find('.save_n_close').css('display','inline-block');
                 this.el.find('.edit_or_save').css('display','inline-block');
-                this.el.find('.history-template').css({'height':'150px'});
+                this.el.find('.history-template').css({'height':'auto'});
                 this.el.find('.change_edit').css({'display':'none'});
                 this.el.find('.contract-model').removeAttr('disabled','disabled');
                 this.el.find('.data-source').removeAttr('disabled','disabled');
-                this.el.find('.contract-tabs').css({'left':'-5px'});
             }
         },
         afterGetMsg: function () {

@@ -2927,13 +2927,21 @@ let dataTableAgGrid = Component.extend({
                     value: data['value'],
                     mode: 'view'
                 };
-                //_.defaultsDeep不会替换原对象中已有key的value
-                let contractConfig = _.defaultsDeep({},{data: obj},contractEditorConfig);
-                PMAPI.openDialogByComponent(contractConfig, {
-                    width: 900,
-                    height: 600,
-                    title: '合同查看'
-                });
+                // //_.defaultsDeep不会替换原对象中已有key的value
+                // let contractConfig = _.defaultsDeep({},{data: obj},contractEditorConfig);
+                // PMAPI.openDialogByComponent(contractConfig, {
+                //     width: 900,
+                //     height: 600,
+                //     title: '合同查看'
+                // });
+                PMAPI.openDialogByIframe(`/iframe/contractEditor/`, {
+                    width: 1400,
+                    height: 800,
+                    title: '合同查看',
+                    modal: true,
+                }, {data:obj}).then(res => {
+
+                })
             } else if (data.event.srcElement.className.indexOf('download-contract') != -1) {
                 this.actions.downloadContract(data, 0);
             }
