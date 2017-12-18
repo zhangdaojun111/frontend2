@@ -76,7 +76,8 @@ let IframeComponent = Component.extend({
         closeHistory: [],         //用于保存历史关闭记录，记录最近5个
         tabsControlOpen: false,   //标签控制界面标记
         saveViewOpen: false,       //保存视图界面标记
-        commonUseList: []          //保存常用iframes，用于预加载
+        commonUseList: [],          //保存常用iframes，用于预加载
+        test_data:[{name:'Bi',status:1},{name:'calendar',status:0},{name:'home',status:0}]
     },
     actions: {
 
