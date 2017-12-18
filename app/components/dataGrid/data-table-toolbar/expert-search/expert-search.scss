@@ -320,6 +320,8 @@
         bottom: 0px;
         width: calc(100% - 20px);
         padding: 10px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius:5px;
         .button-group {
             float: right;
         }

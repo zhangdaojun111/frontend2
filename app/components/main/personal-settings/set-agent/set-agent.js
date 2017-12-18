@@ -43,7 +43,6 @@ let SetAgent = Component.extend({
                             name:result.data.agent_name
                         };
                     }
-
                     this.data.isOpen = result.data.is_apply ? 1:0;
                     $.extend(true,this.data.formatData,this.data.originData.data.workflow_list);
                     this.actions.initWorkflow();
@@ -77,20 +76,7 @@ let SetAgent = Component.extend({
          */
         formatOriginData:function (nodes) {
             for(let i = 0; i < nodes.length; i++){
-                const node = nodes[i];
-                node.text = node.label;
-                node.icon = '';
-                node.selectedIcon = '';
-                node.backColor = "#FFFFFF";
-                node.selectable = false;
-                node.state = {
-                    checked: node.isSelect,
-                    disabled: false,
-                    expanded: true,
-                    selected: false,
-                };
-                node.tags = ['available'];
-                node.nodes = node.children;
+                let node = this.actions._adjustNode(nodes[i]);
                 if(node.isSelect === true && (!node.hasOwnProperty("group"))){
                     this.data.selectedWorkflow.add(node.id);
                 }
@@ -99,6 +85,23 @@ let SetAgent = Component.extend({
                     this.actions.formatOriginData(children);
                 }
             }
+        },
+        _adjustNode:function (originNode) {
+            const node = originNode;
+            node.text = node.label;
+            node.icon = '';
+            node.selectedIcon = '';
+            node.backColor = "#FFFFFF";
+            node.selectable = false;
+            node.state = {
+                checked: node.isSelect,
+                disabled: false,
+                expanded: true,
+                selected: false,
+            };
+            node.tags = ['available'];
+            node.nodes = node.children;
+            return node;
         },
         /**
          * 初始化代理人列表
@@ -112,7 +115,6 @@ let SetAgent = Component.extend({
                     tempData.push(row);
                 }
             }
-            let that = this;
             let temp = [];
             if( Object.keys(this.data.selectedAgent).length > 0){
                 temp.push(this.data.selectedAgent);
@@ -123,8 +125,8 @@ let SetAgent = Component.extend({
                 editable: true,
                 choosed:temp
             },events: {
-                onSelect: function (choosed) {
-                    that.actions.setAgentId(choosed);
+                onSelect: (choosed)=> {
+                    this.actions.setAgentId(choosed);
                 }
             }});
 
@@ -232,13 +234,14 @@ let SetAgent = Component.extend({
                 return;
             }
             this.showLoading();
-            let workflow_temp = Array.from(this.data.selectedWorkflow);
-            let data = {
-                workflow_names:workflow_temp,
+            this.actions._sendAgent({
+                workflow_names:Array.from(this.data.selectedWorkflow),
                 agent_id:this.data.selectedAgent.id,
                 is_apply:this.data.isOpen
-            };
+            });
 
+        },
+        _sendAgent:function (data) {
             UserInfoService.saveAgentData(data).done((result) => {
                 this.hideLoading();
                 if(result.success === 1){

@@ -35,23 +35,18 @@ let FileResult = Component.extend({
             if(this.data.searchData.file_name.indexOf('docx') !== -1
                 || this.data.searchData.file_name.indexOf('xlsx') !== -1
                 || this.data.searchData.file_name.indexOf('xls') !== -1){
-
                 this.data.isCanReview = false;
-                this.fileId = this.data.searchData.file_id;
-                this.data.src = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=1";
-                this.el.find('a.preview').addClass('cantPreview');
-                this.el.find('a.download').attr("href",this.data.src).attr('target','_blank');
-
             }else{
                 // this.data.previewSrc = location.href.split('#')[0] + "data/download_attachment/?file_id=" + this.fileId + "&download=0";
                 // this.data.src = location.href.split('#')[0] + "data/download_attachment/?file_id=" + this.fileId + "&download=1";
-                this.el.find('a.preview').addClass('canPreview');
-                this.fileId = this.data.searchData.file_id;
                 this.data.previewSrc = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=0";
-                this.data.src = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=1";
                 this.el.find('a.preview').attr('href',this.data.previewSrc).attr('target','_blank');
-                this.el.find('a.download').attr("href",this.data.src).attr('target','_blank');
             }
+            this.fileId = this.data.searchData.file_id;
+            this.data.src = window.location.href.split('search_result')[0] + "download_attachment/?file_id=" + this.fileId + "&download=1";
+            this.el.find('a.preview').addClass('cantPreview');
+            this.el.find('a.download').attr("href",this.data.src).attr('target','_blank');
+
         }
     },
     afterRender:function () {

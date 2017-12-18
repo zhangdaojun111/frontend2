@@ -39,33 +39,37 @@ let AutoSelect = Component.extend({
          */
         selectItem: function (item) {
             if (this.data.multiSelect === true) {
-                let choosed = this.el.find('input:checked');
-                let tempStr = [];
-                choosed = Array.from(choosed).map((item) => {
-                    let $item = $(item);
-                    tempStr.push($item.data('name').replace(/\'/g, ''));
-                    return {
-                        id: $item.data('id').replace(/\'/g, ''),
-                        name: $item.data('name').replace(/\'/g, ''),
-                    }
-                });
-                this.data.choosed = choosed;
-                tempStr = tempStr.join(',');
-                this.el.find('.result').attr('title',tempStr);
+                this.el.find('.result').attr('title',this.actions.calTitleArray(this.el.find('input:checked')));
             } else {
-                if (item.find('input:checkbox')[0].checked) {
-                    this.data.choosed = [{
-                        id: item.data('id').replace(/\'/g, ''),
-                        name: item.data('name').replace(/\'/g, ''),
-                    }];
-                    this.el.find('.result').attr('title',item.data('name').replace(/\'/g, ''));
-                    this.actions.hideSelectBox();
-                } else {
-                    this.data.choosed = [];
-                    this.el.find('.result').removeAttr('title');
-                }
+                this.actions.calSingleTitle(item);
             }
             this.actions.renderChoosed();
+        },
+        calTitleArray(choosed){
+            let tempStr = [];
+            choosed = Array.from(choosed).map((item) => {
+                let $item = $(item);
+                tempStr.push($item.data('name').replace(/\'/g, ''));
+                return {
+                    id: $item.data('id').replace(/\'/g, ''),
+                    name: $item.data('name').replace(/\'/g, ''),
+                }
+            });
+            this.data.choosed = choosed;
+            return tempStr.join(',');
+        },
+        calSingleTitle(item){
+            if (item.find('input:checkbox')[0].checked) {
+                this.data.choosed = [{
+                    id: item.data('id').replace(/\'/g, ''),
+                    name: item.data('name').replace(/\'/g, ''),
+                }];
+                this.el.find('.result').attr('title',item.data('name').replace(/\'/g, ''));
+                this.actions.hideSelectBox();
+            } else {
+                this.data.choosed = [];
+                this.el.find('.result').removeAttr('title');
+            }
         },
         /**
          * 取消选中（未使用）
@@ -91,10 +95,7 @@ let AutoSelect = Component.extend({
             input.val(value);
             if (value === '') {
                 this.listWrap.find('li').addClass('match-visible').show();
-                let index = this.data.focusItem.index();
-                let scrollTop = Math.max(0,(index-2) * 30);
-                this.el.find('.auto-select-ul').scrollTop(scrollTop);
-                this.data.focusItem.addClass('hovered');
+                this.actions._adjustScroll();
             } else {
                 this.listWrap.find('li').hide();
                 this.listWrap.find(`li[data-name*="${value}"]`).addClass('match-visible').show();
@@ -187,18 +188,23 @@ let AutoSelect = Component.extend({
             this.trigger('onSelect', this.data.choosed);
             let html = [];
             if (this.data.choosed.length) {
-                this.data.choosed.forEach((item) => {
-                    if (!_.isUndefined(item.id)) {
-                        let checkbox = this.listWrap.find(`input:checkbox[data-id="\'${item.id}\'"]`);
-                        if (checkbox.length) {
-                            checkbox[0].checked = true;
-                        }
-                        html.push(item.name);
-                    }
-                });
+                html = this.actions.loadSelect();
             }
             this.inputResult.val(html.join(','));
             this.el.find('.select-all span').text(this.data.choosed.length);
+        },
+        loadSelect:function () {
+            let html = [];
+            this.data.choosed.forEach((item) => {
+                if (!_.isUndefined(item.id)) {
+                    let checkbox = this.listWrap.find(`input:checkbox[data-id="\'${item.id}\'"]`);
+                    if (checkbox.length) {
+                        checkbox[0].checked = true;
+                    }
+                    html.push(item.name);
+                }
+            });
+            return html;
         },
         /**
          * 全选
@@ -226,27 +232,26 @@ let AutoSelect = Component.extend({
                 }else if(keyCode === 40){
                     event.preventDefault();
                     let $next = that.data.focusItem.nextAll('.match-visible');
-                    if($next.length > 0){
-                        that.data.focusItem.removeClass('hovered');
-                        that.data.focusItem = $next.eq(0);
-                        that.data.focusItem.addClass('hovered');
-                        let index = that.data.focusItem.index();
-                        let scrollTop = Math.max(0,(index-2) * 30);
-                        that.el.find('.auto-select-ul').scrollTop(scrollTop);
-                    }
+                    that.actions._adjustEle($next);
                 }else if(keyCode === 38){
                     event.preventDefault();
                     let $prev = that.data.focusItem.prevAll('.match-visible');
-                    if($prev.length > 0){
-                        that.data.focusItem.removeClass('hovered');
-                        that.data.focusItem = $prev.eq(0);
-                        that.data.focusItem.addClass('hovered');
-                        let index = that.data.focusItem.index();
-                        let scrollTop = Math.max(0,(index-2) * 30);
-                        that.el.find('.auto-select-ul').scrollTop(scrollTop);
-                    }
+                    that.actions._adjustEle($prev);
                 }
             })
+        },
+        _adjustEle:function(selector){
+            if($prev.length > 0){
+                this.data.focusItem.removeClass('hovered');
+                this.data.focusItem = selector.eq(0);
+                this.actions._adjustScroll();
+            }
+        },
+        _adjustScroll:function () {
+            let index = this.data.focusItem.index();
+            let scrollTop = Math.max(0,(index-2) * 30);
+            this.el.find('.auto-select-ul').scrollTop(scrollTop);
+            this.data.focusItem.addClass('hovered');
         },
         /**
          * 下拉框隐藏时，停止监听键盘和鼠标移动
@@ -304,6 +309,36 @@ let AutoSelect = Component.extend({
         },
         removeHideComp:function () {
             window.clearTimeout(this.data.timer);
+        },
+        _settingList:function () {
+            if (this.data.selectBoxHeight === 'auto') {
+                this.listWrap.css({
+                    height: 'auto'
+                });
+                this.listWrap.find('ul').css({
+                    maxHeight: '150px'
+                });
+            } else {
+                this.listWrap.height(this.data.selectBoxHeight);
+                let inputHeight = this.listWrap.find('.auto-select-text-wrap').outerHeight();
+                let selectAllHeight = this.listWrap.find('.select-all').outerHeight();
+                this.listWrap.find('ul').css({
+                    maxHeight: (this.data.selectBoxHeight - inputHeight - selectAllHeight) + 'px'
+                });
+            }
+            if (this.data.displayType === 'popup') {
+                this.listWrap.addClass('popup');
+            }
+            if (this.data.width !== 0) {
+                this.el.find('.auto-select-component').css('width', this.data.width);
+            }
+            if (this.data.editable === false) {
+                this.el.find('.auto-select-component').addClass('disabled');
+            }
+            if (this.data.multiSelect === false) {
+                this.listWrap.find('.select-all').hide();
+                this.listWrap.find('ul').height('100%');
+            }
         }
     },
     binds:[
@@ -369,34 +404,7 @@ let AutoSelect = Component.extend({
         this.listWrap = this.el.find('.list');
         this.inputResult = this.el.find('input.result');
         this.actions.renderChoosed();
-        if (this.data.selectBoxHeight === 'auto') {
-            this.listWrap.css({
-                height: 'auto'
-            });
-            this.listWrap.find('ul').css({
-                maxHeight: '150px'
-            });
-        } else {
-            this.listWrap.height(this.data.selectBoxHeight);
-            let inputHeight = this.listWrap.find('.auto-select-text-wrap').outerHeight();
-            let selectAllHeight = this.listWrap.find('.select-all').outerHeight();
-            this.listWrap.find('ul').css({
-                maxHeight: (this.data.selectBoxHeight - inputHeight - selectAllHeight) + 'px'
-            });
-        }
-        if (this.data.displayType === 'popup') {
-            this.listWrap.addClass('popup');
-        }
-        if (this.data.width !== 0) {
-            this.el.find('.auto-select-component').css('width', this.data.width);
-        }
-        if (this.data.editable === false) {
-            this.el.find('.auto-select-component').addClass('disabled');
-        }
-        if (this.data.multiSelect === false) {
-            this.listWrap.find('.select-all').hide();
-            this.listWrap.find('ul').height('100%');
-        }
+        this.actions._settingList();
     },
     firstAfterRender: function () {
         if (this.data.editable === true) {

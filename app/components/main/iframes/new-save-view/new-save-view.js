@@ -62,8 +62,7 @@ let SaveView = Component.extend({
          * 将当前打开的标签组合保存为视图（不保存bi和日历）
          * @returns {Promise.<void>}
          */
-        saveFavorite:async function () {
-
+        saveFavorite:function () {
             this.data.currentIframesList = this.data.iframesComponent.data.sort;
 
             //过滤List中的bi和日历
@@ -81,7 +80,9 @@ let SaveView = Component.extend({
                 msgbox.alert("视图名称不能为空");
                 return;
             }
-
+            this.actions._sendFavorite(name);
+        },
+        _sendFavorite:async function(name){
             let favorlist = {};
             let list = [];
             let idList = [];
@@ -105,15 +106,14 @@ let SaveView = Component.extend({
                 await this.actions.deleteViewByName(name);
             }
 
-            let that = this;
             TabService.saveFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
                     msgbox.showTips("保存成功");
-                    _.remove(that.data.favoriteList,function (n) {
+                    _.remove(this.data.favoriteList,function (n) {
                         return n.name === name;
                     });
-                    that.data.favoriteList.unshift({'name':name,'list':idList});
-                    that.actions.initList();
+                    this.data.favoriteList.unshift({'name':name,'list':idList});
+                    this.actions.initList();
                 }
             })
         },
@@ -128,14 +128,7 @@ let SaveView = Component.extend({
             }
 
             //获取被点击的视图名称
-            let name = event.currentTarget.attributes.view_id.value;
-            let tabIdList = [];
-            for ( let k of this.data.favoriteList){
-                if ( k.name === name){
-                    tabIdList = k.list;
-                    break;
-                }
-            }
+            let tabIdList = this.actions._getFavoriteView(event);
 
             if(tabIdList && tabIdList.length > 0){
                 let menu = window.config.menu;
@@ -167,6 +160,17 @@ let SaveView = Component.extend({
                 Mediator.emit('saveview:displayview',this.data.newHash);
             }
         },
+        _getFavoriteView:function (event) {
+            let name = event.currentTarget.attributes.view_id.value;
+            let tabIdList = [];
+            for ( let k of this.data.favoriteList){
+                if ( k.name === name){
+                    tabIdList = k.list;
+                    break;
+                }
+            }
+            return tabIdList;
+        },
         /**
          * 根据id查找tabs的url和name
          * @param nodes
@@ -175,15 +179,7 @@ let SaveView = Component.extend({
         findTabInfo:function (nodes,targetList) {
             for( let i=0; i < nodes.length; i++){
                 if(targetList.includes(nodes[i].ts_name ) || targetList.includes(nodes[i].table_id )){
-                    let item = {};
-                    if(nodes[i].table_id && nodes[i].table_id !== ''&& nodes[i].table_id !== '0'){
-                        item.id = nodes[i].table_id;
-                    }else{
-                        item.id = nodes[i].ts_name || '0';
-                    }
-                    item.url = nodes[i].url;
-                    item.name = nodes[i].label;
-                    this.data.newHash.push(item);
+                    this.actions._calNewHash(nodes[i]);
                     _.remove(targetList,function (n) {
                         return n.id === nodes[i].id;
                     });
@@ -196,6 +192,17 @@ let SaveView = Component.extend({
                 }
             }
         },
+        _calNewHash:function (node) {
+            let item = {};
+            if(node.table_id && node.table_id !== ''&& node.table_id !== '0'){
+                item.id = node.table_id;
+            }else{
+                item.id = node.ts_name || '0';
+            }
+            item.url = node.url;
+            item.name = node.label;
+            this.data.newHash.push(item);
+        },
         /**
          * 根据点击事件删除视图
          * @param event
@@ -206,13 +213,12 @@ let SaveView = Component.extend({
             favorlist['name'] = name;
             favorlist['query_type'] = 'delete';
 
-            let that = this;
             TabService.deleteFavoriteItem(favorlist).done((result) => {
                 if(result.success === 1){
                     _.remove(this.data.favoriteList,function (n) {
                         return n.name === name;
                     });
-                    that.actions.initList();
+                    this.actions.initList();
                 }
             })
         },

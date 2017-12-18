@@ -127,8 +127,7 @@ let Preview = Component.extend({
                     //找到前一个可浏览的文件的索引
                     let i = this.data.currentIndex - 1;
                     for(;i >=0; i--){
-                        let type = this.data.list[i].file_name.split('.').pop();
-                        if(preview_file.includes(type)){
+                        if(preview_file.includes(this.data.list[i].file_name.split('.').pop())){
                             break;
                         }
                     }
@@ -156,8 +155,7 @@ let Preview = Component.extend({
                     let i = this.data.currentIndex + 1;
                     let length = this.data.list.length;
                     for (; i < length; i++) {
-                        let type = this.data.list[i].file_name.split('.').pop();
-                        if (preview_file.includes(type)) {
+                        if (preview_file.includes(this.data.list[i].file_name.split('.').pop())) {
                             break;
                         }
                     }
@@ -173,7 +171,6 @@ let Preview = Component.extend({
                     this.data.currentIndex = this.data.currentIndex < this.data.list.length - 1? this.data.currentIndex + 1:this.data.currentIndex;
                     fileId = Object.keys(this.data.list[this.data.currentIndex])[0];
                 }
-
                 this.actions._loadPreview(fileId);
             }
         }
