@@ -90,7 +90,7 @@ let config = {
                         remindTime: this.data.remindTaskItemData.time.substr(11,5),
                         remindRealId: this.data.remindTaskItemData.real_id.substr(2,24),
                     }).then(data => {
-                    this.data.isTaskClick = false;
+                        this.data.isTaskClick = false;
                 });
             })
         },
@@ -105,7 +105,7 @@ let config = {
                 PMAPI.openDialogByIframe(`/wf/approval/?record_id=${this.data.remindTaskItemData['data']['id']}&form_id=${this.data.remindTaskItemData['data']['form_id']}&table_id=${this.data.remindTaskItemData['data']['table_id']}&flow_id=${this.data.remindTaskItemData['data']['flow_id']}`,{
                     width: '100%',
                     height: '900',
-                     title:"审批工作流",
+                    //title:"审批工作流",
                     modal:true,
                     customSize: true,
                 }).then(data => {

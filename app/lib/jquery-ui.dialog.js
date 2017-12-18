@@ -103,6 +103,7 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
                             return;
                         }
                     }
+
                     if(window.top.miniFormVal && window.top.miniFormValRealId == ''){
                         window.top.hideMiniForm[window.top.miniFormValTableId]();
                         delete window.top.miniFormVal[window.top.miniFormValTableId ];
