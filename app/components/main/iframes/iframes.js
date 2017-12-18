@@ -77,7 +77,26 @@ let IframeComponent = Component.extend({
         tabsControlOpen: false,   //标签控制界面标记
         saveViewOpen: false,       //保存视图界面标记
         commonUseList: [],          //保存常用iframes，用于预加载
-        test_data:[{name:'Bi',status:1},{name:'calendar',status:0},{name:'home',status:0}]
+        test_data:[
+            {
+                id: 'bi',
+                name: 'BI',
+                url: window.config.sysConfig.bi_index,
+                status:1
+            },
+            {
+                id: 'calendar',
+                name: '日历',
+                url: window.config.sysConfig.calendar_index,
+                status:1
+            },
+            {
+                id: 'home',
+                name: '首页',
+                url: window.config.sysConfig.home_index,
+                status:1
+            }
+        ]
     },
     actions: {
 
