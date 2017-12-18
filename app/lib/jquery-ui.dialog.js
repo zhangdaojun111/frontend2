@@ -97,13 +97,13 @@ $.widget("custom.erdsDialog", $.ui.dialog, {
             this._on('.ui-dialog-titlebar-close', {
                 click: function (event) {
                     event.preventDefault();
-
                     if(window.top.miniFormVal) {
                         if (window.top.miniFormVal && window.top.miniFormValRealId) {
                             window.top.miniFormValRealId = '';
                             return;
                         }
                     }
+
                     if(window.top.miniFormVal && window.top.miniFormValRealId == ''){
                         window.top.hideMiniForm[window.top.miniFormValTableId]();
                         delete window.top.miniFormVal[window.top.miniFormValTableId ];
