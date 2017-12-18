@@ -120,54 +120,64 @@ let config = {
                 // }
                 Storage.init('null');
                 Storage.deleteItem('deletedItem-'+this.data.id,Storage.SECTION.FORM);
-                for( let data of this.data.rows ){
-                    //附件名称编码转换
-                    data.file_name = data.file_name;
-                    let str = data.file_name.split('.').pop();
-                    if( preview_file.indexOf( str.toLowerCase() ) != -1 ){
-                        data["isPreview"] = true;
-                        if( preview_file.indexOf(str.toLowerCase()) <4){
-                            data["isImg"] = true;
-                        }else{
-                            data["isImg"] = false;
+                FormService.getAttachment({
+                    file_ids:JSON.stringify(this.data.value),
+                    dinput_type:this.data.dinput_type
+                }).then(res=>{
+                    if(res.success) {
+                        this.data.rows = [];
+                        for (let data of res.rows) {
+                            //附件名称编码转换
+                            data.file_name = data.file_name;
+                            let str = data.file_name.split('.').pop();
+                            if (preview_file.indexOf(str.toLowerCase()) != -1) {
+                                data["isPreview"] = true;
+                                if (preview_file.indexOf(str.toLowerCase()) < 4) {
+                                    data["isImg"] = true;
+                                } else {
+                                    data["isImg"] = false;
+                                }
+                            } else {
+                                data["isPreview"] = false;
+                            }
+                            if(this.data.value.includes(data.file_id)){
+                                this.data.rows.push(data);
+                            }
                         }
-                    }else{
-                        data["isPreview"] = false;
+                        if (this.data.real_type == 9 || this.data.real_type == 23) {
+                            let obj = {
+                                list: this.data.rows,
+                                dinput_type: this.data.real_type,
+                                is_view: this.data.is_view,
+                                control_id: this.data.id
+                            };
+                            PMAPI.openDialogByComponent(_.defaultsDeep({}, {data: obj}, AttachmentList), {
+                                width: 700,
+                                height: 500,
+                                title: "浏览上传文件"
+                            }).then(res => {
+                                this.actions._updateDeleted(res);
+                            });
+                        } else if (this.data.real_type == 33) {
+                            let fileId = this.data.value[0];
+                            let obj = {
+                                rows: this.data.rows,
+                                dinput_type: this.data.real_type,
+                                currentVideoId: fileId,
+                                videoSrc: `/download_attachment/?file_id=${fileId}&download=0&dinput_type=${this.data.dinput_type}`,
+                                control_id: this.data.id,
+                                is_view: this.data.is_view
+                            };
+                            PMAPI.openDialogByComponent(_.defaultsDeep({}, {data: obj}, ViewVideo), {
+                                width: 780,
+                                height: 500,
+                                title: '视频播放器'
+                            }).then(res => {
+                                this.actions._updateDeleted(res);
+                            })
+                        }
                     }
-                }
-                if(this.data.real_type == 9 || this.data.real_type == 23){
-                    let obj={
-                        list:this.data.rows,
-                        dinput_type:this.data.real_type,
-                        is_view:this.data.is_view,
-                        control_id:this.data.id
-                    };
-                    PMAPI.openDialogByComponent(_.defaultsDeep({},{data:obj},AttachmentList), {
-                        width: 700,
-                        height: 500,
-                        title: "浏览上传文件"
-                    }).then(res=>{
-                        this.actions._updateDeleted(res);
-                    });
-                }else if(this.data.real_type == 33){
-                    let fileId = this.data.value[0];
-                    let obj={
-                        rows:this.data.rows,
-                        dinput_type:this.data.real_type,
-                        currentVideoId:fileId,
-                        videoSrc:`/download_attachment/?file_id=${fileId}&download=0&dinput_type=${this.data.dinput_type}`,
-                        control_id:this.data.id,
-                        is_view:this.data.is_view
-                    };
-                    PMAPI.openDialogByComponent(_.defaultsDeep({},{data:obj},ViewVideo), {
-                        width: 780,
-                        height: 500,
-                        title: '视频播放器'
-                    }).then(res=>{
-                        this.actions._updateDeleted(res);
-                    })
-                }
-
+                });
             }
         }
     ],
@@ -241,18 +251,18 @@ let config = {
         //调整上传文件条目，仅显示3条
         _playQueueItems:function () {
             if(this.data.queueItemEles.length > 3){
-                this.el.find('.ellipses').css('display','block');
+                this.el.find('.ellipses').show();
                 for(let i=3,length = this.data.queueItemEles.length; i <length;i++){
-                    this.data.queueItemEles[i].css('display','none');
+                    this.data.queueItemEles[i].hide();
                 }
             } else {
-                this.el.find('.ellipses').css('display','none');
+                this.el.find('.ellipses').hide();
             }
             for(let i=0;i<3;i++){
                 if(!this.data.queueItemEles[i]){
                     break;
                 }
-                this.data.queueItemEles[i].css('display','block');
+                this.data.queueItemEles[i].show();
             }
         },
         _updateDeleted:function(res){
@@ -262,14 +272,24 @@ let config = {
             }
             for(let file of deletedFiles){
                 if(this.data.value.indexOf(file)!=-1){
-                    this.data.value.splice(this.data.value.indexOf(file),1);
+                    let index = this.data.value.indexOf(file);
+                    this.data.value.splice(index,1);
+                    for(let i=0,length = this.data.queueItemEles.length;i < length; i++){
+                        let ele = this.data.queueItemEles[i];
+                        if(ele.attr('id') == file){
+                            ele.remove();
+                            this.data.queueItemEles.splice(i,1);
+                            break;
+                        }
+                    }
                 }
-                this.el.find('#'+file).remove();
+                // this.el.find('#'+file).remove();
                 if(this.data.real_type == 23){
                     this.actions._deleteItemFromThumbnailList(file);
                 }
             }
             this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
+            this.actions._playQueueItems();
             if(this.data.value.length > 0){
                 this.el.find('.view-attached-list').css('cursor','pointer');
             }
@@ -289,7 +309,7 @@ let config = {
         },
         _loadArchievedItems:function () {
             for(let i=0,length = this.data.rows.length;i<length;i++){
-                let ele = $('<div></div>');
+                let ele = $(`<div id="${this.data.rows[i].file_id}"></div>`);
                 let item = new AttachmentQueueItem({data:{
                         row:this.data.rows[i],
                         is_archieved:true,
@@ -326,9 +346,6 @@ let config = {
                 }
                 this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
                 this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
-                if(this.data.value.length <= 3){
-                    this.el.find('.ellipses').hide();
-                }
                 this.actions._deleteItemFromThumbnailList(event.data.fileId);
                 this.events.changeValue(this.data);
                 this.actions._playQueueItems();
