@@ -82,20 +82,10 @@ let SettingPage = Component.extend({
          * 获取用户快捷设置参数并解析
          */
         getItemData:function () {
-            // let biStatus = window.config.sysConfig.logic_config.client_login_show_bi || "10";
-            // this.data.biSort = biStatus.split('')[0];
-            // this.data.biStatus = biStatus.split('')[1];
-            //
-            // let calendarStatus = window.config.sysConfig.logic_config.client_login_show_calendar || "20";
-            // this.data.calendarSort = calendarStatus.split('')[0];
-            // this.data.calendarStatus = calendarStatus.split('')[1];
-            //
-            // let homeStatus = window.config.sysConfig.logic_config.client_login_show_home || "000";
-            // this.data.bi_view = homeStatus.substring(0,homeStatus.length - 1);
-            // this.data.homeStatus = homeStatus.substring(homeStatus.length - 1);
-            //
-            // this.actions.addCheckbox();
             let that = this;
+            let homeStatus = window.config.sysConfig.logic_config.client_login_show_home || "000";
+            this.data.bi_view = homeStatus.substring(0,homeStatus.length - 1);
+
             TabService.getOpeningTabs().then((result) => {
                 //特殊标签（首页、日历、Bi）处理
                 that.data.config = result[1];
@@ -127,7 +117,6 @@ let SettingPage = Component.extend({
          */
         addDragBar:function (specialTabs) {
             let parent = this.el.find('.sortable-box');
-            console.log(specialTabs);
             for(let config of specialTabs){
                 let comp = new dragBar({
                     data:{
@@ -136,37 +125,12 @@ let SettingPage = Component.extend({
                         id:config.id
                     }
                 });
-                let container = $(`<li class="sort-item isShow-${config.id}" title="拖动调整顺序">`).appendTo(parent);
+                let container = $(`<li class="sort-item" title="拖动调整顺序" item-id="${config.id}">`).appendTo(parent);
                 comp.render(container);
             }
             this.actions.setBarsSortable();
         },
-        // addCalendarCheck:function ($parent) {
-        //     let $ul = $(`
-        //         <li class='isShow-calendar sort-item' title='拖动调整顺序'>
-        //             <label class='custom-checkbox' style='display: inline'>
-        //                 <input class='calendar-Show' title='点击设置此功能' type='checkbox'>
-        //             </label>
-        //             <span>登录时自动开启日历</span>
-        //             <i class='drag-icon icon-framework-drag'></i>
-        //         </li>`);
-        //     if(this.data.calendarSort === "1"){
-        //         $parent.append($ul);
-        //     }else{
-        //         $parent.prepend($ul);
-        //     }
-        // },
-        // addHomeCheck:function ($parent) {
-        //     let home = $(`
-        //         <li class="isShow-home" title="不可拖动" draggable="false">
-        //             <label class="custom-checkbox" style="display: inline">
-        //                 <input class="home-Show" title="点击设置此功能" type="checkbox" >
-        //             </label>
-        //             <span>登录时自动开启首页</span>
-        //             <i class="drag-icon icon-framework-drag" style="display: none"></i>
-        //         </li>`);
-        //     $parent.prepend(home);
-        // },
+
         /**
          * 获取用户首页bi视图列表
          */
@@ -260,6 +224,7 @@ let SettingPage = Component.extend({
          * 切换首页保存
          * */
         saveHomePage:function () {
+            // saveUserConfig
             let homeValue = this.el.find('input.home-Show').prop("checked");
             let homeflag = this.data.bi_view + ((homeValue === true)? "1" : "0");
             let json3 = {
@@ -273,7 +238,7 @@ let SettingPage = Component.extend({
                     window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + this.data.bi_view;
                     window.config.sysConfig.logic_config.client_login_show_home = res.data.toString();
                 }else{
-                    msgbox.showTips("服务器错误")
+                    msgbox.showTips("服务器错误");
                 }
             })
         },
@@ -312,40 +277,44 @@ let SettingPage = Component.extend({
          */
         saveSetting:function (refresh) {
             this.showLoading();
-            let biflag = this.actions._calFlag(this.data.biSort,this.el.find('input.bi-Show').prop("checked"));
-            let calendarflag = this.actions._calFlag(this.data.calendarSort,this.el.find('input.calendar-Show').prop("checked"));
-            let homeflag = this.actions._calFlag(this.data.bi_view,this.el.find('input.home-Show').prop("checked"));
+            let flags = {
+                bi: this.el.find('input.bi-Show').prop("checked") === true ? '1' : '0',
+                calendar : this.el.find('input.calendar-Show').prop("checked") === true ? '1' : '0',
+                home : this.actions._calFlag(this.data.bi_view,this.el.find('input.home-Show').prop("checked"))
+            };
+
             //以两位数保存bi和日历的顺序及开关，第一位表示顺序，2在前面（面板的上方），1在后面，第二位表示开关，0为关闭，1为开启
+            let newConfig = [];
+            let that = this;
+            //根据快捷设置界面的item顺序和checkbox设置新的config
+            this.el.find('.sortable-box li').each(function () {
+                let id = $(this)[0].attributes['item-id'].value;
+                let temp = {};
+                for (let config of that.data.config){
+                    if(config.id === id){
+                        temp = $.extend(true,{},config);
+                        temp.status = flags[config.id];
+                        newConfig.push(temp);
+                        break;
+                    }
+                }
+            });
+
             let json = {
                 action:'save',
                 pre_type:4,
-                content:biflag
+                content:newConfig
             };
 
-            let json2 = {
-                action:'save',
-                pre_type:5,
-                content:calendarflag
-            };
-
-            let json3 = {
-                action:'save',
-                pre_type:10,
-                content:homeflag
-            };
-
-            this.actions.saveUserConfig(json,json2,json3,refresh);
+            this.actions.saveUserConfig(json,refresh);
         },
         _calFlag:function(originVal,flag){
             return originVal + ((flag === true)?'1':'0');
         },
-        saveUserConfig:function (json,json2,json3,refresh) {
-            UserInfoService.saveUserConfig(json,json2,json3).then((result) => {
+        saveUserConfig:function (json,refresh) {
+            UserInfoService.saveUserConfig(json).then((result) => {
                 this.hideLoading();
-                if(result[0].succ === 1 && result[1].succ === 1 && result[2].succ === 1){
-                    window.config.sysConfig.logic_config.client_login_show_bi = result[0].data.toString();
-                    window.config.sysConfig.logic_config.client_login_show_calendar = result[1].data.toString();
-                    window.config.sysConfig.logic_config.client_login_show_home = result[2].data.toString();
+                if(result.succ === 1){
                     if(!refresh) {
                         msgbox.alert("设置保存成功");
                     }
@@ -385,10 +354,6 @@ let SettingPage = Component.extend({
             this.el.find('.sortable-box:first').droppable({
                 accept:".sort-item",
             });
-
-            // this.actions.setCheck('input.bi-Show',this.data.biStatus);
-            // this.actions.setCheck('input.calendar-Show',this.data.calendarStatus);
-            // this.actions.setCheck('input.home-Show',this.data.homeStatus);
         },
         setCheck(selector,flag){
             if(flag === '1'){

@@ -36,7 +36,6 @@ export const TabService = {
     },
     // 记录用户打开新标签
     onOpenTab:function (id) {
-        console.log("do save tabs");
         let url = '/update_tab_data/?';
         let param  = Utils.formatParams({'tab_id':id,'event_tab':1});
         url = url + param;

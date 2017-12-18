@@ -201,7 +201,6 @@ export const UserInfoService = {
     resetPassword:function (json) {
         let url = '/validate_url_or_reset_pwd/';
         let body = Utils.formatParams(json);
-        console.log(body);
 
         return HTTP.postImmediately(url,body);
     },
