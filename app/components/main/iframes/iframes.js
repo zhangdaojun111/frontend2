@@ -10,6 +10,7 @@ import {SaveView} from "./new-save-view/new-save-view";
 import {TabService} from "../../../services/main/tabService";
 // import {IframesManager} from "../../../lib/iframes-manager";
 import msgbox from '../../../lib/msgbox';
+import {UserInfoService} from "../../../services/main/userInfoService";
 
 // let IframeOnClick = {
 //     resolution: 200,
@@ -77,24 +78,24 @@ let IframeComponent = Component.extend({
         tabsControlOpen: false,   //标签控制界面标记
         saveViewOpen: false,       //保存视图界面标记
         commonUseList: [],          //保存常用iframes，用于预加载
-        test_data:[
+        defaultUserConfig:[         //默认快捷设置，用于兼容老用户或未设置快捷设置的用户
+            {
+                id: 'home',
+                name: '首页',
+                url: window.config.sysConfig.home_index,
+                status:'000'
+            },
             {
                 id: 'bi',
                 name: 'BI',
                 url: window.config.sysConfig.bi_index,
-                status:1
+                status:'1'
             },
             {
                 id: 'calendar',
                 name: '日历',
                 url: window.config.sysConfig.calendar_index,
-                status:1
-            },
-            {
-                id: 'home',
-                name: '首页',
-                url: window.config.sysConfig.home_index,
-                status:1
+                status:'1'
             }
         ]
     },
@@ -425,16 +426,20 @@ let IframeComponent = Component.extend({
          * 获取最后一次退出系统时未关闭的标签数据以及快捷设置中bi/日历的设置记录
          */
         readyOpenTabs: function () {
-            //自动打开的标签由系统设置的bi/日历 和 最后一次系统关闭时未关闭的标签两部分组成
-            //第一部分：获取系统关闭时未关闭的tabs
+            //自动打开的标签由系统关闭时未关闭的普通标签和系统快捷设置的特殊标签bi/日历/首页 两部分组成
             TabService.getOpeningTabs().then((result) => {
-                this.actions._getOpenTabList(result[0]);
-                let biConfig = this.actions._getBiList(result[1]);
-                let calendarConfig = this.actions._getCalendarList(result[2]);
+                //普通标签处理
+                let commonTabs = result[0];
+                this.actions._getOpenTabList(commonTabs);
+                //特殊标签（首页、日历、Bi）处理
+                let specialTabs = result[1];
+                specialTabs = this.data.defaultUserConfig;
+                this.actions._addSpecialTabs(specialTabs);
+                debugger;
                 //如果bi、calendar均未勾选，则参考后台bi、calendar自动开启设置
-                this.actions._getBiCalendarFromConfig(biConfig,calendarConfig);
-                //首页
-                this.actions._getHomeConfig(result[3]);
+                this.actions._getBiCalendarFromConfig();
+
+                //根据config处理结果自动打开tabs
                 this.actions.autoOpenTabs();
             });
         },
@@ -454,95 +459,77 @@ let IframeComponent = Component.extend({
                 console.log("get tabs failed", result.err);
             }
         },
-        // _getBiList(result){
-        //     let biConfig;
-        //     if (result.succ === 1) {
-        //         biConfig = result;
-        //         //检测数据biConfig.data是否为两位数，如果不是（ng系统为1位数），给用户设置默认值10
-        //         if (biConfig.data !== "10" && biConfig.data !== "11" && biConfig.data !== "20" && biConfig.data !== "21") {
-        //             biConfig.data = "10";
-        //         }
-        //         if ((biConfig.data && biConfig.data.toString() !== "10" && biConfig.data.toString() !== "20")) {
-        //             this.data.biCalendarList.push({
-        //                 id: 'bi',
-        //                 name: 'BI',
-        //                 url: window.config.sysConfig.bi_index
-        //             });
-        //         }
-        //         window.config.sysConfig.logic_config.client_login_show_bi = biConfig.data.toString();
-        //     } else {
-        //         console.log("get tabs failed", result.err);
-        //     }
-        //     return biConfig;
-        // },
-        // _getCalendarList(result){
-        //     let calendarConfig;
-        //     if (result.succ === 1) {
-        //         calendarConfig = result;
-        //         //检测数据calendarConfig.data是否为两位数，如果不是，给用户设置默认值20
-        //         if (calendarConfig.data !== "10" && calendarConfig.data !== "11" && calendarConfig.data !== "20" && calendarConfig.data !== "21") {
-        //             calendarConfig.data = "20";
-        //         }
-        //         window.config.sysConfig.logic_config.client_login_show_calendar = calendarConfig.data.toString();
-        //         if ((calendarConfig.data && calendarConfig.data.toString() === "11")) {
-        //             this.data.biCalendarList.unshift({
-        //                 id: 'calendar',
-        //                 name: '日历',
-        //                 url: window.config.sysConfig.calendar_index
-        //             });
-        //         } else if ((calendarConfig.data && calendarConfig.data.toString() === "21")) {
-        //             this.data.biCalendarList.push({
-        //                 id: 'calendar',
-        //                 name: '日历',
-        //                 url: window.config.sysConfig.calendar_index
-        //             });
-        //         }
-        //     }
-        //     return calendarConfig;
-        // },
-        // _getBiCalendarFromConfig(biConfig,calendarConfig){
-        //     if ((biConfig.data === "10" || biConfig.data === "20") && (calendarConfig.data === "10" || calendarConfig.data === "20")) {
-        //         if (window.config.sysConfig.logic_config.login_show_bi === "1") {
-        //             this.data.biCalendarList.push({
-        //                 id: 'bi',
-        //                 name: 'BI',
-        //                 url: window.config.sysConfig.bi_index
-        //             });
-        //         }
-        //         if (window.config.sysConfig.logic_config.login_show_calendar === "1") {
-        //             if ((calendarConfig.data && calendarConfig.data.toString() === "10")) {
-        //                 this.data.biCalendarList.unshift({
-        //                     id: 'calendar',
-        //                     name: '日历',
-        //                     url: window.config.sysConfig.calendar_index
-        //                 });
-        //             } else if ((calendarConfig.data && calendarConfig.data.toString() === "20")) {
-        //                 this.data.biCalendarList.push({
-        //                     id: 'calendar',
-        //                     name: '日历',
-        //                     url: window.config.sysConfig.calendar_index
-        //                 });
-        //             }
-        //         }
-        //     }
-        // },
-        _getHomeConfig(result){
-            if (result.succ === 1) {
-                let homeConfig = result;
-                if (!homeConfig.data.length) {
-                    // msgbox.showTips("服务器暂不支持首页，请及时更新");
-                    homeConfig.data = "000";
+        /**
+         * 根据用户快捷设置结果添加特殊标签
+         * @param specialConfig  传入数组
+         * @private
+         */
+        _addSpecialTabs(specialConfig){
+            //若非数组则设置默认值
+            if(!$.isArray(specialConfig)){
+                let json = {
+                    action:'save',
+                    pre_type:4,
+                    content:this.data.defaultUserConfig
+                };
+                UserInfoService.saveUserConfig(json);
+            }else{
+                for ( let config of specialConfig){
+                    if(config['id'] === 'home'){
+                        this.actions._getHomeConfig(config);
+                    }else{
+                        this.actions._dealConfig(config);
+                    }
                 }
-                if (homeConfig.data.substring(homeConfig.data.length - 1) !== "0" && homeConfig.data.substring(homeConfig.data.length - 1) !== "1") {
-                    homeConfig.data = "000";
-                }
-                window.config.sysConfig.logic_config.client_login_show_home = homeConfig.data.toString();
-                window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + homeConfig.data.substring(0, homeConfig.data.length - 1);
-                if ((homeConfig.data && homeConfig.data.substring(homeConfig.data.length - 1) === "1")) {
+            }
+        },
+        _dealConfig(config){
+            if(config.status.toString() === '1'){
+                let temp = {};
+                temp['name'] = config['name'];
+                temp['id'] = config['id'];
+                temp['url'] = config['url'];
+                this.data.biCalendarList.push(temp);
+            }
+            //获取结果存入window.config，初始化用户快捷设置界面时使用
+            window.config.sysConfig.logic_config['client_login_show_' + config['id']] = config.status.toString;
+        },
+        _getHomeConfig(config){
+            let homeConfig = config;
+            //status为多位数字字符串，最后一位表示开关，前面几位表示首页打开的viewId
+            homeConfig.status = homeConfig.status.toString();
+            let homeFlag = homeConfig.status.substring(homeConfig.status.length - 1, homeConfig.status.length);
+            let canvasNum = homeConfig.status.substring(0,homeConfig.status.length - 1);
+
+            window.config.sysConfig.logic_config.client_login_show_home = homeConfig.status.toString();
+            window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + canvasNum;
+
+            if (homeFlag === '1') {
+                this.data.biCalendarList.push({
+                    id: 'home',
+                    name: '首页',
+                    url: window.config.sysConfig.home_index
+                });
+            }
+        },
+        /**
+         * 用户快捷设置bi和日历均为关闭，则参考manage设置是否打开bi或日历
+         * @private
+         */
+        _getBiCalendarFromConfig(){
+            if (window.config.sysConfig.logic_config.client_login_show_bi === '0' && window.config.sysConfig.logic_config.client_login_show_calendar === '0') {
+                if (window.config.sysConfig.logic_config.login_show_bi === "1") {
                     this.data.biCalendarList.push({
-                        id: 'home',
-                        name: '首页',
-                        url: window.config.sysConfig.home_index
+                        id: 'bi',
+                        name: 'BI',
+                        url: window.config.sysConfig.bi_index
+                    });
+                }
+                if (window.config.sysConfig.logic_config.login_show_calendar === "1") {
+                    this.data.biCalendarList.push({
+                        id: 'calendar',
+                        name: '日历',
+                        url: window.config.sysConfig.calendar_index
                     });
                 }
             }
@@ -555,7 +542,7 @@ let IframeComponent = Component.extend({
             this.actions.findTabInfo(menu, this.data.openingTabsList, this.data.autoOpenList);
             this.actions.sortTabs(this.data.autoOpenList, this.data.timeList);
             this.data.autoOpenList = this.data.autoOpenList.concat(this.data.biCalendarList);
-            console.log(this.data.autoOpenList);
+
             //依次打开各标签
             if (this.data.autoOpenList.length) {
                 for (let k of this.data.autoOpenList) {
@@ -563,7 +550,6 @@ let IframeComponent = Component.extend({
                 }
                 this.actions.focusIframe(this.data.autoOpenList[this.data.autoOpenList.length - 1].id);
             }
-
         },
         /**
          * 使用id取time值，再根据time排序
