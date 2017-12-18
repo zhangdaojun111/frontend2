@@ -9,6 +9,7 @@ import {FormService} from "../../../../services/formService/formService";
 import msgbox from '../../../../lib/msgbox';
 import {PMAPI} from "../../../../lib/postmsg";
 import ViewVideo from "../../view-video/view-video";
+import Mediator from "../../../../lib/mediator";
 
 let config = {
     template: template,
@@ -86,7 +87,15 @@ let config = {
                 let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
                 let fileType = this.data.is_archieved?this.data.row.content_type:this.data.file.type;
                 if(fileType.indexOf('image') != -1) {
-                    PMAPI.openPreview({list:[{file_id:fileId}],id:fileId});
+                    let items = [];
+                    for(let data of this.data.list){
+                        let item = {file_id:data};
+                        items.push(item);
+                    }
+                    if(items.length == 0 || this.data.real_type == 9){
+                        items = [{file_id:fileId}];
+                    }
+                    PMAPI.openPreview({list:items,id:fileId});
                 } else if (fileType== 'video/mp4'
                     || fileType == 'audio/mp3'
                     || fileType == 'audio/wav') {
@@ -279,6 +288,11 @@ let config = {
         } else {
             this.actions._loadArchievedRow();
         }
+    },
+    firstAfterRender:function () {
+        Mediator.subscribe('attachment:changeValue',(data)=>{
+            this.data.list = data;
+        })
     }
 };
 let AttachmentQueueItem = Component.extend(config)

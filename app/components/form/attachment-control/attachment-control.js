@@ -204,7 +204,7 @@ let config = {
                 }
             }
             let ele = $('<div></div>');
-            let item = new AttachmentQueueItem({data:{file: file, real_type: this.data.real_type, fileOrder:i, toolbox:toolbox, is_archieved:false},events:{
+            let item = new AttachmentQueueItem({data:{file: file, list:this.data.value, real_type: this.data.real_type, fileOrder:i, toolbox:toolbox, is_archieved:false},events:{
                 changeFile: event => {
                     if (event.event == 'delete') {
                         this.actions._deleteQueueItem(ele,event);
@@ -234,6 +234,7 @@ let config = {
                     }
                 }
             }});
+            Mediator.publish('attachment:changeValue',this.data.value);
             this.el.find('.upload-process-queue').prepend(ele);
             item.render(ele);
             this.data.queueItemEles.unshift(ele);
@@ -311,6 +312,7 @@ let config = {
             for(let i=0,length = this.data.rows.length;i<length;i++){
                 let ele = $(`<div id="${this.data.rows[i].file_id}"></div>`);
                 let item = new AttachmentQueueItem({data:{
+                        list:this.data.value,
                         row:this.data.rows[i],
                         is_archieved:true,
                         real_type: this.data.real_type,
@@ -319,6 +321,7 @@ let config = {
                     },events:{
                         changeFile:(event)=>{
                             this.actions._deleteQueueItem(ele,event);
+                            Mediator.publish('attachment:changeValue',this.data.value);
                         }
                     }});
                 this.el.find('.upload-process-queue').prepend(ele);
