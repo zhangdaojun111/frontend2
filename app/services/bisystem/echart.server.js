@@ -93,7 +93,9 @@ export class EchartsService {
         let secondMaxYnum = [];
         let secondMinYnum = [];
         let isStack = false; // 判断是否堆叠
-
+        if (cellOption['chartAssignment'] && cellOption['chartAssignment']['val'] == 1) {
+            alert('这是分组信息')
+        }
         yAxis.forEach((y,i) => {
             // 判断是否是堆叠情况
             if (cellOption.yAxis[i] && cellOption.yAxis[i]['group']) {
