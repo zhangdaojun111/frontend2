@@ -32,40 +32,40 @@ export const FormService = {
             let newDataFromParent = window.top.frontendParentNewData[frontendParentTableId];
             //父表类型
             if (newDataFromParent.hasOwnProperty(key)) {
-                let type = newDataFromParent[key]["type"];
-                if (key != "temp_id" && key != "real_id") {
-                    //要填充的value
+                // let type = newDataFromParent[key]["type"];
+                // if (key != "temp_id" && key != "real_id") {
+                //     //要填充的value
                     val = formDataFromParent[key];
-                    //判断父表类型
-                    if (type == 'Select' || type == 'Buildin') {
-                        for (var k in newDataFromParent[key]["options"]) {
-                            if (newDataFromParent[key]["options"][k]["value"] == val) {
-                                val = newDataFromParent[key]["options"][k]["label"];
-                                break;
-                            }
-                        }
-                    } else if (type == 'Radio') {
-                        for (var k in newDataFromParent[key]["group"]) {
-                            if (newDataFromParent[key]["group"][k]["value"] == val) {
-                                val = newDataFromParent[key]["group"][k]["label"];
-                                break;
-                            }
-                        }
-                    } else if (type == 'MultiSelect') {
-                        let resultVal = '';
-                        for (let v of val) {
-                            for (var k in newDataFromParent[key]["options"]) {
-                                if (newDataFromParent[key]["options"][k]["value"] == v) {
-                                    resultVal = resultVal + newDataFromParent[key]["options"][k]["label"] + '，';
-                                    break;
-                                }
-                            }
-                        }
-                        val = resultVal.substr(0, resultVal.length - 1);
-                    }
-                } else {
-                    val = formDataFromParent[key];
-                }
+                //     //判断父表类型
+                //     if (type == 'Select' || type == 'Buildin') {
+                //         for (var k in newDataFromParent[key]["options"]) {
+                //             if (newDataFromParent[key]["options"][k]["value"] == val) {
+                //                 val = newDataFromParent[key]["options"][k]["label"];
+                //                 break;
+                //             }
+                //         }
+                //     } else if (type == 'Radio') {
+                //         for (var k in newDataFromParent[key]["group"]) {
+                //             if (newDataFromParent[key]["group"][k]["value"] == val) {
+                //                 val = newDataFromParent[key]["group"][k]["label"];
+                //                 break;
+                //             }
+                //         }
+                //     } else if (type == 'MultiSelect') {
+                //         let resultVal = '';
+                //         for (let v of val) {
+                //             for (var k in newDataFromParent[key]["options"]) {
+                //                 if (newDataFromParent[key]["options"][k]["value"] == v) {
+                //                     resultVal = resultVal + newDataFromParent[key]["options"][k]["label"] + '，';
+                //                     break;
+                //                 }
+                //             }
+                //         }
+                //         val = resultVal.substr(0, resultVal.length - 1);
+                //     }
+                // } else {
+                //     val = formDataFromParent[key];
+                // }
                 result[key] = val;
             }
         }
