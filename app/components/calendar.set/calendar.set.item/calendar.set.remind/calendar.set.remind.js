@@ -7,6 +7,7 @@ import './calendar.set.remind.scss';
 import {AutoSelect} from '../../../util/autoSelect/autoSelect';
 import {PMAPI, PMENUM} from '../../../../lib/postmsg';
 import MSG from '../../../../lib/msgbox';
+import '../../../../assets/scss/calendar/icon-calendar.scss';
 
 let config = {
     template: template,
