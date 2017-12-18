@@ -183,6 +183,7 @@ export class EchartsService {
                 break;
             }
         }
+
         const splitNumber = 5;// y轴分成几段
         if (!isStack) {
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
@@ -396,8 +397,6 @@ export class EchartsService {
                 val.axisLabel = {textStyle:{fontSize:cellOption['customTextStyle']['chartSize']}};
             });
         }
-        console.log('==================================');
-        console.log(linebarOption);
         return linebarOption;
     }
 
