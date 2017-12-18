@@ -1,14 +1,21 @@
 <div class="attachment-queue-item">
     <div class="loader" style="width: 10px;margin:2px 4px"></div>
     <div class="preview" style="display: none;margin:2px 4px">预览</div>
+    {{#if is_archieved}}
+        <div class="download" style="margin:2px 4px"><a class="download-url" style="color:#2298f4;">下载</a></div>
+    {{/if}}
     <div class="delete-file" style="display: none;margin:2px 4px">删除</div>
-    <div class="processing" style="margin:2px 4px">上传中</div>
-    <div class="keep-on-attaching" style="display: none;margin:2px 4px">继续上传</div>
-    <div class="pause-attaching" style="display: none;margin:2px 4px">暂停</div>
-    <div class="re-uploading" style="display:none;margin:2px 4px">重新上传</div>
-    <div class="cancel-attaching" style="display: none;margin:2px 4px">取消上传</div>
-    <div id="process-num" style="margin:2px 4px">0%</div>
-    <div class="file-name" style="margin:2px 4px"  title="{{file.name}}({{fileSize}})"><strong>{{file.name}}({{fileSize}})</strong></div>
+    {{#if is_archieved}}
+        <div class="file-name" style="margin:2px 4px"  title="{{row.file_name}}"><strong>{{row.file_name}}</strong></div>
+    {{else}}
+        <div class="processing" style="margin:2px 4px">上传中</div>
+        <div class="keep-on-attaching" style="display: none;margin:2px 4px">继续上传</div>
+        <div class="pause-attaching" style="display: none;margin:2px 4px">暂停</div>
+        <div class="re-uploading" style="display:none;margin:2px 4px">重新上传</div>
+        <div class="cancel-attaching" style="display: none;margin:2px 4px">取消上传</div>
+        <div id="process-num" style="margin:2px 4px">0%</div>
+        <div class="file-name" style="margin:2px 4px"  title="{{file.name}}({{fileSize}})"><strong>{{file.name}}({{fileSize}})</strong></div>
+    {{/if}}
     <!--<div class="preview-contain" style="display: none;margin:2px 4px">-->
         <!--<button class="hide-preview" style="margin:2px 4px">收起</button>-->
         <!--<div class="preview-anchor"></div>-->
