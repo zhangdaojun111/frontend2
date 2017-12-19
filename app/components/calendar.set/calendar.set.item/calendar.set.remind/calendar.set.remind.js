@@ -7,6 +7,7 @@ import './calendar.set.remind.scss';
 import {AutoSelect} from '../../../util/autoSelect/autoSelect';
 import {PMAPI, PMENUM} from '../../../../lib/postmsg';
 import MSG from '../../../../lib/msgbox';
+import '../../../../assets/scss/calendar/icon-calendar.scss';
 
 let config = {
     template: template,
@@ -198,7 +199,58 @@ let config = {
                 this.data.emailCopyPeopleAutoSelect.data.choosed.forEach(item => {
                     this.data.emailCopyPeople.push(item['id']);
                 });
-                this.actions.checkRemindStatus();
+               this.actions.checkRemindStatus();
+            }
+        },
+        {
+            event:'change',
+            selector:'.remind-time-sms',
+            callback:function(){
+                this.data.smsRemindTime = this.el.find('.remind-time-sms').val();
+                if(this.data.smsRemindTime.length ==5){
+                    this.el.find('.remind-time-sms-icon').removeClass('icon-calendar-require').addClass('icon-calendar-require_yes');
+                }else{
+                    this.el.find('.remind-time-sms-icon').removeClass('icon-calendar-require_yes').addClass('icon-calendar-require');
+                }
+            }
+        },
+        {
+            event:'change',
+            selector:'.remind-time-email',
+            callback:function(){
+                this.data.emailRemindTime = this.el.find('.remind-time-email').val();
+                if(this.data.emailRemindTime.length ==5){
+                    this.el.find('.remind-time-email-icon').removeClass('icon-calendar-require').addClass('icon-calendar-require_yes');
+                }else{
+                    this.el.find('.remind-time-email-icon').removeClass('icon-calendar-require_yes').addClass('icon-calendar-require');
+                }
+            }
+        },
+        {
+            event:'click',
+            selector:'.remind-receiver-sms li, .remind-receiver-sms .select-all',
+            callback:function(){
+                setTimeout(()=>{
+                    if(this.data.smsReceiverAutoSelect.data.choosed.length>0){
+                        this.el.find('.remind-receiver-sms-icon').removeClass('icon-calendar-require').addClass('icon-calendar-require_yes');
+                    }else{
+                        this.el.find('.remind-receiver-sms-icon').removeClass('icon-calendar-require_yes').addClass('icon-calendar-require');
+                    }
+                },500)
+
+            }
+        },
+        {
+            event:'click',
+            selector:' .remind-receiver-email li, .remind-receiver-email .select-all',
+            callback:function(){
+                setTimeout(()=>{
+                    if(this.data.emailReceiverAutoSelect.data.choosed.length>0){
+                        this.el.find('.remind-receiver-email-icon').removeClass('icon-calendar-require').addClass('icon-calendar-require_yes');
+                    }else{
+                        this.el.find('.remind-receiver-email-icon').removeClass('icon-calendar-require_yes').addClass('icon-calendar-require');
+                    }
+                },500)
             }
         },
     ],

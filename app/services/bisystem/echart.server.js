@@ -93,7 +93,6 @@ export class EchartsService {
         let secondMaxYnum = [];
         let secondMinYnum = [];
         let isStack = false; // 判断是否堆叠
-
         yAxis.forEach((y,i) => {
             // 判断是否是堆叠情况
             if (cellOption.yAxis[i] && cellOption.yAxis[i]['group']) {
@@ -134,7 +133,7 @@ export class EchartsService {
                         width: 1
                     }
                 },
-                areaStyle:(cellOption.chartAssignment && cellOption.chartAssignment.val)? {normal: {}} : (cellOption.yAxis[i] && cellOption.yAxis[i].areaStyle==1)?{normal: {}}:{},
+                areaStyle:cellOption['chartAssignment'] && cellOption['chartAssignment']['val'] == 1 ? (cellOption.yAxis[y['yAxisIndex']] && cellOption.yAxis[y['yAxisIndex']].areaStyle===1 ? {normal:{}} :{}) : (cellOption.yAxis[i] && cellOption.yAxis[i].areaStyle==1)?{normal: {}}:{},
                 stack:cellOption.yAxis[i] && cellOption.yAxis[i]['group'] || '',
                 label: (cellOption.yAxis[i] && cellOption.yAxis[i]['label']==1)?
                     {normal: {
@@ -184,6 +183,7 @@ export class EchartsService {
                 break;
             }
         }
+
         const splitNumber = 5;// y轴分成几段
         if (!isStack) {
             linebarOption['yAxis'][0]['min'] = isZero ? 0 : firstMin;
@@ -397,7 +397,6 @@ export class EchartsService {
                 val.axisLabel = {textStyle:{fontSize:cellOption['customTextStyle']['chartSize']}};
             });
         }
-
         return linebarOption;
     }
 

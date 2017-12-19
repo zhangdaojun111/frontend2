@@ -111,6 +111,8 @@ export class CellBaseComponent extends Component {
             } else if (res['data'].assortment === 'nineGrid') {
                 this.data = this.actions.reassemble({'chart':res['data']});
                 this.reload();
+            } else if (res['data'].assortment === 'approval') {
+                this.actions.getRecord();
             }
         }
     }
