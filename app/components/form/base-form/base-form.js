@@ -2182,7 +2182,7 @@ let config = {
 			if(data[key].dataList=='other_place'){
 				if(!this.data.buildin_options ||(this.data.buildin_options[data[key].id] && $.isEmptyObject(this.data.buildin_options[data[key].id]))){
 					let res=await FormService.getFormStaticBuildinData(this.actions.createPostJson());
-					this.data.oldData[key].dataList=data[key].dataList=(res.data && res.data.buildin_options)?res.data.buildin_options:{' ':{value:'',label:''}};
+					this.data.oldData[key].dataList=data[key].dataList=res.buildin_options && res.buildin_options[data[key].id]?res.buildin_options[data[key].id]:{' ':['请选择','请选择']};
 				}else{
 					this.data.oldData[key].dataList=data[key].dataList=this.data.buildin_options[data[key].id];
 				}
