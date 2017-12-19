@@ -219,6 +219,9 @@ let config = {
                             file_name:event.data.file.name,
                             content_type:event.data.file.type
                         }
+                        if(this.data.rows == undefined){
+                            this.data.rows = [];
+                        }
                         this.data.rows.push(row);
                         this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                         if(this.data.value.length > 0){
@@ -312,6 +315,7 @@ let config = {
                         this.data.rows = res.rows;
                         this.actions._loadArchievedItems();
                     }
+                this.el.find('.file-btns').show();
             });
         },
         _loadArchievedItems:function () {
