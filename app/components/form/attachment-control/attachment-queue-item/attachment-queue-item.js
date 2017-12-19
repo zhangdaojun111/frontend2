@@ -262,6 +262,7 @@ let config = {
                 this.el.find('.preview').css('display', 'inline');
             // }
             this.el.find('.preview').show();
+            this.el.find('.file-name').prop('title',this.data.row.file_name);
             this.actions._unableSomePreview();
             if(this.data.is_view==0){
                 this.el.find('.delete-file').show();
