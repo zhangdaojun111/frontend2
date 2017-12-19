@@ -227,7 +227,7 @@ let config = {
                         if (this.data['thumbnailListComponent']) {
                             this.data['thumbnailListComponent'].actions.addItem(obj);
                         } else if(this.data.real_type == 23) {
-                            let comp = new ThumbnailList({data:{item:[obj],dinput_type:this.data.real_type}});
+                            let comp = new ThumbnailList({data:{items:[obj],dinput_type:this.data.real_type}});
                             comp.render(this.el.find('.thumbnail-list-anchor'));
                             this.data['thumbnailListComponent'] = comp;
                         }
@@ -309,6 +309,7 @@ let config = {
             });
         },
         _loadArchievedItems:function () {
+            this.data.queueItemEles = [];
             for(let i=0,length = this.data.rows.length;i<length;i++){
                 let ele = $(`<div id="${this.data.rows[i].file_id}"></div>`);
                 let item = new AttachmentQueueItem({data:{
@@ -372,14 +373,14 @@ let config = {
             this.el.find('.upload-file').val('上传图片');
             if(this.data.value.length != 0){
                 FormService.getThumbnails({
-                    file_ids: JSON.stringify(this.data.value)
+                    file_ids: this.data.value
                 }).then(res => {
                     if (!res.success) {
                         console.log(res.error);
                         return;
                     }
                     if (res.rows.length != 0) {
-                        let comp = new ThumbnailList({data:{item:res.rows,dinput_type:this.data.real_type}});
+                        let comp = new ThumbnailList({data:{items:res.rows,dinput_type:this.data.real_type}});
                         comp.render(this.el.find('.thumbnail-list-anchor'));
                         this.data['thumbnailListComponent'] = comp;
                     }
@@ -402,7 +403,7 @@ let config = {
     },
     beforeDestroy:function () {
         Mediator.remove('getDataFromOtherFrame:'+this.data.id);
-    }
+    },
 };
 let AttachmentControl = Component.extend(config)
 export default AttachmentControl

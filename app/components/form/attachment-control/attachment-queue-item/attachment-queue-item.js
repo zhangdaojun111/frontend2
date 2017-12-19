@@ -293,6 +293,9 @@ let config = {
         Mediator.subscribe('attachment:changeValue',(data)=>{
             this.data.list = data;
         })
+    },
+    beforeDestory:function () {
+        Mediator.remove('attachment:changeValue');
     }
 };
 let AttachmentQueueItem = Component.extend(config)
