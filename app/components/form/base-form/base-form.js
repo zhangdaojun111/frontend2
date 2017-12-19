@@ -129,9 +129,11 @@ let config = {
 						if (this.data.childComponent[songridDfield]) {
 							this.data.childComponent[songridDfield].data["options"] = options;
 						}
-					}
-					if (val || val == '') {
-						this.actions.setFormValue(songridDfield, $.type(val)=='object' ?val.value:val);
+						this.actions.setFormValue(songridDfield, $.type(val) == 'object' ? val.value : val);
+					}else {
+						if (val || val == '') {
+							this.actions.setFormValue(songridDfield, $.type(val) == 'object' ? val.label : val);
+						}
 					}
 					// this.actions.triggerSingleControl(songridDfield);
 				}
@@ -1089,7 +1091,6 @@ let config = {
 
 		setValueFromDataForForm(res){
 			for (let k in res["data"]) {
-				console.log('k:'+k);
 				let data = this.data.data;
 				//如果是周期规则
 				if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
@@ -1385,8 +1386,6 @@ let config = {
 				data["be_control_condition"] = (key == value) ? 0 : 1;
 			}
 			if (this.data.data[data.dfield]) {
-				console.log('checkValue data.data');
-				console.dir(data);
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
 		},
