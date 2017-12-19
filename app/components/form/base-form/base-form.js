@@ -1800,7 +1800,7 @@ let config = {
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`, {
 					title: showName,
 					width: 1400,
-					height: 800,
+					height: 810,
 				})
 			} else {
 				let formValue = this.actions.getFormValue();
@@ -1811,8 +1811,8 @@ let config = {
 				};
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`, {
 					title: showName,
-					width: 1200,
-					height: 800,
+					width: 1400,
+					height: 810,
 				}, {d});
 			}
 		},
@@ -1980,7 +1980,7 @@ let config = {
 				this.data.viewMode = 'viewFromCorrespondence';
 			}
 			let _this = this;
-			let w = 1400,h = 800;
+			let w = 1400,h = 810;
             if(window.innerWidth<1300){
                 w = 900;
                 h = 600;

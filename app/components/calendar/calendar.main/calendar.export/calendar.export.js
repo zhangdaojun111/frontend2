@@ -7,6 +7,7 @@ import './calendar.export.scss';
 import DateControl from '../../../form/date-control/date-control';
 import {PMAPI, PMENUM} from '../../../../lib/postmsg';
 import {CalendarService} from '../../../../services/calendar/calendar.service';
+import msgbox from "../../../../lib/msgbox";
 
 let config = {
     template: template,
@@ -23,11 +24,11 @@ let config = {
             }
             if( this.data.fromDate > this.data.toDate ){
                 alert( '起始时间不能大于结束时间。' );
-
+                this.el.find('.export-btn').attr("disabled", true);
             }
-            else {
+           else {
                 this.el.find('.export-btn').attr('disabled', false);
-            }
+           }
         },
     },
     afterRender: function() {
@@ -35,11 +36,15 @@ let config = {
             let _this = this;
             _this.data.cancelFields = JSON.stringify(params.data.cancelFields);
             _this.el.on('click', '.export-btn', function () {
-                window.open(`/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}&cancel_fields=${_this.data.cancelFields}`);
+                if( _this.data.fromDate === '' || _this.data.toDate === '' ){
+                    msgbox.alert('请先选择时间！');
+                }else{
+                    window.open(`/calendar_mgr/export_calendar_data/?from_date=${_this.data.fromDate}&to_date=${_this.data.toDate}&cancel_fields=${_this.data.cancelFields}`);
+                }
             });
         });
-        this.el.find('.export-btn').attr("disabled", true);
-        this.el.find('.export-btn').attr('disabled', true);
+        // this.el.find('.export-btn').attr("disabled", true);
+        // this.el.find('.export-btn').attr('disabled', true);
         let _this = this;
 
         let changeStartValue = (res) => {

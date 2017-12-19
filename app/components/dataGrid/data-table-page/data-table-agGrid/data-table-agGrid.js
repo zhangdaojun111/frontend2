@@ -2941,6 +2941,10 @@ let dataTableAgGrid = Component.extend({
         attachmentCellClick: function (data) {
             let dinput_type = data.colDef.real_type;
             let fileIds = data['value'];
+            if(fileIds.length === 0  && this.data.viewMode !==  "normal"){
+                msgBox.alert('附件为空！');
+                return;
+            }
             if (fileIds) {
                 dataTableService.getAttachmentList({
                     file_ids: JSON.stringify(fileIds),

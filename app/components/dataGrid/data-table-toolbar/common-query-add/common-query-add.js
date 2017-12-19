@@ -21,10 +21,8 @@ let css = `
 }
 .commponent-add-container .button-box {
     position: absolute;
-    width: 200px;
-    bottom: 30px;
-    right: 50%;
-    margin-right: -106px;
+    bottom: 20px;
+    right: 20px;
 }
 .commponent-add-container .button-box .save-btn{
     cursor: pointer;
@@ -45,7 +43,6 @@ let css = `
     border: 1px solid #d7d7d7;
     border-radius: 4px;
     color: #666;
-    margin-right: 8px;
     font-size:12px;
 }
 \`;
