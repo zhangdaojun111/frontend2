@@ -1261,6 +1261,13 @@ let dataTableAgGrid = Component.extend({
          * （body：数据，remindData：提醒数据，footer：footer数据）
          */
         getGridData: function (refresh) {
+            if(window.top.miniFormVal && window.top.miniFormVal[this.data.tableId]){
+                $('.dataTableMiniForm').css('display','block')
+                $('#pagetabs').append('<div class="miniFormAnim"></div>')
+            }else{
+                $('.dataTableMiniForm').css('display','none');
+                $('.miniFormAnim').css('display','none');
+            }
             //在途数据
             if (this.data.viewMode == 'in_process' || this.data.viewMode == 'reportTable2') {
                 this.actions.getInprocessData(refresh);
@@ -1303,11 +1310,6 @@ let dataTableAgGrid = Component.extend({
                 }, time);
                 if (refresh) {
                     msgBox.showTips('数据刷新成功。')
-                    if(window.top.miniFormVal && window.top.miniFormVal[this.data.tableId]){
-                        $('.dataTableMiniForm').css('display','block')
-                    }else{
-                        $('.dataTableMiniForm').css('display','none')
-                    }
                 }
                 if (this.data.groupCheck) {
                     msgBox.hideLoadingSelf();
