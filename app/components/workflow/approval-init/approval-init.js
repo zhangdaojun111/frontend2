@@ -217,6 +217,7 @@ let config = {
                     batchIdList: res.record_info.temp_ids,
                     tableId: this.data.obj.table_id,
                     recordId: this.data.obj.record_id,
+                    fromApprove: 1,
                     viewMode: "approveBatch",
                     cannotopenform: cannotopenform,
                     parentRecordId: res['record_info']['id'],
