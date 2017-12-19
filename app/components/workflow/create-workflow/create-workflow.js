@@ -19,6 +19,7 @@ let config = {
 		formSave: false,
 		formValue: '',
 		isSuccessSubmit: '',
+		isFormCreated:false,
 	},
 	actions: {
 		createWorkFlow() {
@@ -111,6 +112,9 @@ let config = {
 					this.data.temp_id=res.data.temp_id.value || '';
 				}
 			});
+			Mediator.subscribe("form:formAlreadyCreate", () => {
+				this.data.isFormCreated=true;
+			});
 		},
 		async getGridinfo() {
 			let res = await workflowService.getGridinfo({
@@ -137,7 +141,8 @@ let config = {
 			if (res.success === 1) {
 				this.data.isSuccessSubmit = false;
 				this.el.find('#place-form').empty();
-				FormEntrys.initForm({
+				this.data.isFormCreated=false;
+				 FormEntrys.initForm({
 					record_id: res.record_id,
 					form_id: this.data.wfObj.formid,
 					is_view: 1,
@@ -150,7 +155,9 @@ let config = {
 				let isdraft = true
 				this.el.find('#addFollower').hide();
 				this.el.find("#startNew").show().on('click', () => {
-					if (isdraft) {
+					console.log('点击时');
+					console.log(this.data.isFormCreated);
+					if (isdraft && this.data.isFormCreated) {
 						this.actions.chooseCb(this.data.wfObj);
 						this.el.find("#startNew").hide();
 						this.el.find("#submitWorkflow").show();
@@ -192,6 +199,7 @@ let config = {
 						this.data.isSuccessSubmit=false;
 						// CreateFormServer.changeToView(wfObj.tableid);
 						this.el.find('#place-form').empty();
+						this.data.isFormCreated=false;
 						FormEntrys.initForm({
 							record_id: res.record_id,
 							form_id: this.data.wfObj.formid,
@@ -205,7 +213,7 @@ let config = {
 						let isdraft = true;
 						this.el.find('#addFollower').hide();
 						this.el.find("#startNew").show().on('click',()=>{
-							if(isdraft){
+							if(isdraft && this.data.isFormCreated){
 								this.actions.chooseCb(this.data.wfObj);
 								this.el.find("#startNew").hide();
 								this.el.find("#submitWorkflow").show();

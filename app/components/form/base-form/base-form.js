@@ -123,16 +123,15 @@ let config = {
 				if (newDataFromSongrid.hasOwnProperty(songridDfield)) {
 					this.data.idsOfSonDataByParent.push(songridDfield);
 					let dinput_type = newDataFromSongrid[songridDfield]["dinput_type"] || "";
-					let options = [{value: val, label: val}];
 					if (FIELD_TYPE_MAPPING.SELECT_TYPE.indexOf(dinput_type) != -1) {
-						let options = [{value: val, label: val}];
+						let options = [$.type(val)=='object' ?{value:val.value,label:val.label}:{value: val, label: val}];
 						this.data.data[songridDfield]["options"] = options;
 						if (this.data.childComponent[songridDfield]) {
 							this.data.childComponent[songridDfield].data["options"] = options;
 						}
 					}
 					if (val || val == '') {
-						this.actions.setFormValue(songridDfield, val);
+						this.actions.setFormValue(songridDfield, $.type(val)=='object' ?val.value:val);
 					}
 					// this.actions.triggerSingleControl(songridDfield);
 				}
@@ -1518,7 +1517,7 @@ let config = {
 				this.actions.requiredChange(this.data.childComponent[data.dfield]);
 			}
 			if (this.data["frontend_cal_parent_2_child"]) {
-				window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
+				this.actions.saveParentFormValue();
 			}
 			if (!this.data.isInit && !noCount) {
 				console.log('getDataForForm');
@@ -1791,7 +1790,7 @@ let config = {
 			}
 			//保存父表数据
 			this.data.data[data['dfield']].total = data['total'];
-			window.top.frontendParentFormValue[this.data.tableId] = this.actions.createFormValue(this.data.data);
+			this.actions.saveParentFormValue();
 		},
 		//打开统计穿透
 		openCount(data) {
@@ -1949,7 +1948,7 @@ let config = {
 					_this.actions.setCountData(data.dfield);
 				}
 			}
-			window.top.frontendParentFormValue[_this.tableId] = _this.actions.createFormValue(_this.data.data);
+			this.actions.saveParentFormValue();
 		},
 
 		openType1SongGrid(_this,data,isView){
@@ -2457,16 +2456,20 @@ let config = {
 					this.actions.setFormValue(k,val)
 				}
 			}
+			this.actions.saveParentFormValue();
+			this.actions.formStyle();
+			this.data.isInit = false;
+		},
+		saveParentFormValue(){
 			let formValue=this.actions.createFormValue(this.data.data);
 			for(let dfield in formValue){
 				let data=this.data.data[dfield];
 				if (data.type == 'Buildin' || data.type == 'Select' || data.type=='Radio') {
-					formValue[dfield] = this.actions.getTextByOptionID(data.dfield, formValue[dfield]);
+					formValue[dfield]={value:formValue[dfield]};
+					formValue[dfield].label = this.actions.getTextByOptionID(data.dfield, formValue[dfield].value);
 				}
 			}
 			window.top.frontendParentFormValue[this.data.tableId] = formValue;
-			this.actions.formStyle();
-			this.data.isInit = false;
 		},
 		//生成表单分页
 		createFormTabs(){
