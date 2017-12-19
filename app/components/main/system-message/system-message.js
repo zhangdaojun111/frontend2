@@ -219,6 +219,7 @@ let SystemMessage = Component.extend({
                 }else if(data && data.sort === "desc"){
                     this.data.getDataParams['sortOrder'] = -1;
                 }
+                this.data.getDataParams['sortField']=data.colId;
                 this.actions.loadData(this.data.getDataParams);
             }else{
                 //前端排序
