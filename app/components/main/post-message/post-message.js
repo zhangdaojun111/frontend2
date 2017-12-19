@@ -57,7 +57,7 @@ let PostMessage = Component.extend({
 	    depIDs:[],
 	    depUserIds:[],
 	    department_tree:null,
-	    depId:window.config.sysConfig.userInfo.department_whole[0],
+	    depId:window.config.sysConfig.userInfo.department_whole && window.config.sysConfig.userInfo.department_whole[0],
 	    isHr:false,
     },
     binds:[{
