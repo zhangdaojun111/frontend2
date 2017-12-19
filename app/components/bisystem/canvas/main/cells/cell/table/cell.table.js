@@ -36,7 +36,7 @@ let config = {
                 this.actions.tableOperate(context);
             }
         },
-        {   //双击查看
+        {   //双击一行 进入查看
             event:'dblclick',
             selector:'.double-list tbody tr',
             callback:function (context,event) {
