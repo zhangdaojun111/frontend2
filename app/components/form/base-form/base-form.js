@@ -1173,7 +1173,7 @@ let config = {
 			if (this.data.isBatch == 1) {
 				delete json["flow_id"];
 			}
-			console.log('快捷添加');
+			console.log('为什么不显示呢');
 			console.log(this.data.isAddBuild);
 			if (this.data.isAddBuild) {
 				json['buildin_id'] = this.data.buildId;
@@ -1210,7 +1210,7 @@ let config = {
 			if (this.data.isAddBuild && !this.flowId) {
 				PMAPI.sendToRealParent({
 					type: PMENUM.close_dialog,
-					key: this.data.key,
+					key: this.data.buildKey,
 					data: {new_option: res.new_option},
 				});
 			} else {
@@ -1826,14 +1826,12 @@ let config = {
 		addNewBuildIn(data) {
 			let _this = this;
 			_this.data['quikAddDfield'] = data.dfield;
-			PMAPI.openDialogByIframe(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.data.key}&btnType=new`, {
+			PMAPI.openDialogByIframe(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&buildKey=${this.data.key}&btnType=new`, {
 				width: 800,
 				height: 600,
 				title: `快捷添加内置字段`,
 				modal: true
 			}).then((data) => {
-				console.log('data');
-				console.log(data);
 				if (!data.new_option) {
 					return;
 				}
@@ -2483,6 +2481,8 @@ let config = {
         this.actions.initForm();
         //生成表单分页
 		this.actions.createFormTabs();
+		console.log('这里面是啥呢?');
+		console.log(this.data);
 	},
 
 	firstAfterRender(){

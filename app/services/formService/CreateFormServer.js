@@ -43,6 +43,7 @@ export const CreateFormServer={
 		this.data.fromApprove = config.from_approve || '';//是否来自审批
 		this.data.isAddBuild = config.isAddBuild || 0;//是否是快捷添加内置
 		this.data.buildId = config.id || '';//快捷添加的key
+		this.data.buildKey=config.buildKey||'';//快捷添加iframekey;
 		this.data.btnType = config.btnType || 'new';//按钮
 		this.data.viewMode = config.viewMode || '0';//aggrid权限
         this.data.requestFormData = config.requestFormData=='1'?1:0;//不请求表单数据
