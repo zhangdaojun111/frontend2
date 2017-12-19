@@ -1846,7 +1846,7 @@ let config = {
 				options.splice(0, 0, data.new_option);
 			}
 			this.data.childComponent[this.data['quikAddDfield']].data.value = data.new_option.value;
-			this.data.childComponent[_this.data['quikAddDfield']].data.showValue = data.new_option.label;
+			this.data.childComponent[this.data['quikAddDfield']].data.showValue = data.new_option.label;
 			this.data.data[this.data['quikAddDfield']] = this.data.childComponent[this.data['quikAddDfield']].data;
 			this.data.childComponent[this.data['quikAddDfield']].reload();
 			this.actions.triggerControl();
