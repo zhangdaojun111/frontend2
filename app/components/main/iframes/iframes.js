@@ -83,19 +83,19 @@ let IframeComponent = Component.extend({
                 id: 'home',
                 name: '首页',
                 url: window.config.sysConfig.home_index,
-                status:'001'
+                status:'000'
             },
             {
                 id: 'bi',
                 name: 'BI',
                 url: window.config.sysConfig.bi_index,
-                status:'1'
+                status:'0'
             },
             {
                 id: 'calendar',
                 name: '日历',
                 url: window.config.sysConfig.calendar_index,
-                status:'1'
+                status:'0'
             }
         ]
     },
@@ -432,8 +432,20 @@ let IframeComponent = Component.extend({
                 let commonTabs = result[0];
                 this.actions._getOpenTabList(commonTabs);
                 //特殊标签（首页、日历、Bi）处理
-                let specialTabs = result[1];
-                specialTabs = this.data.defaultUserConfig;
+                let specialTabs;
+                console.log(result[1].data,'----------------------!!!!!!!');
+                // let test = $.parseJSON(result[1].data);
+                // console.log(test);
+
+                if(typeof result[1].data === 'string'){
+                    try {
+                        specialTabs = $.parseJSON(result[1].data);
+                    }catch (e){
+                        console.log('not array');
+                    }
+                }
+                console.log(specialTabs);
+                // specialTabs = this.data.defaultUserConfig;
                 this.actions._addSpecialTabs(specialTabs);
 
                 //如果bi、calendar均未勾选，则参考后台bi、calendar自动开启设置
@@ -467,10 +479,11 @@ let IframeComponent = Component.extend({
         _addSpecialTabs(specialConfig){
             //若非数组则设置默认值
             if(!$.isArray(specialConfig)){
+                let config = JSON.stringify(this.data.defaultUserConfig);
                 let json = {
                     action:'save',
                     pre_type:4,
-                    content:this.data.defaultUserConfig
+                    content:config
                 };
                 UserInfoService.saveUserConfig(json);
             }else{

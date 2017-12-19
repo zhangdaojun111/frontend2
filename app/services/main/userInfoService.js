@@ -181,7 +181,7 @@ export const UserInfoService = {
         let url = 'user_preference';
         let res = HTTP.post(url,json);
         HTTP.flush();
-
+        console.log(res);
         return res;
     },
     /**
@@ -238,13 +238,13 @@ export const UserInfoService = {
             type:"get"
         });
     },
-    saveHomePageConfig:function (json3) {
-        let url = '/user_preference/';
-
-        return HTTP.postImmediately({
-            url:url,
-            type:"post",
-            data:json3
-        });
-    }
+    // saveHomePageConfig:function (json3) {
+    //     let url = '/user_preference/';
+    //
+    //     return HTTP.postImmediately({
+    //         url:url,
+    //         type:"post",
+    //         data:json3
+    //     });
+    // }
 };

@@ -87,28 +87,29 @@ let SettingPage = Component.extend({
             this.data.bi_view = homeStatus.substring(0,homeStatus.length - 1);
 
             TabService.getOpeningTabs().then((result) => {
+                console.log(result,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
                 //特殊标签（首页、日历、Bi）处理
-                that.data.config = result[1];
-                that.data.config = [         //默认快捷设置，用于兼容老用户或未设置快捷设置的用户
-                    {
-                        id: 'home',
-                        name: '首页',
-                        url: window.config.sysConfig.home_index,
-                        status:'000'
-                    },
-                    {
-                        id: 'bi',
-                        name: 'BI',
-                        url: window.config.sysConfig.bi_index,
-                        status:'1'
-                    },
-                    {
-                        id: 'calendar',
-                        name: '日历',
-                        url: window.config.sysConfig.calendar_index,
-                        status:'1'
-                    }
-                ];
+                that.data.config = JSON.parse(result[1].data);
+                // that.data.config = [         //默认快捷设置，用于兼容老用户或未设置快捷设置的用户
+                //     {
+                //         id: 'home',
+                //         name: '首页',
+                //         url: window.config.sysConfig.home_index,
+                //         status:'000'
+                //     },
+                //     {
+                //         id: 'bi',
+                //         name: 'BI',
+                //         url: window.config.sysConfig.bi_index,
+                //         status:'1'
+                //     },
+                //     {
+                //         id: 'calendar',
+                //         name: '日历',
+                //         url: window.config.sysConfig.calendar_index,
+                //         status:'1'
+                //     }
+                // ];
                 that.actions.addDragBar(that.data.config);
             });
         },
@@ -193,6 +194,8 @@ let SettingPage = Component.extend({
                 height: 217,
                 title: '新建视图'
             });
+            console.log(res);
+            debugger;
             if (res['name']) {
                 this.actions.updateViews(res);
             }
@@ -227,16 +230,26 @@ let SettingPage = Component.extend({
             // saveUserConfig
             let homeValue = this.el.find('input.home-Show').prop("checked");
             let homeflag = this.data.bi_view + ((homeValue === true)? "1" : "0");
-            let json3 = {
+
+            for ( let config of this.data.config){
+                if(config.id === 'home'){
+                    config.status = homeflag;
+                    break;
+                }
+            }
+
+            let config = JSON.stringify(this.data.config);
+            let json = {
                 action:'save',
-                pre_type:10,
-                content:homeflag
+                pre_type:4,
+                content:config
             };
-            UserInfoService.saveHomePageConfig(json3).then((res)=>{
+
+            UserInfoService.saveUserConfig(json).then((res)=>{
                 if(res.success === 1){
                     msgbox.showTips("设置成功");
                     window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + this.data.bi_view;
-                    window.config.sysConfig.logic_config.client_login_show_home = res.data.toString();
+                    window.config.sysConfig.logic_config.client_login_show_home = homeflag.toString();
                 }else{
                     msgbox.showTips("服务器错误");
                 }
@@ -299,7 +312,7 @@ let SettingPage = Component.extend({
                     }
                 }
             });
-
+            newConfig = JSON.stringify(newConfig);
             let json = {
                 action:'save',
                 pre_type:4,
@@ -307,6 +320,7 @@ let SettingPage = Component.extend({
             };
 
             this.actions.saveUserConfig(json,refresh);
+            this.data.config = newConfig;
         },
         _calFlag:function(originVal,flag){
             return originVal + ((flag === true)?'1':'0');
@@ -354,11 +368,6 @@ let SettingPage = Component.extend({
             this.el.find('.sortable-box:first').droppable({
                 accept:".sort-item",
             });
-        },
-        setCheck(selector,flag){
-            if(flag === '1'){
-                this.el.find(selector).attr("checked",true);
-            }
         },
         /**
          * 仅当dom位置发生变化（即bi/日历顺序有变化）才会触发，原地拖动不会触发
