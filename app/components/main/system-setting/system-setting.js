@@ -148,9 +148,9 @@ let SettingPage = Component.extend({
                     let checked = this.data.bi_view == item.id?'checked':'';
                     li += `<li class="bi-view">
                                 <label style="display: inline" class="custom-checkbox">
-                                    <input type="checkbox" title="${item.id}" name="home-page-checkbox" class="check-box" ${checked}>
+                                    <input type="checkbox"  name="home-page-checkbox" class="check-box" ${checked}>
                                 </label>
-                                <span class="set-home-page" title="${item.id}">${item.name}</span>
+                                <span class="set-home-page">${item.name}</span>
                                 <i class="home-page-delete" style="display: ${displaySty};" title="${item.id}">×</i>
                             </li>`;
                 });
