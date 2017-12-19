@@ -57,7 +57,7 @@ let PostMessage = Component.extend({
 	    depIDs:[],
 	    depUserIds:[],
 	    department_tree:null,
-	    depId:window.config.sysConfig.userInfo.department_whole && window.config.sysConfig.userInfo.department_whole[0],
+	    depId:window.config.sysConfig.userInfo.department_whole && window.config.sysConfig.userInfo.department_whole,
 	    isHr:false,
     },
     binds:[{
@@ -85,8 +85,12 @@ let PostMessage = Component.extend({
                 this.data.departmentData = formatTreeData(res.data.department_tree)
                 this.actions.initTree();
                 this.actions.initChoosedUsers();
-                this.actions.findDep(this.data.department_tree);
+                for(let id of this.data.depId){
+	                this.actions.findDep(this.data.department_tree,id);
+                }
                 this.actions.saveUserIds();
+	            console.log('sdasdas');
+	            console.log(this.data.depUserIds);
                 this.hideLoading();
             });
         },
@@ -111,9 +115,9 @@ let PostMessage = Component.extend({
 			}
 	    },
 	    //查找所在部门
-	    findDep(data){
+	    findDep(data,id){
         	for(let key in data){
-        		if(data[key].id == this.data.depId){
+        		if(data[key].id == id){
         			if(data[key].text=='人力资源部' && (this.data.isHr=true)){
         				return true;
 			        }
@@ -122,7 +126,7 @@ let PostMessage = Component.extend({
 		        }
 		        let node=data[key].nodes;
 		        if( node && node.length && node.length>0){
-		        	if(this.actions.findDep(node) === true){
+		        	if(this.actions.findDep(node,id) === true){
 		        		break;
 			        }
 		        }
