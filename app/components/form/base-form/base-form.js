@@ -1354,7 +1354,7 @@ let config = {
 			let arr = [];
 			for (let key in editConditionDict["edit_condition"]) {
 				if (key == 'and') {
-					this.actions.andReviseCondition(editConditionDict,key);
+					this.actions.andReviseCondition(editConditionDict,key,value);
 				} else {
 					this.actions.otherReviseCondition(editConditionDict,key,arr,value);
 				}
@@ -1362,18 +1362,23 @@ let config = {
 		},
 
 		otherReviseCondition(editConditionDict,key,arr,value){
-			for (let dfield of editConditionDict["edit_condition"][key]) {
-				if (arr.indexOf(dfield) != -1) {
-					continue;
+			for(let i in editConditionDict["edit_condition"]){
+				for (let dfield of editConditionDict["edit_condition"][key]) {
+					if (arr.indexOf(dfield) != -1) {
+						continue;
+					}
+					//如果有字段的负责性，再开始下面的逻辑
+					let data = this.data.data[dfield];
+					if (this.data.data[dfield]["required_perm"] == 1) {
+						this.actions.selectReviseCondition(data,value,i,arr,dfield);
+					}
+					if (this.data.childComponent[dfield]) {
+						this.data.childComponent[dfield].data = data;
+						this.data.childComponent[dfield].reload();
+					}
 				}
-				//如果有字段的负责性，再开始下面的逻辑
-				let data = this.data.data[dfield];
-				if (this.data.data[dfield]["required_perm"] == 1) {
-					this.actions.selectReviseCondition(data,value,key,arr,dfield);
-				}
-				if (this.data.childComponent[dfield]) {
-					this.data.childComponent[dfield].data = data;
-					this.data.childComponent[dfield].reload();
+				if(i == value){
+					break;
 				}
 			}
 		},
@@ -1390,7 +1395,7 @@ let config = {
 			}
 		},
 
-		andReviseCondition(editConditionDict,key){
+		andReviseCondition(editConditionDict,key,value){
 			let andData = editConditionDict["edit_condition"][key];
 			for (let f in andData) {
 				let i = 0;
@@ -1962,8 +1967,8 @@ let config = {
 				height: 600,
 				title: `子表`,
 				modal: true
-			}).then(data => {
-				if (_this.viewMode == 'EditChild') {
+			}).then(res => {
+				if (_this.data.viewMode == 'EditChild') {
 					_this.actions.setCountData(data.dfield);
 				}
 			})
