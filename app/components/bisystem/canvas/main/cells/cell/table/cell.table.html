@@ -15,7 +15,7 @@
             </thead>
             <tbody>
             {{#each chart.data.rows}}
-            <tr>
+            <tr class="table-view" data-index="{{@index}}">
                 {{#each @this}}
                 {{#ifLast @index @root.chart.data.rows}}
                     <td align="{{@root.chart.alignment}}">
