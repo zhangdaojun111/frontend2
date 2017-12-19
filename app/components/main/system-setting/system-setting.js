@@ -87,7 +87,6 @@ let SettingPage = Component.extend({
             this.data.bi_view = homeStatus.substring(0,homeStatus.length - 1);
 
             TabService.getOpeningTabs().then((result) => {
-                console.log(result,'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq');
                 //特殊标签（首页、日历、Bi）处理
                 that.data.config = JSON.parse(result[1].data);
                 // that.data.config = [         //默认快捷设置，用于兼容老用户或未设置快捷设置的用户
@@ -194,7 +193,7 @@ let SettingPage = Component.extend({
                 height: 217,
                 title: '新建视图'
             });
-            console.log(res);
+
             if (res['name']) {
                 this.actions.updateViews(res);
             }

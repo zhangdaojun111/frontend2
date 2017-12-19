@@ -83,19 +83,19 @@ let IframeComponent = Component.extend({
                 id: 'home',
                 name: '首页',
                 url: window.config.sysConfig.home_index,
-                status:'000'
+                status:'000'        //BI 最后一位表示开关，前面几位表示viewId
             },
             {
                 id: 'bi',
                 name: 'BI',
                 url: window.config.sysConfig.bi_index,
-                status:'0'
+                status:'0'          //0表示关闭，1表示打开
             },
             {
                 id: 'calendar',
                 name: '日历',
                 url: window.config.sysConfig.calendar_index,
-                status:'0'
+                status:'0'          //0表示关闭，1表示打开
             }
         ]
     },
@@ -433,9 +433,6 @@ let IframeComponent = Component.extend({
                 this.actions._getOpenTabList(commonTabs);
                 //特殊标签（首页、日历、Bi）处理
                 let specialTabs;
-                console.log(result[1].data,'----------------------!!!!!!!');
-                // let test = $.parseJSON(result[1].data);
-                // console.log(test);
 
                 if(typeof result[1].data === 'string'){
                     try {
@@ -444,8 +441,6 @@ let IframeComponent = Component.extend({
                         console.log('not array');
                     }
                 }
-                console.log(specialTabs);
-                // specialTabs = this.data.defaultUserConfig;
                 this.actions._addSpecialTabs(specialTabs);
 
                 //如果bi、calendar均未勾选，则参考后台bi、calendar自动开启设置
@@ -708,7 +703,6 @@ let IframeComponent = Component.extend({
         },
 
         loadHidingIframes: function () {
-            console.log('loading');
             setTimeout(() => {
                 this.actions._startLoadingIframe();
             }, 3000);
