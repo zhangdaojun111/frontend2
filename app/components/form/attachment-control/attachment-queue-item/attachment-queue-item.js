@@ -87,15 +87,11 @@ let config = {
                 let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
                 let fileType = this.data.is_archieved?this.data.row.content_type:this.data.file.type;
                 if(fileType.indexOf('image') != -1) {
-                    let items = [];
-                    for(let data of this.data.list){
-                        let item = {file_id:data};
-                        items.push(item);
-                    }
-                    if(items.length == 0 || this.data.real_type == 9){
+                    let items = this.data.list;
+                    if(items.length == 0){
                         items = [{file_id:fileId}];
                     }
-                    PMAPI.openPreview({list:items,id:fileId});
+                    PMAPI.openPreview({list:items,id:fileId,dinput_type:this.data.real_type});
                 } else if (fileType== 'video/mp4'
                     || fileType == 'audio/mp3'
                     || fileType == 'audio/wav') {
@@ -150,8 +146,8 @@ let config = {
         },
         _unableSomePreview:function(){//有一些不能预览的文件，预览按钮灰显
 
-            if(this.data.real_type == 9 || this.data.real_type == 33){
-                this.el.find('.preview').css('display','inline');
+            // if(this.data.real_type == 9 || this.data.real_type == 33){
+                this.el.find('.preview').show();
                 let fileType = this.data.is_archieved?this.data.row.content_type:this.data.file.type;
                 if(fileType.indexOf('image') == -1
                     && fileType != 'video/mp4'
@@ -159,7 +155,7 @@ let config = {
                     && fileType != 'audio/wav'){
                     this.el.find('.preview').css({'color':'grey','cursor':'auto'});
                 }
-            }
+            // }
         },
         cancelUploading:function () {
             this.data._controlItem.uploadingState = 'canceled';
@@ -262,6 +258,9 @@ let config = {
         },
         _loadArchievedRow:function () {
             this.el.find('.loader').hide();
+            // if(this.data.real_type == 9 || this.data.real_type == 33) {
+                this.el.find('.preview').css('display', 'inline');
+            // }
             this.el.find('.preview').show();
             this.actions._unableSomePreview();
             if(this.data.is_view==0){

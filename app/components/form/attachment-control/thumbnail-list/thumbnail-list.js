@@ -148,7 +148,7 @@ let config = {
                 if(!this.data.items[this.data.currentIndex+i]){
                     return;
                 }
-                PMAPI.openPreview({list:this.data.items,currentIndex:this.data.currentIndex+i});
+                PMAPI.openPreview({list:this.data.items,currentIndex:this.data.currentIndex+i,dinput_type:this.data.dinput_type});
                 event.stopPropagation({list:this.data.items,currentIndex:this.data.currentIndex+i});
             })
         }

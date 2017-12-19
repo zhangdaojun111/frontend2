@@ -128,16 +128,18 @@ let Preview = Component.extend({
                     return;
                 }
                 let fileId;
-                if(this.data.list[0].file_name){//兼容附件浏览的情况
+                if(this.data.list[0].file_id){//兼容附件浏览的情况
                     //找到前一个可浏览的文件的索引
                     let i = this.data.currentIndex - 1;
                     for(;i >=0; i--){
+                        if(!this.data.list[i].file_name){
+                            break;
+                        }
                         let type = this.data.list[i].file_name.split('.').pop();
                         if(preview_file.includes(type.toLowerCase())){
                             break;
                         }
                     }
-                    console.log('i:'+i);
                     if(i < 0){ //前面没有可浏览文件
                         this.data.firstPreviewableIndex = this.data.currentIndex;
                         this.actions._updateSwiftButtons(this.data.currentIndex);
@@ -160,11 +162,14 @@ let Preview = Component.extend({
                     return;
                 }
                 let fileId;
-                if(this.data.list[0].file_name) {//兼容附件浏览的情况
+                if(this.data.list[0]['file_id']) {//兼容附件浏览的情况
                     //找到前一个可浏览的文件的索引
                     let i = this.data.currentIndex + 1;
                     let length = this.data.list.length;
                     for (; i < length; i++) {
+                        if(!this.data.list[i].file_name){
+                            break;
+                        }
                         let type = this.data.list[i].file_name.split('.').pop();
                         if (preview_file.includes(type.toLowerCase())) {
                             break;
@@ -177,7 +182,7 @@ let Preview = Component.extend({
                     } else {
                         this.data.currentIndex++;
                     }
-                    fileId = this.data.list[this.data.currentIndex].file_id;
+                    fileId = this.data.list[this.data.currentIndex]['file_id'];
                 } else {//普通图片浏览
                     this.data.currentIndex = this.data.currentIndex < this.data.list.length - 1? this.data.currentIndex + 1:this.data.currentIndex;
                     fileId = Object.keys(this.data.list[this.data.currentIndex])[0];

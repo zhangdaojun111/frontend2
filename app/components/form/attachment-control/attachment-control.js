@@ -204,7 +204,7 @@ let config = {
                 }
             }
             let ele = $('<div></div>');
-            let item = new AttachmentQueueItem({data:{file: file, list:this.data.value, real_type: this.data.real_type, fileOrder:i, toolbox:toolbox, is_archieved:false},events:{
+            let item = new AttachmentQueueItem({data:{file: file, list:this.data.rows, real_type: this.data.real_type, fileOrder:i, toolbox:toolbox, is_archieved:false},events:{
                 changeFile: event => {
                     if (event.event == 'delete') {
                         this.actions._deleteQueueItem(ele,event);
@@ -214,6 +214,12 @@ let config = {
                         this.data.value.push(event.data.fileId);
                         ele.attr('id',event.data.fileId);
                         this.data.queue.push(event.data);
+                        let row = {
+                            file_id:event.data.fileId,
+                            file_name:event.data.file.name,
+                            content_type:event.data.file.type
+                        }
+                        this.data.rows.push(row);
                         this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                         if(this.data.value.length > 0){
                             this.el.find('.view-attached-list').css('cursor','pointer');
@@ -234,7 +240,7 @@ let config = {
                     }
                 }
             }});
-            Mediator.publish('attachment:changeValue',this.data.value);
+            Mediator.publish('attachment:changeValue',this.data.rows);
             this.el.find('.upload-process-queue').prepend(ele);
             item.render(ele);
             this.data.queueItemEles.unshift(ele);
@@ -313,7 +319,7 @@ let config = {
             for(let i=0,length = this.data.rows.length;i<length;i++){
                 let ele = $(`<div id="${this.data.rows[i].file_id}"></div>`);
                 let item = new AttachmentQueueItem({data:{
-                        list:this.data.value,
+                        list:this.data.rows,
                         row:this.data.rows[i],
                         is_archieved:true,
                         real_type: this.data.real_type,
@@ -322,7 +328,7 @@ let config = {
                     },events:{
                         changeFile:(event)=>{
                             this.actions._deleteQueueItem(ele,event);
-                            Mediator.publish('attachment:changeValue',this.data.value);
+                            Mediator.publish('attachment:changeValue',this.data.rows);
                         }
                     }});
                 this.el.find('.upload-process-queue').prepend(ele);
@@ -330,7 +336,6 @@ let config = {
                 this.data.queueItemEles.unshift(ele);
                 this.actions._playQueueItems();
                 this.data.attachmentQueueItemComps[i]=item;
-
             }
         },
         _deleteQueueItem:function (ele,event) {
@@ -349,6 +354,13 @@ let config = {
                     this.data.queue.splice(i,1);
                 }
                 this.data.value.splice(this.data.value.indexOf(event.data.fileId), 1);
+                for(let j = 0,length = this.data.rows.length;j <length;j++){
+                    let row = this.data.rows[j];
+                    if(row.file_id == event.data.fileId){
+                        this.data.rows.splice(j,1);
+                        break;
+                    }
+                }
                 this.el.find('.view-attached-list').html(`共${this.data.value.length}个文件`);
                 this.actions._deleteItemFromThumbnailList(event.data.fileId);
                 this.events.changeValue(this.data);
