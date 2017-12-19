@@ -67,8 +67,6 @@ let config={
                 return workflowService.getPrepareParams({table_id: _this.data.obj.table_id});
             })().then(res => {
                 if (res.data.flow_data.length === 0) {
-                	console.log('1111111');
-                	console.log(this.data.obj.btnType);
                     if(this.data.obj.btnType != 'new' || this.data.obj.isAddBuild==1){
                         this.el.find('.workflow-flex').hide();
                     }
@@ -95,7 +93,6 @@ let config={
                         noRequestFormData: this.data.noRequestFormData||[],
                         isAddBuild: obj.isAddBuild,
                         id: obj.id,
-	                    buildKey:obj.buildKey,
                         key: obj.key,
                         action: this.data.action
                     });
