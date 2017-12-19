@@ -133,7 +133,6 @@
                     width: 100%;
                     .contract-tabs {
                         display: inline-block;
-
                         //max-width: 560px;
                         max-height:30px;
                         overflow-x:auto;
@@ -141,11 +140,14 @@
                         white-space:nowrap;
                         position: relative;
                         left: -4px;
+                        width: calc(100% - 42px);
                     }
                     .contract-tab {
                         position: relative;
                         display: inline-block;
                         padding: 0 35px;
+                        width: 200px;
+                        text-align: center;
                         border: 1px solid #D7D7D7;
                         border-bottom: none;
                         cursor: pointer;
@@ -186,7 +188,7 @@
                 }
                 .contract-template-anchor {
                     padding: 5px;
-                    line-height: 15px;
+                    line-height: 27px;
                     font-size: 12px;
                     overflow-y: auto;
                     height: calc(100% - 44px);

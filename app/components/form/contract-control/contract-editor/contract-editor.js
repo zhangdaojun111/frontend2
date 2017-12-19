@@ -165,7 +165,11 @@ let contractEditor = Component.extend({
             selector:'.change_edit',
             callback:function () {
                 this.data['mode'] ='edit';
+                this.data.buttonStates.forEach((item) => {
+                    item['display']['edit_or_save'] = 'inline'
+                })
                 // this.data.first = 1;
+                this.actions.showHistoryList();
                 this.actions.showDifPattern()
             }
         }
@@ -177,7 +181,7 @@ let contractEditor = Component.extend({
         editingk2v: {},
         first: 1,
         fontSize: 12,
-        lineHeight:3,
+        lineHeight:15,
     },
     actions: {
         //加载各数据源选项
@@ -504,10 +508,10 @@ let contractEditor = Component.extend({
             switch (name) {
                 case 'line-height':
                     if(size == 'big') {
-                        this.data.lineHeight = 8;
+                        this.data.lineHeight = 20;
                         this.el.find('.contract-template-anchor').css({'line-height':`${this.data.fontSize + this.data.lineHeight}px`});
                     } else if( size == 'normal') {
-                        this.data.lineHeight = 3;
+                        this.data.lineHeight = 15;
                         this.el.find('.contract-template-anchor').css({'line-height':`${this.data.fontSize + this.data.lineHeight}px`});
                     }
                     break;
@@ -583,7 +587,6 @@ let contractEditor = Component.extend({
                 this.el.find('.contract-model').attr('disabled','disabled');
                 this.el.find('.data-source').attr('disabled','disabled');
             } else {
-                this.actions.showHistoryList();
                 this.el.find('.add-tab-button').addClass('active');
                 this.el.find('.delete-tab-btn').css('display','inline-block');
                 this.el.find('.save_n_close').css('display','inline-block');
@@ -595,7 +598,13 @@ let contractEditor = Component.extend({
             }
         },
         afterGetMsg: function () {
-            this.showLoading()
+            this.showLoading();
+            if(this.data['mode']=='edit') {
+                this.actions.showHistoryList();
+            }
+            if(this.data.isAdd) {
+                this.actions.showDifPattern();
+            }
             //初始化各控件
             let obj = {
                 table_id: this.data.table_id,
