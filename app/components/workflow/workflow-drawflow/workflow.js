@@ -49,7 +49,8 @@ let config = {
 					value.is_add_handler = value.is_add_handler || 0;
 					value.add_handler_info = value.add_handler_info || [];
 					value.can_reject = value.can_reject;
-					let {id, text, positionleft: left, positiontop: top, startPoint, endPoint, state, is_add_handler, add_handler_info, can_reject} = value,
+					value.complex_node_id = value.complex_node_id || '';
+					let {id, text, positionleft: left, positiontop: top, startPoint, endPoint, state, is_add_handler, add_handler_info, can_reject,complex_node_id} = value,
 						style = "STATE_STYLE_" + state,
 						theBestTop = __this.actions.getTheBestTop() - 10,
 						theBestLeft = __this.actions.getTheBestLeft() - 10,
@@ -142,6 +143,7 @@ let config = {
 						title: condition || text,
 						state: state,
 						canreject: can_reject,
+                        complex_node_id: complex_node_id,
 						eventname: event_name,//event_name,
 						originaltitle: myTitle,
 						originaltext: attachment + text
@@ -317,6 +319,10 @@ let config = {
 			let can_reject = e.getAttribute("canreject");
 			let text = e.getAttribute("title");
 			this.rejectId = e.getAttribute("id");
+			//会签节点驳回
+			if(e.getAttribute('originaltitle')=='会签'){
+                this.rejectId = e.getAttribute('complex_node_id');
+			}
 			if (can_reject === '1') {
 				// PMAPI.openDialogByComponent(approvalOpinion,{
 				//     width: 450,
