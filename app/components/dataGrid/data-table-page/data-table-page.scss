@@ -172,7 +172,6 @@
         }
     }
     .miniFormAnim {
-        border: 1px solid #333333;
         position: fixed;
         top: 0;
         z-index: 21;
@@ -180,9 +179,9 @@
     }
     @keyframes miniFormAnim
     {
-        0% { left:0px; width:1700px; height: 870px}
+        0% {left:0px; width:1700px; height: 870px; border: 1px solid #333333;}
         20%,90% {left:200px;top:10px; width:100px; height: 30px}
-        100% {left:250px;top:20px; width:0; height: 0; display: none}
+        100% {left:250px;top:20px; width:0; height: 0;}
     }
 }
 
