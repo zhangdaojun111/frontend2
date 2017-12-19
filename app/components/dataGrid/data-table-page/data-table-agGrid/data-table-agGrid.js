@@ -1478,6 +1478,9 @@ let dataTableAgGrid = Component.extend({
         },
         //子表内置父表数据用
         parentBuildinChild: function(){
+        	console.log('************');
+        	console.log(this.data.parentTableId);
+        	console.log(this.data.tableId);
             if(this.data.viewMode == 'EditChild'||this.data.viewMode == 'ViewChild'){
                 if(window.top.frontendRelation[this.data.parentTableId]&&window.top.frontendRelation[this.data.parentTableId][this.data.tableId]&&window.top.frontendRelation[this.data.parentTableId][this.data.tableId]['pdfield_2_cdfield']){
                     this.data.parentBuiltinData = window.top.frontendRelation[this.data.parentTableId][this.data.tableId]['pdfield_2_cdfield'];
@@ -1486,7 +1489,8 @@ let dataTableAgGrid = Component.extend({
                     for(let k in this.data.parentBuiltinData){
                         if(!j[this.data.parentBuiltinData[k]]&&k!='temp_id'&&window.top.frontendParentFormValue[this.data.parentTableId]){
                             // j[this.data.parentBuiltinData[k]] = window.top.frontendParentFormValue[this.data.parentTableId][k];
-                            j[this.data.parentBuiltinData[k]] = window.top.frontendParentFormValue[this.data.tableId][this.data.parentBuiltinData[k]];
+	                        let val=window.top.frontendParentFormValue[this.data.tableId][this.data.parentBuiltinData[k]];
+                            j[this.data.parentBuiltinData[k]] = $.type(val)=='object'?val.label:val;
                         }
                     }
                 }
