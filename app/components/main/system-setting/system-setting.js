@@ -195,7 +195,6 @@ let SettingPage = Component.extend({
                 title: '新建视图'
             });
             console.log(res);
-            debugger;
             if (res['name']) {
                 this.actions.updateViews(res);
             }

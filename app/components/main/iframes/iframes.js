@@ -502,7 +502,7 @@ let IframeComponent = Component.extend({
                 temp['name'] = config['name'];
                 temp['id'] = config['id'];
                 temp['url'] = config['url'];
-                this.data.biCalendarList.push(temp);
+                this.data.biCalendarList.unshift(temp);
             }
             //获取结果存入window.config，初始化用户快捷设置界面时使用
             window.config.sysConfig.logic_config['client_login_show_' + config['id']] = config.status.toString;
@@ -518,7 +518,7 @@ let IframeComponent = Component.extend({
             window.config.sysConfig.home_index = '/bi/index/?single=true&query_mark=home#/canvas/' + canvasNum;
 
             if (homeFlag === '1') {
-                this.data.biCalendarList.push({
+                this.data.biCalendarList.unshift({
                     id: 'home',
                     name: '首页',
                     url: window.config.sysConfig.home_index
