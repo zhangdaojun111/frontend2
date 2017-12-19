@@ -1173,6 +1173,8 @@ let config = {
 			if (this.data.isBatch == 1) {
 				delete json["flow_id"];
 			}
+			console.log('快捷添加');
+			console.log(this.data.isAddBuild);
 			if (this.data.isAddBuild) {
 				json['buildin_id'] = this.data.buildId;
 			}
@@ -1824,12 +1826,14 @@ let config = {
 		addNewBuildIn(data) {
 			let _this = this;
 			_this.data['quikAddDfield'] = data.dfield;
-			PMAPI.openDialogByIframe(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.key}&btnType=new`, {
+			PMAPI.openDialogByIframe(`/iframe/addWf/?table_id=${data.source_table_id}&isAddBuild=1&id=${data.id}&key=${this.data.key}&btnType=new`, {
 				width: 800,
 				height: 600,
 				title: `快捷添加内置字段`,
 				modal: true
 			}).then((data) => {
+				console.log('data');
+				console.log(data);
 				if (!data.new_option) {
 					return;
 				}
