@@ -32,12 +32,15 @@ let config = {
         {   // 查看 编辑 历史
             event:'click',
             selector:'.table-operate a',
+            callback: function (context,event) {
+                this.actions.tableOperate(context);
+            }
+        },
+        {   //双击一行 进入查看
+            event:'dblclick',
+            selector:'.double-list tbody tr',
             callback:function (context,event) {
-                let data = {
-                    table_id: this.data.chart.table_id,
-                    real_id:this.data.chart.data.rows[$(context).attr('data-index')][this.data.chart.data.rows[0].length - 1]
-                };
-                this.actions.gridHandle($(context).attr('class'), data);
+                this.actions.tableOperate(context);
             }
         },
         {   //列排序
@@ -128,6 +131,16 @@ let config = {
                 // }
 
         },
+
+        //操作界面跳转
+        tableOperate: function (context) {
+            let data = {
+                table_id: this.data.chart.table_id,
+                real_id:this.data.chart.data.rows[$(context).attr('data-index')][this.data.chart.data.rows[0].length - 1]
+            };
+            this.actions.gridHandle($(context).attr('class'), data);
+        },
+
         //返回数据url
         returnIframeUrl( u,obj ){
             let str = '?';
