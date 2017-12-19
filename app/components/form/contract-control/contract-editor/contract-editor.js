@@ -257,7 +257,7 @@ let contractEditor = Component.extend({
             this.data['current_tab'] = length;
             this.actions.initButtonStates(this.data['current_tab']);
             this.actions.loadButtons(this.data['current_tab']);
-            this.el.find('.contract-template-anchor').html('<p>请选择模板和数据源。</p>');
+            this.el.find('.contract-template-anchor').html('<p class="blank">请选择模板和数据源。</p>');
             //监听tab
             this.el.on('click','.contract-tab',function(){
                 _this.actions.loadTab($(this).index(), true);
@@ -342,11 +342,11 @@ let contractEditor = Component.extend({
             }
 
             if (!hasModelId) {
-                this.el.find('.contract-template-anchor').html('<p>请选择模板。</p>');
+                this.el.find('.contract-template-anchor').html('<p class="blank">请选择模板。</p>');
                 return;
             }
             if (!this.actions._isElementFull(tab['elements'])) {
-                this.el.find('.contract-template-anchor').html('<p>请选择所有数据源。</p>');
+                this.el.find('.contract-template-anchor').html('<p class="blank">请选择所有数据源。</p>');
                 return;
             }
 
@@ -501,7 +501,8 @@ let contractEditor = Component.extend({
             //     data: this.data.value
             // }, location.origin);
             PMAPI.closeIframeDialog(window.config.key, {
-                data: this.data.value
+                data: this.data.value,
+                changeBtn: true,
             });
         },
         changeStyle: function (name, size) {

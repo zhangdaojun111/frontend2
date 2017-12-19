@@ -4,6 +4,7 @@
 import Component from "../../../lib/component";
 import template from './contract-control.html';
 import {PMAPI} from "../../../lib/postmsg";
+import Mediator from '../../../lib/mediator';
 import {HTTP} from "../../../lib/http";
 import './contract-control.scss'
 import {Storage} from '../../../lib/storage';
@@ -41,6 +42,11 @@ let config = {
                 title: title,
                 modal: true,
             }, {data:this.data}).then(res => {
+                // if(res.changeBtn) {
+                //     Mediator.emit('contract:change:btn', {
+                //         changeBtn: res.changeBtn
+                //     });
+                // }
                 if(res.onlyclose){
                     if((new URL(document.URL)).searchParams!=undefined){
                         Storage.init((new URL(document.URL)).searchParams.get('key'));
