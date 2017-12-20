@@ -1727,7 +1727,7 @@ let config = {
 		createActions() {
 			let actions = {
 				changeValue: (data) => {
-					this.actions.checkValue(data);
+					this.actions.checkValue(data,false,true);
 				},
 				emitHistory: (data) => {
 					this.actions.openHistoryDialog(data);
