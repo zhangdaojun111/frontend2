@@ -1668,7 +1668,8 @@ let dataTableAgGrid = Component.extend({
                 }
             }
             if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
-                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                json['is_temp'] = 1;
                 json['tableType'] = 'dy';
                 delete json['rowId']
             }
