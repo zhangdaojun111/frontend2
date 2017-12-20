@@ -89,8 +89,6 @@ let PostMessage = Component.extend({
 	                this.actions.findDep(this.data.department_tree,id);
                 }
                 this.actions.saveUserIds();
-	            console.log('sdasdas');
-	            console.log(this.data.depUserIds);
                 this.hideLoading();
             });
         },
@@ -118,9 +116,6 @@ let PostMessage = Component.extend({
 	    findDep(data,id){
         	for(let key in data){
         		if(data[key].id == id){
-        			console.log('找到了');
-        			console.log(data[key].text);
-        			console.log(data[key].text.indexOf('人力资源部') !=-1);
         			if(data[key].text.indexOf('人力资源部') !=-1 && (this.data.isHr=true)){
         				return true;
 			        }
@@ -255,9 +250,7 @@ let PostMessage = Component.extend({
                 return item.id;
             });
             let user=window.config.sysConfig.userInfo;
-            if(!user.is_superuser || !this.data.isHr){
-            	console.log('this.data.isHr');
-            	console.log(this.data.isHr);
+            if(!user.is_superuser && !this.data.isHr){
             	if(!window.config.send_msg_perm){
 		            msgbox.alert('您没有发送权限');
 		            return;
