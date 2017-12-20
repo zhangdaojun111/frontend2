@@ -179,6 +179,7 @@ let contractEditor = Component.extend({
         elementKeys: [],
         editingk2v: {},
         first: 1,
+        check: 1,
         fontSize: 12,
         lineHeight:15,
     },
@@ -498,10 +499,7 @@ let contractEditor = Component.extend({
             //     key: this.key,
             //     data: this.data.value
             // }, location.origin);
-            PMAPI.closeIframeDialog(window.config.key, {
-                data: this.data.value,
-                changeBtn: true,
-            });
+            PMAPI.closeIframeDialog(window.config.key,this.data.value,);
         },
         changeStyle: function (name, size) {
             switch (name) {
@@ -539,10 +537,11 @@ let contractEditor = Component.extend({
             }
 
         },
-        textClick: function () {
+        textClick() {
             let _this = this;
             this.el.find('.contract-template-anchor span').on('click', (event) => {
-                if(event.type == 'click' && this.el.find('.edit_or_save').text() == '临时编辑') {
+                if(event.type == 'click' && this.el.find('.edit_or_save').text() == '临时编辑' && this.data.check) {
+                    this.data.check = 0;
                     let name = JSON.parse(JSON.stringify(this.data.local_data[this.data['current_tab']].k2v))[`##${event.target.title}##`];
                     let obj = {
                         table_id: _this.data.table_id,
@@ -571,6 +570,7 @@ let contractEditor = Component.extend({
                                 title: `${name}历史修改记录`,
                                 modal: true
                             })
+                            this.data.check = 1;
                         }
                     })
                 }
@@ -619,7 +619,12 @@ let contractEditor = Component.extend({
             };
             Storage.init(this.data.iframe_key);
             this.data.local_data = Storage.getItem('contractCache-'+this.data.real_id+'-'+this.data.id+'-'+this.data.temp_id+'-'+this.data.field_id,Storage.SECTION.FORM);
-            this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value.data));
+
+            if(this.data.value.data) {
+                this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value.data));
+            } else {
+                this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value));
+            }
             // this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
             this.actions.getElement(obj).then(res => {
                 if (res.success) {
