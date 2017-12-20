@@ -1864,7 +1864,7 @@ let config = {
 		//打开选择器
 		selectChoose(data) {
 			let _this = this;
-			PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}&key=${this.data.key}`, {
+			PMAPI.openDialogByIframe(`/iframe/choose/?fieldId=${data.id}&key=${this.data.key}`, {
 				width: 900,
 				height: 600,
 				title: `选择器`,

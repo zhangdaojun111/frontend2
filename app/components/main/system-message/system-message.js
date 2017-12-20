@@ -160,7 +160,7 @@ let SystemMessage = Component.extend({
             });
         },
         _openApproveDialog:function(data){
-            PMAPI.openDialogByIframe('/iframe/multiapp',{
+            PMAPI.openDialogByIframe('/iframe/multiapp/',{
                 width: 450,
                 height: 310,
                 title: '批量审批',
