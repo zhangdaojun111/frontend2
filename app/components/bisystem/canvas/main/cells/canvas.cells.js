@@ -307,7 +307,6 @@ let config = {
             let param = URLTools.getParam(href);
             if(window.hasOwnProperty("parent") && window.parent !== window && this.data.mode === 'client'){
                 let cellsHeight;
-
                 if(!param['query_mark']){
                     cellsHeight = this.el.find('.cells')[0].scrollHeight + 50;      //50是header高度
                 }else{
