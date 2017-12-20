@@ -139,33 +139,49 @@
                         overflow-y:hidden;
                         white-space:nowrap;
                         position: relative;
+                        padding-right: 2px;
                         left: -4px;
                         width: calc(100% - 42px);
-                    }
-                    .contract-tab {
-                        position: relative;
-                        display: inline-block;
-                        padding: 0 35px;
-                        width: 200px;
-                        text-align: center;
-                        border: 1px solid #D7D7D7;
-                        border-bottom: none;
-                        cursor: pointer;
-                        .delete-tab-btn {
-                            position: absolute;
+                        .contract-tab {
+                            position: relative;
                             display: inline-block;
-                            color: #999;
-                            width: 25px;
-                            height: 25px;
-                            top: 0px;
-                            right: 0px;
+                            padding: 0 35px;
+                            width: 200px;
+                            text-align: center;
+                            border: 1px solid #D7D7D7;
+                            border-bottom: none;
                             cursor: pointer;
-                            background: url(../../../../assets/images/framework/close.png) no-repeat scroll 1px 7px transparent;
-                        }
-                        &.active {
-                            background-color: #ffffff;
+                            .delete-tab-btn {
+                                position: absolute;
+                                display: inline-block;
+                                color: #999;
+                                width: 25px;
+                                height: 25px;
+                                top: 0px;
+                                right: 0px;
+                                cursor: pointer;
+                                background: url(../../../../assets/images/framework/close.png) no-repeat scroll 1px 7px transparent;
+                            }
+                            &.active {
+                                background-color: #ffffff;
+                            }
                         }
                     }
+                    .contract-tabs::-webkit-scrollbar {
+                        width: 4px;
+                        height: 6px;
+                    }
+                    .contract-tabs::-webkit-scrollbar-thumb {
+                        border-radius: 5px;
+                        -webkit-box-shadow: inset 0 0 5px rgba(41, 41, 41, 0.290196);
+                        background: rgba(41, 41, 41,0.2);
+                    }
+                    .contract-tabs::-webkit-scrollbar-track {
+                        -webkit-box-shadow: inset 0 0 5px rgba(41, 41, 41, 0.290196);
+                        border-radius: 0;
+                        background: rgba(41, 41, 41,0.1);
+                    }
+
                     .add-tab-button {
                         display:inline-block;
                         width: 30px;

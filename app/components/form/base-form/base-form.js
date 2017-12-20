@@ -2486,12 +2486,13 @@ let config = {
 		Mediator.subscribe('workflow:voteconfirm',(res)=>{
 			this.actions.setVoteValue(res);
 		})
-		// Mediator.on('contract:change:btn',(res)=>{
-		// 	if(this.data.btnType == 'view') {
-         //        this.data.btnType = 'edit'
-		// 		this.actions.addBtn();
-		// 	}
-		// })
+		Mediator.on('contract:change:btn',(res)=>{
+			if(this.data.btnType == 'view') {
+                this.actions.changeToEdit();
+                // this.data.btnType = 'edit'
+				// this.actions.addBtn();
+			}
+		})
 	},
 
 	beforeDestory() {

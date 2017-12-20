@@ -96,7 +96,6 @@ let contractEditor = Component.extend({
             selector: '.delete-tab-btn',
             callback: function (event) {
                 if (this.data['mode'] == 'edit') {
-                    console.log($(event).parent('.contract-tab').index())
                     // let currentIndex = this.data['current_tab'];
                     let currentIndex = $(event).parent('.contract-tab').index();
                     this.data.local_data.splice(currentIndex, 1);
@@ -114,11 +113,11 @@ let contractEditor = Component.extend({
                     }
                     this.el.find('.contract-tab').removeClass('active')
                     if (this.data['current_tab'] == currentIndex) {
-                        this.el.find('.contract-tab').eq(0).addClass('active');
                         this.actions.loadTab(0, true);
                         this.data['current_tab'] = 0;
                     } else {
-                        this.el.find('.contract-tab').eq(this.data['current_tab']).addClass('active');
+                        this.actions.loadTab(this.data.local_data.length - 1, true);
+                        this.data['current_tab'] = this.data.local_data.length - 1;
                     }
                     return false;
                 }
@@ -258,10 +257,7 @@ let contractEditor = Component.extend({
             this.actions.initButtonStates(this.data['current_tab']);
             this.actions.loadButtons(this.data['current_tab']);
             this.el.find('.contract-template-anchor').html('<p class="blank">请选择模板和数据源。</p>');
-            //监听tab
-            this.el.on('click','.contract-tab',function(){
-                _this.actions.loadTab($(this).index(), true);
-            })
+
             // tabEle.on('click', () => {
             //     debugger
             //     this.actions.loadTab(length, true);
@@ -269,6 +265,8 @@ let contractEditor = Component.extend({
             if(this.el.find('.contract-tab').length >= 10){//仅允许最多有十个标签
                 this.el.find('.add-tab-button').hide();
             }
+            //监听tab
+            this.actions.tabClick();
         },
         loadTab: function (i, isLoadCache,disabled) {
             if (i == this.data['current_tab']) {
@@ -598,6 +596,12 @@ let contractEditor = Component.extend({
                 this.el.find('.data-source').removeAttr('disabled','disabled');
             }
         },
+        tabClick: function () {
+            let _this = this;
+            this.el.on('click','.contract-tab',function(){
+                _this.actions.loadTab($(this).index(), true);
+            })
+        },
         afterGetMsg: function () {
             this.showLoading();
             if(this.data['mode']=='edit') {
@@ -639,11 +643,10 @@ let contractEditor = Component.extend({
                 tabsEle.append(tabEle);
                 this.actions.initButtonStates(i);
                 this.actions.loadButtons(0);
-                tabEle.on('click', ()=>{
-                    this.actions.loadTab(i,true,false);
-                })
+
             }
             $(this.el.find('.contract-tab').get(this.data.local_data.length-1)).addClass('active');
+            this.actions.tabClick();
         }
     },
     afterRender: function () {

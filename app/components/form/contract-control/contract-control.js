@@ -42,11 +42,11 @@ let config = {
                 title: title,
                 modal: true,
             }, {data:this.data}).then(res => {
-                // if(res.changeBtn) {
-                //     Mediator.emit('contract:change:btn', {
-                //         changeBtn: res.changeBtn
-                //     });
-                // }
+                if(res.changeBtn) {
+                    Mediator.emit('contract:change:btn', {
+                        changeBtn: res.changeBtn
+                    });
+                }
                 if(res.onlyclose){
                     if((new URL(document.URL)).searchParams!=undefined){
                         Storage.init((new URL(document.URL)).searchParams.get('key'));
