@@ -294,7 +294,14 @@ let config = {
                 });
             });
 
-            //非新窗口打开且用户模式下发送cells高度给父级
+            this.actions.sendCanvasHeight();
+            // 获取画布块最大zindex
+            this.data.cellMaxZindex = Math.max(...zIndex);
+        },
+        /**
+         * 非新窗口打开且用户模式下发送cells高度给父级
+         */
+        sendCanvasHeight(){
             if(window.hasOwnProperty("parent") && window.parent !== window && this.data.mode === 'client'){
                 let cellsHeight = this.el.find('.cells')[0].scrollHeight;
                 PMAPI.sendToParent({
@@ -302,11 +309,7 @@ let config = {
                     data:cellsHeight
                 });
             }
-
-            // 获取画布块最大zindex
-            this.data.cellMaxZindex = Math.max(...zIndex);
         },
-
         /**
          * 保存画布布局
          */

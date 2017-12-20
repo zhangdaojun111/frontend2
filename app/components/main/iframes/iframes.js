@@ -929,11 +929,6 @@ let IframeComponent = Component.extend({
             this.actions.openIframeById(data.id, false);
         });
 
-        //订阅非新窗口用户模式下Bi画布高度
-        PMAPI.subscribe(PMENUM.send_bi_height, (data) => {
-            console.log('get bi cells height',data);
-        });
-
         Mediator.subscribe('menu:homePageRefresh', (data) => {
             if(this.data.hash['home'] === undefined){
                 return;
