@@ -5,6 +5,7 @@
 import template from './preview.html';
 import Component from "../../../lib/component";
 import './preview.css';
+import '../../../assets/scss/util/util.scss';
 
 let preview_file = ["gif","jpg","jpeg","png","wmv","mp4"];
 

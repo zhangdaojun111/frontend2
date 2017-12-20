@@ -13,12 +13,7 @@
     cursor: pointer;
     z-index: 202;
 }
-.closeImg{
-    content:url('../../../assets/images/form/icon_close_red.png');
-}
-.closeImg:hover{
-    content:url("../../../assets/images/form/icon_close_white.png");
-}
+
 .mask-div{
     z-index: 201;
     background: black;
@@ -65,22 +60,11 @@
     top: 50%;
     cursor: pointer;
 }
-.previous {
-    content:url('../../../assets/images/form/icon_previous_red.png');
-}
-.previous:hover {
-    content:url('../../../assets/images/form/icon_previous_white.png');
-}
+
 .next {
     z-index: 202;
     position: absolute;
     right: 20px;
     top: 50%;
     cursor: pointer;
-}
-.next {
-    content: url('../../../assets/images/form/icon_next_red.png');
-}
-.next:hover {
-    content: url('../../../assets/images/form/icon_next_white.png');
 }
