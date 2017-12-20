@@ -2939,12 +2939,12 @@ let dataTableAgGrid = Component.extend({
             }
         },
         attachmentCellClick: function (data) {
-            let dinput_type = data.colDef.real_type;
-            let fileIds = data['value'];
-            if(fileIds.length === 0  && this.data.viewMode !==  "normal"){
-                msgBox.alert('附件为空！');
+            if(this.actions.haveTempId(data.data)){
+                msgBox.alert('不支持查看源数据。');
                 return;
             }
+            let dinput_type = data.colDef.real_type;
+            let fileIds = data['value'];
             if (fileIds) {
                 dataTableService.getAttachmentList({
                     file_ids: JSON.stringify(fileIds),
@@ -3549,7 +3549,7 @@ let dataTableAgGrid = Component.extend({
             let defaultMax = false;
             PMAPI.openDialogByIframe(url, {
                 width: w || 1400,
-                height: h || 800,
+                height: h || 810,
                 title: title,
                 modal: true,
                 defaultMax: defaultMax,
