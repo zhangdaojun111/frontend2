@@ -1352,17 +1352,26 @@ let config = {
 		reviseCondition: function (editConditionDict, value) {
 			// if(this.dfService.isView){return false;}
 			let arr = [];
+			let flag = false;
+			let keyNum;
 			for (let key in editConditionDict["edit_condition"]) {
 				if (key == 'and') {
 					this.actions.andReviseCondition(editConditionDict,key,value);
 				} else {
+					if(key == value){
+						flag = true;
+						keyNum = key;
+					}
 					this.actions.otherReviseCondition(editConditionDict,key,arr,value);
 				}
+			}
+			if(flag){
+				this.actions.otherReviseCondition(editConditionDict,keyNum,arr,value);
 			}
 		},
 
 		otherReviseCondition(editConditionDict,key,arr,value){
-			for(let i in editConditionDict["edit_condition"]){
+			// for(let i in editConditionDict["edit_condition"]){
 				for (let dfield of editConditionDict["edit_condition"][key]) {
 					if (arr.indexOf(dfield) != -1) {
 						continue;
@@ -1370,17 +1379,14 @@ let config = {
 					//如果有字段的负责性，再开始下面的逻辑
 					let data = this.data.data[dfield];
 					if (this.data.data[dfield]["required_perm"] == 1) {
-						this.actions.selectReviseCondition(data,value,i,arr,dfield);
+						this.actions.selectReviseCondition(data,value,key,arr,dfield);
 					}
 					if (this.data.childComponent[dfield]) {
 						this.data.childComponent[dfield].data = data;
 						this.data.childComponent[dfield].reload();
 					}
 				}
-				if(i == value){
-					break;
-				}
-			}
+			// }
 		},
 
 		selectReviseCondition(data,value,key,arr,dfield){
