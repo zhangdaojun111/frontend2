@@ -303,7 +303,7 @@ let config = {
          */
         sendCanvasHeight(){
             if(window.hasOwnProperty("parent") && window.parent !== window && this.data.mode === 'client'){
-                let cellsHeight = this.el.find('.cells')[0].scrollHeight;
+                let cellsHeight = this.el.find('.cells')[0].scrollHeight + 50;      //50是header高度
                 PMAPI.sendToParent({
                     type:PMENUM.send_bi_height,
                     data:cellsHeight
