@@ -359,7 +359,7 @@ let contractEditor = Component.extend({
                 }
                 return;
             }
-            let type = tab['mode'] || 'show';
+            let type = tab['mode'] || 'edit';
             let index = tab['mode'] ? 0 : i;
             this.actions.getElement({
                 table_id: this.data.table_id,
