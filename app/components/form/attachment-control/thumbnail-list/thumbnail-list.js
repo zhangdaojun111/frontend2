@@ -121,8 +121,6 @@ let config = {
         updateDotState:function () {
             this.el.find('.dot.enable').removeClass('enable').addClass('disable');
             this.el.find('.dot#'+this.data.enableThumbnailIndex).removeClass('disable').addClass('enable');
-            //设置控制点的宽度，用于调整其位置正中
-            this.el.find('.image-controller').css('width',this.data.items.length*15+'px');
         },
         moveList:function (i) {
             if(this.data.items.length <=3){

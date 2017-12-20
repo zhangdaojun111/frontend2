@@ -88,7 +88,7 @@ let config = {
                 let fileType = this.data.is_archieved?this.data.row.content_type:this.data.file.type;
                 if(fileType.indexOf('image') != -1) {
                     let items = this.data.list;
-                    if(items.length == 0){
+                    if(items == undefined || items.length == 0){
                         items = [{file_id:fileId}];
                     }
                     PMAPI.openPreview({list:items,id:fileId,dinput_type:this.data.real_type});

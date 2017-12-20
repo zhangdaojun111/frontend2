@@ -16,8 +16,9 @@
     padding: 22px 0;
   }
   .image-controller-frame {
-    width: 210px;
     height: 10px;
+    width:auto;
+    text-align: center;
     .image-controller {
       margin: auto;
       .dot.enable {
