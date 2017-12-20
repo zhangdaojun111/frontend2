@@ -1067,6 +1067,9 @@ let config = {
 		},
 
 		async getDataForForm() {
+			if(this.data.postData.length == 0){
+				return;
+			}
 			let data = {};
 			data.data = this.actions.createFormValue(this.data.data);
 			data.count_data = this.actions.createFormValue(this.data.data);
