@@ -6,6 +6,7 @@ import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.se
 import Mediator from '../../../../../lib/mediator';
 import msgbox from '../../../../../lib/msgbox';
 import './canvas.cells.scss';
+import {PMAPI,PMENUM} from "../../../../../lib/postmsg";
 
 let config = {
     template: template,
@@ -292,6 +293,15 @@ let config = {
                     sort: window.config.bi_user === 'client' ? val.sort : {}
                 });
             });
+
+            //非新窗口打开且用户模式下发送cells高度给父级
+            if(window.hasOwnProperty("parent") && window.parent !== window && this.data.mode === 'client'){
+                let cellsHeight = this.el.find('.cells')[0].scrollHeight;
+                PMAPI.sendToParent({
+                    type:PMENUM.send_bi_height,
+                    data:cellsHeight
+                });
+            }
 
             // 获取画布块最大zindex
             this.data.cellMaxZindex = Math.max(...zIndex);
