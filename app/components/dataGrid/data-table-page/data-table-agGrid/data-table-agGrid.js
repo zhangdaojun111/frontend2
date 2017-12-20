@@ -1262,8 +1262,11 @@ let dataTableAgGrid = Component.extend({
          */
         getGridData: function (refresh) {
             if(window.top.miniFormVal && window.top.miniFormVal[this.data.tableId]){
-                $('.dataTableMiniForm').css('display','block')
-                $('#pagetabs').append('<div class="miniFormAnim"></div>')
+                $('.dataTableMiniForm').css('display','block');
+                if(this.data.miniFormAnim){
+                    $('#pagetabs').append('<div class="miniFormAnim"></div>');
+                    this.data.miniFormAnim = false;
+                }
             }else{
                 $('.dataTableMiniForm').css('display','none');
                 $('.miniFormAnim').css('display','none');
@@ -2170,7 +2173,7 @@ let dataTableAgGrid = Component.extend({
                                 flow_id: this.data.flowId,
                             };
                             let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
-
+                            this.data.miniFormAnim = true;
                             let title = '新增';
                             this.actions.openSelfIframe(url, title);
                         }else{
@@ -3885,7 +3888,7 @@ let dataTableAgGrid = Component.extend({
                     tableType:this.data.tableType
                 };
                 let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
-
+                this.data.miniFormAnim = true;
                 let title = '新增';
                 this.actions.openSelfIframe(url, title);
             }
