@@ -118,7 +118,10 @@ let PostMessage = Component.extend({
 	    findDep(data,id){
         	for(let key in data){
         		if(data[key].id == id){
-        			if(data[key].text=='人力资源部' && (this.data.isHr=true)){
+        			console.log('找到了');
+        			console.log(data[key].text);
+        			console.log(data[key].text.indexOf('人力资源部') !=-1);
+        			if(data[key].text.indexOf('人力资源部') !=-1 && (this.data.isHr=true)){
         				return true;
 			        }
         			this.actions.saveDepIds(data[key]);
@@ -253,6 +256,8 @@ let PostMessage = Component.extend({
             });
             let user=window.config.sysConfig.userInfo;
             if(!user.is_superuser || !this.data.isHr){
+            	console.log('this.data.isHr');
+            	console.log(this.data.isHr);
             	if(!window.config.send_msg_perm){
 		            msgbox.alert('您没有发送权限');
 		            return;
