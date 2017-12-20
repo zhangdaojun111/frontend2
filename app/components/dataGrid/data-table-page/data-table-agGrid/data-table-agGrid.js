@@ -1262,8 +1262,11 @@ let dataTableAgGrid = Component.extend({
          */
         getGridData: function (refresh) {
             if(window.top.miniFormVal && window.top.miniFormVal[this.data.tableId]){
-                $('.dataTableMiniForm').css('display','block')
-                $('#pagetabs').append('<div class="miniFormAnim"></div>')
+                $('.dataTableMiniForm').css('display','block');
+                if(this.data.miniFormAnim){
+                    $('#pagetabs').append('<div class="miniFormAnim"></div>');
+                    this.data.miniFormAnim = false;
+                }
             }else{
                 $('.dataTableMiniForm').css('display','none');
                 $('.miniFormAnim').css('display','none');
@@ -1668,7 +1671,8 @@ let dataTableAgGrid = Component.extend({
                 }
             }
             if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
-                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                json['is_temp'] = 1;
                 json['tableType'] = 'dy';
                 delete json['rowId']
             }
@@ -2170,7 +2174,7 @@ let dataTableAgGrid = Component.extend({
                                 flow_id: this.data.flowId,
                             };
                             let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
-
+                            this.data.miniFormAnim = true;
                             let title = '新增';
                             this.actions.openSelfIframe(url, title);
                         }else{
@@ -2942,6 +2946,10 @@ let dataTableAgGrid = Component.extend({
             }
         },
         attachmentCellClick: function (data) {
+            if(this.actions.haveTempId(data.data)){
+                msgBox.alert('不支持查看源数据。');
+                return;
+            }
             let dinput_type = data.colDef.real_type;
             let fileIds = data['value'];
             if (fileIds) {
@@ -3548,7 +3556,7 @@ let dataTableAgGrid = Component.extend({
             let defaultMax = false;
             PMAPI.openDialogByIframe(url, {
                 width: w || 1400,
-                height: h || 800,
+                height: h || 810,
                 title: title,
                 modal: true,
                 defaultMax: defaultMax,
@@ -3881,7 +3889,7 @@ let dataTableAgGrid = Component.extend({
                     tableType:this.data.tableType
                 };
                 let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
-
+                this.data.miniFormAnim = true;
                 let title = '新增';
                 this.actions.openSelfIframe(url, title);
             }

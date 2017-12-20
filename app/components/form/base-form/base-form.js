@@ -1067,6 +1067,9 @@ let config = {
 		},
 
 		async getDataForForm() {
+			if(this.data.postData.length == 0){
+				return;
+			}
 			let data = {};
 			data.data = this.actions.createFormValue(this.data.data);
 			data.count_data = this.actions.createFormValue(this.data.data);
@@ -1352,17 +1355,26 @@ let config = {
 		reviseCondition: function (editConditionDict, value) {
 			// if(this.dfService.isView){return false;}
 			let arr = [];
+			let flag = false;
+			let keyNum;
 			for (let key in editConditionDict["edit_condition"]) {
 				if (key == 'and') {
 					this.actions.andReviseCondition(editConditionDict,key,value);
 				} else {
+					if(key == value){
+						flag = true;
+						keyNum = key;
+					}
 					this.actions.otherReviseCondition(editConditionDict,key,arr,value);
 				}
+			}
+			if(flag){
+				this.actions.otherReviseCondition(editConditionDict,keyNum,arr,value);
 			}
 		},
 
 		otherReviseCondition(editConditionDict,key,arr,value){
-			for(let i in editConditionDict["edit_condition"]){
+			// for(let i in editConditionDict["edit_condition"]){
 				for (let dfield of editConditionDict["edit_condition"][key]) {
 					if (arr.indexOf(dfield) != -1) {
 						continue;
@@ -1370,17 +1382,14 @@ let config = {
 					//如果有字段的负责性，再开始下面的逻辑
 					let data = this.data.data[dfield];
 					if (this.data.data[dfield]["required_perm"] == 1) {
-						this.actions.selectReviseCondition(data,value,i,arr,dfield);
+						this.actions.selectReviseCondition(data,value,key,arr,dfield);
 					}
 					if (this.data.childComponent[dfield]) {
 						this.data.childComponent[dfield].data = data;
 						this.data.childComponent[dfield].reload();
 					}
 				}
-				if(i == value){
-					break;
-				}
-			}
+			// }
 		},
 
 		selectReviseCondition(data,value,key,arr,dfield){
@@ -1804,7 +1813,7 @@ let config = {
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`, {
 					title: showName,
 					width: 1400,
-					height: 800,
+					height: 810,
 				})
 			} else {
 				let formValue = this.actions.getFormValue();
@@ -1815,8 +1824,8 @@ let config = {
 				};
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`, {
 					title: showName,
-					width: 1200,
-					height: 800,
+					width: 1400,
+					height: 810,
 				}, {d});
 			}
 		},
@@ -1984,7 +1993,7 @@ let config = {
 				this.data.viewMode = 'viewFromCorrespondence';
 			}
 			let _this = this;
-			let w = 1400,h = 800;
+			let w = 1400,h = 810;
             if(window.innerWidth<1300){
                 w = 900;
                 h = 600;

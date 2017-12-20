@@ -74,22 +74,29 @@ $sub_color:#0088ff;
     }
 
     .bottom-box{
-        color: white;
-        margin-top: 20px;
-        margin-left: 310px;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
         .save-avatar, .set-cancel{
             display: inline-block;
             width: 90px;
             height: 30px;
-            background-color: $sub_color;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             line-height: 30px;
             text-align: center;
-            margin-right: 10px;
             box-sizing: border-box;
-            padding: 1px 6px;
+        }
+        .save-avatar {
+            background-color: $sub_color;
+            margin-right: 8px;
+            color: #fff;
+        }
+        .set-cancel {
+            background-color: #fff;
+            border: 1px solid #d7d7d7;
+            color: #666;
         }
     }
 }
