@@ -913,6 +913,7 @@ let personnel = Component.extend({
             };
             dataTableService.getPermData(obj).then( res=>{
                 let selectAry = [];
+                this.data.userPerm.value = [];
                 res.options.forEach((item)=>{
                     selectAry.push({
                         id:item.value,

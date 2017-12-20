@@ -129,9 +129,11 @@ let config = {
 						if (this.data.childComponent[songridDfield]) {
 							this.data.childComponent[songridDfield].data["options"] = options;
 						}
-					}
-					if (val || val == '') {
-						this.actions.setFormValue(songridDfield, $.type(val)=='object' ?val.value:val);
+						this.actions.setFormValue(songridDfield, $.type(val) == 'object' ? val.value : val);
+					}else {
+						if (val || val == '') {
+							this.actions.setFormValue(songridDfield, $.type(val) == 'object' ? val.label : val);
+						}
 					}
 					// this.actions.triggerSingleControl(songridDfield);
 				}
@@ -1089,7 +1091,6 @@ let config = {
 
 		setValueFromDataForForm(res){
 			for (let k in res["data"]) {
-				console.log('k:'+k);
 				let data = this.data.data;
 				//如果是周期规则
 				if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
@@ -1353,7 +1354,7 @@ let config = {
 			let arr = [];
 			for (let key in editConditionDict["edit_condition"]) {
 				if (key == 'and') {
-					this.actions.andReviseCondition(editConditionDict,key);
+					this.actions.andReviseCondition(editConditionDict,key,value);
 				} else {
 					this.actions.otherReviseCondition(editConditionDict,key,arr,value);
 				}
@@ -1361,18 +1362,23 @@ let config = {
 		},
 
 		otherReviseCondition(editConditionDict,key,arr,value){
-			for (let dfield of editConditionDict["edit_condition"][key]) {
-				if (arr.indexOf(dfield) != -1) {
-					continue;
+			for(let i in editConditionDict["edit_condition"]){
+				for (let dfield of editConditionDict["edit_condition"][key]) {
+					if (arr.indexOf(dfield) != -1) {
+						continue;
+					}
+					//如果有字段的负责性，再开始下面的逻辑
+					let data = this.data.data[dfield];
+					if (this.data.data[dfield]["required_perm"] == 1) {
+						this.actions.selectReviseCondition(data,value,i,arr,dfield);
+					}
+					if (this.data.childComponent[dfield]) {
+						this.data.childComponent[dfield].data = data;
+						this.data.childComponent[dfield].reload();
+					}
 				}
-				//如果有字段的负责性，再开始下面的逻辑
-				let data = this.data.data[dfield];
-				if (this.data.data[dfield]["required_perm"] == 1) {
-					this.actions.selectReviseCondition(data,value,key,arr,dfield);
-				}
-				if (this.data.childComponent[dfield]) {
-					this.data.childComponent[dfield].data = data;
-					this.data.childComponent[dfield].reload();
+				if(i == value){
+					break;
 				}
 			}
 		},
@@ -1385,13 +1391,11 @@ let config = {
 				data["be_control_condition"] = (key == value) ? 0 : 1;
 			}
 			if (this.data.data[data.dfield]) {
-				console.log('checkValue data.data');
-				console.dir(data);
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
 		},
 
-		andReviseCondition(editConditionDict,key){
+		andReviseCondition(editConditionDict,key,value){
 			let andData = editConditionDict["edit_condition"][key];
 			for (let f in andData) {
 				let i = 0;
@@ -1723,7 +1727,7 @@ let config = {
 		createActions() {
 			let actions = {
 				changeValue: (data) => {
-					this.actions.checkValue(data);
+					this.actions.checkValue(data,false,true);
 				},
 				emitHistory: (data) => {
 					this.actions.openHistoryDialog(data);
@@ -1842,7 +1846,7 @@ let config = {
 				options.splice(0, 0, data.new_option);
 			}
 			this.data.childComponent[this.data['quikAddDfield']].data.value = data.new_option.value;
-			this.data.childComponent[_this.data['quikAddDfield']].data.showValue = data.new_option.label;
+			this.data.childComponent[this.data['quikAddDfield']].data.showValue = data.new_option.label;
 			this.data.data[this.data['quikAddDfield']] = this.data.childComponent[this.data['quikAddDfield']].data;
 			this.data.childComponent[this.data['quikAddDfield']].reload();
 			this.actions.triggerControl();
@@ -1963,8 +1967,8 @@ let config = {
 				height: 600,
 				title: `子表`,
 				modal: true
-			}).then(data => {
-				if (_this.viewMode == 'EditChild') {
+			}).then(res => {
+				if (_this.data.viewMode == 'EditChild') {
 					_this.actions.setCountData(data.dfield);
 				}
 			})
@@ -2183,7 +2187,7 @@ let config = {
 			if(data[key].dataList=='other_place'){
 				if(!this.data.buildin_options ||(this.data.buildin_options[data[key].id] && $.isEmptyObject(this.data.buildin_options[data[key].id]))){
 					let res=await FormService.getFormStaticBuildinData(this.actions.createPostJson());
-					this.data.oldData[key].dataList=data[key].dataList=(res.data && res.data.buildin_options)?res.data.buildin_options:{' ':{value:'',label:''}};
+					this.data.oldData[key].dataList=data[key].dataList=res.buildin_options && res.buildin_options[data[key].id]?res.buildin_options[data[key].id]:{' ':['请选择','请选择']};
 				}else{
 					this.data.oldData[key].dataList=data[key].dataList=this.data.buildin_options[data[key].id];
 				}
