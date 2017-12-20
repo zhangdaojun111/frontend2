@@ -43,7 +43,7 @@ let SaveView = Component.extend({
         /**
          * 根据当前视图数据渲染视图列表
          */
-        initList:function () {
+        initList:function (showDel) {
             let $parent = this.el.find('.save-view-list');
             $parent.find('.list-item').remove();
             for(let k of this.data.favoriteList){
@@ -56,6 +56,7 @@ let SaveView = Component.extend({
                 $container.append($span);
                 $container.append($deleteIcon);
                 $parent.append($container);
+                showDel && this.el.find('.delete-icon').show();
             }
         },
         /**
@@ -113,7 +114,7 @@ let SaveView = Component.extend({
                         return n.name === name;
                     });
                     this.data.favoriteList.unshift({'name':name,'list':idList});
-                    this.actions.initList();
+                    this.actions.initList(true);
                 }
             })
         },
@@ -218,7 +219,7 @@ let SaveView = Component.extend({
                     _.remove(this.data.favoriteList,function (n) {
                         return n.name === name;
                     });
-                    this.actions.initList();
+                    this.actions.initList(true);
                 }
             })
         },

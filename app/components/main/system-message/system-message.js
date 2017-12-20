@@ -302,7 +302,7 @@ let SystemMessage = Component.extend({
                 if($event.node.data.is_read === 0){
                     window.config.sysConfig.unread_msg_count--;
                 }
-                this.actions._postReadData(JSON.stringify([data.id]));
+                this.actions._postReadData(JSON.stringify([$event.data.id]));
             }
             if($event.data.wf_urgency_level == 1){
                 msgbox.alert('催办消息：' + ($event.data.urge_info||''));
