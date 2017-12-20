@@ -73,23 +73,16 @@ export const screenShotConfig={
         this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         let t = this;
         this.el.on('paste',(event)=>{
-            console.log('pastefgfg ');
-            console.dir(event);
             if(this.data.file != ''){
                 return;
             }
             var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-            if(items == undefined){
+            if(items == undefined){//safari
                 items = event.originalEvent.clipboardData.files;
-                console.log('items');
-                console.dir(items);
                 for(let index in items){
                     var item = items[index];
-                    console.dir(item.constructor.name);
                     if(item.constructor.name == 'File'){
-                        console.log('in');
                         t.data.file = item;
-                        console.dir(item);
                         var reader = new FileReader();
                         reader.onload = function (event) {
                             console.log('onload');
@@ -101,16 +94,15 @@ export const screenShotConfig={
                             t.data['imageEle'] = ele;
                             t.el.find('.paste-tip').css('display','none');
                         }; // data url!
-                        reader.readAsDataURL(t.data.file);
+                        reader.readAsDataURL(t.data.file); //存在读取文件的时候，报FileError 4的错误
                     }
                 }
-            } else {
+            } else {//chrome
                 for (let index in items) {
                     var item = items[index];
                     if (item.kind === 'file') {
                         var blob = item.getAsFile();
                         t.data.file = blob;
-                        console.dir(blob);
                         var reader = new FileReader();
                         reader.onload = function (event) {
                             let ele = $('<img>');
