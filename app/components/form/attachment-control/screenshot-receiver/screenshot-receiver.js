@@ -73,25 +73,55 @@ export const screenShotConfig={
         this.data.style = $('<style type="text/css"></style>').text(this.data.css).appendTo($("head"));
         let t = this;
         this.el.on('paste',(event)=>{
+            console.log('pastefgfg ');
+            console.dir(event);
             if(this.data.file != ''){
                 return;
             }
             var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-            for (let index in items) {
-                var item = items[index];
-                if (item.kind === 'file') {
-                    var blob = item.getAsFile();
-                    t.data.file = blob;
-                    var reader = new FileReader();
-                    reader.onload = function (event) {
-                        let ele = $('<img>');
-                        ele.addClass('screenshot-image');
-                        ele.attr('src',event.target.result);
-                        t.el.find('.img-anchor').append(ele);
-                        t.data['imageEle'] = ele;
-                        t.el.find('.paste-tip').css('display','none');
-                    }; // data url!
-                    reader.readAsDataURL(blob);
+            if(items == undefined){
+                items = event.originalEvent.clipboardData.files;
+                console.log('items');
+                console.dir(items);
+                for(let index in items){
+                    var item = items[index];
+                    console.dir(item.constructor.name);
+                    if(item.constructor.name == 'File'){
+                        console.log('in');
+                        t.data.file = item;
+                        console.dir(item);
+                        var reader = new FileReader();
+                        reader.onload = function (event) {
+                            console.log('onload');
+                            let ele = $('<img>');
+                            ele.addClass('screenshot-image');
+                            ele.attr('src',event.target.result);
+                            console.dir(ele);
+                            t.el.find('.img-anchor').append(ele);
+                            t.data['imageEle'] = ele;
+                            t.el.find('.paste-tip').css('display','none');
+                        }; // data url!
+                        reader.readAsDataURL(t.data.file);
+                    }
+                }
+            } else {
+                for (let index in items) {
+                    var item = items[index];
+                    if (item.kind === 'file') {
+                        var blob = item.getAsFile();
+                        t.data.file = blob;
+                        console.dir(blob);
+                        var reader = new FileReader();
+                        reader.onload = function (event) {
+                            let ele = $('<img>');
+                            ele.addClass('screenshot-image');
+                            ele.attr('src',event.target.result);
+                            t.el.find('.img-anchor').append(ele);
+                            t.data['imageEle'] = ele;
+                            t.el.find('.paste-tip').css('display','none');
+                        }; // data url!
+                        reader.readAsDataURL(blob);
+                    }
                 }
             }
         });
