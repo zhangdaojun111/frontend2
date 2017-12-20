@@ -36,7 +36,7 @@ let css = `
 .button-box{
     position: absolute;
     text-align: center;
-    width: 91px;
+    width: 90px;
     height: 30px;
     lin-height:30px;
     background-color: rgba(0, 136, 255, 1);
@@ -50,8 +50,8 @@ let css = `
     color: #FFFFFF;
     bottom:15px
     margin-left: 500px;
-    bottom: 25px;
-    right: 15px;
+    bottom: 20px;
+    right: 20px;
 }
    .left{
     width: 40px;
