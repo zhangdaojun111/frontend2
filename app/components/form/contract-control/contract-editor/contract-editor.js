@@ -166,6 +166,7 @@ let contractEditor = Component.extend({
                 this.data['mode'] ='edit';
                 this.data.buttonStates.forEach((item) => {
                     item['display']['edit_or_save'] = 'inline'
+                    item['display']['change_edit'] = 'none'
                 })
                 // this.data.first = 1;
                 this.actions.showHistoryList();
@@ -285,6 +286,7 @@ let contractEditor = Component.extend({
                         download_all:'inline',
                         download_current:'inline',
                         edit_or_save:'none',
+                        change_edit:'none'
                     },
                     edit_or_save_text:'临时编辑'
                 });
@@ -295,6 +297,7 @@ let contractEditor = Component.extend({
                         download_all:'inline',
                         download_current:'inline',
                         edit_or_save:'none',
+                        change_edit:'inline'
                     },
                     edit_or_save_text:'临时编辑'
                 });
@@ -395,9 +398,9 @@ let contractEditor = Component.extend({
                     }
                     this.data.first = 0;
                 }
-                if(!this.data.isAdd) {
-                    this.hideLoading();
-                }
+                // if(!this.data.isAdd) {
+                //     this.hideLoading();
+                // }
             })
         },
         _isElementFull: function (elements) {
@@ -637,9 +640,7 @@ let contractEditor = Component.extend({
                     }
                     this.actions._loadTemplateByIndex(0,true,false);
                 }
-                if(this.data.isAdd) {
-                    this.hideLoading();
-                }
+                this.hideLoading();
             });
             //加载tab
             let tabsEle = this.el.find('.contract-tabs');
