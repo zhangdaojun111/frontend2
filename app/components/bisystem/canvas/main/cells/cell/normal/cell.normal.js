@@ -82,12 +82,17 @@ let config = {
             if (!this.data.cellChart.chart['yHorizontal'] && (type == 3 || type == 5 || type == 12 || type == 30) && window.config.pdf !== true) {
                 // 添加日期筛选,改变cell显示高度
                 this.el.find('.echarts-cell').addClass('date-filed');
-                this.normalRange = new NormalRangeComponent({id: this.data.id}, {
-                    // 通过（一周 一月 半年 一年 全部）获取数据
-                    onChangeDateData: (value) => {
-                        this.actions.getChangeDateData(value);
+                this.normalRange = new NormalRangeComponent({
+                    data: {
+                        id: this.data.id
+                    },
+                    events: {
+                        // 通过（一周 一月 半年 一年 全部）获取数据
+                        onChangeDateData: (value) => {
+                            this.actions.getChangeDateData(value);
+                        }
                     }
-                });
+                    });
                 this.append(this.normalRange, this.el.find('.chart-normal-date-zoom'));
                 this.normalRange.actions.rangeChoose(type);
                 this.normalRange.actions.setDateValue(cellChart.chart.data.xAxis);
@@ -300,7 +305,6 @@ let config = {
         });
     },
     firstAfterRender() {
-        console.log(this.data);
         // 是否显示时间字段
         if (window.config.bi_user !== 'manager') {
             this.actions.judgeDateZoom(this.data.cellChart);
