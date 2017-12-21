@@ -1239,6 +1239,10 @@ let dataTableAgGrid = Component.extend({
                 //获取在途footer数据
                 this.data.inProcessFooter = true;
                 let footerPostData = this.actions.createPostData();
+                //获取footerData所需的filter的值
+                if(this.data.rowData&&footerPostData.tableType == 'in_process'){
+					footerPostData = this.actions.createInProcessPostData(footerPostData);
+                }
                 this.data.inProcessFooter = false;
 
                 dataTableService.getFooterData(footerPostData).then(res => {
@@ -3781,6 +3785,17 @@ let dataTableAgGrid = Component.extend({
             this.actions.getCccuracy();
             this.actions.appendGrid();
             this.actions.renderComponents();
+        },
+        //footerData的filter拼接逻辑
+		createInProcessPostData(footerPostData){
+			let arr = [];
+			for(let key of this.data.rowData){
+				arr.push(key._id)
+			}
+			let str = {};
+			str['_id'] = {'$in':arr};
+			footerPostData['filter'] = JSON.stringify(str);
+			return footerPostData;
         },
     },
     afterRender: function () {

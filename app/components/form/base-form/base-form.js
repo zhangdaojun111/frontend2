@@ -1376,22 +1376,20 @@ let config = {
 		},
 
 		otherReviseCondition(editConditionDict,key,arr,value){
-			// for(let i in editConditionDict["edit_condition"]){
-				for (let dfield of editConditionDict["edit_condition"][key]) {
-					if (arr.indexOf(dfield) != -1) {
-						continue;
-					}
-					//如果有字段的负责性，再开始下面的逻辑
-					let data = this.data.data[dfield];
-					if (this.data.data[dfield]["required_perm"] == 1) {
-						this.actions.selectReviseCondition(data,value,key,arr,dfield);
-					}
-					if (this.data.childComponent[dfield]) {
-						this.data.childComponent[dfield].data = data;
-						this.data.childComponent[dfield].reload();
-					}
+			for (let dfield of editConditionDict["edit_condition"][key]) {
+				if (arr.indexOf(dfield) != -1) {
+					continue;
 				}
-			// }
+				//如果有字段的负责性，再开始下面的逻辑
+				let data = this.data.data[dfield];
+				if (this.data.data[dfield]["required_perm"] == 1) {
+					this.actions.selectReviseCondition(data,value,key,arr,dfield);
+				}
+				if (this.data.childComponent[dfield]) {
+					this.data.childComponent[dfield].data = data;
+					this.data.childComponent[dfield].reload();
+				}
+			}
 		},
 
 		selectReviseCondition(data,value,key,arr,dfield){
