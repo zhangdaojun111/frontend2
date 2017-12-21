@@ -13,6 +13,8 @@
                 height: 44px;
                 overflow-x: auto !important;
                 font-size: 1.4em;
+                display: flex !important;
+                white-space: normal !important;
                 .icon-chart {
                     display: none;
                 }
@@ -21,6 +23,9 @@
                 }
                 &::-webkit-scrollbar {
                     height: 0;
+                }
+                .component-bi-header-menu{
+                    flex-shrink: 0;
                 }
             }
             .views-header-right,.view-header-refresh-cache {

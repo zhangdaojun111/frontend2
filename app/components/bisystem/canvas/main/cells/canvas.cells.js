@@ -455,7 +455,8 @@ let config = {
             }else{
                 let windowSize = $(window).width();
                 if (windowSize && windowSize <= 960) {
-                    this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
+                    // this.actions.phoneWaterfallLoadingCellData({top: this.el.scrollTop()});
+                    this.actions.loadingComplete();
                 } else {
                     this.actions.waterfallLoadingCellData({top: this.el.scrollTop()});
                 }
