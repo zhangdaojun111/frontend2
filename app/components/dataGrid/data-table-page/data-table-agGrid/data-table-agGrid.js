@@ -3765,10 +3765,7 @@ let dataTableAgGrid = Component.extend({
                     this.actions.getHeaderData();
                 })
             }
-            PMAPI.subscribe(PMENUM.aside_fold, () => {
-                console.log($('.ui-dialog').width());
-                $('.ui-dialog').width('calc(100% - 3px)');
-            });
+
             this.actions.getHeaderData();
         },
         afterRenderFun:　function () {
@@ -3783,6 +3780,9 @@ let dataTableAgGrid = Component.extend({
     },
     afterRender: function () {
         this.actions.afterRenderFun();
+        PMAPI.subscribe(PMENUM.aside_fold, () => {
+            $('.ui-dialog').width('100%');
+        });
     },
     binds: [
         {

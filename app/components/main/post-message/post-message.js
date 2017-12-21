@@ -52,7 +52,13 @@ let PostMessage = Component.extend({
         // 部门数据
         departmentData: [],
         // 选中的部门
-        choosedDepart: []
+        choosedDepart: [],
+	    //所在部门所有成员id
+	    depIDs:[],
+	    depUserIds:[],
+	    department_tree:null,
+	    depId:window.config.sysConfig.userInfo.department_whole && window.config.sysConfig.userInfo.department_whole,
+	    isHr:false,
     },
     binds:[{
         event:'change',
@@ -75,12 +81,57 @@ let PostMessage = Component.extend({
             this.showLoading();
             HTTP.getImmediately('/get_department_tree/', {type: ''}).then((res) => {
                 this.data.userData = res.data.department2user;
+                this.data.department_tree=res.data.department_tree;
                 this.data.departmentData = formatTreeData(res.data.department_tree)
                 this.actions.initTree();
                 this.actions.initChoosedUsers();
+                for(let id of this.data.depId){
+	                this.actions.findDep(this.data.department_tree,id);
+                }
+                this.actions.saveUserIds();
                 this.hideLoading();
             });
         },
+	    saveUserIds(){
+        	for(let key in this.data.userData){
+        		if((~this.data.depIDs.indexOf(key))){
+        			for(let key2 in this.data.userData[key]){
+        				this.data.depUserIds.push(key2);
+			        }
+		        }
+	        }
+	    },
+	    //存储所有所在部门成员id
+	    saveDepIds(data){
+		    data.id && this.data.depIDs.push(data.id);
+			for(let key in data){
+				let obj=data[key];
+				let node=obj.nodes;
+				if(node && node.length && node.length>0){
+					this.saveDepIds(obj);
+				}
+			}
+	    },
+	    //查找所在部门
+	    findDep(data,id){
+        	for(let key in data){
+        		if(data[key].id == id){
+        			if(data[key].text.indexOf('人力资源部') !=-1 && (this.data.isHr=true)){
+        				return true;
+			        }
+        			this.actions.saveDepIds(data[key]);
+        			return true;
+		        }
+		        let node=data[key].nodes;
+		        if( node && node.length && node.length>0){
+		        	if(this.actions.findDep(node,id) === true){
+		        		break;
+			        }
+		        }
+	        }
+	        return false;
+	    },
+
         /**
          * 初始化部门树
          */
@@ -198,6 +249,19 @@ let PostMessage = Component.extend({
             choosedUsers = choosedUsers.map((item) => {
                 return item.id;
             });
+            let user=window.config.sysConfig.userInfo;
+            if(!user.is_superuser && !this.data.isHr){
+            	if(!window.config.send_msg_perm){
+		            msgbox.alert('您没有发送权限');
+		            return;
+	            }
+	            for(let id of choosedUsers){
+            		if(!(~this.data.depUserIds.indexOf(id))){
+            			msgbox.alert('请选择同部门人员');
+            			return;
+		            }
+	            }
+            }
             if (form.checkValidity()) {
                 let formData = Form.getValue(form);
                 if (choosedUsers.length === 0) {

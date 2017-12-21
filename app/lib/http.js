@@ -1,4 +1,4 @@
-import xss from 'xss';
+import * as xss from 'xss';
 
 
 $.ajaxSetup({
@@ -11,15 +11,29 @@ const Hash = {};
 const prefix = 'erds-';
 let counter = _.now();
 
-
 function getKey() {
     return prefix + counter ++;
 }
 
+let myxss = new xss.FilterXSS({
+    whiteList: xss.getDefaultWhiteList(),
+    onTagAttr: function (tag, name, value) {
+        if (name === "href" || name === "src") {
+            return `${name}=${value}`;
+        }
+    }
+});
 function xssObj(target) {
     if (target) {
         if (_.isString(target)) {
-            return xss(target);
+            try {
+                let json = JSON.parse(target);
+                let str = JSON.stringify(xssObj(json));
+                return str;
+            } catch (e){
+                return myxss.process(target);
+            }
+
         } else if (_.isArray(target)) {
             target.forEach((item, index) => {
                 target[index] = xssObj(item);
@@ -87,9 +101,9 @@ export const HTTP = {
         if (GetSet.size > 0) {
             let array = [...GetSet];
             $.get('/pipe/', {actions: JSON.stringify(array)})
-            .then((response) => {
-                this._dealResponse(response);
-            }).fail(() => {
+                .then((response) => {
+                    this._dealResponse(response);
+                }).fail(() => {
                 this._dealResponseError(array);
             });
             GetSet.clear();
@@ -98,9 +112,9 @@ export const HTTP = {
         if (PostSet.size > 0) {
             let array = [...PostSet];
             $.post('/pipe/', {actions: JSON.stringify(array)})
-            .then((response) => {
-                this._dealResponse(response);
-            }).fail(() => {
+                .then((response) => {
+                    this._dealResponse(response);
+                }).fail(() => {
                 this._dealResponseError(array);
             });
             PostSet.clear();
