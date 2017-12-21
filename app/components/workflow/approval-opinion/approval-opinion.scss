@@ -50,6 +50,9 @@
     }
     .workflow-btn{
         text-align: right;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
         .J_sure{
             cursor: pointer;
             width: 90px;
@@ -69,7 +72,6 @@
             border: 1px solid #d7d7d7;
             border-radius: 4px;
             color: #666;
-            margin-right: 8px;
             font-size:12px;
         }
     }

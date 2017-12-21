@@ -59,7 +59,7 @@ let SystemMessage = Component.extend({
             //     first: (this.pagination.data.currentPage - 1) * this.pagination.data.rows,
             //     currentPage: this.pagination.data.currentPage
             // });
-            // this.showLoading();
+            this.showLoading();
             systemMessageService.getMyMsg(param).then((data) => {
                 if(this.data == undefined || data == undefined){
                     return;
@@ -71,7 +71,7 @@ let SystemMessage = Component.extend({
                 });
 
                 this.pagination.actions.setPagination(data.total, param.currentPage);
-                // this.hideLoading();
+                this.hideLoading();
                 this.agGrid.gridOptions.api.sizeColumnsToFit();
             });
         },
@@ -160,7 +160,7 @@ let SystemMessage = Component.extend({
             });
         },
         _openApproveDialog:function(data){
-            PMAPI.openDialogByIframe('/iframe/multiapp',{
+            PMAPI.openDialogByIframe('/iframe/multiapp/',{
                 width: 450,
                 height: 310,
                 title: '批量审批',
@@ -219,6 +219,7 @@ let SystemMessage = Component.extend({
                 }else if(data && data.sort === "desc"){
                     this.data.getDataParams['sortOrder'] = -1;
                 }
+	            data.colId && (this.data.getDataParams['sortField']=data.colId);
                 this.actions.loadData(this.data.getDataParams);
             }else{
                 //前端排序

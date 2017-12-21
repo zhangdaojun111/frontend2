@@ -59,9 +59,12 @@ let css = `
 .global-search-history .global-search-history-list{
     height: 17px;
 }
+ .J-print {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+ }
 .J-print-btn{
- position: absolute;
- bottom: 25px ;
  border:none;
  outline: none;
  width: 90px;
@@ -73,13 +76,12 @@ let css = `
  cursor: pointer;
  }
  .J-print-btn.cancel{
-    right:100px;
     color: #666;
     border: 1px solid #d7d7d7;
     background: #fff;
  }
  .J-print-btn.confirm{
-    left:100px;
+    margin-right: 8px;
     background: #0088ff;
  }
 `;

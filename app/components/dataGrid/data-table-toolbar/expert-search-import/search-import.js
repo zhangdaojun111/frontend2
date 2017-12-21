@@ -77,7 +77,7 @@ let searchImport = Component.extend({
                 if(res.success == 1) {
                     msgBox.showTips('导入成功')
                 } else if (res.error) {
-                    msgBox.alert('待导入的查询条件中有字段不存在于本表，无法导入')
+                    msgBox.alert('待导入的查询条件中有字段不存在于本表，无法导入！')
                 }
                 PMAPI.closeIframeDialog(window.config.key, {
                     type: res.success
@@ -100,7 +100,7 @@ let searchImport = Component.extend({
                 if(_this.data.fileData) {
                     _this.actions.import();
                 } else {
-                    msgBox.alert('请选择文件')
+                    msgBox.alert('请选择导入文件！')
                 }
             })
         }

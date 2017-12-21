@@ -1,24 +1,27 @@
-<div class="clearfix" style="overflow-x: hidden;">
+<div class="clearfix" style="overflow: hidden;">
     {{#if unvisible}}
         <a href="javascript:void(0);" style="color:#ccc;margin:2px 4px">权限受限</a>
     {{else if be_control_condition}}
         <a href="javascript:void(0);" style="color:#ccc;margin:2px 4px">被修改条件限制</a>
     {{else}}
-        <div style="display: block;color:#2298f4;position: relative;top: 0;margin:2px;margin-right: 7px;line-height: 25px;float: left;" class="view-attached-list">共{{value.length}}个文件</div>
+    <div class="head">
+        <div style="display: inline-block;color:#2298f4;position: relative;top: 0;margin:2px;margin-right: 7px;line-height: 25px;" class="view-attached-list">共{{value.length}}个文件</div>
         {{#unless is_view}}
-        <div style="display: inline-block" class="file-btns">
-            <!--上传文件，截图上传-->
+        <!--上传文件，截图上传-->
             <input type="file" class="selecting-file" style="display: none;" multiple>
             <input type="button" class='upload-file' style="margin:2px" value="上传文件">
             <input type="button" class="shot-screen" style="margin:2px" value="截图上传">
-            {{#if required}}
-            <span id="requiredLogo" class="{{requiredClass}}" style="float: none; position: relative; top: -3px;"></span>
-            {{/if}}
-            <div class="upload-process-queue" style="position: relative; left: -60px"></div>
-            <div class="ellipses" style="display: none; cursor: pointer;margin:2px 4px;position: relative; left: -60px">......</div>
-        </div>
         {{/unless}}
-
+    </div>
+        <div style="display: none" class="file-btns">
+            {{#unless is_view}}
+                {{#if required}}
+                <span id="requiredLogo" class="{{requiredClass}}" style="float: none; position: relative; top: -3px;"></span>
+                {{/if}}
+            {{/unless}}
+            <div class="upload-process-queue" style="position: relative;"></div>
+            <div class="ellipses" style="display: none; cursor: pointer;margin:2px 4px;position: relative;">......</div>
+        </div>
         <div class="thumbnail-list-anchor"></div>
     {{/if}}
 </div>

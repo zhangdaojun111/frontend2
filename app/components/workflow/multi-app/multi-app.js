@@ -18,7 +18,7 @@ let config={
     },
     actions:{
         approve(e){
-            msgBox.confirm(`确认审批`)
+            msgBox.confirm(`确认审批？`)
             .then(res=>{
                 if(res===true){
                     msgBox.showLoadingSelf();

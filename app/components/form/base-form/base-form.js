@@ -1033,7 +1033,7 @@ let config = {
 			this.data.childComponent[dfield].reload();
 		},
 
-		firstGetData() {
+		async firstGetData() {
 			let buildin_fields = {}
 			for (let index in this.data.data) {
 				let data = this.data.data[index];
@@ -1049,7 +1049,7 @@ let config = {
 				}
 			}
 			this.data.buildin_fields = buildin_fields;
-			this.actions.getDataForForm();
+			await this.actions.getDataForForm();
 		},
 
 		checkBuildValue(data,buildin_fields){
@@ -1067,6 +1067,9 @@ let config = {
 		},
 
 		async getDataForForm() {
+			if(this.data.postData.length == 0){
+				return;
+			}
 			let data = {};
 			data.data = this.actions.createFormValue(this.data.data);
 			data.count_data = this.actions.createFormValue(this.data.data);
@@ -1109,6 +1112,7 @@ let config = {
 			this.data.postData = [];
 			this.data.isSongCount = false;
 			this.actions.afterCalc();
+			this.data.isInit = false;
 			setTimeout(() => {
 				this.data.SongridRef = false;
 			}, 3000);
@@ -1335,7 +1339,7 @@ let config = {
 			}
 			this.actions.afterChangeToEdit();
 		},
-		afterChangeToEdit(){
+		async afterChangeToEdit(){
 			if (this.data.isOtherChangeEdit) {
 
 				this.data.btnType = 'none';
@@ -1344,25 +1348,35 @@ let config = {
 			}
 			this.actions.addBtn();
 			this.actions.checkCustomTable();
-			this.actions.triggerControl();
+			this.data.isInit=true;
 			this.actions.setDataFromParent();
+			await this.actions.firstGetData();
 			this.data.isBtnClick = false;
 		},
 		//修改可修改性
 		reviseCondition: function (editConditionDict, value) {
 			// if(this.dfService.isView){return false;}
 			let arr = [];
+			let flag = false;
+			let keyNum;
 			for (let key in editConditionDict["edit_condition"]) {
 				if (key == 'and') {
 					this.actions.andReviseCondition(editConditionDict,key,value);
 				} else {
+					if(key == value){
+						flag = true;
+						keyNum = key;
+					}
 					this.actions.otherReviseCondition(editConditionDict,key,arr,value);
 				}
+			}
+			if(flag){
+				this.actions.otherReviseCondition(editConditionDict,keyNum,arr,value);
 			}
 		},
 
 		otherReviseCondition(editConditionDict,key,arr,value){
-			for(let i in editConditionDict["edit_condition"]){
+			// for(let i in editConditionDict["edit_condition"]){
 				for (let dfield of editConditionDict["edit_condition"][key]) {
 					if (arr.indexOf(dfield) != -1) {
 						continue;
@@ -1370,17 +1384,14 @@ let config = {
 					//如果有字段的负责性，再开始下面的逻辑
 					let data = this.data.data[dfield];
 					if (this.data.data[dfield]["required_perm"] == 1) {
-						this.actions.selectReviseCondition(data,value,i,arr,dfield);
+						this.actions.selectReviseCondition(data,value,key,arr,dfield);
 					}
 					if (this.data.childComponent[dfield]) {
 						this.data.childComponent[dfield].data = data;
 						this.data.childComponent[dfield].reload();
 					}
 				}
-				if(i == value){
-					break;
-				}
-			}
+			// }
 		},
 
 		selectReviseCondition(data,value,key,arr,dfield){
@@ -1513,6 +1524,8 @@ let config = {
 
 			if (!noCount) {
 				isPustToPostData1 = this.actions.webCalcExpression(data)
+			}else{
+				this.actions.webCalcExpression(data);
 			}
 			if (!this.data.isInit && (isPustToPostData1 || isPustToPostData2)) {
 				this.data.postData.push(data.dfield);
@@ -1804,7 +1817,7 @@ let config = {
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`, {
 					title: showName,
 					width: 1400,
-					height: 800,
+					height: 810,
 				})
 			} else {
 				let formValue = this.actions.getFormValue();
@@ -1815,8 +1828,8 @@ let config = {
 				};
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`, {
 					title: showName,
-					width: 1200,
-					height: 800,
+					width: 1400,
+					height: 810,
 				}, {d});
 			}
 		},
@@ -1855,7 +1868,7 @@ let config = {
 		//打开选择器
 		selectChoose(data) {
 			let _this = this;
-			PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}&key=${this.data.key}`, {
+			PMAPI.openDialogByIframe(`/iframe/choose/?fieldId=${data.id}&key=${this.data.key}`, {
 				width: 900,
 				height: 600,
 				title: `选择器`,
@@ -1984,7 +1997,7 @@ let config = {
 				this.data.viewMode = 'viewFromCorrespondence';
 			}
 			let _this = this;
-			let w = 1400,h = 800;
+			let w = 1400,h = 810;
             if(window.innerWidth<1300){
                 w = 900;
                 h = 600;
@@ -2447,9 +2460,9 @@ let config = {
 				this.actions.checkCustomTable();
 			}
 			// this.actions.triggerControl();
-			this.actions.firstGetData();
-			this.actions.changeOptions();
 			this.actions.setDataFromParent();
+			await this.actions.firstGetData();
+			this.actions.changeOptions();
 			if (this.data.btnType != 'none') {
 				this.actions.addBtn();
 			}
@@ -2462,7 +2475,6 @@ let config = {
 			}
 			this.actions.saveParentFormValue();
 			this.actions.formStyle();
-			this.data.isInit = false;
 		},
 		saveParentFormValue(){
 			let formValue=this.actions.createFormValue(this.data.data);

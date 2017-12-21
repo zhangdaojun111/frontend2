@@ -23,7 +23,7 @@ let config = {
                 if(re.test(val)){
                     let dateElement=new Date(RegExp.$1,parseInt(RegExp.$2,10)-1,RegExp.$3);
                     if(!((dateElement.getFullYear()==parseInt(RegExp.$1))&&((dateElement.getMonth()+1)==parseInt(RegExp.$2,10))&&(dateElement.getDate()==parseInt(RegExp.$3)))){//判断日期逻辑
-                        msgbox.alert('日期的标准格式为yyyy-mm-dd，请修改')
+                        msgbox.alert('日期的标准格式为yyyy-mm-dd，请修改！')
                     } else{
                         if(!_this.data.isAgGrid){
                             _this.data.value = val;
@@ -33,7 +33,7 @@ let config = {
                         }
                     }
                 }else{
-                    msgbox.alert('日期的标准格式为yyyy-mm-dd，请修改')
+                    msgbox.alert('日期的标准格式为yyyy-mm-dd，请修改！')
                 }
             }
         }

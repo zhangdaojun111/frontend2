@@ -9,6 +9,7 @@ import {FormService} from "../../../../services/formService/formService";
 import msgbox from '../../../../lib/msgbox';
 import {PMAPI} from "../../../../lib/postmsg";
 import ViewVideo from "../../view-video/view-video";
+import Mediator from "../../../../lib/mediator";
 
 let config = {
     template: template,
@@ -40,16 +41,25 @@ let config = {
             callback:function () {
                 //删除文件
                 let file_ids = [this.data._controlItem.fileId];
-                FormService.deleteUploaded({
-                    file_ids:JSON.stringify(file_ids),
-                    dinput_type:this.data.real_type
-                }).then(res=>{
-                    if(res.success){
-                        this.trigger('changeFile',{event:'delete',data:this.data._controlItem});
-                    } else {
-                        msgbox.alert('删除文件失败，请再试一次');
-                    }
-                });
+                if(this.data.is_archieved){
+                    //todo trigger to delete
+                    this.trigger('changeFile',{event:'delete',data:{
+                        fileId:this.data._controlItem.fileId,
+                        file:{name:this.data.row.file_name},
+                        md5:'0'}
+                    });
+                } else {
+                    FormService.deleteUploaded({
+                        file_ids: JSON.stringify(file_ids),
+                        dinput_type: this.data.real_type
+                    }).then(res => {
+                        if (res.success) {
+                            this.trigger('changeFile', {event: 'delete', data: this.data._controlItem});
+                        } else {
+                            msgbox.alert('删除文件失败，请再试一次');
+                        }
+                    });
+                }
             }
         },{
             event:'click',
@@ -68,18 +78,24 @@ let config = {
             event:'click',
             selector:'.preview',
             callback:function () {
-                if(this.data._controlItem.process != 100){
+                if(this.data.is_archieved == false && this.data._controlItem.process != 100){
                     msgbox.showTips('数据上传未完成！');
                     return;
                 }
                 let fileId = this.data._controlItem['fileId'];
+                let fileName = this.data.is_archieved?this.data.row.file_name:this.data._controlItem.file.name;
                 let src = '/download_attachment/?file_id='+fileId+'&download=0&dinput_type='+this.data.real_type;
-                if(this.data.file.type.indexOf('image') != -1) {
-                    PMAPI.openPreview({list:[{file_id:fileId}],id:fileId});
-                } else if (this.data.file.type == 'video/mp4'
-                    || this.data.file.type == 'audio/mp3'
-                    || this.data.file.type == 'audio/wav') {
-                    ViewVideo.data.rows = [{file_id:fileId,file_name:this.data._controlItem.file.name}];
+                let fileType = this.data.is_archieved?this.data.row.content_type:this.data.file.type;
+                if(fileType.indexOf('image') != -1) {
+                    let items = this.data.list;
+                    if(items == undefined || items.length == 0){
+                        items = [{file_id:fileId}];
+                    }
+                    PMAPI.openPreview({list:items,id:fileId,dinput_type:this.data.real_type});
+                } else if (fileType== 'video/mp4'
+                    || fileType == 'audio/mp3'
+                    || fileType == 'audio/wav') {
+                    ViewVideo.data.rows = [{file_id:fileId,file_name:fileName}];
                     ViewVideo.data.dinput_type = this.data.real_type;
                     ViewVideo.data.currentVideoId = fileId;
                     ViewVideo.data.is_view = true;
@@ -125,17 +141,21 @@ let config = {
                 this.el.find('.pause-attaching').css('display','none');
                 this.el.find('.cancel-attaching').css('display','none');
                 this.el.find('.delete-file').css('display','inline');
-
-                if(this.data.real_type == 9 || this.data.real_type == 33){
-                    this.el.find('.preview').css('display','inline');
-                    if(this.data.file.type.indexOf('image') == -1
-                        && this.data.file.type != 'video/mp4'
-                        && this.data.file.type != 'audio/mp3'
-                        && this.data.file.type != 'audio/wav'){
-                        this.el.find('.preview').css({'color':'grey','cursor':'auto'});
-                    }
-                }
+                this.actions._unableSomePreview();
             }
+        },
+        _unableSomePreview:function(){//有一些不能预览的文件，预览按钮灰显
+
+            // if(this.data.real_type == 9 || this.data.real_type == 33){
+                this.el.find('.preview').show();
+                let fileType = this.data.is_archieved?this.data.row.content_type:this.data.file.type;
+                if(fileType.indexOf('image') == -1
+                    && fileType != 'video/mp4'
+                    && fileType != 'audio/mp3'
+                    && fileType != 'audio/wav'){
+                    this.el.find('.preview').css({'color':'grey','cursor':'auto'});
+                }
+            // }
         },
         cancelUploading:function () {
             this.data._controlItem.uploadingState = 'canceled';
@@ -192,7 +212,7 @@ let config = {
                 this.actions.transData();
             });
         },
-        transData(){
+        transData:function(){
             if(this.data._controlItem.uploadingState == 'on') {
                 let item = this.data._controlItem;
                 this.data._controlItem.uploadedSize = item.index * item.pack_size;
@@ -235,18 +255,47 @@ let config = {
                     }
                 },errorCallback);
             }
+        },
+        _loadArchievedRow:function () {
+            this.el.find('.loader').hide();
+            // if(this.data.real_type == 9 || this.data.real_type == 33) {
+                this.el.find('.preview').css('display', 'inline');
+            // }
+            this.el.find('.preview').show();
+            this.el.find('.file-name').prop('title',this.data.row.file_name);
+            this.actions._unableSomePreview();
+            if(this.data.is_view==0){
+                this.el.find('.delete-file').show();
+            }
+            this.data._controlItem = {
+                fileId:this.data.row.file_id,
+                file:{name:this.data.row.file_name}
+            };
+            this.el.find('.download-url').attr('href','/download_attachment/?file_id='+this.data.row.file_id+'&download=1&dinput_type='+this.data.real_type);
         }
     },
     afterRender:function () {
-        config.data.fileSize = config.actions.getReadableFileSize(this.data.file.size);
-        this.data.fileSize =  config.data.fileSize;
-        this.data.timestamp =  new Date().getTime();
-        if(this.data.file.name == undefined){
-            this.data.file.name = 'file-'+this.data.timestamp+'.'+this.data.file.type.substring(this.data.file.type.lastIndexOf('/')+1,this.data.file.type.length);
-            let title = this.data.file.name+"("+this.data.fileSize+")";
-            this.el.find('.file-name').prop('title',title).find('strong').text(title);
+        if(this.data.is_archieved == false){
+            config.data.fileSize = config.actions.getReadableFileSize(this.data.file.size);
+            this.data.fileSize =  config.data.fileSize;
+            this.data.timestamp =  new Date().getTime();
+            if(this.data.file.name == undefined){
+                this.data.file.name = 'file-'+this.data.timestamp+'.'+this.data.file.type.substring(this.data.file.type.lastIndexOf('/')+1,this.data.file.type.length);
+                let title = this.data.file.name+"("+this.data.fileSize+")";
+                this.el.find('.file-name').prop('title',title).find('strong').text(title);
+            }
+            this.actions.startUploadFile();
+        } else {
+            this.actions._loadArchievedRow();
         }
-        this.actions.startUploadFile();
+    },
+    firstAfterRender:function () {
+        Mediator.subscribe('attachment:changeValue',(data)=>{
+            this.data.list = data;
+        })
+    },
+    beforeDestory:function () {
+        Mediator.remove('attachment:changeValue');
     }
 };
 let AttachmentQueueItem = Component.extend(config)
