@@ -55,8 +55,10 @@ let config={
         if(window.location.href.indexOf('btnType=view' !=-1)){
             config['parent_btnType'] = 'none';
         }
-        this.dataGrid=new DataTableAgGrid({data: config});
-        this.append(this.dataGrid,this.el.find('.songGrid'));
+        if(this.el.find('.songGrid').length!=0){
+	        this.dataGrid=new DataTableAgGrid({data: config});
+	        this.append(this.dataGrid,this.el.find('.songGrid'));
+        }
     },
 	firstAfterRender(){
 		Mediator.subscribe('form:songGridRefresh:'+this.data["value"],(res)=>{

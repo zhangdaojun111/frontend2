@@ -790,7 +790,7 @@ let dataTableAgGrid = Component.extend({
             }
 
             //图片附件
-            else if (real_type == fieldTypeService.IMAGE_TYPE && colDef['field_content']['is_show_image'] == 1) {
+            else if (real_type == fieldTypeService.IMAGE_TYPE) {
                 sHtml = '<a' + bgStyle + ' class="ag-text-style" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 张图片</a>';
             }
 
@@ -1262,8 +1262,11 @@ let dataTableAgGrid = Component.extend({
          */
         getGridData: function (refresh) {
             if(window.top.miniFormVal && window.top.miniFormVal[this.data.tableId]){
-                $('.dataTableMiniForm').css('display','block')
-                $('#pagetabs').append('<div class="miniFormAnim"></div>')
+                $('.dataTableMiniForm').css('display','block');
+                if(this.data.miniFormAnim){
+                    $('#pagetabs').append('<div class="miniFormAnim"></div>');
+                    this.data.miniFormAnim = false;
+                }
             }else{
                 $('.dataTableMiniForm').css('display','none');
                 $('.miniFormAnim').css('display','none');
@@ -1486,7 +1489,8 @@ let dataTableAgGrid = Component.extend({
                     for(let k in this.data.parentBuiltinData){
                         if(!j[this.data.parentBuiltinData[k]]&&k!='temp_id'&&window.top.frontendParentFormValue[this.data.parentTableId]){
                             // j[this.data.parentBuiltinData[k]] = window.top.frontendParentFormValue[this.data.parentTableId][k];
-                            j[this.data.parentBuiltinData[k]] = window.top.frontendParentFormValue[this.data.tableId][this.data.parentBuiltinData[k]];
+	                        let val=window.top.frontendParentFormValue[this.data.tableId][this.data.parentBuiltinData[k]];
+                            j[this.data.parentBuiltinData[k]] = $.type(val)=='object'?val.label:val;
                         }
                     }
                 }
@@ -1667,7 +1671,8 @@ let dataTableAgGrid = Component.extend({
                 }
             }
             if (this.data.viewMode == 'viewFromCorrespondence' || this.data.viewMode == 'editFromCorrespondence') {
-                json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                // json['is_temp'] = this.data.viewMode == 'editFromCorrespondence'? 1:0;
+                json['is_temp'] = 1;
                 json['tableType'] = 'dy';
                 delete json['rowId']
             }
@@ -2169,7 +2174,7 @@ let dataTableAgGrid = Component.extend({
                                 flow_id: this.data.flowId,
                             };
                             let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
-
+                            this.data.miniFormAnim = true;
                             let title = '新增';
                             this.actions.openSelfIframe(url, title);
                         }else{
@@ -2941,6 +2946,10 @@ let dataTableAgGrid = Component.extend({
             }
         },
         attachmentCellClick: function (data) {
+            if(this.actions.haveTempId(data.data)){
+                msgBox.alert('不支持查看源数据。');
+                return;
+            }
             let dinput_type = data.colDef.real_type;
             let fileIds = data['value'];
             if (fileIds) {
@@ -3547,7 +3556,7 @@ let dataTableAgGrid = Component.extend({
             let defaultMax = false;
             PMAPI.openDialogByIframe(url, {
                 width: w || 1400,
-                height: h || 800,
+                height: h || 810,
                 title: title,
                 modal: true,
                 defaultMax: defaultMax,
@@ -3756,10 +3765,7 @@ let dataTableAgGrid = Component.extend({
                     this.actions.getHeaderData();
                 })
             }
-            PMAPI.subscribe(PMENUM.aside_fold, () => {
-                console.log($('.ui-dialog').width());
-                $('.ui-dialog').width('calc(100% - 3px)');
-            });
+
             this.actions.getHeaderData();
         },
         afterRenderFun:　function () {
@@ -3774,6 +3780,9 @@ let dataTableAgGrid = Component.extend({
     },
     afterRender: function () {
         this.actions.afterRenderFun();
+        PMAPI.subscribe(PMENUM.aside_fold, () => {
+            $('.ui-dialog').width('100%');
+        });
     },
     binds: [
         {
@@ -3880,7 +3889,7 @@ let dataTableAgGrid = Component.extend({
                     tableType:this.data.tableType
                 };
                 let url = dgcService.returnIframeUrl('/iframe/addWf/', obj);
-
+                this.data.miniFormAnim = true;
                 let title = '新增';
                 this.actions.openSelfIframe(url, title);
             }

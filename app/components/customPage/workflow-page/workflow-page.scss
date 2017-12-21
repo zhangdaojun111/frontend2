@@ -244,9 +244,9 @@
         display: none;
     }
     .urge{
-        width: 600px;
+        min-width: 600px;
         position: absolute;
-        height: 300px;
+        min-height: 300px;
         border: 1px solid #E4E4E4;
         top: calc(50% - 200px);
         left: calc(50% - 300px);
@@ -277,22 +277,26 @@
             }
         }
         .urge-text{
-            height: 225px;
+            min-height: 225px;
+            margin-bottom: 60px;
             p{
                 line-height: 30px;
                 font-size: 12px;
                 text-align: center;
             }
             textarea{
-                width: 90%;
-                height: 80%;
+                min-width: 546px;
+                min-height: 186px;
                 margin: auto;
                 display: block;
                 border-radius: 3px;
             }
         }
         .btn-group{
-            margin-left: 380px;
+            position: absolute;
+            margin-top: 20px;
+            right: 20px;
+            bottom: 20px;
             button {
                 cursor: pointer;
                 width: 90px;
@@ -307,6 +311,7 @@
                 color: #666;
                 border: 1px solid #d7d7d7;
                 background-color: #fff;
+                margin-right: 0;
             }
         }
     }

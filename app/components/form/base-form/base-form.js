@@ -129,9 +129,11 @@ let config = {
 						if (this.data.childComponent[songridDfield]) {
 							this.data.childComponent[songridDfield].data["options"] = options;
 						}
-					}
-					if (val || val == '') {
-						this.actions.setFormValue(songridDfield, $.type(val)=='object' ?val.value:val);
+						this.actions.setFormValue(songridDfield, $.type(val) == 'object' ? val.value : val);
+					}else {
+						if (val || val == '') {
+							this.actions.setFormValue(songridDfield, $.type(val) == 'object' ? val.label : val);
+						}
 					}
 					// this.actions.triggerSingleControl(songridDfield);
 				}
@@ -1031,7 +1033,7 @@ let config = {
 			this.data.childComponent[dfield].reload();
 		},
 
-		firstGetData() {
+		async firstGetData() {
 			let buildin_fields = {}
 			for (let index in this.data.data) {
 				let data = this.data.data[index];
@@ -1047,7 +1049,7 @@ let config = {
 				}
 			}
 			this.data.buildin_fields = buildin_fields;
-			this.actions.getDataForForm();
+			await this.actions.getDataForForm();
 		},
 
 		checkBuildValue(data,buildin_fields){
@@ -1065,6 +1067,9 @@ let config = {
 		},
 
 		async getDataForForm() {
+			if(this.data.postData.length == 0){
+				return;
+			}
 			let data = {};
 			data.data = this.actions.createFormValue(this.data.data);
 			data.count_data = this.actions.createFormValue(this.data.data);
@@ -1089,7 +1094,6 @@ let config = {
 
 		setValueFromDataForForm(res){
 			for (let k in res["data"]) {
-				console.log('k:'+k);
 				let data = this.data.data;
 				//如果是周期规则
 				if (data.hasOwnProperty(k) && data[k].hasOwnProperty("real_type") && data[k]["real_type"] == '27') {
@@ -1108,6 +1112,7 @@ let config = {
 			this.data.postData = [];
 			this.data.isSongCount = false;
 			this.actions.afterCalc();
+			this.data.isInit = false;
 			setTimeout(() => {
 				this.data.SongridRef = false;
 			}, 3000);
@@ -1334,7 +1339,7 @@ let config = {
 			}
 			this.actions.afterChangeToEdit();
 		},
-		afterChangeToEdit(){
+		async afterChangeToEdit(){
 			if (this.data.isOtherChangeEdit) {
 
 				this.data.btnType = 'none';
@@ -1343,38 +1348,50 @@ let config = {
 			}
 			this.actions.addBtn();
 			this.actions.checkCustomTable();
-			this.actions.triggerControl();
+			this.data.isInit=true;
 			this.actions.setDataFromParent();
+			await this.actions.firstGetData();
 			this.data.isBtnClick = false;
 		},
 		//修改可修改性
 		reviseCondition: function (editConditionDict, value) {
 			// if(this.dfService.isView){return false;}
 			let arr = [];
+			let flag = false;
+			let keyNum;
 			for (let key in editConditionDict["edit_condition"]) {
 				if (key == 'and') {
-					this.actions.andReviseCondition(editConditionDict,key);
+					this.actions.andReviseCondition(editConditionDict,key,value);
 				} else {
+					if(key == value){
+						flag = true;
+						keyNum = key;
+					}
 					this.actions.otherReviseCondition(editConditionDict,key,arr,value);
 				}
+			}
+			if(flag){
+				this.actions.otherReviseCondition(editConditionDict,keyNum,arr,value);
 			}
 		},
 
 		otherReviseCondition(editConditionDict,key,arr,value){
-			for (let dfield of editConditionDict["edit_condition"][key]) {
-				if (arr.indexOf(dfield) != -1) {
-					continue;
+			// for(let i in editConditionDict["edit_condition"]){
+				for (let dfield of editConditionDict["edit_condition"][key]) {
+					if (arr.indexOf(dfield) != -1) {
+						continue;
+					}
+					//如果有字段的负责性，再开始下面的逻辑
+					let data = this.data.data[dfield];
+					if (this.data.data[dfield]["required_perm"] == 1) {
+						this.actions.selectReviseCondition(data,value,key,arr,dfield);
+					}
+					if (this.data.childComponent[dfield]) {
+						this.data.childComponent[dfield].data = data;
+						this.data.childComponent[dfield].reload();
+					}
 				}
-				//如果有字段的负责性，再开始下面的逻辑
-				let data = this.data.data[dfield];
-				if (this.data.data[dfield]["required_perm"] == 1) {
-					this.actions.selectReviseCondition(data,value,key,arr,dfield);
-				}
-				if (this.data.childComponent[dfield]) {
-					this.data.childComponent[dfield].data = data;
-					this.data.childComponent[dfield].reload();
-				}
-			}
+			// }
 		},
 
 		selectReviseCondition(data,value,key,arr,dfield){
@@ -1385,13 +1402,11 @@ let config = {
 				data["be_control_condition"] = (key == value) ? 0 : 1;
 			}
 			if (this.data.data[data.dfield]) {
-				console.log('checkValue data.data');
-				console.dir(data);
 				this.data.data[data.dfield] = _.defaultsDeep({}, data);
 			}
 		},
 
-		andReviseCondition(editConditionDict,key){
+		andReviseCondition(editConditionDict,key,value){
 			let andData = editConditionDict["edit_condition"][key];
 			for (let f in andData) {
 				let i = 0;
@@ -1509,6 +1524,8 @@ let config = {
 
 			if (!noCount) {
 				isPustToPostData1 = this.actions.webCalcExpression(data)
+			}else{
+				this.actions.webCalcExpression(data);
 			}
 			if (!this.data.isInit && (isPustToPostData1 || isPustToPostData2)) {
 				this.data.postData.push(data.dfield);
@@ -1723,7 +1740,7 @@ let config = {
 		createActions() {
 			let actions = {
 				changeValue: (data) => {
-					this.actions.checkValue(data);
+					this.actions.checkValue(data,false,true);
 				},
 				emitHistory: (data) => {
 					this.actions.openHistoryDialog(data);
@@ -1800,7 +1817,7 @@ let config = {
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?tableName=${showName}&parentTableId=${this.data.tableId}&viewMode=count&tableId=${childId}&rowId=${this.data.realId}&tableType=count&fieldId=${data.id}`, {
 					title: showName,
 					width: 1400,
-					height: 800,
+					height: 810,
 				})
 			} else {
 				let formValue = this.actions.getFormValue();
@@ -1811,8 +1828,8 @@ let config = {
 				};
 				PMAPI.openDialogByIframe(`/iframe/sourceDataGrid/?viewMode=newFormCount&tableId=${childId}&fieldId=${data.id}`, {
 					title: showName,
-					width: 1200,
-					height: 800,
+					width: 1400,
+					height: 810,
 				}, {d});
 			}
 		},
@@ -1842,7 +1859,7 @@ let config = {
 				options.splice(0, 0, data.new_option);
 			}
 			this.data.childComponent[this.data['quikAddDfield']].data.value = data.new_option.value;
-			this.data.childComponent[_this.data['quikAddDfield']].data.showValue = data.new_option.label;
+			this.data.childComponent[this.data['quikAddDfield']].data.showValue = data.new_option.label;
 			this.data.data[this.data['quikAddDfield']] = this.data.childComponent[this.data['quikAddDfield']].data;
 			this.data.childComponent[this.data['quikAddDfield']].reload();
 			this.actions.triggerControl();
@@ -1851,7 +1868,7 @@ let config = {
 		//打开选择器
 		selectChoose(data) {
 			let _this = this;
-			PMAPI.openDialogByIframe(`/iframe/choose?fieldId=${data.id}&key=${this.data.key}`, {
+			PMAPI.openDialogByIframe(`/iframe/choose/?fieldId=${data.id}&key=${this.data.key}`, {
 				width: 900,
 				height: 600,
 				title: `选择器`,
@@ -1963,8 +1980,8 @@ let config = {
 				height: 600,
 				title: `子表`,
 				modal: true
-			}).then(data => {
-				if (_this.viewMode == 'EditChild') {
+			}).then(res => {
+				if (_this.data.viewMode == 'EditChild') {
 					_this.actions.setCountData(data.dfield);
 				}
 			})
@@ -1980,7 +1997,7 @@ let config = {
 				this.data.viewMode = 'viewFromCorrespondence';
 			}
 			let _this = this;
-			let w = 1400,h = 800;
+			let w = 1400,h = 810;
             if(window.innerWidth<1300){
                 w = 900;
                 h = 600;
@@ -2183,7 +2200,7 @@ let config = {
 			if(data[key].dataList=='other_place'){
 				if(!this.data.buildin_options ||(this.data.buildin_options[data[key].id] && $.isEmptyObject(this.data.buildin_options[data[key].id]))){
 					let res=await FormService.getFormStaticBuildinData(this.actions.createPostJson());
-					this.data.oldData[key].dataList=data[key].dataList=(res.data && res.data.buildin_options)?res.data.buildin_options:{' ':{value:'',label:''}};
+					this.data.oldData[key].dataList=data[key].dataList=res.buildin_options && res.buildin_options[data[key].id]?res.buildin_options[data[key].id]:{' ':['请选择','请选择']};
 				}else{
 					this.data.oldData[key].dataList=data[key].dataList=this.data.buildin_options[data[key].id];
 				}
@@ -2438,9 +2455,9 @@ let config = {
 				this.actions.checkCustomTable();
 			}
 			// this.actions.triggerControl();
-			this.actions.firstGetData();
-			this.actions.changeOptions();
 			this.actions.setDataFromParent();
+			await this.actions.firstGetData();
+			this.actions.changeOptions();
 			if (this.data.btnType != 'none') {
 				this.actions.addBtn();
 			}
@@ -2453,7 +2470,6 @@ let config = {
 			}
 			this.actions.saveParentFormValue();
 			this.actions.formStyle();
-			this.data.isInit = false;
 		},
 		saveParentFormValue(){
 			let formValue=this.actions.createFormValue(this.data.data);

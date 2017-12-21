@@ -97,7 +97,7 @@ let AttachmentList = {
                 if(id == undefined){
                     return;
                 }
-                PMAPI.openPreview({list:this.data.list,id:id});
+                PMAPI.openPreview({list:this.data.list,id:id,dinput_type:this.data.dinput_type});
             }
         }, {
             //删除

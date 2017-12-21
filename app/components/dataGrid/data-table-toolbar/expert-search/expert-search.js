@@ -359,15 +359,15 @@ let expertSearch = Component.extend({
         //打开保存常用查询弹窗
         openSaveQueryDialog:function(addQuery){
             PMAPI.openDialogByComponent(addQuery, {
-                width: 380,
-                height: 180,
+                width: 400,
+                height: 170,
                 title: '保存为常用查询'
             }).then((data) => {
                 if(data.onlyclose){
                     return false
                 }
                 if(data.value == '') {
-                    msgBox.alert('名字不能为空');
+                    msgBox.alert('名称不能为空！');
                     // this.actions.openSaveQueryDialog(addQuery)
                 }else  {
                     if(!this.isEdit) {
@@ -565,7 +565,7 @@ let expertSearch = Component.extend({
                 }
             }).on('click','.export', function(){
                 if(_this.data.commonQuery.length == 0){
-                    msgBox.alert('常用查询为空不能导出')
+                    msgBox.alert('常用查询为空不能导出！')
                 } else {
                     searchExport.export(_this.data.tableId,_this.el);
                 }

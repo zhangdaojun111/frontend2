@@ -15,7 +15,7 @@ let HeaderComponent = Component.extend({
     template: template,
     data: {
         asideSize: 'full',
-        postMessageVisible: window.config.sysConfig.userInfo.is_superuser.toString() === "1",
+        postMessageVisible: window.config.sysConfig.userInfo.is_superuser.toString() === "1" || !!window.config.send_msg_perm,
         calendarVisible: window.config.sysConfig.logic_config.use_calendar.toString() === "1",
         biVisible: window.config.sysConfig.logic_config.use_bi.toString() === "1",
         // homeVisible: window.config.sysConfig.logic_config.use_home.toString() === "1",
