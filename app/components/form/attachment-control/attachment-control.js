@@ -354,6 +354,12 @@ let config = {
                         break;
                     }
                 }
+                if(this.data.queue[i].uploadingState){
+                //     //TODO:删除文件
+                    FormService.deleteUploaded({file_ids:JSON.stringify([event.data.fileId]),dinput_type:this.data.real_type}).then(res=>{
+                        console.dir(res);
+                    });
+                }
                 if(i < l){
                     this.data.queue.splice(i,1);
                 }

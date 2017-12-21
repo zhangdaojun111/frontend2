@@ -77,21 +77,43 @@ export const screenShotConfig={
                 return;
             }
             var items = (event.clipboardData || event.originalEvent.clipboardData).items;
-            for (let index in items) {
-                var item = items[index];
-                if (item.kind === 'file') {
-                    var blob = item.getAsFile();
-                    t.data.file = blob;
-                    var reader = new FileReader();
-                    reader.onload = function (event) {
-                        let ele = $('<img>');
-                        ele.addClass('screenshot-image');
-                        ele.attr('src',event.target.result);
-                        t.el.find('.img-anchor').append(ele);
-                        t.data['imageEle'] = ele;
-                        t.el.find('.paste-tip').css('display','none');
-                    }; // data url!
-                    reader.readAsDataURL(blob);
+            if(items == undefined){//safari
+                items = event.originalEvent.clipboardData.files;
+                for(let index in items){
+                    var item = items[index];
+                    if(item.constructor.name == 'File'){
+                        t.data.file = item;
+                        var reader = new FileReader();
+                        reader.onload = function (event) {
+                            console.log('onload');
+                            let ele = $('<img>');
+                            ele.addClass('screenshot-image');
+                            ele.attr('src',event.target.result);
+                            console.dir(ele);
+                            t.el.find('.img-anchor').append(ele);
+                            t.data['imageEle'] = ele;
+                            t.el.find('.paste-tip').css('display','none');
+                        }; // data url!
+                        reader.readAsDataURL(t.data.file); //存在读取文件的时候，报FileError 4的错误
+                    }
+                }
+            } else {//chrome
+                for (let index in items) {
+                    var item = items[index];
+                    if (item.kind === 'file') {
+                        var blob = item.getAsFile();
+                        t.data.file = blob;
+                        var reader = new FileReader();
+                        reader.onload = function (event) {
+                            let ele = $('<img>');
+                            ele.addClass('screenshot-image');
+                            ele.attr('src',event.target.result);
+                            t.el.find('.img-anchor').append(ele);
+                            t.data['imageEle'] = ele;
+                            t.el.find('.paste-tip').css('display','none');
+                        }; // data url!
+                        reader.readAsDataURL(blob);
+                    }
                 }
             }
         });
