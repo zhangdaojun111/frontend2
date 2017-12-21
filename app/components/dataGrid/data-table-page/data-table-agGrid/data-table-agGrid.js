@@ -72,6 +72,8 @@ let dataTableAgGrid = Component.extend({
         rows: 100,
         //第一条数据位置
         first: 0,
+        //对应关系选中条数 false为不显示
+        check_total: false,
         //头部字段属性字典{f1： info}
         colsDict: {},
         //字段id对应field_id
@@ -1409,6 +1411,7 @@ let dataTableAgGrid = Component.extend({
         setGridData: function (res) {
             this.data.rowData = res[0].rows || [];
             this.data.total = res[0].total != undefined ? res[0].total : this.data.total;
+            this.data.check_total = res[0].check_total != undefined ? res[0].check_total : false;
             //对应关系特殊处理
             if ((this.data.viewMode == 'editFromCorrespondence' && this.data.firstRender) || this.data.viewMode == 'viewFromCorrespondence') {
                 this.actions.setCorrespondence(res[0]);
@@ -1423,6 +1426,7 @@ let dataTableAgGrid = Component.extend({
                 //渲染其他组件
                 this.actions.renderAgGrid();
             } else {
+                this.pagination && this.pagination.actions.resetPagination(this.data.total,this.data.check_total);
             }
             let d = {
                 rowData: this.data.rowData,
@@ -1885,6 +1889,7 @@ let dataTableAgGrid = Component.extend({
                 this.data.pagination = true;
                 let paginationData = {
                     total: this.data.total,
+                    check_total: this.data.check_total,
                     rows: this.data.rows,
                     tableId: this.data.tableId,
                     tableOperationData: this.data.tableOperationData,

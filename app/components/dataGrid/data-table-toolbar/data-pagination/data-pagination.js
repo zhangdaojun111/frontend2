@@ -44,11 +44,13 @@ let dataPagination = Component.extend({
         //是否在刷新
         onRefresh: false,
         //分页应用类型
-        type: 'normal'
+        type: 'normal',
+        //对应关系选中条数 false 为不显示
+        check_total:false
     },
     actions: {
         //接受rows值和total值
-        resetPagination: function (total) {
+        resetPagination: function (total,checkTotal) {
             //总数赋值
             this.actions.changeVal( 'total',total );
             //当前页面数据
@@ -61,6 +63,16 @@ let dataPagination = Component.extend({
             this.data.sumPage = Math.ceil(Number(total)/Number(this.data.rows));
             if( Number(this.data.sumPage) == 0 ){
                 this.data.sumPage = 1;
+            }
+            //对应关系显示已选中条数
+            if(this.data.check_total !== false || checkTotal){
+                if(checkTotal)
+                    this.data.check_total = checkTotal;
+                this.el.find('.check').show()
+                this.actions.changeVal('check-total',this.data.check_total);
+            }else{
+                this.data.check_total = false;
+                this.el.find('.check').hide()
             }
             this.data.first = ( Number( this.data.currentPage ) - 1)*Number(this.data.rows);
             this.actions.changeVal( 'sumPage',this.data.sumPage );
