@@ -22,7 +22,9 @@ let config = {
     },
 
     binds: [],
-    afterRender() {}
+    afterRender() {
+        this.el.addClass('component-bi-header-menu');
+    }
 };
 
 export let CanvasHeaderMenuComponent = Component.extend(config);

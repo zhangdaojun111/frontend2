@@ -1,11 +1,10 @@
 .nav-tabs {
     position: relative;
     height: 50px;
-    //white-space: nowrap;
+    white-space: nowrap;
     width: calc(100% - 490px);
     background: transparent;
-    //display: inline-block;
-    display: flex;
+    display: inline-block;
     overflow: hidden;
     .icon-chart {
         .new-charts-icon {
@@ -13,7 +12,7 @@
             margin-left: 17px;
         }
     }
-    div {
+    .component-bi-header-menu {
         height: 100%;
         display: inline-block;
     }
