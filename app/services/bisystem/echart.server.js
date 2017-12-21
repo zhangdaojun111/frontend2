@@ -414,7 +414,6 @@ export class EchartsService {
                 };
             });
         }
-
         // 增加y轴单位
         return linebarOption;
     }
