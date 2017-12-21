@@ -59,6 +59,7 @@ export const PMENUM = {
     aside_fold: '19',
     send_event:'20',
     open_iframe_by_id:'21',     //bi点击title打开数据源tab
+    send_bi_height:'22'
 };
 
 /**

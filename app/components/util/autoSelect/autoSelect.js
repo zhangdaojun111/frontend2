@@ -353,7 +353,7 @@ let AutoSelect = Component.extend({
             selector: 'input.auto-select-text',
             callback: _.debounce(function (context) {
                 this.actions.onInput($(context));
-            }, 1000)
+            }, 500)
         },{
             event: 'click',
             selector: '.choosed .item',

@@ -6,6 +6,8 @@ import {canvasCellService} from '../../../../../services/bisystem/canvas.cell.se
 import Mediator from '../../../../../lib/mediator';
 import msgbox from '../../../../../lib/msgbox';
 import './canvas.cells.scss';
+import {PMAPI,PMENUM} from "../../../../../lib/postmsg";
+import URLTools from "../../../../../lib/url";
 
 let config = {
     template: template,
@@ -293,10 +295,30 @@ let config = {
                 });
             });
 
+            this.actions.sendCanvasHeight();
             // 获取画布块最大zindex
             this.data.cellMaxZindex = Math.max(...zIndex);
         },
+        /**
+         * 非新窗口打开且用户模式下发送cells高度给父级
+         */
+        sendCanvasHeight(){
+            let href = window.location.href;
+            let param = URLTools.getParam(href);
+            if(window.hasOwnProperty("parent") && window.parent !== window && this.data.mode === 'client'){
+                let cellsHeight;
+                if(!param['query_mark']){
+                    cellsHeight = this.el.find('.cells')[0].scrollHeight + 50;      //50是header高度
+                }else{
+                    cellsHeight = this.el.find('.cells')[0].scrollHeight;           //home没有header
+                }
 
+                PMAPI.sendToParent({
+                    type:PMENUM.send_bi_height,
+                    data:cellsHeight
+                });
+            }
+        },
         /**
          * 保存画布布局
          */
