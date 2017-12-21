@@ -790,7 +790,7 @@ let dataTableAgGrid = Component.extend({
             }
 
             //图片附件
-            else if (real_type == fieldTypeService.IMAGE_TYPE && colDef['field_content']['is_show_image'] == 1) {
+            else if (real_type == fieldTypeService.IMAGE_TYPE) {
                 sHtml = '<a' + bgStyle + ' class="ag-text-style" id="file_view" title="查看详情">' + ( myValue.length || 0 ) + ' 张图片</a>';
             }
 
