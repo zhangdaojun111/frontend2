@@ -87,12 +87,22 @@ export class EchartsService {
         const [legend, series] = [[], []];
         const [xAxis, yAxis] = [cellOption.data['xAxis'], cellOption.data['yAxis']];
         const linebarOption = EchartsOption.getEchartsConfigOption('linebar');
+
         linebarOption['xAxis'][0]['data'] = xAxis;
         let firstMaxYnum = [];
         let firstMinYnum = [];
         let secondMaxYnum = [];
         let secondMinYnum = [];
         let isStack = false; // 判断是否堆叠
+        let firstYAxisUnit, secondYAxisUnit; // 获取y轴的单位
+        cellOption['yAxis'].forEach(y => {
+             if (y['yAxisIndex'] === 0) {
+                 firstYAxisUnit = y['unit']
+             } else if (y['yAxisIndex'] === 1) {
+                 secondYAxisUnit = y['unit']
+             }
+        })
+
         yAxis.forEach((y,i) => {
             // 判断是否是堆叠情况
             if (cellOption.yAxis[i] && cellOption.yAxis[i]['group']) {
@@ -194,7 +204,7 @@ export class EchartsService {
             let str = cellChart.chart.data.xAxis[0];
             let len = str.length;
             linebarOption['grid']['right'] = Math.min(Math.max(len*1000/(cellWidth^3),15),40);
-
+            linebarOption['yAxis'][0]['axisLabel']['formatter'] = firstYAxisUnit ? "{value}" + firstYAxisUnit : "{value}"
             // linebarOption['yAxis'][0]['interval'] = Math.abs(firstMax / splitNumber);
         } else if (cellOption.double === 1) {
             // 双y轴 如果有一个y轴小于0
@@ -202,6 +212,7 @@ export class EchartsService {
                 if (isStack) {
                     linebarOption['yAxis'][0]['max'] = null;
                     linebarOption['yAxis'][0]['min'] = null;
+                    linebarOption['yAxis'][0]['axisLabel']['formatter'] = firstYAxisUnit ? "{value}" + firstYAxisUnit : "{value}"
                     linebarOption['yAxis'].push({
                         type: 'value',
                         inverse: false,
@@ -212,7 +223,7 @@ export class EchartsService {
                             inside: false,
                             formatter: function(value,index) {
                                 let isDecimal = _.cloneDeep(value).toString().indexOf('.');
-                                return isDecimal !== -1 ? value.toFixed(5) : value;
+                                return isDecimal !== -1 ? secondYAxisUnit ? value.toFixed(5) + secondYAxisUnit : value.toFixed(5) :  secondYAxisUnit ? value +  secondYAxisUnit : value;
                             }
                         },
                         axisLine: {},
@@ -227,6 +238,7 @@ export class EchartsService {
                 } else {
                     linebarOption['yAxis'][0]['max'] = Math.abs(firstMin) > Math.abs(firstMax) ? Math.abs(firstMin) : Math.abs(firstMax);
                     linebarOption['yAxis'][0]['min'] = Math.abs(firstMin) > Math.abs(firstMax) ? firstMin : -Math.abs(firstMax);
+                    linebarOption['yAxis'][0]['axisLabel']['formatter'] = firstYAxisUnit ? "{value}" + firstYAxisUnit : "{value}"
                     linebarOption['yAxis'].push({
                         type: 'value',
                         inverse: false,
@@ -237,7 +249,7 @@ export class EchartsService {
                             inside: false,
                             formatter: function(value,index) {
                                 let isDecimal = _.cloneDeep(value).toString().indexOf('.');
-                                return isDecimal !== -1 ? value.toFixed(5) : value;
+                                return isDecimal !== -1 ? secondYAxisUnit ? value.toFixed(5) + secondYAxisUnit:value.toFixed(5) : secondYAxisUnit ? value + secondYAxisUnit : value;
                             }
                         },
                         axisLine: {},
@@ -253,6 +265,7 @@ export class EchartsService {
             } else {
                 linebarOption['yAxis'][0]['max'] = isStack ? null : firstMax;
                 linebarOption['yAxis'][0]['min'] = isStack && firstMin < 0 ? null : 0;
+                linebarOption['yAxis'][0]['axisLabel']['formatter'] = firstYAxisUnit ? "{value}" + firstYAxisUnit : "{value}";
                 linebarOption['yAxis'].push({
                     type: 'value',
                     inverse: false,
@@ -263,7 +276,7 @@ export class EchartsService {
                         inside: false,
                         formatter: function(value,index) {
                             let isDecimal = _.cloneDeep(value).toString().indexOf('.');
-                            return isDecimal !== -1 ? value.toFixed(5) : value;
+                            return isDecimal !== -1 ? secondYAxisUnit ? value.toFixed(5) + secondYAxisUnit:value.toFixed(5) : secondYAxisUnit ? value + secondYAxisUnit : value;
                         }
                     },
                     axisLine: {},
@@ -397,6 +410,8 @@ export class EchartsService {
                 val.axisLabel = {textStyle:{fontSize:cellOption['customTextStyle']['chartSize']}};
             });
         }
+
+        // 增加y轴单位
         return linebarOption;
     }
 

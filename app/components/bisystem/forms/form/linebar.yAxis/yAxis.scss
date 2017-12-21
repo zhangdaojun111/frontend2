@@ -61,6 +61,29 @@
                 margin-top:0;
             }
         }
+        .form-chart-text {
+            .form-label {
+                display:inline-block;
+                border:none;
+                span{
+                    color:#000;
+                    padding-top:3px;
+                    padding-right:0;
+                    padding-bottom:0;
+                }
+                span {
+                    background:transparent;
+                }
+            }
+            .form-chart-wrapper {
+                display:inline-block;
+                padding-left:0;
+                input {
+                    margin-top:0;
+                    width:100px;
+                }
+            }
+        }
         >div {
             float:left;
             label {

@@ -8,6 +8,7 @@ import './yAxis.scss';
 import {Base} from '../base';
 import {Y} from './y/y';
 import {Checkbox} from '../checkbox/checkbox';
+import {Text} from '../text/text';
 
 let config = {
     template: template,
@@ -120,13 +121,19 @@ let config = {
                     ]
                 }
             });
+            this.data.unit = new Text({
+                data: {
+                    label: 'Y轴单位:',
+                    defaultValue: '',
+                }
+            });
             this.append(this.data.label, this.el.find('.yAxis-setting'));
             this.append(this.data.areaStyle, this.el.find('.yAxis-setting'));
+            this.append(this.data.unit, this.el.find('.yAxis-setting'));
         }
     },
     binds: [],
     afterRender(){
-        console.log(this.data);
         this.actions.yMoreSetting();
         this.actions.addY();
     }
@@ -146,7 +153,8 @@ class YaXis extends Base {
             data.push(Object.assign(
                 {
                     label:this.data.label.data.value[0] ? 1: 0,
-                    areaStyle:this.data.areaStyle.data.value[0] ? 1: 0
+                    areaStyle:this.data.areaStyle.data.value[0] ? 1: 0,
+                    unit: this.data.unit.data.value,
                 },this.data.yAxis[key].getYData()))
         });
         return data;
@@ -175,7 +183,8 @@ class YaXis extends Base {
             y.group.setValue(item['group'] == 0 ? '' : item['group']);
         });
         this.data.areaStyle.setValue(!yAxis[0]['areaStyle'] || yAxis[0]['areaStyle'] == 0 ? 0: 1);
-        this.data.label.setValue(!yAxis[0]['label'] || yAxis[0]['label'] == 0 ? 0: 1)
+        this.data.label.setValue(!yAxis[0]['label'] || yAxis[0]['label'] == 0 ? 0: 1);
+        this.data.unit.setValue(yAxis[0]['unit'])
     }
 
 
