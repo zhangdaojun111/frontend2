@@ -205,11 +205,11 @@ let contractEditor = Component.extend({
                         let valueSource = event.target.value;
                         let currentTab = this.data.local_data[this.data['current_tab']];
                         if (currentTab['model_id'] == undefined) {
-                            this.el.find('.contract-template-anchor').html('<p>尚未选择模板。</p>');
+                            this.el.find('.contract-template-anchor').html('<p>尚未选择模板</p>');
                         } else {
                             currentTab['elements'][(element.table.table_id) + ''] = valueSource;
                             if (!this.actions._isElementFull(currentTab['elements'])) {
-                                this.el.find('.contract-template-anchor').html('<p>请选择所有数据源。</p>');
+                                this.el.find('.contract-template-anchor').html('<p>请选择所有数据源</p>');
                                 return;
                             }
                             this.actions._loadTemplateByIndex(this.data['current_tab']);
@@ -344,11 +344,14 @@ let contractEditor = Component.extend({
             }
 
             if (!hasModelId) {
-                this.el.find('.contract-template-anchor').html('<p class="blank">请选择模板。</p>');
+                if(!this.data.isAdd) {
+                    this.hideLoading()
+                }
+                this.el.find('.contract-template-anchor').html('<p class="blank">请选择模板</p>');
                 return;
             }
             if (!this.actions._isElementFull(tab['elements'])) {
-                this.el.find('.contract-template-anchor').html('<p class="blank">请选择所有数据源。</p>');
+                this.el.find('.contract-template-anchor').html('<p class="blank">请选择所有数据源</p>');
                 return;
             }
 
@@ -398,9 +401,9 @@ let contractEditor = Component.extend({
                     }
                     this.data.first = 0;
                 }
-                // if(!this.data.isAdd) {
-                //     this.hideLoading();
-                // }
+                if(!this.data.isAdd) {
+                    this.hideLoading();
+                }
             })
         },
         _isElementFull: function (elements) {
@@ -631,8 +634,9 @@ let contractEditor = Component.extend({
             // this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
             this.actions.getElement(obj).then(res => {
                 if (res.success) {
+                    console.log(this.data.local_data)
                     this.actions._loadDataSource(res.data.elements);
-                    this.actions._loadTmplOptions(res.data.model_files);
+                    this.actions._loadTmplOptions(res.data.model_files)
                     this.actions.historyListClick();
                     if (this.data.local_data == '') {
                         this.data.local_data = [];
@@ -640,7 +644,9 @@ let contractEditor = Component.extend({
                     }
                     this.actions._loadTemplateByIndex(0,true,false);
                 }
-                this.hideLoading();
+                if(this.data.isAdd) {
+                    this.hideLoading();
+                }
             });
             //加载tab
             let tabsEle = this.el.find('.contract-tabs');
