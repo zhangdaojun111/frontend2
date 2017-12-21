@@ -1033,7 +1033,7 @@ let config = {
 			this.data.childComponent[dfield].reload();
 		},
 
-		firstGetData() {
+		async firstGetData() {
 			let buildin_fields = {}
 			for (let index in this.data.data) {
 				let data = this.data.data[index];
@@ -1049,7 +1049,7 @@ let config = {
 				}
 			}
 			this.data.buildin_fields = buildin_fields;
-			this.actions.getDataForForm();
+			await this.actions.getDataForForm();
 		},
 
 		checkBuildValue(data,buildin_fields){
@@ -1112,6 +1112,7 @@ let config = {
 			this.data.postData = [];
 			this.data.isSongCount = false;
 			this.actions.afterCalc();
+			this.data.isInit = false;
 			setTimeout(() => {
 				this.data.SongridRef = false;
 			}, 3000);
@@ -1338,7 +1339,7 @@ let config = {
 			}
 			this.actions.afterChangeToEdit();
 		},
-		afterChangeToEdit(){
+		async afterChangeToEdit(){
 			if (this.data.isOtherChangeEdit) {
 
 				this.data.btnType = 'none';
@@ -1347,7 +1348,8 @@ let config = {
 			}
 			this.actions.addBtn();
 			this.actions.checkCustomTable();
-			this.actions.triggerControl();
+			this.data.isInit=true;
+			await this.actions.firstGetData();
 			this.actions.setDataFromParent();
 			this.data.isBtnClick = false;
 		},
@@ -1522,6 +1524,8 @@ let config = {
 
 			if (!noCount) {
 				isPustToPostData1 = this.actions.webCalcExpression(data)
+			}else{
+				this.actions.webCalcExpression(data);
 			}
 			if (!this.data.isInit && (isPustToPostData1 || isPustToPostData2)) {
 				this.data.postData.push(data.dfield);
@@ -2451,7 +2455,7 @@ let config = {
 				this.actions.checkCustomTable();
 			}
 			// this.actions.triggerControl();
-			this.actions.firstGetData();
+			await this.actions.firstGetData();
 			this.actions.changeOptions();
 			this.actions.setDataFromParent();
 			if (this.data.btnType != 'none') {
@@ -2466,7 +2470,6 @@ let config = {
 			}
 			this.actions.saveParentFormValue();
 			this.actions.formStyle();
-			this.data.isInit = false;
 		},
 		saveParentFormValue(){
 			let formValue=this.actions.createFormValue(this.data.data);
