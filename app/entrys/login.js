@@ -403,8 +403,7 @@ if(window.hasOwnProperty("parent") && window.parent !== window){
 let controller = getLoginController();
 controller.formInit();  //初始化表单控件
 controller.getNextUrl();       //根据url判断是否跳转页面
-// let isNeedDownload = controller.browser_check();     //暂时屏蔽
-let isNeedDownload = false;
+let isNeedDownload = controller.browser_check();     //暂时屏蔽
 let showLoginAnimation = false;
 
 function resetLoginBoxInfo(result) {
