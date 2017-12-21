@@ -1112,6 +1112,7 @@ let config = {
 			this.data.postData = [];
 			this.data.isSongCount = false;
 			this.actions.afterCalc();
+			this.data.isInit = false;
 			setTimeout(() => {
 				this.data.SongridRef = false;
 			}, 3000);
@@ -1347,7 +1348,8 @@ let config = {
 			}
 			this.actions.addBtn();
 			this.actions.checkCustomTable();
-			this.actions.triggerControl();
+			this.data.isInit=true;
+			this.actions.firstGetData();
 			this.actions.setDataFromParent();
 			this.data.isBtnClick = false;
 		},
@@ -1522,6 +1524,8 @@ let config = {
 
 			if (!noCount) {
 				isPustToPostData1 = this.actions.webCalcExpression(data)
+			}else{
+				this.actions.webCalcExpression(data);
 			}
 			if (!this.data.isInit && (isPustToPostData1 || isPustToPostData2)) {
 				this.data.postData.push(data.dfield);
@@ -2466,7 +2470,6 @@ let config = {
 			}
 			this.actions.saveParentFormValue();
 			this.actions.formStyle();
-			this.data.isInit = false;
 		},
 		saveParentFormValue(){
 			let formValue=this.actions.createFormValue(this.data.data);
