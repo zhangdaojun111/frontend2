@@ -45,8 +45,11 @@ let config = {
             if(window.config.bi_user !== 'client'){
                 return;
             }
-
             let sources = this.data.chart.data.table_id;
+            if (/\[/.test(sources)) {
+               let sourcesArray = sources.split(',')
+                sources = sourcesArray[0].slice(3,sourcesArray[0].length - 1);
+            }
             let idArr = [];
 
             if(sources){
