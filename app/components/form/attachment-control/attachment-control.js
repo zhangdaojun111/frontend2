@@ -71,8 +71,6 @@ let config = {
                         if(this.data.queue ){
                             for(let item of this.data.queue){
                                 if(file.name == item.file.name && md5 == item.md5){
-                                    console.log('in queue');
-                                    console.dir(this.data.queue);
                                     msgBox.showTips('文件已上传');
                                     return;
                                 }
@@ -81,8 +79,6 @@ let config = {
                         if(this.data.rows){
                             for(let item of this.data.rows){
                                 if(file.name == item.file_name && md5 == item.file_md5){
-                                    console.log('in server');
-                                    console.dir(this.data.rows);
                                     msgBox.showTips('文件已上传');
                                     return;
                                 }
@@ -352,15 +348,12 @@ let config = {
             if (event.data != undefined){
                 let i = 0;
                 let l = this.data.queue.length;
-                console.log('data queue in deleteQueueItem');
-                console.dir(this.data.queue);
                 for(; i < l; i++){
                     let item = this.data.queue[i];
                     if(item.file.name == event.data.file.name && item.md5 == event.data.md5){
                         break;
                     }
                 }
-                console.log("i:"+i+",uploadingState:"+this.data.queue[i].uploadingState);
                 if(this.data.queue[i].uploadingState){
                 //     //TODO:删除文件
                     FormService.deleteUploaded({file_ids:JSON.stringify([event.data.fileId]),dinput_type:this.data.real_type}).then(res=>{
