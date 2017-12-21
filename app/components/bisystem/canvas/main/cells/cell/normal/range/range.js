@@ -93,7 +93,6 @@ let config = {
     ],
     afterRender() {},
     firstAfterRender() {
-
         //默认选中全部
         this.el.find('.normal-date-options .all-year input').prop('checked', true);
         this.el.find('.normal-date-options .all-year').addClass('option-active');
@@ -102,7 +101,6 @@ let config = {
 };
 
 export let NormalRangeComponent = Component.extend(config);
-
 // export class NormalRangeComponent extends Component {
 //     constructor(data,event,extendConfig) {
 //         super($.extend(true,{},config,extendConfig),data,event)
