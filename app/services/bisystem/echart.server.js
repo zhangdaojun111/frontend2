@@ -404,10 +404,14 @@ export class EchartsService {
         if(cellOption['customTextStyle'] && cellOption['customTextStyle'].hasOwnProperty('chartSize')){
             linebarOption['textStyle'] = {fontSize:cellOption['customTextStyle']['chartSize']};
             linebarOption['xAxis'].forEach((val,index)=>{
-                val.axisLabel = {textStyle:{fontSize:cellOption['customTextStyle']['chartSize']}};
+                val.axisLabel.textStyle = {
+                    fontSize:cellOption['customTextStyle']['chartSize']
+                };
             });
             linebarOption['yAxis'].forEach((val,index)=>{
-                val.axisLabel = {textStyle:{fontSize:cellOption['customTextStyle']['chartSize']}};
+                val.axisLabel.textStyle = {
+                    fontSize:cellOption['customTextStyle']['chartSize']
+                };
             });
         }
 
