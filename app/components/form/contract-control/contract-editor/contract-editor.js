@@ -368,7 +368,7 @@ let contractEditor = Component.extend({
                 }
                 return;
             }
-            let type = tab['mode'] || 'show';
+            let type = tab['mode'];
             let index = tab['mode'] ? 0 : i;
             this.actions.getElement({
                 table_id: this.data.table_id,
@@ -638,6 +638,8 @@ let contractEditor = Component.extend({
             }
             if(this.data['mode'] == 'edit') {
                 this.data.local_data[0]['mode'] = 'edit';
+            } else {
+                this.data.local_data[0]['mode'] = 'show';
             }
             // this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
             this.actions.getElement(obj).then(res => {
