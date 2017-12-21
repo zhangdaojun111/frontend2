@@ -3,20 +3,26 @@
  */
 import Component from "../../../lib/component";
 import template from './contract-control.html';
-import {contractEditorConfig} from "./contract-editor/contract-editor";
 import {PMAPI} from "../../../lib/postmsg";
+import Mediator from '../../../lib/mediator';
+import {HTTP} from "../../../lib/http";
 import './contract-control.scss'
 import {Storage} from '../../../lib/storage';
 
 let config = {
     template:template,
+    data: {
+        historyList:[],
+    },
     binds:[
         {
             event:'click',
             selector:'.contract-view',
             callback:function () {
-                this.data['mode']='view';
-                this.actions.openEditor('合同模板预览');
+                if(!this.data.isAdd) {
+                    this.data['mode'] = 'view';
+                    this.actions.openEditor('合同模板预览');
+                }
             }
         },{
             event:'click',
@@ -29,12 +35,18 @@ let config = {
     ],
     actions:{
         openEditor:function(title){
-            let contractConfig = _.defaultsDeep({data:this.data},contractEditorConfig);
-            PMAPI.openDialogByComponent(contractConfig,{
-                width:900,
-                height:600,
-                title:title
-            }).then(res=>{
+            // let contractConfig = _.defaultsDeep({data:this.data},contractEditorConfig);
+            PMAPI.openDialogByIframe(`/iframe/contractEditor/`, {
+                width: 1400,
+                height: 810,
+                title: title,
+                modal: true,
+            }, {data:this.data}).then(res => {
+                if(res.changeBtn) {
+                    Mediator.emit('contract:change:btn', {
+                        changeBtn: res.changeBtn
+                    });
+                }
                 if(res.onlyclose){
                     if((new URL(document.URL)).searchParams!=undefined){
                         Storage.init((new URL(document.URL)).searchParams.get('key'));
@@ -60,12 +72,36 @@ let config = {
                 }
                 this.trigger('changeValue',this.data);
             })
-        }
+
+        },
+        // getHistoryModel: function (json) {
+        //     return HTTP.postImmediately('/customize/rzrk/show_lastest_history/', json);
+        // }
+
     },
+
     afterRender:function () {
         if(this.data['is_view']){
             this.el.find('.contract-edit').css('display','none');
         }
+        if(this.data.isAdd) {
+            this.el.find('.contract-view').eq(0).css({'color':'#999999'});
+        }
+        // let obj = {
+        //     dfield: this.data.dfield,
+        //     table_id: this.data.table_id
+        // }
+        // this.actions.getHistoryModel(obj).then(res=> {
+        //     for(let item of res.data) {
+        //         for(let i in item) {
+        //             let json = {}
+        //             json['id'] = i;
+        //             json['name'] = item[i].substring(0,item[i].length-5)
+        //             this.data.historyList.push(json)
+        //         }
+        //     }
+        // })
+
     }
 }
 let ContractControl = Component.extend(config)

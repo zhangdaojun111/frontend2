@@ -3,20 +3,61 @@
 
     <div class="contract-editor-widget">
 
-        <div class="contract-settings">
+        <div class="contract-settings"      >
+            <div class="history-template">
+                <div class="contract-settings-title">最近使用</div>
+                <div class="history-template-list">
+
+                </div>
+            </div>
             <div class="select-template ">
-                <div class="contract-settings-title">&nbsp;&nbsp;请选择模板</div>
-                <select name="选择模板" class="contract-model" style="width: 200px; margin-top: 5px;margin-left: 5px;">
+                <div class="contract-settings-title">请选择模板</div>
+                <select name="选择模板" class="contract-model">
                     <option value="0">请选择</option>
                 </select>
             </div>
-            <div>
-                <div class="contract-settings-title">&nbsp;&nbsp;请选择数据源</div>
+            <div class="data-source-template">
+                <div class="contract-settings-title">请选择数据源</div>
                 <div class="contract-data-source-anchor"></div>
+            </div>
+            <div class="instrument-template">
+                <div class="contract-settings-title">辅助工具</div>
+                <div class="instrument-template-item">
+                    <span class="instrument-template-item-title">行间距</span>
+                    <span class="instrument-template-input instrument-line-height">
+                        <input class="active" type="checkbox" title="normal">
+                        <lable>默认</lable>
+                    </span>
+                    <span class="instrument-template-input instrument-line-height">
+                        <input  type="checkbox" title="big">
+                        <lable>大</lable>
+                    </span>
+                </div>
+                <div class="instrument-template-item">
+                    <span class="instrument-template-item-title">字&nbsp;&nbsp;&nbsp;&nbsp;号</span>
+                    <span class="instrument-template-input instrument-font-size">
+                        <input class="active" type="checkbox" title="normal">
+                        <lable>默认</lable>
+                    </span>
+                    <span class="instrument-template-input instrument-font-size">
+                        <input type="checkbox" title="mid">
+                        <lable>中</lable>
+                    </span>
+                    <span class="instrument-template-input instrument-font-size">
+                        <input type="checkbox" title="big">
+                        <lable>大</lable>
+                    </span>
+                </div>
+                <div class="instrument-template-item">
+                    <span class="instrument-template-item-title">背景色</span>
+                    <span class="instrument-template-btn" title="normal">默认色</span>
+                    <span class="instrument-template-btn active" title="brown">浅褐色</span>
+                </div>
             </div>
         </div>
         <!--添加 <div class="contract-container"></div>-->
         <div class="contract-container">
+            <div class="contract-settings-title">合同预览</div>
             <!--添加  <div class="contract-container-content"></div>-->
             <div class="contract-container-content">
                 <div class="contract-tab-container">
@@ -24,9 +65,9 @@
                     <ul class="contract-tabs">
                     </ul>
                     <!--componentDialog中使用主框架样式无效？ icon-add，icon-delete-->
-                    <div class="delete-tab-button"></div>
+                    <!--<div class="delete-tab-button"></div>-->
                 </div>
-                <div style="min-height: 30px">
+                <div style="min-height: 30px ;height: calc(100% - 30px)">
                     <div class="contract-template-anchor"></div>
                 </div>
             </div>
@@ -34,10 +75,11 @@
         </div>
 
         <div class="contract-editor-button">
-            <button type="button" class="save_n_close">保存并关闭窗口</button>
+            <button type="button" class="edit_or_save">临时编辑</button>
             <button type="button" class="download_all">下载所有文档</button>
             <button type="button" class="download_current">下载当前文档</button>
-            <button type="button" class="edit_or_save" style="display: none;">编辑</button>
+            <button type="button" class="save_n_close">保存并关闭窗口</button>
+            <button type="button" class="change_edit">转为编辑模式</button>
         </div>
     </div>
 
