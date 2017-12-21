@@ -1033,7 +1033,7 @@ let config = {
 			this.data.childComponent[dfield].reload();
 		},
 
-		firstGetData() {
+		async firstGetData() {
 			let buildin_fields = {}
 			for (let index in this.data.data) {
 				let data = this.data.data[index];
@@ -1049,7 +1049,7 @@ let config = {
 				}
 			}
 			this.data.buildin_fields = buildin_fields;
-			this.actions.getDataForForm();
+			await this.actions.getDataForForm();
 		},
 
 		checkBuildValue(data,buildin_fields){
@@ -1339,7 +1339,7 @@ let config = {
 			}
 			this.actions.afterChangeToEdit();
 		},
-		afterChangeToEdit(){
+		async afterChangeToEdit(){
 			if (this.data.isOtherChangeEdit) {
 
 				this.data.btnType = 'none';
@@ -1349,7 +1349,7 @@ let config = {
 			this.actions.addBtn();
 			this.actions.checkCustomTable();
 			this.data.isInit=true;
-			this.actions.firstGetData();
+			await this.actions.firstGetData();
 			this.actions.setDataFromParent();
 			this.data.isBtnClick = false;
 		},
@@ -2455,7 +2455,7 @@ let config = {
 				this.actions.checkCustomTable();
 			}
 			// this.actions.triggerControl();
-			this.actions.firstGetData();
+			await this.actions.firstGetData();
 			this.actions.changeOptions();
 			this.actions.setDataFromParent();
 			if (this.data.btnType != 'none') {
