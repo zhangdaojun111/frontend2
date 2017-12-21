@@ -169,7 +169,7 @@ let contractEditor = Component.extend({
                     item['display']['change_edit'] = 'none'
                 });
                 this.data.local_data.forEach((item) => {
-                    item['mode'] == 'edit';
+                    item['mode'] = 'edit';
                 });
                 this.el.find('.contract-template-anchor span').addClass('active');
                 // this.data.first = 1;
