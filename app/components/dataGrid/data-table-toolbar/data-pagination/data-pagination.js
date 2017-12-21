@@ -68,8 +68,10 @@ let dataPagination = Component.extend({
             if(this.data.check_total !== false || checkTotal){
                 if(checkTotal)
                     this.data.check_total = checkTotal;
+                this.el.find('.check').show()
                 this.actions.changeVal('check-total',this.data.check_total);
             }else{
+                this.data.check_total = false;
                 this.el.find('.check').hide()
             }
             this.data.first = ( Number( this.data.currentPage ) - 1)*Number(this.data.rows);
