@@ -1349,8 +1349,8 @@ let config = {
 			this.actions.addBtn();
 			this.actions.checkCustomTable();
 			this.data.isInit=true;
-			await this.actions.firstGetData();
 			this.actions.setDataFromParent();
+			await this.actions.firstGetData();
 			this.data.isBtnClick = false;
 		},
 		//修改可修改性
@@ -2455,9 +2455,9 @@ let config = {
 				this.actions.checkCustomTable();
 			}
 			// this.actions.triggerControl();
+			this.actions.setDataFromParent();
 			await this.actions.firstGetData();
 			this.actions.changeOptions();
-			this.actions.setDataFromParent();
 			if (this.data.btnType != 'none') {
 				this.actions.addBtn();
 			}
