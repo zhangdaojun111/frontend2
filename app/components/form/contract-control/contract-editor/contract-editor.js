@@ -168,6 +168,9 @@ let contractEditor = Component.extend({
                     item['display']['edit_or_save'] = 'inline'
                     item['display']['change_edit'] = 'none'
                 })
+                this.data.local_data.forEach((item) => {
+                    item['mode'] == 'edit';
+                })
                 // this.data.first = 1;
                 this.actions.showHistoryList();
                 this.actions.showDifPattern()
@@ -365,7 +368,7 @@ let contractEditor = Component.extend({
                 }
                 return;
             }
-            let type = tab['mode'] || 'edit';
+            let type = tab['mode'] || 'show';
             let index = tab['mode'] ? 0 : i;
             this.actions.getElement({
                 table_id: this.data.table_id,
@@ -586,6 +589,7 @@ let contractEditor = Component.extend({
             if(this.data['mode']=='view'){
                 // this.el.find('.contract-container').css({'width':'100%'});
                 this.el.find('.add-tab-button').removeClass('active');
+                this.el.find('.contract-template-anchor span').removeClass('active');
                 this.el.find('.delete-tab-btn').css('display','none');
                 this.el.find('.history-template').css({'height':'150px'});
                 this.el.find('.change_edit').css({'display':'inline-block'});
@@ -594,6 +598,7 @@ let contractEditor = Component.extend({
             } else {
                 this.el.find('.add-tab-button').addClass('active');
                 this.el.find('.delete-tab-btn').css('display','inline-block');
+                this.el.find('.contract-template-anchor span').addClass('active');
                 this.el.find('.save_n_close').css('display','inline-block');
                 this.el.find('.edit_or_save').css('display','inline-block');
                 this.el.find('.history-template').css({'height':'auto'});
@@ -630,6 +635,9 @@ let contractEditor = Component.extend({
                 this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value.data));
             } else {
                 this.data.local_data = this.data.local_data || JSON.parse(JSON.stringify(this.data.value));
+            }
+            if(this.data['mode'] == 'edit') {
+                this.data.local_data[0]['mode'] = 'edit';
             }
             // this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
             this.actions.getElement(obj).then(res => {

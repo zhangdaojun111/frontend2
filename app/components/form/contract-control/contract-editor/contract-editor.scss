@@ -216,6 +216,9 @@
                     }
                     & span {
                         cursor: pointer;
+                        &.active {
+                            background-color: #99FF33!important;
+                        }
                     }
                 }
             }
