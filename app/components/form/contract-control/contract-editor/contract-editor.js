@@ -480,6 +480,7 @@ let contractEditor = Component.extend({
         editContract: function (k2v) {
             this.el.find('.contract-template-anchor').find('span').attr('contenteditable', 'true');
             this.el.find('.contract-template-anchor').find('span').on('input', _.debounce(event => {
+                $(event.target).removeClass('active');
                 let changedColor = '#ff9933';
                 let changedValue = event.target.innerHTML;
                 let title = event.target.title;
@@ -497,6 +498,7 @@ let contractEditor = Component.extend({
                 for(let i=0;i<eles.length;i++){
                     if(eles[i] != event.target){//绕开本span，如果本span改变，则光标会挪到首位
                         $(eles[i]).html(changedValue);
+                        $(eles[i]).removeClass('active');
                     }
                 }
                 this.data.local_data[this.data['current_tab']]['content']=this.el.find('.contract-template-anchor').html();
@@ -552,7 +554,8 @@ let contractEditor = Component.extend({
             this.el.find('.contract-template-anchor span').on('click', (event) => {
                 if(event.type == 'click' && this.el.find('.edit_or_save').text() == '临时编辑' && this.data.check) {
                     this.data.check = 0;
-                    let name = JSON.parse(JSON.stringify(this.data.local_data[this.data['current_tab']].k2v))[`##${event.target.title}##`];
+                    // let name = JSON.parse(JSON.stringify(this.data.local_data[this.data['current_tab']].k2v))[`##${event.target.title}##`];
+                    let name = event.target.title;
                     let obj = {
                         table_id: _this.data.table_id,
                         real_id: _this.data.real_id,
@@ -639,7 +642,9 @@ let contractEditor = Component.extend({
             if(!this.data.isAdd && this.data['mode'] == 'edit') {
                 this.data.local_data[0]['mode'] = 'edit';
             }
-            this.data.local_data[0]['field']
+            if(!this.data.isAdd){
+                this.data.local_data[0]['field'] = [];
+            }
             // this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
             this.actions.getElement(obj).then(res => {
                 if (res.success) {
