@@ -167,13 +167,14 @@ let contractEditor = Component.extend({
                 this.data.buttonStates.forEach((item) => {
                     item['display']['edit_or_save'] = 'inline'
                     item['display']['change_edit'] = 'none'
-                })
+                });
                 this.data.local_data.forEach((item) => {
                     item['mode'] == 'edit';
-                })
+                });
+                this.el.find('.contract-template-anchor span').addClass('active');
                 // this.data.first = 1;
                 this.actions.showHistoryList();
-                this.actions.showDifPattern()
+                this.actions.showDifPattern();
             }
         }
     ],
@@ -257,7 +258,7 @@ let contractEditor = Component.extend({
             this.el.find('.contract-tabs').append(tabEle);
             this.el.find('.contract-model').val(0).removeAttr('disabled');
             // this.el.find('.data-source').val(0).removeAttr('disabled');
-            this.data.local_data.push({name: '新建', elements: {}, model_id: '', mode: 'edit'});
+            this.data.local_data.push({name: '新建', elements: {}, model_id: '', mode: 'edit',field:[]});
             this.data['current_tab'] = length;
             this.actions.initButtonStates(this.data['current_tab']);
             this.actions.loadButtons(this.data['current_tab']);
@@ -483,7 +484,7 @@ let contractEditor = Component.extend({
                 let changedValue = event.target.innerHTML;
                 let title = event.target.title;
                 if(k2v["##"+title+"##"] != changedValue){
-                    this.data.local_data[this.data['current_tab']]['field'] = [];
+                    // this.data.local_data[this.data['current_tab']]['field'] = [];
                     this.data.local_data[this.data['current_tab']]['field'].push('##'+ title +'##');
                 }
                 k2v["##"+title+"##"]=changedValue;
@@ -596,9 +597,8 @@ let contractEditor = Component.extend({
                 this.el.find('.contract-model').attr('disabled','disabled');
                 this.el.find('.data-source').attr('disabled','disabled');
             } else {
-                this.el.find('.add-tab-button').addClass('active');
                 this.el.find('.delete-tab-btn').css('display','inline-block');
-                this.el.find('.contract-template-anchor span').addClass('active');
+                this.el.find('.add-tab-button').addClass('active');
                 this.el.find('.save_n_close').css('display','inline-block');
                 this.el.find('.edit_or_save').css('display','inline-block');
                 this.el.find('.history-template').css({'height':'auto'});
@@ -639,6 +639,7 @@ let contractEditor = Component.extend({
             if(!this.data.isAdd && this.data['mode'] == 'edit') {
                 this.data.local_data[0]['mode'] = 'edit';
             }
+            this.data.local_data[0]['field']
             // this.data.local_data = JSON.parse(JSON.stringify(this.data.value));
             this.actions.getElement(obj).then(res => {
                 if (res.success) {
