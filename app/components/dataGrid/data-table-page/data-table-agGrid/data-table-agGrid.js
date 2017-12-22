@@ -1068,8 +1068,10 @@ let dataTableAgGrid = Component.extend({
             let tableOperate = dataTableService.getTableOperation(obj2);
             let prepareParmas = dataTableService.getPrepareParmas(obj2);
             Promise.all([preferenceData, headerData, sheetData, tableOperate, prepareParmas]).then((res) => {
-                this.actions.setHeaderData(res);
-                this.actions.getGridData();
+            	if(this && this.actions && this.actions.setHeaderData){
+		            this.actions.setHeaderData(res);
+		            this.actions.getGridData();
+	            }
             });
             //请求表单数据
             // this.actions.getGridData();
