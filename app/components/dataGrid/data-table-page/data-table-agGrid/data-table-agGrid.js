@@ -900,12 +900,12 @@ let config = {
                 agGrid: this.agGrid
             }
             //渲染定制列
-            if( $('.custom-column-btn')[0] ){
+            if( this.el.find('.custom-column-btn')[0] ){
                 this.customColumnsCom  = new customColumns(custom);
                 this.append(this.customColumnsCom, document.querySelector('.custom-columns-panel'));
             }
             //渲染分组
-            if( $('.group-btn')[0] ){
+            if( this.el.find('.group-btn')[0] ){
                 let groupLit = {
                     tableId: this.data.tableId,
                     gridoptions: this.agGrid.gridOptions,
@@ -1075,20 +1075,16 @@ let config = {
                 }
                 let sheetHtml = dgcService.returnSheetHtml( arr );
                 this.el.find( '.SheetPage' ).html( sheetHtml );
-                // console.log('this.el')
                 this.el.on( 'click','.SheetPage ul li',(e)=>{
                     let gridoptions = this.agGrid.gridOptions;
                     let ignore = ['group','number','mySelectAll','myOperate'];
-                    let id = $(e.target).attr( 'sheetId' );
-                    let currentId = $(e.target).parent().attr( 'currentId' );
-                    let arr = JSON.parse( $(e.target).attr( 'sheetValue' ) );
-                    // let i=$('.SheetPage ul li').index();
-                    // console.log(i);
-                    // $('.SheetPage ul li').eq(i).addClass('active').siblings().removeClass('active');
+                    let id = this.el.find(e.target).attr( 'sheetId' );
+                    let currentId = this.el.find(e.target).parent().attr( 'currentId' );
+                    let arr = JSON.parse( this.el.find(e.target).attr( 'sheetValue' ) );
                     if( id == currentId ){
                         return;
                     }
-                    $(e.target).parent().attr( 'currentId',id );
+                    this.el.find(e.target).parent().attr( 'currentId',id );
                     let state = gridoptions.columnApi.getColumnState();
                     for( let s of state ){
                         if( ignore.indexOf( s.colId ) == -1 ){
@@ -1096,17 +1092,15 @@ let config = {
                         }
                     }
                     gridoptions.columnApi.setColumnState( state );
+                    this.customColumnsCom.actions.makeSameSate();
                 } );
-                $('.SheetPage ul li:first').addClass('active1');
-                $('.SheetPage ul li').on('click',function () {
-                   $(this).addClass('active1');
-                   $(this).siblings().removeClass('active1');
+                this.el.find('.SheetPage ul li:first').addClass('active1');
+                this.el.find('.SheetPage ul li').on('click',function () {
+                    $(this).addClass('active1');
+                    $(this).siblings().removeClass('active1');
                 }) ;
-                // console.log($('.SheetPage ul li'));
-                // $('.SheetPage ul li').addClass('active1');
-
                 this.el.find( '.ag-grid-con' ).height( 'calc( 100% - 80px )' );
-                $( '.SheetPage' ).show();
+                this.el.find( '.SheetPage' ).show();
 
             }
         },
@@ -1144,7 +1138,7 @@ let config = {
                     }else {
                         this.agGrid.gridOptions.columnApi.setColumnState( this.data.lastGridState );
                     }
-                    $( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
+                    this.el.find( '.grid-auto-width' ).find( 'span' ).html( !this.data.isAutoWidth?'恢复默认':'自适宽度' );
                     this.data.isAutoWidth = !this.data.isAutoWidth;
                 } )
             }
@@ -1256,15 +1250,13 @@ let config = {
             }
             this.el.on('click','.group-btn',()=> {
                 if(!this.data.groupCheck) {
-                    $('.group-btn').find('span').html('数据');
-                    $('.group-panel').show();
+                    this.el.find('.group-btn').find('span').html('数据');
+                    this.el.find('.group-panel').show();
                     this.data.groupCheck = !this.data.groupCheck;
-                    // if(this.data.myGroup.fields) {
-                        this.actions.onGroupChange(this.data.myGroup.fields)
-                    // }
+                    this.actions.onGroupChange(this.data.myGroup.fields)
                 } else {
-                    $('.group-btn').find('span').html('分组');
-                    $('.group-panel').hide();
+                    this.el.find('.group-btn').find('span').html('分组');
+                    this.el.find('.group-panel').hide();
                     this.data.groupCheck = !this.data.groupCheck;
                     this.agGrid.gridOptions.columnApi.setColumnVisible( 'group' , false);
                     this.actions.getGridData();
